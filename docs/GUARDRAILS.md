@@ -55,6 +55,9 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 
 - dioxus-primitives uses `document::eval` (JavaScript) for focus traps, checkboxes, avatars and context menus. So the kit currently runs only in the **browser and the desktop webview**, not in Blitz/native. That's acceptable for now. Don't add *more* JavaScript of our own.
 - DioxusLabs' styled components use plain CSS via `#[css_module]`, not Tailwind. We keep that model. See the decision log.
+- Tabs use manual activation: the arrow keys move focus, and Enter or Space selects. That's valid WAI-ARIA, but it differs from Radix's default.
+- Dropdown menu items expose `role="option"`, not `menuitem` the way Radix does. Check screen-reader output before relying on it (week 3).
+- `dx` in locked-down environments: set `NO_DOWNLOADS=1` and put `esbuild` 0.27.3 and `wasm-bindgen-cli` (matching Cargo.lock) on PATH.
 
 ## Decision log
 
