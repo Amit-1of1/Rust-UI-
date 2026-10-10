@@ -55,3 +55,45 @@ fn add_copies_then_keeps_edits() {
     let (written, _) = add(&root, &items, tmp.path(), true).unwrap();
     assert_eq!(written.len(), 1);
 }
+
+#[test]
+fn recognises_remotes_and_names_their_cache() {
+    assert!(is_remote("https://github.com/Amit-1of1/Rust-UI-"));
+    assert!(is_remote("git@github.com:Amit-1of1/Rust-UI-.git"));
+    assert!(!is_remote("../Rust-UI-"));
+    assert!(!is_remote("."));
+    assert_eq!(
+        cache_name("https://github.com/a/b.git"),
+        "https---github-com-a-b-git"
+    );
+}
+
+#[test]
+fn clones_a_remote_once_and_reuses_it() {
+    let src = tempfile::tempdir().unwrap();
+    let git = |args: &[&str], dir: &Path| {
+        let ok = std::process::Command::new("git")
+            .args(args)
+            .current_dir(dir)
+            .env("GIT_AUTHOR_NAME", "t")
+            .env("GIT_AUTHOR_EMAIL", "t@example.com")
+            .env("GIT_COMMITTER_NAME", "t")
+            .env("GIT_COMMITTER_EMAIL", "t@example.com")
+            .status()
+            .unwrap()
+            .success();
+        assert!(ok, "git {args:?}");
+    };
+    git(&["init", "-q", "."], src.path());
+    std::fs::write(src.path().join("registry.json"), "{}").unwrap();
+    git(&["add", "."], src.path());
+    git(&["commit", "-q", "-m", "x"], src.path());
+    let url = format!("file://{}", src.path().display());
+    let cache = tempfile::tempdir().unwrap();
+    let first = materialize(&url, cache.path()).unwrap();
+    assert!(first.join("registry.json").is_file());
+    let second = materialize(&url, cache.path()).unwrap();
+    assert_eq!(first, second);
+    // Local paths pass straight through.
+    assert_eq!(materialize(".", cache.path()).unwrap(), PathBuf::from("."));
+}

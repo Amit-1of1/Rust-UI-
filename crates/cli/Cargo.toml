@@ -2,6 +2,10 @@
 name = "rust-ui-cli"
 version = "0.1.0"
 description = "Copy-paste registry CLI for the Rust UI kit: init, add, list, diff"
+repository = "https://github.com/Amit-1of1/Rust-UI-"
+readme = "README.md"
+keywords = ["dioxus", "ui", "components", "cli"]
+categories = ["command-line-utilities", "gui"]
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
