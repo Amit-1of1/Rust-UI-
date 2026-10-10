@@ -1,0 +1,137 @@
+.dx-stepper-root {
+  display: grid;
+  width: 100%;
+  gap: 1.25rem;
+}
+
+.dx-stepper {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.dx-stepper[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.dx-stepper-item {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+/* Connector to the next step. */
+.dx-stepper[data-orientation="horizontal"] .dx-stepper-item:not(:last-child)::after {
+  position: absolute;
+  top: 1rem;
+  right: -0.25rem;
+  left: calc(50% + 1.25rem);
+  height: 2px;
+  background-color: var(--primary-color-7);
+  content: "";
+  transform: translateX(-0.25rem);
+}
+
+.dx-stepper[data-orientation="vertical"] .dx-stepper-item:not(:last-child)::after {
+  position: absolute;
+  top: 2.25rem;
+  bottom: -0.75rem;
+  left: 1rem;
+  width: 2px;
+  background-color: var(--primary-color-7);
+  content: "";
+}
+
+.dx-stepper-item[data-state="done"]::after {
+  background-color: var(--accent-color) !important;
+}
+
+.dx-stepper-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  font: inherit;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.dx-stepper[data-orientation="horizontal"] .dx-stepper-trigger {
+  flex-direction: column;
+}
+
+.dx-stepper[data-orientation="vertical"] .dx-stepper-trigger {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.dx-stepper-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.dx-stepper-trigger:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-stepper-indicator {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--primary-color-7);
+  border-radius: 9999px;
+  background-color: var(--primary-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.dx-stepper-indicator svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dx-stepper-item[data-state="current"] .dx-stepper-indicator,
+.dx-stepper-item[data-state="done"] .dx-stepper-indicator {
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: var(--accent-contrast);
+}
+
+.dx-stepper-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dx-stepper-title {
+  color: var(--secondary-color-1);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.dx-stepper-description {
+  color: var(--secondary-color-5);
+  font-size: 0.8125rem;
+}
+
+.dx-stepper-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

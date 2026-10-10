@@ -1,0 +1,75 @@
+.dx-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dx-marquee-viewport {
+  overflow: hidden;
+}
+
+.dx-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: dx-marquee-scroll var(--dx-marquee-duration, 20s) linear infinite;
+}
+
+.dx-marquee-row {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding-right: 1rem;
+  gap: 1rem;
+}
+
+.dx-marquee:hover .dx-marquee-track,
+.dx-marquee:focus-within .dx-marquee-track,
+.dx-marquee[data-paused="true"] .dx-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes dx-marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.dx-marquee-toggle {
+  align-self: flex-start;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.dx-marquee-toggle:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-marquee-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-marquee-viewport {
+    overflow-x: auto;
+  }
+
+  .dx-marquee-track {
+    animation: none;
+  }
+
+  .dx-marquee-row[aria-hidden="true"],
+  .dx-marquee-toggle {
+    display: none;
+  }
+}

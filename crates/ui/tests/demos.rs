@@ -224,3 +224,51 @@ fn theme_customizer_demo_renders() {
     let html = render(ui::components::theme_customizer::theme_customizer_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn callout_demo_renders() {
+    let html = render(ui::components::callout::callout_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn empty_demo_renders() {
+    let html = render(ui::components::empty::empty_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn status_demo_renders() {
+    let html = render(ui::components::status::status_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn shimmer_demo_renders() {
+    let html = render(ui::components::shimmer::shimmer_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn marquee_demo_renders() {
+    let html = render(ui::components::marquee::marquee_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn button_group_demo_renders() {
+    let html = render(ui::components::button_group::button_group_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn stepper_demo_renders() {
+    let html = render(ui::components::stepper::stepper_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn bottom_nav_demo_renders() {
+    let html = render(ui::components::bottom_nav::bottom_nav_demo::Demo);
+    assert!(!html.is_empty());
+}

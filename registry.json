@@ -73,6 +73,17 @@
       "registryDependencies": []
     },
     {
+      "name": "bottom_nav",
+      "files": [
+        "bottom_nav/bottom_nav_demo.rs",
+        "bottom_nav/component.rs",
+        "bottom_nav/docs.md",
+        "bottom_nav/mod.rs",
+        "bottom_nav/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "breadcrumb",
       "files": [
         "breadcrumb/breadcrumb_demo.rs",
@@ -93,6 +104,19 @@
       "registryDependencies": []
     },
     {
+      "name": "button_group",
+      "files": [
+        "button_group/button_group_demo.rs",
+        "button_group/component.rs",
+        "button_group/docs.md",
+        "button_group/mod.rs",
+        "button_group/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "calendar",
       "files": [
         "calendar/calendar_demo.rs",
@@ -100,6 +124,17 @@
         "calendar/docs.md",
         "calendar/mod.rs",
         "calendar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "callout",
+      "files": [
+        "callout/callout_demo.rs",
+        "callout/component.rs",
+        "callout/docs.md",
+        "callout/mod.rs",
+        "callout/style.css"
       ],
       "registryDependencies": []
     },
@@ -238,6 +273,19 @@
       "registryDependencies": []
     },
     {
+      "name": "empty",
+      "files": [
+        "empty/component.rs",
+        "empty/docs.md",
+        "empty/empty_demo.rs",
+        "empty/mod.rs",
+        "empty/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "field",
       "files": [
         "field/component.rs",
@@ -302,6 +350,17 @@
         "label/docs.md",
         "label/mod.rs",
         "label/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "marquee",
+      "files": [
+        "marquee/component.rs",
+        "marquee/docs.md",
+        "marquee/marquee_demo.rs",
+        "marquee/mod.rs",
+        "marquee/style.css"
       ],
       "registryDependencies": []
     },
@@ -412,6 +471,17 @@
       "registryDependencies": []
     },
     {
+      "name": "shimmer",
+      "files": [
+        "shimmer/component.rs",
+        "shimmer/docs.md",
+        "shimmer/mod.rs",
+        "shimmer/shimmer_demo.rs",
+        "shimmer/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "sidebar",
       "files": [
         "sidebar/component.rs",
@@ -463,6 +533,30 @@
         "spinner/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "status",
+      "files": [
+        "status/component.rs",
+        "status/docs.md",
+        "status/mod.rs",
+        "status/status_demo.rs",
+        "status/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "stepper",
+      "files": [
+        "stepper/component.rs",
+        "stepper/docs.md",
+        "stepper/mod.rs",
+        "stepper/stepper_demo.rs",
+        "stepper/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "switch",
