@@ -302,3 +302,15 @@ fn carousel_demo_renders() {
     let html = render(ui::components::carousel::carousel_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn dropzone_demo_renders() {
+    let html = render(ui::components::dropzone::dropzone_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn multi_select_demo_renders() {
+    let html = render(ui::components::multi_select::multi_select_demo::Demo);
+    assert!(!html.is_empty());
+}

@@ -88,6 +88,8 @@ fn App() -> Element {
                 Section { title: "Input otp", blurb: "One box per character: auto-advance, Backspace, arrow keys and paste.", ui::components::input_otp::input_otp_demo::Demo {} }
                 Section { title: "Input group", blurb: "An input with text or buttons attached inside one border.", ui::components::input_group::input_group_demo::Demo {} }
                 Section { title: "Carousel", blurb: "Snap-scrolling slides with Previous and Next; nothing autoplays.", ui::components::carousel::carousel_demo::Demo {} }
+                Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::components::dropzone::dropzone_demo::Demo {} }
+                Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::components::multi_select::multi_select_demo::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

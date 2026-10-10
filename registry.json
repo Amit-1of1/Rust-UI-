@@ -299,6 +299,17 @@
       "registryDependencies": []
     },
     {
+      "name": "dropzone",
+      "files": [
+        "dropzone/component.rs",
+        "dropzone/docs.md",
+        "dropzone/dropzone_demo.rs",
+        "dropzone/mod.rs",
+        "dropzone/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "empty",
       "files": [
         "empty/component.rs",
@@ -436,6 +447,17 @@
         "menubar/menubar_demo.rs",
         "menubar/mod.rs",
         "menubar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "multi_select",
+      "files": [
+        "multi_select/component.rs",
+        "multi_select/docs.md",
+        "multi_select/mod.rs",
+        "multi_select/multi_select_demo.rs",
+        "multi_select/style.css"
       ],
       "registryDependencies": []
     },

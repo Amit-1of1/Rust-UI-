@@ -290,3 +290,42 @@ fn carousel_is_a_labelled_carousel_of_labelled_slides() {
     assert!(html.contains("tabindex=\"0\""), "{html}");
     assert!(html.contains("Previous") && html.contains("Next"), "{html}");
 }
+
+#[test]
+fn dropzone_wraps_a_native_file_input_in_a_label() {
+    let html = render(|| rsx! { Dropzone { accept: "image/*", multiple: true } });
+    assert!(html.contains("<label"), "{html}");
+    assert!(html.contains("type=\"file\""), "{html}");
+    assert!(
+        html.contains("accept=\"image/*\"") && html.contains("multiple"),
+        "{html}"
+    );
+    assert!(html.contains("Drop files here"), "{html}");
+    assert!(
+        !html.contains("role=\"alert\""),
+        "no error before any drop: {html}"
+    );
+}
+
+#[test]
+fn multi_select_starts_closed_with_a_named_button() {
+    let html = render(|| {
+        rsx! {
+            MultiSelect {
+                label: "Teams",
+                default_selected: vec!["a".to_string(), "b".to_string(), "c".to_string()],
+                options: vec![
+                    MultiOption::new("a", "Alpha"),
+                    MultiOption::new("b", "Beta"),
+                    MultiOption::new("c", "Gamma"),
+                ],
+            }
+        }
+    });
+    assert!(html.contains("aria-expanded=\"false\""), "{html}");
+    assert!(html.contains("Teams: Alpha, Beta +1"), "{html}");
+    assert!(
+        !html.contains("type=\"checkbox\""),
+        "panel is closed: {html}"
+    );
+}

@@ -48,6 +48,7 @@ pub mod prelude {
     pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
     pub use crate::components::dropdown_menu::*;
+    pub use crate::components::dropzone::*;
     pub use crate::components::empty::*;
     pub use crate::components::field::*;
     pub use crate::components::form::*;
@@ -60,6 +61,7 @@ pub mod prelude {
     pub use crate::components::label::*;
     pub use crate::components::marquee::*;
     pub use crate::components::menubar::*;
+    pub use crate::components::multi_select::*;
     pub use crate::components::navbar::*;
     pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
