@@ -85,3 +85,13 @@ body {
   border-radius: 999px;
   background: var(--secondary-color);
 }
+
+/* Containing block for position: fixed descendants (the sidebar demo). */
+.gallery-frame {
+  position: relative;
+  height: 28rem;
+  overflow: hidden;
+  transform: translateZ(0);
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.5rem;
+}

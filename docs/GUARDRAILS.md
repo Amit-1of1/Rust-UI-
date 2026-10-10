@@ -62,6 +62,10 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `AnimatePresence` children need unique, formatted keys (`key: "{id}"`); a static string key is a compile error.
 - Layout animation (siblings sliding into a removed item's space) is not implemented yet. Dioxus-motion has presence-layout hooks, to evaluate later.
 
+- Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
+- Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
+- `navbar` has no demo: its upstream demo needs a router.
+
 ## Decision log
 
 | Date | Decision | Why |

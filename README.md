@@ -51,9 +51,11 @@ fn App() -> Element {
 }
 ```
 
-## Components (week 1)
+## Components
 
-accordion, badge, button, card, checkbox, dialog, dropdown menu, input, label, popover, separator, sheet, switch, tabs, toast, tooltip.
+Behaviour comes from `dioxus-primitives`; each styled component lives in `crates/ui/src/components/<name>/` with a `<name>_demo.rs` shown in the gallery.
+
+accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, checkbox, collapsible, color picker, combobox, context menu, date picker, dialog, drag-and-drop list, dropdown menu, hover card, input, item, label, menubar, navbar, pagination, popover, progress, radio group, scroll area, select, separator, sheet, sidebar, skeleton, slider, switch, tabs, tag group, textarea, toast, toggle, toggle group, toolbar, tooltip, virtual list.
 
 ## Motion
 

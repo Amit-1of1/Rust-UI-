@@ -24,21 +24,48 @@ pub fn ThemeStyles() -> Element {
 /// Everything an app usually needs: `use ui::prelude::*;`
 pub mod prelude {
     pub use crate::components::accordion::*;
+    pub use crate::components::alert_dialog::*;
+    pub use crate::components::aspect_ratio::*;
+    pub use crate::components::avatar::*;
     pub use crate::components::badge::*;
     pub use crate::components::button::*;
+    pub use crate::components::calendar::*;
     pub use crate::components::card::*;
     pub use crate::components::checkbox::*;
+    pub use crate::components::collapsible::*;
+    pub use crate::components::color_picker::*;
+    pub use crate::components::combobox::*;
+    pub use crate::components::context_menu::*;
+    pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
     pub use crate::components::dropdown_menu::*;
+    pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
+    pub use crate::components::item::*;
     pub use crate::components::label::*;
+    pub use crate::components::menubar::*;
+    pub use crate::components::navbar::*;
+    pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
+    pub use crate::components::progress::*;
+    pub use crate::components::radio_group::*;
+    pub use crate::components::scroll_area::*;
+    pub use crate::components::select::*;
     pub use crate::components::separator::*;
     pub use crate::components::sheet::*;
+    pub use crate::components::sidebar::*;
+    pub use crate::components::skeleton::*;
+    pub use crate::components::slider::*;
     pub use crate::components::switch::*;
     pub use crate::components::tabs::*;
+    pub use crate::components::textarea::*;
     pub use crate::components::toast::*;
+    pub use crate::components::toggle::*;
+    pub use crate::components::toggle_group::*;
+    pub use crate::components::toolbar::*;
     pub use crate::components::tooltip::*;
+    pub use crate::components::virtual_list::*;
+    // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.
     pub use crate::ThemeStyles;
     pub use dioxus_primitives::toast::{use_toast, ToastOptions};
     pub use dioxus_primitives::ContentSide;

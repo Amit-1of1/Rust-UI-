@@ -19,7 +19,7 @@ fn App() -> Element {
         ToastProvider {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 2" }
+                Badge { variant: BadgeVariant::Secondary, "week 3" }
             }
             main { class: "gallery-main",
                 Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
@@ -36,6 +36,33 @@ fn App() -> Element {
                 Section { title: "Tooltip", blurb: "Shown on hover and keyboard focus.", TooltipDemo {} }
                 Section { title: "Toast", blurb: "Transient notifications.", ToastDemo {} }
                 Section { title: "Separator", blurb: "Visual divider.", SeparatorDemo {} }
+                Section { title: "Alert dialog", blurb: "A dialog that demands an explicit answer.", ui::components::alert_dialog::alert_dialog_demo::Demo {} }
+                Section { title: "Aspect ratio", blurb: "Keeps content at a fixed ratio.", ui::components::aspect_ratio::aspect_ratio_demo::Demo {} }
+                Section { title: "Avatar", blurb: "Image with a fallback.", ui::components::avatar::avatar_demo::Demo {} }
+                Section { title: "Calendar", blurb: "Date grid; arrow keys move between days.", ui::components::calendar::calendar_demo::Demo {} }
+                Section { title: "Collapsible", blurb: "A single show/hide region.", ui::components::collapsible::collapsible_demo::Demo {} }
+                Section { title: "Color picker", blurb: "Pick a color by hue, saturation and value.", ui::components::color_picker::color_picker_demo::Demo {} }
+                Section { title: "Combobox", blurb: "Type to filter, arrow keys to choose.", ui::components::combobox::combobox_demo::Demo {} }
+                Section { title: "Context menu", blurb: "Right-click for actions.", ui::components::context_menu::context_menu_demo::Demo {} }
+                Section { title: "Date picker", blurb: "Calendar in a popover.", ui::components::date_picker::date_picker_demo::Demo {} }
+                Section { title: "Drag and drop list", blurb: "Reorder with the pointer or keyboard.", ui::components::drag_and_drop_list::drag_and_drop_list_demo::Demo {} }
+                Section { title: "Hover card", blurb: "Rich preview on hover or focus.", ui::components::hover_card::hover_card_demo::Demo {} }
+                Section { title: "Item", blurb: "A flexible row for lists.", ui::components::item::item_demo::Demo {} }
+                Section { title: "Menubar", blurb: "Application-style menus.", ui::components::menubar::menubar_demo::Demo {} }
+                Section { title: "Pagination", blurb: "Page navigation.", ui::components::pagination::pagination_demo::Demo {} }
+                Section { title: "Progress", blurb: "Completion indicator.", ui::components::progress::progress_demo::Demo {} }
+                Section { title: "Radio group", blurb: "One choice from several; arrow keys move.", ui::components::radio_group::radio_group_demo::Demo {} }
+                Section { title: "Scroll area", blurb: "Styled scrolling region.", ui::components::scroll_area::scroll_area_demo::Demo {} }
+                Section { title: "Select", blurb: "Pick one option from a list.", ui::components::select::select_demo::Demo {} }
+                Section { title: "Skeleton", blurb: "Loading placeholder.", ui::components::skeleton::skeleton_demo::Demo {} }
+                Section { title: "Slider", blurb: "Drag or use arrow keys.", ui::components::slider::slider_demo::Demo {} }
+                Section { title: "Tag group", blurb: "Selectable, removable tags.", ui::components::tag_group::tag_group_demo::Demo {} }
+                Section { title: "Textarea", blurb: "Multi-line text entry.", ui::components::textarea::textarea_demo::Demo {} }
+                Section { title: "Toggle", blurb: "A pressable on/off button.", ui::components::toggle::toggle_demo::Demo {} }
+                Section { title: "Toggle group", blurb: "Related toggles with shared state.", ui::components::toggle_group::toggle_group_demo::Demo {} }
+                Section { title: "Toolbar", blurb: "Grouped controls with roving focus.", ui::components::toolbar::toolbar_demo::Demo {} }
+                Section { title: "Virtual list", blurb: "Renders only the visible rows.", ui::components::virtual_list::virtual_list_demo::Demo {} }
+                Section { title: "Sidebar", blurb: "Collapsible navigation, shown in a bounded frame.", div { class: "gallery-frame", ui::components::sidebar::sidebar_demo::Demo {} } }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",
