@@ -65,13 +65,13 @@ Original to this repo (not copied, accessible by construction): alert, breadcrum
 
 ```sh
 cargo install --path crates/cli          # installs `rust-ui`
-rust-ui --source /path/to/Rust-UI- list
-rust-ui --source /path/to/Rust-UI- init  --dest assets/theme.css
-rust-ui --source /path/to/Rust-UI- add command --dest src/components   # also copies dialog, button, kbd
-rust-ui --source /path/to/Rust-UI- diff command --dest src/components  # exit 1 if your copy differs
+rust-ui --source https://github.com/Amit-1of1/Rust-UI- list
+rust-ui init  --dest assets/theme.css
+rust-ui add command --dest src/components   # also copies dialog, button, kbd
+rust-ui diff command --dest src/components  # exit 1 if your copy differs
 ```
 
-`add` never overwrites a file you changed unless you pass `--force`. It prints the `pub mod` lines to paste into your `components/mod.rs`. The source is a local checkout (or `RUST_UI_SOURCE`); fetching over HTTP is not built.
+`add` never overwrites a file you changed unless you pass `--force`. It prints the `pub mod` lines to paste into your `components/mod.rs`. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL such as `https://github.com/Amit-1of1/Rust-UI-`; a URL is shallow-cloned into `~/.cache/rust-ui` and needs `git`.
 
 ## Gallery online
 

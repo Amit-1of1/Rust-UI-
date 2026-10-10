@@ -181,3 +181,57 @@ pub fn mod_lines(items: &[Item]) -> String {
         .map(|i| format!("pub mod {};\n", i.name))
         .collect()
 }
+
+/// Whether a `--source` value is a git remote rather than a local checkout.
+pub fn is_remote(source: &str) -> bool {
+    ["https://", "http://", "ssh://", "git@", "file://"]
+        .iter()
+        .any(|p| source.starts_with(p))
+}
+
+/// A stable, filesystem-safe folder name for a remote's cache.
+pub fn cache_name(source: &str) -> String {
+    source
+        .chars()
+        .map(|c| if c.is_ascii_alphanumeric() { c } else { '-' })
+        .collect::<String>()
+        .trim_matches('-')
+        .to_string()
+}
+
+/// Make `source` usable as a local checkout: local paths are returned as they are; remotes are
+/// shallow-cloned into `cache_root` (and fast-forwarded if already there) with the `git` command.
+pub fn materialize(source: &str, cache_root: &Path) -> Result<PathBuf, String> {
+    if !is_remote(source) {
+        return Ok(PathBuf::from(source));
+    }
+    let dir = cache_root.join(cache_name(source));
+    let git = |args: &[&str], cwd: Option<&Path>| -> Result<(), String> {
+        let mut cmd = std::process::Command::new("git");
+        cmd.args(args);
+        if let Some(cwd) = cwd {
+            cmd.current_dir(cwd);
+        }
+        let out = cmd
+            .output()
+            .map_err(|e| format!("could not run git: {e}"))?;
+        if out.status.success() {
+            Ok(())
+        } else {
+            Err(format!(
+                "git {} failed: {}",
+                args.join(" "),
+                String::from_utf8_lossy(&out.stderr).trim()
+            ))
+        }
+    };
+    if dir.join(".git").exists() {
+        // Offline or diverged: keep using what is cached.
+        let _ = git(&["pull", "--ff-only", "--depth", "1", "-q"], Some(&dir));
+    } else {
+        fs::create_dir_all(cache_root).map_err(|e| e.to_string())?;
+        let target = dir.to_string_lossy().into_owned();
+        git(&["clone", "--depth", "1", "-q", source, &target], None)?;
+    }
+    Ok(dir)
+}

@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 use rust_ui_cli::{
-    add, build, compare, load, mod_lines, resolve, to_json, FileState, COMPONENTS_DIR, THEME_FILE,
+    add, build, compare, load, materialize, mod_lines, resolve, to_json, FileState, COMPONENTS_DIR,
+    THEME_FILE,
 };
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -9,9 +10,10 @@ use std::process::ExitCode;
 #[derive(Parser)]
 #[command(name = "rust-ui", version)]
 struct Cli {
-    /// Checkout of the Rust UI repo to copy from.
+    /// Where to copy from: a local checkout of the Rust UI repo, or a git URL
+    /// (cloned into the cache directory on first use).
     #[arg(long, global = true, default_value = ".", env = "RUST_UI_SOURCE")]
-    source: PathBuf,
+    source: String,
     #[command(subcommand)]
     command: Command,
 }
@@ -50,7 +52,13 @@ enum Command {
 }
 
 fn run(cli: Cli) -> Result<ExitCode, String> {
-    let root: &Path = &cli.source;
+    let cache = std::env::var_os("XDG_CACHE_HOME")
+        .map(PathBuf::from)
+        .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".cache")))
+        .unwrap_or_else(std::env::temp_dir)
+        .join("rust-ui");
+    let source = materialize(&cli.source, &cache)?;
+    let root: &Path = &source;
     let err = |e: std::io::Error| e.to_string();
     match cli.command {
         Command::List => {

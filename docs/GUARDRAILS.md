@@ -69,7 +69,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - The command palette has no global Ctrl+K hotkey: it needs a document-level key listener, which means more JS. Open it from a button for now.
 - Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus.
 - Text colours must pass WCAG AA in both themes. Use `--error-text-color` (not `--secondary-error-color`, which is a fill) for error text. `--secondary-color-5` in light was darkened to #6b6b6b for contrast; upstream's #848484 fails.
-- The registry (`registry.json`) is generated; never hand-edit it. The CLI copies from a local checkout only.
+- The registry (`registry.json`) is generated; never hand-edit it. The CLI copies from a local checkout or a git URL (cloned with the `git` command, cached in `~/.cache/rust-ui`).
 - The gallery has its own `apps/gallery/index.html` (lang, no Google Fonts import). Keep `{app_title}` and `{style_include}`; dx injects the script itself.
 - Native (Blitz): `cargo check -p gallery --no-default-features --features native` compiles against `dioxus-native` 0.7.10. It needed `cargo update -p image --precise 0.25.6` (Blitz pins `image =0.25.6`; the lockfile now carries that). It has **not been run**: this sandbox has no GPU and lacks libxkbcommon-x11. Primitives use `document::eval`, so expect dialogs, focus traps and menus not to work there. Treat native as unproven.
 - Release web bundles need `wasm-opt` (dx downloads it; offline, `npm i -g binaryen` provides one). `.github/workflows/pages.yml` publishes the gallery with `--base-path Rust-UI-`; it is manual and unrun on GitHub (the release bundle was served and loaded under that base path locally).
