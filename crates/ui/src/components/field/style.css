@@ -1,0 +1,32 @@
+.dx-field {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.dx-field-label {
+  color: var(--secondary-color-3);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.dx-field[data-invalid="true"] .dx-field-label {
+  color: var(--secondary-error-color);
+}
+
+.dx-field-description {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.8125rem;
+}
+
+.dx-field-error {
+  margin: 0;
+  color: var(--secondary-error-color);
+  font-size: 0.8125rem;
+}
+
+.dx-field[data-invalid="true"] input,
+.dx-field[data-invalid="true"] textarea {
+  border-color: var(--secondary-error-color);
+}

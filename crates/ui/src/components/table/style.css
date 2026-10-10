@@ -1,0 +1,83 @@
+.dx-table-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dx-table {
+  width: 100%;
+  border-collapse: collapse;
+  caption-side: bottom;
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+}
+
+.dx-table-header .dx-table-row {
+  border-bottom: 1px solid var(--primary-color-6);
+}
+
+.dx-table-row {
+  border-bottom: 1px solid var(--primary-color-6);
+  transition: background-color 150ms;
+}
+
+.dx-table-body .dx-table-row:last-child {
+  border-bottom: 0;
+}
+
+.dx-table-body .dx-table-row:hover {
+  background-color: var(--primary-color-5);
+}
+
+.dx-table-head {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  color: var(--secondary-color-5);
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dx-table-cell {
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.dx-table-footer {
+  background-color: var(--primary-color-5);
+  font-weight: 500;
+}
+
+.dx-table-caption {
+  margin-top: 1rem;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.dx-table-sort {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  margin-left: -0.5rem;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  gap: 0.25rem;
+}
+
+.dx-table-sort:hover {
+  background-color: var(--primary-color-5);
+  color: var(--secondary-color);
+}
+
+.dx-table-sort:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+}
+
+.dx-table-sort-icon {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}

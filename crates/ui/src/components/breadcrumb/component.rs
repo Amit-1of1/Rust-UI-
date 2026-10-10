@@ -1,0 +1,56 @@
+use dioxus::prelude::*;
+
+#[css_module("/src/components/breadcrumb/style.css")]
+struct Styles;
+
+#[component]
+pub fn Breadcrumb(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    rsx! {
+        nav { aria_label: "Breadcrumb", class: Styles::dx_breadcrumb, ..attributes,
+            ol { class: Styles::dx_breadcrumb_list, {children} }
+        }
+    }
+}
+
+#[component]
+pub fn BreadcrumbItem(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    rsx! {
+        li { class: Styles::dx_breadcrumb_item, ..attributes, {children} }
+    }
+}
+
+#[component]
+pub fn BreadcrumbLink(
+    #[props(into, default = "#".to_string())] href: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    rsx! {
+        a { class: Styles::dx_breadcrumb_link, href, ..attributes, {children} }
+    }
+}
+
+/// The current page: not a link, and marked with `aria-current="page"`.
+#[component]
+pub fn BreadcrumbPage(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    rsx! {
+        span { class: Styles::dx_breadcrumb_page, aria_current: "page", ..attributes, {children} }
+    }
+}
+
+/// The divider between items. Hidden from assistive technology.
+#[component]
+pub fn BreadcrumbSeparator() -> Element {
+    rsx! {
+        li { class: Styles::dx_breadcrumb_separator, role: "presentation", aria_hidden: "true", "/" }
+    }
+}

@@ -1,0 +1,39 @@
+.dx-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.dx-chart-grid {
+  stroke: var(--primary-color-6);
+  stroke-dasharray: 3 3;
+}
+
+.dx-chart-tick {
+  fill: var(--secondary-color-5);
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.dx-chart-bar {
+  fill: var(--secondary-color);
+  transition: opacity 150ms;
+}
+
+.dx-chart-bar:hover {
+  opacity: 0.8;
+}
+
+.dx-chart-line {
+  stroke: var(--secondary-color);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.dx-chart-dot {
+  fill: var(--primary-color);
+  stroke: var(--secondary-color);
+  stroke-width: 2;
+}

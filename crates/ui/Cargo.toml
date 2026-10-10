@@ -13,9 +13,15 @@ name = "ui"
 dioxus.workspace = true
 dioxus-primitives.workspace = true
 dioxus-icons.workspace = true
+motion.workspace = true
+time = { version = "0.3.44", features = ["std", "macros"] }
+palette = "0.7.6"
+strum = { version = "0.27.2", features = ["derive"] }
+tracing = "0.1"
 
 [dev-dependencies]
 dioxus-ssr = "0.7.0"
 
 [features]
-web = ["dioxus-primitives/web"]
+web = ["dioxus-primitives/web", "motion/web"]
+desktop = ["motion/desktop"]

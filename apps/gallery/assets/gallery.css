@@ -54,3 +54,44 @@ body {
 }
 
 .gallery-stack { display: grid; gap: 0.5rem; max-width: 20rem; }
+
+.gallery-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.gallery-track { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.gallery-track-label { width: 4rem; font-size: 0.875rem; color: var(--secondary-color-5); }
+
+.gallery-track-rail {
+  position: relative;
+  flex: 1;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--primary-color-5);
+}
+
+.gallery-ball {
+  position: absolute;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--secondary-color);
+}
+
+/* Containing block for position: fixed descendants (the sidebar demo). */
+.gallery-frame {
+  position: relative;
+  height: 28rem;
+  overflow: hidden;
+  transform: translateZ(0);
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.5rem;
+}

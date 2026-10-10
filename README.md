@@ -10,6 +10,7 @@ A personal, shadcn-inspired component kit for [Dioxus](https://dioxuslabs.com), 
 |---|---|
 | `crates/ui` | The kit (`use ui::prelude::*;`). One folder per component: `component.rs`, `style.css`, `docs.md`. |
 | `crates/ui/assets/theme.css` | Color tokens for light and dark, plus the reduced-motion rule. |
+| `crates/motion` | Motion layer: spring presets, `Pop` enter/exit, `use_spring`, `use_reduced_motion`. The only place that touches the animation engine. |
 | `apps/gallery` | Live gallery of every component. A component not shown here isn't done. |
 
 ## Run the gallery
@@ -50,6 +51,31 @@ fn App() -> Element {
 }
 ```
 
-## Components (week 1)
+## Components
 
-accordion, badge, button, card, checkbox, dialog, dropdown menu, input, label, popover, separator, sheet, switch, tabs, toast, tooltip.
+Behaviour comes from `dioxus-primitives`; each styled component lives in `crates/ui/src/components/<name>/` with a `<name>_demo.rs` shown in the gallery.
+
+accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, checkbox, collapsible, color picker, combobox, context menu, date picker, dialog, drag-and-drop list, dropdown menu, hover card, input, item, label, menubar, navbar, pagination, popover, progress, radio group, scroll area, select, separator, sheet, sidebar, skeleton, slider, switch, tabs, tag group, textarea, toast, toggle, toggle group, toolbar, tooltip, virtual list.
+
+Original to this repo (not copied, accessible by construction): alert, breadcrumb, chart (SVG bar/line with a text summary), command palette, field (labels, hints, errors, `validate`), kbd, spinner, sortable table.
+
+## Motion
+
+```rust
+use ui::motion::{AnimatePresence, Pop, SpringPreset, use_spring};
+
+// Springs: retargeting mid-flight keeps momentum; reduced motion makes it instant.
+let mut x = use_spring(0.0, SpringPreset::Snappy);
+x.to(120.0);
+
+// Presence: children finish their exit before unmounting. Give each a unique key.
+rsx! {
+    AnimatePresence {
+        for id in items() {
+            Pop { key: "{id}", "Item {id}" }
+        }
+    }
+}
+```
+
+Baseline open/close animation of the overlay components stays in CSS; springs are for things CSS can't do (interruptible motion, exits driven by state).
