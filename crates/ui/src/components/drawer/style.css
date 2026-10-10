@@ -1,0 +1,109 @@
+.dx-drawer-backdrop {
+  position: fixed;
+  z-index: 1000;
+  background: rgb(0 0 0 / 50%);
+  inset: 0;
+}
+
+.dx-drawer-backdrop[data-state="open"] {
+  animation: dx-drawer-fade 200ms ease-out;
+}
+
+.dx-drawer-backdrop[data-state="closed"] {
+  pointer-events: none;
+}
+
+/* The outer element only slides in; the inner body is what the drag moves. */
+.dx-drawer {
+  position: fixed;
+  z-index: 1001;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.dx-drawer-backdrop[data-state="open"] .dx-drawer {
+  animation: dx-drawer-up 220ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.dx-drawer-body {
+  display: flex;
+  width: 100%;
+  max-width: 32rem;
+  max-height: 85vh;
+  box-sizing: border-box;
+  flex-direction: column;
+  padding: 0.5rem 1.25rem 1.25rem;
+  border: 1px solid var(--primary-color-6);
+  border-bottom: none;
+  border-radius: calc(var(--radius) * 2) calc(var(--radius) * 2) 0 0;
+  background: var(--primary-color-2);
+  box-shadow: 0 -4px 20px rgb(0 0 0 / 20%);
+  color: var(--secondary-color-4);
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.dx-drawer-body:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: -2px;
+}
+
+.dx-drawer-handle {
+  width: 2.5rem;
+  height: 0.25rem;
+  align-self: center;
+  border-radius: 9999px;
+  background: var(--primary-color-7);
+}
+
+.dx-drawer-title {
+  margin: 0;
+  color: var(--secondary-color-1);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.dx-drawer-description {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.dx-drawer-close {
+  align-self: flex-end;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.dx-drawer-close:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+@keyframes dx-drawer-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dx-drawer-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-drawer-backdrop[data-state="open"],
+  .dx-drawer-backdrop[data-state="open"] .dx-drawer {
+    animation: none;
+  }
+}

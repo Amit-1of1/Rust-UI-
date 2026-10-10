@@ -314,3 +314,9 @@ fn multi_select_demo_renders() {
     let html = render(ui::components::multi_select::multi_select_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn drawer_demo_renders() {
+    let html = render(ui::components::drawer::drawer_demo::Demo);
+    assert!(!html.is_empty());
+}

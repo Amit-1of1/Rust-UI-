@@ -90,6 +90,7 @@ fn App() -> Element {
                 Section { title: "Carousel", blurb: "Snap-scrolling slides with Previous and Next; nothing autoplays.", ui::components::carousel::carousel_demo::Demo {} }
                 Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::components::dropzone::dropzone_demo::Demo {} }
                 Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::components::multi_select::multi_select_demo::Demo {} }
+                Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::components::drawer::drawer_demo::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

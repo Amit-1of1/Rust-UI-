@@ -289,6 +289,19 @@
       ]
     },
     {
+      "name": "drawer",
+      "files": [
+        "drawer/component.rs",
+        "drawer/docs.md",
+        "drawer/drawer_demo.rs",
+        "drawer/mod.rs",
+        "drawer/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "dropdown_menu",
       "files": [
         "dropdown_menu/component.rs",

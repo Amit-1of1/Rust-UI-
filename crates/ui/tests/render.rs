@@ -329,3 +329,17 @@ fn multi_select_starts_closed_with_a_named_button() {
         "panel is closed: {html}"
     );
 }
+
+#[test]
+fn closed_drawer_renders_nothing_visible() {
+    // Open dialogs mount after the first render, so the open behaviour is covered by the
+    // browser test in tests/e2e/drawer.mjs; here we only check closed is quiet.
+    let html = render(|| {
+        rsx! {
+            Drawer { open: false,
+                DrawerTitle { "Move goal" }
+            }
+        }
+    });
+    assert!(!html.contains("Move goal"), "{html}");
+}

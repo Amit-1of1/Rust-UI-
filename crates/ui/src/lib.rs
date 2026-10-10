@@ -47,6 +47,7 @@ pub mod prelude {
     pub use crate::components::data_table::*;
     pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
+    pub use crate::components::drawer::*;
     pub use crate::components::dropdown_menu::*;
     pub use crate::components::dropzone::*;
     pub use crate::components::empty::*;

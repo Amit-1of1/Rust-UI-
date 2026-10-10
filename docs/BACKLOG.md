@@ -1,6 +1,6 @@
 # Component and essentials backlog
 
-**Status (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select` and `dropzone` are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Still open: `drawer` (needs a vertical swipe in `crates/motion`), then the essentials list below.
+**Status (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select`, `dropzone` and `drawer` (with a vertical, one-way `SwipeDismiss`) are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Component batches are done; next is the essentials list below and the research ideas (`rust-ui doctor`, then `rust-ui theme --brand`).
 
 Written 2026-10-10 after checking two upstream repos by cloning them (not by reading the web UI):
 
