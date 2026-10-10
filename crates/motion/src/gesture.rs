@@ -88,15 +88,20 @@ impl SwipeTracker {
         self.velocity
     }
 
+    /// Velocity in px/ms at release time `t_ms`; zero if the pointer had already stopped.
+    pub fn release_velocity(&self, t_ms: f64) -> f64 {
+        if t_ms - self.last_t > STALE_MS {
+            0.0
+        } else {
+            self.velocity
+        }
+    }
+
     /// Decide what the release at `t_ms` means for an element `width` pixels wide.
     ///
     /// A pointer that stopped moving before it was released is not a flick.
     pub fn finish(&self, width: f64, t_ms: f64) -> SwipeOutcome {
-        let velocity = if t_ms - self.last_t > STALE_MS {
-            0.0
-        } else {
-            self.velocity
-        };
+        let velocity = self.release_velocity(t_ms);
         let offset = self.offset();
         let direction = if offset >= 0.0 {
             SwipeDirection::Right
@@ -112,6 +117,26 @@ impl SwipeTracker {
             SwipeOutcome::Cancel
         }
     }
+}
+
+/// Keep receiving this pointer's events after it leaves the element (web only; no JS needed).
+/// Captures on the event target (a child of the element is fine: its events bubble to us); with
+/// Dioxus' delegated listeners `current_target` would be the document root, not the element.
+fn capture_pointer(e: &Event<PointerData>) {
+    #[cfg(target_arch = "wasm32")]
+    {
+        use web_sys::wasm_bindgen::JsCast;
+        if let Some(ev) = e.data().downcast::<web_sys::PointerEvent>() {
+            if let Some(el) = ev
+                .target()
+                .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
+            {
+                let _ = el.set_pointer_capture(ev.pointer_id());
+            }
+        }
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    let _ = e;
 }
 
 /// Drag an element sideways to dismiss it, like a toast. Keyboard users press
@@ -137,14 +162,20 @@ pub fn SwipeDismiss(
     let mut dismissed = use_signal(|| false);
     let mut notified = use_signal(|| false);
 
-    let mut release = move |start: f32, end: f32| {
+    // `velocity` is the pointer speed in px/ms at release, so a throw keeps its momentum.
+    let mut release = move |start: f32, end: f32, velocity: f64| {
         dragging.set(false);
         from.set(start);
         to.set(end);
         progress.reset();
         progress.to(1.0);
+        let distance = (end - start) as f64;
+        if distance.abs() > 1.0 {
+            // Progress units per second; negative if the pointer was moving away from the target.
+            progress.set_velocity((velocity * 1000.0 / distance) as f32);
+        }
     };
-    let mut dismiss = move |start: f32, dir: SwipeDirection| {
+    let mut dismiss = move |start: f32, dir: SwipeDirection, velocity: f64| {
         if dismissed() {
             return;
         }
@@ -154,7 +185,7 @@ pub fn SwipeDismiss(
         } else {
             -1.0
         };
-        release(start, sign * width as f32 * 1.2);
+        release(start, sign * width as f32 * 1.2, velocity);
     };
     // Tell the parent once the exit spring has settled.
     use_effect(move || {
@@ -179,6 +210,7 @@ pub fn SwipeDismiss(
                 if dismissed() {
                     return;
                 }
+                capture_pointer(&e);
                 progress.reset();
                 from.set(0.0);
                 to.set(0.0);
@@ -194,9 +226,11 @@ pub fn SwipeDismiss(
             onpointerup: move |_| {
                 if let Some(t) = tracker.take() {
                     let start = t.offset() as f32;
-                    match t.finish(width, now_ms()) {
-                        SwipeOutcome::Dismiss(dir) => dismiss(start, dir),
-                        SwipeOutcome::Cancel => release(start, 0.0),
+                    let now = now_ms();
+                    let velocity = t.release_velocity(now);
+                    match t.finish(width, now) {
+                        SwipeOutcome::Dismiss(dir) => dismiss(start, dir, velocity),
+                        SwipeOutcome::Cancel => release(start, 0.0, velocity),
                     }
                 }
             },
@@ -204,13 +238,13 @@ pub fn SwipeDismiss(
                 if tracker().is_some() {
                     let start = tracker().map(|t| t.offset() as f32).unwrap_or(0.0);
                     tracker.set(None);
-                    release(start, 0.0);
+                    release(start, 0.0, 0.0);
                 }
             },
             onkeydown: move |e| {
                 if matches!(e.key(), Key::Delete | Key::Backspace | Key::Escape) {
                     e.prevent_default();
-                    dismiss(0.0, SwipeDirection::Right);
+                    dismiss(0.0, SwipeDirection::Right, 0.0);
                 }
             },
             ..attributes,
@@ -271,6 +305,15 @@ mod tests {
             t.finish(300.0, 25.0),
             SwipeOutcome::Dismiss(SwipeDirection::Right)
         );
+    }
+
+    #[test]
+    fn release_velocity_is_zero_once_the_pointer_has_stopped() {
+        let mut t = SwipeTracker::new(0.0, 0.0);
+        t.update(30.0, 10.0);
+        t.update(60.0, 20.0);
+        assert!(t.release_velocity(25.0) > 0.5);
+        assert_eq!(t.release_velocity(500.0), 0.0);
     }
 
     #[test]

@@ -15,7 +15,7 @@ dioxus.workspace = true
 dioxus-motion = { version = "=0.4.0", default-features = false, features = ["dioxus"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "0.3", features = ["Window", "MediaQueryList", "Performance"] }
+web-sys = { version = "0.3", features = ["Window", "MediaQueryList", "Performance", "PointerEvent", "Element", "Event", "EventTarget"] }
 
 [dev-dependencies]
 dioxus-ssr = "0.7.0"
