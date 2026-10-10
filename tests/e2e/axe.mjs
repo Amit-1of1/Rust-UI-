@@ -1,5 +1,6 @@
 // Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
 // then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
+// For apps/site: `GALLERY_URL=http://localhost:8767/ READY_SELECTOR=#pricing node axe.mjs`.
 import { chromium } from "playwright";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
@@ -16,7 +17,7 @@ const ACCEPTED = {
 const browser = await chromium.launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
 await page.goto(url);
-await page.waitForSelector(".gallery-main", { timeout: 30000 });
+await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
 await page.waitForTimeout(1500);
 await page.evaluate(axeSource);
 const result = await page.evaluate(() =>

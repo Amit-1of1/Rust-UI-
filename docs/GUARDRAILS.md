@@ -73,6 +73,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - The gallery has its own `apps/gallery/index.html` (lang, no Google Fonts import). Keep `{app_title}` and `{style_include}`; dx injects the script itself.
 - Native (Blitz): `cargo check -p gallery --no-default-features --features native` compiles against `dioxus-native` 0.7.10. It needed `cargo update -p image --precise 0.25.6` (Blitz pins `image =0.25.6`; the lockfile now carries that). It has **not been run**: this sandbox has no GPU and lacks libxkbcommon-x11. Primitives use `document::eval`, so expect dialogs, focus traps and menus not to work there. Treat native as unproven.
 - Release web bundles need `wasm-opt` (dx downloads it; offline, `npm i -g binaryen` provides one). `.github/workflows/pages.yml` publishes the gallery with `--base-path Rust-UI-`; it is manual and unrun on GitHub (the release bundle was served and loaded under that base path locally).
+- `apps/site` must stay kit-only: if it needs something the kit lacks, add that to the kit (or log the gap here) instead of hand-rolling it in the site. Its only own code is page layout CSS and two `web-sys` calls (theme attribute, `location.hash`), both web-only.
 
 ## Decision log
 

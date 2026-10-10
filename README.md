@@ -59,6 +59,10 @@ accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, ch
 
 Original to this repo (not copied, accessible by construction): alert, breadcrumb, chart (SVG bar/line with a text summary), command palette, field (labels, hints, errors, `validate`), kbd, spinner, sortable table.
 
+## Demo site
+
+`apps/site` ("Orbit") is a small landing page built only from the kit: nav, theme switch, pricing tabs, chart, table, FAQ accordion, command palette, a validated signup form with toast and dialog, a swipe-dismiss banner and an animated waitlist. It is a real-world test of the kit; run it with `dx serve --platform web` in `apps/site`.
+
 ## Registry and CLI
 
 `registry.json` lists every component with its files and the other components it needs. It is generated from the folders (`cargo run -p rust-ui-cli -- registry`), and a test fails if it goes stale.
