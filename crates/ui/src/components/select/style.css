@@ -147,8 +147,8 @@
     position-anchor: --dx-select;
     position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
     inset: auto;
-    top: anchor(bottom);
-    left: anchor(left);
+    inset-block-start: anchor(end);
+    inset-inline-start: anchor(start);
     min-width: anchor-size(width);
   }
 }

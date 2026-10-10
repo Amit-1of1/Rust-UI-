@@ -157,8 +157,8 @@
     position-anchor: --dx-combobox;
     position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
     inset: auto;
-    top: anchor(bottom);
-    left: anchor(left);
-    margin-top: 0.25rem;
+    inset-block-start: anchor(end);
+    inset-inline-start: anchor(start);
+    margin-block-start: 0.25rem;
   }
 }

@@ -264,39 +264,39 @@
 
 .dx-popover .dx-popover-content[data-side="top"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: top;
+    position-area: block-start;
     position-try-fallbacks: flip-block;
   }
 }
 
 .dx-popover .dx-popover-content[data-side="top"][data-align="start"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: top span-right;
+    position-area: block-start span-inline-end;
   }
 }
 
 .dx-popover .dx-popover-content[data-side="top"][data-align="end"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: top span-left;
+    position-area: block-start span-inline-start;
   }
 }
 
 .dx-popover .dx-popover-content[data-side="bottom"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: bottom;
+    position-area: block-end;
     position-try-fallbacks: flip-block;
   }
 }
 
 .dx-popover .dx-popover-content[data-side="bottom"][data-align="start"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: bottom span-right;
+    position-area: block-end span-inline-end;
   }
 }
 
 .dx-popover .dx-popover-content[data-side="bottom"][data-align="end"] {
   @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
-    position-area: bottom span-left;
+    position-area: block-end span-inline-start;
   }
 }
 
