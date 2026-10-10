@@ -2,7 +2,10 @@
 //! isn't done (docs/GUARDRAILS.md).
 
 use dioxus::prelude::*;
-use ui::motion::{use_reduced_motion, use_spring, AnimatePresence, Pop, SpringPreset};
+use ui::motion::{
+    use_reduced_motion, use_spring, AnimatePresence, FlipItem, FlipList, Pop, SpringPreset,
+    SwipeDismiss,
+};
 use ui::prelude::*;
 
 const GALLERY_CSS: Asset = asset!("/assets/gallery.css");
@@ -19,7 +22,7 @@ fn App() -> Element {
         ToastProvider {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 5" }
+                Badge { variant: BadgeVariant::Secondary, "week 6" }
             }
             section { class: "gallery-main", "aria-label": "Component gallery",
                 Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
@@ -78,8 +81,13 @@ fn App() -> Element {
                 }
                 Section {
                     title: "Presence",
-                    blurb: "Items fade and scale in, and finish their exit before they unmount.",
+                    blurb: "Items fade and scale in, finish their exit before they unmount, and the rest slide into the gap.",
                     PresenceDemo {}
+                }
+                Section {
+                    title: "Swipe to dismiss",
+                    blurb: "Drag past 40% or flick to dismiss; Delete works from the keyboard.",
+                    SwipeDemo {}
                 }
             }
         }
@@ -418,19 +426,43 @@ fn PresenceDemo() -> Element {
                 "Add item"
             }
         }
-        div { style: "max-width: 22rem;",
+        FlipList { id: "flip-list", style: "max-width: 22rem;",
             AnimatePresence {
                 for id in items() {
-                    Pop { key: "{id}", class: "gallery-item", preset: SpringPreset::Snappy,
-                        span { "Item {id}" }
-                        Button {
-                            variant: ButtonVariant::Ghost,
-                            size: ButtonSize::Sm,
-                            onclick: move |_| items.write().retain(|i| *i != id),
-                            "Remove"
+                    FlipItem { key: "{id}",
+                        Pop { class: "gallery-item", preset: SpringPreset::Snappy,
+                            span { "Item {id}" }
+                            Button {
+                                variant: ButtonVariant::Ghost,
+                                size: ButtonSize::Sm,
+                                onclick: move |_| items.write().retain(|i| *i != id),
+                                "Remove"
+                            }
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+#[component]
+fn SwipeDemo() -> Element {
+    let mut cards = use_signal(|| vec![1u32, 2, 3]);
+    rsx! {
+        p { id: "swipe-hint", "Drag a card sideways, or focus it and press Delete." }
+        div { id: "swipe-list", style: "max-width: 22rem; display: flex; flex-direction: column; gap: 0.5rem;",
+            for id in cards() {
+                SwipeDismiss {
+                    key: "{id}",
+                    class: "gallery-item",
+                    "data-card": "{id}",
+                    on_dismiss: move |_| cards.write().retain(|c| *c != id),
+                    "Card {id}"
+                }
+            }
+            if cards().is_empty() {
+                Button { onclick: move |_| cards.set(vec![1, 2, 3]), "Reset cards" }
             }
         }
     }
