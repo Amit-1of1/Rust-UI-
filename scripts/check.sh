@@ -48,6 +48,8 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node form.mjs)
     fi
     if [ "$name" = gallery ]; then
+      step "otp + carousel behaviour (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node otp.mjs)
       step "table behaviour (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node table.mjs)
       for accent in blue green violet rose orange; do

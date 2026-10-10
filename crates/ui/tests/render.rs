@@ -227,3 +227,66 @@ fn data_table_renders_a_captioned_page_with_a_status() {
     assert!(html.contains("aria-label=\"Filter rows\""), "{html}");
     assert_eq!(html.matches("type=\"checkbox\"").count(), 6, "{html}");
 }
+
+#[test]
+fn input_otp_has_a_named_group_and_one_input_per_character() {
+    let html = render(|| rsx! { InputOtp { label: "Code", length: 4, group: 2 } });
+    assert!(
+        html.contains("role=\"group\"") && html.contains("aria-label=\"Code\""),
+        "{html}"
+    );
+    assert_eq!(html.matches("<input").count(), 4, "{html}");
+    assert!(html.contains("Code, character 3 of 4"), "{html}");
+    assert_eq!(
+        html.matches("autocomplete=\"one-time-code\"").count(),
+        1,
+        "{html}"
+    );
+    assert_eq!(
+        html.matches("aria-hidden=\"true\"").count(),
+        1,
+        "one dash between the two groups: {html}"
+    );
+}
+
+#[test]
+fn input_group_wraps_a_control_and_marks_invalid() {
+    let html = render(|| {
+        rsx! {
+            InputGroup { invalid: true,
+                InputGroupAddon { "https://" }
+                InputGroupInput { "aria-label": "Site" }
+                InputGroupAddon { end: true, "go" }
+            }
+        }
+    });
+    assert!(
+        html.contains("role=\"group\"") && html.contains("data-invalid=\"true\""),
+        "{html}"
+    );
+    assert!(
+        html.contains("data-align=\"start\"") && html.contains("data-align=\"end\""),
+        "{html}"
+    );
+    assert!(html.contains("aria-label=\"Site\""), "{html}");
+}
+
+#[test]
+fn carousel_is_a_labelled_carousel_of_labelled_slides() {
+    let html = render(|| {
+        rsx! {
+            Carousel { label: "Plans",
+                CarouselItem { label: "1 of 2", "A" }
+                CarouselItem { label: "2 of 2", "B" }
+            }
+        }
+    });
+    assert!(html.contains("aria-roledescription=\"carousel\""), "{html}");
+    assert_eq!(
+        html.matches("aria-roledescription=\"slide\"").count(),
+        2,
+        "{html}"
+    );
+    assert!(html.contains("tabindex=\"0\""), "{html}");
+    assert!(html.contains("Previous") && html.contains("Next"), "{html}");
+}

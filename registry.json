@@ -149,6 +149,17 @@
       "registryDependencies": []
     },
     {
+      "name": "carousel",
+      "files": [
+        "carousel/carousel_demo.rs",
+        "carousel/component.rs",
+        "carousel/docs.md",
+        "carousel/mod.rs",
+        "carousel/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "chart",
       "files": [
         "chart/chart_demo.rs",
@@ -347,6 +358,28 @@
         "input/docs.md",
         "input/mod.rs",
         "input/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input_group",
+      "files": [
+        "input_group/component.rs",
+        "input_group/docs.md",
+        "input_group/input_group_demo.rs",
+        "input_group/mod.rs",
+        "input_group/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input_otp",
+      "files": [
+        "input_otp/component.rs",
+        "input_otp/docs.md",
+        "input_otp/input_otp_demo.rs",
+        "input_otp/mod.rs",
+        "input_otp/style.css"
       ],
       "registryDependencies": []
     },

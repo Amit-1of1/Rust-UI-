@@ -284,3 +284,21 @@ fn data_table_demo_renders() {
     let html = render(ui::components::data_table::data_table_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn input_otp_demo_renders() {
+    let html = render(ui::components::input_otp::input_otp_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn input_group_demo_renders() {
+    let html = render(ui::components::input_group::input_group_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn carousel_demo_renders() {
+    let html = render(ui::components::carousel::carousel_demo::Demo);
+    assert!(!html.is_empty());
+}

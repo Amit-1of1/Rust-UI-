@@ -36,6 +36,7 @@ pub mod prelude {
     pub use crate::components::calendar::*;
     pub use crate::components::callout::*;
     pub use crate::components::card::*;
+    pub use crate::components::carousel::*;
     pub use crate::components::chart::*;
     pub use crate::components::checkbox::*;
     pub use crate::components::collapsible::*;
@@ -52,6 +53,8 @@ pub mod prelude {
     pub use crate::components::form::*;
     pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
+    pub use crate::components::input_group::*;
+    pub use crate::components::input_otp::*;
     pub use crate::components::item::*;
     pub use crate::components::kbd::*;
     pub use crate::components::label::*;
