@@ -9,7 +9,7 @@
   padding: 0.25rem;
   padding: 8px 12px;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   border-radius: calc(0.5rem);
   background: none;
   background-color: var(--light, var(--primary-color)) var(--dark, color-mix(in oklab, #FFFFFF26 30%, transparent));

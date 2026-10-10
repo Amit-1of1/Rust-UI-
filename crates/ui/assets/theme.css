@@ -58,6 +58,15 @@ html[data-theme="light"] [class~="dxc-system"] {
 
   /* Highlight colors */
   --focused-border-color: var(--dark, #2b7fff) var(--light, #2b7fff);
+
+  /* Accent: fills for primary actions and checked/active states. Neutral by default;
+     set data-accent="blue|green|violet|rose|orange" on <html> (or any ancestor) to recolor.
+     Override --accent-color / --accent-contrast yourself for a brand color. */
+  --accent-color: var(--secondary-color-2);
+  --accent-contrast: var(--primary-color);
+
+  /* Corner radius shared by controls; set on <html> to square or round everything. */
+  --radius: 0.5rem;
   --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
   --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
   --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
@@ -69,6 +78,33 @@ html[data-theme="light"] [class~="dxc-system"] {
   --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
   --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
   --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
+}
+
+/* Accent presets. Light fills carry white text (>=4.5:1); dark fills carry near-black text. */
+[data-accent="blue"] {
+  --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+  --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+}
+[data-accent="green"] {
+  --accent-color: var(--dark, #4ade80) var(--light, #15803d);
+  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+  --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
+}
+[data-accent="violet"] {
+  --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+  --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+}
+[data-accent="rose"] {
+  --accent-color: var(--dark, #fb7185) var(--light, #be123c);
+  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+  --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
+}
+[data-accent="orange"] {
+  --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
+  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+  --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
 }
 
 /* Respect the OS "reduce motion" setting for every component (docs/GUARDRAILS.md). */

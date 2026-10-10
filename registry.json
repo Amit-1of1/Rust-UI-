@@ -521,6 +521,17 @@
       ]
     },
     {
+      "name": "theme_customizer",
+      "files": [
+        "theme_customizer/component.rs",
+        "theme_customizer/docs.md",
+        "theme_customizer/mod.rs",
+        "theme_customizer/style.css",
+        "theme_customizer/theme_customizer_demo.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "toast",
       "files": [
         "toast/component.rs",

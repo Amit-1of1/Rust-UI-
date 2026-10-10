@@ -67,6 +67,7 @@ pub mod prelude {
     pub use crate::components::table::*;
     pub use crate::components::tabs::*;
     pub use crate::components::textarea::*;
+    pub use crate::components::theme_customizer::*;
     pub use crate::components::toast::*;
     pub use crate::components::toggle::*;
     pub use crate::components::toggle_group::*;

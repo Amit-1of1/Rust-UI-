@@ -31,7 +31,7 @@
     position: absolute;
     height: 100%;
     border-radius: 9999px;
-    background-color: var(--secondary-color-2);
+    background-color: var(--accent-color);
 }
 
 .dx-slider[data-orientation="vertical"] .dx-slider-range {

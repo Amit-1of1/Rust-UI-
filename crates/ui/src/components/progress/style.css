@@ -16,7 +16,7 @@
 .dx-progress-indicator {
     width: var(--progress-value, 0%);
     height: 100%;
-    background-color: var(--secondary-color-1);
+    background-color: var(--accent-color);
     transition: width 250ms ease;
 }
 

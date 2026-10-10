@@ -19,9 +19,9 @@
 }
 
 .dx-checkbox[data-state="checked"] {
-    background-color: var(--secondary-color-2);
+    background-color: var(--accent-color);
     box-shadow: none;
-    color: var(--primary-color);
+    color: var(--accent-contrast);
 }
 
 .dx-checkbox:focus-visible {

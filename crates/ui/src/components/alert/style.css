@@ -4,7 +4,7 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   background-color: var(--primary-color-2);
   color: var(--secondary-color-4);
   font-size: 0.875rem;

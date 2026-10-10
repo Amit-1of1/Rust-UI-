@@ -30,7 +30,7 @@
   padding: 12px 16px;
   border: 1px solid var(--light, var(--primary-color-6))
     var(--dark, var(--primary-color-7));
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   margin-top: -4rem;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   filter: var(--light, none)

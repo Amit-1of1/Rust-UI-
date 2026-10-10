@@ -43,6 +43,14 @@ if [ "$A11Y" = 1 ]; then
       step "axe $name ($scheme)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs "$scheme")
     done
+    if [ "$name" = gallery ]; then
+      for accent in blue green violet rose orange; do
+        for scheme in light dark; do
+          step "axe $name ($accent, $scheme)"
+          (cd tests/e2e && ACCENT="$accent" GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs "$scheme")
+        done
+      done
+    fi
   done
 fi
 

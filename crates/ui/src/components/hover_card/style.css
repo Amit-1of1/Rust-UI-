@@ -15,7 +15,7 @@
   padding: 5px;
   border: 1px solid var(--light, var(--primary-color-6))
     var(--dark, var(--primary-color-7));
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   animation: dx-hover-card-fade-in 0.1s ease-out;
   background: var(--light, var(--primary-color))
     var(--dark, var(--primary-color-5));

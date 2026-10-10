@@ -39,7 +39,7 @@
 
 .dx-radio-item[data-state="checked"]::before {
   border: 0.25rem solid var(--light, var(--primary-color)) var(--dark, var(--primary-color-3));
-  background: var(--secondary-color-4);
+  background: var(--accent-color);
 }
 
 .dx-radio-item:disabled {

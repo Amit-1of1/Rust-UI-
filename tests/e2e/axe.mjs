@@ -1,5 +1,5 @@
 // Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
-// then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
+// (set ACCENT=blue|green|... to scan an accent preset), then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
 // For apps/site: `GALLERY_URL=http://localhost:8767/ READY_SELECTOR=#pricing node axe.mjs`.
 import { chromium } from "playwright";
 import { createRequire } from "node:module";
@@ -18,6 +18,9 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
 await page.goto(url);
 await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+if (process.env.ACCENT) {
+  await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
+}
 await page.waitForTimeout(1500);
 await page.evaluate(axeSource);
 const result = await page.evaluate(() =>
@@ -28,6 +31,6 @@ for (const v of bad) {
   console.log(`${v.impact}\t${v.id}\t${v.help}`);
   for (const n of v.nodes.slice(0, 3)) console.log(`   ${n.target.join(" ")}`);
 }
-console.log(`${scheme}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
+console.log(`${scheme}${process.env.ACCENT ? " / " + process.env.ACCENT : ""}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
 await browser.close();
 process.exit(bad.length ? 1 : 0);
