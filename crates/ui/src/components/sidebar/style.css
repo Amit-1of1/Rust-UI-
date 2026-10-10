@@ -144,7 +144,7 @@
 
 [data-variant="floating"] .dx-sidebar-inner {
   border: 1px solid var(--dx-sidebar-border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
 }
 

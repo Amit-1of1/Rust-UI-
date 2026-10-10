@@ -96,7 +96,7 @@
 .dx-alert-dialog-cancel {
   padding: 8px 18px;
   border: 1px solid var(--primary-color-6);
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   background-color: var(--light, var(--primary-color))
     var(--dark, var(--primary-color-3));
   color: var(--secondary-color-4);
@@ -116,7 +116,7 @@
 .dx-alert-dialog-action {
   padding: 8px 18px;
   border: 1px solid var(--primary-error-color);
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   background-color: var(--primary-error-color);
   color: var(--contrast-error-color);
   cursor: pointer;

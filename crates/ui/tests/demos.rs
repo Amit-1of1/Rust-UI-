@@ -218,3 +218,9 @@ fn chart_demo_renders() {
     let html = render(ui::components::chart::chart_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn theme_customizer_demo_renders() {
+    let html = render(ui::components::theme_customizer::theme_customizer_demo::Demo);
+    assert!(!html.is_empty());
+}

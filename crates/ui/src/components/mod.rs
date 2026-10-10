@@ -47,6 +47,7 @@ pub mod table;
 pub mod tabs;
 pub mod tag_group;
 pub mod textarea;
+pub mod theme_customizer;
 pub mod toast;
 pub mod toggle;
 pub mod toggle_group;

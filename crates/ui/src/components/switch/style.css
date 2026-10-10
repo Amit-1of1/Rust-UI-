@@ -17,7 +17,7 @@
 }
 
 .dx-switch[data-state="checked"] {
-  background-color: var(--secondary-color-2);
+  background-color: var(--accent-color);
 }
 
 .dx-switch:focus-visible {

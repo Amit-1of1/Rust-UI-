@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--primary-color-6);
-    border-radius: 0.5rem;
+    border-radius: var(--radius);
     background-color: var(--light, transparent)
         var(--dark, var(--primary-color-3));
     color: var(--secondary-color-5);
@@ -120,7 +120,7 @@
 .dx-calendar-grid-cell {
     width: 2rem;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--radius);
     aspect-ratio: 1;
     background: none;
     color: var(--secondary-color-4);
@@ -221,7 +221,7 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
 }
 
 .dx-calendar-grid-weeknum {
-    border-radius: 0.5rem;
+    border-radius: var(--radius);
     background-color: var(--primary-color);
     color: var(--secondary-color-5);
     font-size: 12px;
@@ -248,7 +248,7 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
 
 .dx-calendar-month-select-container:has(:focus-visible),
 .dx-calendar-year-select-container:has(:focus-visible) {
-    border-radius: 0.5rem;
+    border-radius: var(--radius);
     outline: 2px solid var(--focused-border-color);
 }
 

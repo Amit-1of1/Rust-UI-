@@ -34,7 +34,7 @@
     justify-content: space-between;
     padding: 0.5rem;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--radius);
     background: none;
     background: var(--light, var(--primary-color))
         var(--dark, var(--primary-color-3));
