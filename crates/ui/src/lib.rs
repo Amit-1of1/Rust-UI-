@@ -24,24 +24,30 @@ pub fn ThemeStyles() -> Element {
 /// Everything an app usually needs: `use ui::prelude::*;`
 pub mod prelude {
     pub use crate::components::accordion::*;
+    pub use crate::components::alert::*;
     pub use crate::components::alert_dialog::*;
     pub use crate::components::aspect_ratio::*;
     pub use crate::components::avatar::*;
     pub use crate::components::badge::*;
+    pub use crate::components::breadcrumb::*;
     pub use crate::components::button::*;
     pub use crate::components::calendar::*;
     pub use crate::components::card::*;
+    pub use crate::components::chart::*;
     pub use crate::components::checkbox::*;
     pub use crate::components::collapsible::*;
     pub use crate::components::color_picker::*;
     pub use crate::components::combobox::*;
+    pub use crate::components::command::*;
     pub use crate::components::context_menu::*;
     pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
     pub use crate::components::dropdown_menu::*;
+    pub use crate::components::field::*;
     pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
     pub use crate::components::item::*;
+    pub use crate::components::kbd::*;
     pub use crate::components::label::*;
     pub use crate::components::menubar::*;
     pub use crate::components::navbar::*;
@@ -56,7 +62,9 @@ pub mod prelude {
     pub use crate::components::sidebar::*;
     pub use crate::components::skeleton::*;
     pub use crate::components::slider::*;
+    pub use crate::components::spinner::*;
     pub use crate::components::switch::*;
+    pub use crate::components::table::*;
     pub use crate::components::tabs::*;
     pub use crate::components::textarea::*;
     pub use crate::components::toast::*;

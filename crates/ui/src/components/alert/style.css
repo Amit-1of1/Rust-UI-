@@ -1,0 +1,32 @@
+.dx-alert {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.5rem;
+  background-color: var(--primary-color-2);
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+  gap: 0.125rem;
+}
+
+.dx-alert[data-variant="destructive"] {
+  border-color: var(--secondary-error-color);
+  color: var(--secondary-error-color);
+}
+
+.dx-alert-title {
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.dx-alert-description {
+  color: var(--secondary-color-5);
+  line-height: 1.25rem;
+}
+
+.dx-alert[data-variant="destructive"] .dx-alert-description {
+  color: inherit;
+  opacity: 0.9;
+}

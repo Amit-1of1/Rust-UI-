@@ -57,6 +57,8 @@ Behaviour comes from `dioxus-primitives`; each styled component lives in `crates
 
 accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, checkbox, collapsible, color picker, combobox, context menu, date picker, dialog, drag-and-drop list, dropdown menu, hover card, input, item, label, menubar, navbar, pagination, popover, progress, radio group, scroll area, select, separator, sheet, sidebar, skeleton, slider, switch, tabs, tag group, textarea, toast, toggle, toggle group, toolbar, tooltip, virtual list.
 
+Original to this repo (not copied, accessible by construction): alert, breadcrumb, chart (SVG bar/line with a text summary), command palette, field (labels, hints, errors, `validate`), kbd, spinner, sortable table.
+
 ## Motion
 
 ```rust

@@ -19,7 +19,7 @@ fn App() -> Element {
         ToastProvider {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 3" }
+                Badge { variant: BadgeVariant::Secondary, "week 4" }
             }
             main { class: "gallery-main",
                 Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
@@ -63,6 +63,14 @@ fn App() -> Element {
                 Section { title: "Toolbar", blurb: "Grouped controls with roving focus.", ui::components::toolbar::toolbar_demo::Demo {} }
                 Section { title: "Virtual list", blurb: "Renders only the visible rows.", ui::components::virtual_list::virtual_list_demo::Demo {} }
                 Section { title: "Sidebar", blurb: "Collapsible navigation, shown in a bounded frame.", div { class: "gallery-frame", ui::components::sidebar::sidebar_demo::Demo {} } }
+                Section { title: "Alert", blurb: "A callout; announced when it appears.", ui::components::alert::alert_demo::Demo {} }
+                Section { title: "Breadcrumb", blurb: "Where you are in the hierarchy.", ui::components::breadcrumb::breadcrumb_demo::Demo {} }
+                Section { title: "Kbd", blurb: "Keyboard keys.", ui::components::kbd::kbd_demo::Demo {} }
+                Section { title: "Spinner", blurb: "Indeterminate loading.", ui::components::spinner::spinner_demo::Demo {} }
+                Section { title: "Field and validation", blurb: "Label, control, hint and error wired together with aria-describedby.", ui::components::field::field_demo::Demo {} }
+                Section { title: "Table", blurb: "Sortable columns announce their direction.", ui::components::table::table_demo::Demo {} }
+                Section { title: "Command palette", blurb: "Type to filter, arrow keys to move, Enter to run.", ui::components::command::command_demo::Demo {} }
+                Section { title: "Charts", blurb: "SVG charts with a text summary for screen readers.", ui::components::chart::chart_demo::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

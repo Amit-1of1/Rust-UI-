@@ -1,0 +1,24 @@
+.dx-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  box-sizing: border-box;
+  border: 2px solid var(--primary-color-7);
+  border-top-color: var(--secondary-color);
+  border-radius: 999px;
+  animation: dx-spinner-spin 700ms linear infinite;
+}
+
+@keyframes dx-spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A frozen ring is still a valid "loading" signal when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  .dx-spinner {
+    animation-duration: 3s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

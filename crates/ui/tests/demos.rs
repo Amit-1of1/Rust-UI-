@@ -170,3 +170,51 @@ fn virtual_list_demo_renders() {
     let html = render(ui::components::virtual_list::virtual_list_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn alert_demo_renders() {
+    let html = render(ui::components::alert::alert_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn breadcrumb_demo_renders() {
+    let html = render(ui::components::breadcrumb::breadcrumb_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn kbd_demo_renders() {
+    let html = render(ui::components::kbd::kbd_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn spinner_demo_renders() {
+    let html = render(ui::components::spinner::spinner_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn field_demo_renders() {
+    let html = render(ui::components::field::field_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn table_demo_renders() {
+    let html = render(ui::components::table::table_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn command_demo_renders() {
+    let html = render(ui::components::command::command_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn chart_demo_renders() {
+    let html = render(ui::components::chart::chart_demo::Demo);
+    assert!(!html.is_empty());
+}

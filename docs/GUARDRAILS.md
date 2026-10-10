@@ -65,6 +65,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
 - `navbar` has no demo: its upstream demo needs a router.
+- The command palette has no global Ctrl+K hotkey: it needs a document-level key listener, which means more JS. Open it from a button for now.
+- Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus.
 
 ## Decision log
 
