@@ -59,6 +59,9 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Dropdown menu items expose `role="option"`, not `menuitem` the way Radix does. Check screen-reader output before relying on it (week 3).
 - `dx` in locked-down environments: set `NO_DOWNLOADS=1` and put `esbuild` 0.27.3 and `wasm-bindgen-cli` (matching Cargo.lock) on PATH.
 
+- `AnimatePresence` children need unique, formatted keys (`key: "{id}"`); a static string key is a compile error.
+- Layout animation (siblings sliding into a removed item's space) is not implemented yet. Dioxus-motion has presence-layout hooks, to evaluate later.
+
 ## Decision log
 
 | Date | Decision | Why |
@@ -66,3 +69,4 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 | 2026-10-10 | Use Dioxus 0.7 and dioxus-primitives as the base; no custom renderer. | Research showed that's 6–12+ months saved. |
 | 2026-10-10 | Week 1 keeps DioxusLabs' plain-CSS modules and CSS-variable theme instead of rewriting to Tailwind. | The upstream components are already shadcn-styled in CSS. Rewriting 15 components into Tailwind would be churn with no visible gain. Tailwind can be added for app layouts later. |
 | 2026-10-10 | Icons come from `dioxus-icons` (Lucide). | The same crate the upstream gallery uses. |
+| 2026-10-10 | Motion engine is `dioxus-motion` pinned `=0.4.0`, wrapped by `crates/motion`. Overlays keep CSS animations. | One maintainer and an unstable API: the wrapper limits blast radius. CSS also keeps the native (Blitz) door open. |

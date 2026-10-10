@@ -5,6 +5,9 @@
 
 pub mod components;
 
+/// Spring presets, presence animations and reduced-motion handling.
+pub use motion;
+
 use dioxus::prelude::*;
 
 /// Theme tokens (colors, light/dark) shared by every component.

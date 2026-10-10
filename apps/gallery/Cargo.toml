@@ -13,4 +13,4 @@ ui.workspace = true
 [features]
 default = ["web"]
 web = ["dioxus/web", "ui/web"]
-desktop = ["dioxus/desktop"]
+desktop = ["dioxus/desktop", "ui/desktop"]

@@ -2,6 +2,7 @@
 //! isn't done (docs/GUARDRAILS.md).
 
 use dioxus::prelude::*;
+use ui::motion::{use_reduced_motion, use_spring, AnimatePresence, Pop, SpringPreset};
 use ui::prelude::*;
 
 const GALLERY_CSS: Asset = asset!("/assets/gallery.css");
@@ -18,7 +19,7 @@ fn App() -> Element {
         ToastProvider {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 1" }
+                Badge { variant: BadgeVariant::Secondary, "week 2" }
             }
             main { class: "gallery-main",
                 Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
@@ -35,6 +36,16 @@ fn App() -> Element {
                 Section { title: "Tooltip", blurb: "Shown on hover and keyboard focus.", TooltipDemo {} }
                 Section { title: "Toast", blurb: "Transient notifications.", ToastDemo {} }
                 Section { title: "Separator", blurb: "Visual divider.", SeparatorDemo {} }
+                Section {
+                    title: "Spring motion",
+                    blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",
+                    SpringDemo {}
+                }
+                Section {
+                    title: "Presence",
+                    blurb: "Items fade and scale in, and finish their exit before they unmount.",
+                    PresenceDemo {}
+                }
             }
         }
     }
@@ -319,6 +330,73 @@ fn SeparatorDemo() -> Element {
             p { style: "margin: 0.25rem 0; font-size: 0.875rem;", "A personal component library." }
             Separator { horizontal: true, decorative: true, style: "margin: 1rem 0;" }
             div { class: "gallery-row", style: "font-size: 0.875rem;", "Docs" Separator { horizontal: false, decorative: true, style: "height: 1rem;" } "Source" }
+        }
+    }
+}
+
+#[component]
+fn SpringDemo() -> Element {
+    let mut far = use_signal(|| false);
+    let reduced = use_reduced_motion();
+    let target: f32 = if far() { 1.0 } else { 0.0 };
+    rsx! {
+        div { class: "gallery-row", style: "margin-bottom: 1rem;",
+            Button { onclick: move |_| far.toggle(), "Go" }
+            if reduced {
+                Badge { variant: BadgeVariant::Outline, "Reduced motion: springs are instant" }
+            }
+        }
+        SpringTrack { label: "Gentle", preset: SpringPreset::Gentle, target }
+        SpringTrack { label: "Snappy", preset: SpringPreset::Snappy, target }
+        SpringTrack { label: "Bouncy", preset: SpringPreset::Bouncy, target }
+    }
+}
+
+/// `target` is 0.0 (left) or 1.0 (right); the ball springs to it.
+#[component]
+fn SpringTrack(label: &'static str, preset: SpringPreset, target: ReadSignal<f32>) -> Element {
+    let mut x = use_spring(0.0, preset);
+    use_effect(move || x.to(target()));
+    let left = x.get_value() * 100.0;
+    rsx! {
+        div { class: "gallery-track",
+            span { class: "gallery-track-label", {label} }
+            div { class: "gallery-track-rail",
+                div { class: "gallery-ball", style: "left: calc({left}% - {left * 0.01 * 1.5}rem);" }
+            }
+        }
+    }
+}
+
+#[component]
+fn PresenceDemo() -> Element {
+    let mut items = use_signal(|| vec![1u32, 2]);
+    let mut next = use_signal(|| 3u32);
+    rsx! {
+        div { class: "gallery-row", style: "margin-bottom: 1rem;",
+            Button {
+                onclick: move |_| {
+                    let id = next();
+                    next.set(id + 1);
+                    items.write().push(id);
+                },
+                "Add item"
+            }
+        }
+        div { style: "max-width: 22rem;",
+            AnimatePresence {
+                for id in items() {
+                    Pop { key: "{id}", class: "gallery-item", preset: SpringPreset::Snappy,
+                        span { "Item {id}" }
+                        Button {
+                            variant: ButtonVariant::Ghost,
+                            size: ButtonSize::Sm,
+                            onclick: move |_| items.write().retain(|i| *i != id),
+                            "Remove"
+                        }
+                    }
+                }
+            }
         }
     }
 }

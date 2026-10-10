@@ -1,0 +1,25 @@
+[package]
+name = "rust-ui-motion"
+version = "0.1.0"
+description = "Motion helpers for the Rust UI kit: spring presets, reduced-motion handling and presence animations"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "motion"
+
+[dependencies]
+dioxus.workspace = true
+# Exact pin: one-maintainer crate whose API changes between minors (docs/GUARDRAILS.md).
+dioxus-motion = { version = "=0.4.0", default-features = false, features = ["dioxus"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Window", "MediaQueryList"] }
+
+[dev-dependencies]
+dioxus-ssr = "0.7.0"
+
+[features]
+web = ["dioxus-motion/web"]
+desktop = ["dioxus-motion/desktop"]
