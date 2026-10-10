@@ -59,4 +59,4 @@ Skip for now: `input_phone` (546 lines, large data tables), `workflow`, `bubble`
 
 1. Batch 1 (one PR, about 10 components).
 2. `form`, then `data_table` (the two most reusable), then the rest of Batch 2.
-3. Icons decision, hooks, theming guide, docs site.
+3. Icons decision, hooks, docs site (theming guide: docs/THEMING.md).

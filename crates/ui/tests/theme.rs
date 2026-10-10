@@ -66,5 +66,5 @@ fn accent_presets_meet_aa_contrast_in_both_modes() {
         assert!(light >= 4.5, "{name} light: {light:.2}:1");
         checked += 1;
     }
-    assert_eq!(checked, 5, "expected five accent presets");
+    assert!(checked >= 5, "expected at least the five shipped presets");
 }

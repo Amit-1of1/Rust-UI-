@@ -6,6 +6,7 @@
 
 pub mod doctor;
 pub mod scaffold;
+pub mod theme;
 
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;

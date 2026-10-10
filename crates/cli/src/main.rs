@@ -51,6 +51,15 @@ enum Command {
         #[arg(long)]
         strict: bool,
     },
+    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
+    Theme {
+        /// Brand colour as hex, e.g. `#7c3aed`.
+        #[arg(long)]
+        brand: String,
+        /// Preset name used in `data-accent="..."`.
+        #[arg(long, default_value = "brand")]
+        name: String,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -136,6 +145,13 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             if errors > 0 || (strict && warnings > 0) {
                 return Ok(ExitCode::FAILURE);
             }
+        }
+        Command::Theme { brand, name } => {
+            use rust_ui_cli::theme::{css, preset, Rgb};
+            if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
+                return Err(format!("`{name}` must be letters, digits or `-`"));
+            }
+            print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
         }
         Command::Diff { names, dest } => {
             let reg = load(root)?;
