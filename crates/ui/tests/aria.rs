@@ -9,7 +9,9 @@
 
 use std::collections::{HashMap, HashSet};
 
-use dioxus::prelude::*;
+use common::{render, DEMOS};
+
+mod common;
 
 // ---------------------------------------------------------------------------------------
 // A tiny HTML tree builder. SSR output is machine-written and regular, so this does not
@@ -489,7 +491,13 @@ fn check(html: &str) -> Vec<String> {
             if name.starts_with("aria-") && !ARIA_ATTRS.contains(&name.as_str()) {
                 problems.push(format!("{}: unknown attribute {name}", what()));
             }
-            if ID_REFS.contains(&name.as_str()) || (n.tag == "label" && name == "for") {
+            // Like axe: a collapsed control may point aria-controls at a popup that is not
+            // rendered until it opens.
+            let collapsed_popup =
+                name == "aria-controls" && n.attr("aria-expanded") == Some("false");
+            if (ID_REFS.contains(&name.as_str()) || (n.tag == "label" && name == "for"))
+                && !collapsed_popup
+            {
                 for r in value.split_whitespace() {
                     if !ids.contains_key(r) {
                         problems.push(format!("{}: {name} points at missing id \"{r}\"", what()));
@@ -528,12 +536,6 @@ fn check(html: &str) -> Vec<String> {
     problems
 }
 
-fn render(app: fn() -> Element) -> String {
-    let mut dom = VirtualDom::new(app);
-    dom.rebuild_in_place();
-    dioxus_ssr::render(&dom)
-}
-
 // ---------------------------------------------------------------------------------------
 // The checker checks itself, then every demo.
 // ---------------------------------------------------------------------------------------
@@ -569,20 +571,15 @@ fn checker_catches_the_mistakes_it_claims_to() {
     assert_eq!(check(good), Vec::<String>::new());
 }
 
-type Demo = (&'static str, fn() -> Element);
-
 /// Problems found on the first run, kept visible instead of silenced. Each entry is a
 /// substring of the reported problem and why it is not fixed yet. The test fails if one
 /// of these goes away, so the list can't go stale.
 const KNOWN: &[(&str, &str)] = &[
     (
         "date_picker: <span class=\"dx-date-segment",
-        "dioxus-primitives bug: DateSegment sets aria-labelledby=\"{id}-label\" but never \
-         renders that element, so day/month/year spinbuttons have no name. Report upstream.",
-    ),
-    (
-        "radio_group: <div class=\"dx-radio-group",
-        "Demo bug: the RadioGroup has no label (ARIA requires a name for radiogroup).",
+        "dioxus-primitives: DateSegment sets aria-labelledby=\"{id}-label\" but never renders \
+         that element. Browsers fall back to its aria-label (\"day\" etc.), so the name \
+         still works, but the reference is invalid. Report upstream.",
     ),
     (
         "sidebar: <button class=\"dx-tooltip-trigger",
@@ -593,110 +590,8 @@ const KNOWN: &[(&str, &str)] = &[
 
 #[test]
 fn every_demo_passes_the_aria_check() {
-    let demos: &[Demo] = &[
-        ("alert", ui::components::alert::alert_demo::Demo),
-        (
-            "alert_dialog",
-            ui::components::alert_dialog::alert_dialog_demo::Demo,
-        ),
-        (
-            "aspect_ratio",
-            ui::components::aspect_ratio::aspect_ratio_demo::Demo,
-        ),
-        ("avatar", ui::components::avatar::avatar_demo::Demo),
-        (
-            "bottom_nav",
-            ui::components::bottom_nav::bottom_nav_demo::Demo,
-        ),
-        (
-            "breadcrumb",
-            ui::components::breadcrumb::breadcrumb_demo::Demo,
-        ),
-        (
-            "button_group",
-            ui::components::button_group::button_group_demo::Demo,
-        ),
-        ("calendar", ui::components::calendar::calendar_demo::Demo),
-        ("callout", ui::components::callout::callout_demo::Demo),
-        ("chart", ui::components::chart::chart_demo::Demo),
-        (
-            "collapsible",
-            ui::components::collapsible::collapsible_demo::Demo,
-        ),
-        (
-            "color_picker",
-            ui::components::color_picker::color_picker_demo::Demo,
-        ),
-        ("combobox", ui::components::combobox::combobox_demo::Demo),
-        ("command", ui::components::command::command_demo::Demo),
-        (
-            "context_menu",
-            ui::components::context_menu::context_menu_demo::Demo,
-        ),
-        (
-            "data_table",
-            ui::components::data_table::data_table_demo::Demo,
-        ),
-        (
-            "date_picker",
-            ui::components::date_picker::date_picker_demo::Demo,
-        ),
-        (
-            "drag_and_drop_list",
-            ui::components::drag_and_drop_list::drag_and_drop_list_demo::Demo,
-        ),
-        ("empty", ui::components::empty::empty_demo::Demo),
-        ("field", ui::components::field::field_demo::Demo),
-        ("form", ui::components::form::form_demo::Demo),
-        (
-            "hover_card",
-            ui::components::hover_card::hover_card_demo::Demo,
-        ),
-        ("item", ui::components::item::item_demo::Demo),
-        ("kbd", ui::components::kbd::kbd_demo::Demo),
-        ("marquee", ui::components::marquee::marquee_demo::Demo),
-        ("menubar", ui::components::menubar::menubar_demo::Demo),
-        (
-            "pagination",
-            ui::components::pagination::pagination_demo::Demo,
-        ),
-        ("progress", ui::components::progress::progress_demo::Demo),
-        (
-            "radio_group",
-            ui::components::radio_group::radio_group_demo::Demo,
-        ),
-        (
-            "scroll_area",
-            ui::components::scroll_area::scroll_area_demo::Demo,
-        ),
-        ("select", ui::components::select::select_demo::Demo),
-        ("shimmer", ui::components::shimmer::shimmer_demo::Demo),
-        ("sidebar", ui::components::sidebar::sidebar_demo::Demo),
-        ("skeleton", ui::components::skeleton::skeleton_demo::Demo),
-        ("slider", ui::components::slider::slider_demo::Demo),
-        ("spinner", ui::components::spinner::spinner_demo::Demo),
-        ("status", ui::components::status::status_demo::Demo),
-        ("stepper", ui::components::stepper::stepper_demo::Demo),
-        ("table", ui::components::table::table_demo::Demo),
-        ("tag_group", ui::components::tag_group::tag_group_demo::Demo),
-        ("textarea", ui::components::textarea::textarea_demo::Demo),
-        (
-            "theme_customizer",
-            ui::components::theme_customizer::theme_customizer_demo::Demo,
-        ),
-        ("toggle", ui::components::toggle::toggle_demo::Demo),
-        (
-            "toggle_group",
-            ui::components::toggle_group::toggle_group_demo::Demo,
-        ),
-        ("toolbar", ui::components::toolbar::toolbar_demo::Demo),
-        (
-            "virtual_list",
-            ui::components::virtual_list::virtual_list_demo::Demo,
-        ),
-    ];
     let mut found = Vec::new();
-    for (name, demo) in demos {
+    for (name, demo) in DEMOS {
         for p in check(&render(*demo)) {
             found.push(format!("{name}: {p}"));
         }
@@ -720,4 +615,9 @@ fn every_demo_passes_the_aria_check() {
             .join("\n")
     );
     assert!(fixed.is_empty(), "fixed, remove from KNOWN: {fixed:?}");
+}
+
+#[test]
+fn every_demo_file_is_checked() {
+    common::assert_demos_complete();
 }

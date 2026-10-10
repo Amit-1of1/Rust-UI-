@@ -51,11 +51,11 @@
 }
 
 .dx-date-picker-popover-content[data-state="open"] {
-    animation: dx-date-picker-popover-fade-in .15s ease-out;
+    animation: dx-date-picker-popover-fade-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out);
 }
 
 .dx-date-picker-popover-content[data-state="closed"] {
-    animation: dx-date-picker-popover-fade-out .15s ease-out forwards;
+    animation: dx-date-picker-popover-fade-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-out) forwards;
     pointer-events: none;
 }
 

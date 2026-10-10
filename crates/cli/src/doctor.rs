@@ -4,6 +4,7 @@
 //! files only, so it is fast enough to run in the gate.
 
 use crate::{COMPONENTS_DIR, THEME_FILE};
+use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 
@@ -141,6 +142,48 @@ fn has_test(tests: &str, name: &str) -> bool {
     tests.contains(&format!("fn {name}")) || tests.contains(&format!("fn {stem}"))
 }
 
+/// Custom properties that dioxus-primitives sets inline at runtime, so no stylesheet
+/// declares them.
+const PRIMITIVE_VARS: &[&str] = &["--toast-count", "--toast-index", "--area-color"];
+
+/// Custom properties declared as `--name:` anywhere in `text` (CSS, or inline styles in Rust).
+pub fn declared_vars(text: &str) -> HashSet<String> {
+    let mut out = HashSet::new();
+    let mut rest = text;
+    while let Some(i) = rest.find("--") {
+        let tail = &rest[i..];
+        let len = tail[2..]
+            .find(|c: char| !(c.is_ascii_alphanumeric() || c == '-' || c == '_'))
+            .map_or(tail.len(), |n| n + 2);
+        if tail[len..].trim_start().starts_with(':') && len > 2 {
+            out.insert(tail[..len].to_string());
+        }
+        rest = &tail[len.max(2)..];
+    }
+    out
+}
+
+/// `var(--name)` uses without a fallback, as `(line, name)`. With a fallback the value is
+/// still valid when the property is missing, so those are fine.
+pub fn bare_var_uses(text: &str) -> Vec<(usize, String)> {
+    let mut out = Vec::new();
+    for (i, line) in text.lines().enumerate() {
+        let mut rest = line;
+        while let Some(at) = rest.find("var(") {
+            let inner = rest[at + 4..].trim_start();
+            let len = inner
+                .find(|c: char| !(c.is_ascii_alphanumeric() || c == '-' || c == '_'))
+                .unwrap_or(inner.len());
+            let name = &inner[..len];
+            if name.starts_with("--") && inner[len..].trim_start().starts_with(')') {
+                out.push((i + 1, name.to_string()));
+            }
+            rest = &rest[at + 4..];
+        }
+    }
+    out
+}
+
 fn read(path: &Path) -> String {
     fs::read_to_string(path).unwrap_or_default()
 }
@@ -180,6 +223,35 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
             "theme",
             "theme.css has no prefers-reduced-motion rule".into(),
         );
+    }
+
+    // Every custom property declared anywhere in the kit, for the undefined-var check.
+    let mut sources: Vec<(String, String, String)> = Vec::new(); // (component, file, text)
+    for name in &names {
+        if let Ok(files) = fs::read_dir(dir.join(name)) {
+            for f in files.filter_map(Result::ok) {
+                let file = f.file_name().to_string_lossy().into_owned();
+                if file.ends_with(".css") || file.ends_with(".rs") {
+                    sources.push((name.clone(), file, read(&f.path())));
+                }
+            }
+        }
+    }
+    let mut declared = declared_vars(&theme);
+    for (_, _, text) in &sources {
+        declared.extend(declared_vars(text));
+    }
+    sources.sort();
+    for (name, file, text) in &sources {
+        for (line, var) in bare_var_uses(text) {
+            if !declared.contains(&var) && !PRIMITIVE_VARS.contains(&var.as_str()) {
+                add(
+                    Level::Error,
+                    name,
+                    format!("{file}:{line} uses var({var}), which nothing defines"),
+                );
+            }
+        }
     }
 
     for name in &names {
@@ -250,6 +322,20 @@ mod tests {
         let css = "a {\n  margin-left: 1px;\n  margin-inline-start: 1px;\n  text-align: left;\n  text-align: center;\n  left: 0;\n  left: 50%;\n}\na[data-side=\"right\"] {\n  margin-left: 4px;\n  left: 100%;\n}";
         let lines: Vec<_> = physical_properties(css).iter().map(|f| f.0).collect();
         assert_eq!(lines, [2, 4, 6]);
+    }
+
+    #[test]
+    fn finds_declared_and_bare_vars() {
+        let css = "a {\n  --gap: 1px;\n  margin: var(--gap);\n  color: var(--fg, #000);\n  width: calc(var( --w ) * 2);\n}";
+        let declared = declared_vars(css);
+        assert!(
+            declared.contains("--gap") && declared.len() == 1,
+            "{declared:?}"
+        );
+        assert_eq!(
+            bare_var_uses(css),
+            [(3, "--gap".to_string()), (5, "--w".to_string())]
+        );
     }
 
     #[test]

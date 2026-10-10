@@ -16,7 +16,7 @@
   border: 1px solid var(--light, var(--primary-color-6))
     var(--dark, var(--primary-color-7));
   border-radius: var(--radius);
-  animation: dx-hover-card-fade-in 0.1s ease-out;
+  animation: dx-hover-card-fade-in var(--spring-snappy-duration, 100ms) var(--spring-snappy, ease-out);
   background: var(--light, var(--primary-color))
     var(--dark, var(--primary-color-5));
 
@@ -115,4 +115,105 @@
 
 .dx-hover-card-content[data-state="closed"] {
   display: none;
+}
+
+/* Anchor positioning (docs/GUARDRAILS.md): the content stays attached to its trigger and
+   flips to the other side when it would leave the screen. No JavaScript. Browsers without
+   anchor-scope keep the absolute layout above. The @supports is nested inside each rule
+   because css_module does not rename classes inside a top-level @supports. */
+.dx-hover-card {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-scope: --dx-hover-card;
+  }
+}
+
+.dx-hover-card-trigger {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-name: --dx-hover-card;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: fixed;
+    position-anchor: --dx-hover-card;
+    inset: auto;
+    transform: none;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="top"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: top;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="top"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: top span-right;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="top"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: top span-left;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="bottom"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: bottom;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="bottom"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: bottom span-right;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="bottom"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: bottom span-left;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="left"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="left"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-bottom;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="left"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-top;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="right"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="right"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-bottom;
+  }
+}
+
+.dx-hover-card .dx-hover-card-content[data-side="right"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-top;
+  }
 }

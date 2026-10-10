@@ -9,7 +9,7 @@
 }
 
 .dx-alert-dialog-backdrop[data-state="closed"] {
-  animation: dx-alert-animate-out 150ms ease-in forwards;
+  animation: dx-alert-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
 }
 
 @keyframes dx-alert-animate-out {
@@ -23,7 +23,7 @@
 }
 
 .dx-alert-dialog-backdrop[data-state="open"] {
-  animation: dx-alert-animate-in 150ms ease-out forwards;
+  animation: dx-alert-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
 }
 
 @keyframes dx-alert-animate-in {

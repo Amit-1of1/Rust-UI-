@@ -66,7 +66,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
 - `navbar` has no demo: its upstream demo needs a router.
-- The command palette has no global Ctrl+K hotkey: it needs a document-level key listener, which means more JS. Open it from a button for now.
+- Ctrl+K opens the command palette through `ui::hooks::use_hotkey`: a web-sys `keydown` listener on `window`, written in Rust (no `eval`, no JS of ours). Web only; keep the visible button, which is the only way in on desktop and native.
 - Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus.
 - Text colours must pass WCAG AA in both themes. Use `--error-text-color` (not `--secondary-error-color`, which is a fill) for error text. `--secondary-color-5` in light was darkened to #6b6b6b for contrast; upstream's #848484 fails.
 - The registry (`registry.json`) is generated; never hand-edit it. The CLI copies from a local checkout or a git URL (cloned with the `git` command, cached in `~/.cache/rust-ui`).
@@ -76,6 +76,10 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `apps/site` must stay kit-only: if it needs something the kit lacks, add that to the kit (or log the gap here) instead of hand-rolling it in the site. Its only own code is page layout CSS and two `web-sys` calls (theme attribute, `location.hash`), both web-only.
 
 - Spring easings (`--spring-gentle|snappy|bouncy` and `-duration`) in theme.css are generated from `motion::SpringPreset` (`motion::css`); `tests/motion_css.rs` fails on drift, `UPDATE_MOTION_CSS=1` regenerates. Use them for CSS animations instead of ad-hoc `150ms ease-out`, with a plain fallback: `var(--spring-snappy, ease-out)`.
+- Floating content (tooltip, popover, hover card, dropdown, select, combobox, menubar) uses CSS anchor positioning to flip at screen edges, inside `@supports`; older engines keep the absolute layout. `css_module` only renames classes inside `@media`, `@layer` and `@container` (manganis-core `css_module_parser.rs`), so put `@supports` *inside* a rule (CSS nesting), never around it. `tests/e2e/anchor.mjs` checks the flip.
+- In Playwright, open things with a DOM click (`el.click()`) when position matters: its mouse click scrolls the page to "stabilise" the target first.
+- Markup snapshots live in `crates/ui/tests/snapshots/`; after an intended markup change run `UPDATE_SNAPSHOTS=1 cargo test -p rust-ui-kit --test snapshots` and review the diff. Calendar and date picker are skipped (they render today's date).
+- `rust-ui doctor` fails on `var(--x)` without a fallback when nothing defines `--x` (variables set inline by dioxus-primitives are listed in `PRIMITIVE_VARS`).
 - `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
 
 ## Decision log
@@ -88,3 +92,4 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 | 2026-10-10 | Motion engine is `dioxus-motion` pinned `=0.4.0`, wrapped by `crates/motion`. Overlays keep CSS animations. | One maintainer and an unstable API: the wrapper limits blast radius. CSS also keeps the native (Blitz) door open. |
 | 2026-10-10 | Registry is generated from component folders; the CLI is a small `clap` tool, not `dx components`. | Could not confirm `dx components` accepts a third-party registry; ~200 lines of our own is cheaper than depending on that. |
 | 2026-10-10 | Light `--secondary-color-5` changed from #848484 to #6b6b6b; added `--error-text-color`. | axe found contrast failures (3.7:1) in muted and error text. |
+| 2026-10-10 | Allow Rust event listeners on `window` via web-sys (first use: Ctrl+K). Still no JavaScript of our own. | The user approved Tier 1, which included this. The guardrail is about JS; web-sys is Rust and the site already used it. |

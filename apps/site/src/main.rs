@@ -27,6 +27,7 @@ fn apply_theme(dark: bool) {
 #[component]
 fn App() -> Element {
     let mut palette = use_signal(|| false);
+    use_hotkey("k", move || palette.set(true));
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: SITE_CSS }

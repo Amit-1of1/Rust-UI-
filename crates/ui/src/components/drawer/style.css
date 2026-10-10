@@ -6,7 +6,7 @@
 }
 
 .dx-drawer-backdrop[data-state="open"] {
-  animation: dx-drawer-fade 200ms ease-out;
+  animation: dx-drawer-fade var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out);
 }
 
 .dx-drawer-backdrop[data-state="closed"] {
@@ -25,7 +25,7 @@
 }
 
 .dx-drawer-backdrop[data-state="open"] .dx-drawer {
-  animation: dx-drawer-up 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  animation: dx-drawer-up var(--spring-gentle-duration, 220ms) var(--spring-gentle, cubic-bezier(0.32, 0.72, 0, 1));
 }
 
 .dx-drawer-body {

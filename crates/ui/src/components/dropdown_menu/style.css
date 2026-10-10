@@ -48,7 +48,7 @@
 }
 
 .dx-dropdown-menu-content[data-state="closed"] {
-  animation: dx-dropdown-menu-content-animate-out 150ms ease-in forwards;
+  animation: dx-dropdown-menu-content-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
   pointer-events: none;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .dx-dropdown-menu-content[data-state="open"] {
-  animation: dx-dropdown-menu-content-animate-in 150ms ease-out forwards;
+  animation: dx-dropdown-menu-content-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
 }
 
 @keyframes dx-dropdown-menu-content-animate-in {
@@ -103,4 +103,31 @@
   background: var(--dark, var(--primary-color-7))
     var(--light, var(--primary-color-4));
   color: var(--secondary-color-1);
+}
+
+/* Anchor positioning (docs/GUARDRAILS.md): the content stays attached to its trigger and
+   flips to the other side when it would leave the screen. No JavaScript. Browsers without
+   anchor-scope keep the absolute layout above. The @supports is nested inside each rule
+   because css_module does not rename classes inside a top-level @supports. */
+.dx-dropdown-menu {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-scope: --dx-dropdown-menu;
+  }
+}
+
+.dx-dropdown-menu-trigger {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-name: --dx-dropdown-menu;
+  }
+}
+
+.dx-dropdown-menu .dx-dropdown-menu-content {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: fixed;
+    position-anchor: --dx-dropdown-menu;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+  }
 }

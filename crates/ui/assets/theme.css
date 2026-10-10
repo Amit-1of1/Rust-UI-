@@ -121,6 +121,12 @@ html[data-theme="light"] [class~="dxc-system"] {
 }
 /* motion tokens: end */
 
+/* Exits are short and plain on purpose: things should leave faster than they arrive. */
+:root {
+  --motion-exit-duration: 150ms;
+  --motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
+}
+
 /* Respect the OS "reduce motion" setting for every component (docs/GUARDRAILS.md). */
 @media (prefers-reduced-motion: reduce) {
   *,
