@@ -213,3 +213,17 @@ fn form_labels_fields_and_turns_native_validation_off() {
     assert!(!html.contains("aria-invalid"), "{html}");
     assert!(!html.contains("role=\"alert\""), "{html}");
 }
+
+#[test]
+fn data_table_renders_a_captioned_page_with_a_status() {
+    let html = render(|| {
+        rsx! { ui::components::data_table::data_table_demo::Demo {} }
+    });
+    assert!(html.contains("<caption"), "{html}");
+    assert!(html.contains("Team directory"), "{html}");
+    assert!(html.contains("aria-sort=\"none\""), "{html}");
+    assert!(html.contains("Showing 1–5 of 14 rows"), "{html}");
+    assert!(html.contains("Page 1 of 3"), "{html}");
+    assert!(html.contains("aria-label=\"Filter rows\""), "{html}");
+    assert_eq!(html.matches("type=\"checkbox\"").count(), 6, "{html}");
+}

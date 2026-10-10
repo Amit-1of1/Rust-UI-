@@ -43,6 +43,7 @@ pub mod prelude {
     pub use crate::components::combobox::*;
     pub use crate::components::command::*;
     pub use crate::components::context_menu::*;
+    pub use crate::components::data_table::*;
     pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
     pub use crate::components::dropdown_menu::*;

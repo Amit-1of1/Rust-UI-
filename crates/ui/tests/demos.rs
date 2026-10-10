@@ -278,3 +278,9 @@ fn form_demo_renders() {
     let html = render(ui::components::form::form_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn data_table_demo_renders() {
+    let html = render(ui::components::data_table::data_table_demo::Demo);
+    assert!(!html.is_empty());
+}

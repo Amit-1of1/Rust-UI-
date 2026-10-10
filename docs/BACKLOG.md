@@ -1,5 +1,7 @@
 # Component and essentials backlog
 
+**Status (2026-10-10):** Batch 1 and `form` are built (PR #12), and `data_table` too. Still open: the rest of Batch 2, then the essentials list below.
+
 Written 2026-10-10 after checking two upstream repos by cloning them (not by reading the web UI):
 
 - `DioxusLabs/components` at `main` (9a75825, the commit we pin): **nothing newer than what we copied**, except a `form` component we skipped.
@@ -28,7 +30,7 @@ We have 52 components. Missing ones, in build order:
 
 | Component | Source | Notes |
 |---|---|---|
-| form (validation, field errors) | `DioxusLabs/components` `preview/.../form` + Rust/UI `use_form.rs` | Biggest gap for real apps; link errors with `aria-describedby` |
+| ~~form (validation, field errors)~~ done | `DioxusLabs/components` `preview/.../form` + Rust/UI `use_form.rs` | Biggest gap for real apps; link errors with `aria-describedby` |
 | input_otp | Rust/UI `input_otp.rs` + hook (92) | Native inputs, paste support |
 | input_group | Rust/UI `input_group.rs` (188) | |
 | drawer | Rust/UI `drawer.rs` (208) | Build on our dialog plus `SwipeDismiss` |
@@ -36,7 +38,7 @@ We have 52 components. Missing ones, in build order:
 | multi_select | Rust/UI `multi_select.rs` (345) | Build on our `combobox` |
 | navigation_menu | Rust/UI `navigation_menu.rs` (368) | Compare with primitives `navbar` first |
 | dropzone | Rust/UI `dropzone.rs` (498) | Needs a keyboard path (button) as well as drag |
-| data_table (sort, filter, paging, selection) | our `table` + Rust/UI `data_table`/`data_grid` ideas | Highest value for dashboards |
+| ~~data_table (sort, filter, paging, selection)~~ done | our `table` + Rust/UI `data_table`/`data_grid` ideas | Highest value for dashboards |
 | date range picker | extend our `date_picker` | |
 
 Skip for now: `input_phone` (546 lines, large data tables), `workflow`, `bubble`/`message`/`attachment` (chat UI), `mask`, `header`/`footer` blocks.

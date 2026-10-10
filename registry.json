@@ -229,6 +229,21 @@
       "registryDependencies": []
     },
     {
+      "name": "data_table",
+      "files": [
+        "data_table/component.rs",
+        "data_table/data_table_demo.rs",
+        "data_table/docs.md",
+        "data_table/mod.rs",
+        "data_table/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "table"
+      ]
+    },
+    {
       "name": "date_picker",
       "files": [
         "date_picker/component.rs",
