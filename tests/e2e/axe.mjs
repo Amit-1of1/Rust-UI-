@@ -1,0 +1,32 @@
+// Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
+// then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
+import { chromium } from "playwright";
+import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
+
+const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
+const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
+const scheme = process.argv[2] ?? "light";
+// Known, accepted findings. Every entry needs a reason; keep this list short.
+const ACCEPTED = {
+  // The sidebar demo renders its own <main>; inside the gallery it is nested in a labelled region.
+  "landmark-main-is-top-level": "sidebar demo is embedded in the gallery page",
+};
+
+const browser = await chromium.launch();
+const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
+await page.goto(url);
+await page.waitForSelector(".gallery-main", { timeout: 30000 });
+await page.waitForTimeout(1500);
+await page.evaluate(axeSource);
+const result = await page.evaluate(() =>
+  axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"] }),
+);
+const bad = result.violations.filter((v) => !(v.id in ACCEPTED));
+for (const v of bad) {
+  console.log(`${v.impact}\t${v.id}\t${v.help}`);
+  for (const n of v.nodes.slice(0, 3)) console.log(`   ${n.target.join(" ")}`);
+}
+console.log(`${scheme}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
+await browser.close();
+process.exit(bad.length ? 1 : 0);

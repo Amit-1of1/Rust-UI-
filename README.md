@@ -59,6 +59,24 @@ accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, ch
 
 Original to this repo (not copied, accessible by construction): alert, breadcrumb, chart (SVG bar/line with a text summary), command palette, field (labels, hints, errors, `validate`), kbd, spinner, sortable table.
 
+## Registry and CLI
+
+`registry.json` lists every component with its files and the other components it needs. It is generated from the folders (`cargo run -p rust-ui-cli -- registry`), and a test fails if it goes stale.
+
+```sh
+cargo install --path crates/cli          # installs `rust-ui`
+rust-ui --source /path/to/Rust-UI- list
+rust-ui --source /path/to/Rust-UI- init  --dest assets/theme.css
+rust-ui --source /path/to/Rust-UI- add command --dest src/components   # also copies dialog, button, kbd
+rust-ui --source /path/to/Rust-UI- diff command --dest src/components  # exit 1 if your copy differs
+```
+
+`add` never overwrites a file you changed unless you pass `--force`. It prints the `pub mod` lines to paste into your `components/mod.rs`. The source is a local checkout (or `RUST_UI_SOURCE`); fetching over HTTP is not built.
+
+## Accessibility check
+
+`tests/e2e/axe.mjs` runs axe-core (WCAG 2 A/AA plus best practices) on the built gallery in light and dark. See the header of that file for how to run it. It is not in CI yet because CI cannot currently run (see below).
+
 ## Motion
 
 ```rust

@@ -13,7 +13,7 @@
 
 .dx-alert[data-variant="destructive"] {
   border-color: var(--secondary-error-color);
-  color: var(--secondary-error-color);
+  color: var(--error-text-color);
 }
 
 .dx-alert-title {
@@ -28,5 +28,4 @@
 
 .dx-alert[data-variant="destructive"] .dx-alert-description {
   color: inherit;
-  opacity: 0.9;
 }

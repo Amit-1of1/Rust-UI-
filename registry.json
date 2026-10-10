@@ -1,0 +1,588 @@
+{
+  "name": "rust-ui",
+  "theme": "crates/ui/assets/theme.css",
+  "cargoDependencies": [
+    "dioxus",
+    "dioxus-primitives",
+    "dioxus-icons"
+  ],
+  "items": [
+    {
+      "name": "accordion",
+      "files": [
+        "accordion/component.rs",
+        "accordion/docs.md",
+        "accordion/mod.rs",
+        "accordion/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "alert",
+      "files": [
+        "alert/alert_demo.rs",
+        "alert/component.rs",
+        "alert/mod.rs",
+        "alert/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "alert_dialog",
+      "files": [
+        "alert_dialog/alert_dialog_demo.rs",
+        "alert_dialog/component.rs",
+        "alert_dialog/docs.md",
+        "alert_dialog/mod.rs",
+        "alert_dialog/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "aspect_ratio",
+      "files": [
+        "aspect_ratio/aspect_ratio_demo.rs",
+        "aspect_ratio/component.rs",
+        "aspect_ratio/docs.md",
+        "aspect_ratio/mod.rs",
+        "aspect_ratio/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "avatar",
+      "files": [
+        "avatar/avatar_demo.rs",
+        "avatar/component.rs",
+        "avatar/docs.md",
+        "avatar/mod.rs",
+        "avatar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "badge",
+      "files": [
+        "badge/component.rs",
+        "badge/docs.md",
+        "badge/mod.rs",
+        "badge/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "breadcrumb",
+      "files": [
+        "breadcrumb/breadcrumb_demo.rs",
+        "breadcrumb/component.rs",
+        "breadcrumb/mod.rs",
+        "breadcrumb/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "button",
+      "files": [
+        "button/component.rs",
+        "button/docs.md",
+        "button/mod.rs",
+        "button/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "calendar",
+      "files": [
+        "calendar/calendar_demo.rs",
+        "calendar/component.rs",
+        "calendar/docs.md",
+        "calendar/mod.rs",
+        "calendar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "card",
+      "files": [
+        "card/component.rs",
+        "card/docs.md",
+        "card/mod.rs",
+        "card/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "chart",
+      "files": [
+        "chart/chart_demo.rs",
+        "chart/component.rs",
+        "chart/mod.rs",
+        "chart/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "checkbox",
+      "files": [
+        "checkbox/component.rs",
+        "checkbox/docs.md",
+        "checkbox/mod.rs",
+        "checkbox/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "collapsible",
+      "files": [
+        "collapsible/collapsible_demo.rs",
+        "collapsible/component.rs",
+        "collapsible/docs.md",
+        "collapsible/mod.rs",
+        "collapsible/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "color_picker",
+      "files": [
+        "color_picker/color_picker_demo.rs",
+        "color_picker/component.rs",
+        "color_picker/docs.md",
+        "color_picker/mod.rs",
+        "color_picker/style.css"
+      ],
+      "registryDependencies": [
+        "input"
+      ]
+    },
+    {
+      "name": "combobox",
+      "files": [
+        "combobox/combobox_demo.rs",
+        "combobox/component.rs",
+        "combobox/docs.md",
+        "combobox/mod.rs",
+        "combobox/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "command",
+      "files": [
+        "command/command_demo.rs",
+        "command/component.rs",
+        "command/mod.rs",
+        "command/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "kbd"
+      ]
+    },
+    {
+      "name": "context_menu",
+      "files": [
+        "context_menu/component.rs",
+        "context_menu/context_menu_demo.rs",
+        "context_menu/docs.md",
+        "context_menu/mod.rs",
+        "context_menu/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "date_picker",
+      "files": [
+        "date_picker/component.rs",
+        "date_picker/date_picker_demo.rs",
+        "date_picker/docs.md",
+        "date_picker/mod.rs",
+        "date_picker/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "dialog",
+      "files": [
+        "dialog/component.rs",
+        "dialog/docs.md",
+        "dialog/mod.rs",
+        "dialog/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "drag_and_drop_list",
+      "files": [
+        "drag_and_drop_list/component.rs",
+        "drag_and_drop_list/docs.md",
+        "drag_and_drop_list/drag_and_drop_list_demo.rs",
+        "drag_and_drop_list/mod.rs",
+        "drag_and_drop_list/style.css"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ]
+    },
+    {
+      "name": "dropdown_menu",
+      "files": [
+        "dropdown_menu/component.rs",
+        "dropdown_menu/docs.md",
+        "dropdown_menu/mod.rs",
+        "dropdown_menu/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "field",
+      "files": [
+        "field/component.rs",
+        "field/field_demo.rs",
+        "field/mod.rs",
+        "field/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ]
+    },
+    {
+      "name": "hover_card",
+      "files": [
+        "hover_card/component.rs",
+        "hover_card/docs.md",
+        "hover_card/hover_card_demo.rs",
+        "hover_card/mod.rs",
+        "hover_card/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input",
+      "files": [
+        "input/component.rs",
+        "input/docs.md",
+        "input/mod.rs",
+        "input/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "item",
+      "files": [
+        "item/component.rs",
+        "item/docs.md",
+        "item/item_demo.rs",
+        "item/mod.rs",
+        "item/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "separator"
+      ]
+    },
+    {
+      "name": "kbd",
+      "files": [
+        "kbd/component.rs",
+        "kbd/kbd_demo.rs",
+        "kbd/mod.rs",
+        "kbd/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "label",
+      "files": [
+        "label/component.rs",
+        "label/docs.md",
+        "label/mod.rs",
+        "label/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "menubar",
+      "files": [
+        "menubar/component.rs",
+        "menubar/docs.md",
+        "menubar/menubar_demo.rs",
+        "menubar/mod.rs",
+        "menubar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "navbar",
+      "files": [
+        "navbar/component.rs",
+        "navbar/docs.md",
+        "navbar/mod.rs",
+        "navbar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "pagination",
+      "files": [
+        "pagination/component.rs",
+        "pagination/docs.md",
+        "pagination/mod.rs",
+        "pagination/pagination_demo.rs",
+        "pagination/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "popover",
+      "files": [
+        "popover/component.rs",
+        "popover/docs.md",
+        "popover/mod.rs",
+        "popover/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "progress",
+      "files": [
+        "progress/component.rs",
+        "progress/docs.md",
+        "progress/mod.rs",
+        "progress/progress_demo.rs",
+        "progress/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "radio_group",
+      "files": [
+        "radio_group/component.rs",
+        "radio_group/docs.md",
+        "radio_group/mod.rs",
+        "radio_group/radio_group_demo.rs",
+        "radio_group/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "scroll_area",
+      "files": [
+        "scroll_area/component.rs",
+        "scroll_area/docs.md",
+        "scroll_area/mod.rs",
+        "scroll_area/scroll_area_demo.rs",
+        "scroll_area/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "select",
+      "files": [
+        "select/component.rs",
+        "select/docs.md",
+        "select/mod.rs",
+        "select/select_demo.rs",
+        "select/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "separator",
+      "files": [
+        "separator/component.rs",
+        "separator/docs.md",
+        "separator/mod.rs",
+        "separator/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "sheet",
+      "files": [
+        "sheet/component.rs",
+        "sheet/docs.md",
+        "sheet/mod.rs",
+        "sheet/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "sidebar",
+      "files": [
+        "sidebar/component.rs",
+        "sidebar/demo.css",
+        "sidebar/docs.md",
+        "sidebar/mod.rs",
+        "sidebar/sidebar_demo.rs",
+        "sidebar/style.css"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "collapsible",
+        "dropdown_menu",
+        "separator",
+        "sheet",
+        "skeleton",
+        "tooltip"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "files": [
+        "skeleton/component.rs",
+        "skeleton/docs.md",
+        "skeleton/mod.rs",
+        "skeleton/skeleton_demo.rs",
+        "skeleton/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "slider",
+      "files": [
+        "slider/component.rs",
+        "slider/docs.md",
+        "slider/mod.rs",
+        "slider/slider_demo.rs",
+        "slider/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "spinner",
+      "files": [
+        "spinner/component.rs",
+        "spinner/mod.rs",
+        "spinner/spinner_demo.rs",
+        "spinner/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "switch",
+      "files": [
+        "switch/component.rs",
+        "switch/docs.md",
+        "switch/mod.rs",
+        "switch/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "table",
+      "files": [
+        "table/component.rs",
+        "table/mod.rs",
+        "table/style.css",
+        "table/table_demo.rs"
+      ],
+      "registryDependencies": [
+        "badge"
+      ]
+    },
+    {
+      "name": "tabs",
+      "files": [
+        "tabs/component.rs",
+        "tabs/docs.md",
+        "tabs/mod.rs",
+        "tabs/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "tag_group",
+      "files": [
+        "tag_group/component.rs",
+        "tag_group/docs.md",
+        "tag_group/mod.rs",
+        "tag_group/style.css",
+        "tag_group/tag_group_demo.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "textarea",
+      "files": [
+        "textarea/component.rs",
+        "textarea/docs.md",
+        "textarea/mod.rs",
+        "textarea/style.css",
+        "textarea/textarea_demo.rs"
+      ],
+      "registryDependencies": [
+        "label"
+      ]
+    },
+    {
+      "name": "toast",
+      "files": [
+        "toast/component.rs",
+        "toast/docs.md",
+        "toast/mod.rs",
+        "toast/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toggle",
+      "files": [
+        "toggle/component.rs",
+        "toggle/docs.md",
+        "toggle/mod.rs",
+        "toggle/style.css",
+        "toggle/toggle_demo.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toggle_group",
+      "files": [
+        "toggle_group/component.rs",
+        "toggle_group/docs.md",
+        "toggle_group/mod.rs",
+        "toggle_group/style.css",
+        "toggle_group/toggle_group_demo.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toolbar",
+      "files": [
+        "toolbar/component.rs",
+        "toolbar/docs.md",
+        "toolbar/mod.rs",
+        "toolbar/style.css",
+        "toolbar/toolbar_demo.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "tooltip",
+      "files": [
+        "tooltip/component.rs",
+        "tooltip/docs.md",
+        "tooltip/mod.rs",
+        "tooltip/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "virtual_list",
+      "files": [
+        "virtual_list/component.rs",
+        "virtual_list/docs.md",
+        "virtual_list/mod.rs",
+        "virtual_list/style.css",
+        "virtual_list/virtual_list_demo.rs"
+      ],
+      "registryDependencies": []
+    }
+  ]
+}

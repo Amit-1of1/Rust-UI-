@@ -384,6 +384,7 @@ fn NavUser() -> Element {
                                     style: "border-radius:0.5rem;",
                                     src: crate::components::DEMO_AVATAR_SRC.to_string(),
                                     alt: "dioxus avatar",
+                                    aria_label: "dioxus avatar",
                                     "DX"
                                 }
                                 div { class: DemoStyles::dx_sidebar_info_block,
@@ -401,6 +402,7 @@ fn NavUser() -> Element {
                                 style: "border-radius:0.5rem;",
                                 src: crate::components::DEMO_AVATAR_SRC.to_string(),
                                 alt: "dioxus avatar",
+                                aria_label: "dioxus avatar",
                                 "DX"
                             }
                             div { class: DemoStyles::dx_sidebar_info_block,

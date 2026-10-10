@@ -11,7 +11,7 @@
 }
 
 .dx-field[data-invalid="true"] .dx-field-label {
-  color: var(--secondary-error-color);
+  color: var(--error-text-color);
 }
 
 .dx-field-description {
@@ -22,7 +22,7 @@
 
 .dx-field-error {
   margin: 0;
-  color: var(--secondary-error-color);
+  color: var(--error-text-color);
   font-size: 0.8125rem;
 }
 

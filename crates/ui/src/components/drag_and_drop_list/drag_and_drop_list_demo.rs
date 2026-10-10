@@ -76,7 +76,7 @@ const INLINE_STYLE: &str = r#".dx-tasks-demo {
 }
 
 .dx-task-code {
-  color: var(--secondary-color-6);
+  color: var(--secondary-color-5);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   font-size: 10.5px;
   font-weight: 500;
