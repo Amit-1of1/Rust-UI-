@@ -48,6 +48,7 @@ pub mod prelude {
     pub use crate::components::dropdown_menu::*;
     pub use crate::components::empty::*;
     pub use crate::components::field::*;
+    pub use crate::components::form::*;
     pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
     pub use crate::components::item::*;

@@ -275,38 +275,25 @@ fn Faq() -> Element {
 
 #[component]
 fn Signup() -> Element {
-    let name_ids = use_field_ids();
-    let email_ids = use_field_ids();
-    let mut name = use_signal(String::new);
-    let mut email = use_signal(String::new);
-    let mut name_err = use_signal(|| None::<String>);
-    let mut email_err = use_signal(|| None::<String>);
+    let form = use_form();
+    let name = form.field(vec![required()]);
+    let email = form.field(vec![required(), email()]);
     let mut people = use_signal(Vec::<(u32, String)>::new);
     let mut next = use_signal(|| 1u32);
     let mut welcome = use_signal(|| false);
     let toasts = use_toast();
 
-    let submit = move |event: FormEvent| {
-        event.prevent_default();
-        name_err.set(validate::required(&name.read()).err());
-        email_err.set(
-            validate::required(&email.read())
-                .and_then(|_| validate::email(&email.read()))
-                .err(),
+    let joined = move |_| {
+        let id = next();
+        next.set(id + 1);
+        let who = name.value().trim().to_string();
+        people.write().insert(0, (id, who.clone()));
+        toasts.success(
+            format!("Welcome, {who}"),
+            ToastOptions::new().description("Check your inbox to confirm."),
         );
-        if name_err.read().is_none() && email_err.read().is_none() {
-            let id = next();
-            next.set(id + 1);
-            let who = name.read().trim().to_string();
-            people.write().insert(0, (id, who.clone()));
-            toasts.success(
-                format!("Welcome, {who}"),
-                ToastOptions::new().description("Check your inbox to confirm."),
-            );
-            welcome.set(true);
-            name.set(String::new());
-            email.set(String::new());
-        }
+        welcome.set(true);
+        form.reset();
     };
 
     rsx! {
@@ -314,31 +301,14 @@ fn Signup() -> Element {
             h2 { id: "signup-title", "Join the waitlist" }
             p { class: "site-lede", "We let people in every week." }
             div { class: "signup-wrap",
-                form { id: "signup-form", style: "display: grid; gap: 1rem;", onsubmit: submit, novalidate: true,
-                    Field { invalid: name_err().is_some(),
-                        FieldLabel { html_for: name_ids.control.clone(), "Name" }
-                        Input {
-                            id: name_ids.control.clone(),
-                            value: name,
-                            aria_invalid: name_err().is_some().then_some("true"),
-                            aria_describedby: name_ids.described_by(name_err().is_some()),
-                            oninput: move |e: FormEvent| name.set(e.value()),
-                        }
-                        FieldError { id: name_ids.error.clone(), message: name_err() }
-                    }
-                    Field { invalid: email_err().is_some(),
-                        FieldLabel { html_for: email_ids.control.clone(), "Work email" }
-                        Input {
-                            id: email_ids.control.clone(),
-                            r#type: "email",
-                            placeholder: "you@company.com",
-                            value: email,
-                            aria_invalid: email_err().is_some().then_some("true"),
-                            aria_describedby: email_ids.described_by(email_err().is_some()),
-                            oninput: move |e: FormEvent| email.set(e.value()),
-                        }
-                        FieldDescription { id: email_ids.description.clone(), "We only email about your invite." }
-                        FieldError { id: email_ids.error.clone(), message: email_err() }
+                Form { state: form, on_valid: joined, id: "signup-form",
+                    TextField { field: name, label: "Name" }
+                    TextField {
+                        field: email,
+                        label: "Work email",
+                        r#type: "email",
+                        placeholder: "you@company.com",
+                        description: "We only email about your invite.",
                     }
                     Button { r#type: "submit", "Join waitlist" }
                 }

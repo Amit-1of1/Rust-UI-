@@ -83,6 +83,7 @@ fn App() -> Element {
                 Section { title: "Button group", blurb: "Buttons joined into one segmented control.", ui::components::button_group::button_group_demo::Demo {} }
                 Section { title: "Stepper", blurb: "Multi-step progress with Back and Next.", ui::components::stepper::stepper_demo::Demo {} }
                 Section { title: "Bottom nav", blurb: "Mobile tab bar with aria-current.", ui::components::bottom_nav::bottom_nav_demo::Demo {} }
+                Section { title: "Form", blurb: "Validation state, a Form and bound TextFields; focus jumps to the first error on submit.", ui::components::form::form_demo::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

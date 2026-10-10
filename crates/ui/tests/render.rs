@@ -200,3 +200,16 @@ fn bottom_nav_marks_the_current_page() {
     assert_eq!(html.matches("aria-current=\"page\"").count(), 1, "{html}");
     assert!(html.contains("<a ") && html.contains("<button"), "{html}");
 }
+
+#[test]
+fn form_labels_fields_and_turns_native_validation_off() {
+    let html = render(|| {
+        rsx! { ui::components::form::form_demo::Demo {} }
+    });
+    assert!(html.contains("novalidate"), "{html}");
+    assert_eq!(html.matches("<label").count(), 2, "{html}");
+    assert!(html.contains("autocomplete=\"email\""), "{html}");
+    // Pristine fields show no error and are not marked invalid.
+    assert!(!html.contains("aria-invalid"), "{html}");
+    assert!(!html.contains("role=\"alert\""), "{html}");
+}

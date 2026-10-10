@@ -299,6 +299,22 @@
       ]
     },
     {
+      "name": "form",
+      "files": [
+        "form/component.rs",
+        "form/docs.md",
+        "form/form_demo.rs",
+        "form/mod.rs",
+        "form/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "callout",
+        "field",
+        "input"
+      ]
+    },
+    {
       "name": "hover_card",
       "files": [
         "hover_card/component.rs",

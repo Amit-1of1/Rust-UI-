@@ -272,3 +272,9 @@ fn bottom_nav_demo_renders() {
     let html = render(ui::components::bottom_nav::bottom_nav_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn form_demo_renders() {
+    let html = render(ui::components::form::form_demo::Demo);
+    assert!(!html.is_empty());
+}
