@@ -88,6 +88,12 @@ impl Spring {
         self.motion.is_running()
     }
 
+    /// Set the spring's current speed (units per second). Only meaningful right after [`Spring::to`].
+    pub fn set_velocity(&mut self, velocity: f32) {
+        // Fails if the spring isn't running (e.g. reduced motion made it instant); that's fine.
+        let _ = self.motion.set_velocity(velocity);
+    }
+
     /// Jump back to the starting value and stop.
     pub fn reset(&mut self) {
         self.motion.reset();
