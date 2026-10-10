@@ -43,6 +43,8 @@ enum Command {
         #[arg(long)]
         force: bool,
     },
+    /// Scaffold a new component in this repo (files, mod/prelude lines, demo, tests, registry).
+    New { name: String },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -94,6 +96,18 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 println!("kept {} (differs; use --force to overwrite)", s.display());
             }
             println!("\nAdd to {}/mod.rs:\n{}", dest.display(), mod_lines(&items));
+        }
+        Command::New { name } => {
+            let files = rust_ui_cli::scaffold::scaffold(root, &name)?;
+            for f in &files {
+                println!("wrote {}", f.display());
+            }
+            std::fs::write(
+                root.join("registry.json"),
+                to_json(&build(root).map_err(err)?),
+            )
+            .map_err(err)?;
+            println!("updated registry.json");
         }
         Command::Diff { names, dest } => {
             let reg = load(root)?;
