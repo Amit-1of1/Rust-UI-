@@ -53,7 +53,7 @@ html[data-theme="light"] [class~="dxc-system"] {
   --secondary-color-2: var(--dark, #e6e6e6) var(--light, #0d0d0d);
   --secondary-color-3: var(--dark, #dcdcdc) var(--light, #2b2b2b);
   --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
-  --secondary-color-5: var(--dark, #a1a1a1) var(--light, #848484);
+  --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
   --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
 
   /* Highlight colors */
@@ -64,6 +64,8 @@ html[data-theme="light"] [class~="dxc-system"] {
   --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
   --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
   --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
+  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
+  --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
   --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
   --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
   --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));

@@ -1,0 +1,22 @@
+[package]
+name = "rust-ui-cli"
+version = "0.1.0"
+description = "Copy-paste registry CLI for the Rust UI kit: init, add, list, diff"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "rust-ui"
+path = "src/main.rs"
+
+[lib]
+name = "rust_ui_cli"
+
+[dependencies]
+clap = { version = "4", features = ["derive", "env"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"

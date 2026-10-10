@@ -19,9 +19,9 @@ fn App() -> Element {
         ToastProvider {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 4" }
+                Badge { variant: BadgeVariant::Secondary, "week 5" }
             }
-            main { class: "gallery-main",
+            section { class: "gallery-main", "aria-label": "Component gallery",
                 Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
                 Section { title: "Badge", blurb: "Status labels.", BadgeDemo {} }
                 Section { title: "Input and label", blurb: "Text entry with an accessible label.", InputDemo {} }
