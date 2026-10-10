@@ -1,0 +1,5 @@
+[application]
+name = "gallery"
+
+[web.app]
+title = "Rust UI kit gallery"
