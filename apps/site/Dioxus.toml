@@ -1,0 +1,5 @@
+[application]
+name = "site"
+
+[web.app]
+title = "Orbit - plan work, ship it"
