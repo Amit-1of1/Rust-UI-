@@ -60,7 +60,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `dx` in locked-down environments: set `NO_DOWNLOADS=1` and put `esbuild` 0.27.3 and `wasm-bindgen-cli` (matching Cargo.lock) on PATH.
 
 - `AnimatePresence` children need unique, formatted keys (`key: "{id}"`); a static string key is a compile error.
-- Layout animation (siblings sliding into a removed item's space) is not implemented yet. Dioxus-motion has presence-layout hooks, to evaluate later.
+- Layout animation is `FlipList`/`FlipItem` (own FLIP over `get_client_rect`, web and desktop webview). The measured element is the outer wrapper and only the inner one is transformed, otherwise the transform pollutes the measurement. `AnimatePresence` also adds its own `data-dioxus-motion-layout-slot` wrappers; don't style or select them.
+- `SwipeDismiss` has no pointer capture (that needs JS), so leaving the element cancels the drag. Keyboard alternative: Delete, Backspace or Escape. A pointer held still for 100 ms before release is not a flick.
 
 - Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.

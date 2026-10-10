@@ -96,4 +96,6 @@ rsx! {
 }
 ```
 
+`FlipList`/`FlipItem` make siblings slide into the gap when a row is removed or added. `SwipeDismiss` is a drag-sideways-to-dismiss wrapper with a keyboard fallback; its decision logic (`SwipeTracker`) is unit tested.
+
 Baseline open/close animation of the overlay components stays in CSS; springs are for things CSS can't do (interruptible motion, exits driven by state).

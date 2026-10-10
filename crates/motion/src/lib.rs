@@ -8,11 +8,17 @@
 //! * [`use_reduced_motion`]: the OS "reduce motion" setting.
 //! * [`Transition`]: a preset that collapses to an instant change when motion is reduced.
 //! * [`Pop`]: enter/exit animation for children of an [`AnimatePresence`].
+//! * [`FlipList`] and [`FlipItem`]: siblings slide into place when a row is added or removed.
+//! * [`SwipeDismiss`]: drag sideways (or press Delete) to dismiss.
 //! * [`use_spring`]: a spring-driven `f32`, e.g. for hover and press effects.
 
+mod flip;
+mod gesture;
 mod preset;
 mod reduced;
 
+pub use flip::{FlipItem, FlipList};
+pub use gesture::{SwipeDirection, SwipeDismiss, SwipeOutcome, SwipeTracker};
 pub use preset::{SpringPreset, Transition};
 pub use reduced::use_reduced_motion;
 
@@ -80,6 +86,11 @@ impl Spring {
     /// Whether the spring is still moving.
     pub fn is_running(&self) -> bool {
         self.motion.is_running()
+    }
+
+    /// Jump back to the starting value and stop.
+    pub fn reset(&mut self) {
+        self.motion.reset();
     }
 
     /// Animate toward `target`.

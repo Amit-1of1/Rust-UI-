@@ -64,3 +64,30 @@ fn pop_renders_its_children_in_the_initial_state() {
     // Entering from invisible: the first frame must not flash at full opacity.
     assert!(html.contains("opacity"), "{html}");
 }
+
+#[test]
+fn swipe_dismiss_is_keyboard_focusable_and_at_rest() {
+    fn app() -> Element {
+        rsx! {
+            motion::SwipeDismiss { on_dismiss: |_| {}, "Card" }
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("tabindex=\"0\""), "{html}");
+    assert!(html.contains("translateX(0px)"), "{html}");
+    assert!(html.contains("touch-action: pan-y"), "{html}");
+}
+
+#[test]
+fn flip_item_wraps_content_without_changing_it() {
+    fn app() -> Element {
+        rsx! {
+            motion::FlipList {
+                motion::FlipItem { span { "row" } }
+            }
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("<span>row</span>"), "{html}");
+    assert!(html.contains("translateY(0px)"), "{html}");
+}
