@@ -11,7 +11,9 @@
 //! * [`FlipList`] and [`FlipItem`]: siblings slide into place when a row is added or removed.
 //! * [`SwipeDismiss`]: drag sideways (or press Delete) to dismiss.
 //! * [`use_spring`]: a spring-driven `f32`, e.g. for hover and press effects.
+//! * [`css`]: the same presets traced as CSS `linear()` easings, for CSS-animated overlays.
 
+pub mod css;
 mod flip;
 mod gesture;
 mod preset;

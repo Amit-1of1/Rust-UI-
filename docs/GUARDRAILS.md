@@ -75,6 +75,9 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Release web bundles need `wasm-opt` (dx downloads it; offline, `npm i -g binaryen` provides one). `.github/workflows/pages.yml` publishes the gallery with `--base-path Rust-UI-`; it is manual and unrun on GitHub (the release bundle was served and loaded under that base path locally).
 - `apps/site` must stay kit-only: if it needs something the kit lacks, add that to the kit (or log the gap here) instead of hand-rolling it in the site. Its only own code is page layout CSS and two `web-sys` calls (theme attribute, `location.hash`), both web-only.
 
+- Spring easings (`--spring-gentle|snappy|bouncy` and `-duration`) in theme.css are generated from `motion::SpringPreset` (`motion::css`); `tests/motion_css.rs` fails on drift, `UPDATE_MOTION_CSS=1` regenerates. Use them for CSS animations instead of ad-hoc `150ms ease-out`, with a plain fallback: `var(--spring-snappy, ease-out)`.
+- `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
+
 ## Decision log
 
 | Date | Decision | Why |
