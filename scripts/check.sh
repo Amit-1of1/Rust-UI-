@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-command gate. Everything CLAUDE.md asks for before pushing, plus the registry check.
-#   scripts/check.sh           fmt, clippy, tests, wasm builds, registry
+#   scripts/check.sh           fmt, clippy, tests, wasm builds, registry, doctor
 #   scripts/check.sh --a11y    also build gallery + site, serve them and run axe (light + dark)
 # The a11y step needs `dx` and `npm ci` in tests/e2e (and Chromium via PLAYWRIGHT_BROWSERS_PATH).
 set -euo pipefail
@@ -22,6 +22,7 @@ step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
 step "tests";   cargo test --workspace
 step "wasm32";  cargo build -p gallery -p site --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
+step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 
 if [ "$A11Y" = 1 ]; then
   PIDS=()

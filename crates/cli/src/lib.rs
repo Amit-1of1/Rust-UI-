@@ -4,6 +4,7 @@
 //! the other registry items it needs. It is generated from the component folders,
 //! so it can't drift from the source.
 
+pub mod doctor;
 pub mod scaffold;
 
 use serde::{Deserialize, Serialize};

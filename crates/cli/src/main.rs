@@ -45,6 +45,12 @@ enum Command {
     },
     /// Scaffold a new component in this repo (files, mod/prelude lines, demo, tests, registry).
     New { name: String },
+    /// Check components against the guardrails (colours, RTL, docs, demos, tests).
+    Doctor {
+        /// Also fail on warnings.
+        #[arg(long)]
+        strict: bool,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -108,6 +114,28 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             )
             .map_err(err)?;
             println!("updated registry.json");
+        }
+        Command::Doctor { strict } => {
+            use rust_ui_cli::doctor::{run as doctor, Level};
+            let findings = doctor(root)?;
+            let (mut errors, mut warnings) = (0, 0);
+            for f in &findings {
+                let tag = match f.level {
+                    Level::Error => {
+                        errors += 1;
+                        "error"
+                    }
+                    Level::Warning => {
+                        warnings += 1;
+                        "warn "
+                    }
+                };
+                println!("{tag} {}: {}", f.component, f.message);
+            }
+            println!("{errors} error(s), {warnings} warning(s)");
+            if errors > 0 || (strict && warnings > 0) {
+                return Ok(ExitCode::FAILURE);
+            }
         }
         Command::Diff { names, dest } => {
             let reg = load(root)?;
