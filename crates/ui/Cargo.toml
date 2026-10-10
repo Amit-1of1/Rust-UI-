@@ -1,0 +1,21 @@
+[package]
+name = "rust-ui-kit"
+version = "0.1.0"
+description = "Personal shadcn-inspired component kit for Dioxus"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "ui"
+
+[dependencies]
+dioxus.workspace = true
+dioxus-primitives.workspace = true
+dioxus-icons.workspace = true
+
+[dev-dependencies]
+dioxus-ssr = "0.7.0"
+
+[features]
+web = ["dioxus-primitives/web"]
