@@ -1,0 +1,33 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    },
+    {
+      "name": "palette",
+      "version": "0.7.6"
+    },
+    {
+      "name": "tracing",
+      "version": "0.1"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "input"
+    }
+  ],
+  "description": "Color picker used when the user needs to make a customized color selection.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "color_picker"
+}

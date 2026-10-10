@@ -1,0 +1,22 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "button"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "input"
+    }
+  ],
+  "description": "Wires a label, description and error to a control with matching ids. `use_field_ids()` returns the ids; for most forms use `TextField` from `form`.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "field"
+}

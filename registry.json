@@ -267,7 +267,10 @@
         "date_picker/mod.rs",
         "date_picker/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "calendar",
+        "popover"
+      ]
     },
     {
       "name": "dialog",

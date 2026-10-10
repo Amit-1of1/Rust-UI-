@@ -1,6 +1,15 @@
 use super::component::*;
 use dioxus::prelude::*;
 
+/// A neutral placeholder image (an inline SVG) for avatar demos, so demos never hit the network.
+pub const DEMO_AVATAR_SRC: &str = concat!(
+    "data:image/svg+xml;utf8,",
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>",
+    "<rect width='64' height='64' fill='%23888'/>",
+    "<circle cx='32' cy='25' r='11' fill='%23fff'/>",
+    "<path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>"
+);
+
 #[css_module("/src/components/avatar/style.css")]
 struct Styles;
 
@@ -19,7 +28,7 @@ pub fn Demo() -> Element {
                 p { class: Styles::dx_avatar_label, "Basic Usage" }
                 ImageAvatar {
                     size: AvatarImageSize::Small,
-                    src: crate::components::DEMO_AVATAR_SRC,
+                    src: DEMO_AVATAR_SRC,
                     alt: "User avatar",
                     on_state_change: move |state| {
                         avatar_state.set(format!("Avatar 1: {state:?}"));
@@ -33,7 +42,7 @@ pub fn Demo() -> Element {
                 ImageAvatar {
                     size: AvatarImageSize::Small,
                     shape: AvatarShape::Rounded,
-                    src: crate::components::DEMO_AVATAR_SRC,
+                    src: DEMO_AVATAR_SRC,
                     alt: "User avatar",
                     on_state_change: move |state| {
                         avatar_state.set(format!("Avatar 2: {state:?}"));
@@ -59,7 +68,7 @@ pub fn Demo() -> Element {
                 p { class: Styles::dx_avatar_label, "Large Size" }
                 ImageAvatar {
                     size: AvatarImageSize::Large,
-                    src: crate::components::DEMO_AVATAR_SRC.to_string(),
+                    src: DEMO_AVATAR_SRC.to_string(),
                     alt: "Large avatar",
                     on_state_change: move |state| {
                         avatar_state.set(format!("Avatar 4: {state:?}"));

@@ -5,6 +5,7 @@
 //! so it can't drift from the source.
 
 pub mod doctor;
+pub mod manifest;
 pub mod scaffold;
 pub mod theme;
 
@@ -40,15 +41,18 @@ pub struct Registry {
 /// Names of the components a source file imports via `components::<name>`.
 pub fn imports_in(source: &str) -> BTreeSet<String> {
     let mut found = BTreeSet::new();
-    let mut rest = source;
-    while let Some(i) = rest.find("components::") {
-        rest = &rest[i + "components::".len()..];
-        let name: String = rest
-            .chars()
-            .take_while(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || *c == '_')
-            .collect();
-        if !name.is_empty() {
-            found.insert(name);
+    // `components::<name>` and sibling imports like `super::super::<name>`.
+    for marker in ["components::", "super::super::"] {
+        let mut rest = source;
+        while let Some(i) = rest.find(marker) {
+            rest = &rest[i + marker.len()..];
+            let name: String = rest
+                .chars()
+                .take_while(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || *c == '_')
+                .collect();
+            if !name.is_empty() {
+                found.insert(name);
+            }
         }
     }
     found
@@ -77,7 +81,9 @@ pub fn build(root: &Path) -> io::Result<Registry> {
             if file.ends_with(".rs") {
                 deps.extend(imports_in(&fs::read_to_string(e.path())?));
             }
-            files.push(format!("{name}/{file}"));
+            if file != "component.json" {
+                files.push(format!("{name}/{file}"));
+            }
         }
         deps.remove(name);
         deps.retain(|d| names.contains(d));

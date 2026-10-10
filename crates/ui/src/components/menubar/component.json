@@ -1,0 +1,24 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    },
+    {
+      "name": "tracing",
+      "version": "0.1"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The Menubar component can be used to display a menu bar with collapsible menus.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "menubar"
+}

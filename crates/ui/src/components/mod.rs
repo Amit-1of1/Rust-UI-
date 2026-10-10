@@ -70,12 +70,3 @@ pub mod toggle_group;
 pub mod toolbar;
 pub mod tooltip;
 pub mod virtual_list;
-
-/// A neutral placeholder image (an inline SVG) for avatar demos, so demos never hit the network.
-pub(crate) const DEMO_AVATAR_SRC: &str = concat!(
-    "data:image/svg+xml;utf8,",
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>",
-    "<rect width='64' height='64' fill='%23888'/>",
-    "<circle cx='32' cy='25' r='11' fill='%23fff'/>",
-    "<path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>"
-);

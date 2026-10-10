@@ -87,13 +87,20 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let json = to_json(&build(root).map_err(err)?);
             let path = root.join("registry.json");
             if check {
-                if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str()) {
-                    eprintln!("registry.json is out of date; run `rust-ui registry`");
+                let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
+                if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
+                    || !stale.is_empty()
+                {
+                    eprintln!(
+                        "registry.json or a component.json is out of date; run `rust-ui registry`"
+                    );
                     return Ok(ExitCode::FAILURE);
                 }
             } else {
                 std::fs::write(&path, json).map_err(err)?;
                 println!("wrote {}", path.display());
+                let n = rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
+                println!("wrote {n} component.json files");
             }
         }
         Command::Init { dest } => {
@@ -122,7 +129,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 to_json(&build(root).map_err(err)?),
             )
             .map_err(err)?;
-            println!("updated registry.json");
+            rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
+            println!("updated registry.json and component.json files");
         }
         Command::Doctor { strict } => {
             use rust_ui_cli::doctor::{run as doctor, Level};
