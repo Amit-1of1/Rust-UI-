@@ -21,6 +21,10 @@ await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { time
 if (process.env.ACCENT) {
   await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
 }
+if (process.env.DIR) {
+  await page.evaluate((d) => document.documentElement.setAttribute("dir", d), process.env.DIR);
+}
+if (process.env.SHOT) await page.screenshot({ path: process.env.SHOT, fullPage: true });
 await page.waitForTimeout(1500);
 await page.evaluate(axeSource);
 const result = await page.evaluate(() =>
@@ -31,6 +35,6 @@ for (const v of bad) {
   console.log(`${v.impact}\t${v.id}\t${v.help}`);
   for (const n of v.nodes.slice(0, 3)) console.log(`   ${n.target.join(" ")}`);
 }
-console.log(`${scheme}${process.env.ACCENT ? " / " + process.env.ACCENT : ""}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
+console.log(`${scheme}${process.env.ACCENT ? " / " + process.env.ACCENT : ""}${process.env.DIR ? " / " + process.env.DIR : ""}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
 await browser.close();
 process.exit(bad.length ? 1 : 0);

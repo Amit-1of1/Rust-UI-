@@ -57,6 +57,8 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node drawer.mjs)
       step "table behaviour (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node table.mjs)
+      step "axe $name (rtl)"
+      (cd tests/e2e && DIR=rtl GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs light)
       for accent in blue green violet rose orange; do
         for scheme in light dark; do
           step "axe $name ($accent, $scheme)"

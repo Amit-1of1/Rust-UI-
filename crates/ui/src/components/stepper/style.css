@@ -27,8 +27,8 @@
 .dx-stepper[data-orientation="horizontal"] .dx-stepper-item:not(:last-child)::after {
   position: absolute;
   top: 1rem;
-  right: -0.25rem;
-  left: calc(50% + 1.25rem);
+  inset-inline-end: -0.25rem;
+  inset-inline-start: calc(50% + 1.25rem);
   height: 2px;
   background-color: var(--primary-color-7);
   content: "";
@@ -39,7 +39,7 @@
   position: absolute;
   top: 2.25rem;
   bottom: -0.75rem;
-  left: 1rem;
+  inset-inline-start: 1rem;
   width: 2px;
   background-color: var(--primary-color-7);
   content: "";
@@ -70,7 +70,7 @@
 
 .dx-stepper[data-orientation="vertical"] .dx-stepper-trigger {
   align-items: flex-start;
-  text-align: left;
+  text-align: start;
 }
 
 .dx-stepper-trigger:disabled {

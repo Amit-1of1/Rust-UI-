@@ -46,11 +46,11 @@
 }
 
 .dx-input-group-addon[data-align="start"] {
-  padding-right: 0;
+  padding-inline-end: 0;
 }
 
 .dx-input-group-addon[data-align="end"] {
-  padding-left: 0;
+  padding-inline-start: 0;
 }
 
 .dx-input-group-addon svg {

@@ -87,6 +87,9 @@ pub fn hard_coded_colours(css: &str) -> Vec<(usize, String)> {
 }
 
 /// Physical properties that flip wrongly in right-to-left layouts, as `(line, text)`.
+///
+/// Left/right offsets are allowed where they are deliberate: percentage or `calc` values
+/// (centring), lines marked `rtl-ok`, and rules for `data-side="left|right"` placement, which name a physical side.
 pub fn physical_properties(css: &str) -> Vec<(usize, String)> {
     const PHYSICAL: &[&str] = &[
         "margin-left",
@@ -95,18 +98,34 @@ pub fn physical_properties(css: &str) -> Vec<(usize, String)> {
         "padding-right",
         "border-left",
         "border-right",
-        "left",
-        "right",
+        "border-top-left-radius",
+        "border-top-right-radius",
+        "border-bottom-left-radius",
+        "border-bottom-right-radius",
     ];
     let mut out = Vec::new();
+    let mut physical_side = false;
     for (i, line) in css.lines().enumerate() {
         let line = line.trim();
+        if line.ends_with('{') {
+            physical_side =
+                line.contains("data-side=\"left\"") || line.contains("data-side=\"right\"");
+            continue;
+        }
         let Some((prop, value)) = line.split_once(':') else {
             continue;
         };
+        if line.contains("rtl-ok") {
+            continue;
+        }
         let prop = prop.trim();
         let value = value.trim().trim_end_matches(';').trim();
-        let physical = PHYSICAL.contains(&prop)
+        let offset = matches!(prop, "left" | "right")
+            && !value.contains('%')
+            && !value.contains("calc")
+            && !physical_side;
+        let physical = (PHYSICAL.contains(&prop) && !physical_side)
+            || offset
             || (prop == "text-align" && matches!(value, "left" | "right"))
             || (prop == "float" && matches!(value, "left" | "right"));
         if physical {
@@ -200,7 +219,7 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         let physical = physical_properties(&css);
         if !physical.is_empty() {
             add(
-                Level::Warning,
+                Level::Error,
                 name,
                 format!(
                     "{} physical CSS properties break right-to-left (first: style.css:{} `{}`)",
@@ -228,7 +247,7 @@ mod tests {
 
     #[test]
     fn flags_physical_properties_only() {
-        let css = "a {\n  margin-left: 1px;\n  margin-inline-start: 1px;\n  text-align: left;\n  text-align: center;\n  left: 0;\n}";
+        let css = "a {\n  margin-left: 1px;\n  margin-inline-start: 1px;\n  text-align: left;\n  text-align: center;\n  left: 0;\n  left: 50%;\n}\na[data-side=\"right\"] {\n  margin-left: 4px;\n  left: 100%;\n}";
         let lines: Vec<_> = physical_properties(css).iter().map(|f| f.0).collect();
         assert_eq!(lines, [2, 4, 6]);
     }

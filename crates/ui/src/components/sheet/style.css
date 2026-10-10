@@ -74,8 +74,8 @@
 
 .dx-sheet[data-side="top"],
 .dx-sheet[data-side="bottom"] {
-  right: 0;
-  left: 0;
+  inset-inline-end: 0;
+  inset-inline-start: 0;
 }
 
 .dx-sheet[data-side="top"] {
@@ -233,7 +233,7 @@
 .dx-sheet-close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   display: flex;
   width: 24px;
   height: 24px;

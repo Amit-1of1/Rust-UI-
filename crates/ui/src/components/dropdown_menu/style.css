@@ -30,7 +30,7 @@
   position: absolute;
   z-index: 1000;
   top: 100%;
-  left: 0;
+  inset-inline-start: 0;
   min-width: 200px;
   padding: 0.25rem;
   border-radius: var(--radius);

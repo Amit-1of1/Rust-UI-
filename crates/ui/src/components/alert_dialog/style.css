@@ -89,7 +89,7 @@
 
   .dx-alert-dialog {
     max-width: 32rem;
-    text-align: left;
+    text-align: start;
   }
 }
 

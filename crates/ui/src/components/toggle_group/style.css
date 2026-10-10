@@ -17,7 +17,7 @@
 .dx-toggle-group[data-allow-multiple-pressed="true"]
   .dx-toggle-item {
   border-top: 1px solid var(--primary-color-6);
-  border-right: 1px solid var(--primary-color-6);
+  border-inline-end: 1px solid var(--primary-color-6);
   border-bottom: 1px solid var(--primary-color-6);
 }
 
@@ -42,7 +42,7 @@
 .dx-toggle-group[data-allow-multiple-pressed="true"]
   .dx-toggle-item[data-state="on"] {
   border-top: 1px solid var(--secondary-color-6);
-  border-right: 1px solid var(--secondary-color-6);
+  border-inline-end: 1px solid var(--secondary-color-6);
   border-bottom: 1px solid var(--secondary-color-6);
 }
 
@@ -52,8 +52,8 @@
 }
 
 .dx-toggle-item:first-child {
-  border-bottom-left-radius: 0.5rem;
-  border-top-left-radius: 0.5rem;
+  border-end-start-radius: 0.5rem;
+  border-start-start-radius: 0.5rem;
 }
 
 .dx-toggle-group[data-allow-multiple-pressed="true"] .dx-toggle-item:first-child {
@@ -61,6 +61,6 @@
 }
 
 .dx-toggle-item:last-child {
-  border-bottom-right-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
+  border-end-end-radius: 0.5rem;
+  border-start-end-radius: 0.5rem;
 }

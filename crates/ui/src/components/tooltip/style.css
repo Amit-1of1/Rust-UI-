@@ -25,7 +25,7 @@
   position: absolute;
   border-width: 0.25rem;
   border-style: solid;
-  margin-left: -0.25rem;
+  margin-left: -0.25rem; /* rtl-ok: pairs with left: 50% */
   content: " ";
   rotate: 45deg;
 }
@@ -94,14 +94,14 @@
 /* Alignment styles for top and bottom */
 .dx-tooltip-content[data-side="top"][data-align="start"],
 .dx-tooltip-content[data-side="bottom"][data-align="start"] {
-  left: 0;
+  inset-inline-start: 0;
   transform: none;
 }
 
 .dx-tooltip-content[data-side="top"][data-align="end"],
 .dx-tooltip-content[data-side="bottom"][data-align="end"] {
-  right: 0;
-  left: auto;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
   transform: none;
 }
 

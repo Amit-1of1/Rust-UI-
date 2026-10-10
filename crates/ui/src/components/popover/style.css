@@ -116,14 +116,14 @@
 /* Alignment styles for top and bottom */
 .dx-popover-content[data-side="top"][data-align="start"],
 .dx-popover-content[data-side="bottom"][data-align="start"] {
-  left: 0;
+  inset-inline-start: 0;
   transform: none;
 }
 
 .dx-popover-content[data-side="top"][data-align="end"],
 .dx-popover-content[data-side="bottom"][data-align="end"] {
-  right: 0;
-  left: auto;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
   transform: none;
 }
 
@@ -174,7 +174,7 @@
 
   .dx-popover-content {
     max-width: 32rem;
-    text-align: left;
+    text-align: start;
   }
 }
 

@@ -43,7 +43,7 @@
 .dx-combobox-expand-icon {
   position: absolute;
   top: 50%;
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
   opacity: 0.5;
   pointer-events: none;
   transform: translateY(-50%);
@@ -53,7 +53,7 @@
   position: absolute;
   z-index: 50;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   display: flex;
   overflow: hidden auto;
   width: 200px;
@@ -131,6 +131,6 @@
 }
 
 .dx-combobox-check-icon {
-  margin-left: auto;
+  margin-inline-start: auto;
   color: var(--secondary-color-5);
 }

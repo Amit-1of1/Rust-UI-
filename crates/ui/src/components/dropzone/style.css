@@ -62,7 +62,7 @@
 
 .dx-dropzone-files {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-inline-start: 1.25rem;
   color: var(--secondary-color-4);
   font-size: 0.875rem;
 }

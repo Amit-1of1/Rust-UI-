@@ -12,7 +12,7 @@
   background-color: transparent;
   color: var(--secondary-color-4);
   outline: none;
-  text-align: left;
+  text-align: start;
 }
 
 .dx-accordion-trigger:focus-visible {

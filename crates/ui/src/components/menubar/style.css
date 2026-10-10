@@ -47,7 +47,7 @@
   position: absolute;
   z-index: 1000;
   top: 100%;
-  left: 0;
+  inset-inline-start: 0;
   min-width: 200px;
   padding: 0.25rem;
   border-radius: var(--radius);
@@ -63,7 +63,7 @@
 }
 
 .dx-menubar-menu:first-child .dx-menubar-content {
-  margin-left: -0.25rem;
+  margin-inline-start: -0.25rem;
 }
 
 .dx-menubar-content[data-state="closed"] {

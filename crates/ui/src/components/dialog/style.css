@@ -78,14 +78,14 @@
 @media (width >= 40rem) {
   .dx-dialog {
     max-width: 32rem;
-    text-align: left;
+    text-align: start;
   }
 }
 
 .dx-dialog-close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   align-self: flex-start;
   padding: 0;
   border: none;
