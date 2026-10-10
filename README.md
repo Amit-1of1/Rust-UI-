@@ -73,6 +73,14 @@ rust-ui --source /path/to/Rust-UI- diff command --dest src/components  # exit 1 
 
 `add` never overwrites a file you changed unless you pass `--force`. It prints the `pub mod` lines to paste into your `components/mod.rs`. The source is a local checkout (or `RUST_UI_SOURCE`); fetching over HTTP is not built.
 
+## Gallery online
+
+`.github/workflows/pages.yml` builds the gallery and deploys it to GitHub Pages (run it manually from the Actions tab after enabling Pages with the GitHub Actions source). Locally: `dx bundle --platform web --release --base-path Rust-UI-` in `apps/gallery`.
+
+## Native (experimental)
+
+`cargo check -p gallery --no-default-features --features native` compiles against Blitz. It has not been run; see `docs/GUARDRAILS.md`.
+
 ## Accessibility check
 
 `tests/e2e/axe.mjs` runs axe-core (WCAG 2 A/AA plus best practices) on the built gallery in light and dark. See the header of that file for how to run it. It is not in CI yet because CI cannot currently run (see below).
