@@ -1,6 +1,19 @@
 {
   "cargoDependencies": [],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "button"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "input"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "label"
+    }
+  ],
   "description": "The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.",
   "exclude": [
     "docs.md",

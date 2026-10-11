@@ -320,3 +320,97 @@ fn drawer_demo_renders() {
     let html = render(ui::components::drawer::drawer_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn button_demo_renders() {
+    let html = render(ui::components::button::button_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn badge_demo_renders() {
+    let html = render(ui::components::badge::badge_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn input_demo_renders() {
+    let html = render(ui::components::input::input_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn checkbox_demo_renders() {
+    let html = render(ui::components::checkbox::checkbox_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn switch_demo_renders() {
+    let html = render(ui::components::switch::switch_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn card_demo_renders() {
+    let html = render(ui::components::card::card_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn tabs_demo_renders() {
+    let html = render(ui::components::tabs::tabs_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn accordion_demo_renders() {
+    let html = render(ui::components::accordion::accordion_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn dialog_demo_renders() {
+    let html = render(ui::components::dialog::dialog_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn sheet_demo_renders() {
+    let html = render(ui::components::sheet::sheet_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn popover_demo_renders() {
+    let html = render(ui::components::popover::popover_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn dropdown_menu_demo_renders() {
+    let html = render(ui::components::dropdown_menu::dropdown_menu_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn tooltip_demo_renders() {
+    let html = render(ui::components::tooltip::tooltip_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn separator_demo_renders() {
+    let html = render(ui::components::separator::separator_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn toast_demo_renders() {
+    let html = render(|| {
+        rsx! {
+            ui::prelude::ToastProvider { ui::components::toast::toast_demo::Demo {} }
+        }
+    });
+    assert!(html.contains("<button"));
+}

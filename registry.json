@@ -10,6 +10,7 @@
     {
       "name": "accordion",
       "files": [
+        "accordion/accordion_demo.rs",
         "accordion/component.rs",
         "accordion/docs.md",
         "accordion/mod.rs",
@@ -66,6 +67,7 @@
     {
       "name": "badge",
       "files": [
+        "badge/badge_demo.rs",
         "badge/component.rs",
         "badge/docs.md",
         "badge/mod.rs",
@@ -98,6 +100,7 @@
     {
       "name": "button",
       "files": [
+        "button/button_demo.rs",
         "button/component.rs",
         "button/docs.md",
         "button/mod.rs",
@@ -143,12 +146,17 @@
     {
       "name": "card",
       "files": [
+        "card/card_demo.rs",
         "card/component.rs",
         "card/docs.md",
         "card/mod.rs",
         "card/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "button",
+        "input",
+        "label"
+      ]
     },
     {
       "name": "carousel",
@@ -175,12 +183,15 @@
     {
       "name": "checkbox",
       "files": [
+        "checkbox/checkbox_demo.rs",
         "checkbox/component.rs",
         "checkbox/docs.md",
         "checkbox/mod.rs",
         "checkbox/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "label"
+      ]
     },
     {
       "name": "collapsible",
@@ -276,11 +287,14 @@
       "name": "dialog",
       "files": [
         "dialog/component.rs",
+        "dialog/dialog_demo.rs",
         "dialog/docs.md",
         "dialog/mod.rs",
         "dialog/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "drag_and_drop_list",
@@ -313,6 +327,7 @@
       "files": [
         "dropdown_menu/component.rs",
         "dropdown_menu/docs.md",
+        "dropdown_menu/dropdown_menu_demo.rs",
         "dropdown_menu/mod.rs",
         "dropdown_menu/style.css"
       ],
@@ -388,10 +403,13 @@
       "files": [
         "input/component.rs",
         "input/docs.md",
+        "input/input_demo.rs",
         "input/mod.rs",
         "input/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "label"
+      ]
     },
     {
       "name": "input_group",
@@ -510,9 +528,12 @@
         "popover/component.rs",
         "popover/docs.md",
         "popover/mod.rs",
+        "popover/popover_demo.rs",
         "popover/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "progress",
@@ -564,6 +585,7 @@
         "separator/component.rs",
         "separator/docs.md",
         "separator/mod.rs",
+        "separator/separator_demo.rs",
         "separator/style.css"
       ],
       "registryDependencies": []
@@ -574,9 +596,14 @@
         "sheet/component.rs",
         "sheet/docs.md",
         "sheet/mod.rs",
+        "sheet/sheet_demo.rs",
         "sheet/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "button",
+        "input",
+        "label"
+      ]
     },
     {
       "name": "shimmer",
@@ -673,7 +700,8 @@
         "switch/component.rs",
         "switch/docs.md",
         "switch/mod.rs",
-        "switch/style.css"
+        "switch/style.css",
+        "switch/switch_demo.rs"
       ],
       "registryDependencies": []
     },
@@ -696,7 +724,8 @@
         "tabs/component.rs",
         "tabs/docs.md",
         "tabs/mod.rs",
-        "tabs/style.css"
+        "tabs/style.css",
+        "tabs/tabs_demo.rs"
       ],
       "registryDependencies": []
     },
@@ -741,9 +770,12 @@
         "toast/component.rs",
         "toast/docs.md",
         "toast/mod.rs",
-        "toast/style.css"
+        "toast/style.css",
+        "toast/toast_demo.rs"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "toggle",
@@ -784,7 +816,8 @@
         "tooltip/component.rs",
         "tooltip/docs.md",
         "tooltip/mod.rs",
-        "tooltip/style.css"
+        "tooltip/style.css",
+        "tooltip/tooltip_demo.rs"
       ],
       "registryDependencies": []
     },

@@ -7,7 +7,12 @@
       "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "button"
+    }
+  ],
   "description": "The Toast component is used to display brief messages to the user, typically for notifications or alerts. The toast messages can be focused with the keyboard with the `f6` key.",
   "exclude": [
     "docs.md",
