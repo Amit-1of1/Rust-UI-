@@ -2,7 +2,7 @@
 //! component name to its live demo. Like `registry.json` it is generated, and a test fails
 //! when it is stale, so the docs site can't drift from the components.
 
-use crate::{build, COMPONENTS_DIR};
+use crate::{build, COMPONENTS_DIR, DEMOS_DIR};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -33,17 +33,14 @@ pub fn generate(root: &Path) -> io::Result<String> {
         let name = &item.name;
         let docs_path = root.join(COMPONENTS_DIR).join(name).join("docs.md");
         let docs = fs::read_to_string(&docs_path).unwrap_or_default();
-        let has_demo = item
-            .files
-            .iter()
-            .any(|f| f == &format!("{name}/{name}_demo.rs"));
+        let has_demo = root.join(DEMOS_DIR).join(format!("{name}.rs")).is_file();
         entries.push_str(&format!(
             "    Entry {{ name: {name:?}, title: {:?}, docs: include_str!(\"../../../{COMPONENTS_DIR}/{name}/docs.md\"), has_demo: {has_demo} }},\n",
             title(&docs, name)
         ));
         if has_demo {
             arms.push_str(&format!(
-                "        {name:?} => rsx! {{ ui::components::{name}::{name}_demo::Demo {{}} }},\n"
+                "        {name:?} => rsx! {{ ui::demos::{name}::Demo {{}} }},\n"
             ));
         }
     }

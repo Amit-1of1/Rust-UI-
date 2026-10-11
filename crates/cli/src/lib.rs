@@ -17,6 +17,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 
 pub const COMPONENTS_DIR: &str = "crates/ui/src/components";
+pub const DEMOS_DIR: &str = "crates/ui/src/demos";
 pub const THEME_FILE: &str = "crates/ui/assets/theme.css";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

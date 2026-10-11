@@ -11,12 +11,7 @@
       "version": "0.1.0"
     }
   ],
-  "componentDependencies": [
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "label"
-    }
-  ],
+  "componentDependencies": [],
   "description": "The Checkbox component is used to create an accessible checkbox input.",
   "exclude": [
     "docs.md",

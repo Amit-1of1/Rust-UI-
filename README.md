@@ -60,7 +60,7 @@ fn App() -> Element {
 
 ## Components
 
-Behaviour comes from `dioxus-primitives`; each styled component lives in `crates/ui/src/components/<name>/` with a `<name>_demo.rs` shown in the gallery.
+Behaviour comes from `dioxus-primitives`; each styled component lives in `crates/ui/src/components/<name>/` with a demo in `crates/ui/src/demos/<name>.rs` that the gallery, the docs site and the tests render. Demos stay out of the component folders, so installing a component never copies them.
 
 accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, checkbox, collapsible, color picker, combobox, context menu, date picker, dialog, drag-and-drop list, dropdown menu, hover card, input, item, label, menubar, navbar, pagination, popover, progress, radio group, scroll area, select, separator, sheet, sidebar, skeleton, slider, switch, tabs, tag group, textarea, toast, toggle, toggle group, toolbar, tooltip, virtual list.
 

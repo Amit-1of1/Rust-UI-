@@ -9,10 +9,6 @@
     {
       "name": "palette",
       "version": "0.7.6"
-    },
-    {
-      "name": "tracing",
-      "version": "0.1"
     }
   ],
   "componentDependencies": [

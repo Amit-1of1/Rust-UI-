@@ -3,14 +3,6 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "callout"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "field"
     },
     {

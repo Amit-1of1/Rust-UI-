@@ -1,11 +1,6 @@
 {
   "cargoDependencies": [],
-  "componentDependencies": [
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    }
-  ],
+  "componentDependencies": [],
   "description": "Joins buttons or inputs into a segmented control, horizontal or vertical.",
   "exclude": [
     "docs.md",

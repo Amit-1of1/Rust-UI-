@@ -11,402 +11,402 @@ fn render(app: fn() -> Element) -> String {
 
 #[test]
 fn alert_dialog_demo_renders() {
-    let html = render(ui::components::alert_dialog::alert_dialog_demo::Demo);
+    let html = render(ui::demos::alert_dialog::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn aspect_ratio_demo_renders() {
-    let html = render(ui::components::aspect_ratio::aspect_ratio_demo::Demo);
+    let html = render(ui::demos::aspect_ratio::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn avatar_demo_renders() {
-    let html = render(ui::components::avatar::avatar_demo::Demo);
+    let html = render(ui::demos::avatar::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn calendar_demo_renders() {
-    let html = render(ui::components::calendar::calendar_demo::Demo);
+    let html = render(ui::demos::calendar::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn collapsible_demo_renders() {
-    let html = render(ui::components::collapsible::collapsible_demo::Demo);
+    let html = render(ui::demos::collapsible::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn color_picker_demo_renders() {
-    let html = render(ui::components::color_picker::color_picker_demo::Demo);
+    let html = render(ui::demos::color_picker::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn combobox_demo_renders() {
-    let html = render(ui::components::combobox::combobox_demo::Demo);
+    let html = render(ui::demos::combobox::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn context_menu_demo_renders() {
-    let html = render(ui::components::context_menu::context_menu_demo::Demo);
+    let html = render(ui::demos::context_menu::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn date_picker_demo_renders() {
-    let html = render(ui::components::date_picker::date_picker_demo::Demo);
+    let html = render(ui::demos::date_picker::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn drag_and_drop_list_demo_renders() {
-    let html = render(ui::components::drag_and_drop_list::drag_and_drop_list_demo::Demo);
+    let html = render(ui::demos::drag_and_drop_list::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn hover_card_demo_renders() {
-    let html = render(ui::components::hover_card::hover_card_demo::Demo);
+    let html = render(ui::demos::hover_card::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn item_demo_renders() {
-    let html = render(ui::components::item::item_demo::Demo);
+    let html = render(ui::demos::item::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn menubar_demo_renders() {
-    let html = render(ui::components::menubar::menubar_demo::Demo);
+    let html = render(ui::demos::menubar::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn pagination_demo_renders() {
-    let html = render(ui::components::pagination::pagination_demo::Demo);
+    let html = render(ui::demos::pagination::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn progress_demo_renders() {
-    let html = render(ui::components::progress::progress_demo::Demo);
+    let html = render(ui::demos::progress::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn radio_group_demo_renders() {
-    let html = render(ui::components::radio_group::radio_group_demo::Demo);
+    let html = render(ui::demos::radio_group::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn scroll_area_demo_renders() {
-    let html = render(ui::components::scroll_area::scroll_area_demo::Demo);
+    let html = render(ui::demos::scroll_area::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn select_demo_renders() {
-    let html = render(ui::components::select::select_demo::Demo);
+    let html = render(ui::demos::select::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn sidebar_demo_renders() {
-    let html = render(ui::components::sidebar::sidebar_demo::Demo);
+    let html = render(ui::demos::sidebar::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn skeleton_demo_renders() {
-    let html = render(ui::components::skeleton::skeleton_demo::Demo);
+    let html = render(ui::demos::skeleton::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn slider_demo_renders() {
-    let html = render(ui::components::slider::slider_demo::Demo);
+    let html = render(ui::demos::slider::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn tag_group_demo_renders() {
-    let html = render(ui::components::tag_group::tag_group_demo::Demo);
+    let html = render(ui::demos::tag_group::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn textarea_demo_renders() {
-    let html = render(ui::components::textarea::textarea_demo::Demo);
+    let html = render(ui::demos::textarea::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn toggle_demo_renders() {
-    let html = render(ui::components::toggle::toggle_demo::Demo);
+    let html = render(ui::demos::toggle::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn toggle_group_demo_renders() {
-    let html = render(ui::components::toggle_group::toggle_group_demo::Demo);
+    let html = render(ui::demos::toggle_group::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn toolbar_demo_renders() {
-    let html = render(ui::components::toolbar::toolbar_demo::Demo);
+    let html = render(ui::demos::toolbar::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn virtual_list_demo_renders() {
-    let html = render(ui::components::virtual_list::virtual_list_demo::Demo);
+    let html = render(ui::demos::virtual_list::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn alert_demo_renders() {
-    let html = render(ui::components::alert::alert_demo::Demo);
+    let html = render(ui::demos::alert::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn breadcrumb_demo_renders() {
-    let html = render(ui::components::breadcrumb::breadcrumb_demo::Demo);
+    let html = render(ui::demos::breadcrumb::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn kbd_demo_renders() {
-    let html = render(ui::components::kbd::kbd_demo::Demo);
+    let html = render(ui::demos::kbd::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn spinner_demo_renders() {
-    let html = render(ui::components::spinner::spinner_demo::Demo);
+    let html = render(ui::demos::spinner::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn field_demo_renders() {
-    let html = render(ui::components::field::field_demo::Demo);
+    let html = render(ui::demos::field::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn table_demo_renders() {
-    let html = render(ui::components::table::table_demo::Demo);
+    let html = render(ui::demos::table::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn command_demo_renders() {
-    let html = render(ui::components::command::command_demo::Demo);
+    let html = render(ui::demos::command::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn chart_demo_renders() {
-    let html = render(ui::components::chart::chart_demo::Demo);
+    let html = render(ui::demos::chart::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn theme_customizer_demo_renders() {
-    let html = render(ui::components::theme_customizer::theme_customizer_demo::Demo);
+    let html = render(ui::demos::theme_customizer::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn callout_demo_renders() {
-    let html = render(ui::components::callout::callout_demo::Demo);
+    let html = render(ui::demos::callout::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn empty_demo_renders() {
-    let html = render(ui::components::empty::empty_demo::Demo);
+    let html = render(ui::demos::empty::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn status_demo_renders() {
-    let html = render(ui::components::status::status_demo::Demo);
+    let html = render(ui::demos::status::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn shimmer_demo_renders() {
-    let html = render(ui::components::shimmer::shimmer_demo::Demo);
+    let html = render(ui::demos::shimmer::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn marquee_demo_renders() {
-    let html = render(ui::components::marquee::marquee_demo::Demo);
+    let html = render(ui::demos::marquee::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn button_group_demo_renders() {
-    let html = render(ui::components::button_group::button_group_demo::Demo);
+    let html = render(ui::demos::button_group::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn stepper_demo_renders() {
-    let html = render(ui::components::stepper::stepper_demo::Demo);
+    let html = render(ui::demos::stepper::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn bottom_nav_demo_renders() {
-    let html = render(ui::components::bottom_nav::bottom_nav_demo::Demo);
+    let html = render(ui::demos::bottom_nav::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn form_demo_renders() {
-    let html = render(ui::components::form::form_demo::Demo);
+    let html = render(ui::demos::form::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn data_table_demo_renders() {
-    let html = render(ui::components::data_table::data_table_demo::Demo);
+    let html = render(ui::demos::data_table::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn input_otp_demo_renders() {
-    let html = render(ui::components::input_otp::input_otp_demo::Demo);
+    let html = render(ui::demos::input_otp::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn input_group_demo_renders() {
-    let html = render(ui::components::input_group::input_group_demo::Demo);
+    let html = render(ui::demos::input_group::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn carousel_demo_renders() {
-    let html = render(ui::components::carousel::carousel_demo::Demo);
+    let html = render(ui::demos::carousel::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn dropzone_demo_renders() {
-    let html = render(ui::components::dropzone::dropzone_demo::Demo);
+    let html = render(ui::demos::dropzone::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn multi_select_demo_renders() {
-    let html = render(ui::components::multi_select::multi_select_demo::Demo);
+    let html = render(ui::demos::multi_select::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn drawer_demo_renders() {
-    let html = render(ui::components::drawer::drawer_demo::Demo);
+    let html = render(ui::demos::drawer::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn button_demo_renders() {
-    let html = render(ui::components::button::button_demo::Demo);
+    let html = render(ui::demos::button::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn badge_demo_renders() {
-    let html = render(ui::components::badge::badge_demo::Demo);
+    let html = render(ui::demos::badge::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn input_demo_renders() {
-    let html = render(ui::components::input::input_demo::Demo);
+    let html = render(ui::demos::input::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn checkbox_demo_renders() {
-    let html = render(ui::components::checkbox::checkbox_demo::Demo);
+    let html = render(ui::demos::checkbox::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn switch_demo_renders() {
-    let html = render(ui::components::switch::switch_demo::Demo);
+    let html = render(ui::demos::switch::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn card_demo_renders() {
-    let html = render(ui::components::card::card_demo::Demo);
+    let html = render(ui::demos::card::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn tabs_demo_renders() {
-    let html = render(ui::components::tabs::tabs_demo::Demo);
+    let html = render(ui::demos::tabs::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn accordion_demo_renders() {
-    let html = render(ui::components::accordion::accordion_demo::Demo);
+    let html = render(ui::demos::accordion::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn dialog_demo_renders() {
-    let html = render(ui::components::dialog::dialog_demo::Demo);
+    let html = render(ui::demos::dialog::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn sheet_demo_renders() {
-    let html = render(ui::components::sheet::sheet_demo::Demo);
+    let html = render(ui::demos::sheet::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn popover_demo_renders() {
-    let html = render(ui::components::popover::popover_demo::Demo);
+    let html = render(ui::demos::popover::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn dropdown_menu_demo_renders() {
-    let html = render(ui::components::dropdown_menu::dropdown_menu_demo::Demo);
+    let html = render(ui::demos::dropdown_menu::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn tooltip_demo_renders() {
-    let html = render(ui::components::tooltip::tooltip_demo::Demo);
+    let html = render(ui::demos::tooltip::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn separator_demo_renders() {
-    let html = render(ui::components::separator::separator_demo::Demo);
+    let html = render(ui::demos::separator::Demo);
     assert!(!html.is_empty());
 }
 
 #[test]
 fn toast_demo_renders() {
-    let html = render(ui::components::toast::toast_demo::Demo);
+    let html = render(ui::demos::toast::Demo);
     assert!(html.contains("<button"));
 }

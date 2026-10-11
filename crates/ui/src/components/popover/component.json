@@ -7,12 +7,7 @@
       "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
     }
   ],
-  "componentDependencies": [
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    }
-  ],
+  "componentDependencies": [],
   "description": "The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.",
   "exclude": [
     "docs.md",

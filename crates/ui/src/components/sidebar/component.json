@@ -14,19 +14,7 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "avatar"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "button"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "collapsible"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "dropdown_menu"
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",

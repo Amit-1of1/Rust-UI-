@@ -3,15 +3,7 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "dialog"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "kbd"
     }
   ],
   "description": "A command palette: a search box over a filtered list, inside a dialog. `filter_items` and `step_active` are pure helpers.",
