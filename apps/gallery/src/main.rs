@@ -19,78 +19,79 @@ fn App() -> Element {
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: GALLERY_CSS }
-        ToastProvider {
+        Fragment {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
                 Badge { variant: BadgeVariant::Secondary, "week 6" }
             }
             section { class: "gallery-main", "aria-label": "Component gallery",
-                Section { title: "Button", blurb: "Variants and sizes.", ButtonDemo {} }
-                Section { title: "Badge", blurb: "Status labels.", BadgeDemo {} }
-                Section { title: "Input and label", blurb: "Text entry with an accessible label.", InputDemo {} }
-                Section { title: "Checkbox and switch", blurb: "Binary choices; Space toggles.", ToggleDemo {} }
-                Section { title: "Card", blurb: "A grouped surface with header, content and footer.", CardDemo {} }
-                Section { title: "Tabs", blurb: "Arrow keys move between tabs.", TabsDemo {} }
-                Section { title: "Accordion", blurb: "Enter or Space expands; one open at a time.", AccordionDemo {} }
-                Section { title: "Dialog", blurb: "Modal with focus trap; Escape closes.", DialogDemo {} }
-                Section { title: "Sheet", blurb: "Side panel built on the dialog primitive.", SheetDemo {} }
-                Section { title: "Popover", blurb: "Anchored floating content.", PopoverDemo {} }
-                Section { title: "Dropdown menu", blurb: "Arrow keys navigate, Enter selects.", DropdownDemo {} }
-                Section { title: "Tooltip", blurb: "Shown on hover and keyboard focus.", TooltipDemo {} }
-                Section { title: "Toast", blurb: "Transient notifications.", ToastDemo {} }
-                Section { title: "Separator", blurb: "Visual divider.", SeparatorDemo {} }
-                Section { title: "Alert dialog", blurb: "A dialog that demands an explicit answer.", ui::components::alert_dialog::alert_dialog_demo::Demo {} }
-                Section { title: "Aspect ratio", blurb: "Keeps content at a fixed ratio.", ui::components::aspect_ratio::aspect_ratio_demo::Demo {} }
-                Section { title: "Avatar", blurb: "Image with a fallback.", ui::components::avatar::avatar_demo::Demo {} }
-                Section { title: "Calendar", blurb: "Date grid; arrow keys move between days.", ui::components::calendar::calendar_demo::Demo {} }
-                Section { title: "Collapsible", blurb: "A single show/hide region.", ui::components::collapsible::collapsible_demo::Demo {} }
-                Section { title: "Color picker", blurb: "Pick a color by hue, saturation and value.", ui::components::color_picker::color_picker_demo::Demo {} }
-                Section { title: "Combobox", blurb: "Type to filter, arrow keys to choose.", ui::components::combobox::combobox_demo::Demo {} }
-                Section { title: "Context menu", blurb: "Right-click for actions.", ui::components::context_menu::context_menu_demo::Demo {} }
-                Section { title: "Date picker", blurb: "Calendar in a popover.", ui::components::date_picker::date_picker_demo::Demo {} }
-                Section { title: "Drag and drop list", blurb: "Reorder with the pointer or keyboard.", ui::components::drag_and_drop_list::drag_and_drop_list_demo::Demo {} }
-                Section { title: "Hover card", blurb: "Rich preview on hover or focus.", ui::components::hover_card::hover_card_demo::Demo {} }
-                Section { title: "Item", blurb: "A flexible row for lists.", ui::components::item::item_demo::Demo {} }
-                Section { title: "Menubar", blurb: "Application-style menus.", ui::components::menubar::menubar_demo::Demo {} }
-                Section { title: "Pagination", blurb: "Page navigation.", ui::components::pagination::pagination_demo::Demo {} }
-                Section { title: "Progress", blurb: "Completion indicator.", ui::components::progress::progress_demo::Demo {} }
-                Section { title: "Radio group", blurb: "One choice from several; arrow keys move.", ui::components::radio_group::radio_group_demo::Demo {} }
-                Section { title: "Scroll area", blurb: "Styled scrolling region.", ui::components::scroll_area::scroll_area_demo::Demo {} }
-                Section { title: "Select", blurb: "Pick one option from a list.", ui::components::select::select_demo::Demo {} }
-                Section { title: "Skeleton", blurb: "Loading placeholder.", ui::components::skeleton::skeleton_demo::Demo {} }
-                Section { title: "Slider", blurb: "Drag or use arrow keys.", ui::components::slider::slider_demo::Demo {} }
-                Section { title: "Tag group", blurb: "Selectable, removable tags.", ui::components::tag_group::tag_group_demo::Demo {} }
-                Section { title: "Textarea", blurb: "Multi-line text entry.", ui::components::textarea::textarea_demo::Demo {} }
-                Section { title: "Toggle", blurb: "A pressable on/off button.", ui::components::toggle::toggle_demo::Demo {} }
-                Section { title: "Toggle group", blurb: "Related toggles with shared state.", ui::components::toggle_group::toggle_group_demo::Demo {} }
-                Section { title: "Toolbar", blurb: "Grouped controls with roving focus.", ui::components::toolbar::toolbar_demo::Demo {} }
-                Section { title: "Virtual list", blurb: "Renders only the visible rows.", ui::components::virtual_list::virtual_list_demo::Demo {} }
-                Section { title: "Sidebar", blurb: "Collapsible navigation, shown in a bounded frame.", div { class: "gallery-frame", ui::components::sidebar::sidebar_demo::Demo {} } }
-                Section { title: "Alert", blurb: "A callout; announced when it appears.", ui::components::alert::alert_demo::Demo {} }
-                Section { title: "Breadcrumb", blurb: "Where you are in the hierarchy.", ui::components::breadcrumb::breadcrumb_demo::Demo {} }
-                Section { title: "Kbd", blurb: "Keyboard keys.", ui::components::kbd::kbd_demo::Demo {} }
-                Section { title: "Spinner", blurb: "Indeterminate loading.", ui::components::spinner::spinner_demo::Demo {} }
-                Section { title: "Field and validation", blurb: "Label, control, hint and error wired together with aria-describedby.", ui::components::field::field_demo::Demo {} }
-                Section { title: "Table", blurb: "Sortable columns announce their direction.", ui::components::table::table_demo::Demo {} }
-                Section { title: "Command palette", blurb: "Type to filter, arrow keys to move, Enter to run.", ui::components::command::command_demo::Demo {} }
-                Section { title: "Charts", blurb: "SVG charts with a text summary for screen readers.", ui::components::chart::chart_demo::Demo {} }
-                Section { title: "Theme customizer", blurb: "Accent colour, corner radius and mode for the whole page. Everything below recolors live.", ui::components::theme_customizer::theme_customizer_demo::Demo {} }
-                Section { title: "Callout", blurb: "Inline notes in default, info, success and warning styles.", ui::components::callout::callout_demo::Demo {} }
-                Section { title: "Empty", blurb: "Empty state with icon, copy and actions.", ui::components::empty::empty_demo::Demo {} }
-                Section { title: "Status", blurb: "A dot plus text label; never colour alone.", ui::components::status::status_demo::Demo {} }
-                Section { title: "Shimmer", blurb: "Loading highlight that becomes a static tint with reduced motion.", ui::components::shimmer::shimmer_demo::Demo {} }
-                Section { title: "Marquee", blurb: "Looping strip with a pause button; stops under reduced motion.", ui::components::marquee::marquee_demo::Demo {} }
-                Section { title: "Button group", blurb: "Buttons joined into one segmented control.", ui::components::button_group::button_group_demo::Demo {} }
-                Section { title: "Stepper", blurb: "Multi-step progress with Back and Next.", ui::components::stepper::stepper_demo::Demo {} }
-                Section { title: "Bottom nav", blurb: "Mobile tab bar with aria-current.", ui::components::bottom_nav::bottom_nav_demo::Demo {} }
-                Section { title: "Form", blurb: "Validation state, a Form and bound TextFields; focus jumps to the first error on submit.", ui::components::form::form_demo::Demo {} }
-                Section { title: "Data table", blurb: "Sort, filter, paginate and select rows; status is announced to screen readers.", ui::components::data_table::data_table_demo::Demo {} }
-                Section { title: "Input otp", blurb: "One box per character: auto-advance, Backspace, arrow keys and paste.", ui::components::input_otp::input_otp_demo::Demo {} }
-                Section { title: "Input group", blurb: "An input with text or buttons attached inside one border.", ui::components::input_group::input_group_demo::Demo {} }
-                Section { title: "Carousel", blurb: "Snap-scrolling slides with Previous and Next; nothing autoplays.", ui::components::carousel::carousel_demo::Demo {} }
-                Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::components::dropzone::dropzone_demo::Demo {} }
-                Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::components::multi_select::multi_select_demo::Demo {} }
-                Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::components::drawer::drawer_demo::Demo {} }
+                Section { title: "Button", blurb: "Variants and sizes.", ui::demos::button::Demo {} }
+                Section { title: "Badge", blurb: "Status labels.", ui::demos::badge::Demo {} }
+                Section { title: "Input and label", blurb: "Text entry with an accessible label.", ui::demos::input::Demo {} }
+                Section { title: "Checkbox", blurb: "Binary choice; Space toggles.", ui::demos::checkbox::Demo {} }
+                Section { title: "Switch", blurb: "An on/off setting.", ui::demos::switch::Demo {} }
+                Section { title: "Card", blurb: "A grouped surface with header, content and footer.", ui::demos::card::Demo {} }
+                Section { title: "Tabs", blurb: "Arrow keys move between tabs.", ui::demos::tabs::Demo {} }
+                Section { title: "Accordion", blurb: "Enter or Space expands; one open at a time.", ui::demos::accordion::Demo {} }
+                Section { title: "Dialog", blurb: "Modal with focus trap; Escape closes.", ui::demos::dialog::Demo {} }
+                Section { title: "Sheet", blurb: "Side panel built on the dialog primitive.", ui::demos::sheet::Demo {} }
+                Section { title: "Popover", blurb: "Anchored floating content.", ui::demos::popover::Demo {} }
+                Section { title: "Dropdown menu", blurb: "Arrow keys navigate, Enter selects.", ui::demos::dropdown_menu::Demo {} }
+                Section { title: "Tooltip", blurb: "Shown on hover and keyboard focus.", ui::demos::tooltip::Demo {} }
+                Section { title: "Toast", blurb: "Transient notifications.", ui::demos::toast::Demo {} }
+                Section { title: "Separator", blurb: "Visual divider.", ui::demos::separator::Demo {} }
+                Section { title: "Alert dialog", blurb: "A dialog that demands an explicit answer.", ui::demos::alert_dialog::Demo {} }
+                Section { title: "Aspect ratio", blurb: "Keeps content at a fixed ratio.", ui::demos::aspect_ratio::Demo {} }
+                Section { title: "Avatar", blurb: "Image with a fallback.", ui::demos::avatar::Demo {} }
+                Section { title: "Calendar", blurb: "Date grid; arrow keys move between days.", ui::demos::calendar::Demo {} }
+                Section { title: "Collapsible", blurb: "A single show/hide region.", ui::demos::collapsible::Demo {} }
+                Section { title: "Color picker", blurb: "Pick a color by hue, saturation and value.", ui::demos::color_picker::Demo {} }
+                Section { title: "Combobox", blurb: "Type to filter, arrow keys to choose.", ui::demos::combobox::Demo {} }
+                Section { title: "Context menu", blurb: "Right-click for actions.", ui::demos::context_menu::Demo {} }
+                Section { title: "Date picker", blurb: "Calendar in a popover.", ui::demos::date_picker::Demo {} }
+                Section { title: "Drag and drop list", blurb: "Reorder with the pointer or keyboard.", ui::demos::drag_and_drop_list::Demo {} }
+                Section { title: "Hover card", blurb: "Rich preview on hover or focus.", ui::demos::hover_card::Demo {} }
+                Section { title: "Item", blurb: "A flexible row for lists.", ui::demos::item::Demo {} }
+                Section { title: "Menubar", blurb: "Application-style menus.", ui::demos::menubar::Demo {} }
+                Section { title: "Pagination", blurb: "Page navigation.", ui::demos::pagination::Demo {} }
+                Section { title: "Progress", blurb: "Completion indicator.", ui::demos::progress::Demo {} }
+                Section { title: "Radio group", blurb: "One choice from several; arrow keys move.", ui::demos::radio_group::Demo {} }
+                Section { title: "Scroll area", blurb: "Styled scrolling region.", ui::demos::scroll_area::Demo {} }
+                Section { title: "Select", blurb: "Pick one option from a list.", ui::demos::select::Demo {} }
+                Section { title: "Skeleton", blurb: "Loading placeholder.", ui::demos::skeleton::Demo {} }
+                Section { title: "Slider", blurb: "Drag or use arrow keys.", ui::demos::slider::Demo {} }
+                Section { title: "Tag group", blurb: "Selectable, removable tags.", ui::demos::tag_group::Demo {} }
+                Section { title: "Textarea", blurb: "Multi-line text entry.", ui::demos::textarea::Demo {} }
+                Section { title: "Toggle", blurb: "A pressable on/off button.", ui::demos::toggle::Demo {} }
+                Section { title: "Toggle group", blurb: "Related toggles with shared state.", ui::demos::toggle_group::Demo {} }
+                Section { title: "Toolbar", blurb: "Grouped controls with roving focus.", ui::demos::toolbar::Demo {} }
+                Section { title: "Virtual list", blurb: "Renders only the visible rows.", ui::demos::virtual_list::Demo {} }
+                Section { title: "Sidebar", blurb: "Collapsible navigation, shown in a bounded frame.", div { class: "gallery-frame", ui::demos::sidebar::Demo {} } }
+                Section { title: "Alert", blurb: "A callout; announced when it appears.", ui::demos::alert::Demo {} }
+                Section { title: "Breadcrumb", blurb: "Where you are in the hierarchy.", ui::demos::breadcrumb::Demo {} }
+                Section { title: "Kbd", blurb: "Keyboard keys.", ui::demos::kbd::Demo {} }
+                Section { title: "Spinner", blurb: "Indeterminate loading.", ui::demos::spinner::Demo {} }
+                Section { title: "Field and validation", blurb: "Label, control, hint and error wired together with aria-describedby.", ui::demos::field::Demo {} }
+                Section { title: "Table", blurb: "Sortable columns announce their direction.", ui::demos::table::Demo {} }
+                Section { title: "Command palette", blurb: "Type to filter, arrow keys to move, Enter to run.", ui::demos::command::Demo {} }
+                Section { title: "Charts", blurb: "SVG charts with a text summary for screen readers.", ui::demos::chart::Demo {} }
+                Section { title: "Theme customizer", blurb: "Accent colour, corner radius and mode for the whole page. Everything below recolors live.", ui::demos::theme_customizer::Demo {} }
+                Section { title: "Callout", blurb: "Inline notes in default, info, success and warning styles.", ui::demos::callout::Demo {} }
+                Section { title: "Empty", blurb: "Empty state with icon, copy and actions.", ui::demos::empty::Demo {} }
+                Section { title: "Status", blurb: "A dot plus text label; never colour alone.", ui::demos::status::Demo {} }
+                Section { title: "Shimmer", blurb: "Loading highlight that becomes a static tint with reduced motion.", ui::demos::shimmer::Demo {} }
+                Section { title: "Marquee", blurb: "Looping strip with a pause button; stops under reduced motion.", ui::demos::marquee::Demo {} }
+                Section { title: "Button group", blurb: "Buttons joined into one segmented control.", ui::demos::button_group::Demo {} }
+                Section { title: "Stepper", blurb: "Multi-step progress with Back and Next.", ui::demos::stepper::Demo {} }
+                Section { title: "Bottom nav", blurb: "Mobile tab bar with aria-current.", ui::demos::bottom_nav::Demo {} }
+                Section { title: "Form", blurb: "Validation state, a Form and bound TextFields; focus jumps to the first error on submit.", ui::demos::form::Demo {} }
+                Section { title: "Data table", blurb: "Sort, filter, paginate and select rows; status is announced to screen readers.", ui::demos::data_table::Demo {} }
+                Section { title: "Input otp", blurb: "One box per character: auto-advance, Backspace, arrow keys and paste.", ui::demos::input_otp::Demo {} }
+                Section { title: "Input group", blurb: "An input with text or buttons attached inside one border.", ui::demos::input_group::Demo {} }
+                Section { title: "Carousel", blurb: "Snap-scrolling slides with Previous and Next; nothing autoplays.", ui::demos::carousel::Demo {} }
+                Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::demos::dropzone::Demo {} }
+                Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::demos::multi_select::Demo {} }
+                Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::demos::drawer::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",
@@ -118,278 +119,6 @@ fn Section(title: &'static str, blurb: &'static str, children: Element) -> Eleme
             h2 { {title} }
             p { {blurb} }
             {children}
-        }
-    }
-}
-
-#[component]
-fn ButtonDemo() -> Element {
-    rsx! {
-        div { class: "gallery-row",
-            Button { "Primary" }
-            Button { variant: ButtonVariant::Secondary, "Secondary" }
-            Button { variant: ButtonVariant::Outline, "Outline" }
-            Button { variant: ButtonVariant::Ghost, "Ghost" }
-            Button { variant: ButtonVariant::Destructive, "Delete" }
-            Button { variant: ButtonVariant::Link, "Link" }
-        }
-        div { class: "gallery-row", style: "margin-top: 0.75rem;",
-            Button { size: ButtonSize::Xs, "Extra small" }
-            Button { size: ButtonSize::Sm, "Small" }
-            Button { "Default" }
-            Button { size: ButtonSize::Lg, "Large" }
-            Button { disabled: true, "Disabled" }
-        }
-    }
-}
-
-#[component]
-fn BadgeDemo() -> Element {
-    rsx! {
-        div { class: "gallery-row",
-            Badge { "Primary" }
-            Badge { variant: BadgeVariant::Secondary, "Secondary" }
-            Badge { variant: BadgeVariant::Destructive, "Destructive" }
-            Badge { variant: BadgeVariant::Outline, "Outline" }
-            Badge { variant: BadgeVariant::Secondary, VerifiedIcon {} "Verified" }
-        }
-    }
-}
-
-#[component]
-fn InputDemo() -> Element {
-    let mut name = use_signal(String::new);
-    rsx! {
-        div { class: "gallery-stack",
-            Label { html_for: "gallery-name", "Name" }
-            Input {
-                id: "gallery-name",
-                placeholder: "Enter your name",
-                value: name,
-                oninput: move |e: FormEvent| name.set(e.value()),
-            }
-            if !name.read().is_empty() {
-                p { style: "margin: 0; font-size: 0.875rem;", "Hello, {name}!" }
-            }
-        }
-    }
-}
-
-#[component]
-fn ToggleDemo() -> Element {
-    let mut on = use_signal(|| false);
-    rsx! {
-        div { class: "gallery-row",
-            Checkbox { id: "terms", name: "terms" }
-            Label { html_for: "terms", "Accept terms" }
-            Switch {
-                checked: on(),
-                aria_label: "Airplane mode",
-                on_checked_change: move |v| on.set(v),
-            }
-            span { style: "font-size: 0.875rem;", if on() { "On" } else { "Off" } }
-        }
-    }
-}
-
-#[component]
-fn CardDemo() -> Element {
-    rsx! {
-        Card { style: "width: 100%; max-width: 24rem;",
-            CardHeader {
-                CardTitle { "Create project" }
-                CardDescription { "Deploy your new project in one click." }
-            }
-            CardContent {
-                div { class: "gallery-stack",
-                    Label { html_for: "gallery-project", "Project name" }
-                    Input { id: "gallery-project", placeholder: "my-app" }
-                }
-            }
-            CardFooter { style: "justify-content: space-between;",
-                Button { variant: ButtonVariant::Outline, "Cancel" }
-                Button { "Create" }
-            }
-        }
-    }
-}
-
-#[component]
-fn TabsDemo() -> Element {
-    rsx! {
-        Tabs { default_value: "account".to_string(), horizontal: true, max_width: "24rem",
-            TabList {
-                TabTrigger { value: "account".to_string(), index: 0usize, "Account" }
-                TabTrigger { value: "password".to_string(), index: 1usize, "Password" }
-            }
-            TabContent { index: 0usize, value: "account".to_string(),
-                p { "Make changes to your account here." }
-            }
-            TabContent { index: 1usize, value: "password".to_string(),
-                p { "Change your password here." }
-            }
-        }
-    }
-}
-
-#[component]
-fn AccordionDemo() -> Element {
-    let items = [
-        (
-            "Is it accessible?",
-            "Yes. Behaviour comes from dioxus-primitives, which follows WAI-ARIA.",
-        ),
-        (
-            "Is it styled?",
-            "Yes. It ships with a neutral, shadcn-like theme you own.",
-        ),
-        (
-            "Is it animated?",
-            "Open and close are animated in CSS; springs arrive in week 2.",
-        ),
-    ];
-    rsx! {
-        div { style: "max-width: 32rem;",
-            Accordion { allow_multiple_open: false, horizontal: false,
-                for (i, (q, a)) in items.into_iter().enumerate() {
-                    AccordionItem { index: i,
-                        AccordionTrigger { {q} }
-                        AccordionContent {
-                            p { style: "margin: 0; padding-bottom: 1rem;", {a} }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-#[component]
-fn DialogDemo() -> Element {
-    let mut open = use_signal(|| false);
-    rsx! {
-        Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
-        Dialog { open: open(), on_open_change: move |v| open.set(v),
-            DialogTitle { "Are you sure?" }
-            DialogDescription { "This action cannot be undone." }
-            div { class: "gallery-row", style: "justify-content: flex-end; margin-top: 1rem;",
-                Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(false), "Cancel" }
-                Button { variant: ButtonVariant::Destructive, onclick: move |_| open.set(false), "Delete" }
-            }
-        }
-    }
-}
-
-#[component]
-fn SheetDemo() -> Element {
-    let mut open = use_signal(|| false);
-    let mut side = use_signal(|| SheetSide::Right);
-    let mut show = move |s: SheetSide| {
-        side.set(s);
-        open.set(true);
-    };
-    rsx! {
-        div { class: "gallery-row",
-            Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Left), "Left" }
-            Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Right), "Right" }
-            Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Top), "Top" }
-            Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Bottom), "Bottom" }
-        }
-        Sheet { open: open(), on_open_change: move |v| open.set(v), "data-side": side().as_str(),
-            SheetHeader {
-                SheetTitle { "Edit profile" }
-                SheetDescription { "Make changes to your profile here." }
-            }
-            div { class: "gallery-stack", style: "padding: 0 1rem;",
-                Label { html_for: "sheet-name", "Name" }
-                Input { id: "sheet-name", initial_value: "Ferris" }
-            }
-            SheetFooter {
-                Button { onclick: move |_| open.set(false), "Save changes" }
-            }
-            SheetContentClose {}
-        }
-    }
-}
-
-#[component]
-fn PopoverDemo() -> Element {
-    let mut open = use_signal(|| false);
-    rsx! {
-        PopoverRoot { open: open(), on_open_change: move |v| open.set(v),
-            PopoverTrigger { "Open popover" }
-            PopoverContent { gap: "0.5rem",
-                strong { "Dimensions" }
-                span { style: "font-size: 0.875rem;", "Set the dimensions for the layer." }
-                Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(false), "Done" }
-            }
-        }
-    }
-}
-
-#[component]
-fn DropdownDemo() -> Element {
-    let mut picked = use_signal(|| None::<&'static str>);
-    let actions = ["Edit", "Duplicate", "Archive", "Delete"];
-    rsx! {
-        div { class: "gallery-row",
-            DropdownMenu { default_open: false,
-                DropdownMenuTrigger { "Actions" }
-                DropdownMenuContent {
-                    for (i, a) in actions.into_iter().enumerate() {
-                        DropdownMenuItem::<&'static str> {
-                            value: a,
-                            index: i,
-                            on_select: move |v| picked.set(Some(v)),
-                            {a}
-                        }
-                    }
-                }
-            }
-            if let Some(a) = picked() {
-                span { style: "font-size: 0.875rem;", "Selected: {a}" }
-            }
-        }
-    }
-}
-
-#[component]
-fn TooltipDemo() -> Element {
-    rsx! {
-        Tooltip {
-            TooltipTrigger { "Hover or focus me" }
-            TooltipContent { side: ContentSide::Top, "Add to library" }
-        }
-    }
-}
-
-#[component]
-fn ToastDemo() -> Element {
-    let toasts = use_toast();
-    rsx! {
-        div { class: "gallery-row",
-            Button {
-                variant: ButtonVariant::Outline,
-                onclick: move |_| toasts.success("Saved".to_string(), ToastOptions::new().description("Your changes are stored.")),
-                "Success toast"
-            }
-            Button {
-                variant: ButtonVariant::Outline,
-                onclick: move |_| toasts.error("Failed".to_string(), ToastOptions::new().description("Something went wrong.")),
-                "Error toast"
-            }
-        }
-    }
-}
-
-#[component]
-fn SeparatorDemo() -> Element {
-    rsx! {
-        div { style: "max-width: 20rem;",
-            strong { "Rust UI kit" }
-            p { style: "margin: 0.25rem 0; font-size: 0.875rem;", "A personal component library." }
-            Separator { horizontal: true, decorative: true, style: "margin: 1rem 0;" }
-            div { class: "gallery-row", style: "font-size: 0.875rem;", "Docs" Separator { horizontal: false, decorative: true, style: "height: 1rem;" } "Source" }
         }
     }
 }

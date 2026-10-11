@@ -101,6 +101,10 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 println!("wrote {}", path.display());
                 let n = rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
                 println!("wrote {n} component.json files");
+                println!(
+                    "wrote {}",
+                    rust_ui_cli::docsgen::write(root).map_err(err)?.display()
+                );
             }
         }
         Command::Init { dest } => {
@@ -130,7 +134,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             )
             .map_err(err)?;
             rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
-            println!("updated registry.json and component.json files");
+            rust_ui_cli::docsgen::write(root).map_err(err)?;
+            println!("updated registry.json, component.json files and the docs index");
         }
         Command::Doctor { strict } => {
             use rust_ui_cli::doctor::{run as doctor, Level};

@@ -413,6 +413,12 @@ fn has_name(
             return true;
         }
     }
+    // `<label for>` also names buttons (the primitives' checkbox and switch are buttons).
+    if matches!(n.tag.as_str(), "button" | "meter" | "output" | "progress")
+        && n.attr("id").is_some_and(|id| labels.contains(id))
+    {
+        return true;
+    }
     if matches!(n.tag.as_str(), "input" | "select" | "textarea") {
         if n.attr("id").is_some_and(|id| labels.contains(id)) {
             return true;
@@ -580,6 +586,17 @@ const KNOWN: &[(&str, &str)] = &[
         "dioxus-primitives: DateSegment sets aria-labelledby=\"{id}-label\" but never renders \
          that element. Browsers fall back to its aria-label (\"day\" etc.), so the name \
          still works, but the reference is invalid. Report upstream.",
+    ),
+    (
+        "tooltip: <div class=\"dx-tooltip-trigger",
+        "Same as the sidebar tooltip: the trigger's aria-describedby points at content that only \
+         renders while open. Primitive behaviour.",
+    ),
+    (
+        "tabs: <div class=\" dx-tabs-content",
+        "dioxus-primitives: tab panels are not linked to their tab with aria-labelledby, and the \
+         inactive panel keeps tabindex=0 under the `hidden` attribute (display: none, so it is \
+         not reachable). Report upstream.",
     ),
     (
         "sidebar: <button class=\"dx-tooltip-trigger",

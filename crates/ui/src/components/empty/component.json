@@ -1,11 +1,6 @@
 {
   "cargoDependencies": [],
-  "componentDependencies": [
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    }
-  ],
+  "componentDependencies": [],
   "description": "Placeholder for a list, table or page with nothing in it, with optional icon, text and actions. Compose `Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, `EmptyContent`.",
   "exclude": [
     "docs.md",

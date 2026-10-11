@@ -17,10 +17,6 @@
       ],
       "name": "time",
       "version": "0.3.44"
-    },
-    {
-      "name": "tracing",
-      "version": "0.1"
     }
   ],
   "componentDependencies": [

@@ -98,8 +98,10 @@ fn clones_a_remote_once_and_reuses_it() {
     assert_eq!(materialize(".", cache.path()).unwrap(), PathBuf::from("."));
 }
 
-const ANCHORS: [&str; 5] = [
+const ANCHORS: [&str; 7] = [
     "crates/ui/src/components/mod.rs",
+    "crates/ui/src/demos/mod.rs",
+    "crates/ui/tests/common/mod.rs",
     "crates/ui/src/lib.rs",
     "crates/ui/tests/demos.rs",
     "crates/ui/tests/render.rs",
@@ -121,18 +123,15 @@ fn scratch(tag: &str) -> PathBuf {
 fn scaffold_creates_files_and_inserts_sorted_lines() {
     let dir = scratch("ok");
     let files = scaffold::scaffold(&dir, "status_dot").unwrap();
-    assert_eq!(files.len(), 10);
+    assert_eq!(files.len(), 12);
     let comp = dir.join("crates/ui/src/components/status_dot");
-    for f in [
-        "mod.rs",
-        "component.rs",
-        "style.css",
-        "docs.md",
-        "status_dot_demo.rs",
-    ] {
+    for f in ["mod.rs", "component.rs", "style.css", "docs.md"] {
         assert!(comp.join(f).is_file(), "{f}");
     }
     let read = |rel: &str| std::fs::read_to_string(dir.join(rel)).unwrap();
+    assert!(dir.join("crates/ui/src/demos/status_dot.rs").is_file());
+    assert!(read("crates/ui/src/demos/mod.rs").contains("pub mod status_dot;"));
+    assert!(read("crates/ui/tests/common/mod.rs").contains("ui::demos::status_dot::Demo"));
     let mods = read("crates/ui/src/components/mod.rs");
     let lines: Vec<_> = mods.lines().filter(|l| l.starts_with("pub mod ")).collect();
     assert!(lines.contains(&"pub mod status_dot;"));
@@ -142,7 +141,7 @@ fn scaffold_creates_files_and_inserts_sorted_lines() {
     assert!(read("crates/ui/src/lib.rs").contains("pub use crate::components::status_dot::*;"));
     assert!(read("crates/ui/tests/demos.rs").contains("status_dot_demo_renders"));
     assert!(read("crates/ui/tests/render.rs").contains("status_dot_renders_its_children"));
-    assert!(read("apps/gallery/src/main.rs").contains("status_dot::status_dot_demo::Demo"));
+    assert!(read("apps/gallery/src/main.rs").contains("ui::demos::status_dot::Demo"));
     let _ = std::fs::remove_dir_all(dir);
 }
 

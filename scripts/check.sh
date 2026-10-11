@@ -20,7 +20,7 @@ step() { printf '\n== %s\n' "$*"; }
 step "fmt";     cargo fmt --all --check
 step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
 step "tests";   cargo test --workspace
-step "wasm32";  cargo build -p gallery -p site --target wasm32-unknown-unknown
+step "wasm32";  cargo build -p gallery -p site -p docs --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 
@@ -33,7 +33,8 @@ if [ "$A11Y" = 1 ]; then
 
   # name | app dir | build output (relative to repo root) | port | element that means "rendered"
   for spec in "gallery|apps/gallery|target/dx/gallery/debug/web/public|8765|.gallery-main" \
-              "site|apps/site|target/dx/site/debug/web/public|8767|#pricing"; do
+              "site|apps/site|target/dx/site/debug/web/public|8767|#pricing" \
+              "docs|apps/docs|target/dx/docs/debug/web/public|8769|.docs-main"; do
     IFS='|' read -r name dir out port ready <<<"$spec"
     step "build $name"
     (cd "$dir" && dx build --platform web)
@@ -44,6 +45,14 @@ if [ "$A11Y" = 1 ]; then
       step "axe $name ($scheme)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs "$scheme")
     done
+    if [ "$name" = docs ]; then
+      for route in "#button" "#data_table" "#theming"; do
+        step "axe docs ($route)"
+        (cd tests/e2e && GALLERY_URL="http://localhost:$port/$route" READY_SELECTOR="$ready" node axe.mjs light)
+      done
+      step "docs navigation behaviour"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node docs.mjs)
+    fi
     if [ "$name" = site ]; then
       step "form behaviour (site)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node form.mjs)

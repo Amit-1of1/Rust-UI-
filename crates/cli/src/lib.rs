@@ -4,6 +4,7 @@
 //! the other registry items it needs. It is generated from the component folders,
 //! so it can't drift from the source.
 
+pub mod docsgen;
 pub mod doctor;
 pub mod manifest;
 pub mod scaffold;
@@ -16,6 +17,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 
 pub const COMPONENTS_DIR: &str = "crates/ui/src/components";
+pub const DEMOS_DIR: &str = "crates/ui/src/demos";
 pub const THEME_FILE: &str = "crates/ui/assets/theme.css";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
