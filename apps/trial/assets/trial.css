@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  background: var(--primary-color);
+  color: var(--secondary-color-1);
+  font-family: system-ui, sans-serif;
+}
+
+.tb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.75rem;
+  padding-inline: 1.5rem;
+  border-block-end: 1px solid var(--primary-color-6);
+  gap: 1rem;
+}
+
+.tb-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.tb-tools,
+.tb-toolbar,
+.tb-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tb-actions {
+  justify-content: flex-end;
+}
+
+.tb-main {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding: 1.5rem;
+}
+
+.tb-toolbar {
+  justify-content: flex-end;
+  margin-block: 1rem 0.5rem;
+}
+
+.tb-field,
+.tb-stats,
+.tb-settings {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tb-stats,
+.tb-settings {
+  gap: 1.5rem;
+  max-width: 36rem;
+  margin-block-start: 1rem;
+}
+
+.tb-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* bench page */
+.bench-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+#bench td {
+  padding-block: 0.125rem;
+  padding-inline: 0.5rem;
+}
+
+#bench tr.selected {
+  background: var(--primary-color-4);
+}

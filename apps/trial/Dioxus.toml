@@ -1,0 +1,5 @@
+[application]
+name = "trial"
+
+[web.app]
+title = "Taskboard"
