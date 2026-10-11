@@ -137,3 +137,29 @@ html[data-theme="light"] [class~="dxc-system"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Forced colors (Windows High Contrast): the browser drops box-shadow and repaints
+ * backgrounds, and most controls here draw their edge and focus ring with box-shadow.
+ * Give every control a system-colour outline instead; outlines don't move layout.
+ * `html:root` lifts these above the components' own `.class:focus-visible` rules.
+ * Checked by tests/e2e/forced_colors.mjs. */
+@media (forced-colors: active) {
+  html:root :is(
+      input:not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"]),
+      textarea,
+      select,
+      [role="checkbox"],
+      [role="switch"],
+      [role="slider"],
+      [role="combobox"],
+      [role="tab"][aria-selected="true"],
+      button[aria-haspopup]
+    ) {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+  }
+  html:root :is(input, textarea, select, button, [role], [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+}

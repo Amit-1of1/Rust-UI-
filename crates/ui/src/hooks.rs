@@ -72,6 +72,27 @@ mod web {
     }
 }
 
+/// Moves focus from the focused element to `selector` inside its nearest ancestor with
+/// class `container`, e.g. back to a menu's trigger when Escape closes the menu.
+/// Web only; does nothing elsewhere.
+pub(crate) fn refocus_within(container: &str, selector: &str) {
+    #[cfg(all(target_arch = "wasm32", feature = "web"))]
+    {
+        use wasm_bindgen::JsCast;
+        let target = web_sys::window()
+            .and_then(|w| w.document())
+            .and_then(|d| d.active_element())
+            .and_then(|el| el.closest(&format!(".{container}")).ok().flatten())
+            .and_then(|root| root.query_selector(selector).ok().flatten())
+            .and_then(|el| el.dyn_into::<web_sys::HtmlElement>().ok());
+        if let Some(el) = target {
+            let _ = el.focus();
+        }
+    }
+    #[cfg(not(all(target_arch = "wasm32", feature = "web")))]
+    let _ = (container, selector);
+}
+
 #[cfg(test)]
 mod tests {
     use super::is_hotkey;

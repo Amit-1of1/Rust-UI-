@@ -17,6 +17,13 @@
   transition: background-color 100ms ease-out, border-color 100ms ease-out, box-shadow 100ms ease-out;
 }
 
+/* Autosize: grow with the content, then scroll. Manual resizing would fight it. */
+.dx-textarea[data-autosize="true"] {
+  max-block-size: var(--textarea-max-height, 16rem);
+  field-sizing: content;
+  resize: none;
+}
+
 .dx-textarea:disabled {
   color: var(--secondary-color-5);
   cursor: not-allowed;

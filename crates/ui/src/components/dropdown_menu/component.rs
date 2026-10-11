@@ -45,6 +45,16 @@ pub fn DropdownMenuTrigger(props: DropdownMenuTriggerProps) -> Element {
 pub fn DropdownMenuContent(props: DropdownMenuContentProps) -> Element {
     let base = attributes!(div {
         class: Styles::dx_dropdown_menu_content,
+        // The primitive closes on Escape but leaves focus on the removed item; the APG
+        // menu button pattern returns it to the trigger.
+        onkeydown: move |e: KeyboardEvent| {
+            if e.key() == Key::Escape {
+                crate::hooks::refocus_within(
+                    &Styles::dx_dropdown_menu.to_string(),
+                    "[aria-haspopup]",
+                );
+            }
+        },
     });
     let merged = merge_attributes(vec![base, props.attributes.clone()]);
 

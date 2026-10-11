@@ -343,3 +343,11 @@ fn closed_drawer_renders_nothing_visible() {
     });
     assert!(!html.contains("Move goal"), "{html}");
 }
+
+#[test]
+fn textarea_autosize_is_opt_in() {
+    let plain = render(|| rsx! { Textarea { aria_label: "Notes" } });
+    assert!(!plain.contains("data-autosize"), "{plain}");
+    let grows = render(|| rsx! { Textarea { aria_label: "Notes", autosize: true } });
+    assert!(grows.contains("data-autosize=\"true\""), "{grows}");
+}

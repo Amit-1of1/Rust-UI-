@@ -51,3 +51,15 @@
 .dx-radio-item:disabled::before {
   cursor: not-allowed;
 }
+
+@media (forced-colors: active) {
+  .dx-radio-item::before {
+    border: 1px solid ButtonText;
+  }
+  .dx-radio-item[data-state="checked"]::before {
+    forced-color-adjust: none;
+    border: 0.25rem solid Canvas;
+    outline: 1px solid ButtonText;
+    background: Highlight;
+  }
+}
