@@ -1,0 +1,22 @@
+{
+  "name": "taskboard-svelte",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@internationalized/date": "3.12.4",
+    "bits-ui": "2.19.5",
+    "svelte-sonner": "1.2.1"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "svelte": "5.57.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  }
+}
