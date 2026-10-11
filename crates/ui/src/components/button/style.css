@@ -31,7 +31,7 @@
 }
 
 .dx-button[data-size="xs"] {
-  height: 1.5rem;
+  height: calc(1.5rem * var(--density, 1));
   padding: 0 0.5rem;
   border-radius: var(--radius);
   font-size: 0.75rem;
@@ -49,7 +49,7 @@
 }
 
 .dx-button[data-size="sm"] {
-  height: 2rem;
+  height: calc(2rem * var(--density, 1));
   padding: 0 0.75rem;
   border-radius: var(--radius);
   gap: 0.375rem;
@@ -60,8 +60,8 @@
 }
 
 .dx-button[data-size="default"] {
-  height: 2.25rem;
-  padding: 0.5rem 1rem;
+  height: calc(2.25rem * var(--density, 1));
+  padding: calc(0.5rem * var(--density, 1)) 1rem;
 }
 
 .dx-button[data-size="default"]:has(> svg) {
@@ -69,7 +69,7 @@
 }
 
 .dx-button[data-size="lg"] {
-  height: 2.5rem;
+  height: calc(2.5rem * var(--density, 1));
   padding: 0 1.5rem;
   border-radius: var(--radius);
 }
@@ -79,8 +79,8 @@
 }
 
 .dx-button[data-size="icon"] {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: calc(2.25rem * var(--density, 1));
+  height: calc(2.25rem * var(--density, 1));
 }
 
 .dx-button[data-size="icon"] svg:not([class*="size-"]) {
@@ -89,8 +89,8 @@
 }
 
 .dx-button[data-size="icon-xs"] {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: calc(1.5rem * var(--density, 1));
+  height: calc(1.5rem * var(--density, 1));
   border-radius: var(--radius);
 }
 
@@ -100,8 +100,8 @@
 }
 
 .dx-button[data-size="icon-sm"] {
-  width: 2rem;
-  height: 2rem;
+  width: calc(2rem * var(--density, 1));
+  height: calc(2rem * var(--density, 1));
 }
 
 .dx-button[data-size="icon-sm"] svg:not([class*="size-"]) {
@@ -110,8 +110,8 @@
 }
 
 .dx-button[data-size="icon-lg"] {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: calc(2.5rem * var(--density, 1));
+  height: calc(2.5rem * var(--density, 1));
 }
 
 .dx-button[data-size="icon-lg"] svg:not([class*="size-"]) {

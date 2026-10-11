@@ -108,7 +108,7 @@ fn theme_customizer_offers_labelled_radios_and_a_range() {
     assert!(html.contains("<legend>Accent colour</legend>"), "{html}");
     assert_eq!(
         html.matches("type=\"radio\"").count(),
-        ACCENTS.len() + 3,
+        ACCENTS.len() + DENSITIES.len() + 3,
         "{html}"
     );
     assert!(html.contains("for=\"theme-radius\""), "{html}");

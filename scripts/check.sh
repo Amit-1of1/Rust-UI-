@@ -65,6 +65,8 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node anchor.mjs)
       step "keyboard per APG pattern (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node keyboard.mjs)
+      step "density presets (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node density.mjs)
       step "forced colors (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node forced_colors.mjs)
       step "Ctrl+K hotkey (gallery)"

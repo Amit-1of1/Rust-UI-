@@ -5,7 +5,7 @@
 }
 
 .dx-dropdown-menu-trigger {
-  padding: 8px 18px;
+  padding: calc(8px * var(--density, 1)) 18px;
   border: none;
   border-radius: var(--radius);
   background-color: var(--dark, var(--primary-color-3))
@@ -83,7 +83,7 @@
 .dx-dropdown-menu-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: calc(8px * var(--density, 1)) 12px;
   border-radius: calc(0.5rem - 0.25rem);
   color: var(--secondary-color-4);
   cursor: pointer;

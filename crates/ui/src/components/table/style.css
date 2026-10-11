@@ -30,7 +30,7 @@
 }
 
 .dx-table-head {
-  height: 2.5rem;
+  height: calc(2.5rem * var(--density, 1));
   padding: 0 0.5rem;
   color: var(--secondary-color-5);
   font-weight: 500;
@@ -39,7 +39,7 @@
 }
 
 .dx-table-cell {
-  padding: 0.5rem;
+  padding: calc(0.5rem * var(--density, 1)) 0.5rem;
   vertical-align: middle;
 }
 

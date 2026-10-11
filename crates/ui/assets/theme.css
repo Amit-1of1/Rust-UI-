@@ -127,6 +127,21 @@ html[data-theme="light"] [class~="dxc-system"] {
   --motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
 }
 
+/* Density: one multiplier for control heights and their vertical padding (buttons, inputs,
+ * select/combobox/menu rows, tabs, table cells). Set data-density on <html> or on any
+ * container to change just that part of the page. */
+:root {
+  --density: 1;
+}
+
+[data-density="compact"] {
+  --density: 0.8;
+}
+
+[data-density="comfortable"] {
+  --density: 1.2;
+}
+
 /* Respect the OS "reduce motion" setting for every component (docs/GUARDRAILS.md). */
 @media (prefers-reduced-motion: reduce) {
   *,

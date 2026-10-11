@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 4rem;
   box-sizing: border-box;
-  padding: 8px 12px;
+  padding: calc(8px * var(--density, 1)) 12px;
   border: none;
   border-radius: var(--radius);
   margin: 0;
