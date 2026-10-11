@@ -4,6 +4,7 @@
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
 
 pub mod components;
+pub mod demos;
 pub mod hooks;
 
 /// Spring presets, presence animations and reduced-motion handling.

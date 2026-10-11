@@ -3,15 +3,7 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "dialog"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "kbd"
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",

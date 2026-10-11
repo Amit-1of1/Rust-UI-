@@ -20,7 +20,6 @@
     {
       "name": "alert",
       "files": [
-        "alert/alert_demo.rs",
         "alert/component.rs",
         "alert/docs.md",
         "alert/mod.rs",
@@ -31,20 +30,16 @@
     {
       "name": "alert_dialog",
       "files": [
-        "alert_dialog/alert_dialog_demo.rs",
         "alert_dialog/component.rs",
         "alert_dialog/docs.md",
         "alert_dialog/mod.rs",
         "alert_dialog/style.css"
       ],
-      "registryDependencies": [
-        "button"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "aspect_ratio",
       "files": [
-        "aspect_ratio/aspect_ratio_demo.rs",
         "aspect_ratio/component.rs",
         "aspect_ratio/docs.md",
         "aspect_ratio/mod.rs",
@@ -55,7 +50,6 @@
     {
       "name": "avatar",
       "files": [
-        "avatar/avatar_demo.rs",
         "avatar/component.rs",
         "avatar/docs.md",
         "avatar/mod.rs",
@@ -76,7 +70,6 @@
     {
       "name": "bottom_nav",
       "files": [
-        "bottom_nav/bottom_nav_demo.rs",
         "bottom_nav/component.rs",
         "bottom_nav/docs.md",
         "bottom_nav/mod.rs",
@@ -89,7 +82,6 @@
     {
       "name": "breadcrumb",
       "files": [
-        "breadcrumb/breadcrumb_demo.rs",
         "breadcrumb/component.rs",
         "breadcrumb/docs.md",
         "breadcrumb/mod.rs",
@@ -112,20 +104,16 @@
     {
       "name": "button_group",
       "files": [
-        "button_group/button_group_demo.rs",
         "button_group/component.rs",
         "button_group/docs.md",
         "button_group/mod.rs",
         "button_group/style.css"
       ],
-      "registryDependencies": [
-        "button"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "calendar",
       "files": [
-        "calendar/calendar_demo.rs",
         "calendar/component.rs",
         "calendar/docs.md",
         "calendar/mod.rs",
@@ -136,7 +124,6 @@
     {
       "name": "callout",
       "files": [
-        "callout/callout_demo.rs",
         "callout/component.rs",
         "callout/docs.md",
         "callout/mod.rs",
@@ -157,7 +144,6 @@
     {
       "name": "carousel",
       "files": [
-        "carousel/carousel_demo.rs",
         "carousel/component.rs",
         "carousel/docs.md",
         "carousel/mod.rs",
@@ -170,7 +156,6 @@
     {
       "name": "chart",
       "files": [
-        "chart/chart_demo.rs",
         "chart/component.rs",
         "chart/docs.md",
         "chart/mod.rs",
@@ -193,7 +178,6 @@
     {
       "name": "collapsible",
       "files": [
-        "collapsible/collapsible_demo.rs",
         "collapsible/component.rs",
         "collapsible/docs.md",
         "collapsible/mod.rs",
@@ -204,7 +188,6 @@
     {
       "name": "color_picker",
       "files": [
-        "color_picker/color_picker_demo.rs",
         "color_picker/component.rs",
         "color_picker/docs.md",
         "color_picker/mod.rs",
@@ -217,7 +200,6 @@
     {
       "name": "combobox",
       "files": [
-        "combobox/combobox_demo.rs",
         "combobox/component.rs",
         "combobox/docs.md",
         "combobox/mod.rs",
@@ -228,16 +210,13 @@
     {
       "name": "command",
       "files": [
-        "command/command_demo.rs",
         "command/component.rs",
         "command/docs.md",
         "command/mod.rs",
         "command/style.css"
       ],
       "registryDependencies": [
-        "button",
         "dialog",
-        "kbd",
         "ui_strings"
       ]
     },
@@ -245,7 +224,6 @@
       "name": "context_menu",
       "files": [
         "context_menu/component.rs",
-        "context_menu/context_menu_demo.rs",
         "context_menu/docs.md",
         "context_menu/mod.rs",
         "context_menu/style.css"
@@ -256,7 +234,6 @@
       "name": "data_table",
       "files": [
         "data_table/component.rs",
-        "data_table/data_table_demo.rs",
         "data_table/docs.md",
         "data_table/mod.rs",
         "data_table/style.css"
@@ -272,7 +249,6 @@
       "name": "date_picker",
       "files": [
         "date_picker/component.rs",
-        "date_picker/date_picker_demo.rs",
         "date_picker/docs.md",
         "date_picker/mod.rs",
         "date_picker/style.css"
@@ -298,12 +274,10 @@
       "files": [
         "drag_and_drop_list/component.rs",
         "drag_and_drop_list/docs.md",
-        "drag_and_drop_list/drag_and_drop_list_demo.rs",
         "drag_and_drop_list/mod.rs",
         "drag_and_drop_list/style.css"
       ],
       "registryDependencies": [
-        "avatar",
         "ui_strings"
       ]
     },
@@ -312,13 +286,10 @@
       "files": [
         "drawer/component.rs",
         "drawer/docs.md",
-        "drawer/drawer_demo.rs",
         "drawer/mod.rs",
         "drawer/style.css"
       ],
-      "registryDependencies": [
-        "button"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "dropdown_menu",
@@ -335,7 +306,6 @@
       "files": [
         "dropzone/component.rs",
         "dropzone/docs.md",
-        "dropzone/dropzone_demo.rs",
         "dropzone/mod.rs",
         "dropzone/style.css"
       ],
@@ -348,40 +318,30 @@
       "files": [
         "empty/component.rs",
         "empty/docs.md",
-        "empty/empty_demo.rs",
         "empty/mod.rs",
         "empty/style.css"
       ],
-      "registryDependencies": [
-        "button"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "field",
       "files": [
         "field/component.rs",
         "field/docs.md",
-        "field/field_demo.rs",
         "field/mod.rs",
         "field/style.css"
       ],
-      "registryDependencies": [
-        "button",
-        "input"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "form",
       "files": [
         "form/component.rs",
         "form/docs.md",
-        "form/form_demo.rs",
         "form/mod.rs",
         "form/style.css"
       ],
       "registryDependencies": [
-        "button",
-        "callout",
         "field",
         "input"
       ]
@@ -391,7 +351,6 @@
       "files": [
         "hover_card/component.rs",
         "hover_card/docs.md",
-        "hover_card/hover_card_demo.rs",
         "hover_card/mod.rs",
         "hover_card/style.css"
       ],
@@ -412,7 +371,6 @@
       "files": [
         "input_group/component.rs",
         "input_group/docs.md",
-        "input_group/input_group_demo.rs",
         "input_group/mod.rs",
         "input_group/style.css"
       ],
@@ -423,7 +381,6 @@
       "files": [
         "input_otp/component.rs",
         "input_otp/docs.md",
-        "input_otp/input_otp_demo.rs",
         "input_otp/mod.rs",
         "input_otp/style.css"
       ],
@@ -436,12 +393,10 @@
       "files": [
         "item/component.rs",
         "item/docs.md",
-        "item/item_demo.rs",
         "item/mod.rs",
         "item/style.css"
       ],
       "registryDependencies": [
-        "button",
         "separator"
       ]
     },
@@ -450,7 +405,6 @@
       "files": [
         "kbd/component.rs",
         "kbd/docs.md",
-        "kbd/kbd_demo.rs",
         "kbd/mod.rs",
         "kbd/style.css"
       ],
@@ -471,7 +425,6 @@
       "files": [
         "marquee/component.rs",
         "marquee/docs.md",
-        "marquee/marquee_demo.rs",
         "marquee/mod.rs",
         "marquee/style.css"
       ],
@@ -484,7 +437,6 @@
       "files": [
         "menubar/component.rs",
         "menubar/docs.md",
-        "menubar/menubar_demo.rs",
         "menubar/mod.rs",
         "menubar/style.css"
       ],
@@ -496,7 +448,6 @@
         "multi_select/component.rs",
         "multi_select/docs.md",
         "multi_select/mod.rs",
-        "multi_select/multi_select_demo.rs",
         "multi_select/style.css"
       ],
       "registryDependencies": [
@@ -519,7 +470,6 @@
         "pagination/component.rs",
         "pagination/docs.md",
         "pagination/mod.rs",
-        "pagination/pagination_demo.rs",
         "pagination/style.css"
       ],
       "registryDependencies": [
@@ -542,7 +492,6 @@
         "progress/component.rs",
         "progress/docs.md",
         "progress/mod.rs",
-        "progress/progress_demo.rs",
         "progress/style.css"
       ],
       "registryDependencies": []
@@ -553,7 +502,6 @@
         "radio_group/component.rs",
         "radio_group/docs.md",
         "radio_group/mod.rs",
-        "radio_group/radio_group_demo.rs",
         "radio_group/style.css"
       ],
       "registryDependencies": []
@@ -564,7 +512,6 @@
         "scroll_area/component.rs",
         "scroll_area/docs.md",
         "scroll_area/mod.rs",
-        "scroll_area/scroll_area_demo.rs",
         "scroll_area/style.css"
       ],
       "registryDependencies": []
@@ -575,7 +522,6 @@
         "select/component.rs",
         "select/docs.md",
         "select/mod.rs",
-        "select/select_demo.rs",
         "select/style.css"
       ],
       "registryDependencies": []
@@ -606,7 +552,6 @@
         "shimmer/component.rs",
         "shimmer/docs.md",
         "shimmer/mod.rs",
-        "shimmer/shimmer_demo.rs",
         "shimmer/style.css"
       ],
       "registryDependencies": []
@@ -618,14 +563,10 @@
         "sidebar/demo.css",
         "sidebar/docs.md",
         "sidebar/mod.rs",
-        "sidebar/sidebar_demo.rs",
         "sidebar/style.css"
       ],
       "registryDependencies": [
-        "avatar",
         "button",
-        "collapsible",
-        "dropdown_menu",
         "separator",
         "sheet",
         "skeleton",
@@ -639,7 +580,6 @@
         "skeleton/component.rs",
         "skeleton/docs.md",
         "skeleton/mod.rs",
-        "skeleton/skeleton_demo.rs",
         "skeleton/style.css"
       ],
       "registryDependencies": []
@@ -650,7 +590,6 @@
         "slider/component.rs",
         "slider/docs.md",
         "slider/mod.rs",
-        "slider/slider_demo.rs",
         "slider/style.css"
       ],
       "registryDependencies": []
@@ -661,7 +600,6 @@
         "spinner/component.rs",
         "spinner/docs.md",
         "spinner/mod.rs",
-        "spinner/spinner_demo.rs",
         "spinner/style.css"
       ],
       "registryDependencies": [
@@ -674,7 +612,6 @@
         "status/component.rs",
         "status/docs.md",
         "status/mod.rs",
-        "status/status_demo.rs",
         "status/style.css"
       ],
       "registryDependencies": []
@@ -685,12 +622,9 @@
         "stepper/component.rs",
         "stepper/docs.md",
         "stepper/mod.rs",
-        "stepper/stepper_demo.rs",
         "stepper/style.css"
       ],
-      "registryDependencies": [
-        "button"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "switch",
@@ -708,12 +642,9 @@
         "table/component.rs",
         "table/docs.md",
         "table/mod.rs",
-        "table/style.css",
-        "table/table_demo.rs"
+        "table/style.css"
       ],
-      "registryDependencies": [
-        "badge"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "tabs",
@@ -731,8 +662,7 @@
         "tag_group/component.rs",
         "tag_group/docs.md",
         "tag_group/mod.rs",
-        "tag_group/style.css",
-        "tag_group/tag_group_demo.rs"
+        "tag_group/style.css"
       ],
       "registryDependencies": []
     },
@@ -742,12 +672,9 @@
         "textarea/component.rs",
         "textarea/docs.md",
         "textarea/mod.rs",
-        "textarea/style.css",
-        "textarea/textarea_demo.rs"
+        "textarea/style.css"
       ],
-      "registryDependencies": [
-        "label"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "theme_customizer",
@@ -755,8 +682,7 @@
         "theme_customizer/component.rs",
         "theme_customizer/docs.md",
         "theme_customizer/mod.rs",
-        "theme_customizer/style.css",
-        "theme_customizer/theme_customizer_demo.rs"
+        "theme_customizer/style.css"
       ],
       "registryDependencies": []
     },
@@ -776,8 +702,7 @@
         "toggle/component.rs",
         "toggle/docs.md",
         "toggle/mod.rs",
-        "toggle/style.css",
-        "toggle/toggle_demo.rs"
+        "toggle/style.css"
       ],
       "registryDependencies": []
     },
@@ -787,8 +712,7 @@
         "toggle_group/component.rs",
         "toggle_group/docs.md",
         "toggle_group/mod.rs",
-        "toggle_group/style.css",
-        "toggle_group/toggle_group_demo.rs"
+        "toggle_group/style.css"
       ],
       "registryDependencies": []
     },
@@ -798,8 +722,7 @@
         "toolbar/component.rs",
         "toolbar/docs.md",
         "toolbar/mod.rs",
-        "toolbar/style.css",
-        "toolbar/toolbar_demo.rs"
+        "toolbar/style.css"
       ],
       "registryDependencies": []
     },
@@ -818,14 +741,9 @@
       "files": [
         "ui_strings/component.rs",
         "ui_strings/docs.md",
-        "ui_strings/mod.rs",
-        "ui_strings/ui_strings_demo.rs"
+        "ui_strings/mod.rs"
       ],
-      "registryDependencies": [
-        "button",
-        "carousel",
-        "spinner"
-      ]
+      "registryDependencies": []
     },
     {
       "name": "virtual_list",
@@ -833,8 +751,7 @@
         "virtual_list/component.rs",
         "virtual_list/docs.md",
         "virtual_list/mod.rs",
-        "virtual_list/style.css",
-        "virtual_list/virtual_list_demo.rs"
+        "virtual_list/style.css"
       ],
       "registryDependencies": []
     }

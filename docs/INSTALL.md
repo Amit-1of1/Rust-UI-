@@ -9,7 +9,7 @@ dx components add button dialog --git https://github.com/Amit-1of1/Rust-UI-
 dx components add --all --git https://github.com/Amit-1of1/Rust-UI-
 ```
 
-`dx` reads the `component.json` next to each component (generated, never edit by hand) and copies the files into `src/components`, adds the crates they need to your `Cargo.toml` (`dioxus-primitives` at the pinned revision, plus icons, time, palette and so on) and copies `theme.css` into `assets/`. Add `mod components;` to `main.rs` and load the theme with `document::Stylesheet`.
+`dx` reads the `component.json` next to each component (generated, never edit by hand) and copies the files into `src/components`, adds the crates they need to your `Cargo.toml` (`dioxus-primitives` at the pinned revision, plus icons, time, palette and so on) and copies `theme.css` into `assets/`. Demos are not copied: they live in `crates/ui/src/demos`, outside the component folders. Add `mod components;` to `main.rs` and load the theme with `document::Stylesheet`.
 
 Components name each other with this repository's URL, so `dialog` pulls in `button` from the same place. The repo is private, so `git` needs access to it.
 

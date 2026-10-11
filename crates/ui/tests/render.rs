@@ -204,7 +204,7 @@ fn bottom_nav_marks_the_current_page() {
 #[test]
 fn form_labels_fields_and_turns_native_validation_off() {
     let html = render(|| {
-        rsx! { ui::components::form::form_demo::Demo {} }
+        rsx! { ui::demos::form::Demo {} }
     });
     assert!(html.contains("novalidate"), "{html}");
     assert_eq!(html.matches("<label").count(), 2, "{html}");
@@ -217,7 +217,7 @@ fn form_labels_fields_and_turns_native_validation_off() {
 #[test]
 fn data_table_renders_a_captioned_page_with_a_status() {
     let html = render(|| {
-        rsx! { ui::components::data_table::data_table_demo::Demo {} }
+        rsx! { ui::demos::data_table::Demo {} }
     });
     assert!(html.contains("<caption"), "{html}");
     assert!(html.contains("Team directory"), "{html}");

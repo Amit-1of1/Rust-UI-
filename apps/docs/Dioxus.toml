@@ -1,0 +1,5 @@
+[application]
+name = "docs"
+
+[web.app]
+title = "Rust UI docs"

@@ -6,6 +6,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 const MOD_RS: &str = "crates/ui/src/components/mod.rs";
+const DEMOS_MOD: &str = "crates/ui/src/demos/mod.rs";
+const DEMOS_DIR_REL: &str = "crates/ui/src/demos";
+const COMMON_RS: &str = "crates/ui/tests/common/mod.rs";
 const LIB_RS: &str = "crates/ui/src/lib.rs";
 const DEMOS_RS: &str = "crates/ui/tests/demos.rs";
 const RENDER_RS: &str = "crates/ui/tests/render.rs";
@@ -109,7 +112,7 @@ fn style_css(name: &str) -> String {
 fn demo_rs(name: &str) -> String {
     let p = pascal(name);
     format!(
-        "use super::component::*;\nuse dioxus::prelude::*;\n\n#[component]\npub fn Demo() -> Element {{\n    rsx! {{\n        {p} {{ \"{} works\" }}\n    }}\n}}\n",
+        "use crate::components::{name}::*;\nuse dioxus::prelude::*;\n\n#[component]\npub fn Demo() -> Element {{\n    rsx! {{\n        {p} {{ \"{} works\" }}\n    }}\n}}\n",
         title(name)
     )
 }
@@ -139,9 +142,19 @@ pub fn scaffold(root: &Path, name: &str) -> Result<Vec<PathBuf>, String> {
         "    pub use crate::components::",
         &format!("    pub use crate::components::{name}::*;"),
     )?;
+    let demos_mod = insert_sorted(&read(DEMOS_MOD)?, "pub mod ", &format!("pub mod {name};"))?;
+    let common = read(COMMON_RS)?;
+    let common_anchor = common
+        .find("\n];\n\n/// Fails if")
+        .ok_or("DEMOS list end not found in tests/common/mod.rs")?;
+    let mut common_new = common.clone();
+    common_new.insert_str(
+        common_anchor + 1,
+        &format!("    (\"{name}\", ui::demos::{name}::Demo),\n"),
+    );
     let mut demos = read(DEMOS_RS)?;
     demos.push_str(&format!(
-        "\n#[test]\nfn {name}_demo_renders() {{\n    let html = render(ui::components::{name}::{name}_demo::Demo);\n    assert!(!html.is_empty());\n}}\n"
+        "\n#[test]\nfn {name}_demo_renders() {{\n    let html = render(ui::demos::{name}::Demo);\n    assert!(!html.is_empty());\n}}\n"
     ));
     let mut render = read(RENDER_RS)?;
     render.push_str(&format!(
@@ -155,7 +168,7 @@ pub fn scaffold(root: &Path, name: &str) -> Result<Vec<PathBuf>, String> {
         .rfind("                Section {")
         .ok_or("gallery Section before the anchor not found")?;
     let line = format!(
-        "                Section {{ title: \"{}\", blurb: \"TODO: describe {p}.\", ui::components::{name}::{name}_demo::Demo {{}} }}\n",
+        "                Section {{ title: \"{}\", blurb: \"TODO: describe {p}.\", ui::demos::{name}::Demo {{}} }}\n",
         title(name)
     );
     let mut gallery_new = gallery.clone();
@@ -165,20 +178,24 @@ pub fn scaffold(root: &Path, name: &str) -> Result<Vec<PathBuf>, String> {
     let files = [
         (
             "mod.rs",
-            format!("mod component;\npub use component::*;\npub mod {name}_demo;\n"),
+            "mod component;\npub use component::*;\n".to_string(),
         ),
         ("component.rs", component_rs(name)),
         ("style.css", style_css(name)),
         ("docs.md", docs_md(name)),
-        (&format!("{name}_demo.rs"), demo_rs(name)),
     ];
     let mut touched = Vec::new();
     for (file, body) in files {
         fs::write(dir.join(file), body).map_err(io)?;
         touched.push(dir.join(file));
     }
+    let demo_path = root.join(DEMOS_DIR_REL).join(format!("{name}.rs"));
+    fs::write(&demo_path, demo_rs(name)).map_err(io)?;
+    touched.push(demo_path);
     for (path, body) in [
         (MOD_RS, mod_rs),
+        (DEMOS_MOD, demos_mod),
+        (COMMON_RS, common_new),
         (LIB_RS, lib_rs),
         (DEMOS_RS, demos),
         (RENDER_RS, render),

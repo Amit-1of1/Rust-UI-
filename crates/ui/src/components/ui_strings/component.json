@@ -1,19 +1,6 @@
 {
   "cargoDependencies": [],
-  "componentDependencies": [
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "button"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "carousel"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "spinner"
-    }
-  ],
+  "componentDependencies": [],
   "description": "Every word the kit shows or announces on its own (\"Next\", \"Clear\", \"No results found.\", \"Go to next page\", screen-reader names) lives in one `UiStrings` struct with English defaults. Wrap the app in `UiStringsProvider` to translate them, and pass a signal to switch language at runtime. Text you pass as props (labels, placeholders) always wins.",
   "exclude": [
     "docs.md",

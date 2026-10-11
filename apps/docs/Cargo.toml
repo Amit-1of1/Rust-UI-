@@ -1,0 +1,21 @@
+[package]
+name = "docs"
+version = "0.1.0"
+description = "Documentation site for the Rust UI kit: one page per component with its live demo"
+publish = false
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus.workspace = true
+ui.workspace = true
+pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "Location"] }
+
+[features]
+default = ["web"]
+web = ["dioxus/web", "ui/web"]
+desktop = ["dioxus/desktop", "ui/desktop"]

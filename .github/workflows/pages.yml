@@ -1,4 +1,4 @@
-name: Gallery on GitHub Pages
+name: Docs and gallery on GitHub Pages
 
 # Manual on purpose: it needs Pages enabled (Settings > Pages > Source: GitHub Actions)
 # and installs dx from source, which is slow. Run it from the Actions tab.
@@ -27,10 +27,18 @@ jobs:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - run: cargo install dioxus-cli --version 0.7.10 --locked
+      # The docs site is the landing page; the gallery lives under /gallery/.
       - run: dx bundle --platform web --release --base-path Rust-UI-
+        working-directory: apps/docs
+      - run: dx bundle --platform web --release --base-path Rust-UI-/gallery
         working-directory: apps/gallery
+      - run: |
+          mkdir -p public
+          cp -r target/dx/docs/release/web/public/. public/
+          mkdir -p public/gallery
+          cp -r target/dx/gallery/release/web/public/. public/gallery/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: target/dx/gallery/release/web/public
+          path: public
       - id: deployment
         uses: actions/deploy-pages@v4

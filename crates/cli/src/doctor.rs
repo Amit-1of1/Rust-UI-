@@ -3,7 +3,7 @@
 //! Errors fail the command; warnings are reported but do not. Everything here reads
 //! files only, so it is fast enough to run in the gate.
 
-use crate::{COMPONENTS_DIR, THEME_FILE};
+use crate::{COMPONENTS_DIR, DEMOS_DIR, THEME_FILE};
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
@@ -256,7 +256,7 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
 
     for name in &names {
         let folder = dir.join(name);
-        let demo = folder.join(format!("{name}_demo.rs"));
+        let demo = root.join(DEMOS_DIR).join(format!("{name}.rs"));
         // style.css only for components that load one; a provider (ui_strings) draws nothing.
         let styled = fs::read_to_string(folder.join("component.rs"))
             .map_or(true, |src| src.contains("#[css_module("));
@@ -267,12 +267,12 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         }
         let has_demo = demo.exists();
         if !has_demo {
-            add(Level::Warning, name, format!("no {name}_demo.rs"));
+            add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
         } else {
             if !demos.contains(&format!("{name}_demo")) {
                 add(Level::Error, name, "demo is not in tests/demos.rs".into());
             }
-            if !gallery.contains(&format!("{name}_demo")) {
+            if !gallery.contains(&format!("demos::{name}::Demo")) {
                 add(
                     Level::Error,
                     name,

@@ -14,10 +14,6 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "avatar"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "ui_strings"
     }
   ],

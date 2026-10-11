@@ -65,7 +65,7 @@ await pattern("accordion", async () => {
 
 // Checkbox and switch: Space toggles.
 await pattern("checkbox", async () => {
-  const box = section("Checkbox and switch").getByRole("checkbox").first();
+  const box = section("Checkbox").getByRole("checkbox").first();
   const before = await attr(box, "aria-checked") ?? String(await box.isChecked());
   await box.focus();
   await press("Space");
@@ -73,7 +73,7 @@ await pattern("checkbox", async () => {
   check(after !== before, "checkbox: Space toggles");
 });
 await pattern("switch", async () => {
-  const sw = section("Checkbox and switch").getByRole("switch").first();
+  const sw = section("Switch").getByRole("switch").first();
   const before = await attr(sw, "aria-checked");
   await sw.focus();
   await press("Space");
