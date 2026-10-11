@@ -68,11 +68,11 @@
 }
 
 .dx-combobox-list[data-state="open"] {
-  animation: dx-picker-in 150ms ease-out forwards;
+  animation: dx-picker-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
 }
 
 .dx-combobox-list[data-state="closed"] {
-  animation: dx-picker-out 100ms ease-in forwards;
+  animation: dx-picker-out var(--motion-exit-duration, 100ms) var(--motion-exit-easing, ease-in) forwards;
   pointer-events: none;
 }
 
@@ -133,4 +133,32 @@
 .dx-combobox-check-icon {
   margin-inline-start: auto;
   color: var(--secondary-color-5);
+}
+
+/* Anchor positioning (docs/GUARDRAILS.md): the content stays attached to its trigger and
+   flips to the other side when it would leave the screen. No JavaScript. Browsers without
+   anchor-scope keep the absolute layout above. The @supports is nested inside each rule
+   because css_module does not rename classes inside a top-level @supports. */
+.dx-combobox {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-scope: --dx-combobox;
+  }
+}
+
+.dx-combobox-input-wrapper {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-name: --dx-combobox;
+  }
+}
+
+.dx-combobox .dx-combobox-list {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: fixed;
+    position-anchor: --dx-combobox;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    inset: auto;
+    inset-block-start: anchor(end);
+    inset-inline-start: anchor(start);
+    margin-block-start: 0.25rem;
+  }
 }

@@ -4,6 +4,7 @@
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
 
 pub mod components;
+pub mod hooks;
 
 /// Spring presets, presence animations and reduced-motion handling.
 pub use motion;
@@ -90,6 +91,7 @@ pub mod prelude {
     pub use crate::components::toolbar::*;
     pub use crate::components::tooltip::*;
     pub use crate::components::virtual_list::*;
+    pub use crate::hooks::use_hotkey;
     // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.
     pub use crate::ThemeStyles;
     pub use dioxus_primitives::toast::{use_toast, ToastOptions};

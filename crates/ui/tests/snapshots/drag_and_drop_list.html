@@ -1,0 +1,366 @@
+<style>.dx-tasks-demo {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.dx-tasks-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 2px 14px;
+  gap: 16px;
+}
+
+.dx-tasks-title {
+  margin: 0;
+  color: var(--secondary-color-n0);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.dx-tasks-subtitle {
+  margin: 4px 0 0;
+  color: var(--secondary-color-n1);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.dx-tasks-count {
+  color: var(--secondary-color-n1);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dx-task-card {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.dx-task-body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dx-task-title {
+  overflow: hidden;
+  color: var(--secondary-color-n0);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-task-meta {
+  display: flex;
+  align-items: center;
+  color: var(--secondary-color-n1);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  gap: 7px;
+  line-height: 1.3;
+}
+
+.dx-task-code {
+  color: var(--secondary-color-n1);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.dx-task-sep {
+  width: 2px;
+  height: 2px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--primary-color-n0);
+}
+
+.dx-task-due[data-urgent="true"] {
+  color: var(--secondary-color-n0);
+  font-weight: 500;
+}
+
+.dx-tasks-demo .dx-dnd-list-item:hover .dx-task-code {
+  color: var(--secondary-color-n2);
+}
+</style>
+<div class="dx-tasks-demo">
+<div class="dx-tasks-header">
+<div>
+<h3 class="dx-tasks-title">Launch priorities
+</h3>
+<p class="dx-tasks-subtitle">Drag to reorder - top is highest priority
+</p>
+</div>
+<span class="dx-tasks-count">6 active
+</span>
+</div>
+<div>
+<div class="dx-dnd-list-a55c53c9">
+<div id="dnd-instructions" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Press Enter to start reordering. Use Arrow keys to change position. Press Enter to confirm or Escape to cancel.
+</div>
+<ul aria-label="Sortable list" aria-roledescription="sortable list" aria-describedby="dnd-instructions" class="dx-dnd-list-ul-a55c53c9">
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Ship Q2 product roadmap
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n0
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>In progress
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="true">Today
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to JS" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n0" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to JS" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">JS
+</span>
+</span>
+</div>
+</div>
+</li>
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Redesign onboarding flow
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n1
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>In review
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="false">Apr 24
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to MP" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n1" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to MP" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">MP
+</span>
+</span>
+</div>
+</div>
+</li>
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Audit payment webhook logs
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n2
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>In progress
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="false">Apr 29
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to KT" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n2" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to KT" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">KT
+</span>
+</span>
+</div>
+</div>
+</li>
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Draft changelog for v2.4
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n3
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>To do
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="false">May 02
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to AR" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n3" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to AR" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">AR
+</span>
+</span>
+</div>
+</div>
+</li>
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Migrate analytics to ClickHouse
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n4
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>Blocked
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="false">May 05
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to DL" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n4" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to DL" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">DL
+</span>
+</span>
+</div>
+</div>
+</li>
+<li aria-roledescription="sortable item" draggable="true" tabindex="-1" aria-grabbed="false" class="dx-dnd-list-item-a55c53c9">
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dx-item-icon-a55c53c9" aria-hidden="true">
+<circle cx="9" cy="12" r="1">
+</circle>
+<circle cx="9" cy="5" r="1">
+</circle>
+<circle cx="9" cy="19" r="1">
+</circle>
+<circle cx="15" cy="12" r="1">
+</circle>
+<circle cx="15" cy="5" r="1">
+</circle>
+<circle cx="15" cy="19" r="1">
+</circle>
+</svg>
+<div class="dx-item-body-div-a55c53c9">
+<div class="dx-task-card">
+<div class="dx-task-body">
+<div class="dx-task-title">Archive legacy API endpoints
+</div>
+<div class="dx-task-meta">
+<span class="dx-task-code">LNC-n5
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span>Backlog
+</span>
+<span class="dx-task-sep" aria-hidden="true">
+</span>
+<span class="dx-task-due" data-urgent="false">Later
+</span>
+</div>
+</div>
+<span role="img" data-state="empty" aria-label="Assigned to SC" class="dx-avatar-4a404e6a dx-avatar-sm-4a404e6a dx-avatar-circle-4a404e6a" style="user-select: none;">
+<img id="dxc-n5" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="Assigned to SC" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-4a404e6a" draggable="false"/>
+<span class="dx-avatar-fallback-4a404e6a">SC
+</span>
+</span>
+</div>
+</div>
+</li>
+</ul>
+<div role="status" aria-live="assertive" aria-atomic="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
+</div>
+</div>
+</div>
+</div>

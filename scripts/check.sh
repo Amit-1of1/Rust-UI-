@@ -47,6 +47,8 @@ if [ "$A11Y" = 1 ]; then
     if [ "$name" = site ]; then
       step "form behaviour (site)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node form.mjs)
+      step "Ctrl+K hotkey (site)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node hotkey.mjs)
     fi
     if [ "$name" = gallery ]; then
       step "otp + carousel behaviour (gallery)"
@@ -59,6 +61,10 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node table.mjs)
       step "axe $name (rtl)"
       (cd tests/e2e && DIR=rtl GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs light)
+      step "anchor positioning (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node anchor.mjs)
+      step "Ctrl+K hotkey (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node hotkey.mjs)
       for accent in blue green violet rose orange; do
         for scheme in light dark; do
           step "axe $name ($accent, $scheme)"

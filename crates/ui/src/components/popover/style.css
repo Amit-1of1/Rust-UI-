@@ -24,11 +24,11 @@
 }
 
 .dx-popover-content[data-state="open"] {
-  animation: dx-popover-fade-in .2s ease-in-out;
+  animation: dx-popover-fade-in var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-in-out);
 }
 
 .dx-popover-content[data-state="closed"] {
-  animation: dx-popover-fade-out .2s ease-in-out forwards;
+  animation: dx-popover-fade-out var(--motion-exit-duration, 200ms) var(--motion-exit-easing, ease-in-out) forwards;
   pointer-events: none;
 }
 
@@ -235,4 +235,105 @@
 
 .dx-popover-trigger:focus-visible {
   box-shadow: 0 0 0 2px var(--focused-border-color);
+}
+
+/* Anchor positioning (docs/GUARDRAILS.md): the content stays attached to its trigger and
+   flips to the other side when it would leave the screen. No JavaScript. Browsers without
+   anchor-scope keep the absolute layout above. The @supports is nested inside each rule
+   because css_module does not rename classes inside a top-level @supports. */
+.dx-popover {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-scope: --dx-popover;
+  }
+}
+
+.dx-popover-trigger {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-name: --dx-popover;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: fixed;
+    position-anchor: --dx-popover;
+    inset: auto;
+    transform: none;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="top"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="top"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start span-inline-end;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="top"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start span-inline-start;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="bottom"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="bottom"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end span-inline-end;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="bottom"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end span-inline-start;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="left"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="left"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-bottom;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="left"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-top;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="right"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="right"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-bottom;
+  }
+}
+
+.dx-popover .dx-popover-content[data-side="right"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-top;
+  }
 }
