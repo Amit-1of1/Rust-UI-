@@ -5,6 +5,7 @@
 //! style page that `bench/run.mjs` drives.
 
 use dioxus::prelude::*;
+use std::rc::Rc;
 use ui::prelude::*;
 
 const TRIAL_CSS: Asset = asset!("/assets/trial.css");
@@ -359,20 +360,33 @@ fn SettingsTab(page_size: usize, on_page_size: EventHandler<usize>) -> Element {
 
 // ----- bench page (js-framework-benchmark style) --------------------------------------------
 
+#[derive(Clone, PartialEq)]
+struct BenchItem {
+    id: usize,
+    title: Rc<str>,
+}
+
 #[component]
 fn Bench() -> Element {
-    let mut rows = use_signal(Vec::<Task>::new);
+    let mut rows = use_signal(Vec::<BenchItem>::new);
     let mut next = use_signal(|| 0usize);
-    let mut selected = use_signal(|| None::<usize>);
+    let selected = use_selection::<usize>();
     use_effect(mark_ready);
 
     let mut build = move |n: usize| {
         let start = next();
         next.set(start + n);
-        (start..start + n).map(task).collect::<Vec<_>>()
+        (start..start + n)
+            .map(|i| BenchItem {
+                id: i + 1,
+                title: task(i).title.into(),
+            })
+            .collect::<Vec<_>>()
     };
 
     rsx! {
+        ThemeStyles {}
+        document::Stylesheet { href: TRIAL_CSS }
         div { class: "bench-buttons",
             button { id: "run", onclick: move |_| { let r = build(1_000); rows.set(r); }, "Create 1,000 rows" }
             button { id: "runlots", onclick: move |_| { let r = build(10_000); rows.set(r); }, "Create 10,000 rows" }
@@ -380,7 +394,7 @@ fn Bench() -> Element {
             button { id: "update",
                 onclick: move |_| {
                     for t in rows.write().iter_mut().step_by(10) {
-                        t.title.push_str(" !!!");
+                        t.title = format!("{} !!!", t.title).into();
                     }
                 },
                 "Update every 10th row"
@@ -399,34 +413,34 @@ fn Bench() -> Element {
         table { id: "bench",
             tbody {
                 for t in rows.read().iter() {
-                    BenchRow {
-                        key: "{t.id}",
-                        id: t.id,
-                        title: t.title.clone(),
-                        selected: selected() == Some(t.id),
-                        on_select: move |id| selected.set(Some(id)),
-                        on_remove: move |id| rows.write().retain(|t: &Task| t.id != id),
-                    }
+                    BenchRow { key: "{t.id}", id: t.id, title: t.title.clone(), selected, rows }
                 }
             }
         }
     }
 }
 
+/// One bench row. Every prop compares cheaply and stays equal unless this row changed,
+/// so when the list re-renders Dioxus skips the rows that didn't change, and the
+/// selection only touches the two rows that flip.
 #[component]
 fn BenchRow(
     id: usize,
-    title: String,
-    selected: bool,
-    on_select: EventHandler<usize>,
-    on_remove: EventHandler<usize>,
+    title: Rc<str>,
+    selected: Selection<usize>,
+    rows: Signal<Vec<BenchItem>>,
 ) -> Element {
+    let is_selected = use_selected(selected, id);
     rsx! {
-        tr { class: if selected { "selected" },
+        tr { class: if is_selected() { "selected" },
             td { "{id}" }
-            td { onclick: move |_| on_select.call(id), "{title}" }
+            td { onclick: move |_| selected.select_only(id), "{title}" }
             td {
-                button { "aria-label": "Remove row {id}", onclick: move |_| on_remove.call(id), "×" }
+                button {
+                    "aria-label": "Remove row {id}",
+                    onclick: move |_| rows.write().retain(|t| t.id != id),
+                    "×"
+                }
             }
         }
     }

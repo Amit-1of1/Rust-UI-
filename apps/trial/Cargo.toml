@@ -10,6 +10,8 @@ rust-version.workspace = true
 [dependencies]
 dioxus.workspace = true
 ui.workspace = true
+tracing = { version = "0.1", features = ["release_max_level_off"] }
+log = { version = "0.4", features = ["release_max_level_off"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "DomStringMap", "Location"] }

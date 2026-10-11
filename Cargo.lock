@@ -8451,7 +8451,9 @@ name = "trial"
 version = "0.1.0"
 dependencies = [
  "dioxus",
+ "log",
  "rust-ui-kit",
+ "tracing",
  "web-sys",
 ]
 

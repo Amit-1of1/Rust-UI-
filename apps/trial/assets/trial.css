@@ -70,9 +70,22 @@ body {
   padding: 1rem;
 }
 
+/* Same table styling as the React and Svelte bench pages (their `.table`), so all three
+   pay the same layout and paint cost. */
+#bench {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 #bench td {
-  padding-block: 0.125rem;
-  padding-inline: 0.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+  text-align: start;
+  border-block-start: 1px solid var(--primary-color-6);
+}
+
+#bench tbody tr:hover {
+  background: var(--primary-color-3);
 }
 
 #bench tr.selected {
