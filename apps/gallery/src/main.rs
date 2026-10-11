@@ -75,6 +75,22 @@ fn App() -> Element {
                 Section { title: "Command palette", blurb: "Type to filter, arrow keys to move, Enter to run.", ui::components::command::command_demo::Demo {} }
                 Section { title: "Charts", blurb: "SVG charts with a text summary for screen readers.", ui::components::chart::chart_demo::Demo {} }
                 Section { title: "Theme customizer", blurb: "Accent colour, corner radius and mode for the whole page. Everything below recolors live.", ui::components::theme_customizer::theme_customizer_demo::Demo {} }
+                Section { title: "Callout", blurb: "Inline notes in default, info, success and warning styles.", ui::components::callout::callout_demo::Demo {} }
+                Section { title: "Empty", blurb: "Empty state with icon, copy and actions.", ui::components::empty::empty_demo::Demo {} }
+                Section { title: "Status", blurb: "A dot plus text label; never colour alone.", ui::components::status::status_demo::Demo {} }
+                Section { title: "Shimmer", blurb: "Loading highlight that becomes a static tint with reduced motion.", ui::components::shimmer::shimmer_demo::Demo {} }
+                Section { title: "Marquee", blurb: "Looping strip with a pause button; stops under reduced motion.", ui::components::marquee::marquee_demo::Demo {} }
+                Section { title: "Button group", blurb: "Buttons joined into one segmented control.", ui::components::button_group::button_group_demo::Demo {} }
+                Section { title: "Stepper", blurb: "Multi-step progress with Back and Next.", ui::components::stepper::stepper_demo::Demo {} }
+                Section { title: "Bottom nav", blurb: "Mobile tab bar with aria-current.", ui::components::bottom_nav::bottom_nav_demo::Demo {} }
+                Section { title: "Form", blurb: "Validation state, a Form and bound TextFields; focus jumps to the first error on submit.", ui::components::form::form_demo::Demo {} }
+                Section { title: "Data table", blurb: "Sort, filter, paginate and select rows; status is announced to screen readers.", ui::components::data_table::data_table_demo::Demo {} }
+                Section { title: "Input otp", blurb: "One box per character: auto-advance, Backspace, arrow keys and paste.", ui::components::input_otp::input_otp_demo::Demo {} }
+                Section { title: "Input group", blurb: "An input with text or buttons attached inside one border.", ui::components::input_group::input_group_demo::Demo {} }
+                Section { title: "Carousel", blurb: "Snap-scrolling slides with Previous and Next; nothing autoplays.", ui::components::carousel::carousel_demo::Demo {} }
+                Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::components::dropzone::dropzone_demo::Demo {} }
+                Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::components::multi_select::multi_select_demo::Demo {} }
+                Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::components::drawer::drawer_demo::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-command gate. Everything CLAUDE.md asks for before pushing, plus the registry check.
-#   scripts/check.sh           fmt, clippy, tests, wasm builds, registry
+#   scripts/check.sh           fmt, clippy, tests, wasm builds, registry, doctor
 #   scripts/check.sh --a11y    also build gallery + site, serve them and run axe (light + dark)
 # The a11y step needs `dx` and `npm ci` in tests/e2e (and Chromium via PLAYWRIGHT_BROWSERS_PATH).
 set -euo pipefail
@@ -22,6 +22,7 @@ step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
 step "tests";   cargo test --workspace
 step "wasm32";  cargo build -p gallery -p site --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
+step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 
 if [ "$A11Y" = 1 ]; then
   PIDS=()
@@ -43,7 +44,27 @@ if [ "$A11Y" = 1 ]; then
       step "axe $name ($scheme)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs "$scheme")
     done
+    if [ "$name" = site ]; then
+      step "form behaviour (site)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node form.mjs)
+      step "Ctrl+K hotkey (site)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node hotkey.mjs)
+    fi
     if [ "$name" = gallery ]; then
+      step "otp + carousel behaviour (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node otp.mjs)
+      step "multi-select + dropzone behaviour (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node pickers.mjs)
+      step "drawer behaviour (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node drawer.mjs)
+      step "table behaviour (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node table.mjs)
+      step "axe $name (rtl)"
+      (cd tests/e2e && DIR=rtl GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs light)
+      step "anchor positioning (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node anchor.mjs)
+      step "Ctrl+K hotkey (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node hotkey.mjs)
       for accent in blue green violet rose orange; do
         for scheme in light dark; do
           step "axe $name ($accent, $scheme)"

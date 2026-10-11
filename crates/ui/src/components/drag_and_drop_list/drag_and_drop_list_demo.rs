@@ -113,9 +113,9 @@ struct TaskView {
 
 // Placeholder avatars (inline SVG, no network).
 const AVATARS: &[&str] = &[
-    crate::components::DEMO_AVATAR_SRC,
-    crate::components::DEMO_AVATAR_SRC,
-    crate::components::DEMO_AVATAR_SRC,
+    crate::components::avatar::avatar_demo::DEMO_AVATAR_SRC,
+    crate::components::avatar::avatar_demo::DEMO_AVATAR_SRC,
+    crate::components::avatar::avatar_demo::DEMO_AVATAR_SRC,
 ];
 
 const TASKS: &[TaskView] = &[

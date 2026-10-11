@@ -1,0 +1,45 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    },
+    {
+      "name": "dioxus-icons",
+      "version": "0.1.0"
+    },
+    {
+      "features": [
+        "std",
+        "macros"
+      ],
+      "name": "time",
+      "version": "0.3.44"
+    },
+    {
+      "name": "tracing",
+      "version": "0.1"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "calendar"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "popover"
+    }
+  ],
+  "description": "The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "date_picker"
+}

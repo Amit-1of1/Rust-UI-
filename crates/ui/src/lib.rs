@@ -4,6 +4,7 @@
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
 
 pub mod components;
+pub mod hooks;
 
 /// Spring presets, presence animations and reduced-motion handling.
 pub use motion;
@@ -29,10 +30,14 @@ pub mod prelude {
     pub use crate::components::aspect_ratio::*;
     pub use crate::components::avatar::*;
     pub use crate::components::badge::*;
+    pub use crate::components::bottom_nav::*;
     pub use crate::components::breadcrumb::*;
     pub use crate::components::button::*;
+    pub use crate::components::button_group::*;
     pub use crate::components::calendar::*;
+    pub use crate::components::callout::*;
     pub use crate::components::card::*;
+    pub use crate::components::carousel::*;
     pub use crate::components::chart::*;
     pub use crate::components::checkbox::*;
     pub use crate::components::collapsible::*;
@@ -40,16 +45,25 @@ pub mod prelude {
     pub use crate::components::combobox::*;
     pub use crate::components::command::*;
     pub use crate::components::context_menu::*;
+    pub use crate::components::data_table::*;
     pub use crate::components::date_picker::*;
     pub use crate::components::dialog::*;
+    pub use crate::components::drawer::*;
     pub use crate::components::dropdown_menu::*;
+    pub use crate::components::dropzone::*;
+    pub use crate::components::empty::*;
     pub use crate::components::field::*;
+    pub use crate::components::form::*;
     pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
+    pub use crate::components::input_group::*;
+    pub use crate::components::input_otp::*;
     pub use crate::components::item::*;
     pub use crate::components::kbd::*;
     pub use crate::components::label::*;
+    pub use crate::components::marquee::*;
     pub use crate::components::menubar::*;
+    pub use crate::components::multi_select::*;
     pub use crate::components::navbar::*;
     pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
@@ -59,10 +73,13 @@ pub mod prelude {
     pub use crate::components::select::*;
     pub use crate::components::separator::*;
     pub use crate::components::sheet::*;
+    pub use crate::components::shimmer::*;
     pub use crate::components::sidebar::*;
     pub use crate::components::skeleton::*;
     pub use crate::components::slider::*;
     pub use crate::components::spinner::*;
+    pub use crate::components::status::*;
+    pub use crate::components::stepper::*;
     pub use crate::components::switch::*;
     pub use crate::components::table::*;
     pub use crate::components::tabs::*;
@@ -74,6 +91,7 @@ pub mod prelude {
     pub use crate::components::toolbar::*;
     pub use crate::components::tooltip::*;
     pub use crate::components::virtual_list::*;
+    pub use crate::hooks::use_hotkey;
     // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.
     pub use crate::ThemeStyles;
     pub use dioxus_primitives::toast::{use_toast, ToastOptions};

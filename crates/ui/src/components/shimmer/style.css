@@ -1,0 +1,34 @@
+.dx-shimmer {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.dx-shimmer[data-loading="true"]::after {
+  position: absolute;
+  inset: 0;
+  animation: dx-shimmer-sweep 1.6s ease-in-out infinite;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in oklab, var(--secondary-color) 22%, transparent) 50%,
+    transparent 70%
+  );
+  content: "";
+  pointer-events: none;
+  transform: translateX(-100%);
+}
+
+@keyframes dx-shimmer-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-shimmer[data-loading="true"]::after {
+    animation: none;
+    background: color-mix(in oklab, var(--secondary-color) 8%, transparent);
+    transform: none;
+  }
+}

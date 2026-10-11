@@ -1,0 +1,18 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "badge"
+    }
+  ],
+  "description": "A styled table. Give a `TableHead` an `on_sort` to make it a sort button; see `DataTable` for filtering, paging and selection.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "table"
+}

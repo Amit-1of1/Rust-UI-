@@ -1,0 +1,316 @@
+use crate::components::button::{Button, ButtonVariant};
+use crate::components::input::Input;
+use crate::components::table::*;
+use dioxus::prelude::*;
+use std::collections::BTreeSet;
+
+#[css_module("/src/components/data_table/style.css")]
+struct Styles;
+
+/// One column: its header and how it behaves.
+#[derive(Clone, PartialEq, Debug)]
+pub struct DataColumn {
+    pub header: String,
+    pub sortable: bool,
+    /// Right-aligned, and sorted as numbers (`$1,200`, `45%` and `3.5` all parse).
+    pub numeric: bool,
+}
+
+impl DataColumn {
+    pub fn new(header: impl Into<String>) -> Self {
+        Self {
+            header: header.into(),
+            sortable: false,
+            numeric: false,
+        }
+    }
+
+    pub fn sortable(mut self) -> Self {
+        self.sortable = true;
+        self
+    }
+
+    pub fn numeric(mut self) -> Self {
+        self.numeric = true;
+        self
+    }
+}
+
+/// What the table shows for a given query, sort and page. Pure, so it is easy to test.
+#[derive(Clone, PartialEq, Debug)]
+pub struct TableView {
+    /// Original row indices on the current page, in display order.
+    pub rows: Vec<usize>,
+    /// Rows that match the filter, across all pages.
+    pub matched: usize,
+    pub pages: usize,
+    /// The current page, clamped into range (zero-based).
+    pub page: usize,
+}
+
+fn number(cell: &str) -> Option<f64> {
+    let cleaned: String = cell
+        .chars()
+        .filter(|c| !matches!(c, '$' | '€' | '£' | ',' | '%' | ' '))
+        .collect();
+    cleaned.parse().ok()
+}
+
+/// Filter (every whitespace-separated term must appear in some cell, ignoring case), sort
+/// (stable; unparsable numbers last) and paginate (`page_size` 0 shows everything).
+pub fn table_view(
+    columns: &[DataColumn],
+    rows: &[Vec<String>],
+    query: &str,
+    sort: Option<(usize, SortDirection)>,
+    page: usize,
+    page_size: usize,
+) -> TableView {
+    let terms: Vec<String> = query.split_whitespace().map(str::to_lowercase).collect();
+    let mut indices: Vec<usize> = (0..rows.len())
+        .filter(|&i| {
+            let cells: Vec<String> = rows[i].iter().map(|c| c.to_lowercase()).collect();
+            terms.iter().all(|t| cells.iter().any(|c| c.contains(t)))
+        })
+        .collect();
+
+    if let Some((col, direction)) = sort {
+        if direction != SortDirection::None && col < columns.len() {
+            let numeric = columns[col].numeric;
+            let cell = |i: usize| rows[i].get(col).map(String::as_str).unwrap_or("");
+            indices.sort_by(|&a, &b| {
+                let ord = if numeric {
+                    match (number(cell(a)), number(cell(b))) {
+                        (Some(x), Some(y)) => x.total_cmp(&y),
+                        (Some(_), None) => std::cmp::Ordering::Less,
+                        (None, Some(_)) => std::cmp::Ordering::Greater,
+                        (None, None) => std::cmp::Ordering::Equal,
+                    }
+                } else {
+                    cell(a).to_lowercase().cmp(&cell(b).to_lowercase())
+                };
+                // Unparsable numbers stay last in both directions.
+                if numeric && (number(cell(a)).is_none() || number(cell(b)).is_none()) {
+                    ord
+                } else if direction == SortDirection::Descending {
+                    ord.reverse()
+                } else {
+                    ord
+                }
+            });
+        }
+    }
+
+    let matched = indices.len();
+    if page_size == 0 {
+        return TableView {
+            rows: indices,
+            matched,
+            pages: 1,
+            page: 0,
+        };
+    }
+    let pages = matched.div_ceil(page_size).max(1);
+    let page = page.min(pages - 1);
+    let rows = indices
+        .into_iter()
+        .skip(page * page_size)
+        .take(page_size)
+        .collect();
+    TableView {
+        rows,
+        matched,
+        pages,
+        page,
+    }
+}
+
+/// A table with sorting, a filter box, pagination and optional row selection. Cells are text;
+/// for custom cell content compose `Table` yourself and reuse [`table_view`].
+#[component]
+pub fn DataTable(
+    columns: Vec<DataColumn>,
+    rows: Vec<Vec<String>>,
+    /// Describes the table to assistive tech and is shown below it.
+    #[props(into)]
+    caption: String,
+    /// Rows per page; `0` shows all rows.
+    #[props(default = 10)]
+    page_size: usize,
+    #[props(default = true)] filterable: bool,
+    #[props(default)] selectable: bool,
+    /// Called with the original indices of the selected rows whenever the selection changes.
+    #[props(default)]
+    on_select: Callback<Vec<usize>>,
+) -> Element {
+    let mut query = use_signal(String::new);
+    let mut sort = use_signal(|| None::<(usize, SortDirection)>);
+    let mut page = use_signal(|| 0_usize);
+    let mut selected = use_signal(BTreeSet::<usize>::new);
+
+    let view = table_view(&columns, &rows, &query(), sort(), page(), page_size);
+    let page_rows = view.rows.clone();
+    let all_on_page =
+        !page_rows.is_empty() && page_rows.iter().all(|i| selected.read().contains(i));
+    let shown = if page_size == 0 {
+        view.matched
+    } else {
+        page_rows.len()
+    };
+    let first = if shown == 0 {
+        0
+    } else {
+        view.page * page_size + 1
+    };
+    let last = if page_size == 0 {
+        view.matched
+    } else {
+        view.page * page_size + shown
+    };
+    let status = if view.matched == 0 {
+        "No rows match.".to_string()
+    } else if page_size == 0 {
+        format!("{} rows", view.matched)
+    } else {
+        format!("Showing {first}–{last} of {} rows", view.matched)
+    };
+    let selected_count = selected.read().len();
+
+    rsx! {
+        div { class: Styles::dx_data_table,
+            if filterable {
+                div { class: Styles::dx_data_table_toolbar,
+                    Input {
+                        r#type: "search",
+                        placeholder: "Filter rows",
+                        "aria-label": "Filter rows",
+                        value: "{query()}",
+                        oninput: move |e: FormEvent| {
+                            query.set(e.value());
+                            page.set(0);
+                        },
+                    }
+                }
+            }
+            Table {
+                TableCaption { "{caption}" }
+                TableHeader {
+                    TableRow {
+                        if selectable {
+                            TableHead {
+                                input {
+                                    r#type: "checkbox",
+                                    "aria-label": "Select all rows on this page",
+                                    checked: all_on_page,
+                                    onchange: {
+                                        let page_rows = page_rows.clone();
+                                        move |e: FormEvent| {
+                                            selected
+                                                .with_mut(|set| {
+                                                    for i in &page_rows {
+                                                        if e.checked() {
+                                                            set.insert(*i);
+                                                        } else {
+                                                            set.remove(i);
+                                                        }
+                                                    }
+                                                });
+                                            on_select.call(selected.read().iter().copied().collect());
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                        for (index , column) in columns.iter().enumerate() {
+                            {
+                                let direction = match sort() {
+                                    Some((c, d)) if c == index => d,
+                                    _ => SortDirection::None,
+                                };
+                                rsx! {
+                                    TableHead {
+                                        key: "{index}",
+                                        sort: direction,
+                                        on_sort: column
+                                            .sortable
+                                            .then(|| {
+                                                EventHandler::new(move |_| {
+                                                    let next = if direction == SortDirection::None && sort().is_none_or(|(c, _)| c != index) {
+                                                        SortDirection::Ascending
+                                                    } else {
+                                                        direction.cycle()
+                                                    };
+                                                    sort.set(Some((index, next)));
+                                                    page.set(0);
+                                                })
+                                            }),
+                                        style: if column.numeric { "text-align: right;" },
+                                        "{column.header}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                TableBody {
+                    for i in page_rows.iter().copied() {
+                        TableRow { key: "{i}", "data-selected": selected.read().contains(&i).then_some("true"),
+                            if selectable {
+                                TableCell {
+                                    input {
+                                        r#type: "checkbox",
+                                        "aria-label": "Select {rows[i].first().cloned().unwrap_or_default()}",
+                                        checked: selected.read().contains(&i),
+                                        onchange: move |e: FormEvent| {
+                                            selected
+                                                .with_mut(|set| {
+                                                    if e.checked() {
+                                                        set.insert(i);
+                                                    } else {
+                                                        set.remove(&i);
+                                                    }
+                                                });
+                                            on_select.call(selected.read().iter().copied().collect());
+                                        },
+                                    }
+                                }
+                            }
+                            for (c , cell) in rows[i].iter().enumerate() {
+                                TableCell {
+                                    key: "{c}",
+                                    style: if columns.get(c).is_some_and(|col| col.numeric) { "text-align: right;" },
+                                    "{cell}"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            div { class: Styles::dx_data_table_footer,
+                p { class: Styles::dx_data_table_status, role: "status",
+                    "{status}"
+                    if selectable && selected_count > 0 {
+                        " · {selected_count} selected"
+                    }
+                }
+                if page_size != 0 && view.pages > 1 {
+                    nav { "aria-label": "Table pages", class: Styles::dx_data_table_pages,
+                        Button {
+                            variant: ButtonVariant::Outline,
+                            disabled: view.page == 0,
+                            onclick: move |_| page.set(view.page.saturating_sub(1)),
+                            "Previous"
+                        }
+                        span { "Page {view.page + 1} of {view.pages}" }
+                        Button {
+                            variant: ButtonVariant::Outline,
+                            disabled: view.page + 1 >= view.pages,
+                            onclick: move |_| page.set(view.page + 1),
+                            "Next"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

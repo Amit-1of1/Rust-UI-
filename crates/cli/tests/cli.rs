@@ -156,3 +156,21 @@ fn scaffold_rejects_bad_and_duplicate_names() {
     assert!(scaffold::scaffold(&dir, "status_dot").is_err());
     let _ = std::fs::remove_dir_all(dir);
 }
+
+#[test]
+fn committed_component_manifests_are_up_to_date() {
+    let stale = manifest::stale_manifests(&repo_root()).unwrap();
+    assert!(
+        stale.is_empty(),
+        "run `cargo run -p rust-ui-cli -- registry`: {stale:?}"
+    );
+}
+
+#[test]
+fn every_component_is_listed_in_the_root_manifest() {
+    let root: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(repo_root().join("component.json")).unwrap())
+            .unwrap();
+    let members = root["members"].as_array().unwrap().len();
+    assert_eq!(members, load(&repo_root()).unwrap().items.len());
+}

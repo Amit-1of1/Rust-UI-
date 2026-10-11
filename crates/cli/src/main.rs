@@ -45,6 +45,21 @@ enum Command {
     },
     /// Scaffold a new component in this repo (files, mod/prelude lines, demo, tests, registry).
     New { name: String },
+    /// Check components against the guardrails (colours, RTL, docs, demos, tests).
+    Doctor {
+        /// Also fail on warnings.
+        #[arg(long)]
+        strict: bool,
+    },
+    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
+    Theme {
+        /// Brand colour as hex, e.g. `#7c3aed`.
+        #[arg(long)]
+        brand: String,
+        /// Preset name used in `data-accent="..."`.
+        #[arg(long, default_value = "brand")]
+        name: String,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -72,13 +87,20 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let json = to_json(&build(root).map_err(err)?);
             let path = root.join("registry.json");
             if check {
-                if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str()) {
-                    eprintln!("registry.json is out of date; run `rust-ui registry`");
+                let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
+                if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
+                    || !stale.is_empty()
+                {
+                    eprintln!(
+                        "registry.json or a component.json is out of date; run `rust-ui registry`"
+                    );
                     return Ok(ExitCode::FAILURE);
                 }
             } else {
                 std::fs::write(&path, json).map_err(err)?;
                 println!("wrote {}", path.display());
+                let n = rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
+                println!("wrote {n} component.json files");
             }
         }
         Command::Init { dest } => {
@@ -107,7 +129,37 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 to_json(&build(root).map_err(err)?),
             )
             .map_err(err)?;
-            println!("updated registry.json");
+            rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
+            println!("updated registry.json and component.json files");
+        }
+        Command::Doctor { strict } => {
+            use rust_ui_cli::doctor::{run as doctor, Level};
+            let findings = doctor(root)?;
+            let (mut errors, mut warnings) = (0, 0);
+            for f in &findings {
+                let tag = match f.level {
+                    Level::Error => {
+                        errors += 1;
+                        "error"
+                    }
+                    Level::Warning => {
+                        warnings += 1;
+                        "warn "
+                    }
+                };
+                println!("{tag} {}: {}", f.component, f.message);
+            }
+            println!("{errors} error(s), {warnings} warning(s)");
+            if errors > 0 || (strict && warnings > 0) {
+                return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Theme { brand, name } => {
+            use rust_ui_cli::theme::{css, preset, Rgb};
+            if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
+                return Err(format!("`{name}` must be letters, digits or `-`"));
+            }
+            print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
         }
         Command::Diff { names, dest } => {
             let reg = load(root)?;

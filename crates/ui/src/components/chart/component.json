@@ -1,0 +1,13 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [],
+  "description": "`BarChart` and `LineChart` drawn as SVG from a list of `ChartDatum`. `describe()` builds the text alternative.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "chart"
+}

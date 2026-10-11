@@ -22,6 +22,7 @@
       "files": [
         "alert/alert_demo.rs",
         "alert/component.rs",
+        "alert/docs.md",
         "alert/mod.rs",
         "alert/style.css"
       ],
@@ -73,10 +74,22 @@
       "registryDependencies": []
     },
     {
+      "name": "bottom_nav",
+      "files": [
+        "bottom_nav/bottom_nav_demo.rs",
+        "bottom_nav/component.rs",
+        "bottom_nav/docs.md",
+        "bottom_nav/mod.rs",
+        "bottom_nav/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "breadcrumb",
       "files": [
         "breadcrumb/breadcrumb_demo.rs",
         "breadcrumb/component.rs",
+        "breadcrumb/docs.md",
         "breadcrumb/mod.rs",
         "breadcrumb/style.css"
       ],
@@ -93,6 +106,19 @@
       "registryDependencies": []
     },
     {
+      "name": "button_group",
+      "files": [
+        "button_group/button_group_demo.rs",
+        "button_group/component.rs",
+        "button_group/docs.md",
+        "button_group/mod.rs",
+        "button_group/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "calendar",
       "files": [
         "calendar/calendar_demo.rs",
@@ -100,6 +126,17 @@
         "calendar/docs.md",
         "calendar/mod.rs",
         "calendar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "callout",
+      "files": [
+        "callout/callout_demo.rs",
+        "callout/component.rs",
+        "callout/docs.md",
+        "callout/mod.rs",
+        "callout/style.css"
       ],
       "registryDependencies": []
     },
@@ -114,10 +151,22 @@
       "registryDependencies": []
     },
     {
+      "name": "carousel",
+      "files": [
+        "carousel/carousel_demo.rs",
+        "carousel/component.rs",
+        "carousel/docs.md",
+        "carousel/mod.rs",
+        "carousel/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "chart",
       "files": [
         "chart/chart_demo.rs",
         "chart/component.rs",
+        "chart/docs.md",
         "chart/mod.rs",
         "chart/style.css"
       ],
@@ -173,6 +222,7 @@
       "files": [
         "command/command_demo.rs",
         "command/component.rs",
+        "command/docs.md",
         "command/mod.rs",
         "command/style.css"
       ],
@@ -194,6 +244,21 @@
       "registryDependencies": []
     },
     {
+      "name": "data_table",
+      "files": [
+        "data_table/component.rs",
+        "data_table/data_table_demo.rs",
+        "data_table/docs.md",
+        "data_table/mod.rs",
+        "data_table/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "table"
+      ]
+    },
+    {
       "name": "date_picker",
       "files": [
         "date_picker/component.rs",
@@ -202,7 +267,10 @@
         "date_picker/mod.rs",
         "date_picker/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "calendar",
+        "popover"
+      ]
     },
     {
       "name": "dialog",
@@ -228,6 +296,19 @@
       ]
     },
     {
+      "name": "drawer",
+      "files": [
+        "drawer/component.rs",
+        "drawer/docs.md",
+        "drawer/drawer_demo.rs",
+        "drawer/mod.rs",
+        "drawer/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "dropdown_menu",
       "files": [
         "dropdown_menu/component.rs",
@@ -238,15 +319,56 @@
       "registryDependencies": []
     },
     {
+      "name": "dropzone",
+      "files": [
+        "dropzone/component.rs",
+        "dropzone/docs.md",
+        "dropzone/dropzone_demo.rs",
+        "dropzone/mod.rs",
+        "dropzone/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "empty",
+      "files": [
+        "empty/component.rs",
+        "empty/docs.md",
+        "empty/empty_demo.rs",
+        "empty/mod.rs",
+        "empty/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
       "name": "field",
       "files": [
         "field/component.rs",
+        "field/docs.md",
         "field/field_demo.rs",
         "field/mod.rs",
         "field/style.css"
       ],
       "registryDependencies": [
         "button",
+        "input"
+      ]
+    },
+    {
+      "name": "form",
+      "files": [
+        "form/component.rs",
+        "form/docs.md",
+        "form/form_demo.rs",
+        "form/mod.rs",
+        "form/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "callout",
+        "field",
         "input"
       ]
     },
@@ -272,6 +394,28 @@
       "registryDependencies": []
     },
     {
+      "name": "input_group",
+      "files": [
+        "input_group/component.rs",
+        "input_group/docs.md",
+        "input_group/input_group_demo.rs",
+        "input_group/mod.rs",
+        "input_group/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input_otp",
+      "files": [
+        "input_otp/component.rs",
+        "input_otp/docs.md",
+        "input_otp/input_otp_demo.rs",
+        "input_otp/mod.rs",
+        "input_otp/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "item",
       "files": [
         "item/component.rs",
@@ -289,6 +433,7 @@
       "name": "kbd",
       "files": [
         "kbd/component.rs",
+        "kbd/docs.md",
         "kbd/kbd_demo.rs",
         "kbd/mod.rs",
         "kbd/style.css"
@@ -306,6 +451,17 @@
       "registryDependencies": []
     },
     {
+      "name": "marquee",
+      "files": [
+        "marquee/component.rs",
+        "marquee/docs.md",
+        "marquee/marquee_demo.rs",
+        "marquee/mod.rs",
+        "marquee/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "menubar",
       "files": [
         "menubar/component.rs",
@@ -313,6 +469,17 @@
         "menubar/menubar_demo.rs",
         "menubar/mod.rs",
         "menubar/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "multi_select",
+      "files": [
+        "multi_select/component.rs",
+        "multi_select/docs.md",
+        "multi_select/mod.rs",
+        "multi_select/multi_select_demo.rs",
+        "multi_select/style.css"
       ],
       "registryDependencies": []
     },
@@ -412,6 +579,17 @@
       "registryDependencies": []
     },
     {
+      "name": "shimmer",
+      "files": [
+        "shimmer/component.rs",
+        "shimmer/docs.md",
+        "shimmer/mod.rs",
+        "shimmer/shimmer_demo.rs",
+        "shimmer/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "sidebar",
       "files": [
         "sidebar/component.rs",
@@ -458,11 +636,36 @@
       "name": "spinner",
       "files": [
         "spinner/component.rs",
+        "spinner/docs.md",
         "spinner/mod.rs",
         "spinner/spinner_demo.rs",
         "spinner/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "status",
+      "files": [
+        "status/component.rs",
+        "status/docs.md",
+        "status/mod.rs",
+        "status/status_demo.rs",
+        "status/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "stepper",
+      "files": [
+        "stepper/component.rs",
+        "stepper/docs.md",
+        "stepper/mod.rs",
+        "stepper/stepper_demo.rs",
+        "stepper/style.css"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "switch",
@@ -478,6 +681,7 @@
       "name": "table",
       "files": [
         "table/component.rs",
+        "table/docs.md",
         "table/mod.rs",
         "table/style.css",
         "table/table_demo.rs"

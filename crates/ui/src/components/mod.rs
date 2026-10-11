@@ -7,10 +7,14 @@ pub mod alert_dialog;
 pub mod aspect_ratio;
 pub mod avatar;
 pub mod badge;
+pub mod bottom_nav;
 pub mod breadcrumb;
 pub mod button;
+pub mod button_group;
 pub mod calendar;
+pub mod callout;
 pub mod card;
+pub mod carousel;
 pub mod chart;
 pub mod checkbox;
 pub mod collapsible;
@@ -18,17 +22,26 @@ pub mod color_picker;
 pub mod combobox;
 pub mod command;
 pub mod context_menu;
+pub mod data_table;
 pub mod date_picker;
 pub mod dialog;
 pub mod drag_and_drop_list;
+pub mod drawer;
 pub mod dropdown_menu;
+pub mod dropzone;
+pub mod empty;
 pub mod field;
+pub mod form;
 pub mod hover_card;
 pub mod input;
+pub mod input_group;
+pub mod input_otp;
 pub mod item;
 pub mod kbd;
 pub mod label;
+pub mod marquee;
 pub mod menubar;
+pub mod multi_select;
 pub mod navbar;
 pub mod pagination;
 pub mod popover;
@@ -38,10 +51,13 @@ pub mod scroll_area;
 pub mod select;
 pub mod separator;
 pub mod sheet;
+pub mod shimmer;
 pub mod sidebar;
 pub mod skeleton;
 pub mod slider;
 pub mod spinner;
+pub mod status;
+pub mod stepper;
 pub mod switch;
 pub mod table;
 pub mod tabs;
@@ -54,12 +70,3 @@ pub mod toggle_group;
 pub mod toolbar;
 pub mod tooltip;
 pub mod virtual_list;
-
-/// A neutral placeholder image (an inline SVG) for avatar demos, so demos never hit the network.
-pub(crate) const DEMO_AVATAR_SRC: &str = concat!(
-    "data:image/svg+xml;utf8,",
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>",
-    "<rect width='64' height='64' fill='%23888'/>",
-    "<circle cx='32' cy='25' r='11' fill='%23fff'/>",
-    "<path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>"
-);

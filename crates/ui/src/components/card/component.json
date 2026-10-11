@@ -1,0 +1,13 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [],
+  "description": "The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "card"
+}

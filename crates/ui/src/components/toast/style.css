@@ -1,7 +1,7 @@
 .dx-toast-container {
   position: fixed;
   z-index: 9999;
-  right: 20px;
+  inset-inline-end: 20px;
   bottom: 20px;
   max-width: 350px;
 }
@@ -50,12 +50,12 @@
 
 .dx-toast-container:not(:hover, :focus-within)
   .dx-toast[data-toast-even]:not([data-top]) {
-  animation: dx-slide-up-even 0.2s ease-out;
+  animation: dx-slide-up-even var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-out);
 }
 
 .dx-toast-container:not(:hover, :focus-within)
   .dx-toast[data-toast-odd]:not([data-top]) {
-  animation: dx-slide-up-odd 0.2s ease-out;
+  animation: dx-slide-up-odd var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-out);
 }
 
 @keyframes dx-slide-up-even {
@@ -95,7 +95,7 @@
 }
 
 .dx-toast[data-top] {
-  animation: dx-toast-slide-in 0.2s ease-out;
+  animation: dx-toast-slide-in var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-out);
 }
 
 .dx-toast-container:hover .dx-toast[data-top],
@@ -125,7 +125,7 @@
 
 .dx-toast-container:hover .dx-toast,
 .dx-toast-container:focus-within .dx-toast {
-  margin-top: var(--toast-padding);
+  margin-top: 0;
   filter: brightness(1);
   opacity: 1;
   transform: scale(calc(100%));
@@ -153,7 +153,7 @@
 
 .dx-toast-content {
   flex: 1;
-  margin-right: 8px;
+  margin-inline-end: 8px;
   transition: filter 0.2s ease;
 }
 

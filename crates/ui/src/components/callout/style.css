@@ -1,0 +1,40 @@
+.dx-callout {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius);
+  background-color: var(--primary-color-3);
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.dx-callout[data-variant="info"] {
+  border-color: var(--focused-border-color);
+  background-color: color-mix(in oklab, var(--focused-border-color) 8%, var(--primary-color));
+}
+
+.dx-callout[data-variant="success"] {
+  border-color: var(--secondary-success-color);
+  background-color: var(--primary-success-color);
+}
+
+.dx-callout[data-variant="warning"] {
+  border-color: var(--secondary-warning-color);
+  background-color: var(--primary-warning-color);
+}
+
+.dx-callout-title {
+  margin: 0 0 0.25rem;
+  color: var(--secondary-color-1);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.dx-callout-body code {
+  padding: 0.0625rem 0.25rem;
+  border-radius: calc(var(--radius) / 2);
+  background-color: var(--primary-color-5);
+  font-size: 0.8125rem;
+}

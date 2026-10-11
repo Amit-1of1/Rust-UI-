@@ -382,7 +382,7 @@ fn NavUser() -> Element {
                                 ImageAvatar {
                                     size: AvatarImageSize::Small,
                                     style: "border-radius:0.5rem;",
-                                    src: crate::components::DEMO_AVATAR_SRC.to_string(),
+                                    src: crate::components::avatar::avatar_demo::DEMO_AVATAR_SRC.to_string(),
                                     alt: "dioxus avatar",
                                     aria_label: "dioxus avatar",
                                     "DX"
@@ -400,7 +400,7 @@ fn NavUser() -> Element {
                             ImageAvatar {
                                 size: AvatarImageSize::Small,
                                 style: "border-radius:0.5rem;",
-                                src: crate::components::DEMO_AVATAR_SRC.to_string(),
+                                src: crate::components::avatar::avatar_demo::DEMO_AVATAR_SRC.to_string(),
                                 alt: "dioxus avatar",
                                 aria_label: "dioxus avatar",
                                 "DX"

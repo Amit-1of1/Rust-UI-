@@ -79,6 +79,18 @@ fn swipe_dismiss_is_keyboard_focusable_and_at_rest() {
 }
 
 #[test]
+fn vertical_swipe_moves_on_the_y_axis_and_leaves_x_scrolling_alone() {
+    fn app() -> Element {
+        rsx! {
+            motion::SwipeDismiss { on_dismiss: |_| {}, vertical: true, one_way: true, "Sheet" }
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("translateY(0px)"), "{html}");
+    assert!(html.contains("touch-action: pan-x"), "{html}");
+}
+
+#[test]
 fn flip_item_wraps_content_without_changing_it() {
     fn app() -> Element {
         rsx! {

@@ -1,0 +1,18 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "label"
+    }
+  ],
+  "description": "The textarea element is used to allow users to enter multi-line text input in a user interface.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "textarea"
+}

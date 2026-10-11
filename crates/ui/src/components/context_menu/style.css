@@ -13,7 +13,7 @@
 }
 
 .dx-context-menu-content[data-state="closed"] {
-  animation: dx-context-menu-animate-out 150ms ease-in forwards;
+  animation: dx-context-menu-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
 }
 
 @keyframes dx-context-menu-animate-out {
@@ -29,7 +29,7 @@
 }
 
 .dx-context-menu-content[data-state="open"] {
-  animation: dx-context-menu-animate-in 150ms ease-out forwards;
+  animation: dx-context-menu-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
 }
 
 @keyframes dx-context-menu-animate-in {

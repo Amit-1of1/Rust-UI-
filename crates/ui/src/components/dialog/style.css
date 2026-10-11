@@ -9,7 +9,7 @@
 }
 
 .dx-dialog-backdrop[data-state="closed"] {
-  animation: dx-dialog-backdrop-animate-out 150ms ease-in forwards;
+  animation: dx-dialog-backdrop-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
   pointer-events: none;
 }
 
@@ -78,14 +78,14 @@
 @media (width >= 40rem) {
   .dx-dialog {
     max-width: 32rem;
-    text-align: left;
+    text-align: start;
   }
 }
 
 .dx-dialog-close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   align-self: flex-start;
   padding: 0;
   border: none;
@@ -99,4 +99,23 @@
 
 .dx-dialog-close:hover {
   color: var(--secondary-color-1);
+}
+
+/* Enter with the kit's snappy spring (motion tokens in theme.css). The fallbacks keep a
+   plain ease-out if the tokens aren't loaded. Reduced motion: theme.css zeroes it. */
+.dx-dialog-backdrop[data-state="open"] .dx-dialog {
+  animation: dx-dialog-content-in var(--spring-snappy-duration, 200ms)
+    var(--spring-snappy, ease-out) both;
+}
+
+@keyframes dx-dialog-content-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }

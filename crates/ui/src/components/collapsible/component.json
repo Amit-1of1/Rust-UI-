@@ -1,0 +1,24 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    },
+    {
+      "name": "dioxus-icons",
+      "version": "0.1.0"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The `Collapsible` component allows users to create expandable sections that can be toggled open or closed. This is useful for displaying content in a compact manner, such as FAQs, menus, or any content that benefits from being hidden until needed.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "collapsible"
+}

@@ -224,3 +224,99 @@ fn theme_customizer_demo_renders() {
     let html = render(ui::components::theme_customizer::theme_customizer_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn callout_demo_renders() {
+    let html = render(ui::components::callout::callout_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn empty_demo_renders() {
+    let html = render(ui::components::empty::empty_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn status_demo_renders() {
+    let html = render(ui::components::status::status_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn shimmer_demo_renders() {
+    let html = render(ui::components::shimmer::shimmer_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn marquee_demo_renders() {
+    let html = render(ui::components::marquee::marquee_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn button_group_demo_renders() {
+    let html = render(ui::components::button_group::button_group_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn stepper_demo_renders() {
+    let html = render(ui::components::stepper::stepper_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn bottom_nav_demo_renders() {
+    let html = render(ui::components::bottom_nav::bottom_nav_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn form_demo_renders() {
+    let html = render(ui::components::form::form_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn data_table_demo_renders() {
+    let html = render(ui::components::data_table::data_table_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn input_otp_demo_renders() {
+    let html = render(ui::components::input_otp::input_otp_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn input_group_demo_renders() {
+    let html = render(ui::components::input_group::input_group_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn carousel_demo_renders() {
+    let html = render(ui::components::carousel::carousel_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn dropzone_demo_renders() {
+    let html = render(ui::components::dropzone::dropzone_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn multi_select_demo_renders() {
+    let html = render(ui::components::multi_select::multi_select_demo::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn drawer_demo_renders() {
+    let html = render(ui::components::drawer::drawer_demo::Demo);
+    assert!(!html.is_empty());
+}

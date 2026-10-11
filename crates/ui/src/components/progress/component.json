@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The Progress component is used to display the progress of a task or operation. It can be used to indicate loading states, file uploads, or any other process that takes time to complete.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "progress"
+}

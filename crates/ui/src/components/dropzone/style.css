@@ -1,0 +1,68 @@
+.dx-dropzone-root {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dx-dropzone {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  min-height: 7rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border: 2px dashed var(--primary-color-7);
+  border-radius: var(--radius);
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.dx-dropzone:hover,
+.dx-dropzone[data-dragging="true"] {
+  border-color: var(--accent-color);
+  background-color: var(--primary-color-5);
+}
+
+.dx-dropzone:has(.dx-dropzone-input:focus-visible) {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-dropzone[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Visually hidden, still focusable and operable by keyboard and assistive tech. */
+.dx-dropzone-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.dx-dropzone-prompt {
+  font-weight: 500;
+}
+
+.dx-dropzone-hint {
+  color: var(--secondary-color-5);
+  font-size: 0.8125rem;
+}
+
+.dx-dropzone-error {
+  margin: 0;
+  color: var(--error-text-color);
+  font-size: 0.875rem;
+}
+
+.dx-dropzone-files {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+}

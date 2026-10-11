@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The Toggle component is used to create a toggle button that can be pressed or unpressed. It is useful for creating a binary option, such as enabling or disabling a feature.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "toggle"
+}

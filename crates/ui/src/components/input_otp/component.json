@@ -1,0 +1,13 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [],
+  "description": "A one-time-code input: one box per character.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "input_otp"
+}

@@ -1,0 +1,13 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [],
+  "description": "A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons. Nothing auto-plays, so there is no motion to pause.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "carousel"
+}

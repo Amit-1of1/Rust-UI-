@@ -23,7 +23,7 @@ pub fn Demo() -> Element {
 .dx-virtual-list-demo .dx-virtual-list-subtitle {{
   margin: 0;
   margin-bottom: 0.75rem;
-  color: var(--primary-color-9);
+  color: var(--secondary-color-5);
   font-size: 0.9rem;
 }}
 
@@ -36,13 +36,13 @@ pub fn Demo() -> Element {
 
 .dx-virtual-list-card h3 {{
   margin: 0 0 0.3rem;
-  color: var(--primary-color-12);
+  color: var(--secondary-color-1);
   font-size: 0.95rem;
 }}
 
 .dx-virtual-list-card p {{
   margin: 0;
-  color: var(--primary-color-11);
+  color: var(--secondary-color-4);
   font-size: 0.875rem;
   line-height: 1.4;
 }}"# }

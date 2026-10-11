@@ -1,0 +1,13 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [],
+  "description": "Pick several options from a list.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "multi_select"
+}

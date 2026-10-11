@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/DioxusLabs/components",
+      "name": "dioxus-primitives",
+      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The HoverCard component can be used to display additional information when a user hovers over an element. It is useful for showing tooltips, additional details, or any other content that should be revealed on hover.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "hover_card"
+}

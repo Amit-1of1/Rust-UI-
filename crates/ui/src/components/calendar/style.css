@@ -49,11 +49,11 @@
 }
 
 .dx-calendar-nav-prev {
-    left: 0.75rem;
+    inset-inline-start: 0.75rem;
 }
 
 .dx-calendar-nav-next {
-    right: 0.75rem;
+    inset-inline-end: 0.75rem;
 }
 
 .dx-calendar-nav-prev:hover,
@@ -161,18 +161,18 @@
 }
 
 .dx-calendar-grid-week td {
-    padding-right: 0;
-    padding-left: 0;
+    padding-inline-end: 0;
+    padding-inline-start: 0;
 }
 
 .dx-calendar-grid-week td:first-child .dx-calendar-grid-cell {
-    border-bottom-left-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
+    border-end-start-radius: 0.5rem;
+    border-start-start-radius: 0.5rem;
 }
 
 .dx-calendar-grid-week td:last-child .dx-calendar-grid-cell {
-    border-bottom-right-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-end-end-radius: 0.5rem;
+    border-start-end-radius: 0.5rem;
 }
 
 .dx-calendar-grid-cell[data-month="last"][data-selection-between="true"],
@@ -193,8 +193,8 @@ td:has(.dx-calendar-grid-cell[data-selection-start="true"]) {
     margin-top: 1px;
     margin-bottom: 1px;
     background-color: var(--primary-color-5);
-    border-bottom-left-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
+    border-end-start-radius: 0.5rem;
+    border-start-start-radius: 0.5rem;
 }
 
 td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
@@ -202,8 +202,8 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
     margin-top: 1px;
     margin-bottom: 1px;
     background-color: var(--primary-color-5);
-    border-bottom-right-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+    border-end-end-radius: 0.5rem;
+    border-start-end-radius: 0.5rem;
 }
 
 .dx-calendar-grid-cell[data-month="current"][data-selected="true"]:hover {

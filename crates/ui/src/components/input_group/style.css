@@ -1,0 +1,59 @@
+.dx-input-group {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  border: 1px solid var(--primary-color-7);
+  border-radius: var(--radius);
+  background-color: var(--primary-color-3);
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+}
+
+.dx-input-group:focus-within {
+  border-color: var(--focused-border-color);
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 1px;
+}
+
+.dx-input-group[data-invalid="true"] {
+  border-color: var(--error-text-color);
+}
+
+.dx-input-group-input {
+  min-width: 0;
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--secondary-color-1);
+  font: inherit;
+  outline: none;
+}
+
+.dx-input-group-input::placeholder {
+  color: var(--secondary-color-5);
+}
+
+.dx-input-group-addon {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  color: var(--secondary-color-5);
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.dx-input-group-addon[data-align="start"] {
+  padding-inline-end: 0;
+}
+
+.dx-input-group-addon[data-align="end"] {
+  padding-inline-start: 0;
+}
+
+.dx-input-group-addon svg {
+  width: 1rem;
+  height: 1rem;
+}

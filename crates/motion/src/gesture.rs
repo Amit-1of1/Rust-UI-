@@ -139,8 +139,11 @@ fn capture_pointer(e: &Event<PointerData>) {
     let _ = e;
 }
 
-/// Drag an element sideways to dismiss it, like a toast. Keyboard users press
-/// Delete, Backspace or Escape while it has focus.
+/// Drag an element sideways (or up and down with `vertical`) to dismiss it, like a toast or a
+/// bottom drawer. Keyboard users press Delete, Backspace or Escape while it has focus.
+///
+/// With `one_way` only the positive direction (right, or down when vertical) can dismiss and the
+/// element does not follow the pointer the other way: right for a bottom drawer you pull down.
 ///
 /// `on_dismiss` is called after the exit animation finishes (or at once under reduced motion).
 #[component]
@@ -149,6 +152,12 @@ pub fn SwipeDismiss(
     /// Width used for the "far enough" test and the exit distance when it can't be measured.
     #[props(default = 320.0)]
     width: f64,
+    /// Drag up and down instead of left and right. `width` then means the height.
+    #[props(default)]
+    vertical: bool,
+    /// Only dismiss toward the right (or down); the other way springs back.
+    #[props(default)]
+    one_way: bool,
     #[props(extends = GlobalAttributes, extends = div)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
@@ -200,12 +209,26 @@ pub fn SwipeDismiss(
     } else {
         from() + (to() - from()) * progress.get_value()
     };
+    let shown = if one_way { shown.max(0.0) } else { shown };
+    let (axis, touch_action) = if vertical {
+        ("Y", "pan-x")
+    } else {
+        ("X", "pan-y")
+    };
+    let coordinate = move |e: &Event<PointerData>| {
+        let point = e.client_coordinates();
+        if vertical {
+            point.y
+        } else {
+            point.x
+        }
+    };
     let opacity = (1.0 - (shown.abs() / (width as f32 * 1.2))).clamp(0.0, 1.0);
 
     rsx! {
         div {
             tabindex: "0",
-            style: "transform: translateX({shown}px); opacity: {opacity}; touch-action: pan-y; cursor: grab;",
+            style: "transform: translate{axis}({shown}px); opacity: {opacity}; touch-action: {touch_action}; cursor: grab;",
             onpointerdown: move |e| {
                 if dismissed() {
                     return;
@@ -214,12 +237,12 @@ pub fn SwipeDismiss(
                 progress.reset();
                 from.set(0.0);
                 to.set(0.0);
-                tracker.set(Some(SwipeTracker::new(e.client_coordinates().x, now_ms())));
+                tracker.set(Some(SwipeTracker::new(coordinate(&e), now_ms())));
                 dragging.set(true);
             },
             onpointermove: move |e| {
                 if let Some(mut t) = tracker() {
-                    t.update(e.client_coordinates().x, now_ms());
+                    t.update(coordinate(&e), now_ms());
                     tracker.set(Some(t));
                 }
             },
@@ -229,6 +252,9 @@ pub fn SwipeDismiss(
                     let now = now_ms();
                     let velocity = t.release_velocity(now);
                     match t.finish(width, now) {
+                        SwipeOutcome::Dismiss(SwipeDirection::Left) if one_way => {
+                            release(start, 0.0, velocity);
+                        }
                         SwipeOutcome::Dismiss(dir) => dismiss(start, dir, velocity),
                         SwipeOutcome::Cancel => release(start, 0.0, velocity),
                     }

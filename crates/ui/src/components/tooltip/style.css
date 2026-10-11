@@ -14,7 +14,7 @@
   max-width: 250px;
   padding: 8px 12px;
   border-radius: var(--radius);
-  animation: dx-tooltip-fade-in 0.2s ease-in-out;
+  animation: dx-tooltip-fade-in var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-in-out);
   background-color: var(--secondary-color-4);
   color: var(--primary-color);
   font-size: 14px;
@@ -25,7 +25,7 @@
   position: absolute;
   border-width: 0.25rem;
   border-style: solid;
-  margin-left: -0.25rem;
+  margin-left: -0.25rem; /* rtl-ok: pairs with left: 50% */
   content: " ";
   rotate: 45deg;
 }
@@ -94,14 +94,14 @@
 /* Alignment styles for top and bottom */
 .dx-tooltip-content[data-side="top"][data-align="start"],
 .dx-tooltip-content[data-side="bottom"][data-align="start"] {
-  left: 0;
+  inset-inline-start: 0;
   transform: none;
 }
 
 .dx-tooltip-content[data-side="top"][data-align="end"],
 .dx-tooltip-content[data-side="bottom"][data-align="end"] {
-  right: 0;
-  left: auto;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
   transform: none;
 }
 
@@ -147,4 +147,105 @@
 
 .dx-tooltip-content[data-state="open"] {
   display: block;
+}
+
+/* Anchor positioning (docs/GUARDRAILS.md): the content stays attached to its trigger and
+   flips to the other side when it would leave the screen. No JavaScript. Browsers without
+   anchor-scope keep the absolute layout above. The @supports is nested inside each rule
+   because css_module does not rename classes inside a top-level @supports. */
+.dx-tooltip {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-scope: --dx-tooltip;
+  }
+}
+
+.dx-tooltip-trigger {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    anchor-name: --dx-tooltip;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: fixed;
+    position-anchor: --dx-tooltip;
+    inset: auto;
+    transform: none;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="top"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="top"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start span-inline-end;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="top"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-start span-inline-start;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="bottom"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end;
+    position-try-fallbacks: flip-block;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="bottom"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end span-inline-end;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="bottom"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: block-end span-inline-start;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="left"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="left"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-bottom;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="left"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: left span-top;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="right"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right;
+    position-try-fallbacks: flip-inline;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="right"][data-align="start"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-bottom;
+  }
+}
+
+.dx-tooltip .dx-tooltip-content[data-side="right"][data-align="end"] {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position-area: right span-top;
+  }
 }
