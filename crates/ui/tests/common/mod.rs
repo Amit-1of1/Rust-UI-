@@ -123,6 +123,10 @@ pub const DEMOS: &[Demo] = &[
     ),
     ("toolbar", ui::components::toolbar::toolbar_demo::Demo),
     (
+        "ui_strings",
+        ui::components::ui_strings::ui_strings_demo::Demo,
+    ),
+    (
         "virtual_list",
         ui::components::virtual_list::virtual_list_demo::Demo,
     ),

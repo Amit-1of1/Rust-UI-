@@ -1,6 +1,7 @@
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::input::Input;
 use crate::components::table::*;
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use std::collections::BTreeSet;
 
@@ -167,13 +168,33 @@ pub fn DataTable(
     } else {
         view.page * page_size + shown
     };
+    let t = use_ui_strings();
+    let total = view.matched.to_string();
     let status = if view.matched == 0 {
-        "No rows match.".to_string()
+        t.no_rows.clone()
     } else if page_size == 0 {
-        format!("{} rows", view.matched)
+        fill(&t.row_count, &[("count", &total)])
     } else {
-        format!("Showing {first}–{last} of {} rows", view.matched)
+        fill(
+            &t.showing_rows,
+            &[
+                ("first", &first.to_string()),
+                ("last", &last.to_string()),
+                ("total", &total),
+            ],
+        )
     };
+    let selected_note = fill(
+        &t.selected_count,
+        &[("count", &selected.read().len().to_string())],
+    );
+    let page_of = fill(
+        &t.page_of,
+        &[
+            ("page", &(view.page + 1).to_string()),
+            ("pages", &view.pages.to_string()),
+        ],
+    );
     let selected_count = selected.read().len();
 
     rsx! {
@@ -182,8 +203,8 @@ pub fn DataTable(
                 div { class: Styles::dx_data_table_toolbar,
                     Input {
                         r#type: "search",
-                        placeholder: "Filter rows",
-                        "aria-label": "Filter rows",
+                        placeholder: t.filter_rows.clone(),
+                        "aria-label": t.filter_rows.clone(),
                         value: "{query()}",
                         oninput: move |e: FormEvent| {
                             query.set(e.value());
@@ -200,7 +221,7 @@ pub fn DataTable(
                             TableHead {
                                 input {
                                     r#type: "checkbox",
-                                    "aria-label": "Select all rows on this page",
+                                    "aria-label": t.select_all_rows.clone(),
                                     checked: all_on_page,
                                     onchange: {
                                         let page_rows = page_rows.clone();
@@ -259,7 +280,7 @@ pub fn DataTable(
                                 TableCell {
                                     input {
                                         r#type: "checkbox",
-                                        "aria-label": "Select {rows[i].first().cloned().unwrap_or_default()}",
+                                        "aria-label": fill(&t.select_row, &[("row", rows[i].first().map(String::as_str).unwrap_or_default())]),
                                         checked: selected.read().contains(&i),
                                         onchange: move |e: FormEvent| {
                                             selected
@@ -290,23 +311,23 @@ pub fn DataTable(
                 p { class: Styles::dx_data_table_status, role: "status",
                     "{status}"
                     if selectable && selected_count > 0 {
-                        " · {selected_count} selected"
+                        " · {selected_note}"
                     }
                 }
                 if page_size != 0 && view.pages > 1 {
-                    nav { "aria-label": "Table pages", class: Styles::dx_data_table_pages,
+                    nav { "aria-label": t.table_pages.clone(), class: Styles::dx_data_table_pages,
                         Button {
                             variant: ButtonVariant::Outline,
                             disabled: view.page == 0,
                             onclick: move |_| page.set(view.page.saturating_sub(1)),
-                            "Previous"
+                            {t.previous.clone()}
                         }
-                        span { "Page {view.page + 1} of {view.pages}" }
+                        span { "{page_of}" }
                         Button {
                             variant: ButtonVariant::Outline,
                             disabled: view.page + 1 >= view.pages,
                             onclick: move |_| page.set(view.page + 1),
-                            "Next"
+                            {t.next.clone()}
                         }
                     }
                 }

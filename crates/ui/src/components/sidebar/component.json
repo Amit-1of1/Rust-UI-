@@ -43,6 +43,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "tooltip"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application.",

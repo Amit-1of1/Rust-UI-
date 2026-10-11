@@ -5,6 +5,7 @@ use crate::components::sheet::{
 };
 use crate::components::skeleton::Skeleton;
 use crate::components::tooltip::{Tooltip, TooltipContent, TooltipTrigger};
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::core::use_drop;
 use dioxus::prelude::*;
 use dioxus_icons::lucide::PanelLeft;
@@ -259,6 +260,7 @@ pub fn Sidebar(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let t = use_ui_strings();
     let ctx = use_sidebar();
     let mut ctx_side = ctx.side;
     if *ctx_side.peek() != side {
@@ -298,8 +300,8 @@ pub fn Sidebar(
                 "data-mobile": "true",
                 SheetContentClose { class: Styles::dx_sidebar_sheet_close }
                 SheetHeader { class: Styles::dx_sr_only,
-                    SheetTitle { "Sidebar" }
-                    SheetDescription { "Displays the mobile sidebar." }
+                    SheetTitle { {t.sidebar.clone()} }
+                    SheetDescription { {t.sidebar_description.clone()} }
                 }
                 div { class: Styles::dx_sidebar_mobile_inner, {children} }
             }
@@ -355,6 +357,7 @@ pub fn SidebarTrigger(
         "data-slot": "sidebar-trigger",
     });
     let merged = merge_attributes(vec![base, attributes]);
+    let toggle = use_ui_strings().toggle_sidebar;
 
     rsx! {
         Button {
@@ -370,7 +373,7 @@ pub fn SidebarTrigger(
                 class: Styles::dx_sidebar_trigger_icon,
                 size: "1rem",
             }
-            span { class: Styles::dx_sr_only, "Toggle Sidebar" }
+            span { class: Styles::dx_sr_only, {toggle} }
         }
     }
 }
@@ -378,6 +381,7 @@ pub fn SidebarTrigger(
 #[component]
 pub fn SidebarRail(#[props(extends = GlobalAttributes)] attributes: Vec<Attribute>) -> Element {
     let ctx = use_sidebar();
+    let toggle = use_ui_strings().toggle_sidebar;
 
     let base = attributes!(button {
         class: Styles::dx_sidebar_rail,
@@ -388,10 +392,10 @@ pub fn SidebarRail(#[props(extends = GlobalAttributes)] attributes: Vec<Attribut
 
     rsx! {
         button {
-            aria_label: "Toggle Sidebar",
+            aria_label: toggle.clone(),
             tabindex: -1,
             onclick: move |_| ctx.toggle(),
-            title: "Toggle Sidebar",
+            title: toggle,
             ..merged,
         }
     }

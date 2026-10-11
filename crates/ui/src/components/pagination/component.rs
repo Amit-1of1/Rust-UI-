@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_icons::lucide::{ChevronLeft, ChevronRight, Ellipsis};
 #[css_module("/src/components/pagination/style.css")]
@@ -141,17 +142,18 @@ pub fn PaginationPrevious(
     #[props(extends = a)]
     attributes: Vec<Attribute>,
 ) -> Element {
+    let t = use_ui_strings();
     rsx! {
         PaginationLink {
             size: PaginationLinkSize::Default,
-            aria_label: "Go to previous page",
+            aria_label: t.go_to_previous_page,
             data_kind: Some(PaginationLinkKind::Previous),
             onclick,
             onmousedown,
             onmouseup,
             attributes,
             ChevronLeft { size: "1rem" }
-            span { class: Styles::dx_pagination_label, "Previous" }
+            span { class: Styles::dx_pagination_label, {t.previous} }
         }
     }
 }
@@ -165,16 +167,17 @@ pub fn PaginationNext(
     #[props(extends = a)]
     attributes: Vec<Attribute>,
 ) -> Element {
+    let t = use_ui_strings();
     rsx! {
         PaginationLink {
             size: PaginationLinkSize::Default,
-            aria_label: "Go to next page",
+            aria_label: t.go_to_next_page,
             data_kind: Some(PaginationLinkKind::Next),
             onclick,
             onmousedown,
             onmouseup,
             attributes,
-            span { class: Styles::dx_pagination_label, "Next" }
+            span { class: Styles::dx_pagination_label, {t.next} }
             ChevronRight { size: "1rem" }
         }
     }

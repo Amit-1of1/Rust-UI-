@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 #[css_module("/src/components/marquee/style.css")]
@@ -11,13 +12,15 @@ pub fn Marquee(
     /// Seconds for one full loop.
     #[props(default = 20)]
     duration: u32,
-    /// Accessible name for the strip.
-    #[props(into, default = "Scrolling content".to_string())]
-    label: String,
+    /// Accessible name for the strip. Defaults to "Scrolling content" ([`UiStrings`](crate::components::ui_strings::UiStrings)).
+    #[props(into)]
+    label: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
     let mut paused = use_signal(|| false);
+    let t = use_ui_strings();
+    let label = label.unwrap_or(t.scrolling_content);
     rsx! {
         div {
             class: Styles::dx_marquee,
@@ -37,8 +40,8 @@ pub fn Marquee(
                 r#type: "button",
                 "aria-pressed": "{paused()}",
                 onclick: move |_| paused.toggle(),
-                if paused() { "Play" } else { "Pause" }
-                span { class: Styles::dx_marquee_sr, " scrolling" }
+                if paused() { {t.play} } else { {t.pause} }
+                span { class: Styles::dx_marquee_sr, {t.scrolling} }
             }
         }
     }

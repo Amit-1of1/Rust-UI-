@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 #[css_module("/src/components/breadcrumb/style.css")]
@@ -8,8 +9,9 @@ pub fn Breadcrumb(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let label = use_ui_strings().breadcrumb;
     rsx! {
-        nav { aria_label: "Breadcrumb", class: Styles::dx_breadcrumb, ..attributes,
+        nav { aria_label: label, class: Styles::dx_breadcrumb, ..attributes,
             ol { class: Styles::dx_breadcrumb_list, {children} }
         }
     }

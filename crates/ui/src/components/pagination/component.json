@@ -5,7 +5,12 @@
       "version": "0.1.0"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
   "description": "The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.",
   "exclude": [
     "docs.md",

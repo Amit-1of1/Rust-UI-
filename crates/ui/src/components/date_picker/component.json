@@ -31,6 +31,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "popover"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.",

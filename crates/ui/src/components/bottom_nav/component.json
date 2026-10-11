@@ -1,6 +1,11 @@
 {
   "cargoDependencies": [],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
   "description": "A mobile-style tab bar of links or buttons.",
   "exclude": [
     "docs.md",

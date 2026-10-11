@@ -1,3 +1,4 @@
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -122,8 +123,8 @@ pub fn InputOtp(
     #[props(default = 6)]
     length: usize,
     /// Accessible name of the whole code, for example "Verification code".
-    #[props(into, default = "One-time code".to_string())]
-    label: String,
+    #[props(into)]
+    label: Option<String>,
     /// Only accept digits (the default). Off accepts letters and digits.
     #[props(default = true)]
     numeric: bool,
@@ -140,6 +141,8 @@ pub fn InputOtp(
     on_complete: Callback<String>,
 ) -> Element {
     let length = length.clamp(1, 12);
+    let t = use_ui_strings();
+    let label = label.unwrap_or_else(|| t.otp_label.clone());
     let base = use_hook(|| {
         static NEXT: AtomicU64 = AtomicU64::new(1);
         format!("dx-otp-{}", NEXT.fetch_add(1, Ordering::Relaxed))
@@ -180,7 +183,7 @@ pub fn InputOtp(
                     r#type: "text",
                     inputmode: if numeric { "numeric" } else { "text" },
                     autocomplete: if i == 0 { "one-time-code" } else { "off" },
-                    "aria-label": "{label}, character {i + 1} of {length}",
+                    "aria-label": fill(&t.otp_character, &[("label", &label), ("n", &(i + 1).to_string()), ("total", &length.to_string())]),
                     "aria-invalid": invalid.then_some("true"),
                     disabled,
                     value: state.read().chars[i].map(String::from).unwrap_or_default(),

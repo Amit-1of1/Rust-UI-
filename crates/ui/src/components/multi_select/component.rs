@@ -1,3 +1,4 @@
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use std::collections::BTreeSet;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -51,7 +52,9 @@ pub fn MultiSelect(
     /// Accessible name, for example "Teams".
     #[props(into)]
     label: String,
-    #[props(into, default = "Select…".to_string())] placeholder: String,
+    /// Shown when nothing is selected. Defaults to "Select…" ([`UiStrings`](crate::components::ui_strings::UiStrings)).
+    #[props(into)]
+    placeholder: Option<String>,
     /// Values selected at first.
     #[props(default)]
     default_selected: Vec<String>,
@@ -64,6 +67,8 @@ pub fn MultiSelect(
         static NEXT: AtomicU64 = AtomicU64::new(1);
         format!("dx-multi-{}", NEXT.fetch_add(1, Ordering::Relaxed))
     });
+    let t = use_ui_strings();
+    let placeholder = placeholder.unwrap_or_else(|| t.select_placeholder.clone());
     let mut open = use_signal(|| false);
     let mut query = use_signal(String::new);
     let mut selected =
@@ -128,12 +133,12 @@ pub fn MultiSelect(
                     id: "{panel_id}",
                     class: Styles::dx_multi_select_panel,
                     role: "group",
-                    "aria-label": "{label} options",
+                    "aria-label": fill(&t.options_named, &[("label", &label)]),
                     input {
                         class: Styles::dx_multi_select_filter,
                         r#type: "search",
-                        "aria-label": "Filter {label}",
-                        placeholder: "Filter",
+                        "aria-label": fill(&t.filter_named, &[("label", &label)]),
+                        placeholder: t.filter.clone(),
                         value: "{query()}",
                         oninput: move |e: FormEvent| query.set(e.value()),
                     }
@@ -174,7 +179,7 @@ pub fn MultiSelect(
                         }
                     }
                     p { class: Styles::dx_multi_select_status, role: "status",
-                        if visible_count == 0 { "No options match." } else { "{ordered.len()} selected" }
+                        if visible_count == 0 { {t.no_options.clone()} } else { {fill(&t.selected_count, &[("count", &ordered.len().to_string())])} }
                     }
                     div { class: Styles::dx_multi_select_footer,
                         button {
@@ -184,13 +189,13 @@ pub fn MultiSelect(
                                 selected.set(BTreeSet::new());
                                 on_change.call(Vec::new());
                             },
-                            "Clear"
+                            {t.clear.clone()}
                         }
                         button {
                             class: Styles::dx_multi_select_action,
                             r#type: "button",
                             onclick: move |_| close.call(()),
-                            "Done"
+                            {t.done.clone()}
                         }
                     }
                 }

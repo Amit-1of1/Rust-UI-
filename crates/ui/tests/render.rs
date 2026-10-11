@@ -351,3 +351,12 @@ fn textarea_autosize_is_opt_in() {
     let grows = render(|| rsx! { Textarea { aria_label: "Notes", autosize: true } });
     assert!(grows.contains("data-autosize=\"true\""), "{grows}");
 }
+
+#[test]
+fn ui_strings_provider_renders_its_children() {
+    let html = render(|| {
+        let strings = use_signal(UiStrings::default);
+        rsx! { UiStringsProvider { strings, "hello" } }
+    });
+    assert!(html.contains("hello"), "{html}");
+}

@@ -12,6 +12,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "kbd"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "A command palette: a search box over a filtered list, inside a dialog. `filter_items` and `step_active` are pure helpers.",

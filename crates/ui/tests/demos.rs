@@ -320,3 +320,9 @@ fn drawer_demo_renders() {
     let html = render(ui::components::drawer::drawer_demo::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn ui_strings_demo_renders() {
+    let html = render(ui::components::ui_strings::ui_strings_demo::Demo);
+    assert!(!html.is_empty());
+}

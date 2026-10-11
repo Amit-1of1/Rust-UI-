@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 use dioxus_icons::lucide::ChevronDown;
@@ -368,10 +369,11 @@ pub(crate) fn DateRangePickerEndValue(props: DateRangePickerEndValueProps) -> El
 
 #[component]
 pub(crate) fn DatePickerPopoverTrigger(props: PopoverTriggerProps) -> Element {
+    let label = use_ui_strings().show_calendar;
     rsx! {
         PopoverTrigger {
             class: Styles::dx_date_picker_popover_trigger,
-            aria_label: "Show Calendar",
+            aria_label: label,
             attributes: props.attributes,
             ChevronDown {
                 class: Styles::dx_date_picker_trigger,

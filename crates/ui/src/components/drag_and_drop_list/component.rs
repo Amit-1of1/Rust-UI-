@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_icons::lucide::{GripVertical, X};
 use dioxus_primitives::drag_and_drop_list::{
@@ -32,10 +33,8 @@ pub struct DragAndDropListProps {
 #[component]
 pub fn DragAndDropList(props: DragAndDropListProps) -> Element {
     let is_removable = props.is_removable;
-    let aria_label = props
-        .aria_label
-        .clone()
-        .unwrap_or_else(|| "Sortable list".to_string());
+    let default_label = use_ui_strings().sortable_list;
+    let aria_label = props.aria_label.clone().unwrap_or(default_label);
     // Keep a stable key per item so Dioxus moves keyed siblings instead of
     // swapping content between list items during reorder.
     let items: Vec<Element> = props

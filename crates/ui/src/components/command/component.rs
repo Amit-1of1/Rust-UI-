@@ -1,4 +1,5 @@
 use crate::components::dialog::{Dialog, DialogDescription, DialogTitle};
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -81,12 +82,16 @@ pub fn CommandDialog(
     on_open_change: EventHandler<bool>,
     items: Vec<CommandItem>,
     on_select: EventHandler<String>,
-    #[props(into, default = "Search commands...".to_string())] placeholder: String,
+    /// Defaults to "Search commands..." ([`UiStrings`](crate::components::ui_strings::UiStrings)).
+    #[props(into)]
+    placeholder: Option<String>,
 ) -> Element {
     static NEXT: AtomicU64 = AtomicU64::new(1);
     let base = use_hook(|| format!("dx-command-{}", NEXT.fetch_add(1, Ordering::Relaxed)));
     let mut query = use_signal(String::new);
     let mut active = use_signal(|| 0usize);
+    let t = use_ui_strings();
+    let placeholder = placeholder.unwrap_or_else(|| t.search_commands_placeholder.clone());
 
     // Start fresh every time the palette opens.
     use_effect(move || {
@@ -126,8 +131,8 @@ pub fn CommandDialog(
 
     rsx! {
         Dialog { open, on_open_change: move |v| on_open_change.call(v),
-            DialogTitle { class: Styles::dx_command_sr_only, "Command palette" }
-            DialogDescription { class: Styles::dx_command_sr_only, "Search for a command and press Enter to run it." }
+            DialogTitle { class: Styles::dx_command_sr_only, {t.command_palette} }
+            DialogDescription { class: Styles::dx_command_sr_only, {t.command_help} }
             div { class: Styles::dx_command,
                 input {
                     class: Styles::dx_command_input,
@@ -137,7 +142,7 @@ pub fn CommandDialog(
                     spellcheck: "false",
                     autofocus: true,
                     placeholder,
-                    aria_label: "Search commands",
+                    aria_label: t.search_commands,
                     aria_expanded: "true",
                     aria_controls: "{base}-list",
                     aria_activedescendant: active_id,
@@ -148,7 +153,7 @@ pub fn CommandDialog(
                     },
                     onkeydown,
                 }
-                ul { class: Styles::dx_command_list, id: "{base}-list", role: "listbox", aria_label: "Commands",
+                ul { class: Styles::dx_command_list, id: "{base}-list", role: "listbox", aria_label: t.commands,
                     for (row, &index) in matches.iter().enumerate() {
                         {
                             let item = &items[index];
@@ -181,7 +186,7 @@ pub fn CommandDialog(
                     }
                 }
                 if count == 0 {
-                    p { class: Styles::dx_command_empty, role: "status", "No results found." }
+                    p { class: Styles::dx_command_empty, role: "status", {t.no_results} }
                 }
             }
         }

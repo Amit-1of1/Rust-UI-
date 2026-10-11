@@ -90,6 +90,7 @@ pub mod prelude {
     pub use crate::components::toggle_group::*;
     pub use crate::components::toolbar::*;
     pub use crate::components::tooltip::*;
+    pub use crate::components::ui_strings::*;
     pub use crate::components::virtual_list::*;
     pub use crate::hooks::use_hotkey;
     // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.

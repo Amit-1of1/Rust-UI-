@@ -1,3 +1,4 @@
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -25,6 +26,8 @@ pub fn Carousel(
         static NEXT: AtomicU64 = AtomicU64::new(1);
         format!("dx-carousel-{}", NEXT.fetch_add(1, Ordering::Relaxed))
     });
+    let t = use_ui_strings();
+    let slides = fill(&t.slides, &[("label", &label)]);
     rsx! {
         section {
             class: Styles::dx_carousel,
@@ -36,7 +39,7 @@ pub fn Carousel(
                 class: Styles::dx_carousel_track,
                 tabindex: "0",
                 role: "group",
-                "aria-label": "{label} slides",
+                "aria-label": "{slides}",
                 {children}
             }
             div { class: Styles::dx_carousel_controls,
@@ -47,13 +50,13 @@ pub fn Carousel(
                         let track = track.clone();
                         move |_| scroll_by(&track, -1)
                     },
-                    "Previous"
+                    {t.previous}
                 }
                 button {
                     class: Styles::dx_carousel_button,
                     r#type: "button",
                     onclick: move |_| scroll_by(&track, 1),
-                    "Next"
+                    {t.next}
                 }
             }
         }

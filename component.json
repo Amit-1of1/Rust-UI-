@@ -69,6 +69,7 @@
     "crates/ui/src/components/toggle_group",
     "crates/ui/src/components/toolbar",
     "crates/ui/src/components/tooltip",
+    "crates/ui/src/components/ui_strings",
     "crates/ui/src/components/virtual_list"
   ],
   "name": "rust-ui"
