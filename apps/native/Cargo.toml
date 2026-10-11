@@ -1,0 +1,12 @@
+[package]
+name = "native"
+version = "0.1.0"
+description = "Renders one kit demo on the native (Blitz) renderer, for the native smoke test"
+publish = false
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus = { workspace = true, features = ["native"] }
+ui.workspace = true
