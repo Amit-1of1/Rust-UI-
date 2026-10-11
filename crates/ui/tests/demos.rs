@@ -407,10 +407,6 @@ fn separator_demo_renders() {
 
 #[test]
 fn toast_demo_renders() {
-    let html = render(|| {
-        rsx! {
-            ui::prelude::ToastProvider { ui::components::toast::toast_demo::Demo {} }
-        }
-    });
+    let html = render(ui::components::toast::toast_demo::Demo);
     assert!(html.contains("<button"));
 }

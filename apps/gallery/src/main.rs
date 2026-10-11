@@ -19,7 +19,7 @@ fn App() -> Element {
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: GALLERY_CSS }
-        ToastProvider {
+        Fragment {
             header { class: "gallery-header",
                 h1 { "Rust UI kit" }
                 Badge { variant: BadgeVariant::Secondary, "week 6" }

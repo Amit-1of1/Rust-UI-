@@ -126,6 +126,24 @@ pub const DEMOS: &[Demo] = &[
         "virtual_list",
         ui::components::virtual_list::virtual_list_demo::Demo,
     ),
+    ("button", ui::components::button::button_demo::Demo),
+    ("badge", ui::components::badge::badge_demo::Demo),
+    ("input", ui::components::input::input_demo::Demo),
+    ("checkbox", ui::components::checkbox::checkbox_demo::Demo),
+    ("switch", ui::components::switch::switch_demo::Demo),
+    ("card", ui::components::card::card_demo::Demo),
+    ("tabs", ui::components::tabs::tabs_demo::Demo),
+    ("accordion", ui::components::accordion::accordion_demo::Demo),
+    ("dialog", ui::components::dialog::dialog_demo::Demo),
+    ("sheet", ui::components::sheet::sheet_demo::Demo),
+    ("popover", ui::components::popover::popover_demo::Demo),
+    (
+        "dropdown_menu",
+        ui::components::dropdown_menu::dropdown_menu_demo::Demo,
+    ),
+    ("tooltip", ui::components::tooltip::tooltip_demo::Demo),
+    ("separator", ui::components::separator::separator_demo::Demo),
+    ("toast", ui::components::toast::toast_demo::Demo),
 ];
 
 /// Fails if a component folder has a `<name>_demo.rs` that [`DEMOS`] does not list.

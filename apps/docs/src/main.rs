@@ -2,6 +2,7 @@
 //! `docs.md`) and the install and theming guides. The page list and the demos come from
 //! `generated.rs`, which `rust-ui registry` writes, so a component can't be left out.
 
+#[rustfmt::skip] // generated, one entry per line
 mod generated;
 
 use dioxus::prelude::*;
@@ -66,7 +67,7 @@ fn App() -> Element {
         ThemeStyles {}
         document::Stylesheet { href: DOCS_CSS }
         a { class: "docs-skip", href: "#page-title", "Skip to content" }
-        ToastProvider {
+        Fragment {
             header { class: "docs-header",
                 a { class: "docs-brand", href: "#", "Rust UI" }
                 span { class: "docs-tagline", "Accessible, animated components for Dioxus" }
