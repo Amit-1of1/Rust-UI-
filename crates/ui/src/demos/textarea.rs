@@ -28,6 +28,19 @@ pub fn Demo() -> Element {
                     oninput: move |e: FormEvent| description.set(e.value()),
                 }
             }
+
+            div {
+                display: "flex",
+                flex_direction: "column",
+                gap: ".5rem",
+
+                Label { html_for: "autosize", "Grows as you type" }
+                Textarea {
+                    id: "autosize",
+                    autosize: true,
+                    placeholder: "Write a few lines",
+                }
+            }
         }
     }
 }

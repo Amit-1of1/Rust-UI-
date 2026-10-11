@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 299dc316afe49557de4b7506501b016d8547a6d80cf6a503136ea9e7aa1289e5 # shrinks to len = 1, slot = 0, digits = "0"
+cc 8368b03e089338f03677fc2b1c9e174936c911270f30b2ec42af460039a21d00 # shrinks to (len, numeric, events) = (1, false, [Input { slot: 0, text: "a" }])

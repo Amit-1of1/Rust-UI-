@@ -257,8 +257,11 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
     for name in &names {
         let folder = dir.join(name);
         let demo = root.join(DEMOS_DIR).join(format!("{name}.rs"));
+        // style.css only for components that load one; a provider (ui_strings) draws nothing.
+        let styled = fs::read_to_string(folder.join("component.rs"))
+            .map_or(true, |src| src.contains("#[css_module("));
         for file in ["component.rs", "style.css", "docs.md"] {
-            if !folder.join(file).exists() {
+            if (file != "style.css" || styled) && !folder.join(file).exists() {
                 add(Level::Error, name, format!("missing {file}"));
             }
         }

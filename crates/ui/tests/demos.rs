@@ -410,3 +410,9 @@ fn toast_demo_renders() {
     let html = render(ui::demos::toast::Demo);
     assert!(html.contains("<button"));
 }
+
+#[test]
+fn ui_strings_demo_renders() {
+    let html = render(ui::demos::ui_strings::Demo);
+    assert!(html.contains("Previous"), "{html}");
+}

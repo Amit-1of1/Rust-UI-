@@ -17,15 +17,19 @@ fn set_root_attr(name: &str, value: &str) {
     let _ = document::eval(&js);
 }
 
-/// Controls for the accent colour, corner radius and light/dark mode of the whole page.
+/// Density presets defined in `theme.css` (`[data-density=...]`). `default` sets nothing.
+pub const DENSITIES: [&str; 3] = ["compact", "default", "comfortable"];
+
+/// Controls for the accent colour, corner radius, density and light/dark mode of the whole page.
 ///
-/// It only sets `data-accent` / `data-theme` and `--radius` on `<html>`, so an app can do the
+/// It only sets `data-accent` / `data-density` / `data-theme` and `--radius` on `<html>`, so an app can do the
 /// same from its own settings screen.
 #[component]
 pub fn ThemeCustomizer() -> Element {
     let mut accent = use_signal(|| "neutral");
     let mut radius = use_signal(|| 8_u32);
     let mut mode = use_signal(|| "system");
+    let mut density = use_signal(|| "default");
     rsx! {
         div { class: Styles::dx_theme_customizer,
             fieldset { class: Styles::dx_theme_group,
@@ -68,6 +72,26 @@ pub fn ThemeCustomizer() -> Element {
                             ));
                         }
                     },
+                }
+            }
+            fieldset { class: Styles::dx_theme_group,
+                legend { "Density" }
+                div { class: Styles::dx_theme_swatches,
+                    for value in DENSITIES {
+                        label { class: Styles::dx_theme_swatch,
+                            input {
+                                r#type: "radio",
+                                name: "theme-density",
+                                value,
+                                checked: density() == value,
+                                onchange: move |_| {
+                                    density.set(value);
+                                    set_root_attr("data-density", if value == "default" { "" } else { value });
+                                },
+                            }
+                            span { "{value}" }
+                        }
+                    }
                 }
             }
             fieldset { class: Styles::dx_theme_group,

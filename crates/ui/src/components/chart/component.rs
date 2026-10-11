@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 #[css_module("/src/components/chart/style.css")]
@@ -140,7 +141,12 @@ pub fn BarChart(
     let count = data.len();
     let slot = (WIDTH - PLOT_LEFT - PLOT_RIGHT) / count.max(1) as f32;
     let bar_width = (slot * 0.6).max(2.0);
-    let summary = describe(&data);
+    let no_data = use_ui_strings().no_data;
+    let summary = if data.is_empty() {
+        no_data
+    } else {
+        describe(&data)
+    };
     rsx! {
         svg {
             class: Styles::dx_chart,
@@ -184,7 +190,12 @@ pub fn LineChart(
         .map(|(x, y)| format!("{x:.1},{y:.1}"))
         .collect::<Vec<_>>()
         .join(" ");
-    let summary = describe(&data);
+    let no_data = use_ui_strings().no_data;
+    let summary = if data.is_empty() {
+        no_data
+    } else {
+        describe(&data)
+    };
     rsx! {
         svg {
             class: Styles::dx_chart,

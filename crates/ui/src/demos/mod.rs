@@ -68,4 +68,5 @@ pub mod toggle;
 pub mod toggle_group;
 pub mod toolbar;
 pub mod tooltip;
+pub mod ui_strings;
 pub mod virtual_list;

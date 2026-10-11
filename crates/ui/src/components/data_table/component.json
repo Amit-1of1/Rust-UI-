@@ -12,6 +12,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "table"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "A table with sorting, a filter box, pagination and optional row selection, built on `Table`.",

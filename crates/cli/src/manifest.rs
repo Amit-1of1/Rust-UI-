@@ -76,6 +76,12 @@ fn cargo_dependencies(source: &str, rev: &str, registry: &str) -> Vec<Value> {
     if uses("tracing") {
         deps.push(json!({"name": "tracing", "version": "0.1"}));
     }
+    if uses("web_sys") {
+        deps.push(json!({"name": "web-sys", "version": "0.3", "features": ["Window", "Document", "Element", "HtmlElement"]}));
+    }
+    if uses("wasm_bindgen") {
+        deps.push(json!({"name": "wasm-bindgen", "version": "0.2"}));
+    }
     if uses("motion") {
         deps.push(json!({"name": "rust-ui-motion", "git": registry}));
     }

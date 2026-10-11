@@ -75,7 +75,9 @@
         "bottom_nav/mod.rs",
         "bottom_nav/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "breadcrumb",
@@ -85,7 +87,9 @@
         "breadcrumb/mod.rs",
         "breadcrumb/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "button",
@@ -145,7 +149,9 @@
         "carousel/mod.rs",
         "carousel/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "chart",
@@ -155,7 +161,9 @@
         "chart/mod.rs",
         "chart/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "checkbox",
@@ -208,7 +216,8 @@
         "command/style.css"
       ],
       "registryDependencies": [
-        "dialog"
+        "dialog",
+        "ui_strings"
       ]
     },
     {
@@ -232,7 +241,8 @@
       "registryDependencies": [
         "button",
         "input",
-        "table"
+        "table",
+        "ui_strings"
       ]
     },
     {
@@ -245,7 +255,8 @@
       ],
       "registryDependencies": [
         "calendar",
-        "popover"
+        "popover",
+        "ui_strings"
       ]
     },
     {
@@ -266,7 +277,9 @@
         "drag_and_drop_list/mod.rs",
         "drag_and_drop_list/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "drawer",
@@ -296,7 +309,9 @@
         "dropzone/mod.rs",
         "dropzone/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "empty",
@@ -369,7 +384,9 @@
         "input_otp/mod.rs",
         "input_otp/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "item",
@@ -411,7 +428,9 @@
         "marquee/mod.rs",
         "marquee/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "menubar",
@@ -431,7 +450,9 @@
         "multi_select/mod.rs",
         "multi_select/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "navbar",
@@ -451,7 +472,9 @@
         "pagination/mod.rs",
         "pagination/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "popover",
@@ -547,7 +570,8 @@
         "separator",
         "sheet",
         "skeleton",
-        "tooltip"
+        "tooltip",
+        "ui_strings"
       ]
     },
     {
@@ -578,7 +602,9 @@
         "spinner/mod.rs",
         "spinner/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "status",
@@ -707,6 +733,15 @@
         "tooltip/docs.md",
         "tooltip/mod.rs",
         "tooltip/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "ui_strings",
+      "files": [
+        "ui_strings/component.rs",
+        "ui_strings/docs.md",
+        "ui_strings/mod.rs"
       ],
       "registryDependencies": []
     },

@@ -108,7 +108,7 @@ fn theme_customizer_offers_labelled_radios_and_a_range() {
     assert!(html.contains("<legend>Accent colour</legend>"), "{html}");
     assert_eq!(
         html.matches("type=\"radio\"").count(),
-        ACCENTS.len() + 3,
+        ACCENTS.len() + DENSITIES.len() + 3,
         "{html}"
     );
     assert!(html.contains("for=\"theme-radius\""), "{html}");
@@ -342,4 +342,21 @@ fn closed_drawer_renders_nothing_visible() {
         }
     });
     assert!(!html.contains("Move goal"), "{html}");
+}
+
+#[test]
+fn textarea_autosize_is_opt_in() {
+    let plain = render(|| rsx! { Textarea { aria_label: "Notes" } });
+    assert!(!plain.contains("data-autosize"), "{plain}");
+    let grows = render(|| rsx! { Textarea { aria_label: "Notes", autosize: true } });
+    assert!(grows.contains("data-autosize=\"true\""), "{grows}");
+}
+
+#[test]
+fn ui_strings_provider_renders_its_children() {
+    let html = render(|| {
+        let strings = use_signal(UiStrings::default);
+        rsx! { UiStringsProvider { strings, "hello" } }
+    });
+    assert!(html.contains("hello"), "{html}");
 }

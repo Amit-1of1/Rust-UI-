@@ -65,6 +65,7 @@ pub const DEMOS: &[Demo] = &[
     ("toggle", ui::demos::toggle::Demo),
     ("toggle_group", ui::demos::toggle_group::Demo),
     ("toolbar", ui::demos::toolbar::Demo),
+    ("ui_strings", ui::demos::ui_strings::Demo),
     ("virtual_list", ui::demos::virtual_list::Demo),
     ("button", ui::demos::button::Demo),
     ("badge", ui::demos::badge::Demo),

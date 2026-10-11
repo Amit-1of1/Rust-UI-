@@ -14,7 +14,7 @@
 }
 
 .dx-menubar-trigger {
-  padding: 8px 12px;
+  padding: calc(8px * var(--density, 1)) 12px;
   border: none;
   border-radius: calc(0.5rem - 0.25rem);
   background: none;
@@ -102,7 +102,7 @@
 
 .dx-menubar-item {
   display: block;
-  padding: 8px 12px;
+  padding: calc(8px * var(--density, 1)) 12px;
   border-radius: calc(0.5rem - 0.25rem);
   cursor: pointer;
   font-size: 14px;

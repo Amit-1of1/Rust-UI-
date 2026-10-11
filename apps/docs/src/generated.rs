@@ -77,6 +77,7 @@ pub const ENTRIES: &[Entry] = &[
     Entry { name: "toggle_group", title: "Toggle group", docs: include_str!("../../../crates/ui/src/components/toggle_group/docs.md"), has_demo: true },
     Entry { name: "toolbar", title: "Toolbar", docs: include_str!("../../../crates/ui/src/components/toolbar/docs.md"), has_demo: true },
     Entry { name: "tooltip", title: "Tooltip", docs: include_str!("../../../crates/ui/src/components/tooltip/docs.md"), has_demo: true },
+    Entry { name: "ui_strings", title: "UiStrings", docs: include_str!("../../../crates/ui/src/components/ui_strings/docs.md"), has_demo: true },
     Entry { name: "virtual_list", title: "Virtual list", docs: include_str!("../../../crates/ui/src/components/virtual_list/docs.md"), has_demo: true },
 ];
 
@@ -149,6 +150,7 @@ pub fn demo(name: &str) -> Element {
         "toggle_group" => rsx! { ui::demos::toggle_group::Demo {} },
         "toolbar" => rsx! { ui::demos::toolbar::Demo {} },
         "tooltip" => rsx! { ui::demos::tooltip::Demo {} },
+        "ui_strings" => rsx! { ui::demos::ui_strings::Demo {} },
         "virtual_list" => rsx! { ui::demos::virtual_list::Demo {} },
         _ => rsx! {},
     }

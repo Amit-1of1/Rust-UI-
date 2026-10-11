@@ -1,3 +1,4 @@
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 #[css_module("/src/components/bottom_nav/style.css")]
@@ -7,10 +8,12 @@ struct Styles;
 /// `label` names the landmark (for example "Main").
 #[component]
 pub fn BottomNav(
-    #[props(into, default = "Main".to_string())] label: String,
+    #[props(into)] label: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let default_label = use_ui_strings().main_navigation;
+    let label = label.unwrap_or(default_label);
     rsx! {
         nav { class: Styles::dx_bottom_nav, "aria-label": "{label}", ..attributes,
             ul { class: Styles::dx_bottom_nav_list, {children} }

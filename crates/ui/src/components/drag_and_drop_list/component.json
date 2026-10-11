@@ -11,7 +11,12 @@
       "version": "0.1.0"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
   "description": "Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input.",
   "exclude": [
     "docs.md",

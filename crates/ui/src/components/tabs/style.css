@@ -23,7 +23,7 @@
 }
 
 .dx-tabs-trigger {
-    padding: 4px 8px;
+    padding: calc(4px * var(--density, 1)) 8px;
     border: none;
     border-radius: calc(0.5rem - 0.25rem);
     background: none;

@@ -46,6 +46,10 @@ pub fn Textarea(
     onpaste: Option<EventHandler<ClipboardEvent>>,
     onmounted: Option<EventHandler<MountedEvent>>,
     #[props(default)] variant: TextareaVariant,
+    /// Grow with the text instead of scrolling, up to `--textarea-max-height` (CSS
+    /// `field-sizing: content`, no JavaScript). Browsers without it keep a fixed height.
+    #[props(default)]
+    autosize: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=textarea)]
     attributes: Vec<Attribute>,
@@ -56,6 +60,7 @@ pub fn Textarea(
             class: Styles::dx_textarea,
             "data-slot": "textarea",
             "data-style": variant.class(),
+            "data-autosize": autosize.then_some("true"),
             oninput: move |e| _ = oninput.map(|callback| callback(e)),
             onchange: move |e| _ = onchange.map(|callback| callback(e)),
             oninvalid: move |e| _ = oninvalid.map(|callback| callback(e)),

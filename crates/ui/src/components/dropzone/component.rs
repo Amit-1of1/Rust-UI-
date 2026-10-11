@@ -1,3 +1,4 @@
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::html::{FileData, HasFileData};
 use dioxus::prelude::*;
 
@@ -49,8 +50,9 @@ pub fn format_size(bytes: u64) -> String {
 #[component]
 pub fn Dropzone(
     /// Visible instructions, for example "Drop files here or browse".
-    #[props(into, default = "Drop files here or click to browse".to_string())]
-    prompt: String,
+    /// Defaults to "Drop files here or click to browse" ([`UiStrings`](crate::components::ui_strings::UiStrings)).
+    #[props(into)]
+    prompt: Option<String>,
     /// Comma-separated: `.png`, `image/*`, `application/pdf`. Empty accepts anything.
     #[props(into, default)]
     accept: String,
@@ -63,6 +65,10 @@ pub fn Dropzone(
     #[props(default)]
     on_files: Callback<Vec<FileData>>,
 ) -> Element {
+    let t = use_ui_strings();
+    let prompt = prompt.unwrap_or_else(|| t.drop_files.clone());
+    let only_one = t.only_one_file.clone();
+    let (not_accepted, too_large) = (t.not_accepted.clone(), t.too_large.clone());
     let mut dragging = use_signal(|| false);
     let mut names = use_signal(Vec::<(String, u64)>::new);
     let mut problem = use_signal(|| None::<String>);
@@ -75,15 +81,18 @@ pub fn Dropzone(
             let (name, size) = (file.name(), file.size());
             let kind = file.content_type().unwrap_or_default();
             if !accepts(&accept_for_handle, &name, &kind) {
-                rejected.push(format!("{name} is not an accepted type"));
+                rejected.push(fill(&not_accepted, &[("name", &name)]));
             } else if max_size > 0 && size > max_size {
-                rejected.push(format!("{name} is larger than {}", format_size(max_size)));
+                rejected.push(fill(
+                    &too_large,
+                    &[("name", &name), ("size", &format_size(max_size))],
+                ));
             } else {
                 ok.push(file);
             }
         }
         if !multiple && ok.len() > 1 {
-            rejected.push("Only one file can be added".to_string());
+            rejected.push(only_one.clone());
             ok.truncate(1);
         }
         problem.set((!rejected.is_empty()).then(|| rejected.join(". ") + "."));
@@ -122,14 +131,14 @@ pub fn Dropzone(
                 }
                 span { class: Styles::dx_dropzone_prompt, "{prompt}" }
                 if !accept.is_empty() {
-                    span { class: Styles::dx_dropzone_hint, "Accepts {accept}" }
+                    span { class: Styles::dx_dropzone_hint, {fill(&t.accepts, &[("types", &accept)])} }
                 }
             }
             if let Some(message) = problem() {
                 p { class: Styles::dx_dropzone_error, role: "alert", "{message}" }
             }
             if !names.read().is_empty() {
-                ul { class: Styles::dx_dropzone_files, "aria-label": "Selected files",
+                ul { class: Styles::dx_dropzone_files, "aria-label": t.selected_files.clone(),
                     for (name , size) in names.read().iter() {
                         li { key: "{name}", "{name} ", span { class: Styles::dx_dropzone_hint, "({format_size(*size)})" } }
                     }

@@ -92,6 +92,7 @@ fn App() -> Element {
                 Section { title: "Dropzone", blurb: "Drop files or browse; type and size are checked, rejections are announced.", ui::demos::dropzone::Demo {} }
                 Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::demos::multi_select::Demo {} }
                 Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::demos::drawer::Demo {} }
+                Section { title: "Translatable strings", blurb: "Words the kit shows on its own come from UiStringsProvider; switch the language.", ui::demos::ui_strings::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",
