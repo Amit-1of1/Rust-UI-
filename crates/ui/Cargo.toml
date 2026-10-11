@@ -25,6 +25,7 @@ wasm-bindgen = "0.2"
 
 [dev-dependencies]
 dioxus-ssr = "0.7.0"
+proptest = { version = "1", default-features = false, features = ["std"] }
 
 [features]
 web = ["dioxus-primitives/web", "motion/web"]
