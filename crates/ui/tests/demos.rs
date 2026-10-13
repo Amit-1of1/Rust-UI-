@@ -190,6 +190,12 @@ fn kbd_demo_renders() {
 }
 
 #[test]
+fn label_demo_renders() {
+    let html = render(ui::demos::label::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
 fn spinner_demo_renders() {
     let html = render(ui::demos::spinner::Demo);
     assert!(!html.is_empty());

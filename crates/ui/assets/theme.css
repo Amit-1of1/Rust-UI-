@@ -67,6 +67,10 @@ html[data-theme="light"] [class~="dxc-system"] {
 
   /* Corner radius shared by controls; set on <html> to square or round everything. */
   --radius: 0.5rem;
+
+  /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
+     mode, where a light scrim barely separates the panel from the page. */
+  --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
   --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
   --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
   --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);

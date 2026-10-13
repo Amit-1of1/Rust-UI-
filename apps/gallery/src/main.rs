@@ -70,6 +70,7 @@ fn App() -> Element {
                 Section { title: "Alert", blurb: "A callout; announced when it appears.", ui::demos::alert::Demo {} }
                 Section { title: "Breadcrumb", blurb: "Where you are in the hierarchy.", ui::demos::breadcrumb::Demo {} }
                 Section { title: "Kbd", blurb: "Keyboard keys.", ui::demos::kbd::Demo {} }
+                Section { title: "Label", blurb: "Click the label to focus its input.", ui::demos::label::Demo {} }
                 Section { title: "Spinner", blurb: "Indeterminate loading.", ui::demos::spinner::Demo {} }
                 Section { title: "Field and validation", blurb: "Label, control, hint and error wired together with aria-describedby.", ui::demos::field::Demo {} }
                 Section { title: "Table", blurb: "Sortable columns announce their direction.", ui::demos::table::Demo {} }
