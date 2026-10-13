@@ -5,6 +5,10 @@ description = "Motion helpers for the Rust UI kit: spring presets, reduced-motio
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["dioxus", "animation", "spring", "motion"]
+categories = ["gui", "wasm"]
 
 [lib]
 name = "motion"
