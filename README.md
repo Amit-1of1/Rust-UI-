@@ -96,9 +96,13 @@ rust-ui diff command --dest src/components  # exit 1 if your copy differs
 
 `scripts/check.sh` runs fmt, clippy `-D warnings`, the tests, the wasm32 builds (gallery and site) and the registry check. `scripts/check.sh --a11y` also builds the gallery and site with `dx`, serves them and runs axe in light and dark (needs `dx` and `npm ci` in `tests/e2e`).
 
-## Gallery online
+## Install in your app
 
-`.github/workflows/pages.yml` builds the gallery and deploys it to GitHub Pages (run it manually from the Actions tab after enabling Pages with the GitHub Actions source). Locally: `dx bundle --platform web --release --base-path Rust-UI-` in `apps/gallery`.
+Copy components with `dx components add` or `rust-ui add`, or depend on `rust-ui-kit` from git. Both are in [docs/INSTALL.md](docs/INSTALL.md). Nothing is on crates.io yet; [docs/PUBLISHING.md](docs/PUBLISHING.md) says why and what each crate needs.
+
+## Docs and gallery online
+
+`.github/workflows/pages.yml` builds the docs site (landing page) and the gallery (under `/gallery/`) and deploys them to GitHub Pages. It is manual and has not run yet; the one-time repo settings it needs are in [docs/PUBLISHING.md](docs/PUBLISHING.md#docs-site-on-github-pages).
 
 ## Native (experimental)
 
