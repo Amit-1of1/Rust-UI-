@@ -1,7 +1,7 @@
 use crate::components::button::{Button, ButtonVariant};
+use crate::components::icons::{BadgeCheck, ChevronRight};
 use crate::components::item::*;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{BadgeCheck, ChevronRight};
 
 #[component]
 pub fn Demo() -> Element {

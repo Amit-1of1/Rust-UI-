@@ -4,6 +4,7 @@ use crate::components::collapsible::{Collapsible, CollapsibleContent, Collapsibl
 use crate::components::dropdown_menu::{
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 };
+use crate::components::icons::{ChevronRight, Circle};
 use crate::components::separator::Separator;
 use crate::components::sidebar::{
     Sidebar, SidebarCollapsible, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel,
@@ -14,7 +15,6 @@ use crate::components::sidebar::{
 };
 use crate::components::skeleton::Skeleton;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{ChevronRight, Circle};
 
 #[css_module("/src/components/sidebar/demo.css")]
 struct DemoStyles;

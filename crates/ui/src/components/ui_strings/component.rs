@@ -88,6 +88,9 @@ pub struct UiStrings {
     pub show_calendar: String,
     // Chart
     pub no_data: String,
+    // Link
+    /// Read after a link that opens in a new tab.
+    pub opens_in_new_tab: String,
 }
 
 impl Default for UiStrings {
@@ -142,6 +145,7 @@ impl Default for UiStrings {
             slides: s("{label} slides"),
             show_calendar: s("Show Calendar"),
             no_data: s("No data."),
+            opens_in_new_tab: s("(opens in a new tab)"),
         }
     }
 }

@@ -1,5 +1,5 @@
+use crate::components::icons::X;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::X;
 use dioxus_primitives::tag_group::{
     self, TagGroupEmptyProps, TagGroupLabelProps, TagGroupMultiProps, TagGroupProps, TagListProps,
 };
@@ -120,7 +120,7 @@ pub fn RemoveButton(
             class: Styles::dx_remove_button,
             attributes,
             {children}
-            X { size: "12px" }
+            X { "aria-hidden": "true", size: "12px" }
         }
     }
 }

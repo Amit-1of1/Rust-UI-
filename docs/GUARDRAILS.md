@@ -66,7 +66,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
 - `navbar` has no demo: its upstream demo needs a router.
-- Ctrl+K opens the command palette through `ui::hooks::use_hotkey`: a web-sys `keydown` listener on `window`, written in Rust (no `eval`, no JS of ours). Web only; keep the visible button, which is the only way in on desktop and native.
+- Ctrl+K opens the command palette through `CommandDialog { hotkey: "k" }` (which calls `ui::hooks::use_hotkey`): a web-sys `keydown` listener on `window`, written in Rust (no `eval`, no JS of ours). Web only; keep the visible button, which is the only way in on desktop and native.
 - Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus.
 - Text colours must pass WCAG AA in both themes. Use `--error-text-color` (not `--secondary-error-color`, which is a fill) for error text. `--secondary-color-5` in light was darkened to #6b6b6b for contrast; upstream's #848484 fails.
 - The registry (`registry.json`) is generated; never hand-edit it. The CLI copies from a local checkout or a git URL (cloned with the `git` command, cached in `~/.cache/rust-ui`).
@@ -95,3 +95,4 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 | 2026-10-10 | Allow Rust event listeners on `window` via web-sys (first use: Ctrl+K). Still no JavaScript of our own. | The user approved it ("Allow" on the decision card, 2026-10-10). The guardrail is about JS; web-sys is Rust and the site already used it. |
 | 2026-10-11 | Fix primitive keyboard gaps in the styled layer, not the primitive: Slider Home/End (own value copy), dropdown Escape returns focus to the trigger (web-sys `focus()`, same rule as the Ctrl+K listener). | tests/e2e/keyboard.mjs found both; primitive markup stays untouched. Worth reporting upstream. |
 | 2026-10-11 | Kit strings come from `UiStringsProvider` (English defaults); `--density` scales control heights. Both are registry items/tokens, so copied components keep working. | Tier 2 ideas 12 and 14. |
+| 2026-10-13 | Icons stay Lucide via `dioxus-icons`, now behind the `icons` registry item; shared hooks are the `hooks` registry item. Neither is in the prelude as a glob (Lucide names clash with components). | Compared with Rust/UI's icon crate in `docs/ICONS.md`. Registry items let `rust-ui add` bring them along with the components that import them. |

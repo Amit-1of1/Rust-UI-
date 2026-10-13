@@ -1,5 +1,5 @@
+use crate::components::icons::BadgeCheck;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::BadgeCheck;
 
 #[css_module("/src/components/badge/style.css")]
 struct Styles;
@@ -66,7 +66,7 @@ fn BadgeElement(props: BadgeProps) -> Element {
 #[component]
 pub fn VerifiedIcon() -> Element {
     rsx! {
-        BadgeCheck {
+        BadgeCheck { "aria-hidden": "true",
             size: "12px",
             stroke: "var(--secondary-color-4)",
         }

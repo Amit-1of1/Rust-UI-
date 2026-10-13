@@ -1,5 +1,5 @@
+use crate::components::icons::X;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::X;
 use dioxus_primitives::dialog::{
     self, DialogCtx, DialogDescriptionProps, DialogRootProps, DialogTitleProps,
 };
@@ -67,7 +67,7 @@ pub fn SheetContentClose(
 
     rsx! {
         SheetClose { attributes,
-            X { size: "20px" }
+            X { "aria-hidden": "true", size: "20px" }
         }
     }
 }

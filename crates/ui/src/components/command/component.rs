@@ -1,4 +1,5 @@
 use crate::components::dialog::{Dialog, DialogDescription, DialogTitle};
+use crate::components::hooks::use_hotkey;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -85,7 +86,15 @@ pub fn CommandDialog(
     /// Defaults to "Search commands..." ([`UiStrings`](crate::components::ui_strings::UiStrings)).
     #[props(into)]
     placeholder: Option<String>,
+    /// Open with Ctrl+`hotkey` (Cmd on macOS) anywhere on the page, e.g. `hotkey: "k"`.
+    /// Web only ([`use_hotkey`]); keep a visible button that opens it too. Read once, on mount.
+    hotkey: Option<&'static str>,
 ) -> Element {
+    use_hotkey(hotkey.unwrap_or_default(), move || {
+        if hotkey.is_some() {
+            on_open_change.call(true);
+        }
+    });
     static NEXT: AtomicU64 = AtomicU64::new(1);
     let base = use_hook(|| format!("dx-command-{}", NEXT.fetch_add(1, Ordering::Relaxed)));
     let mut query = use_signal(String::new);

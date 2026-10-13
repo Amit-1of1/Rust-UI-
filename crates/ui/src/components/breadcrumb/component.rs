@@ -53,6 +53,6 @@ pub fn BreadcrumbPage(
 #[component]
 pub fn BreadcrumbSeparator() -> Element {
     rsx! {
-        li { class: Styles::dx_breadcrumb_separator, role: "presentation", aria_hidden: "true", "/" }
+        li { class: Styles::dx_breadcrumb_separator, role: "presentation", "aria-hidden": "true", "/" }
     }
 }

@@ -1,5 +1,5 @@
+use crate::components::icons::{Check, ChevronsUpDown};
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{Check, ChevronsUpDown};
 use dioxus_primitives::combobox::{
     self, default_combobox_filter, ComboboxEmptyProps, ComboboxOptionProps,
 };
@@ -89,7 +89,7 @@ pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Elem
                     placeholder: props.placeholder,
                     aria_label: props.aria_label.clone(),
                 }
-                ChevronsUpDown {
+                ChevronsUpDown { "aria-hidden": "true",
                     class: Styles::dx_combobox_expand_icon,
                     size: "16px",
                 }
@@ -137,7 +137,7 @@ pub fn ComboboxOption<T: Clone + PartialEq + 'static>(props: ComboboxOptionProps
             attributes: merged,
             {props.children}
             combobox::ComboboxItemIndicator {
-                Check {
+                Check { "aria-hidden": "true",
                     class: Styles::dx_combobox_check_icon,
                     size: "16px",
                 }

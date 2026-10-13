@@ -7,8 +7,6 @@ use dioxus::prelude::*;
 pub fn Demo() -> Element {
     let mut open = use_signal(|| false);
     let mut last = use_signal(|| None::<String>);
-    // Ctrl+K (Cmd+K) anywhere on the page; the button below does the same off the web.
-    crate::hooks::use_hotkey("k", move || open.set(true));
     let items = vec![
         CommandItem::new("new-file", "New file")
             .group("File")
@@ -45,6 +43,8 @@ pub fn Demo() -> Element {
             on_open_change: move |v| open.set(v),
             items,
             on_select: move |id| last.set(Some(id)),
+            // Ctrl+K (Cmd+K) anywhere on the page; the button does the same off the web.
+            hotkey: "k",
         }
     }
 }

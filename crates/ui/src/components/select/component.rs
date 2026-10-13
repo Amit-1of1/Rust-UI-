@@ -1,5 +1,5 @@
+use crate::components::icons::{Check, ChevronDown};
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{Check, ChevronDown};
 use dioxus_primitives::select::{
     self, SelectGroupLabelProps, SelectMultiProps, SelectOptionProps, SelectProps,
 };
@@ -33,7 +33,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
             select::SelectTrigger {
                 class: Styles::dx_select_trigger,
                 select::SelectValue {}
-                ChevronDown {
+                ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",
                     stroke: "var(--primary-color-7)",
@@ -70,7 +70,7 @@ pub fn SelectMulti<T: Clone + PartialEq + 'static>(props: SelectMultiProps<T>) -
             select::SelectTrigger {
                 class: Styles::dx_select_trigger,
                 select::SelectValue {}
-                ChevronDown {
+                ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",
                     stroke: "var(--primary-color-7)",
@@ -119,7 +119,7 @@ pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>)
             attributes: merged,
             {props.children}
             select::SelectItemIndicator {
-                Check {
+                Check { "aria-hidden": "true",
                     size: "1rem",
                     stroke: "var(--secondary-color-5)",
                 }

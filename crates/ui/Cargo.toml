@@ -20,8 +20,9 @@ strum = { version = "0.27.2", features = ["derive"] }
 tracing = "0.1"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget"] }
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget", "MediaQueryList", "Navigator", "Clipboard"] }
 wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
 
 [dev-dependencies]
 dioxus-ssr = "0.7.0"

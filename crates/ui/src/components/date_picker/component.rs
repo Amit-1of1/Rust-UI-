@@ -1,7 +1,7 @@
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
-use dioxus_icons::lucide::ChevronDown;
+use crate::components::icons::ChevronDown;
 use dioxus_primitives::{
     calendar::DateRange,
     date_picker::{
@@ -375,7 +375,7 @@ pub(crate) fn DatePickerPopoverTrigger(props: PopoverTriggerProps) -> Element {
             class: Styles::dx_date_picker_popover_trigger,
             aria_label: label,
             attributes: props.attributes,
-            ChevronDown {
+            ChevronDown { "aria-hidden": "true",
                 class: Styles::dx_date_picker_trigger,
                 size: "20px",
                 stroke: "var(--primary-color-7)",

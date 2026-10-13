@@ -1,5 +1,5 @@
+use crate::components::icons::Check;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::Check;
 use dioxus_primitives::checkbox::{self, CheckboxProps};
 
 #[css_module("/src/components/checkbox/style.css")]
@@ -19,7 +19,7 @@ pub fn Checkbox(props: CheckboxProps) -> Element {
             on_checked_change: props.on_checked_change,
             attributes: props.attributes,
             checkbox::CheckboxIndicator { class: Styles::dx_checkbox_indicator,
-                Check { size: "1rem" }
+                Check { "aria-hidden": "true", size: "1rem" }
             }
         }
     }

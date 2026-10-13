@@ -1,5 +1,5 @@
+use crate::components::icons::ChevronDown;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::ChevronDown;
 use dioxus_primitives::navbar::{
     self, NavbarContentProps, NavbarItemProps, NavbarNavProps, NavbarProps, NavbarTriggerProps,
 };
@@ -37,7 +37,7 @@ pub fn NavbarTrigger(props: NavbarTriggerProps) -> Element {
     rsx! {
         navbar::NavbarTrigger { class: Styles::dx_navbar_trigger, attributes: props.attributes,
             {props.children}
-            ChevronDown {
+            ChevronDown { "aria-hidden": "true",
                 class: Styles::dx_navbar_expand_icon,
                 size: "20px",
                 stroke: "var(--secondary-color-4)",
