@@ -1207,3 +1207,67 @@ fn virtual_list_exposes_list_role_and_total_height() {
     assert!(html.contains("role=\"list\""), "{html}");
     assert!(html.contains("height:2000px"), "{html}");
 }
+
+#[test]
+fn icons_render_as_svg() {
+    use ui::icons::Check;
+    let html = render(|| rsx! { Check { size: 16, "aria-hidden": "true" } });
+    assert!(
+        html.starts_with("<svg") && html.contains("aria-hidden=\"true\""),
+        "{html}"
+    );
+}
+
+#[test]
+fn chips_are_a_named_group_of_checkboxes() {
+    let html = render(|| {
+        rsx! {
+            Chips { label: "Status",
+                Chip { default_checked: true, "Open" }
+                Chip { "Closed" }
+            }
+        }
+    });
+    assert!(
+        html.contains("role=\"group\"") && html.contains("aria-label=\"Status\""),
+        "{html}"
+    );
+    assert_eq!(html.matches("type=\"checkbox\"").count(), 2, "{html}");
+    assert_eq!(html.matches("data-state=\"on\"").count(), 1, "{html}");
+}
+
+#[test]
+fn controlled_chip_follows_checked() {
+    let html = render(|| rsx! { Chip { checked: true, default_checked: false, "On" } });
+    assert!(html.contains("data-state=\"on\""), "{html}");
+}
+
+#[test]
+fn link_is_a_plain_anchor() {
+    let html = render(|| rsx! { TextLink { href: "/docs", "Docs" } });
+    assert!(
+        html.starts_with("<a") && html.contains("href=\"/docs\""),
+        "{html}"
+    );
+    assert!(!html.contains("target="), "{html}");
+}
+
+#[test]
+fn link_external_opens_safely_and_says_so() {
+    let html =
+        render(|| rsx! { TextLink { href: "https://x.test", external: true, current: true, "X" } });
+    assert!(html.contains("target=\"_blank\""), "{html}");
+    assert!(html.contains("rel=\"noopener noreferrer\""), "{html}");
+    assert!(html.contains("opens in a new tab"), "{html}");
+    assert!(html.contains("aria-current=\"page\""), "{html}");
+}
+
+#[test]
+fn hooks_media_query_is_false_off_the_web() {
+    fn app() -> Element {
+        let wide = use_media_query("(min-width: 1px)");
+        let (_, copied) = use_copy_clipboard();
+        rsx! { p { "{wide} {copied}" } }
+    }
+    assert_eq!(render(app), "<p>false false</p>");
+}

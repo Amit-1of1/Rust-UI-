@@ -83,6 +83,10 @@ pub const DEMOS: &[Demo] = &[
     ("tooltip", ui::demos::tooltip::Demo),
     ("separator", ui::demos::separator::Demo),
     ("toast", ui::demos::toast::Demo),
+    ("icons", ui::demos::icons::Demo),
+    ("hooks", ui::demos::hooks::Demo),
+    ("chips", ui::demos::chips::Demo),
+    ("link", ui::demos::link::Demo),
 ];
 
 /// Fails if a component folder has a `<name>_demo.rs` that [`DEMOS`] does not list.

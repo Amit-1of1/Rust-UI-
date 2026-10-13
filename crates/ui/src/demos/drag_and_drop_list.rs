@@ -208,9 +208,9 @@ fn task_item(t: TaskView) -> Element {
                 div { class: "dx-task-title", "{t.title}" }
                 div { class: "dx-task-meta",
                     span { class: "dx-task-code", "{t.code}" }
-                    span { class: "dx-task-sep", aria_hidden: "true" }
+                    span { class: "dx-task-sep", "aria-hidden": "true" }
                     span { "{t.status}" }
-                    span { class: "dx-task-sep", aria_hidden: "true" }
+                    span { class: "dx-task-sep", "aria-hidden": "true" }
                     span {
                         class: "dx-task-due",
                         "data-urgent": "{urgent_attr}",

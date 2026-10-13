@@ -1,0 +1,22 @@
+{
+  "cargoDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
+  "description": "`TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring. `external: true` opens it in a new tab safely and says so; `current: true` marks the page you are on.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "link"
+}

@@ -1,6 +1,8 @@
 # Component and essentials backlog
 
-**Status (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select`, `dropzone` and `drawer` (with a vertical, one-way `SwipeDismiss`) are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Component batches are done; next is the essentials list below and the research ideas (`rust-ui doctor`, then `rust-ui theme --brand`).
+**Status (2026-10-13):** `chips` and `link` (`TextLink`) are built, the icon set is decided (`docs/ICONS.md`) and the shared hooks are a registry item (`hooks`). Batch 1 is complete.
+
+**Earlier (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select`, `dropzone` and `drawer` (with a vertical, one-way `SwipeDismiss`) are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Component batches are done; next is the essentials list below and the research ideas (`rust-ui doctor`, then `rust-ui theme --brand`).
 
 Written 2026-10-10 after checking two upstream repos by cloning them (not by reading the web UI):
 
@@ -21,8 +23,8 @@ We have 52 components. Missing ones, in build order:
 | shimmer | Rust/UI `shimmer.rs` (46) | Reduced motion: static |
 | marquee | Rust/UI `marquee.rs` (60) | Must pause on hover/focus and under reduced motion |
 | button_group | Rust/UI `button_group.rs` (65) | `role="group"` plus label |
-| chips | Rust/UI `chips.rs` (36) | |
-| link | Rust/UI `link.rs` (49) | Check what its web_sys use does first |
+| ~~chips~~ done | Rust/UI `chips.rs` (36) | Focusable checkbox, check mark as well as colour |
+| ~~link~~ done | Rust/UI `link.rs` (49) | `TextLink`; upstream's web_sys use was a `force_reload` button, left out |
 | stepper | Rust/UI `stepper.rs` + `use_stepper` (161) | Use `aria-current="step"` |
 | bottom_nav | Rust/UI `bottom_nav.rs` | |
 
@@ -45,8 +47,8 @@ Skip for now: `input_phone` (546 lines, large data tables), `workflow`, `bubble`
 
 ## Essentials that are not components
 
-1. **Icons.** Pick one set and wrap it (Rust/UI `crates/icons` is MIT and Lucide-based; we already depend on `dioxus-icons`). Decide and document one.
-2. **Hooks** worth borrowing from Rust/UI: `use_media_query`, `use_click_outside`, `use_copy_clipboard`, `use_lock_body_scroll`, `use_is_mobile`, `use_debounce`-style helpers.
+1. ~~**Icons.**~~ Done: Lucide via `dioxus-icons`, wrapped as the `icons` item (`docs/ICONS.md`).
+2. **Hooks**: the `hooks` item ships `use_hotkey`, `Selection`, `use_media_query`, `use_copy_clipboard`. Still to borrow if a component needs them: `use_click_outside`, `use_lock_body_scroll`, a debounce helper.
 3. **Theming guide** (accent, radius, dark mode, brand colour). Tokens exist; the guide does not.
 4. **Docs site**: a page per component from each `docs.md`, with the live demo.
 5. **RTL/direction**: Rust/UI has `direction_provider`; add logical CSS properties and an RTL axe pass.

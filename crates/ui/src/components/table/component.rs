@@ -103,7 +103,7 @@ pub fn TableHead(
                     r#type: "button",
                     onclick: move |_| on_sort.call(()),
                     {children}
-                    span { aria_hidden: "true", class: Styles::dx_table_sort_icon, {sort.arrow()} }
+                    span { "aria-hidden": "true", class: Styles::dx_table_sort_icon, {sort.arrow()} }
                 }
             } else {
                 {children}

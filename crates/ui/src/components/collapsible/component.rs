@@ -1,5 +1,5 @@
+use crate::components::icons::ChevronsUpDown;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::ChevronsUpDown;
 use dioxus_primitives::collapsible::{
     self, CollapsibleContentProps, CollapsibleProps, CollapsibleTriggerProps,
 };
@@ -38,7 +38,7 @@ pub fn CollapsibleTrigger(props: CollapsibleTriggerProps) -> Element {
         collapsible::CollapsibleTrigger { as: props.r#as, attributes: merged,
             {props.children}
             if show_icon {
-                ChevronsUpDown {
+                ChevronsUpDown { "aria-hidden": "true",
                     size: "1rem",
                     stroke: "var(--secondary-color-3)",
                 }

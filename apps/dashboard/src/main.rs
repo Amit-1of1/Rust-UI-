@@ -13,7 +13,7 @@ mod settings;
 
 use data::Customer;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{LayoutDashboard, Receipt, Settings as SettingsIcon, Users};
+use ui::icons::{LayoutDashboard, Receipt, Settings as SettingsIcon, Users};
 use ui::prelude::*;
 
 const DASHBOARD_CSS: Asset = asset!("/assets/dashboard.css");

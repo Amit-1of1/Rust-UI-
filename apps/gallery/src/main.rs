@@ -94,6 +94,10 @@ fn App() -> Element {
                 Section { title: "Multi select", blurb: "Pick several options; native checkboxes with a filter box; Escape returns focus.", ui::demos::multi_select::Demo {} }
                 Section { title: "Drawer", blurb: "Slides up from the bottom; drag the handle down to dismiss, or use Escape.", ui::demos::drawer::Demo {} }
                 Section { title: "Translatable strings", blurb: "Words the kit shows on its own come from UiStringsProvider; switch the language.", ui::demos::ui_strings::Demo {} }
+                Section { title: "Icons", blurb: "Lucide icons through ui::icons. Decorative icons are hidden from screen readers; icon-only buttons carry the name.", ui::demos::icons::Demo {} }
+                Section { title: "Hooks", blurb: "Shared hooks: media queries, copy to clipboard, Ctrl+K and row selection. They install with the components that use them.", ui::demos::hooks::Demo {} }
+                Section { title: "Chips", blurb: "On/off chips for filters: native checkboxes with a check mark, so state never relies on colour.", ui::demos::chips::Demo {} }
+                Section { title: "Link", blurb: "Inline text links. External links open in a new tab and say so; the current page is marked with aria-current.", ui::demos::link::Demo {} }
                 Section {
                     title: "Spring motion",
                     blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

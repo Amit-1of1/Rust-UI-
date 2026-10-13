@@ -4,7 +4,15 @@ All colour, radius and mode live in `theme.css` as CSS custom properties. Compon
 
 ## Mode
 
-Set `data-theme="light"` or `"dark"` on `<html>`. Without it the OS preference applies. Colour tokens use the pattern `var(--dark, X) var(--light, Y)`.
+Set `data-theme="light"` or `"dark"` on `<html>`. Without it the OS preference applies. The attribute only sets `color-scheme`, and every colour token is a `light-dark(light, dark)` pair, so the scheme picks the value:
+
+```css
+--primary-color: light-dark(#fff, #000);
+```
+
+`color-scheme` also gives native scrollbars, form controls and the page canvas the matching scheme.
+
+`light-dark()` needs Chrome 123, Safari 17.5 or Firefox 120. For older engines `theme.css` carries a generated `@supports not (color: light-dark(...))` block that restates the kit's tokens as space toggles (`var(--dark, X) var(--light, Y)`); `cargo test -p rust-ui-kit --test theme` fails when it drifts and `UPDATE_THEME_CSS=1` regenerates it. The `--dark`/`--light` toggles stay defined for values `light-dark()` cannot hold, such as shadows.
 
 ## Accent colour
 
@@ -16,7 +24,7 @@ Set `data-accent` on `<html>` to `blue`, `green`, `violet`, `rose` or `orange`. 
 cargo run -p rust-ui-cli -- theme --brand '#7c3aed' --name brand >> assets/theme.css
 ```
 
-Then set `data-accent="brand"`. The generator keeps your hue and saturation and moves only the lightness, until the label text on the fill reaches 4.5:1 (WCAG AA) in both dark and light mode. A colour that is already readable is kept as is. Check the result against a pasted preset with `cargo test -p rust-ui-kit --test theme`.
+The block uses `light-dark()`. Inside this repo, rerun `UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme` after appending, so the fallback block covers it too. Then set `data-accent="brand"`. The generator keeps your hue and saturation and moves only the lightness, until the label text on the fill reaches 4.5:1 (WCAG AA) in both dark and light mode. A colour that is already readable is kept as is. Check the result against a pasted preset with `cargo test -p rust-ui-kit --test theme`.
 
 ## Radius
 

@@ -264,8 +264,20 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         // style.css only for components that load one; a provider (ui_strings) draws nothing.
         let styled = fs::read_to_string(folder.join("component.rs"))
             .map_or(true, |src| src.contains("#[css_module("));
+        // A folder of several modules (hooks) has its code beside mod.rs instead.
+        let split = fs::read_dir(&folder).is_ok_and(|entries| {
+            entries.filter_map(Result::ok).any(|e| {
+                let f = e.file_name();
+                f != "mod.rs" && f != "component.rs" && f.to_string_lossy().ends_with(".rs")
+            })
+        });
         for file in ["component.rs", "style.css", "docs.md"] {
-            if (file != "style.css" || styled) && !folder.join(file).exists() {
+            let needed = match file {
+                "component.rs" => !split,
+                "style.css" => styled && !split,
+                _ => true,
+            };
+            if needed && !folder.join(file).exists() {
                 add(Level::Error, name, format!("missing {file}"));
             }
         }

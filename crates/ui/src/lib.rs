@@ -5,7 +5,11 @@
 
 pub mod components;
 pub mod demos;
-pub mod hooks;
+
+/// Shared hooks (`use_hotkey`, `Selection`, `use_media_query`, ...): `ui::hooks::*`.
+pub use components::hooks;
+/// The kit's icon set (Lucide): `ui::icons::Check`. Import by path, not with a glob.
+pub use components::icons;
 
 /// Spring presets, presence animations and reduced-motion handling.
 pub use motion;
@@ -41,6 +45,7 @@ pub mod prelude {
     pub use crate::components::carousel::*;
     pub use crate::components::chart::*;
     pub use crate::components::checkbox::*;
+    pub use crate::components::chips::*;
     pub use crate::components::collapsible::*;
     pub use crate::components::color_picker::*;
     pub use crate::components::combobox::*;
@@ -55,6 +60,7 @@ pub mod prelude {
     pub use crate::components::empty::*;
     pub use crate::components::field::*;
     pub use crate::components::form::*;
+    pub use crate::components::hooks::*;
     pub use crate::components::hover_card::*;
     pub use crate::components::input::*;
     pub use crate::components::input_group::*;
@@ -62,6 +68,7 @@ pub mod prelude {
     pub use crate::components::item::*;
     pub use crate::components::kbd::*;
     pub use crate::components::label::*;
+    pub use crate::components::link::*;
     pub use crate::components::marquee::*;
     pub use crate::components::menubar::*;
     pub use crate::components::multi_select::*;
@@ -93,7 +100,6 @@ pub mod prelude {
     pub use crate::components::tooltip::*;
     pub use crate::components::ui_strings::*;
     pub use crate::components::virtual_list::*;
-    pub use crate::hooks::{use_hotkey, use_selected, use_selection, Selection};
     // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.
     pub use crate::ThemeStyles;
     pub use dioxus_primitives::toast::{use_toast, ToastOptions};

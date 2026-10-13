@@ -1,0 +1,37 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget",
+        "Navigator",
+        "Clipboard",
+        "MediaQueryList",
+        "KeyboardEvent"
+      ],
+      "name": "web-sys",
+      "version": "0.3"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2"
+    },
+    {
+      "name": "wasm-bindgen-futures",
+      "version": "0.4"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "Hooks shared by the components and by apps.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "hooks"
+}
