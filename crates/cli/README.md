@@ -3,7 +3,7 @@
 Copy-paste CLI for the [Rust UI kit](https://github.com/Amit-1of1/Rust-UI-): it copies components (and the components they depend on) into your Dioxus project, shadcn style.
 
 ```sh
-cargo install --path crates/cli      # installs `rust-ui`
+cargo install --git https://github.com/Amit-1of1/Rust-UI- rust-ui-cli   # installs `rust-ui`
 rust-ui --source https://github.com/Amit-1of1/Rust-UI- list
 rust-ui --source https://github.com/Amit-1of1/Rust-UI- init --dest assets/theme.css
 rust-ui --source https://github.com/Amit-1of1/Rust-UI- add command --dest src/components

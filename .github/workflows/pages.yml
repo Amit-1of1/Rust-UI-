@@ -2,6 +2,8 @@ name: Docs and gallery on GitHub Pages
 
 # Manual on purpose: it needs Pages enabled (Settings > Pages > Source: GitHub Actions)
 # and installs dx from source, which is slow. Run it from the Actions tab.
+# One-time repo setup and a local reproduction: docs/PUBLISHING.md.
+# The base paths below must match the repo name (https://<owner>.github.io/<repo>/).
 on:
   workflow_dispatch:
 
