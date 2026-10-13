@@ -1,5 +1,4 @@
 use crate::components::icons::Check;
-use crate::components::icons::Check;
 use dioxus::prelude::*;
 /// Re-exported so apps can read and set the checked state without depending on
 /// dioxus-primitives themselves.
