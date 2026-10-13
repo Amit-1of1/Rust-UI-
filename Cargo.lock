@@ -1800,6 +1800,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "dashboard"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "dioxus-icons",
+ "rust-ui-kit",
+ "time",
+ "web-sys",
+]
+
+[[package]]
 name = "data-encoding"
 version = "2.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

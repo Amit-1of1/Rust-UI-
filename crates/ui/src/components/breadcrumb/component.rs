@@ -30,11 +30,24 @@ pub fn BreadcrumbItem(
 #[component]
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
+    /// For in-app navigation without a router: call `prevent_default()` and switch the view.
+    #[props(default)]
+    onclick: Option<EventHandler<MouseEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
     rsx! {
-        a { class: Styles::dx_breadcrumb_link, href, ..attributes, {children} }
+        a {
+            class: Styles::dx_breadcrumb_link,
+            href,
+            onclick: move |e| {
+                if let Some(f) = &onclick {
+                    f.call(e);
+                }
+            },
+            ..attributes,
+            {children}
+        }
     }
 }
 

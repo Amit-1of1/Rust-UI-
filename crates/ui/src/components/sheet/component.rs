@@ -1,4 +1,5 @@
 use crate::components::icons::X;
+use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{
     self, DialogCtx, DialogDescriptionProps, DialogRootProps, DialogTitleProps,
@@ -60,14 +61,17 @@ pub fn Sheet(props: DialogRootProps) -> Element {
 pub fn SheetContentClose(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element {
+    // Icon-only, so it needs a name of its own.
+    let close = use_ui_strings().close;
     let base = attributes!(button {
         class: Styles::dx_sheet_close,
+        aria_label: close,
     });
     let attributes = merge_attributes(vec![base, attributes]);
 
     rsx! {
         SheetClose { attributes,
-            X { "aria-hidden": "true", size: "20px" }
+            X { size: "20px", "aria-hidden": "true" }
         }
     }
 }

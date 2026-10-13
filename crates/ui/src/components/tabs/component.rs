@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
 use dioxus_primitives::tabs::{self, TabContentProps, TabListProps, TabTriggerProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[css_module("/src/components/tabs/style.css")]
 struct Styles;
@@ -67,8 +68,29 @@ impl TabsVariant {
     }
 }
 
+/// Links each panel to its tab. The primitive gives a tab `aria-controls` but leaves the
+/// panel unnamed, so every trigger gets an id from its index and the panel at the same
+/// index points `aria-labelledby` at it. A `TabTrigger` with its own `id` needs the
+/// matching `TabContent` to set `aria_labelledby` to that id.
+#[derive(Clone)]
+struct TabIds(String);
+
+impl TabIds {
+    fn trigger(&self, index: usize) -> String {
+        format!("{}-tab-{index}", self.0)
+    }
+}
+
 #[component]
 pub fn Tabs(props: TabsProps) -> Element {
+    static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
+    use_context_provider(|| {
+        TabIds(format!(
+            "rui-tabs-{}",
+            NEXT_ID.fetch_add(1, Ordering::Relaxed)
+        ))
+    });
+
     let base = attributes!(div {
         class: format!("{} {}", props.class, Styles::dx_tabs),
         "data-variant": props.variant.to_class(),
@@ -115,7 +137,7 @@ pub fn TabTrigger(props: TabTriggerProps) -> Element {
     rsx! {
         tabs::TabTrigger {
             class: None,
-            id: props.id,
+            id: props.id.or_else(|| try_use_context::<TabIds>().map(|ids| ids.trigger((props.index)()))),
             value: props.value,
             index: props.index,
             disabled: props.disabled,
@@ -133,7 +155,8 @@ pub fn TabContent(props: TabContentProps) -> Element {
             props.class.unwrap_or_default(),
             Styles::dx_tabs_content,
             Styles::dx_tabs_content_themed
-        )
+        ),
+        aria_labelledby: try_use_context::<TabIds>().map(|ids| ids.trigger((props.index)())),
     });
     let merged = merge_attributes(vec![base, props.attributes]);
 

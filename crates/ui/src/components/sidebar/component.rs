@@ -641,10 +641,18 @@ pub fn SidebarMenuButton(
     #[props(default)] size: SidebarMenuButtonSize,
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     #[props(default)] tooltip: Option<Element>,
+    /// Click handler for the default `<button>` (ignored when `as` renders something else).
+    #[props(default)]
+    onclick: Option<EventHandler<MouseEvent>>,
     r#as: Option<Callback<Vec<Attribute>, Element>>,
     children: Element,
 ) -> Element {
     let ctx = use_sidebar();
+    let click = move |e: MouseEvent| {
+        if let Some(f) = &onclick {
+            f.call(e);
+        }
+    };
     let is_mobile = ctx.is_mobile;
     let state = ctx.state;
 
@@ -655,6 +663,8 @@ pub fn SidebarMenuButton(
         "data-size": size.as_str(),
         "data-variant": variant.as_str(),
         "data-active": if is_active { "true" } else { "false" },
+        // The active item is the current page for assistive tech, not just a style.
+        aria_current: is_active.then_some("page"),
     });
     let merged = merge_attributes(vec![base, attributes]);
 
@@ -662,7 +672,7 @@ pub fn SidebarMenuButton(
         return if let Some(dynamic) = r#as {
             dynamic.call(merged)
         } else {
-            rsx! { button { ..merged, {children} } }
+            rsx! { button { onclick: click, ..merged, {children} } }
         };
     };
 
@@ -680,7 +690,7 @@ pub fn SidebarMenuButton(
                     if let Some(dynamic) = &r#as {
                         dynamic.call(final_attrs)
                     } else {
-                        rsx! { button { ..final_attrs, {children} } }
+                        rsx! { button { onclick: click, ..final_attrs, {children} } }
                     }
                 },
             }

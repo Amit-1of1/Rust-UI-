@@ -70,6 +70,10 @@ Original to this repo (not copied, accessible by construction): alert, breadcrum
 
 `apps/site` ("Orbit") is a small landing page built only from the kit: nav, theme switch, pricing tabs, chart, table, FAQ accordion, command palette, a validated signup form with toast and dialog, a swipe-dismiss banner and an animated waitlist. It is a real-world test of the kit; run it with `dx serve --platform web` in `apps/site`.
 
+## Admin dashboard
+
+`apps/dashboard` ("Acme Admin") is the second real app on the kit: sidebar layout, KPI cards, charts, a customers table with badges and row menus, edit sheet, add and delete dialogs, an orders `DataTable` with date-range and status filters, a settings form and a Ctrl+K palette. What it found missing is in [`apps/dashboard/GAPS.md`](apps/dashboard/GAPS.md). Run it with `dx serve --platform web` in `apps/dashboard`; `tests/e2e/dashboard.mjs` (part of `scripts/check.sh --a11y`) runs axe on every page and overlay and drives the main flows.
+
 ## Registry and CLI
 
 `registry.json` lists every component with its files and the other components it needs. It is generated from the folders (`cargo run -p rust-ui-cli -- registry`), and a test fails if it goes stale.
@@ -92,9 +96,13 @@ rust-ui diff command --dest src/components  # exit 1 if your copy differs
 
 `scripts/check.sh` runs fmt, clippy `-D warnings`, the tests, the wasm32 builds (gallery and site) and the registry check. `scripts/check.sh --a11y` also builds the gallery and site with `dx`, serves them and runs axe in light and dark (needs `dx` and `npm ci` in `tests/e2e`).
 
-## Gallery online
+## Install in your app
 
-`.github/workflows/pages.yml` builds the gallery and deploys it to GitHub Pages (run it manually from the Actions tab after enabling Pages with the GitHub Actions source). Locally: `dx bundle --platform web --release --base-path Rust-UI-` in `apps/gallery`.
+Copy components with `dx components add` or `rust-ui add`, or depend on `rust-ui-kit` from git. Both are in [docs/INSTALL.md](docs/INSTALL.md). Nothing is on crates.io yet; [docs/PUBLISHING.md](docs/PUBLISHING.md) says why and what each crate needs.
+
+## Docs and gallery online
+
+`.github/workflows/pages.yml` builds the docs site (landing page) and the gallery (under `/gallery/`) and deploys them to GitHub Pages. It is manual and has not run yet; the one-time repo settings it needs are in [docs/PUBLISHING.md](docs/PUBLISHING.md#docs-site-on-github-pages).
 
 ## Native (experimental)
 

@@ -21,6 +21,8 @@ pub struct UiStrings {
     pub next: String,
     pub loading: String,
     pub filter: String,
+    /// Name of icon-only close buttons (sheet).
+    pub close: String,
     // Pagination
     pub go_to_previous_page: String,
     pub go_to_next_page: String,
@@ -118,6 +120,7 @@ impl Default for UiStrings {
             selected_count: s("{count} selected"),
             clear: s("Clear"),
             done: s("Done"),
+            close: s("Close"),
             command_palette: s("Command palette"),
             command_help: s("Search for a command and press Enter to run it."),
             search_commands: s("Search commands"),

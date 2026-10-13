@@ -5,6 +5,13 @@ description = "Personal shadcn-inspired component kit for Dioxus"
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["dioxus", "ui", "components", "shadcn"]
+categories = ["gui", "wasm"]
+# crates.io rejects git dependencies, and dioxus-primitives is git-only (crates.io holds an
+# empty 0.0.0 placeholder). Install from git or copy components instead; docs/PUBLISHING.md.
+publish = false
 
 [lib]
 name = "ui"

@@ -1,11 +1,12 @@
 [workspace]
 resolver = "3"
-members = ["crates/ui", "crates/motion", "crates/cli", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/native"]
+members = ["crates/ui", "crates/motion", "crates/cli", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/native"]
 
 [workspace.package]
 edition = "2021"
 license = "MIT OR Apache-2.0"
 rust-version = "1.88"
+repository = "https://github.com/Amit-1of1/Rust-UI-"
 
 [workspace.dependencies]
 # Pinned to a minor version on purpose; see docs/GUARDRAILS.md.
@@ -13,8 +14,9 @@ dioxus = "0.7.10"
 # Git-only upstream, pinned to an exact commit (DioxusLabs/components, 2026-09-07).
 dioxus-primitives = { git = "https://github.com/DioxusLabs/components", rev = "9a758255ea26e2b20c8cecf4c1c946feb9e71da7" }
 dioxus-icons = "0.1.0"
-ui = { path = "crates/ui", package = "rust-ui-kit" }
-motion = { path = "crates/motion", package = "rust-ui-motion" }
+# `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
+ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
+motion = { path = "crates/motion", package = "rust-ui-motion", version = "0.1.0" }
 
 [profile.release]
 opt-level = "z"

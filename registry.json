@@ -611,7 +611,8 @@
         "sheet/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "icons",
+        "ui_strings"
       ]
     },
     {

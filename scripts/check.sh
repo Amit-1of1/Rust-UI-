@@ -20,7 +20,7 @@ step() { printf '\n== %s\n' "$*"; }
 step "fmt";     cargo fmt --all --check
 step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
 step "tests";   cargo test --workspace
-step "wasm32";  cargo build -p gallery -p site -p docs --target wasm32-unknown-unknown
+step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 
@@ -90,6 +90,16 @@ if [ "$A11Y" = 1 ]; then
       done
     fi
   done
+
+  # apps/dashboard: a real app on the kit. Its script runs axe (light + dark) on every page and
+  # overlay, plus the add / edit / delete / filter / Ctrl+K flows.
+  step "build dashboard"
+  (cd apps/dashboard && dx build --platform web)
+  python3 -m http.server 8771 --directory target/dx/dashboard/debug/web/public >/dev/null 2>&1 &
+  PIDS+=("$!")
+  sleep 1
+  step "dashboard: axe on every page + flows"
+  (cd tests/e2e && GALLERY_URL="http://localhost:8771/" node dashboard.mjs)
 fi
 
 printf '\nAll checks passed.\n'

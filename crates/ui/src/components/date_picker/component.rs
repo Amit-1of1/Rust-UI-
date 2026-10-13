@@ -2,8 +2,10 @@ use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 
 use crate::components::icons::ChevronDown;
+/// Re-exported so apps can name the picker's value types without depending on
+/// dioxus-primitives or `time` themselves.
+pub use dioxus_primitives::calendar::DateRange;
 use dioxus_primitives::{
-    calendar::DateRange,
     date_picker::{
         self, DatePickerDaySegmentProps, DatePickerInputProps, DatePickerMonthSegmentProps,
         DatePickerSeparatorProps, DatePickerYearSegmentProps, DateRangePickerEndValueProps,
@@ -14,7 +16,7 @@ use dioxus_primitives::{
     popover::{PopoverContentProps, PopoverTriggerProps},
     ContentAlign,
 };
-use time::{Date, Month};
+pub use time::{Date, Month};
 
 use super::super::calendar::*;
 use super::super::popover::*;
