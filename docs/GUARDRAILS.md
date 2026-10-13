@@ -83,6 +83,10 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `rust-ui doctor` fails on `var(--x)` without a fallback when nothing defines `--x` (variables set inline by dioxus-primitives are listed in `PRIMITIVE_VARS`).
 - `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
 
+- Passing `class` to most kit components *replaces* the kit's class (two `class` attributes; the DOM keeps the last). `Button`, `Separator` and `Card` merge. Until the sweep lands (apps/dashboard/GAPS.md, gap 10), put app classes on a wrapper.
+- `AlertDialogAction` closes the dialog before it calls `on_click`; keep "what to act on" in its own signal, not in the open flag.
+- Calling `FormField::set` from an effect is fine (it reads with `peek`); keep new `FormField` methods non-reactive for the same reason.
+
 ## Decision log
 
 | Date | Decision | Why |

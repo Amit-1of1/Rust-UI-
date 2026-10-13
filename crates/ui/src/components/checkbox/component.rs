@@ -1,5 +1,8 @@
 use dioxus::prelude::*;
 use dioxus_icons::lucide::Check;
+/// Re-exported so apps can read and set the checked state without depending on
+/// dioxus-primitives themselves.
+pub use dioxus_primitives::checkbox::CheckboxState;
 use dioxus_primitives::checkbox::{self, CheckboxProps};
 
 #[css_module("/src/components/checkbox/style.css")]
