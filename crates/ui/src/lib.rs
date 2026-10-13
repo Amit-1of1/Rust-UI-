@@ -4,6 +4,7 @@
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
 
 pub mod components;
+pub mod css_bundle;
 pub mod demos;
 pub mod hooks;
 
@@ -16,8 +17,11 @@ use dioxus::prelude::*;
 pub const THEME_CSS: Asset = asset!("/assets/theme.css");
 
 /// Loads the theme stylesheet. Render once near the root of the app.
+///
+/// It also switches to the single bundled stylesheet when the page has one (see [`css_bundle`]).
 #[component]
 pub fn ThemeStyles() -> Element {
+    use_hook(css_bundle::install);
     rsx! {
         document::Stylesheet { href: THEME_CSS }
     }
