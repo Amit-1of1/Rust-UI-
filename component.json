@@ -43,6 +43,7 @@
     "crates/ui/src/components/menubar",
     "crates/ui/src/components/multi_select",
     "crates/ui/src/components/navbar",
+    "crates/ui/src/components/overlay",
     "crates/ui/src/components/pagination",
     "crates/ui/src/components/popover",
     "crates/ui/src/components/progress",

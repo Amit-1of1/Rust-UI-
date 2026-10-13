@@ -416,3 +416,9 @@ fn active_sidebar_item_is_the_current_page() {
     });
     assert_eq!(html.matches("aria-current=\"page\"").count(), 1, "{html}");
 }
+
+#[test]
+fn modal_portal_renders_its_children_in_place_off_native() {
+    let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
+    assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
+}

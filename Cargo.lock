@@ -5040,7 +5040,15 @@ dependencies = [
 name = "native"
 version = "0.1.0"
 dependencies = [
+ "anyrender",
+ "anyrender_vello_cpu",
+ "blitz-dom",
+ "blitz-paint",
+ "blitz-traits",
  "dioxus",
+ "dioxus-native-dom",
+ "image",
+ "manganis-core",
  "rust-ui-kit",
 ]
 

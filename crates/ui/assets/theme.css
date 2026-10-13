@@ -2,12 +2,14 @@
  * need to import this file once in your project root.
  */
 
-html[data-theme="dark"] {
+html[data-theme="dark"],
+[data-theme="dark"] {
   --dark: initial;
   --light: ;
 }
 
-html[data-theme="light"] {
+html[data-theme="light"],
+[data-theme="light"] {
   --dark: ;
   --light: initial;
 }
@@ -36,7 +38,11 @@ html[data-theme="light"] [class~="dxc-system"] {
   }
 }
 
-:root {
+/* The tokens are re-declared on any element with data-theme, so a subtree can switch theme
+   on its own (the native renderer has no <html> to put it on, and a preview pane may want
+   the other theme). */
+:root,
+[data-theme] {
   /* Primary colors */
   --primary-color: var(--dark, #000) var(--light, #fff);
   --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);

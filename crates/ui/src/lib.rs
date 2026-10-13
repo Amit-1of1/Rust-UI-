@@ -16,10 +16,14 @@ use dioxus::prelude::*;
 pub const THEME_CSS: Asset = asset!("/assets/theme.css");
 
 /// Loads the theme stylesheet. Render once near the root of the app.
+///
+/// With the `native` feature it also renders the [`components::overlay::OverlayLayer`]
+/// that modals move into, so put it at the root, before the rest of the app.
 #[component]
 pub fn ThemeStyles() -> Element {
     rsx! {
         document::Stylesheet { href: THEME_CSS }
+        components::overlay::OverlayLayer {}
     }
 }
 
@@ -66,6 +70,7 @@ pub mod prelude {
     pub use crate::components::menubar::*;
     pub use crate::components::multi_select::*;
     pub use crate::components::navbar::*;
+    pub use crate::components::overlay::*;
     pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
     pub use crate::components::progress::*;

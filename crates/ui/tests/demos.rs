@@ -416,3 +416,9 @@ fn ui_strings_demo_renders() {
     let html = render(ui::demos::ui_strings::Demo);
     assert!(html.contains("Previous"), "{html}");
 }
+
+#[test]
+fn overlay_demo_renders() {
+    let html = render(ui::demos::overlay::Demo);
+    assert!(html.contains("Show banner"), "{html}");
+}

@@ -27,3 +27,12 @@
 .dx-checkbox:focus-visible {
     box-shadow: 0 0 0 2px var(--focused-border-color);
 }
+
+/* The primitive's hidden form input follows the button and hides itself with opacity,
+   `pointer-events: none` and a percentage `translate`. The native renderer (Blitz) supports
+   neither of the last two, so the input sat on top of the button and took the click. A zero
+   size keeps it out of the way everywhere; the web never showed it anyway. */
+.dx-checkbox + input[type="checkbox"][aria-hidden="true"] {
+    width: 0;
+    height: 0;
+}

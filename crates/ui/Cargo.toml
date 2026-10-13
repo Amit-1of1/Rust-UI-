@@ -37,3 +37,5 @@ proptest = { version = "1", default-features = false, features = ["std"] }
 [features]
 web = ["dioxus-primitives/web", "motion/web"]
 desktop = ["motion/desktop"]
+# dioxus-native (Blitz): modals move into a window-sized layer; see components/overlay.
+native = []

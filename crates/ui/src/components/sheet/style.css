@@ -14,6 +14,7 @@
 }
 
 .dx-sheet-root[data-state="open"] {
+  opacity: 1;
   animation: dx-sheet-root-in var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
 }
 

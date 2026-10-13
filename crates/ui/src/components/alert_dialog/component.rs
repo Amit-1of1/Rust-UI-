@@ -1,3 +1,4 @@
+use crate::components::overlay::ModalPortal;
 use dioxus::prelude::*;
 use dioxus_primitives::alert_dialog::{
     self, AlertDialogActionProps, AlertDialogActionsProps, AlertDialogCancelProps,
@@ -10,16 +11,18 @@ struct Styles;
 #[component]
 pub fn AlertDialog(props: AlertDialogRootProps) -> Element {
     rsx! {
-        alert_dialog::AlertDialogRoot {
-            class: Styles::dx_alert_dialog_backdrop,
-            id: props.id,
-            default_open: props.default_open,
-            open: props.open,
-            on_open_change: props.on_open_change,
-            attributes: props.attributes,
-            alert_dialog::AlertDialogContent {
-                class: Styles::dx_alert_dialog.to_string(),
-                {props.children}
+        ModalPortal {
+            alert_dialog::AlertDialogRoot {
+                class: Styles::dx_alert_dialog_backdrop,
+                id: props.id,
+                default_open: props.default_open,
+                open: props.open,
+                on_open_change: props.on_open_change,
+                attributes: props.attributes,
+                alert_dialog::AlertDialogContent {
+                    class: Styles::dx_alert_dialog.to_string(),
+                    {props.children}
+                }
             }
         }
     }
