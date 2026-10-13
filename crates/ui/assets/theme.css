@@ -48,6 +48,10 @@ html[data-theme="dark"] {
 
   /* Corner radius shared by controls; set on <html> to square or round everything. */
   --radius: 0.5rem;
+
+  /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
+     mode, where a light scrim barely separates the panel from the page. */
+  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
   --primary-success-color: light-dark(#ecfdf5, #02271c);
   --secondary-success-color: light-dark(#10b981, #b6fae3);
   --primary-warning-color: light-dark(#fffbeb, #342203);
@@ -137,6 +141,7 @@ html[data-theme="light"] {
     --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
     --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
     --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
+    --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
     --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
     --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
     --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);

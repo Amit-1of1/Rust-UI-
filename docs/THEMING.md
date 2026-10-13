@@ -30,6 +30,10 @@ The block uses `light-dark()`. Inside this repo, rerun `UPDATE_THEME_CSS=1 cargo
 
 `--radius` (default `0.5rem`) rounds every component. The `ThemeCustomizer` component exposes accent, radius and mode as controls.
 
+## Overlay
+
+`--overlay-color` is the scrim behind modal overlays (dialog, alert dialog, sheet, drawer): black at 40% in light mode and 60% in dark mode.
+
 ## Not supported
 
 Colours are not defined in Rust. See the decision in `docs/GUARDRAILS.md`: the web and desktop webview only understand CSS, and custom properties are the supported theming route.

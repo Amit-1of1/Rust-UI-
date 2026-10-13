@@ -43,6 +43,7 @@ pub const DEMOS: &[Demo] = &[
     ("input_otp", ui::demos::input_otp::Demo),
     ("item", ui::demos::item::Demo),
     ("kbd", ui::demos::kbd::Demo),
+    ("label", ui::demos::label::Demo),
     ("marquee", ui::demos::marquee::Demo),
     ("menubar", ui::demos::menubar::Demo),
     ("multi_select", ui::demos::multi_select::Demo),

@@ -136,6 +136,10 @@ pub fn physical_properties(css: &str) -> Vec<(usize, String)> {
     out
 }
 
+/// Components that have no demo on purpose (see GUARDRAILS): navbar items are router
+/// `Link`s, so a demo would need a router of its own.
+const NO_DEMO_OK: &[&str] = &["navbar"];
+
 /// A component counts as tested when some test function is named after it.
 fn has_test(tests: &str, name: &str) -> bool {
     let stem = name.strip_suffix("_group").unwrap_or(name);
@@ -279,7 +283,9 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         }
         let has_demo = demo.exists();
         if !has_demo {
-            add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
+            if !NO_DEMO_OK.contains(&name.as_str()) {
+                add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
+            }
         } else {
             if !demos.contains(&format!("{name}_demo")) {
                 add(Level::Error, name, "demo is not in tests/demos.rs".into());
