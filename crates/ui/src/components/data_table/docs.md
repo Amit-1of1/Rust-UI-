@@ -13,7 +13,9 @@ DataTable {
 }
 ```
 
-Cells are text. For custom cell content (badges, buttons) compose `Table` yourself and call `table_view(...)` for the filter, sort and page logic; it is a pure function.
+Cells are text. For custom content (a badge, a link, a row menu) pass `render_cell: move |(row, col)| rsx! { ... }`; `row` is the index into `rows`, and the text in `rows` is still what filtering and sorting use. For a different layout altogether, compose `Table` yourself and call `table_view(...)` for the filter, sort and page logic; it is a pure function.
+
+Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
 ## Accessibility
 

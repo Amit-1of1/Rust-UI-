@@ -81,10 +81,13 @@ impl FormField {
 
     /// Set the value. Once the field has been blurred or has an error, it re-validates on every
     /// change so the message clears as soon as the user fixes it.
+    ///
+    /// Reads nothing reactively, so calling it from an effect (to load a record into the form)
+    /// doesn't make that effect re-run, and overwrite the user's edits, when the field is blurred.
     pub fn set(&self, value: impl Into<String>) {
         let mut v = self.value;
         v.set(value.into());
-        if (self.touched)() || self.error.peek().is_some() {
+        if *self.touched.peek() || self.error.peek().is_some() {
             self.validate();
         }
     }

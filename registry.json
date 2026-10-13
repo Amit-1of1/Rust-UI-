@@ -544,7 +544,9 @@
         "sheet/mod.rs",
         "sheet/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "shimmer",

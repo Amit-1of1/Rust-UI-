@@ -360,3 +360,59 @@ fn ui_strings_provider_renders_its_children() {
     });
     assert!(html.contains("hello"), "{html}");
 }
+
+// ---- found by apps/dashboard (see apps/dashboard/GAPS.md) ----
+
+#[test]
+fn card_keeps_its_own_class_next_to_the_callers() {
+    let html = render(|| rsx! { Card { class: "kpi", CardTitle { class: "big", "7" } } });
+    assert!(
+        html.contains("dx-card-") && html.contains(" kpi\""),
+        "{html}"
+    );
+    assert!(
+        html.contains("dx-card-title-") && html.contains(" big\""),
+        "{html}"
+    );
+}
+
+#[test]
+fn data_table_render_cell_replaces_the_text() {
+    let html = render(|| {
+        rsx! {
+            DataTable {
+                columns: vec![DataColumn::new("Name"), DataColumn::new("State")],
+                rows: vec![vec!["Ada".to_string(), "Paid".to_string()]],
+                caption: "Orders",
+                render_cell: |(row, col): (usize, usize)| {
+                    if col == 1 {
+                        rsx! { Badge { "badge-{row}" } }
+                    } else {
+                        rsx! { "plain" }
+                    }
+                },
+            }
+        }
+    });
+    assert!(html.contains("badge-0") && html.contains("plain"), "{html}");
+    assert!(!html.contains(">Paid<"), "{html}");
+}
+
+#[test]
+fn active_sidebar_item_is_the_current_page() {
+    let html = render(|| {
+        rsx! {
+            SidebarProvider {
+                Sidebar {
+                    SidebarContent {
+                        SidebarMenu {
+                            SidebarMenuItem { SidebarMenuButton { is_active: true, "Home" } }
+                            SidebarMenuItem { SidebarMenuButton { "Other" } }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    assert_eq!(html.matches("aria-current=\"page\"").count(), 1, "{html}");
+}
