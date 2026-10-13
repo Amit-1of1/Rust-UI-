@@ -166,8 +166,10 @@ function findChromePid(before) {
 
 // ----- DOM operations (js-framework-benchmark style) ------------------------------------------
 
-// Runs `setup`, then times `act` from the click until the DOM shows `done` and the next frame
-// has painted. Everything runs inside the page, on the page's clock.
+// Runs `setup`, then clicks `act` and times it the way js-framework-benchmark does: from the
+// start of the click event to the end of the last paint it causes, read from a Chrome trace.
+// That counts script, style, layout and paint, and doesn't depend on when a framework
+// schedules its DOM update (sync for React, a microtask for Svelte and Dioxus).
 const OPS = {
   "create 1,000 rows": { act: "#run", done: "n() === 1000" },
   "replace 1,000 rows": { setup: ["#run"], act: "#run", done: "n() === 1000 && id(0) !== before0" },
@@ -180,38 +182,54 @@ const OPS = {
   "clear 1,000 rows": { setup: ["#run"], act: "#clear", done: "n() === 0" },
 };
 
-async function op(page, spec) {
-  return page.evaluate(async ({ setup, act, done }) => {
-    const rows = () => document.querySelectorAll("#bench tbody tr");
-    const n = () => rows().length;
-    const id = (i) => rows()[i]?.children[0].textContent;
-    const title = (i) => rows()[i]?.children[1].textContent;
-    const row = (sel) => sel.replace(/^row\((\d+)\)/, (_, i) => `#bench tbody tr:nth-child(${Number(i) + 1})`);
+async function op(browser, page, spec) {
+  await page.evaluate(async ({ setup }) => {
+    const n = () => document.querySelectorAll("#bench tbody tr").length;
     const frame = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
-    const until = async (f) => {
-      const t = performance.now();
-      while (!f()) {
-        if (performance.now() - t > 20000) throw new Error("timed out: " + done);
-        await new Promise((r) => setTimeout(r, 0));
-      }
-    };
     for (const s of setup ?? []) {
       const before = n();
       document.querySelector(s).click();
-      await until(() => n() !== before || n() === 1000);
+      const t = performance.now();
+      while (n() === before && n() !== 1000) {
+        if (performance.now() - t > 20000) throw new Error("setup timed out");
+        await new Promise((r) => setTimeout(r, 0));
+      }
       await frame();
       await frame();
     }
-    const before0 = id(0);
-    const before998 = id(998);
-    const check = new Function("n", "id", "title", "rows", "before0", "before998", `return ${done}`);
-    const target = document.querySelector(row(act));
-    const t0 = performance.now();
-    target.click();
-    await until(() => check(n, id, title, rows, before0, before998));
-    await frame();
-    return performance.now() - t0;
+    const rows = document.querySelectorAll("#bench tbody tr");
+    window.__before0 = rows[0]?.children[0].textContent;
+    window.__before998 = rows[998]?.children[0].textContent;
   }, spec);
+  await page.waitForTimeout(100);
+  await browser.startTracing(page, { categories: ["devtools.timeline", "disabled-by-default-devtools.timeline"] });
+  await page.evaluate(({ act }) => {
+    const sel = act.replace(/^row\((\d+)\)/, (_, i) => `#bench tbody tr:nth-child(${Number(i) + 1})`);
+    document.querySelector(sel).click();
+  }, spec);
+  await page.waitForFunction(
+    ({ done }) => {
+      const rows = () => document.querySelectorAll("#bench tbody tr");
+      const n = () => rows().length;
+      const id = (i) => rows()[i]?.children[0].textContent;
+      const title = (i) => rows()[i]?.children[1].textContent;
+      const check = new Function("n", "id", "title", "rows", "before0", "before998", `return ${done}`);
+      return check(n, id, title, rows, window.__before0, window.__before998);
+    },
+    spec,
+    { timeout: 20000, polling: "raf" },
+  );
+  await page.waitForTimeout(300);
+  const trace = JSON.parse((await browser.stopTracing()).toString()).traceEvents;
+  const click = trace.find((e) => e.name === "EventDispatch" && e.args?.data?.type === "click");
+  if (!click) throw new Error("no click in the trace");
+  const paints = trace.filter((e) => e.name === "Paint" && e.ph === "X" && e.ts >= click.ts);
+  if (!paints.length) {
+    const names = [...new Set(trace.filter((e) => e.ts >= click.ts).map((e) => e.name))];
+    throw new Error("no paint after the click: " + names.join(","));
+  }
+  const end = Math.max(...paints.map((e) => e.ts + (e.dur ?? 0)));
+  return (end - click.ts) / 1000;
 }
 
 async function ops(browser, url) {
@@ -220,7 +238,7 @@ async function ops(browser, url) {
     const xs = [];
     for (let i = 0; i < RUNS + 1; i++) {
       const { context, page } = await freshPage(browser, url + "?bench");
-      const ms = await op(page, spec);
+      const ms = await op(browser, page, spec);
       if (i > 0) xs.push(ms); // first run is warm-up
       await context.close();
     }
