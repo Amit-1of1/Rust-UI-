@@ -219,10 +219,10 @@ pub fn SidebarProvider(
             );
             let mut eval = document::eval(&js_code);
 
-            loop {
-                if eval.recv::<bool>().await.is_ok() {
-                    ctx.toggle();
-                }
+            // Stop when the channel closes. On renderers without JS (Blitz) `recv` fails
+            // at once, and looping on that would never yield and freeze the app.
+            while eval.recv::<bool>().await.is_ok() {
+                ctx.toggle();
             }
         });
     });

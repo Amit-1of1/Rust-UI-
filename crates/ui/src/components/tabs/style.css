@@ -70,3 +70,9 @@
 .dx-tabs-content[data-state="inactive"] {
     display: none;
 }
+
+/* The primitive sets `hidden: false` on the active panel. Blitz keeps the attribute and
+   hides it with the UA rule, so show the active panel explicitly. */
+.dx-tabs-content[data-state="active"] {
+    display: block;
+}

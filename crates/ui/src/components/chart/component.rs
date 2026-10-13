@@ -206,7 +206,17 @@ pub fn LineChart(
             desc { "{summary}" }
             Grid { plot_height: height, data: data.clone() }
             if points.len() > 1 {
-                polyline { class: Styles::dx_chart_line, points: "{path}", fill: "none" }
+                // The presentation attributes are a fallback for renderers that draw inline SVG
+                // without the page's CSS (Blitz); where CSS applies, the class wins.
+                polyline {
+                    class: Styles::dx_chart_line,
+                    points: "{path}",
+                    fill: "none",
+                    stroke: "currentColor",
+                    stroke_width: "2",
+                    stroke_linecap: "round",
+                    stroke_linejoin: "round",
+                }
             }
             for (i, (x, y)) in points.iter().enumerate() {
                 circle { key: "{data[i].label}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5" }

@@ -94,16 +94,16 @@
 .dx-calendar-grid {
     width: 100%;
     padding: 0.5rem;
+    border-collapse: separate;
+    border-spacing: 0 0.25rem;
+    table-layout: fixed;
 }
 
 .dx-calendar-grid-header {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 8px;
+    text-align: center;
 }
 
 .dx-calendar-grid-day-header {
-    flex: 1;
     color: var(--secondary-color-5);
     font-size: 12px;
     font-weight: 300;
@@ -111,10 +111,7 @@
 }
 
 .dx-calendar-grid-body {
-    display: flex;
     width: 100%;
-    flex-direction: column;
-    gap: 0.25rem;
 }
 
 .dx-calendar-grid-cell {
@@ -228,11 +225,8 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
 }
 
 /* Calendar with week numbers */
-.dx-calendar-grid-week {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
+.dx-calendar-grid-week td {
+    text-align: center;
 }
 
 /* Calendar states */
