@@ -418,6 +418,86 @@ fn active_sidebar_item_is_the_current_page() {
 }
 
 #[test]
+fn select_label_names_the_trigger_not_the_root() {
+    let html = render(|| {
+        rsx! {
+            Select::<String> { aria_label: "Fruit",
+                SelectOption::<String> { index: 0usize, value: "a", "Apple" }
+            }
+        }
+    });
+    // The root keeps no label; the trigger is named by the label and its own value.
+    assert!(!html.contains("aria-label=\"Fruit\""), "{html}");
+    let trigger = html.split("<button").nth(1).unwrap_or_default();
+    let by = trigger
+        .split("aria-labelledby=\"")
+        .nth(1)
+        .and_then(|s| s.split('"').next())
+        .unwrap_or_else(|| panic!("trigger has no aria-labelledby: {html}"));
+    let ids: Vec<&str> = by.split_whitespace().collect();
+    assert_eq!(ids.len(), 2, "{by}");
+    assert!(
+        html.contains(&format!("id=\"{}\" hidden=true>Fruit<", ids[0])),
+        "{html}"
+    );
+    assert!(trigger.contains(&format!("id=\"{}\"", ids[1])), "{html}");
+
+    let html = render(|| {
+        rsx! {
+            label { id: "fruit-label", "Fruit" }
+            SelectMulti::<String> { aria_labelledby: "fruit-label",
+                SelectOption::<String> { index: 0usize, value: "a", "Apple" }
+            }
+        }
+    });
+    assert!(
+        html.contains("aria-labelledby=\"fruit-label rui-select-"),
+        "{html}"
+    );
+    assert!(
+        !html.contains("hidden=true>"),
+        "no label span needed: {html}"
+    );
+}
+
+#[test]
+fn tab_panels_are_labelled_by_their_tab() {
+    let html = render(|| {
+        rsx! {
+            Tabs { default_value: "a".to_string(),
+                TabList {
+                    TabTrigger { value: "a".to_string(), index: 0usize, "A" }
+                    TabTrigger { value: "b".to_string(), index: 1usize, id: "own", "B" }
+                }
+                TabContent { value: "a".to_string(), index: 0usize, "Panel A" }
+                TabContent { value: "b".to_string(), index: 1usize, aria_labelledby: "own", "Panel B" }
+            }
+        }
+    });
+    let tab = html
+        .split("role=\"tab\"")
+        .nth(1)
+        .and_then(|s| s.split("id=\"").nth(1))
+        .and_then(|s| s.split('"').next())
+        .unwrap_or_else(|| panic!("first tab has no id: {html}"));
+    assert!(
+        html.contains(&format!("aria-labelledby=\"{tab}\"")),
+        "{html}"
+    );
+    assert!(html.contains("aria-labelledby=\"own\""), "{html}");
+}
+
+#[test]
+fn tooltip_trigger_describes_only_while_open() {
+    let closed = render(|| rsx! { Tooltip { TooltipTrigger { "Tip" } TooltipContent { "Hint" } } });
+    assert!(!closed.contains("aria-describedby"), "{closed}");
+    let open = render(|| {
+        rsx! { Tooltip { default_open: true, TooltipTrigger { "Tip" } TooltipContent { "Hint" } } }
+    });
+    assert!(open.contains("aria-describedby"), "{open}");
+}
+
+#[test]
 fn modal_portal_renders_its_children_in_place_off_native() {
     let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
     assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
