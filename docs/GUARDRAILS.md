@@ -63,7 +63,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Layout animation is `FlipList`/`FlipItem` (own FLIP over `get_client_rect`, web and desktop webview). The measured element is the outer wrapper and only the inner one is transformed, otherwise the transform pollutes the measurement. `AnimatePresence` also adds its own `data-dioxus-motion-layout-slot` wrappers; don't style or select them.
 - `SwipeDismiss` captures the pointer on web (web-sys `set_pointer_capture` on the event *target*; Dioxus delegates listeners to the root, so `current_target` is the wrong element), so a drag keeps tracking outside the element. Off web it falls back to cancelling on leave. Release speed is passed to the spring (`Spring::set_velocity`), so a flick keeps its momentum. Keyboard alternative: Delete, Backspace or Escape. A pointer held still for 100 ms before release is not a flick.
 
-- Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it.
+- Select's trigger is a `<button aria-haspopup="listbox">`, not `role="combobox"` as in Radix. Verify with a screen reader before relying on it. `aria_label`/`aria_labelledby` on `Select` are moved to the trigger, which lists itself after the label so the value is still read.
+- Primitive ARIA bugs worked around in the styled layer (upstream issue drafts in the project files, `rust-ui/upstream/`): tab panels get `aria-labelledby` pointing at their tab (by index); the tooltip trigger drops `aria-describedby` while closed. The date segment's dangling `aria-labelledby` can't be overridden (the primitive writes it before our attributes, so ours would be a duplicate) and stays in `KNOWN` in `tests/aria.rs`. Upstream ids are private, so components that need ids keep their own counter (`rui-<component>-N`).
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
 - `navbar` has no demo: its upstream demo needs a router.
 - Ctrl+K opens the command palette through `ui::hooks::use_hotkey`: a web-sys `keydown` listener on `window`, written in Rust (no `eval`, no JS of ours). Web only; keep the visible button, which is the only way in on desktop and native.
@@ -83,6 +84,10 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `rust-ui doctor` fails on `var(--x)` without a fallback when nothing defines `--x` (variables set inline by dioxus-primitives are listed in `PRIMITIVE_VARS`).
 - `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
 
+- Passing `class` to most kit components *replaces* the kit's class (two `class` attributes; the DOM keeps the last). `Button`, `Separator` and `Card` merge. Until the sweep lands (apps/dashboard/GAPS.md, gap 10), put app classes on a wrapper.
+- `AlertDialogAction` closes the dialog before it calls `on_click`; keep "what to act on" in its own signal, not in the open flag.
+- Calling `FormField::set` from an effect is fine (it reads with `peek`); keep new `FormField` methods non-reactive for the same reason.
+
 ## Decision log
 
 | Date | Decision | Why |
@@ -97,3 +102,4 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 | 2026-10-11 | Fix primitive keyboard gaps in the styled layer, not the primitive: Slider Home/End (own value copy), dropdown Escape returns focus to the trigger (web-sys `focus()`, same rule as the Ctrl+K listener). | tests/e2e/keyboard.mjs found both; primitive markup stays untouched. Worth reporting upstream. |
 | 2026-10-11 | Kit strings come from `UiStringsProvider` (English defaults); `--density` scales control heights. Both are registry items/tokens, so copied components keep working. | Tier 2 ideas 12 and 14. |
 | 2026-10-13 | Keep `dioxus-primitives` as a pinned git dependency; `rust-ui-kit` is `publish = false` and installs from git or by copying. `rust-ui-motion` and `rust-ui-cli` are publish-ready but unpublished. | crates.io only has an empty `0.0.0` placeholder for primitives, and upstream also needs `dioxus-attributes` released. Forking ~22,600 lines of a11y code costs more than waiting. Details in docs/PUBLISHING.md. |
+| 2026-10-13 | Work around primitive ARIA bugs in the styled layer only when the fix is attribute-level and merges cleanly (tabs, tooltip, select naming); otherwise keep the finding in `tests/aria.rs` `KNOWN` and draft an upstream issue. Never patch or fork the primitive. | User asked to fix the recorded accessibility bugs; GUARDRAILS forbids forks. |

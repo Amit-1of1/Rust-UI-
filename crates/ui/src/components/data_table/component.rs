@@ -143,11 +143,28 @@ pub fn DataTable(
     /// Called with the original indices of the selected rows whenever the selection changes.
     #[props(default)]
     on_select: Callback<Vec<usize>>,
+    /// Custom cell content: called with `(row, column)` (original row index) and rendered
+    /// instead of the text. The text in `rows` is still what filtering and sorting use.
+    #[props(default)]
+    render_cell: Option<Callback<(usize, usize), Element>>,
 ) -> Element {
     let mut query = use_signal(String::new);
     let mut sort = use_signal(|| None::<(usize, SortDirection)>);
     let mut page = use_signal(|| 0_usize);
     let mut selected = use_signal(BTreeSet::<usize>::new);
+
+    // Selection is kept as row indices, so it means nothing once the rows change (an outside
+    // filter, an insert or a delete). Drop it then, and go back to the first page.
+    use_effect(use_reactive!(|rows| {
+        let _ = rows;
+        if *page.peek() != 0 {
+            page.set(0);
+        }
+        if !selected.peek().is_empty() {
+            selected.set(BTreeSet::new());
+            on_select.call(Vec::new());
+        }
+    }));
 
     let view = table_view(&columns, &rows, &query(), sort(), page(), page_size);
     let page_rows = view.rows.clone();
@@ -300,7 +317,11 @@ pub fn DataTable(
                                 TableCell {
                                     key: "{c}",
                                     style: if columns.get(c).is_some_and(|col| col.numeric) { "text-align: right;" },
-                                    "{cell}"
+                                    if let Some(render) = render_cell {
+                                        {render.call((i, c))}
+                                    } else {
+                                        "{cell}"
+                                    }
                                 }
                             }
                         }

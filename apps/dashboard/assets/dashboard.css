@@ -1,0 +1,193 @@
+/* Page layout only. Every colour is a theme token, so light, dark and accents all work. */
+
+body {
+  margin: 0;
+  background: var(--primary-color);
+  color: var(--secondary-color-1);
+  font-family: system-ui, sans-serif;
+}
+
+.db-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.db-logo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius, 0.5rem);
+  background: var(--secondary-color-1);
+  color: var(--primary-color);
+}
+
+.db-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--primary-color-6);
+}
+
+.db-crumbs {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.db-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.db-main {
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+  padding: 1.5rem;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.db-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.db-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.db-kpi-value {
+  font-size: 1.75rem;
+}
+
+.db-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.db-muted {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.db-strong {
+  font-weight: 500;
+}
+
+.db-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.db-toolbar > input[type="search"] {
+  max-width: 16rem;
+}
+
+.db-spacer {
+  flex: 1;
+}
+
+.db-inline-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.db-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.db-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.db-error {
+  margin: 0;
+  color: var(--error-text-color);
+  font-size: 0.875rem;
+}
+
+.db-check,
+.db-switch-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.db-switch-row {
+  justify-content: space-between;
+  padding-block: 0.5rem;
+}
+
+.db-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.db-table-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.db-pages {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.db-sheet-form {
+  padding-inline: 1rem;
+}
+
+.db-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 40rem) {
+  .db-wide-only,
+  .db-crumbs {
+    display: none;
+  }
+
+  .db-main {
+    padding: 1rem;
+  }
+
+  .db-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

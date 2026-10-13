@@ -22,5 +22,5 @@ rsx! {
 - **AlertDialogTitle**: The dialog's heading.
 - **AlertDialogDescription**: Additional description for the dialog.
 - **AlertDialogActions**: Container for action buttons.
-- **AlertDialogAction**: Main action button (e.g., confirm/delete). Closes dialog and calls optional `on_click`.
+- **AlertDialogAction**: Main action button (e.g., confirm/delete). Closes the dialog, *then* calls the optional `on_click`. So if `on_open_change(false)` clears state (such as "which item to delete"), `on_click` sees it already cleared: keep that state separate from the open flag.
 - **AlertDialogCancel**: Cancel/close button. Closes dialog and calls optional `on_click`.

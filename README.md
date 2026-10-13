@@ -70,6 +70,10 @@ Original to this repo (not copied, accessible by construction): alert, breadcrum
 
 `apps/site` ("Orbit") is a small landing page built only from the kit: nav, theme switch, pricing tabs, chart, table, FAQ accordion, command palette, a validated signup form with toast and dialog, a swipe-dismiss banner and an animated waitlist. It is a real-world test of the kit; run it with `dx serve --platform web` in `apps/site`.
 
+## Admin dashboard
+
+`apps/dashboard` ("Acme Admin") is the second real app on the kit: sidebar layout, KPI cards, charts, a customers table with badges and row menus, edit sheet, add and delete dialogs, an orders `DataTable` with date-range and status filters, a settings form and a Ctrl+K palette. What it found missing is in [`apps/dashboard/GAPS.md`](apps/dashboard/GAPS.md). Run it with `dx serve --platform web` in `apps/dashboard`; `tests/e2e/dashboard.mjs` (part of `scripts/check.sh --a11y`) runs axe on every page and overlay and drives the main flows.
+
 ## Registry and CLI
 
 `registry.json` lists every component with its files and the other components it needs. It is generated from the folders (`cargo run -p rust-ui-cli -- registry`), and a test fails if it goes stale.
