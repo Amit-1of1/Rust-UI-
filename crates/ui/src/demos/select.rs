@@ -39,6 +39,7 @@ pub fn Demo() -> Element {
     rsx! {
         Select::<Option<Fruit>> {
             width: "12rem",
+            aria_label: "Fruit",
             SelectGroup {
                 SelectGroupLabel { "Fruits" }
                 {fruits}

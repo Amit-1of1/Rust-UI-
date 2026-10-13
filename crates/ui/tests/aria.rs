@@ -361,10 +361,14 @@ fn role(n: &Node) -> Option<String> {
     Some(implicit.into())
 }
 
-fn is_hidden(nodes: &[Node], mut i: usize) -> bool {
+/// Hidden from assistive technology: under `aria-hidden="true"`, or also under the
+/// `hidden` attribute when `with_hidden_attr` is set.
+fn is_hidden(nodes: &[Node], mut i: usize, with_hidden_attr: bool) -> bool {
     loop {
         let n = &nodes[i];
-        if n.attr("aria-hidden") == Some("true") || n.attr("hidden").is_some() {
+        if n.attr("aria-hidden") == Some("true")
+            || (with_hidden_attr && n.attr("hidden").is_some_and(|v| v != "false"))
+        {
             return true;
         }
         match n.parent {
@@ -518,10 +522,12 @@ fn check(html: &str) -> Vec<String> {
                 }
             }
         }
-        if is_hidden(&nodes, i) {
-            if is_focusable(n) {
-                problems.push(format!("{}: focusable inside aria-hidden", what()));
-            }
+        // Like axe's aria-hidden-focus: only aria-hidden counts. Under `hidden` an element
+        // is `display: none` and can't take focus, whatever its tabindex.
+        if is_hidden(&nodes, i, false) && is_focusable(n) {
+            problems.push(format!("{}: focusable inside aria-hidden", what()));
+        }
+        if is_hidden(&nodes, i, true) {
             continue;
         }
         let Some(role) = role(n) else { continue };
@@ -573,37 +579,22 @@ fn checker_catches_the_mistakes_it_claims_to() {
         <button aria-label="Close"><svg aria-hidden="true"></svg></button>
         <div role="switch" aria-checked=false>Wifi</div>
         <h2 id="t">Title</h2><div role="dialog" aria-labelledby="t"></div>
-        <img src="a.png" alt=""/>"#;
+        <img src="a.png" alt=""/>
+        <div role="tabpanel" aria-label="Off" tabindex="0" hidden></div>"#;
     assert_eq!(check(good), Vec::<String>::new());
 }
 
 /// Problems found on the first run, kept visible instead of silenced. Each entry is a
 /// substring of the reported problem and why it is not fixed yet. The test fails if one
 /// of these goes away, so the list can't go stale.
-const KNOWN: &[(&str, &str)] = &[
-    (
-        "date_picker: <span class=\"dx-date-segment",
-        "dioxus-primitives: DateSegment sets aria-labelledby=\"{id}-label\" but never renders \
-         that element. Browsers fall back to its aria-label (\"day\" etc.), so the name \
-         still works, but the reference is invalid. Report upstream.",
-    ),
-    (
-        "tooltip: <div class=\"dx-tooltip-trigger",
-        "Same as the sidebar tooltip: the trigger's aria-describedby points at content that only \
-         renders while open. Primitive behaviour.",
-    ),
-    (
-        "tabs: <div class=\" dx-tabs-content",
-        "dioxus-primitives: tab panels are not linked to their tab with aria-labelledby, and the \
-         inactive panel keeps tabindex=0 under the `hidden` attribute (display: none, so it is \
-         not reachable). Report upstream.",
-    ),
-    (
-        "sidebar: <button class=\"dx-tooltip-trigger",
-        "Tooltip trigger points aria-describedby at tooltip content that only renders \
-         while open. Primitive behaviour; check with a screen reader.",
-    ),
-];
+const KNOWN: &[(&str, &str)] = &[(
+    "date_picker: <span class=\"dx-date-segment",
+    "dioxus-primitives: DateSegment sets aria-labelledby=\"{id}-label\" but never renders \
+     that element. Browsers fall back to its aria-label (\"day\" etc.), so the name still \
+     works. Not fixable from the styled layer: the segment writes the attribute before \
+     spreading ours, so passing our own value emits it twice. Upstream draft: \
+     rust-ui/upstream/dioxus-primitives-a11y-issues.md in the project files.",
+)];
 
 #[test]
 fn every_demo_passes_the_aria_check() {

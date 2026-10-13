@@ -28,3 +28,7 @@ Tabs {
     }
 }
 ```
+
+## Accessibility
+
+Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
