@@ -125,15 +125,11 @@ pub fn preset(brand: Rgb) -> Result<Preset, String> {
 
 /// The CSS block, in the same shape as the presets in `theme.css`.
 pub fn css(name: &str, p: &Preset) -> String {
-    let fill = format!(
-        "var(--dark, {}) var(--light, {})",
-        p.dark_fill.hex(),
-        p.light_fill.hex()
-    );
+    let fill = format!("light-dark({}, {})", p.light_fill.hex(), p.dark_fill.hex());
     format!(
-        "[data-accent=\"{name}\"] {{\n  --accent-color: {fill};\n  --accent-contrast: var(--dark, {}) var(--light, {});\n  --focused-border-color: {fill};\n}}\n",
-        p.dark_text.hex(),
-        p.light_text.hex()
+        "[data-accent=\"{name}\"] {{\n  --accent-color: {fill};\n  --accent-contrast: light-dark({}, {});\n  --focused-border-color: {fill};\n}}\n",
+        p.light_text.hex(),
+        p.dark_text.hex()
     )
 }
 
@@ -197,7 +193,7 @@ mod tests {
         let p = preset(Rgb::parse("#7c3aed").unwrap()).unwrap();
         let css = css("brand", &p);
         assert!(css.starts_with("[data-accent=\"brand\"] {"));
-        assert!(css.contains("--accent-color: var(--dark, #"));
-        assert!(css.contains("var(--light, #"));
+        assert!(css.contains("--accent-color: light-dark(#"));
+        assert!(css.contains("--accent-contrast: light-dark(#"));
     }
 }

@@ -1,7 +1,98 @@
-/* This file contains the theme variables for the styled dioxus-components components. You only
- * need to import this file once in your project root.
- */
+/* Theme tokens for the kit's components. Load this file once, near the root of the app.
+ *
+ * Light and dark: every colour token is a `light-dark(light, dark)` pair, so the colour scheme
+ * picks the value. It follows the OS by default; data-theme="light" or "dark" on <html> forces
+ * one. `color-scheme` also gives native scrollbars, form controls and the page canvas the same
+ * scheme. Browsers without light-dark() (before Chrome 123, Safari 17.5, Firefox 120) use the
+ * generated fallback block further down. */
+:root {
+  color-scheme: light dark;
+}
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root {
+  /* Primary colors */
+  --primary-color: light-dark(#fff, #000);
+  --primary-color-1: light-dark(#fbfbfb, #0e0e0e);
+  --primary-color-2: light-dark(#fff, #0a0a0a);
+  --primary-color-3: light-dark(#f8f8f8, #141313);
+  --primary-color-4: light-dark(#f8f8f8, #1a1a1a);
+  --primary-color-5: light-dark(#f5f5f5, #262626);
+  --primary-color-6: light-dark(#e5e5e5, #232323);
+  --primary-color-7: light-dark(#b0b0b0, #3e3e3e);
+
+  /* Secondary colors */
+  --secondary-color: light-dark(#000, #fff);
+  --secondary-color-1: light-dark(#000, #fafafa);
+  --secondary-color-2: light-dark(#0d0d0d, #e6e6e6);
+  --secondary-color-3: light-dark(#2b2b2b, #dcdcdc);
+  --secondary-color-4: light-dark(#111, #d4d4d4);
+  --secondary-color-5: light-dark(#6b6b6b, #a1a1a1);
+  --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
+
+  /* Highlight colors */
+  --focused-border-color: #2b7fff;
+
+  /* Accent: fills for primary actions and checked/active states. Neutral by default;
+     set data-accent="blue|green|violet|rose|orange" on <html> (or any ancestor) to recolor.
+     Override --accent-color / --accent-contrast yourself for a brand color. */
+  --accent-color: var(--secondary-color-2);
+  --accent-contrast: var(--primary-color);
+
+  /* Corner radius shared by controls; set on <html> to square or round everything. */
+  --radius: 0.5rem;
+  --primary-success-color: light-dark(#ecfdf5, #02271c);
+  --secondary-success-color: light-dark(#10b981, #b6fae3);
+  --primary-warning-color: light-dark(#fffbeb, #342203);
+  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
+  --primary-error-color: light-dark(#dc2626, #a22e2e);
+  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
+  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
+  --error-text-color: light-dark(#b91c1c, #f87171);
+  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
+  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
+  --secondary-info-color: light-dark(var(--secondary-color-3), var(--primary-color-7));
+}
+
+/* Accent presets, light-dark(light, dark). Light fills carry white text (>=4.5:1); dark fills
+   carry near-black text (tests/theme.rs checks both). */
+[data-accent="blue"] {
+  --accent-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+}
+[data-accent="green"] {
+  --accent-color: light-dark(#15803d, #4ade80);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#15803d, #4ade80);
+}
+[data-accent="violet"] {
+  --accent-color: light-dark(#6d28d9, #a78bfa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+}
+[data-accent="rose"] {
+  --accent-color: light-dark(#be123c, #fb7185);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#be123c, #fb7185);
+}
+[data-accent="orange"] {
+  --accent-color: light-dark(#c2410c, #fb923c);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#c2410c, #fb923c);
+}
+
+/* Space toggles: --dark and --light are "initial" or empty depending on the scheme, so
+ * `var(--dark, a) var(--light, b)` picks a or b. Kept for values light-dark() cannot hold
+ * (shadows, gradients) and for component CSS not yet moved to light-dark(). Prefer
+ * light-dark() for colours. */
 html[data-theme="dark"] {
   --dark: initial;
   --light: ;
@@ -10,16 +101,6 @@ html[data-theme="dark"] {
 html[data-theme="light"] {
   --dark: ;
   --light: initial;
-}
-
-html[data-theme="dark"] [class~="dxc-system"] {
-  --dxc-light-on: ;
-  --dxc-dark-on: initial;
-}
-
-html[data-theme="light"] [class~="dxc-system"] {
-  --dxc-light-on: initial;
-  --dxc-dark-on: ;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,76 +117,64 @@ html[data-theme="light"] [class~="dxc-system"] {
   }
 }
 
-:root {
-  /* Primary colors */
-  --primary-color: var(--dark, #000) var(--light, #fff);
-  --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);
-  --primary-color-2: var(--dark, #0a0a0a) var(--light, #fff);
-  --primary-color-3: var(--dark, #141313) var(--light, #f8f8f8);
-  --primary-color-4: var(--dark, #1a1a1a) var(--light, #f8f8f8);
-  --primary-color-5: var(--dark, #262626) var(--light, #f5f5f5);
-  --primary-color-6: var(--dark, #232323) var(--light, #e5e5e5);
-  --primary-color-7: var(--dark, #3e3e3e) var(--light, #b0b0b0);
-
-  /* Secondary colors */
-  --secondary-color: var(--dark, #fff) var(--light, #000);
-  --secondary-color-1: var(--dark, #fafafa) var(--light, #000);
-  --secondary-color-2: var(--dark, #e6e6e6) var(--light, #0d0d0d);
-  --secondary-color-3: var(--dark, #dcdcdc) var(--light, #2b2b2b);
-  --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
-  --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
-  --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
-
-  /* Highlight colors */
-  --focused-border-color: var(--dark, #2b7fff) var(--light, #2b7fff);
-
-  /* Accent: fills for primary actions and checked/active states. Neutral by default;
-     set data-accent="blue|green|violet|rose|orange" on <html> (or any ancestor) to recolor.
-     Override --accent-color / --accent-contrast yourself for a brand color. */
-  --accent-color: var(--secondary-color-2);
-  --accent-contrast: var(--primary-color);
-
-  /* Corner radius shared by controls; set on <html> to square or round everything. */
-  --radius: 0.5rem;
-  --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
-  --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
-  --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
-  --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
-  --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
-  --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
-  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
-  --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
-  --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
-  --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
-  --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
+/* theme fallback: begin (generated, do not edit) */
+/* For browsers without light-dark(): the same tokens as space toggles.
+ * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */
+@supports not (color: light-dark(#000, #fff)) {
+  :root:root {
+    --primary-color: var(--dark, #000) var(--light, #fff);
+    --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);
+    --primary-color-2: var(--dark, #0a0a0a) var(--light, #fff);
+    --primary-color-3: var(--dark, #141313) var(--light, #f8f8f8);
+    --primary-color-4: var(--dark, #1a1a1a) var(--light, #f8f8f8);
+    --primary-color-5: var(--dark, #262626) var(--light, #f5f5f5);
+    --primary-color-6: var(--dark, #232323) var(--light, #e5e5e5);
+    --primary-color-7: var(--dark, #3e3e3e) var(--light, #b0b0b0);
+    --secondary-color: var(--dark, #fff) var(--light, #000);
+    --secondary-color-1: var(--dark, #fafafa) var(--light, #000);
+    --secondary-color-2: var(--dark, #e6e6e6) var(--light, #0d0d0d);
+    --secondary-color-3: var(--dark, #dcdcdc) var(--light, #2b2b2b);
+    --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
+    --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
+    --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
+    --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
+    --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
+    --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
+    --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
+    --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
+    --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
+    --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
+    --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
+    --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
+    --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
+  }
+  [data-accent="blue"][data-accent="blue"] {
+    --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+  }
+  [data-accent="green"][data-accent="green"] {
+    --accent-color: var(--dark, #4ade80) var(--light, #15803d);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
+  }
+  [data-accent="violet"][data-accent="violet"] {
+    --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+  }
+  [data-accent="rose"][data-accent="rose"] {
+    --accent-color: var(--dark, #fb7185) var(--light, #be123c);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
+  }
+  [data-accent="orange"][data-accent="orange"] {
+    --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
+  }
 }
-
-/* Accent presets. Light fills carry white text (>=4.5:1); dark fills carry near-black text. */
-[data-accent="blue"] {
-  --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
-  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-  --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
-}
-[data-accent="green"] {
-  --accent-color: var(--dark, #4ade80) var(--light, #15803d);
-  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-  --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
-}
-[data-accent="violet"] {
-  --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
-  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-  --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
-}
-[data-accent="rose"] {
-  --accent-color: var(--dark, #fb7185) var(--light, #be123c);
-  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-  --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
-}
-[data-accent="orange"] {
-  --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
-  --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-  --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
-}
+/* theme fallback: end */
 
 /* motion tokens: begin (generated, do not edit) */
 /* Each spring preset traced as a CSS easing, so CSS animations feel like the Rust
