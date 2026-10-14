@@ -1,0 +1,11 @@
+- heading "Breadcrumb" [level=2]
+- paragraph: Where you are in the hierarchy.
+- navigation "Breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#"
+    - listitem:
+      - link "Components":
+        - /url: "#"
+    - listitem: Breadcrumb

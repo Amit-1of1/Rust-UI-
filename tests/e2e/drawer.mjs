@@ -1,9 +1,9 @@
 // Behaviour of Drawer in the gallery: open, labelled dialog, Escape, drag down to dismiss.
 // Usage: serve the built gallery, then `GALLERY_URL=http://localhost:8765/ node drawer.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 900, height: 800 } });
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
 await page.waitForSelector(".gallery-main");

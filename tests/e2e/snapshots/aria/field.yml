@@ -1,0 +1,10 @@
+- heading "Field and validation" [level=2]
+- paragraph: Label, control, hint and error wired together with aria-describedby.
+- text: Email
+- textbox "Email":
+  - /placeholder: you@example.com
+- paragraph: We never share it.
+- text: Password
+- textbox "Password"
+- paragraph: At least 8 characters.
+- button "Create account"

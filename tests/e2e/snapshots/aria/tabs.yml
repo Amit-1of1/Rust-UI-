@@ -1,0 +1,7 @@
+- heading "Tabs" [level=2]
+- paragraph: Arrow keys move between tabs.
+- tablist:
+  - tab "Account" [selected]
+  - tab "Password"
+- tabpanel "Account":
+  - paragraph: Make changes to your account here.

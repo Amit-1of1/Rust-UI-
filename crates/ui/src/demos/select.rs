@@ -31,7 +31,9 @@ pub fn Demo() -> Element {
         rsx! {
             SelectOption::<Option<Fruit>> { index: i, value: f, text_value: "{f}",
                 disabled: matches!(f, Fruit::Orange),
-                "{f.emoji()} {f}"
+                // The emoji is decoration: read "Apple", not "red apple Apple".
+                span { "aria-hidden": "true", "{f.emoji()} " }
+                "{f}"
             }
         }
     });

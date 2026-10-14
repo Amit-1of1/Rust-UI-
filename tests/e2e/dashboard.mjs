@@ -2,7 +2,7 @@
 // the main flows work by keyboard and mouse.
 // Build: (cd apps/dashboard && dx build --platform web); serve target/dx/dashboard/debug/web/public
 // Run:   GALLERY_URL=http://localhost:8771/ node dashboard.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
@@ -31,7 +31,7 @@ async function axe(page, label) {
 const nav = (page, name) => page.locator("[data-sidebar='menu-button']", { hasText: name }).click();
 const heading = (page) => page.locator("h1.db-title").textContent();
 
-const browser = await chromium.launch();
+const browser = await launch();
 for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));

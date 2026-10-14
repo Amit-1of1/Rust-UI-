@@ -21,6 +21,9 @@ struct Styles;
 /// The same goes for what makes it a form control: `id` (so a `<label for>` and focus-on-error
 /// reach the button), `aria-describedby`, `aria-invalid` and `aria-required` are moved to the
 /// trigger too, and `placeholder` is shown while nothing is selected.
+///
+/// The open list is labelled by the same label (without the trigger), so a screen reader
+/// names the popup ("Fruit, list box") instead of an unnamed list.
 struct TriggerName {
     root: Vec<Attribute>,
     trigger: Vec<Attribute>,
@@ -29,6 +32,7 @@ struct TriggerName {
     label_id: String,
     label: Option<String>,
     labelledby: Option<String>,
+    list_labelledby: Option<String>,
 }
 
 /// Attributes that belong on the trigger button rather than the wrapper.
@@ -72,6 +76,11 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
         (None, Some(_)) => Some(format!("{label_id} {trigger_id}")),
         (None, None) => None,
     };
+    let list_labelledby = match (&by, &label) {
+        (Some(ids), _) => Some(ids.clone()),
+        (None, Some(_)) => Some(label_id.clone()),
+        (None, None) => None,
+    };
     TriggerName {
         root,
         trigger,
@@ -80,6 +89,7 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
         trigger_id,
         label_id,
         labelledby,
+        list_labelledby,
     }
 }
 
@@ -125,6 +135,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
             }
             select::SelectList {
                 class: Styles::dx_select_list,
+                aria_labelledby: name.list_labelledby,
                 {props.children}
             }
         }
@@ -173,6 +184,7 @@ pub fn SelectMulti<T: Clone + PartialEq + 'static>(props: SelectMultiProps<T>) -
             }
             select::SelectList {
                 class: Styles::dx_select_list,
+                aria_labelledby: name.list_labelledby,
                 {props.children}
             }
         }

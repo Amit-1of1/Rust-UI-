@@ -1,7 +1,7 @@
 // Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
 // (set ACCENT=blue|green|... to scan an accent preset), then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
 // For apps/site: `GALLERY_URL=http://localhost:8767/ READY_SELECTOR=#pricing node axe.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
@@ -14,7 +14,7 @@ const ACCEPTED = {
   "landmark-main-is-top-level": "sidebar demo is embedded in the gallery page",
 };
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
 await page.goto(url);
 await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });

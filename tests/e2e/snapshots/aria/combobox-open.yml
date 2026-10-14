@@ -1,0 +1,8 @@
+- listbox "Frameworks":
+  - option "Next.js"
+  - option "SvelteKit"
+  - option "Nuxt.js"
+  - option "Remix"
+  - option "Astro"
+  - option "SolidStart"
+  - option "Dioxus"
