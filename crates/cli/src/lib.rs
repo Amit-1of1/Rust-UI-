@@ -3,6 +3,10 @@
 //! The registry is shaped like shadcn's: one item per component with its files and
 //! the other registry items it needs. It is generated from the component folders,
 //! so it can't drift from the source.
+//!
+//! Internal: this library is the `rust-ui` binary's implementation, public for the repo's
+//! tests, and may change in any release. The commands are the supported interface; which of
+//! them are stable is in docs/STABILITY.md.
 
 pub mod docsgen;
 pub mod doctor;

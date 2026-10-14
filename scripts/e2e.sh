@@ -43,7 +43,8 @@ trap cleanup EXIT
 APPS="gallery|apps/gallery|target/dx/gallery/$PROFILE/web/public|8765
 site|apps/site|target/dx/site/$PROFILE/web/public|8767
 docs|apps/docs|target/dx/docs/$PROFILE/web/public|8769
-dashboard|apps/dashboard|target/dx/dashboard/$PROFILE/web/public|8771"
+dashboard|apps/dashboard|target/dx/dashboard/$PROFILE/web/public|8771
+booking|apps/booking|target/dx/booking/$PROFILE/web/public|8773"
 
 while IFS='|' read -r name dir out port; do
   if [ "$BUILD" = 1 ]; then
@@ -58,6 +59,7 @@ done <<<"$APPS"
 sleep 1
 
 G=http://localhost:8765/ S=http://localhost:8767/ D=http://localhost:8769/ A=http://localhost:8771/
+B=http://localhost:8773/
 
 for engine in ${BROWSERS//,/ }; do
   export BROWSER="$engine"
@@ -95,6 +97,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] light-dark theme, chips, link";    e2e env GALLERY_URL=$G node theme.mjs
   step "[$engine] Ctrl+K hotkey (gallery)";          e2e env GALLERY_URL=$G node hotkey.mjs
   step "[$engine] dashboard: axe on every page + flows"; e2e env GALLERY_URL=$A node dashboard.mjs
+  step "[$engine] booking: axe on every route + flows"; e2e env GALLERY_URL=$B node booking.mjs
 
   # Contrast of the accent presets depends on the CSS, not the engine: Chromium only.
   if [ "$engine" = chromium ]; then

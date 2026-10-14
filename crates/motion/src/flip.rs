@@ -17,6 +17,10 @@ fn bump(mut t: Signal<u32>) {
 }
 
 /// Groups [`FlipItem`]s so they re-measure together.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn FlipList(
     #[props(extends = GlobalAttributes, extends = div)] attributes: Vec<Attribute>,
@@ -33,6 +37,10 @@ pub fn FlipList(
 }
 
 /// One row of a [`FlipList`]. Its position change is animated; its content is untouched.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn FlipItem(
     #[props(default)] preset: SpringPreset,

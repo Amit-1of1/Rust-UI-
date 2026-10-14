@@ -5,6 +5,10 @@ use dioxus::prelude::*;
 struct Styles;
 
 /// One point or bar.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, PartialEq, Debug)]
 pub struct ChartDatum {
     pub label: String,
@@ -131,6 +135,10 @@ fn Grid(plot_height: f32, data: Vec<ChartDatum>) -> Element {
 
 /// A bar chart drawn as SVG in the accent colour. `label` is read by screen readers along
 /// with a summary of every value; hovering a bar shows its value.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn BarChart(
     data: Vec<ChartDatum>,
@@ -175,6 +183,10 @@ pub fn BarChart(
 }
 
 /// A line chart drawn as SVG with theme colors. Same accessibility contract as [`BarChart`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn LineChart(
     data: Vec<ChartDatum>,

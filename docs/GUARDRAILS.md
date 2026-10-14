@@ -47,6 +47,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 ## Process traps
 
 - [ ] **Small PRs, one theme each** (one week's slice, or one component family).
+- [ ] **Every public API change gets a `CHANGELOG.md` line; a breaking one also gets a `docs/MIGRATION.md` section.** New public items start experimental and are marked as `docs/STABILITY.md` says. Don't bump crate versions in feature PRs ([docs/VERSIONING.md](VERSIONING.md)).
 - [ ] **Update this file and the plan when reality differs.** Don't silently drift.
 - [ ] **End every week with a demo:** the gallery running, plus a one-paragraph note of what changed.
 - [ ] **No timeline promises shorter than the plan.** If a week slips, cut scope, don't stack weeks.
@@ -94,6 +95,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `ui::demos` is behind the kit's `demos` feature (gallery, docs, apps/native and the kit's tests turn it on), so apps don't ship demo code or demo CSS.
 - `AlertDialogAction` closes the dialog before it calls `on_click`; keep "what to act on" in its own signal, not in the open flag.
 - Calling `FormField::set` from an effect is fine (it reads with `peek`); keep new `FormField` methods non-reactive for the same reason.
+- `apps/booking` is the first app on the Dioxus router (`dioxus` feature `router`). Kit links are plain `<a href>` (a full page load under the router): use the router's `Link` (with `button_look` for a button look) or `onclick` + `navigator()`. See `apps/booking/GAPS.md`.
+- In e2e scripts, don't click a "Dark mode" switch to get the dark theme: under `colorScheme: "dark"` it is already on, and the click turns it off.
 
 ## Decision log
 

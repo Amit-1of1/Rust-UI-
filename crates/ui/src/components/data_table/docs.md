@@ -29,3 +29,7 @@ Paging and selection are kept as row indices, so both reset when `rows` changes 
 ## Source
 
 Original to this repo (sorting headers come from our `Table`). The feature set follows Rust/UI's `data_table` / `data_grid`, which were not copied.
+
+## Stability
+
+Experimental. The column API and the `toolbar` slot are new and may change in any release; see `docs/STABILITY.md` in the kit repository.

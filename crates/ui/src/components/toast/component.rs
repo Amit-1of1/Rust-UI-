@@ -98,6 +98,10 @@ pub fn ToastProvider(
 /// Shorter toasts for the common case: `toasts.notify_success("Saved")`, or with a description
 /// `toasts.notify_error(("Failed", "Try again."))`. The primitive's `success(String, ToastOptions)`
 /// still works for durations and other options.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub trait ToastsExt {
     fn notify_success(&self, message: impl Into<ToastMessage>);
     fn notify_error(&self, message: impl Into<ToastMessage>);
@@ -107,6 +111,10 @@ pub trait ToastsExt {
 
 /// A toast's title and optional description. Built from `"title"`, a `String`, or a
 /// `(title, description)` pair.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, PartialEq, Debug)]
 pub struct ToastMessage {
     pub title: String,

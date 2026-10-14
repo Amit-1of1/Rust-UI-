@@ -1,7 +1,9 @@
+use crate::components::checkbox::{Checkbox, CheckboxState};
 use crate::components::combobox::{Combobox, ComboboxEmpty, ComboboxOption};
 use crate::components::field::*;
 use crate::components::input::Input;
 use crate::components::select::{Select, SelectOption};
+use crate::components::textarea::Textarea;
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
@@ -50,6 +52,10 @@ pub fn first_error(validators: &[Validator], value: &str) -> Option<String> {
 
 /// One field's state: value, error and touched flag, plus the ids that tie its label,
 /// description and error message together. Create with [`FormState::field`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq)]
 pub struct FormField {
     value: Signal<String>,
@@ -163,6 +169,10 @@ impl FormField {
 }
 
 /// All the fields of one form. Create with [`use_form`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq)]
 pub struct FormState {
     fields: Signal<Vec<FormField>>,
@@ -232,6 +242,10 @@ impl FormState {
 }
 
 /// Create the state for one form.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_form() -> FormState {
     FormState {
         fields: use_hook(|| Signal::new(Vec::new())),
@@ -267,22 +281,30 @@ pub fn TextField(
     #[props(into, default = "text".to_string())] r#type: String,
     #[props(into, default)] placeholder: Option<String>,
     #[props(into, default)] autocomplete: Option<String>,
+    /// Anything else for the `<input>`: `inputmode`, `maxlength`, `pattern`, `class`, ...
+    /// The field's own wiring (`id`, `value`, `aria-invalid`, `aria-describedby`) wins.
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=input)]
+    attributes: Vec<Attribute>,
 ) -> Element {
     let ids = field.ids();
     let error = field.error();
     let invalid = error.is_some();
     let described = field.described_by(description.is_some());
+    let wiring = attributes!(input {
+        id: ids.control.clone(),
+        r#type: r#type,
+        placeholder: placeholder,
+        autocomplete: autocomplete,
+        value: field.value(),
+        aria_invalid: invalid.then_some("true"),
+        aria_describedby: described,
+    });
     rsx! {
         Field { invalid,
             FieldLabel { html_for: ids.control.clone(), "{label}" }
             Input {
-                id: ids.control.clone(),
-                r#type: "{r#type}",
-                placeholder: placeholder,
-                autocomplete: autocomplete,
-                value: "{field.value()}",
-                aria_invalid: invalid.then_some("true"),
-                aria_describedby: described,
+                attributes: merge_attributes(vec![attributes, wiring]),
                 oninput: move |e: FormEvent| field.set(e.value()),
                 onblur: move |_| field.blur(),
                 onmounted: move |e| field.mounted(e),
@@ -297,6 +319,10 @@ pub fn TextField(
 
 /// One choice of a [`SelectField`] or [`ComboboxField`]: the value stored in the field and
 /// the text shown. `"UTC".into()` uses the same text for both.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, PartialEq, Debug)]
 pub struct FieldOption {
     pub value: String,
@@ -327,6 +353,10 @@ fn use_selection(field: FormField) -> Memo<Option<String>> {
 /// error and description in `aria-describedby`, `aria-invalid`, and focus on a failed submit.
 /// The field holds the chosen option's `value` (empty while nothing is chosen, so
 /// `required()` works). It validates when the list closes, as a text field does on blur.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn SelectField(
     field: FormField,
@@ -376,6 +406,10 @@ pub fn SelectField(
 
 /// A searchable [`Combobox`] bound to a [`FormField`], wired like [`SelectField`]. `empty` is
 /// shown when the search matches nothing.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn ComboboxField(
     field: FormField,
@@ -417,6 +451,86 @@ pub fn ComboboxField(
                         "{option.label}"
                     }
                 }
+            }
+            if let Some(description) = description {
+                FieldDescription { id: ids.description.clone(), "{description}" }
+            }
+            FieldError { id: ids.error.clone(), message: error }
+        }
+    }
+}
+
+/// A multi-line [`Textarea`] bound to a [`FormField`], wired like [`TextField`]. Extra
+/// attributes (`rows`, `maxlength`, ...) go to the `<textarea>`.
+#[component]
+pub fn TextareaField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(into, default)] placeholder: Option<String>,
+    /// Grow with the text (see [`Textarea`]).
+    #[props(default)]
+    autosize: bool,
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=textarea)]
+    attributes: Vec<Attribute>,
+) -> Element {
+    let ids = field.ids();
+    let error = field.error();
+    let invalid = error.is_some();
+    let wiring = attributes!(textarea {
+        id: ids.control.clone(),
+        placeholder: placeholder,
+        value: field.value(),
+        aria_invalid: invalid.then_some("true"),
+        aria_describedby: field.described_by(description.is_some()),
+    });
+    rsx! {
+        Field { invalid,
+            FieldLabel { html_for: ids.control.clone(), "{label}" }
+            Textarea {
+                autosize,
+                attributes: merge_attributes(vec![attributes, wiring]),
+                oninput: move |e: FormEvent| field.set(e.value()),
+                onblur: move |_| field.blur(),
+                onmounted: move |e| field.mounted(e),
+            }
+            if let Some(description) = description {
+                FieldDescription { id: ids.description.clone(), "{description}" }
+            }
+            FieldError { id: ids.error.clone(), message: error }
+        }
+    }
+}
+
+/// A [`Checkbox`] with its label beside it, bound to a [`FormField`] ("I accept the terms").
+/// The field holds `"true"` while checked and `""` while not, so `required()` (or `custom` with
+/// your own message) makes it mandatory. It validates on every change, and a failed submit
+/// focuses it like any other field.
+#[component]
+pub fn CheckboxField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+) -> Element {
+    let ids = field.ids();
+    let error = field.error();
+    let invalid = error.is_some();
+    let checked = field.value() == "true";
+    rsx! {
+        Field { invalid,
+            div { class: Styles::dx_form_check,
+                Checkbox {
+                    id: ids.control.clone(),
+                    checked: Some(if checked { CheckboxState::Checked } else { CheckboxState::Unchecked }),
+                    on_checked_change: move |state: CheckboxState| {
+                        field.set(if state == CheckboxState::Checked { "true" } else { "" });
+                        field.blur();
+                    },
+                    aria_invalid: invalid.then_some("true"),
+                    aria_describedby: field.described_by(description.is_some()),
+                }
+                FieldLabel { html_for: ids.control.clone(), "{label}" }
             }
             if let Some(description) = description {
                 FieldDescription { id: ids.description.clone(), "{description}" }

@@ -38,3 +38,7 @@ dioxus-native can't run the script that writes to `<html>`. Wrap the app in `The
 ## Source
 
 Original to this repo.
+
+## Stability
+
+`ACCENTS`, `DENSITIES` and the attributes and tokens the customizer writes are stable. `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` and the customizer's own markup are experimental and may change in any release; see `docs/STABILITY.md` in the kit repository.
