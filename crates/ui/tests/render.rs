@@ -1279,7 +1279,7 @@ fn hooks_media_query_is_false_off_the_web() {
 }
 
 #[test]
-fn modal_portal_renders_its_children_in_place_off_native() {
+fn overlay_modal_portal_renders_its_children_in_place_off_native() {
     let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
     assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
 }
@@ -1409,4 +1409,42 @@ fn form_field_with_starts_from_and_resets_to_its_initial_value() {
         rsx! { p { "{name.value()} {city.value()}" } }
     }
     assert_eq!(render(app), "<p>Ada Paris</p>");
+}
+
+#[test]
+fn toast_notify_takes_plain_strings_and_pairs() {
+    #[component]
+    fn Send() -> Element {
+        let toasts = use_toast();
+        use_hook(move || {
+            toasts.notify_success("Saved");
+            toasts.notify_error(("Failed", "Try again."));
+        });
+        rsx! {}
+    }
+    let mut dom = VirtualDom::new(|| rsx! { ToastProvider { Send {} } });
+    dom.rebuild_in_place();
+    dom.mark_all_dirty();
+    dom.render_immediate_to_vec();
+    let html = dioxus_ssr::render(&dom);
+    for text in ["Saved", "Failed", "Try again."] {
+        assert!(html.contains(text), "missing {text} in {html}");
+    }
+}
+
+#[test]
+fn chart_marks_show_their_value_on_hover() {
+    let html = render(|| {
+        rsx! {
+            BarChart { data: vec![ChartDatum::new("Jan", 12.0)], label: "Bars" }
+            LineChart { data: vec![ChartDatum::new("Feb", 7.5), ChartDatum::new("Mar", 3.0)], label: "Line" }
+        }
+    });
+    for title in [
+        "<title>Jan: 12</title>",
+        "<title>Feb: 7.5</title>",
+        "<title>Mar: 3</title>",
+    ] {
+        assert!(html.contains(title), "missing {title} in {html}");
+    }
 }

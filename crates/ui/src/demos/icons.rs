@@ -29,6 +29,12 @@ pub fn Demo() -> Element {
                 Button { variant: ButtonVariant::Ghost, "aria-label": "Search",
                     Search { size: "1rem", "aria-hidden": "true" }
                 }
+                // Or with hidden text (the theme's `sr-only` class), which translators and
+                // find-in-page also see.
+                Button { variant: ButtonVariant::Ghost,
+                    Settings { size: "1rem", "aria-hidden": "true" }
+                    span { class: "sr-only", "Settings" }
+                }
             }
         }
     }

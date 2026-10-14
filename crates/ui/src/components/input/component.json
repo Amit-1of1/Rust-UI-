@@ -1,5 +1,12 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "dioxus-primitives",
+      "rev": "a1100155246be04c91cb0b485852c2063364775c"
+    }
+  ],
   "componentDependencies": [],
   "description": "The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.",
   "exclude": [

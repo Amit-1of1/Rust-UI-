@@ -1,4 +1,5 @@
 use crate::components::data_table::*;
+use crate::components::toggle::Toggle;
 use dioxus::prelude::*;
 
 const PEOPLE: [(&str, &str, &str, &str); 14] = [
@@ -20,8 +21,11 @@ const PEOPLE: [(&str, &str, &str, &str); 14] = [
 
 #[component]
 pub fn Demo() -> Element {
+    // An outside filter, shown in the table's toolbar beside its own filter box.
+    let mut research_only = use_signal(|| false);
     let rows: Vec<Vec<String>> = PEOPLE
         .iter()
+        .filter(|(_, team, _, _)| !research_only() || *team == "Research")
         .map(|(a, b, c, d)| vec![a.to_string(), b.to_string(), c.to_string(), d.to_string()])
         .collect();
     let columns = vec![
@@ -40,6 +44,13 @@ pub fn Demo() -> Element {
                 page_size: 5,
                 selectable: true,
                 on_select: move |s| picked.set(s),
+                toolbar: rsx! {
+                    Toggle {
+                        pressed: research_only(),
+                        on_pressed_change: move |on| research_only.set(on),
+                        "Research only"
+                    }
+                },
             }
             p { style: "margin: 0; font-size: 0.875rem;", "Selected rows: {picked().len()}" }
         }

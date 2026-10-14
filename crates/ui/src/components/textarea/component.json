@@ -1,5 +1,12 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "dioxus-primitives",
+      "rev": "a1100155246be04c91cb0b485852c2063364775c"
+    }
+  ],
   "componentDependencies": [],
   "description": "The textarea element is used to allow users to enter multi-line text input in a user interface.",
   "exclude": [

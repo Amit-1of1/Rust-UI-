@@ -1,7 +1,7 @@
 use crate::components::button::{Button, ButtonVariant};
-use crate::components::toast::ToastProvider;
+use crate::components::toast::{ToastProvider, ToastsExt};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::{use_toast, ToastOptions};
+use dioxus_primitives::toast::use_toast;
 
 /// Self-contained: the demo brings its own provider, so it also works on a docs page.
 #[component]
@@ -18,13 +18,18 @@ fn Buttons() -> Element {
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;",
             Button {
                 variant: ButtonVariant::Outline,
-                onclick: move |_| toasts.success("Saved".to_string(), ToastOptions::new().description("Your changes are stored.")),
+                onclick: move |_| toasts.notify_success(("Saved", "Your changes are stored.")),
                 "Success toast"
             }
             Button {
                 variant: ButtonVariant::Outline,
-                onclick: move |_| toasts.error("Failed".to_string(), ToastOptions::new().description("Something went wrong.")),
+                onclick: move |_| toasts.notify_error(("Failed", "Something went wrong.")),
                 "Error toast"
+            }
+            Button {
+                variant: ButtonVariant::Outline,
+                onclick: move |_| toasts.notify_info("Copied"),
+                "Info toast"
             }
         }
     }

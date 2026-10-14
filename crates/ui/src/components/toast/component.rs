@@ -95,6 +95,83 @@ pub fn ToastProvider(
     }
 }
 
+/// Shorter toasts for the common case: `toasts.notify_success("Saved")`, or with a description
+/// `toasts.notify_error(("Failed", "Try again."))`. The primitive's `success(String, ToastOptions)`
+/// still works for durations and other options.
+pub trait ToastsExt {
+    fn notify_success(&self, message: impl Into<ToastMessage>);
+    fn notify_error(&self, message: impl Into<ToastMessage>);
+    fn notify_warning(&self, message: impl Into<ToastMessage>);
+    fn notify_info(&self, message: impl Into<ToastMessage>);
+}
+
+/// A toast's title and optional description. Built from `"title"`, a `String`, or a
+/// `(title, description)` pair.
+#[derive(Clone, PartialEq, Debug)]
+pub struct ToastMessage {
+    pub title: String,
+    pub description: Option<String>,
+}
+
+impl ToastMessage {
+    fn split(self) -> (String, toast::ToastOptions) {
+        let mut options = toast::ToastOptions::new();
+        if let Some(description) = self.description {
+            options = options.description(description);
+        }
+        (self.title, options)
+    }
+}
+
+impl From<&str> for ToastMessage {
+    fn from(title: &str) -> Self {
+        Self {
+            title: title.to_string(),
+            description: None,
+        }
+    }
+}
+
+impl From<String> for ToastMessage {
+    fn from(title: String) -> Self {
+        Self {
+            title,
+            description: None,
+        }
+    }
+}
+
+impl<T: Into<String>, D: Into<String>> From<(T, D)> for ToastMessage {
+    fn from((title, description): (T, D)) -> Self {
+        Self {
+            title: title.into(),
+            description: Some(description.into()),
+        }
+    }
+}
+
+impl ToastsExt for toast::Toasts {
+    fn notify_success(&self, message: impl Into<ToastMessage>) {
+        let (title, options) = message.into().split();
+        self.success(title, options);
+    }
+
+    fn notify_error(&self, message: impl Into<ToastMessage>) {
+        let (title, options) = message.into().split();
+        self.error(title, options);
+    }
+
+    fn notify_warning(&self, message: impl Into<ToastMessage>) {
+        let (title, options) = message.into().split();
+        self.warning(title, options);
+    }
+
+    fn notify_info(&self, message: impl Into<ToastMessage>) {
+        let (title, options) = message.into().split();
+        self.info(title, options);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

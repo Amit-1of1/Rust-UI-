@@ -5,6 +5,8 @@
 
 pub mod components;
 pub mod css_bundle;
+/// Demos shown in the gallery and the docs site (feature `demos`).
+#[cfg(feature = "demos")]
 pub mod demos;
 
 /// Shared hooks (`use_hotkey`, `Selection`, `use_media_query`, ...): `ui::hooks::*`.

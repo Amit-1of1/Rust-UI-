@@ -24,7 +24,7 @@ struct Styles;
 struct TriggerName {
     root: Vec<Attribute>,
     trigger: Vec<Attribute>,
-    placeholder: String,
+    placeholder: Option<String>,
     trigger_id: String,
     label_id: String,
     label: Option<String>,
@@ -75,7 +75,7 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
     TriggerName {
         root,
         trigger,
-        placeholder: placeholder.unwrap_or_default(),
+        placeholder,
         label: label.filter(|_| by.is_none()),
         trigger_id,
         label_id,
@@ -112,7 +112,11 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
                 attributes: name.trigger,
-                select::SelectValue { placeholder: name.placeholder }
+                if let Some(placeholder) = name.placeholder {
+                    select::SelectValue { placeholder }
+                } else {
+                    select::SelectValue {}
+                }
                 ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",
@@ -156,7 +160,11 @@ pub fn SelectMulti<T: Clone + PartialEq + 'static>(props: SelectMultiProps<T>) -
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
                 attributes: name.trigger,
-                select::SelectValue { placeholder: name.placeholder }
+                if let Some(placeholder) = name.placeholder {
+                    select::SelectValue { placeholder }
+                } else {
+                    select::SelectValue {}
+                }
                 ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",

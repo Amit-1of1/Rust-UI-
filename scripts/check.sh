@@ -71,6 +71,8 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node drawer.mjs)
       step "table behaviour (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node table.mjs)
+      step "select + combobox form fields (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node form_fields.mjs)
       step "axe $name (rtl)"
       (cd tests/e2e && DIR=rtl GALLERY_URL="http://localhost:$port/" READY_SELECTOR="$ready" node axe.mjs light)
       step "anchor positioning (gallery)"

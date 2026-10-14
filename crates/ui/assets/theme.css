@@ -224,6 +224,20 @@ html[data-theme="light"],
   --density: 1.2;
 }
 
+/* Visually hidden, still read by screen readers: `span { class: "sr-only", "Close" }` for an
+   icon-only button. A plain global class (not a CSS module), so app code can use it too. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Respect the OS "reduce motion" setting for every component (docs/GUARDRAILS.md). */
 @media (prefers-reduced-motion: reduce) {
   *,
