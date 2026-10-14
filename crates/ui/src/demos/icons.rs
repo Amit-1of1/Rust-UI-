@@ -1,5 +1,8 @@
 use crate::components::button::{Button, ButtonVariant};
-use crate::components::icons::{Bell, Copy, Download, Heart, Search, Settings, Star, Trash};
+use crate::components::icons::{
+    lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings, Star,
+    Trash,
+};
 use dioxus::prelude::*;
 
 #[component]
@@ -15,6 +18,31 @@ pub fn Demo() -> Element {
                 IconCell { label: "Settings", Settings { size: "1.25rem", "aria-hidden": "true" } }
                 IconCell { label: "Star", Star { size: "1.25rem", "aria-hidden": "true" } }
                 IconCell { label: "Download", Download { size: "1.25rem", "aria-hidden": "true" } }
+            }
+            // Theme sizes (`--icon-size-*`), and an icon chosen at runtime from its data.
+            div { style: "display: flex; gap: 0.75rem; align-items: end;",
+                for size in [IconSize::Xs, IconSize::Sm, IconSize::Md, IconSize::Lg, IconSize::Xl] {
+                    Icon { icon: lucide::SPARKLES, size }
+                }
+            }
+            // A labelled icon is an image with a name; nothing else says "Verified" here.
+            p { style: "display: flex; gap: 0.5rem; align-items: center; margin: 0;",
+                "Ada Lovelace"
+                Icon { icon: lucide::BADGE_CHECK, size: IconSize::Sm, label: "Verified" }
+            }
+            // Directional icons mirror in right-to-left text.
+            div { style: "display: flex; gap: 1.5rem;",
+                span { dir: "ltr", style: "display: inline-flex; gap: 0.25rem; align-items: center;",
+                    "Next"
+                    ChevronRight { size: IconSize::Sm }
+                }
+                span {
+                    dir: "rtl",
+                    lang: "ar",
+                    style: "display: inline-flex; gap: 0.25rem; align-items: center;",
+                    "التالي"
+                    ChevronRight { size: IconSize::Sm }
+                }
             }
             div { style: "display: flex; gap: 0.5rem; align-items: center;",
                 Button { variant: ButtonVariant::Outline,

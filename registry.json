@@ -404,6 +404,7 @@
       "files": [
         "icons/component.rs",
         "icons/docs.md",
+        "icons/lucide.rs",
         "icons/mod.rs"
       ],
       "registryDependencies": []

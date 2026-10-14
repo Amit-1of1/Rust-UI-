@@ -19,7 +19,6 @@ name = "ui"
 [dependencies]
 dioxus.workspace = true
 dioxus-primitives.workspace = true
-dioxus-icons.workspace = true
 motion.workspace = true
 time = { version = "0.3.44", features = ["std", "macros"] }
 palette = "0.7.6"

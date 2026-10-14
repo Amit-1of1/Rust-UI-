@@ -224,6 +224,32 @@ html[data-theme="light"],
   --density: 1.2;
 }
 
+/* Icons (components/icons). `IconSize::Sm` etc. read these sizes; the default is lg (24px, like
+   Lucide). Icons without their own `stroke_width` draw with --icon-stroke-width. `:where()` keeps these
+   at zero specificity, so a component's or app's own icon CSS wins. */
+:root {
+  --icon-size-xs: 0.75rem;
+  --icon-size-sm: 1rem;
+  --icon-size-md: 1.25rem;
+  --icon-size-lg: 1.5rem;
+  --icon-size-xl: 2rem;
+  --icon-stroke-width: 2;
+}
+
+:where(svg[data-icon][data-size="xs"]) { width: var(--icon-size-xs); height: var(--icon-size-xs); }
+:where(svg[data-icon][data-size="sm"]) { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+:where(svg[data-icon][data-size="md"]) { width: var(--icon-size-md); height: var(--icon-size-md); }
+:where(svg[data-icon][data-size="lg"]) { width: var(--icon-size-lg); height: var(--icon-size-lg); }
+:where(svg[data-icon][data-size="xl"]) { width: var(--icon-size-xl); height: var(--icon-size-xl); }
+:where(svg[data-icon][data-stroke="theme"]) { stroke-width: var(--icon-stroke-width); }
+
+/* Arrows, chevrons, undo and the like point along the reading direction. `scale` (not
+   `transform`) so a component's own rotation still applies. */
+svg[data-mirror-rtl]:dir(rtl) { scale: -1 1; }
+@supports not selector(:dir(rtl)) {
+  [dir="rtl"] svg[data-mirror-rtl] { scale: -1 1; }
+}
+
 /* Visually hidden, still read by screen readers: `span { class: "sr-only", "Close" }` for an
    icon-only button. A plain global class (not a CSS module), so app code can use it too. */
 .sr-only {

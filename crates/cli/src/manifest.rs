@@ -66,9 +66,6 @@ fn cargo_dependencies(source: &str, primitives: &(String, String), registry: &st
         };
         deps.push(json!({"name": "dioxus-primitives", "git": primitives.0, "rev": primitives.1, "features": features}));
     }
-    if uses("dioxus_icons") {
-        deps.push(json!({"name": "dioxus-icons", "version": "0.1.0"}));
-    }
     if uses("time") {
         deps.push(json!({"name": "time", "version": "0.3.44", "features": ["std", "macros"]}));
     }
@@ -223,15 +220,12 @@ mod tests {
 
     #[test]
     fn dependencies_follow_the_imports() {
-        let src = "use dioxus_primitives::x;\nuse dioxus_icons::y;\nuse motion::z;";
+        let src = "use dioxus_primitives::x;\nuse motion::z;";
         let names: Vec<_> = cargo_dependencies(src, &("u".into(), "abc".into()), "g")
             .iter()
             .map(|d| d["name"].as_str().unwrap().to_string())
             .collect();
-        assert_eq!(
-            names,
-            ["dioxus-primitives", "dioxus-icons", "rust-ui-motion"]
-        );
+        assert_eq!(names, ["dioxus-primitives", "rust-ui-motion"]);
         assert!(
             cargo_dependencies("use dioxus::prelude::*;", &("u".into(), "abc".into()), "g")
                 .is_empty()

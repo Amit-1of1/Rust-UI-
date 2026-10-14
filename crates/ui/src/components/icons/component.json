@@ -1,12 +1,7 @@
 {
-  "cargoDependencies": [
-    {
-      "name": "dioxus-icons",
-      "version": "0.1.0"
-    }
-  ],
+  "cargoDependencies": [],
   "componentDependencies": [],
-  "description": "The kit's one icon set: Lucide (1,700+ icons) through the `dioxus-icons` crate, re-exported here so apps and components import icons from one place.",
+  "description": "The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.",
   "exclude": [
     "docs.md",
     "component.json"

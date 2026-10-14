@@ -1,8 +1,25 @@
 # Icons
 
-**Decision (2026-10-13): Lucide, through `dioxus-icons` 0.1.0, wrapped by the `icons` registry item.** Apps import `ui::icons::Check`; components import `crate::components::icons::Check`. Nothing outside `crates/ui/src/components/icons` names `dioxus_icons`.
+**Decision (2026-10-14): every Lucide icon, generated into the kit by `scripts/gen-lucide-icons.mjs`.** This replaces the 2026-10-13 decision below (Lucide through `dioxus-icons` 0.1.0). Apps import `ui::icons::Check`; components import `crate::components::icons::Check`. Nothing depends on an icon crate.
 
-## Options compared
+## How it works
+
+- `scripts/gen-lucide-icons.mjs` downloads the pinned `lucide-static` release with `npm pack` (which checks the registry's integrity hash), reads `icon-nodes.json` (each icon's shapes), `tags.json` (search words, put in the rustdoc) and the alias exports (old names), and writes `crates/ui/src/components/icons/lucide.rs` through `rustfmt`. Run it again with `--version` to upgrade; `--from` takes an unpacked or packed package for offline use.
+- `lucide.rs` has one constant per icon (`lucide::CHECK: IconData`, the shapes as `IconNode` values with Lucide's own numbers) and one component per icon (`components::Check`, re-exported as `ui::icons::Check`). Old names are `pub use` aliases.
+- `Icon` (in `component.rs`) draws any `IconData`; every generated component calls the same function, so the per-icon code is a few bytes.
+- **Binary size:** each constant and component is a separate item, so the linker keeps only the icons an app names (checked on the gallery's wasm build: icons it doesn't use are not in it). `lucide::ALL` names every icon and keeps all of them, so only tests use it.
+- The generator fails on any SVG element or attribute it doesn't know, so a Lucide release that needs a new shape type can't be converted silently wrong.
+
+## Rules
+
+- **Decorative by default.** An icon without a `label` is `aria-hidden="true"`; with one it is `role="img"` with that name. An icon-only control is named on the control (`aria-label` or `sr-only` text), never on the SVG.
+- **Theme sizes.** `IconSize::Xs` … `Xl` read `--icon-size-*` (default `Lg`, 24px). Use a number or CSS length (`"1em"`) for a fixed box or to follow the text. The size rules use `:where()`, so a component's own icon CSS wins.
+- **Stroke.** `--icon-stroke-width` (2) unless the caller passes `stroke_width`.
+- **Colour.** Icons draw with `currentColor`; colour them through the text colour or a token, never a literal.
+- **Right-to-left.** Icons that point along the reading direction mirror inside `dir="rtl"` (`scale: -1 1`, so a component's own `transform` still applies): left/right arrows, chevrons, corners and moves, panel toggles, undo/redo, reply/forward, log in/out, indent, text wrap. Vertical arrows, media controls and clocks don't. The list is `mirrorsInRtl` in the generator; `mirror_rtl` overrides it per icon.
+- **No sprite.** Icons stay inline SVG: that works on Blitz and in SSR with no extra file, and sprites only pay off with hundreds of repeated icons on one page.
+
+## History: the 2026-10-13 comparison
 
 | | `dioxus-icons` (chosen) | Rust/UI `crates/icons` | Copy Lucide SVGs into the repo |
 |---|---|---|---|
@@ -16,13 +33,13 @@
 
 Rust/UI's set loses on the accessibility point alone (a title on every decorative icon), and it brings Tailwind merging we don't use. Copying SVGs by hand would mean maintaining a generator; `dioxus-icons` already is one.
 
-## Why a wrapper item
+### Why a wrapper item
 
 - **One place to swap.** GUARDRAILS asks us to wrap outside dependencies. If `dioxus-icons` stalls, changing `components/icons/component.rs` is the whole migration.
 - **The registry knows about it.** `rust-ui add select` now brings the `icons` item along (it is a registry dependency, detected from the import), so copied components compile without editing imports.
 - **No glob in the prelude.** Lucide has icons named `Link`, `Badge`, `Calendar`, `Component` and more, so `ui::prelude::*` does not include icons. Import them by path.
 
-## Rules
+### Rules then
 
 - Decorative icons get `"aria-hidden": "true"` (every icon inside the kit's components now does).
 - An icon-only control is named on the control (`aria-label` or visually hidden text), never on the SVG.
