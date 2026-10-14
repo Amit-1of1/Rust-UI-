@@ -104,6 +104,10 @@ rust-ui diff command --dest src/components  # exit 1 if your copy differs
 
 Copy components with `dx components add` or `rust-ui add`, or depend on `rust-ui-kit` from git. Both are in [docs/INSTALL.md](docs/INSTALL.md). Nothing is on crates.io yet; [docs/PUBLISHING.md](docs/PUBLISHING.md) says why and what each crate needs.
 
+## Versions and API stability
+
+What changed is in [CHANGELOG.md](CHANGELOG.md), with upgrade steps for breaking changes in [docs/MIGRATION.md](docs/MIGRATION.md). The crates use semver `0.x`: a breaking change to a stable item bumps the minor version ([docs/VERSIONING.md](docs/VERSIONING.md)). [docs/STABILITY.md](docs/STABILITY.md) lists which parts of the API are stable, experimental or internal.
+
 ## Docs and gallery online
 
 `.github/workflows/pages.yml` builds the docs site (landing page) and the gallery (under `/gallery/`) and deploys them to GitHub Pages. It is manual and has not run yet; the one-time repo settings it needs are in [docs/PUBLISHING.md](docs/PUBLISHING.md#docs-site-on-github-pages).

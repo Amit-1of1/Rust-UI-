@@ -1,0 +1,103 @@
+# API stability
+
+Which parts of `rust-ui-kit` (`ui`), `rust-ui-motion` (`motion`) and `rust-ui-cli` (`rust-ui`) you can build on, as of 2026-10-14. The rules for changing each level are in [VERSIONING.md](VERSIONING.md).
+
+| Level | Promise |
+|---|---|
+| **Stable** | Breaking changes only in a minor release while `0.x` (major after `1.0`), each with a CHANGELOG entry and upgrade steps in [MIGRATION.md](MIGRATION.md), and a deprecation period when practical. |
+| **Experimental** | Usable, tested and documented, but the shape may still change in any release. Changes are listed in the CHANGELOG; there is no deprecation period. Pin a `rev`/tag if you rely on it. |
+| **Internal** | Public only so this repo's apps, tools and tests can reach it. No promise at all; don't use it from an app. |
+
+Everything is young (the kit started on 2026-10-10), so "stable" means "we now treat changes to it as breaking", not "it will never change". The kit has no `1.0` yet.
+
+## How to tell
+
+- Items listed as experimental or internal below say so in their rustdoc (first paragraph or a `# Stability` section), and experimental components say so in a "Stability" section of their `docs.md` (shown on the docs site).
+- Anything not listed below as experimental or internal, and reachable from `ui::prelude`, `ui::hooks`, `ui::icons`, `ui::motion` or the crate roots, is stable.
+
+## `rust-ui-kit` (`ui`)
+
+### Stable
+
+- **`ui::prelude`** and the components it re-exports, with their props, enums and child components. That covers the components copied from DioxusLabs/components (accordion, alert dialog, aspect ratio, avatar, button, calendar, card, checkbox, collapsible, color picker, combobox, context menu, date picker, dialog, drag-and-drop list, dropdown menu, hover card, input, label, menubar, navbar, pagination, popover, progress, radio group, scroll area, select, separator, sheet, sidebar, skeleton, slider, switch, tabs, textarea, toast, toggle, toggle group, toolbar, tooltip, virtual list), the ones written here (alert, breadcrumb, command, field, kbd, spinner, table) and the ones adapted from Rust/UI (bottom nav, button group, callout, chips, empty, input group, link, marquee, shimmer, status, stepper), plus carousel, drawer, dropzone, input OTP, item, multi select and tag group, except where listed under experimental.
+- **`ThemeStyles`**, **`THEME_CSS`**.
+- **`ui::hooks`**: `use_hotkey`, `use_media_query`, `use_copy_clipboard`.
+- **`ui::icons`**: the icon components. Icon names follow Lucide through `dioxus-icons`; a Lucide rename upstream is a breaking change here.
+- **`UiStrings`**, `UiStringsProvider`, `use_ui_strings`, `fill`. New fields can be added in any release; build `UiStrings` with `..UiStrings::default()`.
+- **Common behaviour**: `class` on a styled component adds to the kit's class; every other attribute you pass lands on the component's root element, except where a component's docs say it moves to the focusable control (`Select`, `Combobox`).
+- **Theme contract** (`crates/ui/assets/theme.css`, [THEMING.md](THEMING.md)): the colour, radius, density, overlay and spring tokens (`--primary-color`, `--accent-color`, `--accent-contrast`, `--radius`, `--density`, `--overlay-color`, `--error-text-color`, `--spring-gentle|snappy|bouncy` and their `-duration`s, ...), the `data-theme` (`light`, `dark`), `data-accent` (the names in `ACCENTS`) and `data-density` (the names in `DENSITIES`) attributes, and the `.sr-only` class.
+- **Registry item names** (the component folder names) and the `component.json` format, since `dx components add` and `rust-ui add` depend on them.
+- **Features**: `web`, `desktop`.
+
+### Experimental
+
+| Item | Why |
+|---|---|
+| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `FieldOption`, `Validator` and the rules | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. |
+| `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
+| `chart` | Kit-written SVG; multi-series charts and a legend (dashboard gap 19) will change its props. |
+| `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
+| `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
+| `hooks::Selection`, `use_selection`, `use_selected` | Built for the benchmark app; the API may change with its next use. |
+| Feature `native` | Does nothing today and is kept so apps that enable it keep building. Native (Blitz) support is a preview ([NATIVE.md](NATIVE.md)). |
+| Re-exports from `dioxus-primitives` in the prelude (`use_toast`, `ToastOptions`, `ContentSide`) | Their shape follows the pinned primitives rev (our fork). A rev bump that changes them is announced as breaking. |
+
+### Internal
+
+- `ui::demos` (feature `demos`): the gallery and docs demos. The feature exists for this repo's apps and tests.
+- `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `rust-ui postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
+- `ui::components::<name>` module paths. Import from `ui::prelude` (or `ui::hooks`, `ui::icons`); the module layout follows the registry and may move. `drag_and_drop_list` and `tag_group` are the exception: both export `RemoveButton`, so import them by module path.
+
+## `rust-ui-motion` (`motion`, also `ui::motion`)
+
+### Stable
+
+- `SpringPreset`, `Transition`, `use_reduced_motion`, `Pop`.
+- `AnimatePresence`, `use_is_present`, `PresenceMode` as used with `Pop` (keyed children, the default mode).
+
+### Experimental
+
+| Item | Why |
+|---|---|
+| `use_motion`, `MotionHandle`, `MotionStyle`, `AnimationConfig`, `AnimationError` | Re-exported straight from `dioxus-motion` `=0.4.0`, a one-maintainer crate whose API changes between minors. Moving off 0.4 changes these types. Prefer `use_spring` and `Pop`. |
+| `use_spring`, `Spring` | Thin wrapper that may change when the engine does. |
+| `FlipList`, `FlipItem` | Own FLIP implementation; web and desktop webview only. |
+| `SwipeDismiss`, `SwipeDirection`, `SwipeOutcome`, `SwipeTracker` | Gesture API grew `vertical`/`one_way` recently and depends on pointer capture (none on native). |
+
+### Internal
+
+- `motion::css` (`CssSpring`, `stylesheet`, `BEGIN_MARKER`, `END_MARKER`): generates the spring tokens in `theme.css`. The tokens are stable; the generator is not.
+
+## `rust-ui-cli` (`rust-ui`)
+
+### Stable
+
+- The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `RUST_UI_SOURCE`.
+- The `registry.json` format these commands read.
+
+### Experimental
+
+- `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
+- `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
+- `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
+
+### Internal
+
+- `rust-ui new` and `rust-ui registry`: tools for working inside this repository.
+- The library crate `rust_ui_cli` (every module and function). It is the binary's implementation, public for the repo's tests. Use the commands instead.
+
+## Marking experimental items
+
+When adding or reviewing a public item:
+
+- In rustdoc, add a section to the item (or its module):
+
+  ```rust
+  /// # Stability
+  ///
+  /// Experimental: may change in any release (docs/STABILITY.md).
+  ```
+
+  Use "Internal: not part of the public API (docs/STABILITY.md)." for internal items.
+- For a component, end its `docs.md` with a `## Stability` section saying it is experimental and why.
+- Add it to the right table above, and move it to "Stable" (with a CHANGELOG "Changed" line) once its shape has held for a release.

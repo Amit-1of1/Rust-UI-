@@ -40,9 +40,10 @@ proptest = { version = "1", default-features = false, features = ["std"] }
 [features]
 # The gallery and docs demos (`ui::demos`). Off by default so apps don't ship demo code and
 # demo CSS; the gallery, the docs site, apps/native and the kit's own tests turn it on.
+# Internal (docs/STABILITY.md).
 demos = []
 web = ["dioxus-primitives/web", "motion/web"]
 desktop = ["motion/desktop"]
 # dioxus-native (Blitz). Nothing in the kit needs it any more (docs/NATIVE.md); kept so
-# apps that turn it on keep building.
+# apps that turn it on keep building. Experimental (docs/STABILITY.md).
 native = []

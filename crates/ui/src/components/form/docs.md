@@ -55,3 +55,7 @@ Use `FormField` directly (value, error, ids, set, load, blur, mounted) to wire y
 ## Source
 
 Original to this repo. The idea (a form-state hook plus bound fields) follows the pattern in Rust/UI's `use_form`, but nothing is copied; it is not Leptos- or serde-based.
+
+## Stability
+
+Experimental. The form API was reshaped twice in October 2026 (`mounted`, then `field_with`, `load` and the select and combobox fields), and binding a raw `Select` is still open. It may change in any release; see `docs/STABILITY.md` in the kit repository.

@@ -8,6 +8,9 @@
 //! [`Document`] so the per-component links for bundled files are never created.
 //!
 //! Without the bundle (`dx serve`, desktop, tests) nothing changes.
+//!
+//! Internal: not part of the public API (docs/STABILITY.md). Use [`crate::ThemeStyles`] and
+//! `rust-ui postbuild`.
 
 use dioxus::document::{Document, Eval, LinkProps, MetaProps, ScriptProps, StyleProps};
 use std::rc::Rc;

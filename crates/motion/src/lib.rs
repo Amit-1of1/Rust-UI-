@@ -12,6 +12,14 @@
 //! * [`SwipeDismiss`]: drag sideways (or press Delete) to dismiss.
 //! * [`use_spring`]: a spring-driven `f32`, e.g. for hover and press effects.
 //! * [`css`]: the same presets traced as CSS `linear()` easings, for CSS-animated overlays.
+//!
+//! # Stability
+//!
+//! Stable: [`SpringPreset`], [`Transition`], [`use_reduced_motion`], [`Pop`], and
+//! [`AnimatePresence`], [`use_is_present`] and [`PresenceMode`] as used with `Pop`.
+//! Experimental: [`use_spring`], [`FlipList`]/[`FlipItem`], [`SwipeDismiss`] and its types, and
+//! the other items re-exported from `dioxus-motion` (they change when the engine does).
+//! Internal: [`css`]. Details in docs/STABILITY.md.
 
 pub mod css;
 mod flip;
@@ -24,6 +32,8 @@ pub use gesture::{SwipeDirection, SwipeDismiss, SwipeOutcome, SwipeTracker};
 pub use preset::{SpringPreset, Transition};
 pub use reduced::use_reduced_motion;
 
+// Engine re-exports. AnimatePresence, use_is_present and PresenceMode are stable; the rest is
+// experimental: their types are dioxus-motion's and change with it (docs/STABILITY.md).
 pub use dioxus_motion::prelude::{
     use_is_present, use_motion, AnimatePresence, AnimationConfig, AnimationError, MotionHandle,
     MotionStyle, PresenceMode,
@@ -72,6 +82,10 @@ pub fn Pop(
 /// retargeted. Reads as `value.get_value()`; move it with [`Spring::to`].
 ///
 /// With reduced motion on, [`Spring::to`] jumps straight to the target.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy)]
 pub struct Spring {
     motion: MotionHandle<f32>,
@@ -112,6 +126,10 @@ impl Spring {
 }
 
 /// Create a [`Spring`] starting at `initial`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_spring(initial: f32, preset: SpringPreset) -> Spring {
     let reduced = use_reduced_motion();
     // `use_motion` only fails for a non-finite initial value; fall back to zero.
