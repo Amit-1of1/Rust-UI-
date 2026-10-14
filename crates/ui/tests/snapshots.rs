@@ -32,8 +32,8 @@ fn normalize_ids(html: &str) -> String {
         let mut parts: Vec<String> = token.split('-').map(str::to_string).collect();
         for i in 1..parts.len() {
             // Eight hex digits, which can be all letters (`bebfbacb`).
-            let hash = parts[i].len() == 8
-                && parts[i].chars().all(|c| matches!(c, '0'..='9' | 'a'..='f'));
+            let hash =
+                parts[i].len() == 8 && parts[i].chars().all(|c| matches!(c, '0'..='9' | 'a'..='f'));
             if hash && parts[i - 1].chars().any(|c| c.is_ascii_alphabetic()) {
                 parts[i] = "css".to_string();
                 continue;
