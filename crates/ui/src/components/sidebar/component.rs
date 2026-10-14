@@ -247,8 +247,24 @@ pub fn SidebarProvider(
     });
     let merged = merge_attributes(vec![base, attributes]);
 
+    // Without scripts (native) there is no window listener; hear the shortcut on the wrapper
+    // instead, which works while focus is inside it.
+    let scripts = use_hook(|| document::eval("").send(()).is_ok());
     rsx! {
-        div { ..merged, {children} }
+        div {
+            onkeydown: move |e: KeyboardEvent| {
+                let m = e.modifiers();
+                if !scripts
+                    && (m.ctrl() || m.meta())
+                    && e.key() == Key::Character(SIDEBAR_KEYBOARD_SHORTCUT.into())
+                {
+                    e.prevent_default();
+                    ctx.toggle();
+                }
+            },
+            ..merged,
+            {children}
+        }
     }
 }
 

@@ -24,6 +24,7 @@ pub fn Input(
     oncopy: Option<EventHandler<ClipboardEvent>>,
     oncut: Option<EventHandler<ClipboardEvent>>,
     onpaste: Option<EventHandler<ClipboardEvent>>,
+    onmounted: Option<EventHandler<MountedEvent>>,
     #[props(extends=GlobalAttributes)]
     #[props(extends=input)]
     attributes: Vec<Attribute>,
@@ -50,6 +51,7 @@ pub fn Input(
             oncopy: move |e| _ = oncopy.map(|callback| callback(e)),
             oncut: move |e| _ = oncut.map(|callback| callback(e)),
             onpaste: move |e| _ = onpaste.map(|callback| callback(e)),
+            onmounted: move |e| _ = onmounted.map(|callback| callback(e)),
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_input }), attributes]),
             {children}
         }

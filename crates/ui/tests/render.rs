@@ -1279,12 +1279,6 @@ fn hooks_media_query_is_false_off_the_web() {
 }
 
 #[test]
-fn overlay_modal_portal_renders_its_children_in_place_off_native() {
-    let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
-    assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
-}
-
-#[test]
 fn sidebar_is_a_navigation_landmark_that_can_be_renamed() {
     let html = render(|| {
         rsx! {
