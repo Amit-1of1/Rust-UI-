@@ -74,6 +74,10 @@ Original to this repo (not copied, accessible by construction): alert, breadcrum
 
 `apps/dashboard` ("Acme Admin") is the second real app on the kit: sidebar layout, KPI cards, charts, a customers table with badges and row menus, edit sheet, add and delete dialogs, an orders `DataTable` with date-range and status filters, a settings form and a Ctrl+K palette. What it found missing is in [`apps/dashboard/GAPS.md`](apps/dashboard/GAPS.md). Run it with `dx serve --platform web` in `apps/dashboard`; `tests/e2e/dashboard.mjs` (part of `scripts/check.sh --a11y`) runs axe on every page and overlay and drives the main flows.
 
+## Booking app
+
+`apps/booking` ("Trailhead Stays") is the third real app: a routed cabin-booking site with search, filters (price range, type, amenities), sort and paging, a stay page (carousel, tabs, accordion, hover card, a date-range booking box with a live price breakdown), a three-step checkout (stepper, validated forms, radio group, required checkbox) and a trips page with a cancel confirmation. It is the first app on the Dioxus router. What it found is in [`apps/booking/GAPS.md`](apps/booking/GAPS.md); `tests/e2e/booking.mjs` (part of `scripts/check.sh --a11y`) runs axe on every route and overlay in light and dark and drives the flows. Run it with `dx serve --platform web` in `apps/booking`.
+
 ## Registry and CLI
 
 `registry.json` lists every component with its files and the other components it needs. It is generated from the folders (`cargo run -p rust-ui-cli -- registry`), and a test fails if it goes stale.

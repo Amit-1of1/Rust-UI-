@@ -981,6 +981,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "booking"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "rust-ui-kit",
+ "time",
+ "web-sys",
+]
+
+[[package]]
 name = "built"
 version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1936,7 +1946,7 @@ dependencies = [
 [[package]]
 name = "dioxus-attributes"
 version = "0.1.0"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=68c311758a2c7d555ef92c813713008d028f87bf#68c311758a2c7d555ef92c813713008d028f87bf"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=71fed6960350eafeff5699f9fd3a447a1418b7b7#71fed6960350eafeff5699f9fd3a447a1418b7b7"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -2392,7 +2402,7 @@ dependencies = [
 [[package]]
 name = "dioxus-primitives"
 version = "0.0.1"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=68c311758a2c7d555ef92c813713008d028f87bf#68c311758a2c7d555ef92c813713008d028f87bf"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=71fed6960350eafeff5699f9fd3a447a1418b7b7#71fed6960350eafeff5699f9fd3a447a1418b7b7"
 dependencies = [
  "dioxus",
  "dioxus-attributes",

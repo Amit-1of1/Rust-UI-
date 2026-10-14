@@ -12,7 +12,6 @@ struct Styles;
 pub fn Accordion(props: AccordionProps) -> Element {
     rsx! {
         accordion::Accordion {
-            width: "15rem",
             id: props.id,
             allow_multiple_open: props.allow_multiple_open,
             disabled: props.disabled,

@@ -3,7 +3,7 @@
 Six crates carry small fixes on top of the exact versions we depend on. The fixes live on branches of forks under `Amit-1of1`, pinned to a commit in the workspace `Cargo.toml`.
 
 - The five renderer crates (Blitz and `dioxus-native-dom`) are swapped in with `[patch.crates-io]`. Only builds that pull them in (the `native` feature, `apps/native`) are affected; the web and desktop builds never compile them.
-- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. Its fixes only switch on where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave exactly as upstream.
+- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with one exception: the date range input freeze below is a plain bug fix that applies everywhere.
 
 | Crate | Release | Upstream commit of that release | Fork branch | Pinned commit |
 |---|---|---|---|---|
@@ -12,7 +12,7 @@ Six crates carry small fixes on top of the exact versions we depend on. The fixe
 | `blitz-net` | 0.2.1 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-net) | [Amit-1of1/blitz `rust-ui/blitz-net-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-net-0.2.1) | `505d30e` |
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
 | `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `8f3d575` |
-| `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) | `68c3117` |
+| `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) | `71fed69` |
 
 The `component.json` manifests that `rust-ui-cli registry` generates name the same fork and commit, so `dx components add` installs the fixed primitives too.
 
@@ -55,8 +55,9 @@ All six crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream'
 | Escape, outside click and focus traps need `eval` | dioxus-primitives | where `eval` can't run: dialog, alert dialog and popover take focus when they open and handle Escape themselves; focus leaving them (a click outside moves or clears it) closes them, and Tab out of a modal one brings focus back; the context menu closes on focus leaving it |
 | Slider and color area drags need `eval` | dioxus-primitives | a window-sized `PointerShield` takes the pointer moves and release while dragging |
 | Drag-and-drop list needs HTML drag and drop | dioxus-primitives | a press that moves more than 4px starts a pointer drag; items under the pointer pick the slot; release drops, leaving the list cancels |
+| Typing a complete start date into a date range input froze the page (web too; found by `apps/booking`) | dioxus-primitives | the range input and its two date inputs write each other's signals only when the value changes; a write of the same value used to notify and loop forever |
 
-Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos).
+Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates.
 
 ## Known limits of the patches
 

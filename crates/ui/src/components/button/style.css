@@ -18,6 +18,8 @@
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  /* `button_look` puts this on links too. */
+  text-decoration: none;
 }
 
 .dx-button svg {

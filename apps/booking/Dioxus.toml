@@ -1,0 +1,5 @@
+[application]
+name = "booking"
+
+[web.app]
+title = "Trailhead Stays"

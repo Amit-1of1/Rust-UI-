@@ -23,7 +23,7 @@ step "tests";   cargo test --workspace --exclude native
 # On its own: in a workspace build the gallery's `web` feature reaches the motion crate,
 # which then calls into JavaScript off wasm and panics in the native drawer test.
 step "native (headless Blitz)"; cargo test -p native
-step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard --target wasm32-unknown-unknown
+step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard -p booking --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 
@@ -105,6 +105,16 @@ if [ "$A11Y" = 1 ]; then
   sleep 1
   step "dashboard: axe on every page + flows"
   (cd tests/e2e && GALLERY_URL="http://localhost:8771/" node dashboard.mjs)
+
+  # apps/booking: the third real app (routed, long forms). Its script runs axe (light + dark) on
+  # every route and overlay, plus search, filters, booking, the checkout steps and cancelling.
+  step "build booking"
+  (cd apps/booking && dx build --platform web)
+  python3 -m http.server 8773 --directory target/dx/booking/debug/web/public >/dev/null 2>&1 &
+  PIDS+=("$!")
+  sleep 1
+  step "booking: axe on every route + flows"
+  (cd tests/e2e && GALLERY_URL="http://localhost:8773/" node booking.mjs)
 fi
 
 printf '\nAll checks passed.\n'

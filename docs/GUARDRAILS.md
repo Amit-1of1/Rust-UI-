@@ -93,6 +93,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `ui::demos` is behind the kit's `demos` feature (gallery, docs, apps/native and the kit's tests turn it on), so apps don't ship demo code or demo CSS.
 - `AlertDialogAction` closes the dialog before it calls `on_click`; keep "what to act on" in its own signal, not in the open flag.
 - Calling `FormField::set` from an effect is fine (it reads with `peek`); keep new `FormField` methods non-reactive for the same reason.
+- `apps/booking` is the first app on the Dioxus router (`dioxus` feature `router`). Kit links are plain `<a href>` (a full page load under the router): use the router's `Link` (with `button_look` for a button look) or `onclick` + `navigator()`. See `apps/booking/GAPS.md`.
+- In e2e scripts, don't click a "Dark mode" switch to get the dark theme: under `colorScheme: "dark"` it is already on, and the click turns it off.
 
 ## Decision log
 
