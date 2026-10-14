@@ -36,7 +36,7 @@ for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));
   await page.goto(url);
-  await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
+  await page.waitForSelector("body[data-ready='1'] .db-main");
   if (scheme === "dark") {
     await page.getByRole("switch", { name: "Dark mode" }).click();
   }
@@ -73,7 +73,7 @@ for (const scheme of ["light", "dark"]) {
 // ---- flows (light) ----
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 await page.goto(url);
-await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
+await page.waitForSelector("body[data-ready='1'] .db-main");
 const status = () => page.locator(".db-table-footer [role='status']").textContent();
 
 // Ctrl+K navigates.

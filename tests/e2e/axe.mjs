@@ -21,7 +21,7 @@ page.on("pageerror", (e) => logs.push(`pageerror: ${e.message}`));
 page.on("console", (m) => m.type() === "error" && logs.push(`console: ${m.text()}`));
 await page.goto(url);
 try {
-  await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+  await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main");
 } catch (e) {
   console.log(`${url} did not render:\n  ${logs.slice(0, 10).join("\n  ") || "(no errors logged)"}`);
   throw e;

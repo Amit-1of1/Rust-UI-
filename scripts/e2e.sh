@@ -4,7 +4,7 @@
 #   scripts/e2e.sh                          build the apps with dx, then test on Chromium
 #   scripts/e2e.sh --browsers chromium,firefox,webkit
 #   scripts/e2e.sh --prebuilt               use the existing target/dx/*/debug/web/public
-#   scripts/e2e.sh --release                release builds (CI: WebKit is slow to start 16 MB debug wasm)
+#   scripts/e2e.sh --release                test release builds (target/dx/*/release)
 # Needs `npm ci` in tests/e2e and each engine under PLAYWRIGHT_BROWSERS_PATH (this script never
 # downloads one; `npx playwright install <engine>` does, and CI does it in .github/workflows/e2e.yml).
 set -euo pipefail

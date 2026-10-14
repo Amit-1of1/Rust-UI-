@@ -9,7 +9,7 @@ const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
 const browser = await launch();
 const page = await browser.newPage({ forcedColors: "active", viewport: { width: 1100, height: 900 } });
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main");
 await page.waitForTimeout(1000);
 
 const forced = await page.evaluate(() => matchMedia("(forced-colors: active)").matches);

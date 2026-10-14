@@ -13,7 +13,7 @@ const MAX = Number(process.env.MAX_TABS ?? 1500);
 const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main");
 await page.waitForTimeout(1000);
 
 let failed = 0;
