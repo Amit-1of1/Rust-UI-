@@ -104,8 +104,18 @@ for (let i = 0; i < MAX; i++) {
     break;
   }
   if (s.problems.length) {
-    // Revealed-on-focus controls fade in; look again once the transition is done.
+    // Revealed-on-focus controls fade in; look again once the transition is done. Headless
+    // WebKit can leave a transition unstarted for a stop it scrolled to, so after the wait the
+    // focused element's own transitions are run to their end state, which is what a user sees.
     await page.waitForTimeout(350);
+    await page.evaluate(() => {
+      const el = document.activeElement;
+      for (const a of [el, el?.parentElement].flatMap((n) => n?.getAnimations?.() ?? [])) {
+        try {
+          a.finish(); // throws for an infinite animation (a spinner), which is left alone
+        } catch {}
+      }
+    });
     s.problems = (await stop()).problems;
   }
   seen.add(s.id);

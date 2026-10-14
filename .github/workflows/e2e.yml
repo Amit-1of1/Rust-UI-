@@ -58,3 +58,9 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: tests/e2e
       - run: scripts/e2e.sh --prebuilt --release --browsers ${{ matrix.browser }}
+      # Temporary: how often WebKit traps starting the gallery, per JSC tier.
+      - if: matrix.browser == 'webkit' && always()
+        run: |
+          python3 -m http.server 8765 --directory target/dx/gallery/release/web/public >/dev/null 2>&1 &
+          sleep 1
+          cd tests/e2e && node _crash_probe.mjs

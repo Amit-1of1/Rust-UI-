@@ -20,7 +20,10 @@ export async function launch(options) {
       const page = await newPage(opts);
       page.setDefaultTimeout(TIMEOUT);
       // A wasm panic or engine crash otherwise shows up only as a timeout.
-      page.on("pageerror", (e) => console.log(`page error (${ENGINE}): ${e.message.split("\n")[0]}`));
+      page.on("pageerror", (e) => {
+        console.log(`page error (${ENGINE}): ${e.message.split("\n")[0]}`);
+        if (e.stack) console.log(`  ${e.stack.split("\n").slice(0, 5).join("\n  ")}`);
+      });
       return page;
     };
     return browser;
