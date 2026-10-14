@@ -228,9 +228,7 @@ pub fn SwipeDismiss(
     rsx! {
         div {
             tabindex: "0",
-            // No text selection on the drag surface: in Firefox a press on text followed by a
-            // move starts a selection, and the pointer's move and up events never arrive.
-            style: "transform: translate{axis}({shown}px); opacity: {opacity}; touch-action: {touch_action}; cursor: grab; user-select: none; -webkit-user-select: none;",
+            style: "transform: translate{axis}({shown}px); opacity: {opacity}; touch-action: {touch_action}; cursor: grab;",
             onpointerdown: move |e| {
                 if dismissed() {
                     return;

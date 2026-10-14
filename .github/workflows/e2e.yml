@@ -64,9 +64,3 @@ jobs:
           python3 -m http.server 8765 --directory target/dx/gallery/release/web/public >/dev/null 2>&1 &
           sleep 1
           cd tests/e2e && node _crash_probe.mjs
-      # Temporary: what stops Firefox delivering a captured drag on the drawer.
-      - if: matrix.browser == 'firefox' && always()
-        run: |
-          python3 -m http.server 8765 --directory target/dx/gallery/release/web/public >/dev/null 2>&1 &
-          sleep 1
-          cd tests/e2e && BROWSER=firefox timeout 600 node _drag_probe.mjs
