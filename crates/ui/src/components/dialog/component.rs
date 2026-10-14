@@ -1,3 +1,4 @@
+use crate::components::overlay::ModalPortal;
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{self, DialogDescriptionProps, DialogRootProps, DialogTitleProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
@@ -13,17 +14,19 @@ pub fn Dialog(props: DialogRootProps) -> Element {
     let merged = merge_attributes(vec![base, props.attributes]);
 
     rsx! {
-        dialog::DialogRoot {
-            class: Styles::dx_dialog_backdrop,
-            id: props.id,
-            is_modal: props.is_modal,
-            open: props.open,
-            default_open: props.default_open,
-            on_open_change: props.on_open_change,
-            dialog::DialogContent {
-                class: None,
-                attributes: merged,
-                {props.children}
+        ModalPortal {
+            dialog::DialogRoot {
+                class: Styles::dx_dialog_backdrop,
+                id: props.id,
+                is_modal: props.is_modal,
+                open: props.open,
+                default_open: props.default_open,
+                on_open_change: props.on_open_change,
+                dialog::DialogContent {
+                    class: None,
+                    attributes: merged,
+                    {props.children}
+                }
             }
         }
     }

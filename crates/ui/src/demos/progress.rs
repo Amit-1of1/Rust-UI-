@@ -1,25 +1,23 @@
+use crate::components::button::*;
 use crate::components::progress::*;
 use dioxus::prelude::*;
 
+/// Driven by buttons rather than a JavaScript timer, so it also works on the native renderer.
 #[component]
 pub fn Demo() -> Element {
-    let mut progress = use_signal(|| 0);
-
-    use_effect(move || {
-        let mut timer = document::eval(
-            "setInterval(() => {
-                dioxus.send(Math.floor(Math.random() * 30));
-            }, 1000);",
-        );
-        spawn(async move {
-            while let Ok(new_progress) = timer.recv::<usize>().await {
-                let mut progress = progress.write();
-                *progress = (*progress + new_progress) % 101;
-            }
-        });
-    });
+    let mut progress = use_signal(|| 30_u32);
 
     rsx! {
-        Progress { aria_label: "Progressbar Demo", value: progress() as f64 }
+        div { style: "display: grid; gap: 0.75rem; max-width: 20rem;",
+            Progress { aria_label: "Progressbar Demo", value: progress() as f64 }
+            div { style: "display: flex; gap: 0.5rem;",
+                Button {
+                    variant: ButtonVariant::Outline,
+                    onclick: move |_| progress.set((progress() + 10).min(100)),
+                    "Add 10%"
+                }
+                Button { variant: ButtonVariant::Ghost, onclick: move |_| progress.set(0), "Reset" }
+            }
+        }
     }
 }

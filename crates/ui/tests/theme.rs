@@ -111,10 +111,14 @@ fn doubled(selector: &str) -> String {
 }
 
 /// The fallback block: every `light-dark(l, d)` token again as the space toggle
-/// `var(--dark, d) var(--light, l)`, for engines that do not parse `light-dark()`.
+/// `var(--dark, d) var(--light, l)`, for engines that do not parse `light-dark()`, and for
+/// Blitz (dioxus-native), whose Stylo parses it but always picks the light value. Blitz is
+/// told apart by `accent-color`, which its Stylo lacks and every browser with `light-dark()`
+/// has (`color-scheme` would not do: Blitz turns on Stylo's unimplemented properties). Root tokens are also re-declared on `[data-theme]`, so a subtree can
+/// switch theme on its own there too.
 fn fallback(tokens: &str) -> String {
     let mut out = format!(
-        "{FALLBACK_BEGIN}\n/* For browsers without light-dark(): the same tokens as space toggles.\n * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */\n@supports not (color: light-dark(#000, #fff)) {{\n"
+        "{FALLBACK_BEGIN}\n/* For browsers without light-dark(): the same tokens as space toggles.\n * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */\n@supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {{\n"
     );
     let mut selector = None;
     let mut body = String::new();
@@ -124,7 +128,11 @@ fn fallback(tokens: &str) -> String {
             body.clear();
         } else if line == "}" {
             if let Some(sel) = selector.take().filter(|_| !body.is_empty()) {
-                out.push_str(&format!("  {} {{\n{body}  }}\n", doubled(&sel)));
+                let sel = match sel.as_str() {
+                    ":root" => format!("{}, {}", doubled(":root"), doubled("[data-theme]")),
+                    _ => doubled(&sel),
+                };
+                out.push_str(&format!("  {sel} {{\n{body}  }}\n"));
             }
         } else if let Some((name, value)) = line.trim().split_once(':') {
             let value = value.trim().trim_end_matches(';');
@@ -183,7 +191,10 @@ fn fallback_converts_pairs_and_nested_vars() {
         out.contains("--b: var(--dark, var(--c, #111)) var(--light, var(--a));"),
         "{out}"
     );
-    assert!(out.contains(":root:root {"), "{out}");
+    assert!(
+        out.contains(":root:root, [data-theme][data-theme] {"),
+        "{out}"
+    );
     assert!(
         !out.contains("--r") && !out.contains("data-accent"),
         "{out}"

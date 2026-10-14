@@ -1,7 +1,12 @@
 /* Alert Dialog Backdrop */
+/* The backdrop centres the dialog with flexbox rather than `top: 50%` plus a percentage
+   `translate`, which the native renderer (Blitz) ignores. */
 .dx-alert-dialog-backdrop {
   position: fixed;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--overlay-color);
   inset: 0;
   opacity: 0;
@@ -23,6 +28,7 @@
 }
 
 .dx-alert-dialog-backdrop[data-state="open"] {
+  opacity: 1;
   animation: dx-alert-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
 }
 
@@ -38,10 +44,8 @@
 
 /* Alert Dialog Container - improved for theme consistency */
 .dx-alert-dialog {
-  position: fixed;
+  position: relative;
   z-index: 1001;
-  top: 50%;
-  left: 50%;
   display: flex;
   width: 100%;
   max-width: calc(100% - 2rem);
@@ -59,7 +63,6 @@
     Arial, sans-serif;
   gap: 16px;
   text-align: center;
-  transform: translate(-50%, -50%);
 }
 
 .dx-alert-dialog-title {

@@ -14,4 +14,4 @@ ui.workspace = true
 default = ["web"]
 web = ["dioxus/web", "ui/web"]
 desktop = ["dioxus/desktop", "ui/desktop"]
-native = ["dioxus/native"]
+native = ["dioxus/native", "ui/native"]

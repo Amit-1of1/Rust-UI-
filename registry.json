@@ -37,7 +37,9 @@
         "alert_dialog/mod.rs",
         "alert_dialog/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "overlay"
+      ]
     },
     {
       "name": "aspect_ratio",
@@ -293,7 +295,9 @@
         "dialog/mod.rs",
         "dialog/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "overlay"
+      ]
     },
     {
       "name": "drag_and_drop_list",
@@ -316,7 +320,9 @@
         "drawer/mod.rs",
         "drawer/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "overlay"
+      ]
     },
     {
       "name": "dropdown_menu",
@@ -528,6 +534,15 @@
       ]
     },
     {
+      "name": "overlay",
+      "files": [
+        "overlay/component.rs",
+        "overlay/docs.md",
+        "overlay/mod.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "pagination",
       "files": [
         "pagination/component.rs",
@@ -612,6 +627,7 @@
       ],
       "registryDependencies": [
         "icons",
+        "overlay",
         "ui_strings"
       ]
     },

@@ -3,17 +3,23 @@
  * Light and dark: every colour token is a `light-dark(light, dark)` pair, so the colour scheme
  * picks the value. It follows the OS by default; data-theme="light" or "dark" on <html> forces
  * one. `color-scheme` also gives native scrollbars, form controls and the page canvas the same
- * scheme. Browsers without light-dark() (before Chrome 123, Safari 17.5, Firefox 120) use the
+ * scheme. Browsers without light-dark() (before Chrome 123, Safari 17.5, Firefox 120) and the
+ * native renderer (Blitz: parses light-dark() but always picks light) use the
  * generated fallback block further down. */
 :root {
   color-scheme: light dark;
 }
 
-html[data-theme="light"] {
+/* data-theme also works on any element, which then switches its own subtree: light-dark()
+   resolves against the element that uses the token. The native renderer has no <html> to
+   put it on, and a preview pane may want the other theme. */
+html[data-theme="light"],
+[data-theme="light"] {
   color-scheme: light;
 }
 
-html[data-theme="dark"] {
+html[data-theme="dark"],
+[data-theme="dark"] {
   color-scheme: dark;
 }
 
@@ -97,12 +103,14 @@ html[data-theme="dark"] {
  * `var(--dark, a) var(--light, b)` picks a or b. Kept for values light-dark() cannot hold
  * (shadows, gradients) and for component CSS not yet moved to light-dark(). Prefer
  * light-dark() for colours. */
-html[data-theme="dark"] {
+html[data-theme="dark"],
+[data-theme="dark"] {
   --dark: initial;
   --light: ;
 }
 
-html[data-theme="light"] {
+html[data-theme="light"],
+[data-theme="light"] {
   --dark: ;
   --light: initial;
 }
@@ -124,8 +132,8 @@ html[data-theme="light"] {
 /* theme fallback: begin (generated, do not edit) */
 /* For browsers without light-dark(): the same tokens as space toggles.
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */
-@supports not (color: light-dark(#000, #fff)) {
-  :root:root {
+@supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
+  :root:root, [data-theme][data-theme] {
     --primary-color: var(--dark, #000) var(--light, #fff);
     --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);
     --primary-color-2: var(--dark, #0a0a0a) var(--light, #fff);

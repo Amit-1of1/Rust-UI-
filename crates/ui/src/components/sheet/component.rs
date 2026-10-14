@@ -1,4 +1,5 @@
 use crate::components::icons::X;
+use crate::components::overlay::ModalPortal;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{
@@ -40,18 +41,20 @@ pub fn Sheet(props: DialogRootProps) -> Element {
     let content_attributes = merge_attributes(vec![content_base, props.attributes]);
 
     rsx! {
-        dialog::DialogRoot {
-            class: Styles::dx_sheet_root,
-            "data-slot": "sheet-root",
-            id: props.id,
-            is_modal: props.is_modal,
-            open: props.open,
-            default_open: props.default_open,
-            on_open_change: props.on_open_change,
-            dialog::DialogContent {
-                class: None,
-                attributes: content_attributes,
-                {props.children}
+        ModalPortal {
+            dialog::DialogRoot {
+                class: Styles::dx_sheet_root,
+                "data-slot": "sheet-root",
+                id: props.id,
+                is_modal: props.is_modal,
+                open: props.open,
+                default_open: props.default_open,
+                on_open_change: props.on_open_change,
+                dialog::DialogContent {
+                    class: None,
+                    attributes: content_attributes,
+                    {props.children}
+                }
             }
         }
     }

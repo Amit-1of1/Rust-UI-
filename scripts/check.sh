@@ -19,7 +19,10 @@ step() { printf '\n== %s\n' "$*"; }
 
 step "fmt";     cargo fmt --all --check
 step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
-step "tests";   cargo test --workspace
+step "tests";   cargo test --workspace --exclude native
+# On its own: in a workspace build the gallery's `web` feature reaches the motion crate,
+# which then calls into JavaScript off wasm and panics in the native drawer test.
+step "native (headless Blitz)"; cargo test -p native
 step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard --target wasm32-unknown-unknown
 step "registry"; cargo run -q -p rust-ui-cli -- registry --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
