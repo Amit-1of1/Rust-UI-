@@ -2,6 +2,7 @@ name: Browser checks
 
 # scripts/e2e.sh on Chromium, Firefox and WebKit: axe, keyboard, accessibility tree and the
 # behaviour scripts in tests/e2e. The apps are built once and shared with each engine's job.
+# Release builds: WebKit on a runner times out on, or crashes in, the 16 MB debug wasm.
 on:
   push:
     branches: [master, main]
@@ -20,11 +21,15 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: dioxus-cli@0.7.10
+      # strip = true in [profile.release] drops the section newer wasm-bindgen needs; keep the
+      # symbols here rather than change the profile.
       - run: |
           for app in gallery site docs dashboard; do
-            (cd apps/$app && dx build --platform web)
+            (cd apps/$app && dx build --platform web --release)
           done
-      - run: tar -cf web.tar target/dx/*/debug/web/public
+        env:
+          CARGO_PROFILE_RELEASE_STRIP: "false"
+      - run: tar -cf web.tar target/dx/*/release/web/public
       - uses: actions/upload-artifact@v4
         with:
           name: web
@@ -53,4 +58,4 @@ jobs:
         working-directory: tests/e2e
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         working-directory: tests/e2e
-      - run: scripts/e2e.sh --prebuilt --browsers ${{ matrix.browser }}
+      - run: scripts/e2e.sh --prebuilt --release --browsers ${{ matrix.browser }}

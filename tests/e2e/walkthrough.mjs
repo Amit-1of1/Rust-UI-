@@ -65,7 +65,11 @@ const stop = () =>
     const s = getComputedStyle(boxOf);
     const problems = [];
     if (r.width < 1 || r.height < 1) problems.push("zero-size");
-    if (s.visibility === "hidden" || s.display === "none" || Number(s.opacity) === 0) problems.push("invisible");
+    if (s.visibility === "hidden" || s.display === "none" || Number(s.opacity) === 0)
+      problems.push(
+        `invisible (opacity ${s.opacity}, :focus-visible ${el.matches(":focus-visible")}, ` +
+          `running animations ${boxOf.getAnimations?.().length ?? "?"})`,
+      );
     if (el.closest("[aria-hidden=true]")) problems.push("inside aria-hidden");
     if (el.closest("[inert]")) problems.push("inside inert");
     if (!self && !wrap) problems.push("no focus indicator");
