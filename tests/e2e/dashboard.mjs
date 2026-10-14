@@ -78,10 +78,13 @@ await page.waitForSelector("body[data-ready='1'] .db-main");
 const status = () => page.locator(".db-table-footer [role='status']").textContent();
 
 // Ctrl+K navigates.
+// In a split build the palette and the Customers page load on first use: wait for each.
 await page.keyboard.press("Control+k");
+await page.getByRole("combobox", { name: /search commands/i }).waitFor();
 await page.keyboard.type("customers");
 await page.keyboard.press("Enter");
-await page.waitForTimeout(200);
+await page.waitForFunction(() => document.querySelector("h1.db-title")?.textContent === "Customers",
+  null, { timeout: 10000 }).catch(() => {});
 check((await heading(page)) === "Customers", "palette: 'customers' + Enter opens Customers");
 const before = await status();
 check(/of 48 customers/.test(before), `48 customers listed (${before})`);
