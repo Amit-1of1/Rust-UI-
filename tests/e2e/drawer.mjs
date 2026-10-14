@@ -46,6 +46,25 @@ await page.mouse.up();
 await page.waitForTimeout(900);
 if (await page.getByRole("dialog", { name: "Move goal" }).count()) {
   console.log("pointer events during the drag:", (await page.evaluate(() => window.__events)).join(" "));
+  // The same press-and-drag on a bare page, with and without pointer capture, tells a bug in
+  // the kit apart from how this engine's automation delivers events.
+  for (const capture of [false, true]) {
+    const probe = await browser.newPage();
+    await probe.setContent(`<div id=d style="padding:40px;user-select:none"><p id=p>Pick a number</p></div>`);
+    await probe.evaluate((capture) => {
+      window.__ev = [];
+      for (const t of ["pointerdown", "pointermove", "pointerup", "pointercancel", "gotpointercapture", "lostpointercapture"])
+        document.addEventListener(t, (e) => (t !== "pointermove" || !window.__ev.includes("pointermove")) && window.__ev.push(t), true);
+      if (capture) document.getElementById("d").addEventListener("pointerdown", (e) => e.target.setPointerCapture(e.pointerId));
+    }, capture);
+    const b = await probe.locator("#p").boundingBox();
+    await probe.mouse.move(b.x + 10, b.y + 5);
+    await probe.mouse.down();
+    for (let i = 1; i <= 5; i++) await probe.mouse.move(b.x + 10, b.y + 5 + i * 25);
+    await probe.mouse.up();
+    console.log(`bare page, capture ${capture}:`, (await probe.evaluate(() => window.__ev)).join(" "));
+    await probe.close();
+  }
 }
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "dragging down dismisses");
 
