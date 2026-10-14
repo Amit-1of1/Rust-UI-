@@ -9,6 +9,10 @@ use std::collections::BTreeSet;
 struct Styles;
 
 /// One column: its header and how it behaves.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, PartialEq, Debug)]
 pub struct DataColumn {
     pub header: String,
@@ -129,6 +133,10 @@ pub fn table_view(
 /// A table with sorting, a filter box, pagination and optional row selection. Cells are text
 /// unless `render_cell` is given; `toolbar` adds controls beside the filter box. For a different
 /// layout compose `Table` yourself and reuse [`table_view`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn DataTable(
     columns: Vec<DataColumn>,

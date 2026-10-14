@@ -47,6 +47,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 ## Process traps
 
 - [ ] **Small PRs, one theme each** (one week's slice, or one component family).
+- [ ] **Every public API change gets a `CHANGELOG.md` line; a breaking one also gets a `docs/MIGRATION.md` section.** New public items start experimental and are marked as `docs/STABILITY.md` says. Don't bump crate versions in feature PRs ([docs/VERSIONING.md](VERSIONING.md)).
 - [ ] **Update this file and the plan when reality differs.** Don't silently drift.
 - [ ] **End every week with a demo:** the gallery running, plus a one-paragraph note of what changed.
 - [ ] **No timeline promises shorter than the plan.** If a week slips, cut scope, don't stack weeks.

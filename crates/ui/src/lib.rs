@@ -2,10 +2,20 @@
 //!
 //! Behaviour and accessibility come from `dioxus-primitives`; the styled layer in
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
+//!
+//! # Stability
+//!
+//! Import from [`prelude`], [`hooks`], [`icons`] and [`motion`]. Which items are stable,
+//! experimental or internal is listed in docs/STABILITY.md; experimental and internal items
+//! also say so in their docs. Breaking changes follow docs/VERSIONING.md and are listed in
+//! CHANGELOG.md.
 
+/// Component modules. Internal paths: import from [`prelude`] instead (docs/STABILITY.md).
 pub mod components;
 pub mod css_bundle;
 /// Demos shown in the gallery and the docs site (feature `demos`).
+///
+/// Internal: not part of the public API (docs/STABILITY.md).
 #[cfg(feature = "demos")]
 pub mod demos;
 

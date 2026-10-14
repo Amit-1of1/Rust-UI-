@@ -57,6 +57,10 @@ fn set_root_radius(px: u32) {
 }
 
 /// Light or dark, or whatever the operating system prefers.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
 pub enum ThemeMode {
     #[default]
@@ -79,6 +83,10 @@ impl ThemeMode {
 /// The page's theme: mode, accent, density and corner radius. One shared state, so a
 /// header switch, a settings screen and [`ThemeCustomizer`] always agree. Get it with
 /// [`use_theme`]; the setters write `<html>` and every [`ThemeScope`], like the customizer.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq)]
 pub struct Theme {
     choices: Choices,
@@ -87,6 +95,10 @@ pub struct Theme {
 
 /// The shared [`Theme`]. Reading it subscribes the component, so it re-renders on changes
 /// made anywhere else.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_theme() -> Theme {
     let choices = use_hook(choices);
     let prefers_dark = use_media_query("(prefers-color-scheme: dark)");
@@ -169,6 +181,10 @@ impl Theme {
 /// On the web and in desktop webviews the customizer sets them on `<html>` and this wrapper
 /// is not needed. Renderers without JavaScript (dioxus-native) can't reach `<html>`, so wrap
 /// the app in `ThemeScope` there. It is a `display: contents` box: it doesn't change layout.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn ThemeScope(children: Element) -> Element {
     let choices = use_hook(choices);

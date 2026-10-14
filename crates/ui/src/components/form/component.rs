@@ -50,6 +50,10 @@ pub fn first_error(validators: &[Validator], value: &str) -> Option<String> {
 
 /// One field's state: value, error and touched flag, plus the ids that tie its label,
 /// description and error message together. Create with [`FormState::field`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq)]
 pub struct FormField {
     value: Signal<String>,
@@ -163,6 +167,10 @@ impl FormField {
 }
 
 /// All the fields of one form. Create with [`use_form`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, PartialEq)]
 pub struct FormState {
     fields: Signal<Vec<FormField>>,
@@ -232,6 +240,10 @@ impl FormState {
 }
 
 /// Create the state for one form.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_form() -> FormState {
     FormState {
         fields: use_hook(|| Signal::new(Vec::new())),
@@ -297,6 +309,10 @@ pub fn TextField(
 
 /// One choice of a [`SelectField`] or [`ComboboxField`]: the value stored in the field and
 /// the text shown. `"UTC".into()` uses the same text for both.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, PartialEq, Debug)]
 pub struct FieldOption {
     pub value: String,
@@ -327,6 +343,10 @@ fn use_selection(field: FormField) -> Memo<Option<String>> {
 /// error and description in `aria-describedby`, `aria-invalid`, and focus on a failed submit.
 /// The field holds the chosen option's `value` (empty while nothing is chosen, so
 /// `required()` works). It validates when the list closes, as a text field does on blur.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn SelectField(
     field: FormField,
@@ -376,6 +396,10 @@ pub fn SelectField(
 
 /// A searchable [`Combobox`] bound to a [`FormField`], wired like [`SelectField`]. `empty` is
 /// shown when the search matches nothing.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn ComboboxField(
     field: FormField,

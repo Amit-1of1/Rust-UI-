@@ -5,6 +5,9 @@
 //! [`SpringPreset`] here and write it out as `linear(...)` plus the time it takes to
 //! settle. The result is `assets/motion.css` in the kit: real spring feel, no JavaScript,
 //! no per-frame work, and the same presets the Rust side uses.
+//!
+//! Internal: not part of the public API (docs/STABILITY.md). The `--spring-*` tokens it
+//! generates are stable; this generator is not.
 
 use crate::SpringPreset;
 
