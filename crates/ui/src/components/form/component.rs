@@ -1,6 +1,7 @@
 use crate::components::field::*;
 use crate::components::input::Input;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
 
 #[css_module("/src/components/form/style.css")]
@@ -189,10 +190,9 @@ pub fn Form(
 ) -> Element {
     rsx! {
         form {
-            class: Styles::dx_form,
             novalidate: true,
             onsubmit: move |event| state.submit(event, || on_valid.call(())),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_form }), attributes]),
             {children}
         }
     }

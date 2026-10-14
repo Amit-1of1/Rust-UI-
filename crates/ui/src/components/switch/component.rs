@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 use dioxus_primitives::switch::{self, SwitchProps};
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/switch/style.css")]
 struct Styles;
@@ -8,7 +9,6 @@ struct Styles;
 pub fn Switch(props: SwitchProps) -> Element {
     rsx! {
         switch::Switch {
-            class: Styles::dx_switch,
             checked: props.checked,
             default_checked: props.default_checked,
             disabled: props.disabled,
@@ -16,7 +16,7 @@ pub fn Switch(props: SwitchProps) -> Element {
             name: props.name,
             value: props.value,
             on_checked_change: props.on_checked_change,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_switch }), props.attributes]),
             switch::SwitchThumb { class: Styles::dx_switch_thumb }
         }
     }

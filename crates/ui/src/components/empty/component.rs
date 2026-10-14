@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/empty/style.css")]
 struct Styles;
@@ -11,7 +12,7 @@ pub fn Empty(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_empty, ..attributes, {children} }
+        div { ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty }), attributes]), {children} }
     }
 }
 
@@ -21,7 +22,7 @@ pub fn EmptyHeader(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_empty_header, ..attributes, {children} }
+        div { ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty_header }), attributes]), {children} }
     }
 }
 
@@ -32,7 +33,7 @@ pub fn EmptyMedia(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_empty_media, "aria-hidden": "true", ..attributes, {children} }
+        div { "aria-hidden": "true", ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty_media }), attributes]), {children} }
     }
 }
 
@@ -45,10 +46,9 @@ pub fn EmptyTitle(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_empty_title,
             role: "heading",
             "aria-level": "{level.clamp(1, 6)}",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty_title }), attributes]),
             {children}
         }
     }
@@ -60,7 +60,7 @@ pub fn EmptyDescription(
     children: Element,
 ) -> Element {
     rsx! {
-        p { class: Styles::dx_empty_description, ..attributes, {children} }
+        p { ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty_description }), attributes]), {children} }
     }
 }
 
@@ -71,6 +71,6 @@ pub fn EmptyContent(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_empty_content, ..attributes, {children} }
+        div { ..merge_attributes(vec![attributes!(div { class: Styles::dx_empty_content }), attributes]), {children} }
     }
 }

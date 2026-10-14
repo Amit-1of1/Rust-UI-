@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 /// dioxus-primitives themselves.
 pub use dioxus_primitives::checkbox::CheckboxState;
 use dioxus_primitives::checkbox::{self, CheckboxProps};
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/checkbox/style.css")]
 struct Styles;
@@ -12,7 +13,6 @@ struct Styles;
 pub fn Checkbox(props: CheckboxProps) -> Element {
     rsx! {
         checkbox::Checkbox {
-            class: Styles::dx_checkbox,
             checked: props.checked,
             default_checked: props.default_checked,
             required: props.required,
@@ -20,7 +20,7 @@ pub fn Checkbox(props: CheckboxProps) -> Element {
             name: props.name,
             value: props.value,
             on_checked_change: props.on_checked_change,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_checkbox }), props.attributes]),
             checkbox::CheckboxIndicator { class: Styles::dx_checkbox_indicator,
                 Check { "aria-hidden": "true", size: "1rem" }
             }

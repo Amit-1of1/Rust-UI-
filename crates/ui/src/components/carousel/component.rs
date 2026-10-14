@@ -1,5 +1,6 @@
 use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/carousel/style.css")]
@@ -30,10 +31,9 @@ pub fn Carousel(
     let slides = fill(&t.slides, &[("label", &label)]);
     rsx! {
         section {
-            class: Styles::dx_carousel,
             "aria-roledescription": "carousel",
             "aria-label": "{label}",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_carousel }), attributes]),
             div {
                 id: "{track}",
                 class: Styles::dx_carousel_track,
@@ -72,11 +72,10 @@ pub fn CarouselItem(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_carousel_item,
             role: "group",
             "aria-roledescription": "slide",
             "aria-label": label,
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_carousel_item }), attributes]),
             {children}
         }
     }

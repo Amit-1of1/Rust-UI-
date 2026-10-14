@@ -3,6 +3,7 @@ use dioxus_primitives::toast::{
     self, Toast, ToastCloseButtonProps, ToastContentProps, ToastDescriptionProps, ToastProps,
     ToastTitleProps,
 };
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::time::Duration;
 
 #[css_module("/src/components/toast/style.css")]
@@ -20,8 +21,7 @@ fn StyledToast(props: ToastProps) -> Element {
             on_close: props.on_close,
             permanent: props.permanent,
             duration: props.duration,
-            class: Styles::dx_toast,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast }), props.attributes]),
             ToastContent {
                 ToastTitle {}
                 ToastDescription {}
@@ -35,8 +35,7 @@ fn StyledToast(props: ToastProps) -> Element {
 fn ToastContent(props: ToastContentProps) -> Element {
     rsx! {
         toast::ToastContent {
-            class: Styles::dx_toast_content,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast_content }), props.attributes]),
             {props.children}
         }
     }
@@ -46,8 +45,7 @@ fn ToastContent(props: ToastContentProps) -> Element {
 fn ToastTitle(props: ToastTitleProps) -> Element {
     rsx! {
         toast::ToastTitle {
-            class: Styles::dx_toast_title,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast_title }), props.attributes]),
             children: props.children,
         }
     }
@@ -57,8 +55,7 @@ fn ToastTitle(props: ToastTitleProps) -> Element {
 fn ToastDescription(props: ToastDescriptionProps) -> Element {
     rsx! {
         toast::ToastDescription {
-            class: Styles::dx_toast_description,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast_description }), props.attributes]),
             children: props.children,
         }
     }
@@ -68,8 +65,7 @@ fn ToastDescription(props: ToastDescriptionProps) -> Element {
 fn ToastCloseButton(props: ToastCloseButtonProps) -> Element {
     rsx! {
         toast::ToastCloseButton {
-            class: Styles::dx_toast_close,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast_close }), props.attributes]),
             children: props.children,
         }
     }
@@ -90,11 +86,10 @@ pub fn ToastProvider(
 
     rsx! {
         toast::ToastProvider {
-            class: Styles::dx_toast_container,
             default_duration,
             max_toasts,
             render_toast,
-            attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast_container }), attributes]),
             {children}
         }
     }

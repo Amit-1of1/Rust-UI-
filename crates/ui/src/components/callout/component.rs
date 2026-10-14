@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/callout/style.css")]
 struct Styles;
@@ -37,10 +38,9 @@ pub fn Callout(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_callout,
             role: "note",
             "data-variant": variant.as_str(),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_callout }), attributes]),
             if let Some(title) = title {
                 p { class: Styles::dx_callout_title, "{title}" }
             }

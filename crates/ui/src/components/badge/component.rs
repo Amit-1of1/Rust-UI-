@@ -1,5 +1,6 @@
 use crate::components::icons::BadgeCheck;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/badge/style.css")]
 struct Styles;
@@ -55,9 +56,8 @@ pub fn Badge(props: BadgeProps) -> Element {
 fn BadgeElement(props: BadgeProps) -> Element {
     rsx! {
         span {
-            class: Styles::dx_badge,
             "data-style": props.variant.class(),
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_badge }), props.attributes]),
             {props.children}
         }
     }

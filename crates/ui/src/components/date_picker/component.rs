@@ -314,8 +314,7 @@ pub(crate) fn DateRangePickerInput(props: DatePickerInputProps) -> Element {
 pub(crate) fn DatePickerYearSegment(props: DatePickerYearSegmentProps) -> Element {
     rsx! {
         date_picker::DatePickerYearSegment {
-            class: Styles::dx_date_segment,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_date_segment }), props.attributes]),
         }
     }
 }
@@ -324,8 +323,7 @@ pub(crate) fn DatePickerYearSegment(props: DatePickerYearSegmentProps) -> Elemen
 pub(crate) fn DatePickerMonthSegment(props: DatePickerMonthSegmentProps) -> Element {
     rsx! {
         date_picker::DatePickerMonthSegment {
-            class: Styles::dx_date_segment,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_date_segment }), props.attributes]),
         }
     }
 }
@@ -334,8 +332,7 @@ pub(crate) fn DatePickerMonthSegment(props: DatePickerMonthSegmentProps) -> Elem
 pub(crate) fn DatePickerDaySegment(props: DatePickerDaySegmentProps) -> Element {
     rsx! {
         date_picker::DatePickerDaySegment {
-            class: Styles::dx_date_segment,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_date_segment }), props.attributes]),
         }
     }
 }
@@ -344,9 +341,8 @@ pub(crate) fn DatePickerDaySegment(props: DatePickerDaySegmentProps) -> Element 
 pub(crate) fn DatePickerSeparator(props: DatePickerSeparatorProps) -> Element {
     rsx! {
         date_picker::DatePickerSeparator {
-            class: Styles::dx_date_segment,
             symbol: props.symbol,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_date_segment }), props.attributes]),
         }
     }
 }
@@ -374,9 +370,8 @@ pub(crate) fn DatePickerPopoverTrigger(props: PopoverTriggerProps) -> Element {
     let label = use_ui_strings().show_calendar;
     rsx! {
         PopoverTrigger {
-            class: Styles::dx_date_picker_popover_trigger,
             aria_label: label,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_date_picker_popover_trigger }), props.attributes]),
             ChevronDown { "aria-hidden": "true",
                 class: Styles::dx_date_picker_trigger,
                 size: "20px",
@@ -390,10 +385,13 @@ pub(crate) fn DatePickerPopoverTrigger(props: PopoverTriggerProps) -> Element {
 pub(crate) fn DatePickerPopoverContent(props: PopoverContentProps) -> Element {
     rsx! {
         PopoverContent {
-            class: Styles::dx_date_picker_popover_content.to_string(),
             id: props.id,
             side: props.side,
             align: props.align,
+            class: match props.class {
+                Some(class) => format!("{} {class}", Styles::dx_date_picker_popover_content),
+                None => Styles::dx_date_picker_popover_content.to_string(),
+            },
             attributes: props.attributes,
             {props.children}
         }

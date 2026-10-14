@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/field/style.css")]
@@ -57,10 +58,9 @@ pub fn Field(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_field,
             "data-slot": "field",
             "data-invalid": invalid.then_some("true"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_field }), attributes]),
             {children}
         }
     }
@@ -73,7 +73,7 @@ pub fn FieldLabel(
     children: Element,
 ) -> Element {
     rsx! {
-        label { class: Styles::dx_field_label, r#for: html_for, ..attributes, {children} }
+        label { r#for: html_for, ..merge_attributes(vec![attributes!(div { class: Styles::dx_field_label }), attributes]), {children} }
     }
 }
 
@@ -84,7 +84,7 @@ pub fn FieldDescription(
     children: Element,
 ) -> Element {
     rsx! {
-        p { class: Styles::dx_field_description, id, ..attributes, {children} }
+        p { id, ..merge_attributes(vec![attributes!(div { class: Styles::dx_field_description }), attributes]), {children} }
     }
 }
 

@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/stepper/style.css")]
 struct Styles;
@@ -96,9 +97,8 @@ pub fn Stepper(
     rsx! {
         div { class: Styles::dx_stepper_root,
             ol {
-                class: Styles::dx_stepper,
                 "data-orientation": if vertical { "vertical" } else { "horizontal" },
-                ..attributes,
+                ..merge_attributes(vec![attributes!(div { class: Styles::dx_stepper }), attributes]),
                 {children}
             }
             {footer}

@@ -5,6 +5,7 @@ use dioxus_primitives::drag_and_drop_list::{
     self, DragAndDropContext, DragAndDropDropIndicatorProps, DragAndDropItemContext,
     DragAndDropListItemProps, DragAndDropListItemsProps,
 };
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/drag_and_drop_list/style.css")]
 struct Styles;
@@ -59,10 +60,9 @@ pub fn DragAndDropList(props: DragAndDropListProps) -> Element {
 
     rsx! {
         drag_and_drop_list::DragAndDropList {
-            class: Styles::dx_dnd_list,
             items,
             aria_label: props.aria_label,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_dnd_list }), props.attributes]),
             drag_and_drop_list::DragAndDropInstructions {}
             DragAndDropListItems {
                 aria_label,
@@ -77,12 +77,11 @@ pub fn DragAndDropList(props: DragAndDropListProps) -> Element {
 pub fn DragAndDropListItem(props: DragAndDropListItemProps) -> Element {
     rsx! {
         drag_and_drop_list::DragAndDropListItem {
-            class: Styles::dx_dnd_list_item,
             index: props.index,
             // Forward the stable item key so the primitive tracks focus by
             // identity across reorders and removals instead of losing it.
             item_key: props.item_key.clone(),
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_dnd_list_item }), props.attributes]),
             {props.children}
         }
     }
@@ -92,9 +91,8 @@ pub fn DragAndDropListItem(props: DragAndDropListItemProps) -> Element {
 pub fn DragAndDropListItems(props: DragAndDropListItemsProps) -> Element {
     rsx! {
         drag_and_drop_list::DragAndDropListItems {
-            class: Styles::dx_dnd_list_ul,
             aria_label: props.aria_label,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_dnd_list_ul }), props.attributes]),
             for item in drag_and_drop_list::use_drag_and_drop_list_items() {
                 Fragment {
                     key: "{item.key}",
@@ -121,10 +119,9 @@ pub fn DragAndDropListItems(props: DragAndDropListItemsProps) -> Element {
 pub fn DragAndDropDropIndicator(props: DragAndDropDropIndicatorProps) -> Element {
     rsx! {
         drag_and_drop_list::DragAndDropDropIndicator {
-            class: Styles::dx_drop_indicator,
             index: props.index,
             position: props.position,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_drop_indicator }), props.attributes]),
         }
     }
 }
@@ -151,7 +148,6 @@ pub fn RemoveButton(
     let label = format!("Remove item {}", index + 1);
     rsx! {
         button {
-            class: Styles::dx_remove_button,
             r#type: "button",
             aria_label: "{label}",
             draggable: "false",
@@ -167,7 +163,7 @@ pub fn RemoveButton(
                 event.stop_propagation();
                 ctx.remove(index);
             },
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_remove_button }), attributes]),
             {children}
             X { "aria-hidden": "true", size: "14px" }
         }

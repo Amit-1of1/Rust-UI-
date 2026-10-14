@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/table/style.css")]
 struct Styles;
@@ -12,7 +13,7 @@ macro_rules! table_part {
             children: Element,
         ) -> Element {
             rsx! {
-                $tag { class: Styles::$class, ..attributes, {children} }
+                $tag { ..merge_attributes(vec![attributes!(div { class: Styles::$class }), attributes]), {children} }
             }
         }
     };
@@ -26,7 +27,7 @@ pub fn Table(
 ) -> Element {
     rsx! {
         div { class: Styles::dx_table_container,
-            table { class: Styles::dx_table, ..attributes, {children} }
+            table { ..merge_attributes(vec![attributes!(div { class: Styles::dx_table }), attributes]), {children} }
         }
     }
 }
@@ -42,7 +43,7 @@ pub fn TableCell(
     children: Element,
 ) -> Element {
     rsx! {
-        td { class: Styles::dx_table_cell, ..attributes, {children} }
+        td { ..merge_attributes(vec![attributes!(div { class: Styles::dx_table_cell }), attributes]), {children} }
     }
 }
 table_part!(TableCaption, caption, dx_table_caption);
@@ -93,10 +94,9 @@ pub fn TableHead(
 ) -> Element {
     rsx! {
         th {
-            class: Styles::dx_table_head,
             scope: "col",
             aria_sort: if on_sort.is_some() { sort.aria() },
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_table_head }), attributes]),
             if let Some(on_sort) = on_sort {
                 button {
                     class: Styles::dx_table_sort,

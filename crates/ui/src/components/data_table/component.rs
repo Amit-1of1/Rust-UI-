@@ -126,8 +126,9 @@ pub fn table_view(
     }
 }
 
-/// A table with sorting, a filter box, pagination and optional row selection. Cells are text;
-/// for custom cell content compose `Table` yourself and reuse [`table_view`].
+/// A table with sorting, a filter box, pagination and optional row selection. Cells are text
+/// unless `render_cell` is given; `toolbar` adds controls beside the filter box. For a different
+/// layout compose `Table` yourself and reuse [`table_view`].
 #[component]
 pub fn DataTable(
     columns: Vec<DataColumn>,
@@ -147,6 +148,9 @@ pub fn DataTable(
     /// instead of the text. The text in `rows` is still what filtering and sorting use.
     #[props(default)]
     render_cell: Option<Callback<(usize, usize), Element>>,
+    /// Extra controls (outside filters, actions) shown in the toolbar beside the filter box.
+    #[props(default)]
+    toolbar: Option<Element>,
 ) -> Element {
     let mut query = use_signal(String::new);
     let mut sort = use_signal(|| None::<(usize, SortDirection)>);
@@ -216,18 +220,22 @@ pub fn DataTable(
 
     rsx! {
         div { class: Styles::dx_data_table,
-            if filterable {
+            if filterable || toolbar.is_some() {
                 div { class: Styles::dx_data_table_toolbar,
-                    Input {
+                    if filterable {
+                        Input {
+                            class: Styles::dx_data_table_filter,
                         r#type: "search",
                         placeholder: t.filter_rows.clone(),
                         "aria-label": t.filter_rows.clone(),
                         value: "{query()}",
-                        oninput: move |e: FormEvent| {
-                            query.set(e.value());
-                            page.set(0);
-                        },
+                            oninput: move |e: FormEvent| {
+                                query.set(e.value());
+                                page.set(0);
+                            },
+                        }
                     }
+                    {toolbar}
                 }
             }
             Table {

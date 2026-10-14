@@ -602,8 +602,14 @@ fn breadcrumb_is_labelled_nav_with_current_page() {
         html.contains("role=\"presentation\" aria-hidden=\"true\""),
         "{html}"
     );
-    assert!(html.contains("aria-current=\"page\">Breadcrumb"), "{html}");
-    assert!(html.contains("href=\"#\">Home"), "{html}");
+    assert!(
+        html.contains("<span aria-current=\"page\"") && html.contains(">Breadcrumb</span>"),
+        "{html}"
+    );
+    assert!(
+        html.contains("<a href=\"#\"") && html.contains(">Home</a>"),
+        "{html}"
+    );
 }
 
 #[test]

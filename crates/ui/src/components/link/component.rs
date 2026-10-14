@@ -1,6 +1,7 @@
 use crate::components::icons::ExternalLink;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/link/style.css")]
 struct Styles;
@@ -26,12 +27,11 @@ pub fn TextLink(
     let t = use_ui_strings();
     rsx! {
         a {
-            class: Styles::dx_link,
             href,
             target: external.then_some("_blank"),
             rel: external.then_some("noopener noreferrer"),
             "aria-current": current.then_some("page"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_link }), attributes]),
             {children}
             if external {
                 ExternalLink { class: Styles::dx_link_icon, size: "0.875em", "aria-hidden": "true" }

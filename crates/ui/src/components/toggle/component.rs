@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 use dioxus_primitives::toggle::{self, ToggleProps};
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/toggle/style.css")]
 struct Styles;
@@ -8,7 +9,6 @@ struct Styles;
 pub fn Toggle(props: ToggleProps) -> Element {
     rsx! {
         toggle::Toggle {
-            class: Styles::dx_toggle,
             pressed: props.pressed,
             default_pressed: props.default_pressed,
             disabled: props.disabled,
@@ -16,7 +16,7 @@ pub fn Toggle(props: ToggleProps) -> Element {
             onmounted: props.onmounted,
             onfocus: props.onfocus,
             onkeydown: props.onkeydown,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toggle }), props.attributes]),
             {props.children}
         }
     }
