@@ -5,10 +5,13 @@
 #![allow(dead_code)]
 
 use blitz_dom::Document as _;
-use blitz_traits::events::{BlitzMouseButtonEvent, MouseEventButton, MouseEventButtons, UiEvent};
+use blitz_traits::events::{
+    BlitzKeyEvent, BlitzMouseButtonEvent, KeyState, MouseEventButton, MouseEventButtons, UiEvent,
+};
 use blitz_traits::shell::{ColorScheme, Viewport};
 use dioxus::prelude::*;
 use dioxus_native_dom::{DioxusDocument, DocumentConfig};
+pub use keyboard_types::{Code, Key, Modifiers};
 use std::path::{Path, PathBuf};
 
 pub const WIDTH: u32 = 1024;
@@ -144,6 +147,54 @@ impl Harness {
         assert!(r.on_screen(), "{selector} is not on screen: {r:?}");
         let (x, y) = r.center();
         self.click_at(x, y);
+    }
+
+    /// Press and release a key (sent to the focused element, as the shell does).
+    pub fn key(&mut self, key: Key, code: Code, modifiers: Modifiers) {
+        for state in [KeyState::Pressed, KeyState::Released] {
+            let ev = BlitzKeyEvent {
+                key: key.clone(),
+                code,
+                modifiers,
+                location: keyboard_types::Location::Standard,
+                is_auto_repeating: false,
+                is_composing: false,
+                state,
+                text: None,
+            };
+            self.doc.handle_ui_event(match state {
+                KeyState::Pressed => UiEvent::KeyDown(ev),
+                KeyState::Released => UiEvent::KeyUp(ev),
+            });
+        }
+        self.settle();
+    }
+
+    /// The element that has keyboard focus.
+    pub fn focused(&self) -> Option<usize> {
+        self.doc.focus_node_id()
+    }
+
+    /// Move the mouse to the middle of the first element matching `selector`.
+    pub fn hover(&mut self, selector: &str) {
+        let r = self
+            .rect(selector)
+            .unwrap_or_else(|| panic!("no element for {selector}"));
+        let (x, y) = r.center();
+        self.move_to(x, y);
+    }
+
+    /// Move the mouse to (x, y) without pressing anything.
+    pub fn move_to(&mut self, x: f32, y: f32) {
+        self.doc
+            .handle_ui_event(UiEvent::MouseMove(BlitzMouseButtonEvent {
+                x,
+                y,
+                button: MouseEventButton::Main,
+                buttons: MouseEventButtons::None,
+                mods: Default::default(),
+            }));
+        self.settle();
     }
 
     pub fn click_at(&mut self, x: f32, y: f32) {

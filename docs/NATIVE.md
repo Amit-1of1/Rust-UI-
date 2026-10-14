@@ -1,6 +1,6 @@
 # Native (Blitz) status
 
-Tested 2026-10-13 on `dioxus-native` 0.7.10 (Blitz 0.2). Static components, the modals (dialog, alert dialog, sheet, drawer, command palette), click-driven popups (popover, dropdown, select, combobox, date picker, multi select) and the click controls (checkbox, switch, radio, toggle, accordion, collapsible, tabs) work. Anything driven by pointer events, hover or `document::eval` does not (see Limits). Native is still a preview, not a target.
+Tested 2026-10-14 on `dioxus-native` 0.7.10 (Blitz 0.2) **with our patches** to `blitz-dom`, `blitz-paint` and `dioxus-native-dom` (in `vendor/`, see [vendor/README.md](../vendor/README.md)). Static components, the modals (dialog, alert dialog, sheet, drawer, command palette), click-driven popups (popover, dropdown, select, combobox, date picker, multi select), the click controls (checkbox, switch, radio, toggle, accordion, collapsible, tabs), hover UI (tooltip, hover card), the menubar, clicking a slider track, keyboard focus (Tab, Shift+Tab, arrow keys between tabs, Enter and Space on buttons) work. What is still missing is anything that needs `document::eval` (see Limits). Native is still a preview, not a target.
 
 ## How to run it
 
@@ -17,7 +17,7 @@ DEMO=table dx serve --renderer native --platform linux   # look at one (in apps/
 
 The smoke test fails a demo that exits, panics or draws a blank window. It cannot tell "looks right" from "looks wrong"; read the screenshots.
 
-`apps/native/tests/interactions.rs` is the real check. It runs the demos on `dioxus-native-dom` (the same Blitz document the window uses, without a window or GPU), injects the kit CSS exactly as `#[css_module]` hashes it, clicks things, and asserts on layout and on CPU-painted pixels. It runs in `cargo test --workspace`, so `scripts/check.sh` covers it. `NATIVE_SHOTS=1 cargo test -p native --test interactions` also saves PNGs to `target/native-headless/`. `THEME=dark` forces the dark theme in `apps/native`.
+`apps/native/tests/engine.rs` checks the renderer patches one by one with a few lines of markup each (all 12 fail on the unpatched crates). `apps/native/tests/interactions.rs` is the real check. It runs the demos on `dioxus-native-dom` (the same Blitz document the window uses, without a window or GPU), injects the kit CSS exactly as `#[css_module]` hashes it, clicks things, and asserts on layout and on CPU-painted pixels. It runs in `cargo test --workspace`, so `scripts/check.sh` covers it. `NATIVE_SHOTS=1 cargo test -p native --test interactions` also saves PNGs to `target/native-headless/`. `THEME=dark` forces the dark theme in `apps/native`.
 
 ## Results
 
@@ -40,19 +40,33 @@ All 68 demos start and draw (smoke test, before and after this pass). The headle
 | `progress` demo frozen | its timer was a JavaScript `setInterval` | the demo uses buttons |
 | `LineChart` has no line | Blitz draws inline SVG with usvg and ignores page CSS, so a `fill: none; stroke: …` class draws nothing | presentation attributes (`stroke="currentColor"`) as a fallback; CSS still wins where it applies |
 
-### Limits (Blitz 0.2 / dioxus-native 0.7.10; not worked around)
+### Fixed in the renderer (our forks, 2026-10-14)
 
-- **No pointer events.** `dioxus-native` does not deliver `pointerdown/up/move` (`convert_pointer_data` is `unimplemented!`). The menubar trigger, slider dragging, drag-and-drop list, `SwipeDismiss` (drawer drag; its Close button and Escape work) and the context menu do nothing. Hover-only UI (tooltip, hover card) is untested and likely inert.
-- **No `onmounted`, so no focus or measuring from Rust** (`convert_mounted_data` is `unimplemented!`). Together with `document::eval` answering every call with an error, focus management (dialogs' focus trap, `multi_select`/`form`/`input_otp` focus moves), the carousel scroll, `theme_customizer` (it sets attributes on `<html>`), the sidebar keyboard shortcut and `use_hotkey` are inert. There is no Rust-side replacement to switch to until Blitz implements these.
-- **No `pointer-events`:** every element takes clicks inside its box, even an empty or invisible one. That is why the overlay layer is 0x0 and its children exist only while a modal is open.
-- **Percentage transforms are dropped entirely** (`translate(-50%)` and anything combined with it). Popover, tooltip and hover card content centred on the trigger is shifted right by half its width; sheet slide-in animations don't slide. Visible and usable, not pretty.
-- **`z-index` only orders siblings.** A dropdown can be covered by a later sibling of one of its ancestors. Modals avoid this via the overlay layer.
-- **Overlay layer caveats:** it assumes the app is not scrolled (the layer scrolls with the page) and sets `body { margin: 0 }`. Portalled content sees contexts from above `ThemeStyles` and from inside the modal only.
+These were limits of Blitz 0.2 / dioxus-native 0.7.10. They are now fixed on our forks of the crates (`Amit-1of1/blitz`, `Amit-1of1/dioxus`); the table in [FORKS.md](FORKS.md) has the details and the test for each.
+
+- **Pointer and hover events** (`pointerdown/move/up`, `mouseenter/leave`, `mouseover/out`, pointer enter/leave/over/out) are delivered, with real client, page and element coordinates. Tooltip and hover card open on hover; the menubar opens; clicking a slider track moves the thumb.
+- **`onmounted`** fires, and `MountedData` answers `get_client_rect`, `set_focus`, `scroll_to`, `scroll` and the scroll queries. With **focus events** (`focus`, `blur`, `focusin`, `focusout`) this makes the primitives' roving focus work: arrow keys move focus between tabs (tested); radio and toggle groups, toolbars and menus use the same collection code.
+- **Keyboard:** a click focuses the nearest focusable element; Tab and Shift+Tab move through focusable elements; Enter and Space activate buttons.
+- **`position: fixed`** is laid out against the window.
+- **Percentage transforms** (`translate(-50%, -50%)`) work, transforms nest, and text moves with its box.
+- **`pointer-events: none`** and `visibility: hidden` let clicks through.
+- **`z-index`** works across ancestors (stacking contexts), for painting and for clicks.
+- **Click offset** beside text in a padded block is gone; boxes sticking out of their parent are clickable.
+- `disabled: false` and `hidden: false` no longer disable or hide (false boolean attributes are removed, as on the web).
+
+The kit-side workarounds from the previous pass (`ModalPortal`/`OverlayLayer`, flexbox-centred dialogs, the 0x0 checkbox input, the tabs `[hidden]` rule) stay: they are harmless with the patches and keep the unpatched crates usable.
+
+### Limits (still open)
+
+- **`document::eval` answers every call with an error**, and there is no JavaScript engine. The primitives use it for: Escape to close overlays (`use_global_keydown_listener`), outside-click dismissal (`use_outside_dismiss`), dialog focus traps, slider and drag-and-drop dragging (global pointer tracking in `pointer.rs`), the context menu's position, avatar image load state, and `theme_customizer`. Fixing these means giving the primitives a Rust path that does not use `eval` (the fork of DioxusLabs/components is approved for that), not patching the renderer.
+- `SwipeDismiss` drags (drawer) need pointer capture, which native does not have; the Close button and Escape (once Escape works) are the way out.
 - **CSS on inline SVG is ignored:** chart bars and dots draw in the default black; grid lines are missing.
-- **Theme:** dark works. It follows the window's colour scheme (`prefers-color-scheme`; X11 reports none, so Xvfb is light), and `data-theme="dark"` on any element switches its subtree. `ThemeCustomizer` can't change it (it needs `eval`); set `data-theme` on a wrapper from Rust instead. A wrapper with `data-theme` resets an accent set on an outer element; put `data-accent` on the same wrapper.
+- **Theme:** dark follows the window's colour scheme (`prefers-color-scheme`; X11 reports none, so Xvfb is light), and `data-theme="dark"` on any element switches its subtree. `ThemeCustomizer` can't change it (it needs `eval`); set `data-theme` on a wrapper from Rust instead. A wrapper with `data-theme` resets an accent set on an outer element; put `data-accent` on the same wrapper.
+- **Overlay layer caveats:** it assumes the app is not scrolled (the layer scrolls with the page) and sets `body { margin: 0 }`. Portalled content sees contexts from above `ThemeStyles` and from inside the modal only.
 - **Window defaults to 800x600**; fonts fall back to the system serif (`Inter` is not bundled).
+- Limits of the renderer patches themselves are listed in [FORKS.md](FORKS.md#known-limits-of-the-patches).
 
-### What to do next if native ever matters
+### What to do next
 
-1. Report upstream (Blitz / dioxus-native): the inline-root hit-test offset, `position: fixed` against the parent, percentage transforms, pointer and mounted events. Each reproduces in a few lines with `apps/native/tests/common`.
-2. On the next dioxus-native release, run `cargo test -p native --test interactions` and the smoke test first; when pointer and mounted events land, the eval-based focus code can move to `MountedData::set_focus`.
+1. Give the primitives an `eval`-free path for Escape, outside-click dismissal, focus traps and pointer tracking on a branch of `Amit-1of1/dioxus-components` (based on the primitives commit we pin), now that pointer, focus and mounted events exist on native.
+2. On the next dioxus-native release, move the fork branches to it (FORKS.md, "Moving to a new upstream release") and run `cargo test -p native` and the smoke test first.

@@ -821,8 +821,7 @@ checksum = "6099cdc01846bc367c4e7dd630dc5966dccf36b652fae7a74e17b640411a91b2"
 [[package]]
 name = "blitz-dom"
 version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c81d0f520bad6798a54cc4360bcabd245dc0aba2ce5917217d1d82ac5ee6bfed"
+source = "git+https://github.com/Amit-1of1/blitz?rev=b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350#b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350"
 dependencies = [
  "accesskit",
  "app_units",
@@ -885,8 +884,7 @@ dependencies = [
 [[package]]
 name = "blitz-paint"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "027aa42b3795589c9d7ae0238ac3087f9f22b58f9643fc22c4dc1ef1ef3413b2"
+source = "git+https://github.com/Amit-1of1/blitz?rev=d69d92a512ed58a28d2015b6199a1bbf6878aa39#d69d92a512ed58a28d2015b6199a1bbf6878aa39"
 dependencies = [
  "anyrender",
  "anyrender_svg",
@@ -2383,8 +2381,7 @@ dependencies = [
 [[package]]
 name = "dioxus-native-dom"
 version = "0.7.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0979a659aca5fe1ed94bc64ffba519b1d7d3d17a80967a4e927fc82a4fe3ba39"
+source = "git+https://github.com/Amit-1of1/dioxus?rev=95019012a0d23cd6d36c4487797d69b685719340#95019012a0d23cd6d36c4487797d69b685719340"
 dependencies = [
  "blitz-dom",
  "blitz-traits",
@@ -5055,6 +5052,7 @@ dependencies = [
  "dioxus",
  "dioxus-native-dom",
  "image",
+ "keyboard-types",
  "manganis-core",
  "rust-ui-kit",
 ]

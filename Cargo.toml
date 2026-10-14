@@ -26,3 +26,13 @@ strip = true
 
 [profile.dev]
 debug = 0
+
+# Native (Blitz) fixes, carried on forks as small patches on the exact upstream releases we use.
+# Pinned to commits; the branch each commit is on is named alongside. See docs/FORKS.md.
+[patch.crates-io]
+# Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4
+blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350" }
+# Amit-1of1/blitz, branch rust-ui/blitz-paint-0.2.1
+blitz-paint = { git = "https://github.com/Amit-1of1/blitz", rev = "d69d92a512ed58a28d2015b6199a1bbf6878aa39" }
+# Amit-1of1/dioxus, branch rust-ui/dioxus-native-dom-0.7.10
+dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "95019012a0d23cd6d36c4487797d69b685719340" }
