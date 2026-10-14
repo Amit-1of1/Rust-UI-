@@ -169,6 +169,96 @@ fn clicks_on_inline_children_of_a_padded_block_hit_them() {
     assert_eq!(attr(&h, "#b", "data-n").as_deref(), Some("1"));
 }
 
+#[test]
+fn right_click_fires_contextmenu() {
+    fn app() -> Element {
+        let mut at = use_signal(|| None::<i32>);
+        rsx! {
+            div {
+                id: "t",
+                style: "margin: 40px; width: 200px; height: 100px;",
+                "data-at": at().map(|x| x.to_string()),
+                oncontextmenu: move |e| at.set(Some(e.element_coordinates().x as i32)),
+            }
+        }
+    }
+    let mut h = Harness::new(app);
+    let r = h.rect("#t").unwrap();
+    h.click_at(r.x + 10.0, r.y + 10.0);
+    assert_eq!(
+        attr(&h, "#t", "data-at"),
+        None,
+        "left click fired contextmenu"
+    );
+    h.right_click_at(r.x + 12.0, r.y + 10.0);
+    assert_eq!(attr(&h, "#t", "data-at").as_deref(), Some("12"));
+}
+
+#[test]
+fn images_fire_load() {
+    use blitz_dom::net::Resource;
+    use blitz_dom::util::ImageType;
+    fn app() -> Element {
+        let mut loaded = use_signal(|| false);
+        rsx! {
+            img { id: "i", src: "x.png", "data-loaded": "{loaded}", onload: move |_| loaded.set(true) }
+        }
+    }
+    let mut h = Harness::new(app);
+    let img = h.find("#i").unwrap();
+    assert_eq!(attr(&h, "#i", "data-loaded").as_deref(), Some("false"));
+    h.doc.load_resource(Resource::Image(
+        img,
+        ImageType::Image,
+        1,
+        1,
+        std::sync::Arc::new(vec![0; 4]),
+    ));
+    h.settle();
+    assert_eq!(attr(&h, "#i", "data-loaded").as_deref(), Some("true"));
+}
+
+#[test]
+fn keyed_lists_reorder_without_losing_items() {
+    fn app() -> Element {
+        let mut items = use_signal(|| vec![1, 2, 3, 4]);
+        rsx! {
+            button { id: "rotate", onclick: move |_| items.write().rotate_left(1), "rotate" }
+            ul {
+                for i in items() {
+                    li { key: "{i}", class: "item", "{i}" }
+                }
+            }
+        }
+    }
+    let mut h = Harness::new(app);
+    h.click("#rotate");
+    let order: Vec<String> = h
+        .doc
+        .query_selector_all(".item")
+        .unwrap()
+        .into_iter()
+        .map(|id| h.doc.get_node(id).unwrap().text_content())
+        .collect();
+    assert_eq!(order, ["2", "3", "4", "1"]);
+}
+
+#[test]
+fn checkboxes_and_radios_fire_change() {
+    fn app() -> Element {
+        let mut n = use_signal(|| 0);
+        rsx! {
+            div { id: "n", "data-n": "{n}" }
+            input { id: "c", r#type: "checkbox", onchange: move |_| n += 1 }
+            input { id: "r", r#type: "radio", name: "g", onchange: move |_| n += 10 }
+        }
+    }
+    let mut h = Harness::new(app);
+    h.click("#c");
+    h.click("#r");
+    assert_eq!(attr(&h, "#n", "data-n").as_deref(), Some("11"));
+}
+
 // ---- positioning -----------------------------------------------------------------------
 
 #[test]

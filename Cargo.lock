@@ -821,7 +821,7 @@ checksum = "6099cdc01846bc367c4e7dd630dc5966dccf36b652fae7a74e17b640411a91b2"
 [[package]]
 name = "blitz-dom"
 version = "0.2.4"
-source = "git+https://github.com/Amit-1of1/blitz?rev=b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350#b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350"
+source = "git+https://github.com/Amit-1of1/blitz?rev=ceca47f651b17ef8fb9143558e4ec9ebc7d3e729#ceca47f651b17ef8fb9143558e4ec9ebc7d3e729"
 dependencies = [
  "accesskit",
  "app_units",
@@ -1939,7 +1939,7 @@ dependencies = [
 [[package]]
 name = "dioxus-attributes"
 version = "0.1.0"
-source = "git+https://github.com/DioxusLabs/components?rev=9a758255ea26e2b20c8cecf4c1c946feb9e71da7#9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=a1100155246be04c91cb0b485852c2063364775c#a1100155246be04c91cb0b485852c2063364775c"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -2381,7 +2381,7 @@ dependencies = [
 [[package]]
 name = "dioxus-native-dom"
 version = "0.7.10"
-source = "git+https://github.com/Amit-1of1/dioxus?rev=95019012a0d23cd6d36c4487797d69b685719340#95019012a0d23cd6d36c4487797d69b685719340"
+source = "git+https://github.com/Amit-1of1/dioxus?rev=e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37#e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37"
 dependencies = [
  "blitz-dom",
  "blitz-traits",
@@ -2395,7 +2395,7 @@ dependencies = [
 [[package]]
 name = "dioxus-primitives"
 version = "0.0.1"
-source = "git+https://github.com/DioxusLabs/components?rev=9a758255ea26e2b20c8cecf4c1c946feb9e71da7#9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=a1100155246be04c91cb0b485852c2063364775c#a1100155246be04c91cb0b485852c2063364775c"
 dependencies = [
  "dioxus",
  "dioxus-attributes",
