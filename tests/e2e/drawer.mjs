@@ -21,10 +21,16 @@ await page.keyboard.press("Escape");
 await page.waitForTimeout(400);
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "Escape closes");
 
-// Drag the body down past the threshold.
+// Drag the body down past the threshold. The pointer events seen are logged if it fails, since
+// engines differ in capture and boundary events.
 await trigger.click();
 await dialog.waitFor();
 await page.waitForTimeout(500);
+await page.evaluate(() => {
+  window.__events = [];
+  for (const type of ["pointerdown", "pointerup", "pointercancel", "pointerleave", "pointerout", "lostpointercapture", "gotpointercapture"])
+    document.addEventListener(type, (e) => window.__events.push(`${type}@${e.target.tagName ?? "?"}`), true);
+});
 const handle = dialog.locator("div").filter({ hasText: /^$/ }).first();
 const box = await dialog.getByText("Pick a number").boundingBox();
 await page.mouse.move(box.x + 20, box.y + 5);
@@ -36,6 +42,9 @@ for (let i = 1; i <= 10; i++) {
 await page.waitForTimeout(150);
 await page.mouse.up();
 await page.waitForTimeout(900);
+if (await page.getByRole("dialog", { name: "Move goal" }).count()) {
+  console.log("pointer events during the drag:", (await page.evaluate(() => window.__events)).join(" "));
+}
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "dragging down dismisses");
 
 // A short drag springs back and keeps it open.

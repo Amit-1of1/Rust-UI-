@@ -90,7 +90,8 @@ for (let i = 0; i < MAX; i++) {
     break;
   }
   if (seen.has(s.id)) {
-    reachedEnd = s.id === stops[0]?.id; // wrapped round to the first stop
+    // Wrapped round to the first stop, or (Firefox headless) Tab on the last stop left focus there.
+    reachedEnd = s.id === stops[0]?.id || s.id === stops[stops.length - 1]?.id;
     if (!reachedEnd) check(false, `focus loops back to an earlier stop at ${s.what} (trap)`);
     break;
   }

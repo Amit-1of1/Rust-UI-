@@ -53,8 +53,31 @@ check(unnamed.length === 0, `every control in the engine tree has a name (${cont
 
 const byRole = (...roles) => nodes.filter((n) => roles.includes(n.role));
 const has = (list, key) => list.length > 0 && list.every((n) => n[key] !== undefined);
-const toggles = byRole("checkbox", "checkbutton", "switch", "radio", "radiobutton");
-check(has(toggles, "checked"), `checkboxes, switches and radios expose checked state (${toggles.length})`);
+// Engines differ in how they report "not checked" (Firefox leaves the field out), so check the
+// state the engine reports changes when the control is toggled.
+async function engineState(name, role) {
+  const t = await page.accessibility.snapshot({ interestingOnly: true });
+  let found;
+  (function walk(n) {
+    if (!n || found) return;
+    if (n.name === name && role.includes(n.role)) found = n;
+    for (const c of n.children ?? []) walk(c);
+  })(t);
+  return found?.checked ?? false;
+}
+for (const [title, role, name] of [
+  ["Checkbox", ["checkbox", "checkbutton"], "Accept terms"],
+  ["Switch", ["switch", "checkbox", "checkbutton", "togglebutton"], "Airplane mode"],
+]) {
+  const before = await engineState(name, role);
+  await section(title).getByRole(role[0]).first().focus();
+  await page.keyboard.press("Space");
+  await page.waitForTimeout(200);
+  const after = await engineState(name, role);
+  check(before !== after, `${role[0]} "${name}": engine reports the checked state change (${before} -> ${after})`);
+  await page.keyboard.press("Space");
+  await page.waitForTimeout(200);
+}
 const tabs = byRole("tab", "pagetab");
 check(tabs.some((n) => n.selected === true), `the selected tab is exposed as selected (${tabs.length} tabs)`);
 const sliders = byRole("slider");
