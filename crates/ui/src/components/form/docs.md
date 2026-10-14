@@ -21,7 +21,7 @@ Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)`
 - Keyboard: on a failed submit focus moves to the first invalid field. Enter submits as usual.
 - Reduced motion: no animation.
 
-Use `FormField` directly (value, error, ids, set, blur) to wire your own controls such as a select or checkbox.
+Use `FormField` directly (value, error, ids, set, blur, mounted) to wire your own controls such as a select or checkbox. Pass the control's `onmounted` to `field.mounted(e)` so a failed submit can focus it on every renderer, native included.
 
 ## Source
 

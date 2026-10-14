@@ -1,4 +1,3 @@
-use crate::components::overlay::ModalPortal;
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{
     self, DialogCtx, DialogDescriptionProps, DialogRootProps, DialogTitleProps,
@@ -22,27 +21,26 @@ pub fn Drawer(props: DialogRootProps) -> Element {
     });
     let merged = merge_attributes(vec![base, props.attributes]);
     rsx! {
-        ModalPortal {
-            dialog::DialogRoot {
-                class: Styles::dx_drawer_backdrop,
-                id: props.id,
-                is_modal: props.is_modal,
-                open: props.open,
-                default_open: props.default_open,
-                on_open_change: props.on_open_change,
-                dialog::DialogContent { class: None, attributes: merged,
-                    SwipeDismiss {
-                        vertical: true,
-                        one_way: true,
-                        width: 320.0,
-                        on_dismiss: move |_| on_open_change.call(false),
-                        class: Styles::dx_drawer_body,
-                        div { class: Styles::dx_drawer_handle, "aria-hidden": "true" }
-                        {props.children}
-                    }
+        dialog::DialogRoot {
+            class: Styles::dx_drawer_backdrop,
+            id: props.id,
+            is_modal: props.is_modal,
+            open: props.open,
+            default_open: props.default_open,
+            on_open_change: props.on_open_change,
+            dialog::DialogContent { class: None, attributes: merged,
+                SwipeDismiss {
+                    vertical: true,
+                    one_way: true,
+                    width: 320.0,
+                    on_dismiss: move |_| on_open_change.call(false),
+                    class: Styles::dx_drawer_body,
+                    div { class: Styles::dx_drawer_handle, "aria-hidden": "true" }
+                    {props.children}
                 }
             }
         }
+
     }
 }
 

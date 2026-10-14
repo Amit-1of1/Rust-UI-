@@ -1,14 +1,24 @@
 use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
+use std::rc::Rc;
 use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/input_otp/style.css")]
 struct Styles;
 
-fn focus_slot(base: &str, index: usize) {
+/// Focus a box through its element handle (works on every renderer), then select its text
+/// where scripts run, so the next key replaces it. Without scripts, typing into a filled box
+/// gives the old and the new character, which [`OtpState::apply`] resolves.
+fn focus_slot(slots: &[Option<Rc<MountedData>>], base: &str, index: usize) {
+    if let Some(Some(slot)) = slots.get(index) {
+        let slot = slot.clone();
+        spawn(async move {
+            _ = slot.set_focus(true).await;
+        });
+    }
     // `base` is generated here (`dx-otp-<n>`), never user text.
     let _ = document::eval(&format!(
-        "var e=document.getElementById('{base}-{index}');if(e){{e.focus();e.select();}}"
+        "document.getElementById('{base}-{index}')?.select()"
     ));
 }
 
@@ -80,7 +90,16 @@ impl OtpState {
         let last = self.chars.len() - 1;
         match event {
             OtpEvent::Input { slot, text } if slot <= last => {
-                let typed: Vec<char> = text.chars().filter(|&c| self.accepts(c)).collect();
+                let mut typed: Vec<char> = text.chars().filter(|&c| self.accepts(c)).collect();
+                // Typing into a filled box whose text was not selected leaves the old character
+                // beside the new one; keep the new one.
+                if let (Some(old), [a, b]) = (self.chars[slot], typed.as_slice()) {
+                    if *a == old {
+                        typed = vec![*b];
+                    } else if *b == old {
+                        typed = vec![*a];
+                    }
+                }
                 if typed.is_empty() {
                     self.chars[slot] = None;
                     self.focus = slot;
@@ -148,6 +167,7 @@ pub fn InputOtp(
         format!("dx-otp-{}", NEXT.fetch_add(1, Ordering::Relaxed))
     });
     let mut state = use_signal(move || OtpState::new(length, numeric));
+    let mut slots = use_signal(move || vec![None::<Rc<MountedData>>; length]);
     let apply = {
         let base = base.clone();
         move |event: OtpEvent| -> OtpOutcome {
@@ -160,7 +180,7 @@ pub fn InputOtp(
                 }
             }
             if outcome != OtpOutcome::Ignored {
-                focus_slot(&base, now.focus);
+                focus_slot(&slots.peek(), &base, now.focus);
             }
             outcome
         }
@@ -187,6 +207,11 @@ pub fn InputOtp(
                     "aria-invalid": invalid.then_some("true"),
                     disabled,
                     value: state.read().chars[i].map(String::from).unwrap_or_default(),
+                    onmounted: move |e: MountedEvent| {
+                        if let Some(slot) = slots.write().get_mut(i) {
+                            *slot = Some(e.data());
+                        }
+                    },
                     onfocus: {
                         let base = base.clone();
                         move |_| {

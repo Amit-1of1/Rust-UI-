@@ -1271,9 +1271,3 @@ fn hooks_media_query_is_false_off_the_web() {
     }
     assert_eq!(render(app), "<p>false false</p>");
 }
-
-#[test]
-fn modal_portal_renders_its_children_in_place_off_native() {
-    let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
-    assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
-}
