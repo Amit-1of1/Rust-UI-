@@ -44,10 +44,14 @@ for (let i = 1; i <= 10; i++) {
   await page.waitForTimeout(30);
 }
 await page.waitForTimeout(150);
+// How far the drawer followed the pointer, logged if it does not dismiss.
+const followed = await dialog.evaluate((d) => [...d.querySelectorAll("[style*=translateY]")].map((e) => e.style.transform).join(" "));
 await page.mouse.up();
 await page.waitForTimeout(900);
-if (await page.getByRole("dialog", { name: "Move goal" }).count())
+if (await page.getByRole("dialog", { name: "Move goal" }).count()) {
   console.log("pointer events during the drag:", (await page.evaluate(() => window.__events)).join(" "));
+  console.log("drawer transform before the release:", followed || "(none)");
+}
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "dragging down dismisses");
 
 // A short drag springs back and keeps it open.
