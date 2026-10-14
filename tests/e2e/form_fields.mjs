@@ -9,7 +9,7 @@ const page = await browser.newPage();
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
 await page.waitForSelector(".gallery-main");
 await page.waitForTimeout(1000);
-const form = page.locator("form", { has: page.getByRole("button", { name: "Create account" }) });
+const form = page.locator("form", { has: page.getByRole("button", { name: /^Role/ }) });
 
 const role = form.getByRole("button", { name: /^Role/ });
 const zone = form.getByRole("combobox", { name: "Time zone" });
