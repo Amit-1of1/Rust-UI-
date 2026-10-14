@@ -268,3 +268,110 @@ fn data_theme_on_any_element_switches_its_subtree() {
     shot(&h, "card_data_theme");
     assert!(is_dark(card_background(&h)), "{:?}", card_background(&h));
 }
+
+// ---- needs the patched renderer (docs/FORKS.md) ---------------------------------------------
+
+fn attr(h: &Harness, selector: &str, name: &str) -> Option<String> {
+    let id = h.find(selector)?;
+    h.doc
+        .get_node(id)?
+        .attr(blitz_dom::LocalName::from(name))
+        .map(str::to_owned)
+}
+
+#[test]
+fn tooltip_opens_on_hover() {
+    let mut h = Harness::new(demo!("tooltip"));
+    assert!(h.rect("[role=tooltip]").is_none_or(|r| !r.on_screen()));
+    h.move_to(1000.0, 700.0);
+    h.hover("[tabindex]");
+    shot(&h, "tooltip");
+    let r = h.rect("[role=tooltip]").expect("tooltip did not open");
+    assert!(r.on_screen(), "{r:?}");
+    // Centred on its trigger: needs `translate(-50%)`, which upstream Blitz dropped.
+    let t = h.rect("[tabindex]").unwrap();
+    let painted = h.doc.get_node(h.find("[role=tooltip]").unwrap()).unwrap();
+    let shift = painted.css_transform_2d().map_or(0.0, |m| m[4] as f32);
+    assert!(
+        ((r.x + shift + r.w / 2.0) - (t.x + t.w / 2.0)).abs() < 2.0,
+        "tooltip {r:?} (shift {shift}) not centred on {t:?}"
+    );
+    h.move_to(1000.0, 700.0);
+    assert!(
+        h.rect("[role=tooltip]").is_none_or(|r| !r.on_screen()),
+        "tooltip stayed open"
+    );
+}
+
+#[test]
+fn hover_card_opens_on_hover() {
+    let mut h = Harness::new(demo!("hover_card"));
+    h.move_to(1000.0, 700.0);
+    h.hover("[role=button]");
+    h.settle();
+    shot(&h, "hover_card");
+    let r = h.rect("[role=tooltip]");
+    assert!(r.is_some_and(|r| r.on_screen()), "{r:?}");
+}
+
+#[test]
+fn slider_jumps_to_a_click_on_its_track() {
+    let mut h = Harness::new(demo!("slider"));
+    let before = attr(&h, "[role=slider]", "aria-valuenow");
+    let track = h.rect("[role=group]").expect("slider root");
+    h.click_at(track.x + track.w * 0.9, track.y + track.h / 2.0);
+    h.settle();
+    shot(&h, "slider");
+    let after = attr(&h, "[role=slider]", "aria-valuenow");
+    assert_ne!(before, after);
+}
+
+#[test]
+fn menubar_opens_on_click() {
+    let r = open(
+        "menubar",
+        demo!("menubar"),
+        "[role=menubar] button",
+        "[role=menu][id]",
+    );
+    assert!(r.h > 30.0, "{r:?}");
+}
+
+#[test]
+fn tab_key_moves_focus() {
+    let mut h = Harness::new(demo!("button_group"));
+    h.key(Key::Tab, Code::Tab, Modifiers::empty());
+    let first = h.focused().expect("nothing focused after Tab");
+    h.key(Key::Tab, Code::Tab, Modifiers::empty());
+    let second = h.focused().expect("focus lost");
+    assert_ne!(first, second);
+    h.key(Key::Tab, Code::Tab, Modifiers::SHIFT);
+    assert_eq!(h.focused(), Some(first));
+}
+
+#[test]
+fn arrow_keys_move_focus_between_tabs() {
+    let mut h = Harness::new(demo!("tabs"));
+    h.click("[role=tab]");
+    let first = h.focused().expect("tab not focused by click");
+    h.key(Key::ArrowRight, Code::ArrowRight, Modifiers::empty());
+    let next = h.focused().expect("focus lost");
+    assert_ne!(first, next, "ArrowRight did not move focus");
+    assert_eq!(
+        h.doc
+            .get_node(next)
+            .and_then(|n| n.attr(blitz_dom::LocalName::from("role"))),
+        Some("tab")
+    );
+}
+
+#[test]
+fn enter_activates_a_focused_button() {
+    let mut h = Harness::new(demo!("dialog"));
+    h.key(Key::Tab, Code::Tab, Modifiers::empty());
+    h.key(Key::Enter, Code::Enter, Modifiers::empty());
+    assert!(
+        h.rect("[role=dialog]").is_some(),
+        "Enter did not open the dialog"
+    );
+}
