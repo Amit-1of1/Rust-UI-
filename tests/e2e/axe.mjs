@@ -16,8 +16,16 @@ const ACCEPTED = {
 
 const browser = await launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
+const logs = [];
+page.on("pageerror", (e) => logs.push(`pageerror: ${e.message}`));
+page.on("console", (m) => m.type() === "error" && logs.push(`console: ${m.text()}`));
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+try {
+  await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+} catch (e) {
+  console.log(`${url} did not render:\n  ${logs.slice(0, 10).join("\n  ") || "(no errors logged)"}`);
+  throw e;
+}
 if (process.env.ACCENT) {
   await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
 }

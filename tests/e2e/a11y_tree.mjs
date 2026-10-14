@@ -86,7 +86,10 @@ check(
   `sliders expose a value (${sliders.length})`,
 );
 const pressed = nodes.filter((n) => n.pressed !== undefined);
-check(pressed.length > 0, `toggle buttons expose pressed state (${pressed.length})`);
+// Playwright's WebKit snapshot does not carry `pressed` at all (aria-pressed itself is
+// covered by the ARIA snapshots below and keyboard.mjs).
+if (ENGINE === "webkit") console.log(`skip toggle pressed state: not in the WebKit snapshot API`);
+else check(pressed.length > 0, `toggle buttons expose pressed state (${pressed.length})`);
 const expandable = nodes.filter((n) => n.expanded !== undefined);
 check(expandable.length > 0, `disclosures and popups expose expanded state (${expandable.length})`);
 const headings = byRole("heading");

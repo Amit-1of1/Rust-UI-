@@ -151,7 +151,10 @@ await darkSwitch.click();
 await page.waitForTimeout(200);
 check(await page.getByRole("radio", { name: "Dark" }).isChecked(), "header switch on: customizer shows Dark");
 check((await page.evaluate(() => document.documentElement.dataset.theme)) === "dark", "data-theme is dark");
-await page.getByRole("radio", { name: "Light" }).check({ force: true });
+// From the keyboard: the radio input is visually hidden, and a forced click on it does
+// nothing in WebKit. Space checks the focused radio.
+await page.getByRole("radio", { name: "Light" }).focus();
+await page.keyboard.press("Space");
 await page.waitForTimeout(200);
 check((await darkSwitch.getAttribute("aria-checked")) === "false", "customizer Light: header switch turns off");
 
