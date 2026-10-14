@@ -17,13 +17,22 @@ struct Styles;
 /// are moved to the trigger. The trigger also lists itself in `aria-labelledby`, so a
 /// screen reader announces the label and the current value ("Fruit, Apple"), the way a
 /// native `<select>` does. A plain `aria-label` on a button would replace the value.
+///
+/// The same goes for what makes it a form control: `id` (so a `<label for>` and focus-on-error
+/// reach the button), `aria-describedby`, `aria-invalid` and `aria-required` are moved to the
+/// trigger too, and `placeholder` is shown while nothing is selected.
 struct TriggerName {
     root: Vec<Attribute>,
+    trigger: Vec<Attribute>,
+    placeholder: String,
     trigger_id: String,
     label_id: String,
     label: Option<String>,
     labelledby: Option<String>,
 }
+
+/// Attributes that belong on the trigger button rather than the wrapper.
+const TRIGGER_ATTRIBUTES: [&str; 3] = ["aria-describedby", "aria-invalid", "aria-required"];
 
 fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
     static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
@@ -34,20 +43,30 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
     );
     let mut label = None;
     let mut by = None;
+    let mut id = None;
+    let mut placeholder = None;
+    let mut trigger = Vec::new();
     let root = attributes
         .into_iter()
-        .filter(|a| {
+        .filter_map(|a| {
+            if TRIGGER_ATTRIBUTES.contains(&a.name) {
+                trigger.push(a);
+                return None;
+            }
             let slot = match a.name {
                 "aria-label" => &mut label,
                 "aria-labelledby" => &mut by,
-                _ => return true,
+                "id" => &mut id,
+                "placeholder" => &mut placeholder,
+                _ => return Some(a),
             };
             if let AttributeValue::Text(t) = &a.value {
                 *slot = Some(t.clone()).filter(|t| !t.trim().is_empty());
             }
-            false
+            None
         })
         .collect();
+    let trigger_id = id.unwrap_or(trigger_id);
     let labelledby = match (&by, &label) {
         (Some(ids), _) => Some(format!("{ids} {trigger_id}")),
         (None, Some(_)) => Some(format!("{label_id} {trigger_id}")),
@@ -55,6 +74,8 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
     };
     TriggerName {
         root,
+        trigger,
+        placeholder: placeholder.unwrap_or_default(),
         label: label.filter(|_| by.is_none()),
         trigger_id,
         label_id,
@@ -90,7 +111,8 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 class: Styles::dx_select_trigger,
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
-                select::SelectValue {}
+                attributes: name.trigger,
+                select::SelectValue { placeholder: name.placeholder }
                 ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",
@@ -133,7 +155,8 @@ pub fn SelectMulti<T: Clone + PartialEq + 'static>(props: SelectMultiProps<T>) -
                 class: Styles::dx_select_trigger,
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
-                select::SelectValue {}
+                attributes: name.trigger,
+                select::SelectValue { placeholder: name.placeholder }
                 ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",
                     size: "20px",
