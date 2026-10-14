@@ -5,6 +5,13 @@
 }
 
 .dx-data-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dx-data-table-filter {
   max-width: 20rem;
 }
 

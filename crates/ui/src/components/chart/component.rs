@@ -129,8 +129,8 @@ fn Grid(plot_height: f32, data: Vec<ChartDatum>) -> Element {
     }
 }
 
-/// A bar chart drawn as SVG with theme colors. `label` is read by screen readers along
-/// with a summary of every value.
+/// A bar chart drawn as SVG in the accent colour. `label` is read by screen readers along
+/// with a summary of every value; hovering a bar shows its value.
 #[component]
 pub fn BarChart(
     data: Vec<ChartDatum>,
@@ -162,7 +162,10 @@ pub fn BarChart(
                     let y = plot.y(datum.value);
                     let bar_height = (plot.bottom - y).max(0.0);
                     rsx! {
-                        rect { key: "{datum.label}", class: Styles::dx_chart_bar, x: "{x}", y: "{y}", width: "{bar_width}", height: "{bar_height}", rx: "3" }
+                        rect { key: "{datum.label}", class: Styles::dx_chart_bar, x: "{x}", y: "{y}", width: "{bar_width}", height: "{bar_height}", rx: "3",
+                            // Shown on hover; the values are also in the chart's `<desc>`.
+                            title { "{datum.label}: {datum.value}" }
+                        }
                         text { class: Styles::dx_chart_tick, x: "{plot.x_center(i, count)}", y: "{plot.height - 6.0}", text_anchor: "middle", "{datum.label}" }
                     }
                 }
@@ -219,7 +222,9 @@ pub fn LineChart(
                 }
             }
             for (i, (x, y)) in points.iter().enumerate() {
-                circle { key: "{data[i].label}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5" }
+                circle { key: "{data[i].label}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5",
+                    title { "{data[i].label}: {data[i].value}" }
+                }
                 text { class: Styles::dx_chart_tick, x: "{x}", y: "{plot.height - 6.0}", text_anchor: "middle", "{data[i].label}" }
             }
         }

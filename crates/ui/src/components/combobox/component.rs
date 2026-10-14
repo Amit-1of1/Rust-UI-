@@ -61,12 +61,34 @@ pub struct ComboboxProps<T: Clone + PartialEq + 'static = String> {
     pub children: Element,
 }
 
+/// Attributes that make it a form control. They belong on the text input (the focusable
+/// control a `<label for>` points at), not on the wrapper `div`.
+const INPUT_ATTRIBUTES: [&str; 5] = [
+    "id",
+    "aria-labelledby",
+    "aria-describedby",
+    "aria-invalid",
+    "aria-required",
+];
+
 #[component]
 pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Element {
     let base = attributes!(div {
         class: Styles::dx_combobox
     });
-    let merged = merge_attributes(vec![base, props.attributes]);
+    let (input_attributes, root): (Vec<Attribute>, Vec<Attribute>) = props
+        .attributes
+        .into_iter()
+        .partition(|a| INPUT_ATTRIBUTES.contains(&a.name));
+    let input_id = input_attributes.iter().find_map(|a| match &a.value {
+        dioxus::core::AttributeValue::Text(id) if a.name == "id" => Some(id.clone()),
+        _ => None,
+    });
+    let input_attributes: Vec<Attribute> = input_attributes
+        .into_iter()
+        .filter(|a| a.name != "id")
+        .collect();
+    let merged = merge_attributes(vec![base, root]);
 
     rsx! {
         combobox::Combobox {
@@ -87,7 +109,9 @@ pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Elem
                 combobox::ComboboxInput {
                     class: Styles::dx_combobox_input,
                     placeholder: props.placeholder,
+                    id: input_id,
                     aria_label: props.aria_label.clone(),
+                    attributes: input_attributes,
                 }
                 ChevronsUpDown { "aria-hidden": "true",
                     class: Styles::dx_combobox_expand_icon,

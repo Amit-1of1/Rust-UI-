@@ -87,7 +87,10 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `rust-ui doctor` fails on `var(--x)` without a fallback when nothing defines `--x` (variables set inline by dioxus-primitives are listed in `PRIMITIVE_VARS`).
 - `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
 
-- Passing `class` to most kit components *replaces* the kit's class (two `class` attributes; the DOM keeps the last). `Button`, `Separator` and `Card` merge. Until the sweep lands (apps/dashboard/GAPS.md, gap 10), put app classes on a wrapper.
+- A component's own `class` goes through `merge_attributes` (dioxus-primitives) with the caller's attributes, never as a separate `class:` next to `..attributes` (that renders two `class` attributes and the browser drops one). Primitive props with a named `class: Option<String>` (radio item, navbar item, popover and dialog content) are joined by hand instead. `crates/ui/tests/class.rs` renders each component with a class; add new components to it.
+- `Select` and `Combobox` move `id`, `aria-describedby`, `aria-invalid` and `aria-required` (and `aria-label`/`aria-labelledby` for `Select`) from their wrapper to the focusable control, so they can be form fields (`SelectField`, `ComboboxField`).
+- Theme mode, accent, density and radius have one source of truth, `use_theme()`; app code should not write `data-theme` itself.
+- `ui::demos` is behind the kit's `demos` feature (gallery, docs, apps/native and the kit's tests turn it on), so apps don't ship demo code or demo CSS.
 - `AlertDialogAction` closes the dialog before it calls `on_click`; keep "what to act on" in its own signal, not in the open flag.
 - Calling `FormField::set` from an effect is fine (it reads with `peek`); keep new `FormField` methods non-reactive for the same reason.
 

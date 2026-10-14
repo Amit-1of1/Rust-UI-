@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/alert/style.css")]
 struct Styles;
@@ -29,11 +30,10 @@ pub fn Alert(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_alert,
             role: "alert",
             "data-slot": "alert",
             "data-variant": variant.as_str(),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_alert }), attributes]),
             {children}
         }
     }
@@ -45,7 +45,7 @@ pub fn AlertTitle(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_alert_title, "data-slot": "alert-title", ..attributes, {children} }
+        div { "data-slot": "alert-title", ..merge_attributes(vec![attributes!(div { class: Styles::dx_alert_title }), attributes]), {children} }
     }
 }
 
@@ -56,9 +56,8 @@ pub fn AlertDescription(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_alert_description,
             "data-slot": "alert-description",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_alert_description }), attributes]),
             {children}
         }
     }

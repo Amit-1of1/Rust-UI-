@@ -2,6 +2,23 @@
 
 Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.
 
+## One theme state: `use_theme()`
+
+The customizer's choices live in one shared state. Read and change it from app code with `use_theme()`, so a header switch and the customizer never disagree:
+
+```rust
+let theme = use_theme();
+rsx! {
+    Switch {
+        checked: theme.is_dark(),
+        aria_label: "Dark mode",
+        on_checked_change: move |dark| theme.set_mode(if dark { ThemeMode::Dark } else { ThemeMode::Light }),
+    }
+}
+```
+
+`mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
+
 ## Native (no JavaScript)
 
 dioxus-native can't run the script that writes to `<html>`. Wrap the app in `ThemeScope { ... }` there: it applies the same choices to everything inside it, and doesn't change layout (`display: contents`). On the web and desktop it is harmless.

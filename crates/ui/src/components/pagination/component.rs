@@ -1,6 +1,7 @@
 use crate::components::icons::{ChevronLeft, ChevronRight, Ellipsis};
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 #[css_module("/src/components/pagination/style.css")]
 struct Styles;
 
@@ -44,11 +45,10 @@ pub fn Pagination(
 ) -> Element {
     rsx! {
         nav {
-            class: Styles::dx_pagination,
             "data-slot": "pagination",
             role: "navigation",
             aria_label: "pagination",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination }), attributes]),
             {children}
         }
     }
@@ -61,9 +61,8 @@ pub fn PaginationContent(
 ) -> Element {
     rsx! {
         ul {
-            class: Styles::dx_pagination_content,
             "data-slot": "pagination-content",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination_content }), attributes]),
             {children}
         }
     }
@@ -106,7 +105,6 @@ pub fn PaginationLink(props: PaginationLinkProps) -> Element {
     let data_kind = props.data_kind.map(|kind| kind.attr());
     rsx! {
         a {
-            class: Styles::dx_pagination_link,
             "data-slot": "pagination-link",
             "data-active": props.is_active,
             "data-size": props.size.class(),
@@ -127,7 +125,7 @@ pub fn PaginationLink(props: PaginationLinkProps) -> Element {
                     f.call(event);
                 }
             },
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination_link }), props.attributes]),
             {props.children}
         }
     }
@@ -189,10 +187,9 @@ pub fn PaginationEllipsis(
 ) -> Element {
     rsx! {
         span {
-            class: Styles::dx_pagination_ellipsis,
             "data-slot": "pagination-ellipsis",
             "aria-hidden": "true",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination_ellipsis }), attributes]),
             Ellipsis { "aria-hidden": "true", size: "1rem" }
             span { class: Styles::dx_sr_only, "More pages" }
         }

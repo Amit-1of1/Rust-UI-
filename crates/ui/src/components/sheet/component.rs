@@ -83,7 +83,7 @@ pub fn SheetHeader(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_sheet_header, "data-slot": "sheet-header", ..attributes, {children} }
+        div { "data-slot": "sheet-header", ..merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_header }), attributes]), {children} }
     }
 }
 
@@ -93,7 +93,7 @@ pub fn SheetFooter(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_sheet_footer, "data-slot": "sheet-footer", ..attributes, {children} }
+        div { "data-slot": "sheet-footer", ..merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_footer }), attributes]), {children} }
     }
 }
 
@@ -102,9 +102,8 @@ pub fn SheetTitle(props: DialogTitleProps) -> Element {
     rsx! {
         dialog::DialogTitle {
             id: props.id,
-            class: Styles::dx_sheet_title,
             "data-slot": "sheet-title",
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_title }), props.attributes]),
             {props.children}
         }
     }
@@ -115,9 +114,8 @@ pub fn SheetDescription(props: DialogDescriptionProps) -> Element {
     rsx! {
         dialog::DialogDescription {
             id: props.id,
-            class: Styles::dx_sheet_description,
             "data-slot": "sheet-description",
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_description }), props.attributes]),
             {props.children}
         }
     }

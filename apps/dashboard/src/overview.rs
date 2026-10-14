@@ -78,7 +78,7 @@ pub fn Overview() -> Element {
                             TableHead { "Order" }
                             TableHead { "Customer" }
                             TableHead { "Status" }
-                            TableHead { style: "text-align: right;", "Amount" }
+                            TableHead { numeric: true, "Amount" }
                         }
                     }
                     TableBody {
@@ -89,7 +89,7 @@ pub fn Overview() -> Element {
                                 TableCell {
                                     Badge { variant: order_badge(&o.status), "{o.status}" }
                                 }
-                                TableCell { style: "text-align: right;", {money(o.amount)} }
+                                TableCell { numeric: true, {money(o.amount)} }
                             }
                         }
                     }

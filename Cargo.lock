@@ -1806,7 +1806,6 @@ name = "dashboard"
 version = "0.1.0"
 dependencies = [
  "dioxus",
- "dioxus-icons",
  "rust-ui-kit",
  "time",
  "web-sys",
@@ -6885,6 +6884,7 @@ dependencies = [
  "dioxus-ssr",
  "palette",
  "proptest",
+ "rust-ui-kit",
  "rust-ui-motion",
  "strum",
  "time",

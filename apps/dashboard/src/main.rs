@@ -66,25 +66,12 @@ impl Page {
 pub struct Store {
     pub customers: Signal<Vec<Customer>>,
     pub page: Signal<Page>,
-    pub dark: Signal<bool>,
     /// Set from the command palette: open the "Add customer" dialog.
     pub adding: Signal<bool>,
 }
 
 pub fn use_store() -> Store {
     use_context::<Store>()
-}
-
-pub fn apply_theme(dark: bool) {
-    #[cfg(target_arch = "wasm32")]
-    if let Some(root) = web_sys::window()
-        .and_then(|w| w.document())
-        .and_then(|d| d.document_element())
-    {
-        let _ = root.set_attribute("data-theme", if dark { "dark" } else { "light" });
-    }
-    #[cfg(not(target_arch = "wasm32"))]
-    let _ = dark;
 }
 
 /// `document.body.dataset.ready = "1"` once mounted: the e2e scripts wait for it.
@@ -104,7 +91,6 @@ fn App() -> Element {
     use_context_provider(|| Store {
         customers,
         page: Signal::new(Page::Overview),
-        dark: Signal::new(false),
         adding: Signal::new(false),
     });
     use_effect(mark_ready);
@@ -120,6 +106,15 @@ fn Shell() -> Element {
     let mut store = use_store();
     let mut palette = use_signal(|| false);
     use_hotkey("k", move || palette.set(true));
+    // The same state ThemeCustomizer (Settings) uses, so the switch and the customizer agree.
+    let theme = use_theme();
+    let set_dark = move |dark: bool| {
+        theme.set_mode(if dark {
+            ThemeMode::Dark
+        } else {
+            ThemeMode::Light
+        })
+    };
 
     let page = (store.page)();
     let mut commands: Vec<CommandItem> = Page::ALL
@@ -133,10 +128,8 @@ fn Shell() -> Element {
 
     rsx! {
         SidebarProvider {
-            // The kit's Sidebar is a plain div; make it a landmark so its content is reachable.
             Sidebar {
                 collapsible: SidebarCollapsible::Icon,
-                role: "navigation",
                 aria_label: "Main",
                 SidebarHeader {
                     div { class: "db-brand",
@@ -203,12 +196,9 @@ fn Shell() -> Element {
                             }
                         }
                         Switch {
-                            checked: (store.dark)(),
+                            checked: theme.is_dark(),
                             aria_label: "Dark mode",
-                            on_checked_change: move |v| {
-                                store.dark.set(v);
-                                apply_theme(v);
-                            },
+                            on_checked_change: set_dark,
                         }
                         UserMenu {}
                     }
@@ -234,11 +224,7 @@ fn Shell() -> Element {
                     store.page.set(Page::Customers);
                     store.adding.set(true);
                 }
-                "theme" => {
-                    let v = !(store.dark)();
-                    store.dark.set(v);
-                    apply_theme(v);
-                }
+                "theme" => set_dark(!theme.is_dark()),
                 other => {
                     if let Some(p) = Page::from_id(other) {
                         store.page.set(p);
@@ -276,7 +262,7 @@ fn UserMenu() -> Element {
                 DropdownMenuItem::<&'static str> {
                     index: 1usize,
                     value: "logout",
-                    on_select: move |_| toasts.info("Signed out (demo)".to_string(), ToastOptions::new()),
+                    on_select: move |_| toasts.notify_info("Signed out (demo)"),
                     "Sign out"
                 }
             }

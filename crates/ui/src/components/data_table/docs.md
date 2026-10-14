@@ -15,6 +15,8 @@ DataTable {
 
 Cells are text. For custom content (a badge, a link, a row menu) pass `render_cell: move |(row, col)| rsx! { ... }`; `row` is the index into `rows`, and the text in `rows` is still what filtering and sorting use. For a different layout altogether, compose `Table` yourself and call `table_view(...)` for the filter, sort and page logic; it is a pure function.
 
+Outside filters or actions (a date range, a status select, an "Export" button) go in `toolbar: rsx! { ... }`; they sit in the same row as the filter box and wrap on narrow screens.
+
 Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
 ## Accessibility

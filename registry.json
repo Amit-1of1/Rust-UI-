@@ -369,8 +369,10 @@
         "form/style.css"
       ],
       "registryDependencies": [
+        "combobox",
         "field",
-        "input"
+        "input",
+        "select"
       ]
     },
     {
@@ -756,7 +758,9 @@
         "theme_customizer/mod.rs",
         "theme_customizer/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "toast",

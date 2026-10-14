@@ -3,6 +3,7 @@ use dioxus::prelude::*;
 use dioxus_primitives::tag_group::{
     self, TagGroupEmptyProps, TagGroupLabelProps, TagGroupMultiProps, TagGroupProps, TagListProps,
 };
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/tag_group/style.css")]
 struct Styles;
@@ -11,7 +12,6 @@ struct Styles;
 pub fn TagGroup(props: TagGroupProps<String>) -> Element {
     rsx! {
         tag_group::TagGroup {
-            class: Styles::dx_tag_group,
             value: props.value,
             default_value: props.default_value,
             on_value_change: props.on_value_change,
@@ -20,7 +20,7 @@ pub fn TagGroup(props: TagGroupProps<String>) -> Element {
             allow_empty_selection: props.allow_empty_selection,
             escape_clears_selection: props.escape_clears_selection,
             roving_loop: props.roving_loop,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag_group }), props.attributes]),
             {props.children}
         }
     }
@@ -30,7 +30,6 @@ pub fn TagGroup(props: TagGroupProps<String>) -> Element {
 pub fn TagGroupMulti(props: TagGroupMultiProps<String>) -> Element {
     rsx! {
         tag_group::TagGroupMulti {
-            class: Styles::dx_tag_group,
             values: props.values,
             default_values: props.default_values,
             on_values_change: props.on_values_change,
@@ -39,7 +38,7 @@ pub fn TagGroupMulti(props: TagGroupMultiProps<String>) -> Element {
             allow_empty_selection: props.allow_empty_selection,
             escape_clears_selection: props.escape_clears_selection,
             roving_loop: props.roving_loop,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag_group }), props.attributes]),
             {props.children}
         }
     }
@@ -49,9 +48,8 @@ pub fn TagGroupMulti(props: TagGroupMultiProps<String>) -> Element {
 pub fn TagGroupLabel(props: TagGroupLabelProps) -> Element {
     rsx! {
         tag_group::TagGroupLabel {
-            class: Styles::dx_tag_group_label,
             id: props.id,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag_group_label }), props.attributes]),
             {props.children}
         }
     }
@@ -61,8 +59,7 @@ pub fn TagGroupLabel(props: TagGroupLabelProps) -> Element {
 pub fn TagGroupEmpty(props: TagGroupEmptyProps) -> Element {
     rsx! {
         tag_group::TagGroupEmpty {
-            class: Styles::dx_tag_group_empty,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag_group_empty }), props.attributes]),
             {props.children}
         }
     }
@@ -72,8 +69,7 @@ pub fn TagGroupEmpty(props: TagGroupEmptyProps) -> Element {
 pub fn TagList(props: TagListProps) -> Element {
     rsx! {
         tag_group::TagList {
-            class: Styles::dx_tag_list,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag_list }), props.attributes]),
             {props.children}
         }
     }
@@ -98,13 +94,12 @@ pub struct TagProps {
 pub fn Tag(props: TagProps) -> Element {
     rsx! {
         tag_group::TagOption::<String> {
-            class: Styles::dx_tag,
             value: props.value,
             text_value: props.text_value,
             disabled: props.disabled,
             id: props.id,
             index: props.index,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_tag }), props.attributes]),
             {props.children}
         }
     }
@@ -117,8 +112,7 @@ pub fn RemoveButton(
 ) -> Element {
     rsx! {
         tag_group::TagRemoveButton {
-            class: Styles::dx_remove_button,
-            attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_remove_button }), attributes]),
             {children}
             X { "aria-hidden": "true", size: "12px" }
         }

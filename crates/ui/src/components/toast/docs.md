@@ -1,5 +1,17 @@
 The Toast component is used to display brief messages to the user, typically for notifications or alerts. The toast messages can be focused with the keyboard with the `f6` key.
 
+## Short form
+
+For the common case use `ToastsExt` (in the prelude): it takes `&str`, `String` or a `(title, description)` pair, so no `.to_string()` or `ToastOptions::new()`:
+
+```rust
+let toasts = use_toast();
+toasts.notify_success("Saved");
+toasts.notify_error(("Failed", "Try again."));
+```
+
+`notify_warning` and `notify_info` work the same. Use the long form below for a duration or a permanent toast.
+
 ## Component Structure
 
 ```rust

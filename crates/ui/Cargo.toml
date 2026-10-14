@@ -32,10 +32,15 @@ wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 
 [dev-dependencies]
+# The integration tests walk every demo.
+rust-ui-kit = { path = ".", features = ["demos"] }
 dioxus-ssr = "0.7.0"
 proptest = { version = "1", default-features = false, features = ["std"] }
 
 [features]
+# The gallery and docs demos (`ui::demos`). Off by default so apps don't ship demo code and
+# demo CSS; the gallery, the docs site, apps/native and the kit's own tests turn it on.
+demos = []
 web = ["dioxus-primitives/web", "motion/web"]
 desktop = ["motion/desktop"]
 # dioxus-native (Blitz). Nothing in the kit needs it any more (docs/NATIVE.md); kept so

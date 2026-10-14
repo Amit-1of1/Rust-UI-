@@ -1,5 +1,6 @@
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/marquee/style.css")]
 struct Styles;
@@ -23,12 +24,11 @@ pub fn Marquee(
     let label = label.unwrap_or(t.scrolling_content);
     rsx! {
         div {
-            class: Styles::dx_marquee,
             role: "group",
             "aria-label": "{label}",
             "data-paused": paused().then_some("true"),
             style: "--dx-marquee-duration: {duration}s;",
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_marquee }), attributes]),
             div { class: Styles::dx_marquee_viewport,
                 div { class: Styles::dx_marquee_track,
                     div { class: Styles::dx_marquee_row, {children.clone()} }

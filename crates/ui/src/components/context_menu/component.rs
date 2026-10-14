@@ -2,6 +2,7 @@ use dioxus::prelude::*;
 use dioxus_primitives::context_menu::{
     self, ContextMenuContentProps, ContextMenuItemProps, ContextMenuProps, ContextMenuTriggerProps,
 };
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/context_menu/style.css")]
 struct Styles;
@@ -42,9 +43,8 @@ pub fn ContextMenuTrigger(props: ContextMenuTriggerProps) -> Element {
 pub fn ContextMenuContent(props: ContextMenuContentProps) -> Element {
     rsx! {
         context_menu::ContextMenuContent {
-            class: Styles::dx_context_menu_content,
             id: props.id,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_context_menu_content }), props.attributes]),
             {props.children}
         }
     }
@@ -54,12 +54,11 @@ pub fn ContextMenuContent(props: ContextMenuContentProps) -> Element {
 pub fn ContextMenuItem(props: ContextMenuItemProps) -> Element {
     rsx! {
         context_menu::ContextMenuItem {
-            class: Styles::dx_context_menu_item,
             disabled: props.disabled,
             value: props.value,
             index: props.index,
             on_select: props.on_select,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_context_menu_item }), props.attributes]),
             {props.children}
         }
     }

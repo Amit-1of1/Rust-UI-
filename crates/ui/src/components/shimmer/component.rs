@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/shimmer/style.css")]
 struct Styles;
@@ -13,10 +14,9 @@ pub fn Shimmer(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_shimmer,
             "data-loading": loading.then_some("true"),
             "aria-busy": loading.then_some("true"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_shimmer }), attributes]),
             {children}
         }
     }

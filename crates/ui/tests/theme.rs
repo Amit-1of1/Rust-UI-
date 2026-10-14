@@ -200,3 +200,16 @@ fn fallback_converts_pairs_and_nested_vars() {
         "{out}"
     );
 }
+
+#[test]
+fn theme_ships_a_global_sr_only_class() {
+    let start = THEME.find("\n.sr-only {").expect(".sr-only in theme.css");
+    let block = &THEME[start..start + THEME[start..].find('}').unwrap()];
+    for rule in [
+        "position: absolute;",
+        "clip-path: inset(50%);",
+        "overflow: hidden;",
+    ] {
+        assert!(block.contains(rule), "{rule} missing from {block}");
+    }
+}

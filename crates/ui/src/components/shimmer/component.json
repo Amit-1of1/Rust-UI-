@@ -1,5 +1,12 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "dioxus-primitives",
+      "rev": "68c311758a2c7d555ef92c813713008d028f87bf"
+    }
+  ],
   "componentDependencies": [],
   "description": "Wraps loading content and sweeps a highlight across it.",
   "exclude": [

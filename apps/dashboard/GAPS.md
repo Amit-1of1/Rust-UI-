@@ -4,7 +4,7 @@
 
 Severity: **High** means a real app hits it early and the result is broken or inaccessible. **Medium** means a workaround is needed and is easy to get wrong. **Low** means friction or polish.
 
-## Fixed in the kit (this PR)
+## Fixed in the kit (PR #22)
 
 | # | Severity | Gap | Fix |
 |---|---|---|---|
@@ -18,25 +18,33 @@ Severity: **High** means a real app hits it early and the result is broken or in
 | 8 | Medium | Value types were not exported: naming a date range or a checkbox state needed direct `dioxus-primitives` and `time` dependencies. | `DateRange`, `Date`, `Month` and `CheckboxState` are in the prelude. |
 | 9 | Medium | `AlertDialogAction` closes the dialog *before* calling `on_click`. Clearing "which item to delete" in `on_open_change(false)` means `on_click` sees nothing and the delete silently does nothing. | Documented in `alert_dialog/docs.md`; the app keeps the target and the open flag in separate signals. The order itself is upstream behaviour (see open gap 13). |
 
+## Closed since (follow-up PR)
+
+The app now uses each fix instead of its workaround, and `tests/e2e/dashboard.mjs` still passes axe on every page and overlay in light and dark.
+
+| # | Severity | Gap | Fix |
+|---|---|---|---|
+| 10 | High | Passing `class` to most components rendered two `class` attributes, so either the kit's styling or the caller's class was lost. | Every styled component merges its class with the caller's through `merge_attributes` (about 130 call sites in 50 components). `tests/class.rs` renders 77 components with a class and fails on a duplicate `class` attribute or a dropped kit class. The app's `Form { class }` and `TableCell { class }` now keep their kit styling. |
+| 11 | Medium | The `Select` trigger couldn't be labelled. | Already fixed by PR #23 (`aria_label` / `aria_labelledby` move to the trigger). The app's `role="group"` wrappers are gone. |
+| 12 | Medium | `Sidebar` was a plain `div`; `SidebarInset` being the page's `main` was undocumented. | `Sidebar` is a navigation landmark named "Sidebar" (`UiStrings::sidebar`; `aria_label` renames it, `role` overrides it), on desktop, static and mobile. `SidebarInset` is documented as the page's `main`. Render test `sidebar_is_a_navigation_landmark_that_can_be_renamed`. |
+| 14 | Medium | Light/dark had two sources of truth. | `use_theme()`: one shared mode / accent / density / radius state with `is_dark()`, read and written by `ThemeCustomizer` and app code. The header switch uses it; `dashboard.mjs` checks the switch and the customizer agree both ways. |
+| 15 | Medium | Only text fields joined `use_form`. | `SelectField` and `ComboboxField` bind a `Select` or `Combobox` to a `FormField`: label, `aria-invalid`, error in `aria-describedby`, focus on a failed submit. `Select` and `Combobox` now move `id` and those attributes to their focusable control, and `Select` takes a placeholder. Settings uses `ComboboxField` (no hand-written alert); the edit sheet uses `SelectField`. `tests/e2e/form_fields.mjs` covers it in the gallery. |
+| 16 | Low | No initial values; `reset()` emptied. | `form.field_with(initial, rules)`; `field.load(value)` for loading a record (sets the value and what `reset()` returns to, clears the error). |
+| 18 | Low | Outside filters couldn't sit next to `DataTable`'s filter box. | `toolbar: rsx! { .. }` slot beside the filter box (shown even with `filterable: false`). Orders puts its date range and status toggles there; the gallery demo has a "Research only" toggle. |
+| 19 | Low | Chart marks were solid `currentColor`, no hover values. | Marks use `--accent-color`; each bar and point has an SVG `<title>` with its value, shown on hover. Multi-series and a legend are still open (below). |
+| 20 | Low | `toasts.success(...)` needed `String` and `ToastOptions`. | `ToastsExt` (prelude): `toasts.notify_success("Saved")`, or a `(title, description)` pair. |
+| 21 | Low | No `sr-only` class. | `.sr-only` in `theme.css`; the icons demo uses it, the app's own copy is gone. |
+| 22 | Low | Icons needed a direct `dioxus-icons` dependency. | `ui::icons` already re-exported them; the app's direct dependency is removed. |
+| 23 | Low | The `demos` module was compiled into every app. | `ui::demos` is behind the kit's `demos` feature, turned on by the gallery, docs, `apps/native` and the kit's tests. The dashboard bundle no longer carries demo code or `sidebar/demo.css`. |
+| 24 | Low | Sortable header text didn't line up with the cells below it. | Measured in the gallery: start-aligned columns already lined up (the button's negative start margin); right-aligned numeric columns ended 22 px short (the button's end padding and arrow). `TableHead` and `TableCell` take `numeric: true` (end-aligned, tabular figures; the sort arrow goes before the text and the end padding is pulled back). `DataTable` uses it for numeric columns; `tests/e2e/table.mjs` checks both edges to 1 px. |
+
 ## Open (reported, not fixed here)
 
 | # | Severity | Gap | Workaround in the app | Suggested fix |
 |---|---|---|---|---|
-| 10 | High | Most components spread `..attributes` after their own `class`, which renders two `class` attributes. In the browser the caller's wins and the kit's styling is gone; in SSR HTML the first wins. Checked: `Input`, `Textarea`, `Kbd`, `Breadcrumb`, `Table`, `TableCell`, `Badge`, `Empty`, `Spinner`, `SheetHeader`, `Pagination`, `Label` (Label the other way round: the caller's class is dropped). `Button` and `Separator` merge correctly. | Wrap the component in a `div` with the class instead. | One sweep with the `merge_class` helper from `card` (or `merge_attributes`), plus a test that renders each component with `class: "x"`. It touches many files that parallel work is changing, so it should be its own PR. |
-| 11 | Medium | The `Select` trigger can't be labelled: attributes land on the wrapper, not the `<button>`. | `div { role: "group", aria-labelledby }` around it (also found by `apps/trial`). | A styled `Select` props struct with `aria_label` / `aria_labelledby` / `trigger_id` forwarded to `SelectTrigger`. |
-| 12 | Medium | `SidebarInset` renders `<main>`, and `Sidebar` is a plain `div`. An app that adds its own `main` gets duplicate-landmark errors, and the sidebar's content is outside any landmark (axe `region`). | No inner `main`; `Sidebar { role: "navigation", aria_label: "Main" }`. | Document that `SidebarInset` is the page's `main`, and give `Sidebar` a navigation landmark by default (check the gallery demo with axe). |
-| 13 | Medium | Toasts are `role="alertdialog"` (dioxus-primitives). Screen readers announce each as a dialog, and `getByRole("alertdialog")` in tests matches both a confirm dialog and a toast. | Tests match dialogs by name. | Report upstream; `role="status"` (or `alert` for errors) is the usual pattern. Also report the AlertDialogAction close-then-call order. |
-| 14 | Medium | Light/dark has two sources of truth: the header switch writes `data-theme` with web-sys, and `ThemeCustomizer` writes it too. Changing the mode in one leaves the other showing the wrong state. | None (visible in Settings). | A `use_theme()` signal (mode, accent, radius, density) that both `ThemeCustomizer` and app code read and write. |
-| 15 | Medium | Only text fields join `use_form` validation. A combobox or select can't be marked required, isn't focused on a failed submit, and its error isn't wired with `aria-describedby`. | Hand-written `role="alert"` message under the time-zone combobox. | Let `FormField` back any control (an `Option<String>` value), or add `SelectField` / `ComboboxField` wrappers like `TextField`. |
-| 16 | Low | No initial values for form fields; `reset()` empties instead of restoring. | `use_hook` to `set` defaults; an effect to load the edited record. | `form.field_with(initial, rules)` and `reset()` back to the initial value. |
-| 17 | Low | Controlled `Select` wants `Option<ReadSignal<Option<T>>>`, so a plain `Signal<String>` needs a `use_memo` adapter. | `use_memo(move || Some(plan()))`. | Accept `Option<T>` via `into` like `RadioGroup`. |
-| 18 | Low | `DataTable`'s filter box is its own toolbar row; outside filters (date range, status) can't sit next to it. | Two toolbars. | A `toolbar: Element` slot rendered beside the filter. |
-| 19 | Low | Charts are single-series with no hover values, legend or accent colour; bars are solid `currentColor`. Fine for a KPI page, thin for analytics. | None. | Use `--accent-color` for marks; multi-series and a focusable data table fallback later. |
-| 20 | Low | `toasts.success(...)` takes `String`, so every call needs `.to_string()`. | `.to_string()`. | Upstream API; a kit helper taking `impl Into<String>` would do. |
-| 21 | Low | No `sr-only` utility class in the theme; each app writes its own. | `.db-sr-only` in the app CSS. | Ship one in `theme.css`. |
-| 22 | Low | Icons need a direct `dioxus-icons` dependency in the app. | Added it. | Re-export as `ui::icons` (it is already wrapped per GUARDRAILS' one-maintainer rule in spirit). |
-| 23 | Low | The kit's `demos` module is always compiled into the library, so every app ships demo code and demo CSS (`sidebar/demo.css` is in this app's bundle). | None. | Put `demos` behind a feature that only the gallery, docs and tests enable (the size thread may already cover this). |
-| 24 | Low | Sortable header text sits a few pixels right of the cell text below it (the sort button's padding). | None. | Negative inline margin on the sort button, or matching cell padding. |
+| 13 | Medium | Toasts are `role="alertdialog"` (dioxus-primitives). Screen readers announce each as a dialog, and `getByRole("alertdialog")` in tests matches both a confirm dialog and a toast. | Tests match dialogs by name. | A marked patch on the `Amit-1of1/dioxus-components` fork (`role="status"`, or `alert` for errors), per the 2026-10-14 fork rule. Left out here because the native thread owns the fork pin right now. Also report the AlertDialogAction close-then-call order (gap 9). |
+| 17 | Low | A controlled raw `Select` wants `Option<ReadSignal<Option<T>>>`, so a plain `Signal<String>` needs a `use_memo` adapter. | Forms use `SelectField` (no adapter); a raw `Select` still needs the memo. | Give the kit's `Select` its own props struct that accepts a plain value, or add the conversion to the primitive on the fork. |
+| 19 | Low | Charts are single-series with no legend. | None. | Multi-series with a legend, and a focusable data-table fallback. |
 
 ## Things that worked well
 

@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/input_group/style.css")]
 struct Styles;
@@ -14,10 +15,9 @@ pub fn InputGroup(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_input_group,
             role: "group",
             "data-invalid": invalid.then_some("true"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_input_group }), attributes]),
             {children}
         }
     }
@@ -32,9 +32,8 @@ pub fn InputGroupAddon(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_input_group_addon,
             "data-align": if end { "end" } else { "start" },
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_input_group_addon }), attributes]),
             {children}
         }
     }
@@ -51,10 +50,9 @@ pub fn InputGroupInput(
 ) -> Element {
     rsx! {
         input {
-            class: Styles::dx_input_group_input,
             oninput: move |e| _ = oninput.map(|callback| callback(e)),
             onblur: move |e| _ = onblur.map(|callback| callback(e)),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_input_group_input }), attributes]),
         }
     }
 }

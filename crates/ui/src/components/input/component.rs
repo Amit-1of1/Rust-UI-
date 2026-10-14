@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 #[css_module("/src/components/input/style.css")]
 struct Styles;
 
@@ -31,7 +32,6 @@ pub fn Input(
 ) -> Element {
     rsx! {
         input {
-            class: Styles::dx_input,
             oninput: move |e| _ = oninput.map(|callback| callback(e)),
             onchange: move |e| _ = onchange.map(|callback| callback(e)),
             oninvalid: move |e| _ = oninvalid.map(|callback| callback(e)),
@@ -52,7 +52,7 @@ pub fn Input(
             oncut: move |e| _ = oncut.map(|callback| callback(e)),
             onpaste: move |e| _ = onpaste.map(|callback| callback(e)),
             onmounted: move |e| _ = onmounted.map(|callback| callback(e)),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_input }), attributes]),
             {children}
         }
     }

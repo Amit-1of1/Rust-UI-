@@ -75,10 +75,9 @@ pub fn DrawerClose(
     let ctx: DialogCtx = use_context();
     rsx! {
         button {
-            class: Styles::dx_drawer_close,
             r#type: "button",
             onclick: move |_| ctx.set_open(false),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_drawer_close }), attributes]),
             {children}
         }
     }
