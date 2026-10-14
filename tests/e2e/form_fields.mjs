@@ -1,10 +1,10 @@
 // SelectField and ComboboxField (the gallery's form demo) join use_form like a TextField:
 // labelled, marked invalid with the error linked, focused on a failed submit, cleared on a pick.
 // Usage: serve the built gallery, then `GALLERY_URL=http://localhost:8765/ node form_fields.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage();
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
 await page.waitForSelector(".gallery-main > .gallery-section:last-child");

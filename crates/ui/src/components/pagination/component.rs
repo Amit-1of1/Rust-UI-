@@ -188,7 +188,6 @@ pub fn PaginationEllipsis(
     rsx! {
         span {
             "data-slot": "pagination-ellipsis",
-            "aria-hidden": "true",
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination_ellipsis }), attributes]),
             Ellipsis { "aria-hidden": "true", size: "1rem" }
             span { class: Styles::dx_sr_only, "More pages" }

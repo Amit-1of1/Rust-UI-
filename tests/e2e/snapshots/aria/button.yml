@@ -1,0 +1,13 @@
+- heading "Button" [level=2]
+- paragraph: Variants and sizes.
+- button "Primary"
+- button "Secondary"
+- button "Outline"
+- button "Ghost"
+- button "Delete"
+- button "Link"
+- button "Extra small"
+- button "Small"
+- button "Default"
+- button "Large"
+- button "Disabled" [disabled]

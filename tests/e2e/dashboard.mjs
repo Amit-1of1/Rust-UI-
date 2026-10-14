@@ -2,7 +2,7 @@
 // the main flows work by keyboard and mouse.
 // Build: (cd apps/dashboard && dx build --platform web); serve target/dx/dashboard/debug/web/public
 // Run:   GALLERY_URL=http://localhost:8771/ node dashboard.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
@@ -31,12 +31,12 @@ async function axe(page, label) {
 const nav = (page, name) => page.locator("[data-sidebar='menu-button']", { hasText: name }).click();
 const heading = (page) => page.locator("h1.db-title").textContent();
 
-const browser = await chromium.launch();
+const browser = await launch();
 for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));
   await page.goto(url);
-  await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
+  await page.waitForSelector("body[data-ready='1'] .db-main");
   // The page follows the system scheme and the switch reflects it; clicking it here would
   // turn dark mode off and scan the light theme twice.
   const dark = await page.getByRole("switch", { name: "Dark mode" }).getAttribute("aria-checked");
@@ -74,7 +74,7 @@ for (const scheme of ["light", "dark"]) {
 // ---- flows (light) ----
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 await page.goto(url);
-await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
+await page.waitForSelector("body[data-ready='1'] .db-main");
 const status = () => page.locator(".db-table-footer [role='status']").textContent();
 
 // Ctrl+K navigates.
@@ -154,7 +154,10 @@ await darkSwitch.click();
 await page.waitForTimeout(200);
 check(await page.getByRole("radio", { name: "Dark" }).isChecked(), "header switch on: customizer shows Dark");
 check((await page.evaluate(() => document.documentElement.dataset.theme)) === "dark", "data-theme is dark");
-await page.getByRole("radio", { name: "Light" }).check({ force: true });
+// From the keyboard: the radio input is visually hidden, and a forced click on it does
+// nothing in WebKit. Space checks the focused radio.
+await page.getByRole("radio", { name: "Light" }).focus();
+await page.keyboard.press("Space");
 await page.waitForTimeout(200);
 check((await darkSwitch.getAttribute("aria-checked")) === "false", "customizer Light: header switch turns off");
 

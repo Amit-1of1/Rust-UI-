@@ -1,9 +1,9 @@
 // Behaviour of the `use_form` hook through the Orbit signup form (apps/site).
 // Usage: serve the built site, then `GALLERY_URL=http://localhost:8767/ node form.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage();
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8767/");
 await page.waitForSelector("#signup-form");

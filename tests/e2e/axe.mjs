@@ -1,7 +1,7 @@
 // Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
 // (set ACCENT=blue|green|... to scan an accent preset), then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
 // For apps/site: `GALLERY_URL=http://localhost:8767/ READY_SELECTOR=#pricing node axe.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
@@ -14,10 +14,18 @@ const ACCEPTED = {
   "landmark-main-is-top-level": "sidebar demo is embedded in the gallery page",
 };
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
+const logs = [];
+page.on("pageerror", (e) => logs.push(`pageerror: ${e.message}`));
+page.on("console", (m) => m.type() === "error" && logs.push(`console: ${m.text()}`));
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child", { timeout: 30000 });
+try {
+  await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child");
+} catch (e) {
+  console.log(`${url} did not render:\n  ${logs.slice(0, 10).join("\n  ") || "(no errors logged)"}`);
+  throw e;
+}
 if (process.env.ACCENT) {
   await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
 }

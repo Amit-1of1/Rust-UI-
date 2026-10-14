@@ -3,17 +3,24 @@
 // disappears. Emulate forced colors and check every interactive control still has a
 // visible edge (a border or outline), and that focus shows as an outline.
 // GALLERY_URL=... node forced_colors.mjs
-import { chromium } from "playwright";
+import { ENGINE, launch } from "./engine.mjs";
 
 const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ forcedColors: "active", viewport: { width: 1100, height: 900 } });
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child", { timeout: 30000 });
+await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child");
 await page.waitForTimeout(1000);
 
 const forced = await page.evaluate(() => matchMedia("(forced-colors: active)").matches);
 if (!forced) {
+  // Playwright can only emulate forced colors where the engine supports it (Chromium,
+  // Firefox). Windows High Contrast itself only exists in Chromium-based browsers and Firefox.
+  if (ENGINE === "webkit") {
+    console.log("skip: webkit cannot emulate forced colors");
+    await browser.close();
+    process.exit(0);
+  }
   console.error("forced colors did not take effect");
   process.exit(1);
 }

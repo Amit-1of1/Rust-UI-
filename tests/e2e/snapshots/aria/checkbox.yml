@@ -1,0 +1,4 @@
+- heading "Checkbox" [level=2]
+- paragraph: Binary choice; Space toggles.
+- checkbox "Accept terms"
+- text: Accept terms

@@ -1,9 +1,9 @@
 // Ctrl+K opens the command palette from anywhere on the page (ui::hooks::use_hotkey).
 // GALLERY_URL=... node hotkey.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 
 const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage();
 await page.goto(url);
 await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child");

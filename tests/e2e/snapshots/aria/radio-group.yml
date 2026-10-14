@@ -1,0 +1,6 @@
+- heading "Radio group" [level=2]
+- paragraph: One choice from several; arrow keys move.
+- radiogroup "Favourite colour":
+  - radio "Blue"
+  - radio "Red"
+  - radio "Green" [disabled]

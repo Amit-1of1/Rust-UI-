@@ -1,0 +1,4 @@
+- heading "Switch" [level=2]
+- paragraph: An on/off setting.
+- switch "Airplane mode"
+- text: "Off"

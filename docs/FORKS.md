@@ -62,7 +62,7 @@ All six crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream'
 | Drag-and-drop list needs HTML drag and drop | dioxus-primitives | a press that moves more than 4px starts a pointer drag; items under the pointer pick the slot; release drops, leaving the list cancels |
 | Typing a complete start date into a date range input froze the page (web too; found by `apps/booking`) | dioxus-primitives | the range input and its two date inputs write each other's signals only when the value changes; a write of the same value used to notify and loop forever |
 
-Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates. The splitter rows are checked by `scripts/release-web.sh`, which fails when a lazy part comes out nearly empty, and by `scripts/check.sh --release`, which runs the dashboard and gallery browser checks against split builds.
+Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates. The splitter rows are checked by `scripts/release-web.sh`, which fails when a lazy part comes out nearly empty, and by the browser checks on release builds (`scripts/check.sh --release` locally, `.github/workflows/e2e.yml` in CI on each engine), which test the split dashboard and gallery.
 
 ## Known limits of the patches
 

@@ -1,9 +1,9 @@
 // Density presets: data-density on <html> scales control heights through --density.
 // GALLERY_URL=... node density.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 
 const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
 await page.goto(url);
 await page.waitForSelector(".gallery-main > .gallery-section:last-child");

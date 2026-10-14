@@ -3,10 +3,10 @@
 // ARIA state those keys change, and where focus ends up. Modelled on React Aria's
 // test-utils "testers" (Apache-2.0), written from scratch.
 // GALLERY_URL=... node keyboard.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 
 const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
 await page.goto(url);
 await page.waitForSelector(".gallery-main > .gallery-section:last-child");
@@ -173,6 +173,11 @@ await pattern("textarea autosize", async () => {
   await area.focus();
   await page.keyboard.type("one\ntwo\nthree\nfour\nfive\nsix");
   const h1 = (await area.boundingBox()).height;
+  if (!(await page.evaluate(() => CSS.supports("field-sizing", "content")))) {
+    // Documented fallback (textarea/component.rs): a fixed height that scrolls.
+    console.log(`skip textarea: no field-sizing in this engine, height stays ${Math.round(h1)}px`);
+    return;
+  }
   check(h1 > h0, `textarea: autosize grows with the text (${Math.round(h0)}px -> ${Math.round(h1)}px)`);
 });
 

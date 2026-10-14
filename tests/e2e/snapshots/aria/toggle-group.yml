@@ -1,0 +1,6 @@
+- heading "Toggle group" [level=2]
+- paragraph: Related toggles with shared state.
+- group "Text style":
+  - button "Bold": B
+  - button "Italic": I
+  - button "Underline": U

@@ -98,7 +98,7 @@ rust-ui diff command --dest src/components  # exit 1 if your copy differs
 
 ## Gate
 
-`scripts/check.sh` runs fmt, clippy `-D warnings`, the tests, the wasm32 builds (gallery and site) and the registry check. `scripts/check.sh --a11y` also builds the gallery and site with `dx`, serves them and runs axe in light and dark (needs `dx` and `npm ci` in `tests/e2e`).
+`scripts/check.sh` runs fmt, clippy `-D warnings`, the tests, the wasm32 builds (gallery and site) and the registry check. `scripts/check.sh --a11y` also builds the web apps with `dx` and runs the browser checks in `scripts/e2e.sh` (needs `dx` and `npm ci` in `tests/e2e`). Add `--browsers chromium,firefox,webkit` to run them on each engine you have installed.
 
 ## Install in your app
 
@@ -118,7 +118,7 @@ What changed is in [CHANGELOG.md](CHANGELOG.md), with upgrade steps for breaking
 
 ## Accessibility check
 
-`tests/e2e/axe.mjs` runs axe-core (WCAG 2 A/AA plus best practices) on the built gallery in light and dark. See the header of that file for how to run it. It is not in CI yet because CI cannot currently run (see below).
+`scripts/e2e.sh` runs axe-core (WCAG 2 A/AA plus best practices), the keyboard checks per APG pattern, a keyboard-only walkthrough of the gallery and accessibility-tree checks (roles, names and states, with snapshots in `tests/e2e/snapshots/aria/`). `.github/workflows/e2e.yml` runs it on Chromium, Firefox and WebKit. What still needs a person with a real screen reader is in [docs/SCREEN_READERS.md](docs/SCREEN_READERS.md).
 
 ## Motion
 

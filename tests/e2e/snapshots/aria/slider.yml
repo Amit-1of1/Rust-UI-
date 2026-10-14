@@ -1,0 +1,5 @@
+- heading "Slider" [level=2]
+- paragraph: Drag or use arrow keys.
+- text: 50%
+- group:
+  - slider "Volume"

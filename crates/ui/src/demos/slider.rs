@@ -15,7 +15,7 @@ pub fn Demo() -> Element {
             div { style: "margin-bottom: 15px; font-size: 16px; font-weight: bold;", "{current_value:.0}%" }
 
             Slider {
-                label: "Demo Slider",
+                label: "Volume",
                 horizontal: true,
                 min: 0.0,
                 max: 100.0,
