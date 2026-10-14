@@ -23,14 +23,23 @@ announced change.
 
 ## Found and fixed by the automated pass (2026-10-14)
 
-- The sidebar's show-on-hover "More" buttons stayed invisible when focused in WebKit, had no
-  focus ring, and below 768px were never shown at all. They now show on their own focus, get a
-  ring, and stay visible on narrow screens.
+- The sidebar's show-on-hover "More" buttons had no focus ring and below 768px were never
+  shown at all. They now get a ring, show on their own focus, and stay visible on narrow
+  screens.
 - The open Select list had no name; it is now labelled by the Select's label ("Fruit, list box").
 - Pagination's "More pages" text sat inside `aria-hidden`, so the ellipsis item was an empty
   list item; it is read now.
 - Demo names a reader would stumble on: "Demo Slider", "Progressbar Demo", toggle buttons named
   "B", "I", "U" and emoji read before each fruit name.
+
+## Open engine issue
+
+- WebKit (Playwright's WebKit 26 on Linux CI) sometimes traps inside the gallery's wasm within a
+  second of loading ("Out of bounds memory access" in a wasm-bindgen closure call, then
+  "Unreachable code"), and the page stops responding. It hit 2 of about 18 gallery loads in
+  some CI runs and none in others, never in Chromium or Firefox, and not in 80 plain loads
+  with any JSC wasm tier turned off. The cause is not known. Check the gallery in real Safari;
+  a failing WebKit job whose log shows this trap is this issue, not the check that timed out.
 
 ## Needs a person with a screen reader
 
