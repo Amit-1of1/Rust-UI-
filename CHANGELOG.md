@@ -20,6 +20,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Added
 
+- **ui:** `TextareaField` and `CheckboxField` for `use_form`; `TextField` passes other attributes (`inputmode`, `maxlength`, ...) to its input (experimental `form`). `Stepper` takes `current: Signal<usize>` to be driven from outside. `button_look(variant, size)` styles a router `Link` as a button. (#34)
 - **ui:** `use_theme()`, `Theme` and `ThemeMode`: one shared mode, accent, density and radius state with `is_dark()` (experimental). (#30)
 - **ui:** `SelectField`, `ComboboxField`, `FieldOption`, `FormState::field_with` and `FormField::load` (experimental). `Select` takes a `placeholder`. (#30)
 - **ui:** `DataTable` `toolbar` slot beside the filter box (experimental). (#30)
@@ -42,6 +43,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Changed
 
+- **ui:** `Accordion` no longer sets an inline `width: 15rem`; it fills its container. Wrap it in a sized box if you relied on the old width. (#34)
 - **ui:** Theme colour tokens are `light-dark()` pairs and `data-theme` sets `color-scheme`; the old `var(--dark, X) var(--light, Y)` form still works. `rust-ui theme --brand` prints `light-dark()` pairs. (#21)
 - **ui:** Chart marks use `--accent-color` and show their value on hover. (#30)
 - **ui:** dioxus-primitives comes from our fork (`Amit-1of1/dioxus-components`), pinned by commit; native renderer crates are patched from forks ([FORKS.md](docs/FORKS.md)). No kit API changed. (#26, #27)
@@ -51,4 +53,5 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 ### Fixed
 
 - **ui:** Many native (Blitz) fixes: Escape, outside click, focus traps, drags, context menu, toast F6, field focus, carousel, sidebar shortcut. (#24, #26, #27, #29)
+- **ui:** A `DateRangePicker` no longer freezes the page after a complete start date is typed (primitives fork `71fed69`). An `Item` inside an `ItemGroup` is `role="listitem"`. Found by the booking app (`apps/booking/GAPS.md`). (#34)
 - **ui:** Kit gaps found by the dashboard app (`apps/dashboard/GAPS.md`): `FormField::set` no longer subscribes effects, `Card` merges a caller's class, and more. (#22, #30)

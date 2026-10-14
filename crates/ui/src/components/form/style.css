@@ -2,3 +2,10 @@
   display: grid;
   gap: 1rem;
 }
+
+/* CheckboxField: the box and its label on one line. */
+.dx-form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

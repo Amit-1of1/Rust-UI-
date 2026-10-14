@@ -1455,3 +1455,114 @@ fn table_numeric_columns_are_marked_on_head_and_cell() {
     });
     assert_eq!(html.matches("data-numeric=\"true\"").count(), 2, "{html}");
 }
+
+// ---- Gaps found by apps/booking (apps/booking/GAPS.md) ----
+
+#[test]
+fn item_in_a_group_is_a_list_item() {
+    let html = render(|| {
+        rsx! {
+            ItemGroup {
+                Item { ItemContent { "Inside" } }
+            }
+            Item { ItemContent { "Outside" } }
+        }
+    });
+    assert_eq!(html.matches("role=\"listitem\"").count(), 1, "{html}");
+}
+
+#[test]
+fn stepper_follows_a_controlled_step() {
+    fn app() -> Element {
+        let step = use_signal(|| 2usize);
+        rsx! {
+            Stepper { total: 3, current: step,
+                StepperItem { step: 0usize, title: "One" }
+                StepperItem { step: 1usize, title: "Two" }
+                StepperItem { step: 2usize, title: "Three" }
+            }
+        }
+    }
+    let html = render(app);
+    let current = html
+        .split("<li")
+        .find(|li| li.contains("aria-current=\"step\""));
+    assert!(current.is_some_and(|li| li.contains("Three")), "{html}");
+}
+
+#[test]
+fn form_text_field_passes_extra_attributes_to_its_input() {
+    fn app() -> Element {
+        let form = use_form();
+        let card = form.field(vec![required()]);
+        rsx! {
+            TextField { field: card, label: "Card number", inputmode: "numeric", maxlength: "19" }
+        }
+    }
+    let html = render(app);
+    let input = html.split("<input").nth(1).expect("input");
+    assert!(input.contains("inputmode=\"numeric\""), "{input}");
+    assert!(input.contains("maxlength=\"19\""), "{input}");
+    assert!(
+        input.contains("id=\"dx-field-"),
+        "the field's own id stays: {input}"
+    );
+}
+
+#[test]
+fn form_checkbox_and_textarea_fields_are_labelled_and_report_errors() {
+    fn app() -> Element {
+        let form = use_form();
+        let notes = form.field_with("Late arrival", vec![]);
+        let terms = form.field(vec![required()]);
+        use_hook(move || {
+            terms.validate();
+        });
+        rsx! {
+            TextareaField { field: notes, label: "Notes", rows: "3" }
+            CheckboxField { field: terms, label: "I accept" }
+        }
+    }
+    let html = render(app);
+    let textarea = html.split("<textarea").nth(1).expect("textarea");
+    assert!(textarea.contains("rows=\"3\""), "{textarea}");
+    assert!(html.contains("Late arrival"), "{html}");
+    let checkbox = html
+        .split("<button")
+        .find(|b| b.contains("role=\"checkbox\""))
+        .expect("checkbox");
+    assert!(checkbox.contains("aria-invalid=\"true\""), "{checkbox}");
+    assert!(
+        checkbox.contains("aria-describedby=\"dx-field-"),
+        "{checkbox}"
+    );
+    // Both labels point at their control.
+    assert_eq!(html.matches("for=\"dx-field-").count(), 2, "{html}");
+}
+
+#[test]
+fn button_look_styles_another_element_as_a_button() {
+    let html = render(|| {
+        rsx! {
+            a { href: "/trips", ..button_look(ButtonVariant::Outline, ButtonSize::Sm), "Trips" }
+        }
+    });
+    assert!(html.contains("data-style=\"outline\""), "{html}");
+    assert!(html.contains("data-size=\"sm\""), "{html}");
+    assert!(html.contains("class=\"dx-button"), "{html}");
+}
+
+#[test]
+fn accordion_has_no_fixed_width() {
+    let html = render(|| {
+        rsx! {
+            Accordion {
+                AccordionItem { index: 0usize,
+                    AccordionTrigger { "Q" }
+                    AccordionContent { "A" }
+                }
+            }
+        }
+    });
+    assert!(!html.contains("width:15rem"), "fills its container: {html}");
+}

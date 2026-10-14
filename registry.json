@@ -369,10 +369,12 @@
         "form/style.css"
       ],
       "registryDependencies": [
+        "checkbox",
         "combobox",
         "field",
         "input",
-        "select"
+        "select",
+        "textarea"
       ]
     },
     {

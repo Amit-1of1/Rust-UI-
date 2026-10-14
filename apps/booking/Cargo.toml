@@ -1,0 +1,21 @@
+[package]
+name = "booking"
+version = "0.1.0"
+description = "Trailhead Stays: a cabin booking app built only from the kit, to find gaps (see GAPS.md)"
+publish = false
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus = { workspace = true, features = ["router"] }
+ui.workspace = true
+time = { version = "0.3.44", features = ["std", "macros"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "DomStringMap"] }
+
+[features]
+default = ["web"]
+web = ["dioxus/web", "ui/web"]
+desktop = ["dioxus/desktop", "ui/desktop"]

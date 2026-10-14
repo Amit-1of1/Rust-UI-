@@ -37,9 +37,10 @@ for (const scheme of ["light", "dark"]) {
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));
   await page.goto(url);
   await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
-  if (scheme === "dark") {
-    await page.getByRole("switch", { name: "Dark mode" }).click();
-  }
+  // The page follows the system scheme and the switch reflects it; clicking it here would
+  // turn dark mode off and scan the light theme twice.
+  const dark = await page.getByRole("switch", { name: "Dark mode" }).getAttribute("aria-checked");
+  check(dark === String(scheme === "dark"), `${scheme}: the dark mode switch follows the system (${dark})`);
 
   for (const name of ["Overview", "Customers", "Orders", "Settings"]) {
     await nav(page, name);

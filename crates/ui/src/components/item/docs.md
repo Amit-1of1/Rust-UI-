@@ -1,5 +1,7 @@
 A versatile component for displaying content with media, title, description, and actions.
 
+`ItemGroup` is a list (`role="list"`), and every `Item` inside it is a list item (`role="listitem"`); an `Item` on its own has no role.
+
 ## Component Structure
 
 ```rust
