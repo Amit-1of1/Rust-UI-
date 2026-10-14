@@ -1,5 +1,5 @@
+use crate::components::icons::ChevronDown;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::ChevronDown;
 use dioxus_primitives::accordion::{
     self, AccordionContentProps, AccordionItemProps, AccordionProps, AccordionTriggerProps,
 };
@@ -48,7 +48,7 @@ pub fn AccordionTrigger(props: AccordionTriggerProps) -> Element {
             id: props.id,
             attributes: props.attributes,
             {props.children}
-            ChevronDown {
+            ChevronDown { "aria-hidden": "true",
                 class: Styles::dx_accordion_expand_icon,
                 size: "20px",
                 stroke: "var(--secondary-color-4)",

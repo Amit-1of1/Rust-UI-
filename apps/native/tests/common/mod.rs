@@ -46,6 +46,10 @@ impl Rect {
     }
 }
 
+/// blitz-paint keeps its layer counters in process-wide statics, so two tests painting at
+/// once can trip each other up. Paint one frame at a time.
+static PAINT: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
 pub struct Harness {
     pub doc: DioxusDocument,
     /// Animation clock in seconds. Every `settle` moves it a second on, so CSS enter
@@ -164,6 +168,7 @@ impl Harness {
         use anyrender::ImageRenderer as _;
         let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(WIDTH, HEIGHT);
         let mut buf = Vec::new();
+        let _paint = PAINT.lock().unwrap_or_else(|e| e.into_inner());
         renderer.render_to_vec(
             |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, WIDTH, HEIGHT),
             &mut buf,
@@ -179,6 +184,7 @@ impl Harness {
         use anyrender::ImageRenderer as _;
         let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(WIDTH, HEIGHT);
         let mut buf = Vec::new();
+        let _paint = PAINT.lock().unwrap_or_else(|e| e.into_inner());
         renderer.render_to_vec(
             |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, WIDTH, HEIGHT),
             &mut buf,

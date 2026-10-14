@@ -1,4 +1,5 @@
 use crate::components::button::{Button, ButtonVariant};
+use crate::components::icons::PanelLeft;
 use crate::components::separator::Separator;
 use crate::components::sheet::{
     Sheet, SheetContentClose, SheetDescription, SheetHeader, SheetSide, SheetTitle,
@@ -8,7 +9,6 @@ use crate::components::tooltip::{Tooltip, TooltipContent, TooltipTrigger};
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::core::use_drop;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::PanelLeft;
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 use dioxus_primitives::use_controlled;
@@ -369,7 +369,7 @@ pub fn SidebarTrigger(
                 ctx.toggle();
             },
             attributes: merged,
-            PanelLeft {
+            PanelLeft { "aria-hidden": "true",
                 class: Styles::dx_sidebar_trigger_icon,
                 size: "1rem",
             }

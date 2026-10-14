@@ -1,6 +1,6 @@
+use crate::components::icons::{GripVertical, X};
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{GripVertical, X};
 use dioxus_primitives::drag_and_drop_list::{
     self, DragAndDropContext, DragAndDropDropIndicatorProps, DragAndDropItemContext,
     DragAndDropListItemProps, DragAndDropListItemsProps,
@@ -132,7 +132,7 @@ pub fn DragAndDropDropIndicator(props: DragAndDropDropIndicatorProps) -> Element
 #[component]
 fn DragIcon() -> Element {
     rsx! {
-        GripVertical {
+        GripVertical { "aria-hidden": "true",
             class: Styles::dx_item_icon,
             "aria-hidden": "true",
             size: "16px",
@@ -169,7 +169,7 @@ pub fn RemoveButton(
             },
             ..attributes,
             {children}
-            X { size: "14px" }
+            X { "aria-hidden": "true", size: "14px" }
         }
     }
 }

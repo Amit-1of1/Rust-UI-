@@ -1,7 +1,7 @@
+use crate::components::icons::X;
 use crate::components::overlay::ModalPortal;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::X;
 use dioxus_primitives::dialog::{
     self, DialogCtx, DialogDescriptionProps, DialogRootProps, DialogTitleProps,
 };

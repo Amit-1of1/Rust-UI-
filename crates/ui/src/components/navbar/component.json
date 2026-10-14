@@ -7,13 +7,14 @@
       "git": "https://github.com/DioxusLabs/components",
       "name": "dioxus-primitives",
       "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
-    },
-    {
-      "name": "dioxus-icons",
-      "version": "0.1.0"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    }
+  ],
   "description": "The Navbar component can be used to display a navigation bar with collapsible sections.",
   "exclude": [
     "docs.md",

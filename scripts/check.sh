@@ -81,6 +81,8 @@ if [ "$A11Y" = 1 ]; then
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node density.mjs)
       step "forced colors (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node forced_colors.mjs)
+      step "light-dark theme, chips, link (gallery)"
+      (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node theme.mjs)
       step "Ctrl+K hotkey (gallery)"
       (cd tests/e2e && GALLERY_URL="http://localhost:$port/" node hotkey.mjs)
       for accent in blue green violet rose orange; do

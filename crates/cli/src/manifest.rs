@@ -77,15 +77,69 @@ fn cargo_dependencies(source: &str, rev: &str, registry: &str) -> Vec<Value> {
         deps.push(json!({"name": "tracing", "version": "0.1"}));
     }
     if uses("web_sys") {
-        deps.push(json!({"name": "web-sys", "version": "0.3", "features": ["Window", "Document", "Element", "HtmlElement"]}));
+        deps.push(
+            json!({"name": "web-sys", "version": "0.3", "features": web_sys_features(source)}),
+        );
     }
     if uses("wasm_bindgen") {
         deps.push(json!({"name": "wasm-bindgen", "version": "0.2"}));
+    }
+    if uses("wasm_bindgen_futures") {
+        deps.push(json!({"name": "wasm-bindgen-futures", "version": "0.4"}));
     }
     if uses("motion") {
         deps.push(json!({"name": "rust-ui-motion", "git": registry}));
     }
     deps
+}
+
+/// The web-sys features a source needs: a base set, the types it names, and the types
+/// behind the methods it calls (web-sys gates each type behind a feature of its name).
+fn web_sys_features(source: &str) -> Vec<String> {
+    const BASE: &[&str] = &[
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget",
+    ];
+    const BY_METHOD: &[(&str, &str)] = &[
+        (".navigator()", "Navigator"),
+        (".clipboard()", "Clipboard"),
+        (".match_media(", "MediaQueryList"),
+    ];
+    let mut out: Vec<String> = BASE.iter().map(|s| s.to_string()).collect();
+    let mut add = |name: &str| {
+        if name.starts_with(|c: char| c.is_ascii_uppercase()) && !out.iter().any(|f| f == name) {
+            out.push(name.to_string());
+        }
+    };
+    for (method, feature) in BY_METHOD {
+        if source.contains(method) {
+            add(feature);
+        }
+    }
+    // `web_sys::KeyboardEvent` and `use web_sys::{A, B}`.
+    for (i, _) in source.match_indices("web_sys::") {
+        let rest = &source[i + "web_sys::".len()..];
+        let names = match rest.strip_prefix('{') {
+            Some(list) => &list[..list.find('}').unwrap_or(0)],
+            None => {
+                &rest[..rest
+                    .find(|c: char| !c.is_ascii_alphanumeric())
+                    .unwrap_or(rest.len())]
+            }
+        };
+        for name in names.split(',') {
+            let name: String = name
+                .trim()
+                .chars()
+                .take_while(|c| c.is_ascii_alphanumeric())
+                .collect();
+            add(&name);
+        }
+    }
+    out
 }
 
 /// Every manifest as `(path relative to root, contents)`: one per component and the root.
@@ -175,5 +229,22 @@ mod tests {
         );
         assert!(cargo_dependencies("use dioxus::prelude::*;", "abc", "g").is_empty());
         assert!(cargo_dependencies("use crate::components::time::Clock;", "abc", "g").is_empty());
+    }
+
+    #[test]
+    fn web_sys_features_follow_types_and_methods() {
+        let src = "use web_sys::{KeyboardEvent, MediaQueryList};\nweb_sys::window().navigator().clipboard();\nfoo(a, Bar);";
+        let f = web_sys_features(src);
+        for want in [
+            "Window",
+            "KeyboardEvent",
+            "MediaQueryList",
+            "Navigator",
+            "Clipboard",
+        ] {
+            assert!(f.iter().any(|x| x == want), "{want} missing from {f:?}");
+        }
+        assert_eq!(f.iter().filter(|x| *x == "MediaQueryList").count(), 1);
+        assert!(!f.iter().any(|x| x == "Bar"), "{f:?}");
     }
 }

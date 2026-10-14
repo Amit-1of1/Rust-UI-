@@ -1,6 +1,6 @@
+use crate::components::icons::{ChevronLeft, ChevronRight, Ellipsis};
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
-use dioxus_icons::lucide::{ChevronLeft, ChevronRight, Ellipsis};
 #[css_module("/src/components/pagination/style.css")]
 struct Styles;
 
@@ -152,7 +152,7 @@ pub fn PaginationPrevious(
             onmousedown,
             onmouseup,
             attributes,
-            ChevronLeft { size: "1rem" }
+            ChevronLeft { "aria-hidden": "true", size: "1rem" }
             span { class: Styles::dx_pagination_label, {t.previous} }
         }
     }
@@ -178,7 +178,7 @@ pub fn PaginationNext(
             onmouseup,
             attributes,
             span { class: Styles::dx_pagination_label, {t.next} }
-            ChevronRight { size: "1rem" }
+            ChevronRight { "aria-hidden": "true", size: "1rem" }
         }
     }
 }
@@ -191,9 +191,9 @@ pub fn PaginationEllipsis(
         span {
             class: Styles::dx_pagination_ellipsis,
             "data-slot": "pagination-ellipsis",
-            aria_hidden: "true",
+            "aria-hidden": "true",
             ..attributes,
-            Ellipsis { size: "1rem" }
+            Ellipsis { "aria-hidden": "true", size: "1rem" }
             span { class: Styles::dx_sr_only, "More pages" }
         }
     }

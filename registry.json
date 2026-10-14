@@ -15,7 +15,9 @@
         "accordion/mod.rs",
         "accordion/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "alert",
@@ -67,7 +69,9 @@
         "badge/mod.rs",
         "badge/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "bottom_nav",
@@ -121,7 +125,9 @@
         "calendar/mod.rs",
         "calendar/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "callout",
@@ -175,7 +181,21 @@
         "checkbox/mod.rs",
         "checkbox/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "name": "chips",
+      "files": [
+        "chips/component.rs",
+        "chips/docs.md",
+        "chips/mod.rs",
+        "chips/style.css"
+      ],
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "collapsible",
@@ -185,7 +205,9 @@
         "collapsible/mod.rs",
         "collapsible/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "color_picker",
@@ -207,7 +229,9 @@
         "combobox/mod.rs",
         "combobox/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "command",
@@ -219,6 +243,7 @@
       ],
       "registryDependencies": [
         "dialog",
+        "hooks",
         "ui_strings"
       ]
     },
@@ -257,6 +282,7 @@
       ],
       "registryDependencies": [
         "calendar",
+        "icons",
         "popover",
         "ui_strings"
       ]
@@ -282,6 +308,7 @@
         "drag_and_drop_list/style.css"
       ],
       "registryDependencies": [
+        "icons",
         "ui_strings"
       ]
     },
@@ -353,12 +380,33 @@
       ]
     },
     {
+      "name": "hooks",
+      "files": [
+        "hooks/clipboard.rs",
+        "hooks/docs.md",
+        "hooks/hotkey.rs",
+        "hooks/media.rs",
+        "hooks/mod.rs",
+        "hooks/selection.rs"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "hover_card",
       "files": [
         "hover_card/component.rs",
         "hover_card/docs.md",
         "hover_card/mod.rs",
         "hover_card/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "icons",
+      "files": [
+        "icons/component.rs",
+        "icons/docs.md",
+        "icons/mod.rs"
       ],
       "registryDependencies": []
     },
@@ -427,6 +475,19 @@
       "registryDependencies": []
     },
     {
+      "name": "link",
+      "files": [
+        "link/component.rs",
+        "link/docs.md",
+        "link/mod.rs",
+        "link/style.css"
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "marquee",
       "files": [
         "marquee/component.rs",
@@ -468,7 +529,9 @@
         "navbar/mod.rs",
         "navbar/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "overlay",
@@ -488,6 +551,7 @@
         "pagination/style.css"
       ],
       "registryDependencies": [
+        "icons",
         "ui_strings"
       ]
     },
@@ -539,7 +603,9 @@
         "select/mod.rs",
         "select/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "separator",
@@ -560,6 +626,7 @@
         "sheet/style.css"
       ],
       "registryDependencies": [
+        "icons",
         "overlay",
         "ui_strings"
       ]
@@ -585,6 +652,7 @@
       ],
       "registryDependencies": [
         "button",
+        "icons",
         "separator",
         "sheet",
         "skeleton",
@@ -682,7 +750,9 @@
         "tag_group/mod.rs",
         "tag_group/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "textarea",

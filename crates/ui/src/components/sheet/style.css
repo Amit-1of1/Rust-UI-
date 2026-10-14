@@ -2,7 +2,7 @@
 .dx-sheet-root {
   position: fixed;
   z-index: 1000;
-  background: rgb(0 0 0 / 50%);
+  background: var(--overlay-color);
   inset: 0;
   opacity: 0;
   will-change: opacity;

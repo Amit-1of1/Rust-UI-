@@ -190,6 +190,12 @@ fn kbd_demo_renders() {
 }
 
 #[test]
+fn label_demo_renders() {
+    let html = render(ui::demos::label::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
 fn spinner_demo_renders() {
     let html = render(ui::demos::spinner::Demo);
     assert!(!html.is_empty());
@@ -415,6 +421,30 @@ fn toast_demo_renders() {
 fn ui_strings_demo_renders() {
     let html = render(ui::demos::ui_strings::Demo);
     assert!(html.contains("Previous"), "{html}");
+}
+
+#[test]
+fn icons_demo_renders() {
+    let html = render(ui::demos::icons::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn hooks_demo_renders() {
+    let html = render(ui::demos::hooks::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn chips_demo_renders() {
+    let html = render(ui::demos::chips::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn link_demo_renders() {
+    let html = render(ui::demos::link::Demo);
+    assert!(!html.is_empty());
 }
 
 #[test]

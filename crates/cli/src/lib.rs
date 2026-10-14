@@ -7,6 +7,7 @@
 pub mod docsgen;
 pub mod doctor;
 pub mod manifest;
+pub mod postbuild;
 pub mod scaffold;
 pub mod theme;
 

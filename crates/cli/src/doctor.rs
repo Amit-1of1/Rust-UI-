@@ -136,6 +136,10 @@ pub fn physical_properties(css: &str) -> Vec<(usize, String)> {
     out
 }
 
+/// Components that have no demo on purpose (see GUARDRAILS): navbar items are router
+/// `Link`s, so a demo would need a router of its own.
+const NO_DEMO_OK: &[&str] = &["navbar"];
+
 /// A component counts as tested when some test function is named after it.
 fn has_test(tests: &str, name: &str) -> bool {
     let stem = name.strip_suffix("_group").unwrap_or(name);
@@ -260,14 +264,28 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         // style.css only for components that load one; a provider (ui_strings) draws nothing.
         let styled = fs::read_to_string(folder.join("component.rs"))
             .map_or(true, |src| src.contains("#[css_module("));
+        // A folder of several modules (hooks) has its code beside mod.rs instead.
+        let split = fs::read_dir(&folder).is_ok_and(|entries| {
+            entries.filter_map(Result::ok).any(|e| {
+                let f = e.file_name();
+                f != "mod.rs" && f != "component.rs" && f.to_string_lossy().ends_with(".rs")
+            })
+        });
         for file in ["component.rs", "style.css", "docs.md"] {
-            if (file != "style.css" || styled) && !folder.join(file).exists() {
+            let needed = match file {
+                "component.rs" => !split,
+                "style.css" => styled && !split,
+                _ => true,
+            };
+            if needed && !folder.join(file).exists() {
                 add(Level::Error, name, format!("missing {file}"));
             }
         }
         let has_demo = demo.exists();
         if !has_demo {
-            add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
+            if !NO_DEMO_OK.contains(&name.as_str()) {
+                add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
+            }
         } else {
             if !demos.contains(&format!("{name}_demo")) {
                 add(Level::Error, name, "demo is not in tests/demos.rs".into());

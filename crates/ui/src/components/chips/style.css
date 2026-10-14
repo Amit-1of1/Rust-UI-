@@ -1,0 +1,87 @@
+.dx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dx-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: calc(2rem * var(--density, 1));
+  padding-inline: 0.75rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 999px;
+  background: var(--primary-color-3);
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  font-size: 0.875rem;
+  user-select: none;
+  transition:
+    background-color 150ms var(--spring-snappy, ease-out),
+    border-color 150ms ease-out,
+    color 150ms ease-out;
+}
+
+.dx-chip:hover {
+  background: var(--primary-color-5);
+}
+
+.dx-chip[data-state="on"] {
+  border-color: var(--accent-color);
+  background: var(--accent-color);
+  color: var(--accent-contrast);
+}
+
+.dx-chip:has(.dx-chip-input:focus-visible) {
+  box-shadow: 0 0 0 2px var(--focused-border-color);
+}
+
+.dx-chip[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* The checkbox stays in the page (focusable, announced) but is not drawn. */
+.dx-chip-input {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The check mark grows in when the chip turns on, so the state never relies on colour. */
+.dx-chip-check {
+  display: inline-flex;
+  overflow: hidden;
+  width: 0;
+  transition: width 150ms var(--spring-snappy, ease-out);
+}
+
+.dx-chip[data-state="on"] .dx-chip-check {
+  width: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-chip,
+  .dx-chip-check {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .dx-chip {
+    border-color: ButtonText;
+  }
+  .dx-chip[data-state="on"] {
+    border-color: Highlight;
+  }
+  .dx-chip:has(.dx-chip-input:focus-visible) {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "cargoDependencies": [
+    {
+      "name": "dioxus-icons",
+      "version": "0.1.0"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "The kit's one icon set: Lucide (1,700+ icons) through the `dioxus-icons` crate, re-exported here so apps and components import icons from one place.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "icons"
+}

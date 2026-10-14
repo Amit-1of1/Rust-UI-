@@ -43,6 +43,7 @@ pub const DEMOS: &[Demo] = &[
     ("input_otp", ui::demos::input_otp::Demo),
     ("item", ui::demos::item::Demo),
     ("kbd", ui::demos::kbd::Demo),
+    ("label", ui::demos::label::Demo),
     ("marquee", ui::demos::marquee::Demo),
     ("menubar", ui::demos::menubar::Demo),
     ("multi_select", ui::demos::multi_select::Demo),
@@ -82,6 +83,10 @@ pub const DEMOS: &[Demo] = &[
     ("tooltip", ui::demos::tooltip::Demo),
     ("separator", ui::demos::separator::Demo),
     ("toast", ui::demos::toast::Demo),
+    ("icons", ui::demos::icons::Demo),
+    ("hooks", ui::demos::hooks::Demo),
+    ("chips", ui::demos::chips::Demo),
+    ("link", ui::demos::link::Demo),
     ("overlay", ui::demos::overlay::Demo),
 ];
 

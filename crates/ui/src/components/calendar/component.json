@@ -7,10 +7,6 @@
       "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
     },
     {
-      "name": "dioxus-icons",
-      "version": "0.1.0"
-    },
-    {
       "features": [
         "std",
         "macros"
@@ -19,7 +15,12 @@
       "version": "0.3.44"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    }
+  ],
   "description": "The Calendar component is used to display a calendar interface, allowing users to select dates. It provides a grid layout of days for a specific month and year.",
   "exclude": [
     "docs.md",

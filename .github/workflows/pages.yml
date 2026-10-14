@@ -34,6 +34,10 @@ jobs:
         working-directory: apps/docs
       - run: dx bundle --platform web --release --base-path Rust-UI-/gallery
         working-directory: apps/gallery
+      # One stylesheet per app instead of one per component (see crates/cli/README.md).
+      - run: |
+          cargo run -q -p rust-ui-cli -- postbuild target/dx/docs/release/web/public
+          cargo run -q -p rust-ui-cli -- postbuild target/dx/gallery/release/web/public
       - run: |
           mkdir -p public
           cp -r target/dx/docs/release/web/public/. public/
