@@ -6,7 +6,7 @@ What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIO
 
 ## Unreleased
 
-### Icons are generated in the kit (PR #PR)
+### Icons are generated in the kit (PR #35)
 
 **Who:** apps that use `ui::icons`, name `dioxus_icons` directly, or match icon markup in tests or CSS.
 
