@@ -4,6 +4,7 @@
 #   scripts/e2e.sh                          build the apps with dx, then test on Chromium
 #   scripts/e2e.sh --browsers chromium,firefox,webkit
 #   scripts/e2e.sh --prebuilt               use the existing target/dx/*/debug/web/public
+#   scripts/e2e.sh --release                release builds (CI: WebKit is slow to start 16 MB debug wasm)
 # Needs `npm ci` in tests/e2e and each engine under PLAYWRIGHT_BROWSERS_PATH (this script never
 # downloads one; `npx playwright install <engine>` does, and CI does it in .github/workflows/e2e.yml).
 set -euo pipefail
@@ -11,12 +12,14 @@ cd "$(dirname "$0")/.."
 
 BROWSERS="${BROWSERS:-chromium}"
 BUILD=1
+PROFILE=debug
 while [ $# -gt 0 ]; do
   case "$1" in
     --browsers) BROWSERS="$2"; shift ;;
     --browsers=*) BROWSERS="${1#*=}" ;;
     --prebuilt) BUILD=0 ;;
-    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
+    --release) PROFILE=release ;;
+    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
   shift
@@ -35,15 +38,16 @@ trap cleanup EXIT
 [ -d tests/e2e/node_modules ] || (cd tests/e2e && npm ci)
 
 # name | app dir | build output (relative to repo root) | port
-APPS="gallery|apps/gallery|target/dx/gallery/debug/web/public|8765
-site|apps/site|target/dx/site/debug/web/public|8767
-docs|apps/docs|target/dx/docs/debug/web/public|8769
-dashboard|apps/dashboard|target/dx/dashboard/debug/web/public|8771"
+APPS="gallery|apps/gallery|target/dx/gallery/$PROFILE/web/public|8765
+site|apps/site|target/dx/site/$PROFILE/web/public|8767
+docs|apps/docs|target/dx/docs/$PROFILE/web/public|8769
+dashboard|apps/dashboard|target/dx/dashboard/$PROFILE/web/public|8771"
 
 while IFS='|' read -r name dir out port; do
   if [ "$BUILD" = 1 ]; then
     step "build $name"
-    (cd "$dir" && dx build --platform web)
+    if [ "$PROFILE" = release ]; then (cd "$dir" && dx build --platform web --release)
+    else (cd "$dir" && dx build --platform web); fi
   fi
   [ -f "$out/index.html" ] || { echo "$out/index.html missing: build $name first" >&2; exit 1; }
   python3 -m http.server "$port" --directory "$out" >/dev/null 2>&1 &

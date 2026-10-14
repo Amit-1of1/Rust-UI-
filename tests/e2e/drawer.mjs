@@ -28,6 +28,8 @@ await dialog.waitFor();
 await page.waitForTimeout(500);
 await page.evaluate(() => {
   window.__events = [];
+  let moves = 0;
+  document.addEventListener("pointermove", () => moves++ === 0 && window.__events.push("pointermove…"), true);
   for (const type of ["pointerdown", "pointerup", "pointercancel", "pointerleave", "pointerout", "lostpointercapture", "gotpointercapture"])
     document.addEventListener(type, (e) => window.__events.push(`${type}@${e.target.tagName ?? "?"}`), true);
 });
