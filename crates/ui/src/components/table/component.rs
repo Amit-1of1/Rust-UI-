@@ -37,13 +37,20 @@ table_part!(TableBody, tbody, dx_table_body);
 table_part!(TableFooter, tfoot, dx_table_footer);
 table_part!(TableRow, tr, dx_table_row);
 
+/// A body cell. `numeric` aligns it to the end with tabular figures, to match a
+/// `numeric` [`TableHead`].
 #[component]
 pub fn TableCell(
+    #[props(default)] numeric: bool,
     #[props(extends=GlobalAttributes, extends=td)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
     rsx! {
-        td { ..merge_attributes(vec![attributes!(div { class: Styles::dx_table_cell }), attributes]), {children} }
+        td {
+            "data-numeric": numeric.then_some("true"),
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_table_cell }), attributes]),
+            {children}
+        }
     }
 }
 table_part!(TableCaption, caption, dx_table_caption);
@@ -84,11 +91,14 @@ impl SortDirection {
     }
 }
 
-/// A column header. Pass `on_sort` to make it a sort button (with `aria-sort`).
+/// A column header. Pass `on_sort` to make it a sort button (with `aria-sort`). `numeric`
+/// aligns it to the end, with the sort arrow before the text so the text lines up with
+/// the `numeric` cells below.
 #[component]
 pub fn TableHead(
     #[props(default)] sort: SortDirection,
     #[props(default)] on_sort: Option<EventHandler<()>>,
+    #[props(default)] numeric: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
@@ -96,6 +106,7 @@ pub fn TableHead(
         th {
             scope: "col",
             aria_sort: if on_sort.is_some() { sort.aria() },
+            "data-numeric": numeric.then_some("true"),
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_table_head }), attributes]),
             if let Some(on_sort) = on_sort {
                 button {

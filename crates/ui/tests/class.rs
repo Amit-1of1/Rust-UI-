@@ -58,7 +58,9 @@ macro_rules! cases {
     };
 }
 
-const CASES: &[(&str, fn() -> Element)] = cases![
+type Case = (&'static str, fn() -> Element);
+
+const CASES: &[Case] = cases![
     "Accordion" => rsx! { Accordion { class: "caller-x" } },
     "AccordionItem" => rsx! { Accordion { AccordionItem { index: 0usize, class: "caller-x" } } },
     "AccordionTrigger" => rsx! { Accordion { AccordionItem { index: 0usize, AccordionTrigger { class: "caller-x", "Q" } } } },

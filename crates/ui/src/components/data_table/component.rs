@@ -290,7 +290,7 @@ pub fn DataTable(
                                                     page.set(0);
                                                 })
                                             }),
-                                        style: if column.numeric { "text-align: right;" },
+                                        numeric: column.numeric,
                                         "{column.header}"
                                     }
                                 }
@@ -324,7 +324,7 @@ pub fn DataTable(
                             for (c , cell) in rows[i].iter().enumerate() {
                                 TableCell {
                                     key: "{c}",
-                                    style: if columns.get(c).is_some_and(|col| col.numeric) { "text-align: right;" },
+                                    numeric: columns.get(c).is_some_and(|col| col.numeric),
                                     if let Some(render) = render_cell {
                                         {render.call((i, c))}
                                     } else {

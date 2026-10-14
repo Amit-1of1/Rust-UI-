@@ -41,5 +41,28 @@ assert.match(await status.innerText(), /1 selected/);
 await table.getByLabel("Select all rows on this page").check();
 await page.waitForTimeout(100);
 assert.match(await status.innerText(), /5 selected/);
+
+// Sortable headers line up with their cells: start edges for text, end edges for numbers.
+const edges = await table.evaluate((t) => {
+  const textBox = (node) => {
+    const r = document.createRange();
+    r.selectNodeContents(node);
+    return r.getBoundingClientRect();
+  };
+  const heads = [...t.querySelectorAll("thead th")];
+  const cells = [...t.querySelectorAll("tbody tr:first-child td")];
+  const at = (name) => heads.findIndex((th) => th.innerText.startsWith(name));
+  const label = (i) => textBox(heads[i].querySelector("button").firstChild);
+  const name = at("Name");
+  const salary = at("Salary");
+  return {
+    nameHead: label(name).left,
+    nameCell: textBox(cells[name]).left,
+    salaryHead: label(salary).right,
+    salaryCell: textBox(cells[salary]).right,
+  };
+});
+assert.ok(Math.abs(edges.nameHead - edges.nameCell) <= 1, `Name header starts with its cells ${JSON.stringify(edges)}`);
+assert.ok(Math.abs(edges.salaryHead - edges.salaryCell) <= 1, `Salary header ends with its cells ${JSON.stringify(edges)}`);
 console.log("table: ok");
 await browser.close();

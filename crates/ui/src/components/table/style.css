@@ -68,6 +68,20 @@
   gap: 0.25rem;
 }
 
+/* Numeric columns: end-aligned figures. In a sortable numeric header the arrow goes first
+   and the button's end padding is pulled back, so the header text ends where the cells'
+   text ends. */
+.dx-table-head[data-numeric="true"],
+.dx-table-cell[data-numeric="true"] {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.dx-table-head[data-numeric="true"] .dx-table-sort {
+  flex-direction: row-reverse;
+  margin-inline: 0 -0.5rem;
+}
+
 .dx-table-sort:hover {
   background-color: var(--primary-color-5);
   color: var(--secondary-color);

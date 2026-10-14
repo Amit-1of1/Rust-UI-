@@ -152,7 +152,7 @@ pub fn Customers() -> Element {
                                                     page.set(0);
                                                 })
                                             }),
-                                        style: if column.numeric { "text-align: right;" },
+                                        numeric: column.numeric,
                                         "{column.header}"
                                     }
                                 }
@@ -248,7 +248,7 @@ fn CustomerRow(
             TableCell {
                 Badge { variant: status_badge(&customer.status), "{customer.status}" }
             }
-            TableCell { style: "text-align: right;", {money(customer.mrr)} }
+            TableCell { numeric: true, {money(customer.mrr)} }
             TableCell { style: "text-align: right;",
                 DropdownMenu {
                     DropdownMenuTrigger { aria_label: "Actions for {customer.name}", "…" }

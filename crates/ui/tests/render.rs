@@ -1448,3 +1448,16 @@ fn chart_marks_show_their_value_on_hover() {
         assert!(html.contains(title), "missing {title} in {html}");
     }
 }
+
+#[test]
+fn table_numeric_columns_are_marked_on_head_and_cell() {
+    let html = render(|| {
+        rsx! {
+            Table {
+                TableHeader { TableRow { TableHead { numeric: true, on_sort: |_| {}, "Amount" } } }
+                TableBody { TableRow { TableCell { numeric: true, "$5" } TableCell { "plain" } } }
+            }
+        }
+    });
+    assert_eq!(html.matches("data-numeric=\"true\"").count(), 2, "{html}");
+}
