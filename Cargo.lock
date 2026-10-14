@@ -821,7 +821,7 @@ checksum = "6099cdc01846bc367c4e7dd630dc5966dccf36b652fae7a74e17b640411a91b2"
 [[package]]
 name = "blitz-dom"
 version = "0.2.4"
-source = "git+https://github.com/Amit-1of1/blitz?rev=ceca47f651b17ef8fb9143558e4ec9ebc7d3e729#ceca47f651b17ef8fb9143558e4ec9ebc7d3e729"
+source = "git+https://github.com/Amit-1of1/blitz?rev=a55f2909d06ea6168ee9bd5328c5c450be9ff0dd#a55f2909d06ea6168ee9bd5328c5c450be9ff0dd"
 dependencies = [
  "accesskit",
  "app_units",
@@ -872,8 +872,7 @@ dependencies = [
 [[package]]
 name = "blitz-net"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0583c80a179a95a08adeb30c6c25dfeaa9d6e9314072f3c81a7976dee8d7a562"
+source = "git+https://github.com/Amit-1of1/blitz?rev=505d30e40c295e5ea71bcc182167edcfcd6f86c5#505d30e40c295e5ea71bcc182167edcfcd6f86c5"
 dependencies = [
  "blitz-traits",
  "data-url",
@@ -923,8 +922,7 @@ dependencies = [
 [[package]]
 name = "blitz-traits"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6cd87a5b7bc1bc3d546aeb28d0867ff3191e9c4e85452e1808931200a4bc49d4"
+source = "git+https://github.com/Amit-1of1/blitz?rev=14f766f1e18a9daad1465ca5d9d9f7f52f0ccf9e#14f766f1e18a9daad1465ca5d9d9f7f52f0ccf9e"
 dependencies = [
  "bitflags 2.13.2",
  "bytes",
@@ -1939,7 +1937,7 @@ dependencies = [
 [[package]]
 name = "dioxus-attributes"
 version = "0.1.0"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=a1100155246be04c91cb0b485852c2063364775c#a1100155246be04c91cb0b485852c2063364775c"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=68c311758a2c7d555ef92c813713008d028f87bf#68c311758a2c7d555ef92c813713008d028f87bf"
 dependencies = [
  "dioxus-rsx",
  "proc-macro2",
@@ -2381,7 +2379,7 @@ dependencies = [
 [[package]]
 name = "dioxus-native-dom"
 version = "0.7.10"
-source = "git+https://github.com/Amit-1of1/dioxus?rev=e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37#e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37"
+source = "git+https://github.com/Amit-1of1/dioxus?rev=8f3d575287a6fe12c689aa09cef92ad7ac521aac#8f3d575287a6fe12c689aa09cef92ad7ac521aac"
 dependencies = [
  "blitz-dom",
  "blitz-traits",
@@ -2395,7 +2393,7 @@ dependencies = [
 [[package]]
 name = "dioxus-primitives"
 version = "0.0.1"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=a1100155246be04c91cb0b485852c2063364775c#a1100155246be04c91cb0b485852c2063364775c"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=68c311758a2c7d555ef92c813713008d028f87bf#68c311758a2c7d555ef92c813713008d028f87bf"
 dependencies = [
  "dioxus",
  "dioxus-attributes",

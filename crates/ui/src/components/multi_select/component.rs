@@ -93,12 +93,15 @@ pub fn MultiSelect(
 
     let button_id = format!("{base}-button");
     let panel_id = format!("{base}-panel");
-    let close = Callback::new({
-        let button_id = button_id.clone();
-        move |()| {
-            open.set(false);
-            query.set(String::new());
-            let _ = document::eval(&format!("document.getElementById('{button_id}')?.focus()"));
+    let mut button_el = use_signal(|| None::<std::rc::Rc<MountedData>>);
+    let close = Callback::new(move |()| {
+        open.set(false);
+        query.set(String::new());
+        // Through the element handle rather than a script, so it also works on native.
+        if let Some(button) = button_el() {
+            spawn(async move {
+                _ = button.set_focus(true).await;
+            });
         }
     });
 
@@ -120,6 +123,7 @@ pub fn MultiSelect(
                 "aria-controls": "{panel_id}",
                 "aria-label": "{label}: {button_text}",
                 onclick: move |_| open.set(!open()),
+                onmounted: move |e: MountedEvent| button_el.set(Some(e.data())),
                 span { class: Styles::dx_multi_select_text, "{button_text}" }
                 span { "aria-hidden": "true", "▾" }
             }

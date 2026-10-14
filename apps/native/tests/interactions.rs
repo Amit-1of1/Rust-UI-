@@ -614,3 +614,165 @@ fn theme_customizer_switches_the_theme_without_javascript() {
         "accent not applied"
     );
 }
+
+/// The `id` of an element's nearest ancestor (or itself) with attribute `name`, and its value.
+fn ancestor_attr(h: &Harness, node: usize, name: &str) -> Option<String> {
+    let mut node = Some(node);
+    while let Some(id) = node {
+        let n = h.doc.get_node(id)?;
+        if let Some(v) = n.attr(blitz_dom::LocalName::from(name)) {
+            return Some(v.to_owned());
+        }
+        node = n.parent;
+    }
+    None
+}
+
+#[test]
+fn avatar_shows_its_fallback_when_the_image_fails() {
+    use blitz_dom::net::Resource;
+    use blitz_dom::util::ImageType;
+    let mut h = Harness::new(demo!("avatar"));
+    let img = h.find("img").expect("avatar image");
+    assert_eq!(
+        ancestor_attr(&h, img, "data-state").as_deref(),
+        Some("loading")
+    );
+    // What the window's network provider reports when the fetch or the decode fails.
+    h.doc
+        .load_resource(Resource::ImageFailed(img, ImageType::Image));
+    h.settle();
+    let root = h
+        .find("[aria-label='Basic avatar']")
+        .expect("first avatar root");
+    assert_eq!(
+        ancestor_attr(&h, root, "data-state").as_deref(),
+        Some("error")
+    );
+}
+
+#[test]
+fn f6_moves_focus_to_the_notifications() {
+    let mut h = Harness::new(demo!("toast"));
+    // Focus inside the app (showing a toast needs a timer runtime the harness doesn't have).
+    h.key(Key::Tab, Code::Tab, Modifiers::empty());
+    assert!(h.focused().is_some());
+    h.key(Key::F6, Code::F6, Modifiers::empty());
+    assert_eq!(
+        h.focused(),
+        h.find("[role=region]"),
+        "F6 did not focus the toasts"
+    );
+}
+
+#[test]
+fn escape_in_a_multi_select_returns_focus_to_its_button() {
+    let mut h = Harness::new(demo!("multi_select"));
+    h.click("button[aria-expanded]");
+    h.click("input[type=search]");
+    assert_eq!(h.focused(), h.find("input[type=search]"));
+    h.key(Key::Escape, Code::Escape, Modifiers::empty());
+    assert!(h.find("input[type=search]").is_none(), "panel still open");
+    assert_eq!(h.focused(), h.find("button[aria-expanded]"));
+}
+
+#[test]
+fn a_failed_submit_focuses_the_first_invalid_field() {
+    let mut h = Harness::new(demo!("form"));
+    h.click("button[type=submit]");
+    let first = h.find("input[type=email]").expect("email field");
+    assert_eq!(
+        h.focused(),
+        Some(first),
+        "focus did not move to the email field"
+    );
+    assert_eq!(
+        h.doc
+            .get_node(first)
+            .unwrap()
+            .attr(blitz_dom::LocalName::from("aria-invalid")),
+        Some("true")
+    );
+}
+
+#[test]
+fn input_otp_moves_focus_as_you_type() {
+    let mut h = Harness::new(demo!("input_otp"));
+    let boxes = |h: &Harness| -> Vec<usize> {
+        h.doc
+            .query_selector_all("input")
+            .unwrap()
+            .into_iter()
+            .collect()
+    };
+    let b = boxes(&h);
+    assert_eq!(b.len(), 6);
+    h.click("input");
+    h.type_text("12");
+    assert_eq!(h.focused(), Some(b[2]), "focus did not advance");
+    // Back to the first box and type over its digit.
+    h.key(Key::Home, Code::Home, Modifiers::empty());
+    assert_eq!(h.focused(), Some(b[0]));
+    h.type_text("7");
+    assert_eq!(h.focused(), Some(b[1]));
+    h.type_text("23456");
+    let status = h.find("[role=status]").unwrap();
+    assert!(
+        h.doc
+            .get_node(status)
+            .unwrap()
+            .text_content()
+            .contains("Code 723456 entered."),
+        "{}",
+        h.doc.get_node(status).unwrap().text_content()
+    );
+}
+
+#[test]
+fn carousel_buttons_scroll_the_track() {
+    let mut h = Harness::new(demo!("carousel"));
+    let track = h.find("[tabindex='0'][role=group]").expect("track");
+    let offset = |h: &Harness| h.doc.get_node(track).unwrap().scroll_offset.x;
+    assert_eq!(offset(&h), 0.0);
+    let buttons: Vec<usize> = h
+        .doc
+        .query_selector_all("button")
+        .unwrap()
+        .into_iter()
+        .collect();
+    let next = buttons.last().copied().unwrap();
+    let (x, y) = {
+        let n = h.doc.get_node(next).unwrap();
+        let p = n.absolute_position(0.0, 0.0);
+        let s = n.final_layout.size;
+        (p.x + s.width / 2.0, p.y + s.height / 2.0)
+    };
+    h.click_at(x, y);
+    h.settle();
+    let moved = offset(&h);
+    assert!(moved > 0.0, "Next did not scroll");
+    let prev = buttons[0];
+    let (x, y) = {
+        let n = h.doc.get_node(prev).unwrap();
+        let p = n.absolute_position(0.0, 0.0);
+        let s = n.final_layout.size;
+        (p.x + s.width / 2.0, p.y + s.height / 2.0)
+    };
+    h.click_at(x, y);
+    h.settle();
+    assert!(offset(&h) < moved, "Previous did not scroll back");
+}
+
+#[test]
+fn ctrl_b_toggles_the_sidebar() {
+    let mut h = Harness::new(demo!("sidebar"));
+    let state = |h: &Harness| {
+        let n = h.find("[data-collapsible]").expect("desktop sidebar");
+        ancestor_attr(h, n, "data-state")
+    };
+    let before = state(&h);
+    // The shortcut is heard while focus is inside the sidebar layout.
+    h.click("[data-slot=sidebar-wrapper] button");
+    h.key(Key::Character("b".into()), Code::KeyB, Modifiers::CONTROL);
+    assert_ne!(state(&h), before, "Ctrl+B did not toggle the sidebar");
+}

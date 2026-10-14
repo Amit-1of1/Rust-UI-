@@ -47,7 +47,6 @@ pub mod link;
 pub mod marquee;
 pub mod menubar;
 pub mod multi_select;
-pub mod overlay;
 pub mod pagination;
 pub mod popover;
 pub mod progress;

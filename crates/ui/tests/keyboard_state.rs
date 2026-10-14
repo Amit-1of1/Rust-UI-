@@ -168,3 +168,24 @@ fn otp_typing_a_code_completes_it() {
     );
     assert_eq!(s.code(), "");
 }
+
+#[test]
+fn otp_typing_over_a_filled_box_keeps_the_new_character() {
+    // Where the box's text can't be selected on focus (native), the input reports the old
+    // character next to the new one, on either side of the caret.
+    let mut s = OtpState::new(4, true);
+    s.apply(OtpEvent::Input {
+        slot: 0,
+        text: "1234".into(),
+    });
+    s.apply(OtpEvent::Input {
+        slot: 1,
+        text: "27".into(),
+    });
+    s.apply(OtpEvent::Input {
+        slot: 2,
+        text: "83".into(),
+    });
+    assert_eq!(s.code(), "1784");
+    assert_eq!(s.focus, 3);
+}
