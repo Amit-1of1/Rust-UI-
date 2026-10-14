@@ -1,0 +1,5 @@
+- heading "Accordion" [level=2]
+- paragraph: Enter or Space expands; one open at a time.
+- button "Is it accessible?"
+- button "Is it styled?"
+- button "Is it animated?"

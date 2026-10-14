@@ -1,0 +1,4 @@
+- dialog "Open popover":
+  - strong: Dimensions
+  - text: Set the dimensions for the layer.
+  - button "Done"

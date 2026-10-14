@@ -1,0 +1,5 @@
+- alertdialog "Delete item":
+  - heading "Delete item" [level=2]
+  - paragraph: Are you sure you want to delete this item? This action cannot be undone.
+  - button "Cancel"
+  - button "Delete"

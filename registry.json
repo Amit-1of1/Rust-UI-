@@ -3,8 +3,7 @@
   "theme": "crates/ui/assets/theme.css",
   "cargoDependencies": [
     "dioxus",
-    "dioxus-primitives",
-    "dioxus-icons"
+    "dioxus-primitives"
   ],
   "items": [
     {

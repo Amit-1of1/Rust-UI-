@@ -1,0 +1,7 @@
+- heading "Menubar" [level=2]
+- paragraph: Application-style menus.
+- menubar:
+  - menu:
+    - menuitem "File"
+  - menu:
+    - menuitem "Edit"

@@ -103,9 +103,7 @@ pub fn build(root: &Path) -> io::Result<Registry> {
     Ok(Registry {
         name: "rust-ui".into(),
         theme: THEME_FILE.into(),
-        cargo_dependencies: ["dioxus", "dioxus-primitives", "dioxus-icons"]
-            .map(String::from)
-            .to_vec(),
+        cargo_dependencies: ["dioxus", "dioxus-primitives"].map(String::from).to_vec(),
         items,
     })
 }

@@ -1,0 +1,10 @@
+- heading "Input otp" [level=2]
+- paragraph: "One box per character: auto-advance, Backspace, arrow keys and paste."
+- group "Verification code":
+  - textbox "Verification code, character 1 of 6"
+  - textbox "Verification code, character 2 of 6"
+  - textbox "Verification code, character 3 of 6"
+  - textbox "Verification code, character 4 of 6"
+  - textbox "Verification code, character 5 of 6"
+  - textbox "Verification code, character 6 of 6"
+- status: Enter the 6-digit code.

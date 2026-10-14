@@ -1,0 +1,60 @@
+name: Browser checks
+
+# scripts/e2e.sh on Chromium, Firefox and WebKit: axe, keyboard, accessibility tree and the
+# behaviour scripts in tests/e2e. The apps are built once and shared with each engine's job.
+# Release builds: WebKit on a runner times out on, or crashes in, the 16 MB debug wasm.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Pinned: release wasm builds on newer stable (LLVM 23) lose the __wasm_bindgen_unstable
+      # section to strip = true in [profile.release] (dx builds a wasm-release profile from it).
+      - uses: dtolnay/rust-toolchain@1.97.0
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: dioxus-cli@0.7.10
+      - run: |
+          for app in gallery site docs dashboard booking; do
+            (cd apps/$app && dx build --platform web --release)
+          done
+      - run: tar -cf web.tar target/dx/*/release/web/public
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: web.tar
+          retention-days: 3
+
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: web
+      - run: tar -xf web.tar
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tests/e2e/package-lock.json
+      - run: npm ci
+        working-directory: tests/e2e
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+        working-directory: tests/e2e
+      - run: scripts/e2e.sh --prebuilt --release --browsers ${{ matrix.browser }}
