@@ -141,7 +141,7 @@ if [ "$RELEASE" = 1 ]; then
     step "axe gallery (split, $scheme)"
     (cd tests/e2e && GALLERY_URL="http://localhost:8766/" node axe.mjs "$scheme")
   done
-  for t in table keyboard pickers drawer otp hotkey; do
+  for t in table keyboard pickers drawer otp hotkey form_fields; do
     step "$t behaviour (gallery, split)"
     (cd tests/e2e && GALLERY_URL="http://localhost:8766/" node "$t.mjs")
   done
