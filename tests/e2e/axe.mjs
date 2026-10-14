@@ -17,7 +17,7 @@ const ACCEPTED = {
 const browser = await chromium.launch();
 const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1100, height: 900 } });
 await page.goto(url);
-await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main", { timeout: 30000 });
+await page.waitForSelector(process.env.READY_SELECTOR ?? ".gallery-main > .gallery-section:last-child", { timeout: 30000 });
 if (process.env.ACCENT) {
   await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
 }

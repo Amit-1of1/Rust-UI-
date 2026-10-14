@@ -6,7 +6,7 @@ const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1000, height: 700 } });
 await page.goto(url);
-await page.waitForSelector(".gallery-main");
+await page.waitForSelector(".gallery-main > .gallery-section:last-child");
 
 let failed = 0;
 const check = (ok, msg) => {

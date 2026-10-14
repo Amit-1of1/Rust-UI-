@@ -36,7 +36,7 @@ fn status_badge(status: &str) -> BadgeVariant {
     }
 }
 
-#[component]
+#[component(lazy)]
 pub fn Customers() -> Element {
     let mut store = use_store();
     let mut query = use_signal(String::new);
@@ -365,6 +365,10 @@ fn AddCustomer() -> Element {
     let email_field = form.field(vec![required(), email()]);
     let mut plan = use_signal(|| "Pro".to_string());
     let mut trial = use_signal(|| true);
+    // The command palette can open this page and the dialog at once. A dialog that mounts
+    // already open misses its focus trap (its script isn't loaded yet), so open after mount.
+    let mut mounted = use_signal(|| false);
+    use_effect(move || mounted.set(true));
 
     let plans = PLANS.iter().enumerate().map(|(i, p)| {
         rsx! {
@@ -374,7 +378,7 @@ fn AddCustomer() -> Element {
 
     rsx! {
         Dialog {
-            open: (store.adding)(),
+            open: (store.adding)() && mounted(),
             on_open_change: move |v| store.adding.set(v),
             DialogTitle { "Add customer" }
             DialogDescription { "They'll get an invite email (not in this demo)." }

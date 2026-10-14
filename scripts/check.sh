@@ -2,15 +2,20 @@
 # One-command gate. Everything CLAUDE.md asks for before pushing, plus the registry check.
 #   scripts/check.sh           fmt, clippy, tests, wasm builds, registry, doctor
 #   scripts/check.sh --a11y    also build gallery + site, serve them and run axe (light + dark)
+#   scripts/check.sh --release also make split release builds of gallery + dashboard
+#                              (scripts/release-web.sh, needs dx from scripts/install-dx.sh)
+#                              and run their browser checks against those
 # The a11y step needs `dx` and `npm ci` in tests/e2e (and Chromium via PLAYWRIGHT_BROWSERS_PATH).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 A11Y=0
+RELEASE=0
 for arg in "$@"; do
   case "$arg" in
     --a11y) A11Y=1 ;;
-    -h|--help) sed -n '2,5p' "$0"; exit 0 ;;
+    --release) RELEASE=1 ;;
+    -h|--help) sed -n '2,8p' "$0"; exit 0 ;;
     *) echo "unknown argument: $arg" >&2; exit 2 ;;
   esac
 done
@@ -35,7 +40,7 @@ if [ "$A11Y" = 1 ]; then
   [ -d tests/e2e/node_modules ] || (cd tests/e2e && npm ci)
 
   # name | app dir | build output (relative to repo root) | port | element that means "rendered"
-  for spec in "gallery|apps/gallery|target/dx/gallery/debug/web/public|8765|.gallery-main" \
+  for spec in "gallery|apps/gallery|target/dx/gallery/debug/web/public|8765|.gallery-main > .gallery-section:last-child" \
               "site|apps/site|target/dx/site/debug/web/public|8767|#pricing" \
               "docs|apps/docs|target/dx/docs/debug/web/public|8769|.docs-main"; do
     IFS='|' read -r name dir out port ready <<<"$spec"
@@ -103,6 +108,31 @@ if [ "$A11Y" = 1 ]; then
   sleep 1
   step "dashboard: axe on every page + flows"
   (cd tests/e2e && GALLERY_URL="http://localhost:8771/" node dashboard.mjs)
+fi
+
+if [ "$RELEASE" = 1 ]; then
+  RPIDS=()
+  rcleanup() { for p in "${RPIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null || true; done; }
+  trap rcleanup EXIT
+  [ -d tests/e2e/node_modules ] || (cd tests/e2e && npm ci)
+  # The lazy parts load after the first screen; every check waits for what it uses.
+  step "split release build: dashboard"; scripts/release-web.sh dashboard
+  python3 -m http.server 8772 --directory target/dx/dashboard/release/web/public >/dev/null 2>&1 &
+  RPIDS+=("$!")
+  step "split release build: gallery"; scripts/release-web.sh gallery
+  python3 -m http.server 8766 --directory target/dx/gallery/release/web/public >/dev/null 2>&1 &
+  RPIDS+=("$!")
+  sleep 1
+  step "dashboard (split): axe on every page + flows"
+  (cd tests/e2e && GALLERY_URL="http://localhost:8772/" node dashboard.mjs)
+  for scheme in light dark; do
+    step "axe gallery (split, $scheme)"
+    (cd tests/e2e && GALLERY_URL="http://localhost:8766/" node axe.mjs "$scheme")
+  done
+  for t in table keyboard pickers drawer otp hotkey; do
+    step "$t behaviour (gallery, split)"
+    (cd tests/e2e && GALLERY_URL="http://localhost:8766/" node "$t.mjs")
+  done
 fi
 
 printf '\nAll checks passed.\n'

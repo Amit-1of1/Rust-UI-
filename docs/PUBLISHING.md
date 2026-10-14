@@ -66,9 +66,9 @@ The base paths are tied to the repo name. If the repo is renamed, change `--base
 To reproduce the build locally:
 
 ```sh
-cargo install dioxus-cli --version 0.7.10 --locked
-(cd apps/docs && dx bundle --platform web --release --base-path Rust-UI-)
-(cd apps/gallery && dx bundle --platform web --release --base-path Rust-UI-/gallery)
+scripts/install-dx.sh     # dx 0.7.10 with the wasm splitter fixes (docs/FORKS.md)
+scripts/release-web.sh docs --base-path Rust-UI-
+scripts/release-web.sh gallery --base-path Rust-UI-/gallery   # split: the first screen loads first
 # output: target/dx/docs/release/web/public and target/dx/gallery/release/web/public
 ```
 

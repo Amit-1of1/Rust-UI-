@@ -47,6 +47,35 @@ Medians of 7 runs on 2026-10-13, measured with scripts like `bench/run.mjs` agai
 
 The CSS file alone saves requests, not bytes: the component styles are 6 KB brotli in total.
 
+### Split by default: the gallery and the dashboard
+
+Since 2026-10-14 `scripts/release-web.sh` splits the gallery and the dashboard too. Measured with [`size.mjs`](size.mjs): served with brotli, 5 runs, "slow 4G" is 1.6 Mbps down with 150 ms RTT, and "everything" is after every screen has been opened once. Before is the plain release build plus the one CSS file; after adds the split, built with `dx` from `scripts/install-dx.sh`. Raw numbers: `results/size-2026-10-14.json`.
+
+| | Gallery before | Gallery after | Dashboard before | Dashboard after |
+|---|---|---|---|---|
+| First screen, brotli | 817 KB | **238 KB** | 510 KB | **316 KB** |
+| Requests for the first screen | 9 | 5 | 6 | 5 |
+| Styled first screen on slow 4G | 5.10 s | **1.87 s** | 3.33 s | **2.32 s** |
+| Everything, brotli | 817 KB | 913 KB | 510 KB | 700 KB |
+
+What is lazy was picked by measuring:
+
+- **Gallery:** the first six sections (button to card) are in the main file; everything below them is one lazy part (`MoreSections`, 671 KB brotli) that starts downloading as soon as the first screen is up. One lazy part per demo was tried first: the first screen was 296 KB, but code shared by several demos and not by the first screen is copied into every part that uses it, so the whole gallery came to 1,957 KB, 2.4x the unsplit build.
+- **Dashboard:** Overview (the first page) and the shell are in the main file. Customers (131 KB), Orders (152 KB) and Settings (81 KB) each download when first opened, and the Ctrl+K command menu (20 KB) on first open. The total grows by 190 KB because the three pages each carry their own copy of the table, select and form code; a visitor pays that only by opening every page.
+- **Taskboard:** unchanged (Stats, Settings, New task dialog, command menu and bench page).
+
+Stock `dx` 0.7.10 can't build these: its splitter left the gallery's lazy part and the dashboard's Settings page as ~450-byte files, with their code still in the main file, and crashed on the lazy command menu. Both bugs are fixed on our dioxus fork ([docs/FORKS.md](../docs/FORKS.md)).
+
+The React and Svelte comparison, rerun the same way on 2026-10-14 (Taskboard first screen; its later files are not opened here):
+
+| | Rust (split) | React | Svelte |
+|---|---|---|---|
+| First screen, brotli | 291 KB | 101 KB | 71 KB |
+| Requests | 5 | 3 | 3 |
+| Styled first screen on slow 4G | 2.29 s | 0.97 s | 0.81 s |
+
+The Taskboard's split didn't change in this round, so the gap to React and Svelte is where it was (2.9x and 4.1x for the first screen).
+
 ### DOM operations (`?bench`, ms, lower is better)
 
 Each time runs from the start of the click to the end of the last paint it causes, read from a Chrome trace, as js-framework-benchmark does.
@@ -135,7 +164,7 @@ The first two are done (see [Shrinking the Rust download](#shrinking-the-rust-do
 ## Running it
 
 ```sh
-# Rust: release build, split, one CSS file (needs dx 0.7.10 and wasm-opt on PATH)
+# Rust: release build, split, one CSS file (needs dx from scripts/install-dx.sh and wasm-opt on PATH)
 scripts/release-web.sh trial
 python3 -m http.server 8801 -d target/dx/trial/release/web/public &
 # React and Svelte
@@ -146,3 +175,13 @@ cd tests/e2e && RUNS=7 node ../../bench/run.mjs > ../../bench/results/latest.jso
 ```
 
 `TARGETS="name=url,..."` picks the builds and `ONLY=load,ops,app,memory` runs only some parts.
+
+Sizes and first-screen times for any set of builds (it serves each folder itself, with brotli):
+
+```sh
+scripts/install-dx.sh   # once: dx with the splitter fixes
+scripts/release-web.sh gallery && scripts/release-web.sh dashboard
+cd tests/e2e && node ../../bench/size.mjs gallery=../../target/dx/gallery/release/web/public \
+  dashboard=../../target/dx/dashboard/release/web/public trial=../../target/dx/trial/release/web/public \
+  react=../../bench/react/dist svelte=../../bench/svelte/dist
+```

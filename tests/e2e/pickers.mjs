@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
-await page.waitForSelector(".gallery-main");
+await page.waitForSelector(".gallery-main > .gallery-section:last-child");
 await page.waitForTimeout(1200);
 
 // MultiSelect

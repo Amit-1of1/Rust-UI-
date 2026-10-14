@@ -23,7 +23,7 @@ cd apps/docs && dx serve     # http://localhost:8080
 ## Run the gallery
 
 ```sh
-cargo install dioxus-cli --version 0.7.10 --locked   # once
+cargo install dioxus-cli --version 0.7.10 --locked   # once (release builds: scripts/install-dx.sh)
 cd apps/gallery
 dx serve                     # web, http://localhost:8080
 dx serve --platform desktop --no-default-features --features desktop

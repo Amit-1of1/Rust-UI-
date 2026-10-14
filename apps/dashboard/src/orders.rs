@@ -7,7 +7,7 @@ use dioxus::prelude::*;
 use std::collections::HashSet;
 use ui::prelude::*;
 
-#[component]
+#[component(lazy)]
 pub fn Orders() -> Element {
     let store = use_store();
     let all = use_memo(move || data::orders(&store.customers.read(), 120));
