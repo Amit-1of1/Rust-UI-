@@ -375,3 +375,242 @@ fn enter_activates_a_focused_button() {
         "Enter did not open the dialog"
     );
 }
+
+// ---- needs the patched primitives (docs/FORKS.md, no-script fallbacks) ----------------------
+
+fn inside(h: &Harness, node: Option<usize>, selector: &str) -> bool {
+    let Some(root) = h.find(selector) else {
+        return false;
+    };
+    let mut node = node;
+    while let Some(id) = node {
+        if id == root {
+            return true;
+        }
+        node = h.doc.get_node(id).and_then(|n| n.parent);
+    }
+    false
+}
+
+#[test]
+fn escape_closes_a_dialog() {
+    let mut h = Harness::new(demo!("dialog"));
+    h.click("button");
+    assert!(h.rect("[role=dialog]").is_some(), "dialog did not open");
+    assert!(
+        inside(&h, h.focused(), "[role=dialog]"),
+        "focus did not move into the dialog"
+    );
+    h.key(Key::Escape, Code::Escape, Modifiers::empty());
+    assert!(h.rect("[role=dialog]").is_none(), "Escape did not close it");
+}
+
+#[test]
+fn clicking_outside_closes_a_dialog() {
+    let mut h = Harness::new(demo!("dialog"));
+    h.click("button");
+    h.click_at(10.0, 10.0); // on the backdrop
+    assert!(h.rect("[role=dialog]").is_none(), "dialog still open");
+}
+
+#[test]
+fn clicking_inside_keeps_a_dialog_open() {
+    let mut h = Harness::new(demo!("dialog"));
+    h.click("button");
+    let d = h.rect("[role=dialog]").unwrap();
+    h.click_at(d.x + d.w / 2.0, d.y + 8.0);
+    assert!(h.rect("[role=dialog]").is_some(), "dialog closed");
+}
+
+#[test]
+fn tab_stays_inside_a_modal_dialog() {
+    let mut h = Harness::new(demo!("dialog"));
+    h.click("button");
+    for i in 0..8 {
+        h.key(Key::Tab, Code::Tab, Modifiers::empty());
+        assert!(
+            h.rect("[role=dialog]").is_some(),
+            "Tab {i} closed the dialog"
+        );
+        assert!(
+            inside(&h, h.focused(), "[role=dialog]"),
+            "Tab {i} moved focus out of the dialog"
+        );
+    }
+}
+
+#[test]
+fn escape_and_outside_clicks_close_a_popover() {
+    let mut h = Harness::new(demo!("popover"));
+    h.click("button");
+    assert!(h.rect("[role=dialog]").is_some(), "popover did not open");
+    h.key(Key::Escape, Code::Escape, Modifiers::empty());
+    assert!(h.rect("[role=dialog]").is_none(), "Escape did not close it");
+    h.click("button");
+    assert!(h.rect("[role=dialog]").is_some(), "popover did not reopen");
+    h.click_at(WIDTH as f32 - 10.0, HEIGHT as f32 - 10.0);
+    assert!(
+        h.rect("[role=dialog]").is_none(),
+        "outside click did not close it"
+    );
+}
+
+#[test]
+fn slider_follows_a_drag() {
+    let mut h = Harness::new(demo!("slider"));
+    let track = h.rect("[role=group]").expect("slider root");
+    let y = track.y + track.h / 2.0;
+    let value = |h: &Harness| -> f64 {
+        attr(h, "[role=slider]", "aria-valuenow")
+            .unwrap()
+            .parse()
+            .unwrap()
+    };
+    let start = (track.x + track.w * 0.2, y);
+    // The pointer leaves the track on the way; the drag keeps following it.
+    h.drag(
+        start,
+        &[
+            (track.x + track.w * 0.5, y + 80.0),
+            (track.x + track.w * 0.8, y),
+        ],
+    );
+    shot(&h, "slider_drag");
+    let v = value(&h);
+    assert!((70.0..=90.0).contains(&v), "value {v} after drag");
+    assert!(
+        h.find("[data-pointer-shield]").is_none(),
+        "drag did not end"
+    );
+}
+
+#[test]
+fn context_menu_opens_on_right_click_and_closes() {
+    let mut h = Harness::new(demo!("context_menu"));
+    let (x, y) = h.rect("[aria-haspopup=menu]").expect("trigger").center();
+    let open_menu = |h: &mut Harness| {
+        h.right_click_at(x, y);
+        let m = h.rect("[role=menu]").expect("menu did not open");
+        assert!(m.on_screen(), "{m:?}");
+        assert!(
+            (m.x - x).abs() < 2.0 && (m.y - y).abs() < 2.0,
+            "menu at {m:?}, click at {x},{y}"
+        );
+    };
+    open_menu(&mut h);
+    shot(&h, "context_menu");
+    h.key(Key::Escape, Code::Escape, Modifiers::empty());
+    assert!(h.rect("[role=menu]").is_none(), "Escape did not close it");
+    open_menu(&mut h);
+    h.click_at(WIDTH as f32 - 10.0, HEIGHT as f32 - 10.0);
+    assert!(
+        h.rect("[role=menu]").is_none(),
+        "outside click did not close it"
+    );
+}
+
+#[test]
+fn avatar_shows_its_image_once_loaded() {
+    use blitz_dom::net::Resource;
+    use blitz_dom::util::ImageType;
+    let mut h = Harness::new(demo!("avatar"));
+    let img = h.find("img").expect("avatar image");
+    let state = |h: &Harness| {
+        let mut node = h.doc.get_node(img).and_then(|n| n.parent);
+        while let Some(id) = node {
+            let n = h.doc.get_node(id).unwrap();
+            if let Some(state) = n.attr(blitz_dom::LocalName::from("data-state")) {
+                return state.to_owned();
+            }
+            node = n.parent;
+        }
+        panic!("no avatar root");
+    };
+    assert_eq!(state(&h), "loading");
+    // What the window's network provider does once the image has been fetched.
+    h.doc.load_resource(Resource::Image(
+        img,
+        ImageType::Image,
+        1,
+        1,
+        std::sync::Arc::new(vec![255; 4]),
+    ));
+    h.settle();
+    assert_eq!(state(&h), "loaded");
+}
+
+#[test]
+fn drag_and_drop_list_reorders_with_the_mouse() {
+    let mut h = Harness::new(demo!("drag_and_drop_list"));
+    let items = |h: &Harness| -> Vec<usize> {
+        h.doc
+            .query_selector_all("[aria-roledescription='sortable item']")
+            .unwrap()
+            .into_iter()
+            .collect()
+    };
+    let before = items(&h);
+    assert!(before.len() >= 3, "{before:?}");
+    let rect = |h: &Harness, id: usize| {
+        let n = h.doc.get_node(id).unwrap();
+        let p = n.absolute_position(0.0, 0.0);
+        let s = n.final_layout.size;
+        (p.x + s.width / 2.0, p.y, s.height)
+    };
+    let (x, y0, height) = rect(&h, before[0]);
+    let (_, y2, h2) = rect(&h, before[2]);
+    // Press the first item, drag it into the lower half of the third, release.
+    h.drag(
+        (x, y0 + height / 2.0),
+        &[(x, y0 + height / 2.0 + 10.0), (x, y2 + h2 * 0.75)],
+    );
+    shot(&h, "drag_and_drop_list");
+    let text = |h: &Harness, ids: &[usize]| -> Vec<String> {
+        ids.iter()
+            .map(|&id| h.doc.get_node(id).unwrap().text_content())
+            .collect()
+    };
+    let (was, now) = (text(&h, &before), text(&h, &items(&h)));
+    assert_eq!(
+        now[..3],
+        [was[1].clone(), was[2].clone(), was[0].clone()],
+        "order {now:?}"
+    );
+}
+
+#[test]
+fn drag_and_drop_list_reorders_with_the_keyboard() {
+    let mut h = Harness::new(demo!("drag_and_drop_list"));
+    let texts = |h: &Harness| -> Vec<String> {
+        h.doc
+            .query_selector_all("[aria-roledescription='sortable item']")
+            .unwrap()
+            .into_iter()
+            .map(|id| h.doc.get_node(id).unwrap().text_content())
+            .collect()
+    };
+    let was = texts(&h);
+    h.click("[aria-roledescription='sortable item']");
+    h.key(Key::Enter, Code::Enter, Modifiers::empty());
+    h.key(Key::ArrowDown, Code::ArrowDown, Modifiers::empty());
+    h.key(Key::Enter, Code::Enter, Modifiers::empty());
+    let now = texts(&h);
+    assert_eq!(now.len(), was.len(), "an item went missing: {now:?}");
+    assert_eq!(now[..2], [was[1].clone(), was[0].clone()]);
+}
+
+#[test]
+fn theme_customizer_switches_the_theme_without_javascript() {
+    let mut h = Harness::new(demo!("theme_customizer"));
+    h.click("input[name=theme-mode][value=dark]");
+    assert_eq!(
+        attr(&h, "[data-theme]", "data-theme").as_deref(),
+        Some("dark"),
+        "no ThemeScope picked up the mode"
+    );
+    h.click("input[name=theme-accent][value=blue]");
+    assert!(
+        h.find("[style*=contents][data-accent=blue]").is_some(),
+        "accent not applied"
+    );
+}

@@ -11,8 +11,10 @@ repository = "https://github.com/Amit-1of1/Rust-UI-"
 [workspace.dependencies]
 # Pinned to a minor version on purpose; see docs/GUARDRAILS.md.
 dioxus = "0.7.10"
-# Git-only upstream, pinned to an exact commit (DioxusLabs/components, 2026-09-07).
-dioxus-primitives = { git = "https://github.com/DioxusLabs/components", rev = "9a758255ea26e2b20c8cecf4c1c946feb9e71da7" }
+# Git-only upstream (DioxusLabs/components, 2026-09-07), used through our fork, pinned to a commit.
+# Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825: upstream DioxusLabs/components
+# 9a75825 plus the no-JavaScript fallbacks listed in docs/FORKS.md.
+dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "a1100155246be04c91cb0b485852c2063364775c" }
 dioxus-icons = "0.1.0"
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
@@ -31,8 +33,8 @@ debug = 0
 # Pinned to commits; the branch each commit is on is named alongside. See docs/FORKS.md.
 [patch.crates-io]
 # Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4
-blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "b55b1081fc5c6f0764d0bd7b3e2da7474d9c9350" }
+blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "ceca47f651b17ef8fb9143558e4ec9ebc7d3e729" }
 # Amit-1of1/blitz, branch rust-ui/blitz-paint-0.2.1
 blitz-paint = { git = "https://github.com/Amit-1of1/blitz", rev = "d69d92a512ed58a28d2015b6199a1bbf6878aa39" }
 # Amit-1of1/dioxus, branch rust-ui/dioxus-native-dom-0.7.10
-dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "95019012a0d23cd6d36c4487797d69b685719340" }
+dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37" }

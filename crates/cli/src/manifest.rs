@@ -9,7 +9,6 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-const PRIMITIVES_GIT: &str = "https://github.com/DioxusLabs/components";
 /// Where this registry lives. `dx` resolves a plain string in `componentDependencies` against
 /// its own built-in registry, so our siblings must be named with this URL. The motion crate
 /// (needed by drawer) lives here too. Override with `RUST_UI_REGISTRY_GIT` to test a fork.
@@ -19,15 +18,21 @@ fn registry_git() -> String {
     std::env::var("RUST_UI_REGISTRY_GIT").unwrap_or_else(|_| REGISTRY_GIT.to_string())
 }
 
-/// The pinned `dioxus-primitives` revision, read from the workspace manifest.
-fn primitives_rev(root: &Path) -> io::Result<String> {
+/// The pinned `dioxus-primitives` repository and revision, read from the workspace manifest.
+fn primitives_source(root: &Path) -> io::Result<(String, String)> {
     let text = fs::read_to_string(root.join("Cargo.toml"))?;
-    text.lines()
+    let line = text
+        .lines()
         .find(|l| l.trim_start().starts_with("dioxus-primitives"))
-        .and_then(|l| l.split("rev = \"").nth(1))
-        .and_then(|r| r.split('"').next())
-        .map(str::to_string)
-        .ok_or_else(|| io::Error::other("dioxus-primitives rev not found in Cargo.toml"))
+        .ok_or_else(|| io::Error::other("dioxus-primitives not found in Cargo.toml"))?;
+    let field = |name: &str| {
+        line.split(&format!("{name} = \""))
+            .nth(1)
+            .and_then(|r| r.split('"').next())
+            .map(str::to_string)
+            .ok_or_else(|| io::Error::other(format!("dioxus-primitives {name} not found")))
+    };
+    Ok((field("git")?, field("rev")?))
 }
 
 /// First paragraph after the title in `docs.md`, on one line.
@@ -40,7 +45,7 @@ pub fn description(docs: &str) -> String {
 }
 
 /// Crates a component's source uses, as `dx` cargo dependencies.
-fn cargo_dependencies(source: &str, rev: &str, registry: &str) -> Vec<Value> {
+fn cargo_dependencies(source: &str, primitives: &(String, String), registry: &str) -> Vec<Value> {
     // `krate::` as a crate root, not as a path segment like `components::time::`.
     let uses = |krate: &str| {
         let pat = format!("{krate}::");
@@ -59,7 +64,7 @@ fn cargo_dependencies(source: &str, rev: &str, registry: &str) -> Vec<Value> {
         } else {
             &[]
         };
-        deps.push(json!({"name": "dioxus-primitives", "git": PRIMITIVES_GIT, "rev": rev, "features": features}));
+        deps.push(json!({"name": "dioxus-primitives", "git": primitives.0, "rev": primitives.1, "features": features}));
     }
     if uses("dioxus_icons") {
         deps.push(json!({"name": "dioxus-icons", "version": "0.1.0"}));
@@ -144,7 +149,7 @@ fn web_sys_features(source: &str) -> Vec<String> {
 
 /// Every manifest as `(path relative to root, contents)`: one per component and the root.
 pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
-    let rev = primitives_rev(root)?;
+    let primitives = primitives_source(root)?;
     let git = registry_git();
     let reg = build(root)?;
     let mut out = Vec::new();
@@ -165,7 +170,7 @@ pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
             "name": item.name,
             "description": description(&docs),
             "exclude": ["docs.md", "component.json"],
-            "cargoDependencies": cargo_dependencies(&source, &rev, &git),
+            "cargoDependencies": cargo_dependencies(&source, &primitives, &git),
             "componentDependencies": item.registry_dependencies.iter().map(|d| json!({"name": d, "git": git})).collect::<Vec<_>>(),
             "globalAssets": [theme.to_string_lossy()],
         });
@@ -219,7 +224,7 @@ mod tests {
     #[test]
     fn dependencies_follow_the_imports() {
         let src = "use dioxus_primitives::x;\nuse dioxus_icons::y;\nuse motion::z;";
-        let names: Vec<_> = cargo_dependencies(src, "abc", "g")
+        let names: Vec<_> = cargo_dependencies(src, &("u".into(), "abc".into()), "g")
             .iter()
             .map(|d| d["name"].as_str().unwrap().to_string())
             .collect();
@@ -227,8 +232,16 @@ mod tests {
             names,
             ["dioxus-primitives", "dioxus-icons", "rust-ui-motion"]
         );
-        assert!(cargo_dependencies("use dioxus::prelude::*;", "abc", "g").is_empty());
-        assert!(cargo_dependencies("use crate::components::time::Clock;", "abc", "g").is_empty());
+        assert!(
+            cargo_dependencies("use dioxus::prelude::*;", &("u".into(), "abc".into()), "g")
+                .is_empty()
+        );
+        assert!(cargo_dependencies(
+            "use crate::components::time::Clock;",
+            &("u".into(), "abc".into()),
+            "g"
+        )
+        .is_empty());
     }
 
     #[test]

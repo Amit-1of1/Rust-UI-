@@ -53,20 +53,34 @@ These were limits of Blitz 0.2 / dioxus-native 0.7.10. They are now fixed on our
 - **`z-index`** works across ancestors (stacking contexts), for painting and for clicks.
 - **Click offset** beside text in a padded block is gone; boxes sticking out of their parent are clickable.
 - `disabled: false` and `hidden: false` no longer disable or hide (false boolean attributes are removed, as on the web).
+- **Keyed lists** keep every item when reordered (upstream dropped a node moved within its own parent).
+- **Right click** fires `contextmenu`; **images** fire `load`; checkboxes and radios fire `change`.
+
+### Fixed in the primitives (our fork, 2026-10-14)
+
+The primitives used `document::eval` for document-level listeners. Where it can't run, our fork of DioxusLabs/components does the same with element events ([FORKS.md](FORKS.md) has the list and tests):
+
+- **Escape** closes dialogs, alert dialogs, popovers and the context menu.
+- **Clicking outside** closes dialogs, popovers and the context menu.
+- **Focus traps:** dialogs and popovers take focus when they open, and Tab doesn't leave a modal one.
+- **Dragging** works for the slider, the color area and the drag-and-drop list.
+- **Context menu** opens at the right-click point. **Avatar** shows its image once it loads.
+- **Theme customizer** works inside a `ThemeScope` wrapper.
 
 The kit-side workarounds from the previous pass (`ModalPortal`/`OverlayLayer`, flexbox-centred dialogs, the 0x0 checkbox input, the tabs `[hidden]` rule) stay: they are harmless with the patches and keep the unpatched crates usable.
 
 ### Limits (still open)
 
-- **`document::eval` answers every call with an error**, and there is no JavaScript engine. The primitives use it for: Escape to close overlays (`use_global_keydown_listener`), outside-click dismissal (`use_outside_dismiss`), dialog focus traps, slider and drag-and-drop dragging (global pointer tracking in `pointer.rs`), the context menu's position, avatar image load state, and `theme_customizer`. Fixing these means giving the primitives a Rust path that does not use `eval` (the fork of DioxusLabs/components is approved for that), not patching the renderer.
-- `SwipeDismiss` drags (drawer) need pointer capture, which native does not have; the Close button and Escape (once Escape works) are the way out.
+- **`document::eval` answers every call with an error**, and there is no JavaScript engine. The primitives no longer need it for their main behaviour (see below). What still uses it does nothing on native: toast's F6 shortcut, the kit's `focus()`/`select()` helpers in multi select, form and input OTP, carousel scrolling, and the sidebar's keyboard shortcut and cookie.
+- `SwipeDismiss` drags (drawer) need pointer capture, which native does not have; the Close button and Escape are the way out.
 - **CSS on inline SVG is ignored:** chart bars and dots draw in the default black; grid lines are missing.
-- **Theme:** dark follows the window's colour scheme (`prefers-color-scheme`; X11 reports none, so Xvfb is light), and `data-theme="dark"` on any element switches its subtree. `ThemeCustomizer` can't change it (it needs `eval`); set `data-theme` on a wrapper from Rust instead. A wrapper with `data-theme` resets an accent set on an outer element; put `data-accent` on the same wrapper.
+- **Theme:** dark follows the window's colour scheme (`prefers-color-scheme`; X11 reports none, so Xvfb is light), and `data-theme="dark"` on any element switches its subtree. `ThemeCustomizer` changes it inside a `ThemeScope` wrapper (it can't reach `<html>` without `eval`); or set `data-theme` on a wrapper from Rust. A wrapper with `data-theme` resets an accent set on an outer element; put `data-accent` on the same wrapper.
 - **Overlay layer caveats:** it assumes the app is not scrolled (the layer scrolls with the page) and sets `body { margin: 0 }`. Portalled content sees contexts from above `ThemeStyles` and from inside the modal only.
 - **Window defaults to 800x600**; fonts fall back to the system serif (`Inter` is not bundled).
 - Limits of the renderer patches themselves are listed in [FORKS.md](FORKS.md#known-limits-of-the-patches).
 
 ### What to do next
 
-1. Give the primitives an `eval`-free path for Escape, outside-click dismissal, focus traps and pointer tracking on a branch of `Amit-1of1/dioxus-components` (based on the primitives commit we pin), now that pointer, focus and mounted events exist on native.
-2. On the next dioxus-native release, move the fork branches to it (FORKS.md, "Moving to a new upstream release") and run `cargo test -p native` and the smoke test first.
+1. Replace the kit's remaining `eval` calls listed above with `MountedData` (`set_focus`, `scroll_to`), which works on every renderer.
+2. The `ModalPortal`/`OverlayLayer` workaround is no longer needed with the forks (the modal tests pass without it); dropping it would remove the overlay layer caveats.
+3. On the next dioxus-native release, move the fork branches to it (FORKS.md, "Moving to a new upstream release") and run `cargo test -p native` and the smoke test first.

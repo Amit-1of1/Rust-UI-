@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        ThemeCustomizer {}
+        // ThemeScope carries the choices where `<html>` can't be reached (native).
+        ThemeScope { ThemeCustomizer {} }
     }
 }

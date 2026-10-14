@@ -2,9 +2,9 @@
   "cargoDependencies": [
     {
       "features": [],
-      "git": "https://github.com/DioxusLabs/components",
+      "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "dioxus-primitives",
-      "rev": "9a758255ea26e2b20c8cecf4c1c946feb9e71da7"
+      "rev": "a1100155246be04c91cb0b485852c2063364775c"
     }
   ],
   "componentDependencies": [

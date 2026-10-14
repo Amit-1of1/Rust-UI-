@@ -197,6 +197,49 @@ impl Harness {
         self.settle();
     }
 
+    /// Press the main button at (x, y), move to each point with it held, release at the last.
+    pub fn drag(&mut self, from: (f32, f32), to: &[(f32, f32)]) {
+        let ev = |(x, y): (f32, f32), buttons| BlitzMouseButtonEvent {
+            x,
+            y,
+            button: MouseEventButton::Main,
+            buttons,
+            mods: Default::default(),
+        };
+        self.doc
+            .handle_ui_event(UiEvent::MouseMove(ev(from, MouseEventButtons::None)));
+        self.doc
+            .handle_ui_event(UiEvent::MouseDown(ev(from, MouseEventButtons::Primary)));
+        self.settle();
+        for &point in to {
+            self.doc
+                .handle_ui_event(UiEvent::MouseMove(ev(point, MouseEventButtons::Primary)));
+            self.settle();
+        }
+        let last = to.last().copied().unwrap_or(from);
+        self.doc
+            .handle_ui_event(UiEvent::MouseUp(ev(last, MouseEventButtons::None)));
+        self.settle();
+    }
+
+    /// Press and release the secondary (right) button at (x, y).
+    pub fn right_click_at(&mut self, x: f32, y: f32) {
+        let ev = |buttons| BlitzMouseButtonEvent {
+            x,
+            y,
+            button: MouseEventButton::Secondary,
+            buttons,
+            mods: Default::default(),
+        };
+        self.doc
+            .handle_ui_event(UiEvent::MouseMove(ev(MouseEventButtons::None)));
+        self.doc
+            .handle_ui_event(UiEvent::MouseDown(ev(MouseEventButtons::Secondary)));
+        self.doc
+            .handle_ui_event(UiEvent::MouseUp(ev(MouseEventButtons::None)));
+        self.settle();
+    }
+
     pub fn click_at(&mut self, x: f32, y: f32) {
         let ev = |buttons| BlitzMouseButtonEvent {
             x,
