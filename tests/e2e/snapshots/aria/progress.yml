@@ -1,0 +1,5 @@
+- heading "Progress" [level=2]
+- paragraph: Completion indicator.
+- progressbar "Upload progress"
+- button "Add 10%"
+- button "Reset"

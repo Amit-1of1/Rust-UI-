@@ -1,11 +1,11 @@
 // Behaviour of the docs site: hash routes render, the nav marks the current page, the filter
 // works, a demo is live, and navigation moves focus to the page heading.
 // Usage: serve the built docs app, then `GALLERY_URL=http://localhost:8769/ node docs.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
 const base = process.env.GALLERY_URL ?? "http://localhost:8769/";
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
@@ -40,7 +40,14 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 
 // Filter narrows the component list.
 await page.getByLabel("Filter components").fill("date");
-const names = await nav.getByRole("list").nth(1).getByRole("link").allInnerTexts();
+// The list re-renders after the input event; Firefox gets there a frame later than Chromium.
+const list = nav.getByRole("list").nth(1).getByRole("link");
+let names = [];
+for (let i = 0; i < 20; i++) {
+  names = await list.allInnerTexts();
+  if (names.length > 0 && names.every((n) => /date/i.test(n))) break;
+  await page.waitForTimeout(100);
+}
 assert.ok(names.length > 0 && names.every((n) => /date/i.test(n)), `filter result: ${names}`);
 
 // Code blocks that can scroll are keyboard reachable.

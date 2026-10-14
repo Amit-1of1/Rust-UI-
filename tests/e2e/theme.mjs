@@ -1,10 +1,10 @@
 // light-dark() theme tokens: the OS scheme picks light or dark, data-theme on <html> forces
 // one, and accent presets follow the same switch. Also checks the chips and link demos.
 // GALLERY_URL=... node theme.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 
 const url = process.env.GALLERY_URL ?? "http://localhost:8765/";
-const browser = await chromium.launch();
+const browser = await launch();
 
 let failed = 0;
 const check = (ok, msg) => {

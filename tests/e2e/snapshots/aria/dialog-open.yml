@@ -1,0 +1,5 @@
+- dialog "Are you sure?":
+  - heading "Are you sure?" [level=2]
+  - paragraph: This action cannot be undone.
+  - button "Cancel"
+  - button "Delete"

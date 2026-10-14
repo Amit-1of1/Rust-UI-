@@ -1,0 +1,22 @@
+- heading "Pagination" [level=2]
+- paragraph: Page navigation.
+- navigation "pagination":
+  - list:
+    - listitem:
+      - link "Go to previous page":
+        - /url: "#"
+        - text: Previous
+    - listitem:
+      - link "1":
+        - /url: "#"
+    - listitem:
+      - link "2":
+        - /url: "#"
+    - listitem:
+      - link "3":
+        - /url: "#"
+    - listitem: More pages
+    - listitem:
+      - link "Go to next page":
+        - /url: "#"
+        - text: Next

@@ -1,9 +1,9 @@
 // Behaviour of MultiSelect and Dropzone in the gallery.
 // Usage: serve the built gallery, then `GALLERY_URL=http://localhost:8765/ node pickers.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage();
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
 await page.waitForSelector(".gallery-main");

@@ -638,6 +638,10 @@
   transition: transform 150ms ease-out, opacity 200ms ease-out, visibility 0ms 0ms;
 }
 
+.dx-sidebar-menu-action[data-sidebar="menu-action"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--dx-sidebar-ring);
+}
+
 .dx-sidebar-menu-action[data-sidebar="menu-action"]:hover {
   background: var(--dx-sidebar-accent);
   color: var(--dx-sidebar-accent-foreground);
@@ -680,11 +684,15 @@
   visibility: hidden;
 }
 
-.dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"] {
-  opacity: 0;
-}
-
+/* Hidden until hover or focus on wide screens only: touch screens have no hover, so there it
+   stays visible (as upstream's md:opacity-0). Its own :focus-visible shows it too, which does
+   not depend on :focus-within reaching the menu item. */
 @media (width >=768px) {
+  .dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"] {
+    opacity: 0;
+  }
+
+  .dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"]:focus-visible,
   .dx-sidebar-menu-item:hover .dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"],
   .dx-sidebar-menu-item:focus-within .dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"],
   .dx-sidebar-menu-action[data-sidebar="menu-action"][data-show-on-hover="true"][data-state="open"] {

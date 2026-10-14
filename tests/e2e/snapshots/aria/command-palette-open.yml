@@ -1,0 +1,13 @@
+- dialog "Command palette":
+  - heading "Command palette" [level=2]
+  - paragraph: Search for a command and press Enter to run it.
+  - combobox "Search commands" [expanded]
+  - listbox "Commands":
+    - text: File
+    - option "New file Ctrl N" [selected]
+    - option "Open file Ctrl O"
+    - option "Save file Ctrl S"
+    - text: View
+    - option "Toggle theme"
+    - option "Zoom in Ctrl +"
+    - option "Zoom out Ctrl -"

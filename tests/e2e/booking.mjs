@@ -2,7 +2,7 @@
 // search, filter, booking, checkout and cancel flows work.
 // Build: (cd apps/booking && dx build --platform web); serve target/dx/booking/debug/web/public
 // Run:   GALLERY_URL=http://localhost:8773/ node booking.mjs
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 
@@ -28,7 +28,7 @@ async function axe(page, label) {
   check(result.violations.length === 0, `axe ${label}: ${result.violations.length} violation type(s)`);
 }
 
-const ready = (page) => page.waitForSelector("body[data-ready='1'] .tr-main", { timeout: 30000 });
+const ready = (page) => page.waitForSelector("body[data-ready='1'] .tr-main");
 const h1 = (page) => page.locator("main h1").first().textContent();
 const count = (page) => page.locator(".tr-results-bar [role='status']").textContent();
 const nav = (page, name) => page.getByRole("navigation", { name: "Main" }).getByRole("link", { name }).click();
@@ -50,7 +50,7 @@ const iso = (days) => {
   return t.toISOString().slice(0, 10);
 };
 
-const browser = await chromium.launch();
+const browser = await launch();
 for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));

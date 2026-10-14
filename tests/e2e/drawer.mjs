@@ -1,9 +1,9 @@
 // Behaviour of Drawer in the gallery: open, labelled dialog, Escape, drag down to dismiss.
 // Usage: serve the built gallery, then `GALLERY_URL=http://localhost:8765/ node drawer.mjs`.
-import { chromium } from "playwright";
+import { launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
-const browser = await chromium.launch();
+const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 900, height: 800 } });
 await page.goto(process.env.GALLERY_URL ?? "http://localhost:8765/");
 await page.waitForSelector(".gallery-main");
@@ -21,21 +21,37 @@ await page.keyboard.press("Escape");
 await page.waitForTimeout(400);
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "Escape closes");
 
-// Drag the body down past the threshold.
+// Drag the body down past the threshold (0.4 x 320 px), from the top of the drawer so the
+// pointer stays inside the window: Firefox's automation drops the release outside the viewport.
 await trigger.click();
 await dialog.waitFor();
 await page.waitForTimeout(500);
-const handle = dialog.locator("div").filter({ hasText: /^$/ }).first();
-const box = await dialog.getByText("Pick a number").boundingBox();
-await page.mouse.move(box.x + 20, box.y + 5);
+await page.evaluate(() => {
+  window.__events = [];
+  let moves = 0;
+  document.addEventListener("pointermove", () => moves++ === 0 && window.__events.push("pointermove…"), true);
+  for (const type of ["pointerdown", "pointerup", "pointercancel", "lostpointercapture", "gotpointercapture"])
+    document.addEventListener(type, (e) => window.__events.push(`${type}@${e.target.tagName ?? "?"}`), true);
+});
+const box = await dialog.boundingBox();
+const start = { x: box.x + box.width / 2, y: box.y + 12 };
+const viewport = page.viewportSize();
+assert.ok(start.y + 160 < viewport.height, "the drag fits inside the window");
+await page.mouse.move(start.x, start.y);
 await page.mouse.down();
 for (let i = 1; i <= 10; i++) {
-  await page.mouse.move(box.x + 20, box.y + 5 + i * 25);
+  await page.mouse.move(start.x, start.y + i * 16);
   await page.waitForTimeout(30);
 }
 await page.waitForTimeout(150);
+// How far the drawer followed the pointer, logged if it does not dismiss.
+const followed = await dialog.evaluate((d) => [...d.querySelectorAll("[style*=translateY]")].map((e) => e.style.transform).join(" "));
 await page.mouse.up();
 await page.waitForTimeout(900);
+if (await page.getByRole("dialog", { name: "Move goal" }).count()) {
+  console.log("pointer events during the drag:", (await page.evaluate(() => window.__events)).join(" "));
+  console.log("drawer transform before the release:", followed || "(none)");
+}
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "dragging down dismisses");
 
 // A short drag springs back and keeps it open.

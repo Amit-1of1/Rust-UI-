@@ -90,6 +90,13 @@ impl SwipeTracker {
         x - self.start_x
     }
 
+    /// Take the release position as the final one without touching the velocity: a browser
+    /// can coalesce or drop the last moves before the release, and the release is where the
+    /// pointer really ended up.
+    pub fn release_at(&mut self, x: f64) {
+        self.last_x = x;
+    }
+
     pub fn offset(&self) -> f64 {
         self.last_x - self.start_x
     }
@@ -260,8 +267,9 @@ pub fn SwipeDismiss(
                     tracker.set(Some(t));
                 }
             },
-            onpointerup: move |_| {
-                if let Some(t) = tracker.take() {
+            onpointerup: move |e| {
+                if let Some(mut t) = tracker.take() {
+                    t.release_at(coordinate(&e));
                     let start = t.offset() as f32;
                     let now = now_ms();
                     let velocity = t.release_velocity(now);
@@ -296,6 +304,19 @@ pub fn SwipeDismiss(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn release_position_counts_when_moves_were_dropped() {
+        // Only one move arrived, but the pointer was released far enough down.
+        let mut t = SwipeTracker::new(0.0, 0.0);
+        t.update(20.0, 16.0);
+        t.release_at(160.0);
+        assert_eq!(t.offset(), 160.0);
+        assert_eq!(
+            t.finish(320.0, 500.0),
+            SwipeOutcome::Dismiss(SwipeDirection::Right)
+        );
+    }
 
     #[test]
     fn short_slow_drag_cancels() {

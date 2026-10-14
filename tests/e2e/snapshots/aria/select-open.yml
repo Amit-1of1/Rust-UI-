@@ -1,0 +1,12 @@
+- listbox "Fruit":
+  - group "Fruits":
+    - text: Fruits
+    - option "Apple"
+    - option "Banana"
+    - option "Orange" [disabled]
+    - option "Orangeade"
+    - option "Strawberry"
+    - option "Watermelon"
+  - group "Other":
+    - text: Other
+    - option "Other"
