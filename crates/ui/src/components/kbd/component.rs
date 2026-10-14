@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/kbd/style.css")]
 struct Styles;
@@ -10,7 +11,7 @@ pub fn Kbd(
     children: Element,
 ) -> Element {
     rsx! {
-        kbd { class: Styles::dx_kbd, ..attributes, {children} }
+        kbd { ..merge_attributes(vec![attributes!(div { class: Styles::dx_kbd }), attributes]), {children} }
     }
 }
 
@@ -21,6 +22,6 @@ pub fn KbdGroup(
     children: Element,
 ) -> Element {
     rsx! {
-        span { class: Styles::dx_kbd_group, ..attributes, {children} }
+        span { ..merge_attributes(vec![attributes!(div { class: Styles::dx_kbd_group }), attributes]), {children} }
     }
 }

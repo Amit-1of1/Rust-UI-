@@ -1,5 +1,6 @@
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/spinner/style.css")]
 struct Styles;
@@ -15,6 +16,6 @@ pub fn Spinner(
     let default_label = use_ui_strings().loading;
     let label = label.unwrap_or(default_label);
     rsx! {
-        span { class: Styles::dx_spinner, role: "status", aria_label: label, ..attributes }
+        span { role: "status", aria_label: label, ..merge_attributes(vec![attributes!(div { class: Styles::dx_spinner }), attributes]) }
     }
 }

@@ -8,6 +8,14 @@ pub fn Demo() -> Element {
     let form = use_form();
     let email = form.field(vec![required(), email()]);
     let password = form.field(vec![required(), min_len(8)]);
+    let role = form.field(vec![custom(|v| {
+        if v.is_empty() {
+            Err("Pick a role.".to_string())
+        } else {
+            Ok(())
+        }
+    })]);
+    let zone = form.field_with("UTC", vec![required()]);
     let mut done = use_signal(|| false);
     rsx! {
         div { style: "display: grid; gap: 1rem; max-width: 22rem;",
@@ -30,6 +38,23 @@ pub fn Demo() -> Element {
                     label: "Password",
                     r#type: "password",
                     autocomplete: "new-password",
+                }
+                SelectField {
+                    field: role,
+                    label: "Role",
+                    placeholder: "Choose a role",
+                    options: vec![
+                        FieldOption::new("dev", "Developer"),
+                        FieldOption::new("design", "Designer"),
+                        FieldOption::new("pm", "Product manager"),
+                    ],
+                }
+                ComboboxField {
+                    field: zone,
+                    label: "Time zone",
+                    description: "Resets to UTC.",
+                    placeholder: "Search time zones",
+                    options: vec!["UTC".into(), "Europe/London".into(), "Asia/Tokyo".into()],
                 }
                 Button { r#type: "submit", "Create account" }
             }

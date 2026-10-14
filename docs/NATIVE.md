@@ -33,7 +33,7 @@ All 68 demos start and draw (smoke test, before and after this pass). The headle
 | `calendar` shows no days | `display: flex` on `tbody`/`tr` inside a table renders nothing in Blitz | table layout (`table-layout: fixed`, `border-spacing`) |
 | `tabs` panel invisible | the primitive sets `hidden: false`; Blitz keeps the attribute and the UA `[hidden]` rule wins | `.dx-tabs-content[data-state="active"] { display: block }` |
 | Overlays "do not open" beside their trigger | Not an overlay bug: Blitz hit-tests the inline children of a block with padding (a button next to text) off by that padding, so the click lands on the parent. Wrapping in a `div` "fixed" it because the parent stopped being an inline box | `apps/native` puts its padding on an outer box. Apps: don't put padding or a border on a block whose children are all inline (buttons, text); wrap them in a `div` |
-| Modals cover only their parent, run off the right edge | `position: fixed` is laid out as `absolute`, and Taffy places it relative to the *parent*; `translate(-50%, -50%)` is dropped (Blitz skips any transform with a percentage) | With the `native` feature, `ModalPortal` (component `overlay`) moves dialog, alert dialog, sheet and drawer into a window-sized `OverlayLayer` that `ThemeStyles` renders. Dialogs are centred by the backdrop with flexbox instead of a percentage transform (same look on the web) |
+| Modals cover only their parent, run off the right edge | `position: fixed` is laid out as `absolute`, and Taffy places it relative to the *parent*; `translate(-50%, -50%)` is dropped (Blitz skips any transform with a percentage) | Fixed in the renderer fork (`position: fixed` against the window, percentage transforms); the kit's earlier `ModalPortal`/`OverlayLayer` workaround was removed. Dialogs are still centred by the backdrop with flexbox (same look on the web) |
 | Modal invisible if CSS animations don't run | backdrop is `opacity: 0` and only the animation's `forwards` fill made it visible | `[data-state="open"]` sets `opacity: 1` itself |
 | `checkbox` does not toggle | the primitive's hidden form input is moved away with a percentage `translate` and `pointer-events: none`, neither supported, so it sat on the button and took the click | the input is sized 0x0 in `checkbox/style.css` |
 | `multi_select` list empty | Blitz sizes a scrolling child's grid row to 0 | the panel is a flex column |
@@ -54,7 +54,9 @@ These were limits of Blitz 0.2 / dioxus-native 0.7.10. They are now fixed on our
 - **Click offset** beside text in a padded block is gone; boxes sticking out of their parent are clickable.
 - `disabled: false` and `hidden: false` no longer disable or hide (false boolean attributes are removed, as on the web).
 - **Keyed lists** keep every item when reordered (upstream dropped a node moved within its own parent).
-- **Right click** fires `contextmenu`; **images** fire `load`; checkboxes and radios fire `change`.
+- **Right click** fires `contextmenu`; **images** fire `load` and, when they fail, `error`; checkboxes and radios fire `change`.
+- **Forms:** a submit button click and Enter in a field fire `submit`.
+- `MountedData::scroll` goes to a position, as on the web.
 
 ### Fixed in the primitives (our fork, 2026-10-14)
 
@@ -64,23 +66,29 @@ The primitives used `document::eval` for document-level listeners. Where it can'
 - **Clicking outside** closes dialogs, popovers and the context menu.
 - **Focus traps:** dialogs and popovers take focus when they open, and Tab doesn't leave a modal one.
 - **Dragging** works for the slider, the color area and the drag-and-drop list.
-- **Context menu** opens at the right-click point. **Avatar** shows its image once it loads.
+- **Context menu** opens at the right-click point. **Avatar** shows its image once it loads, and its fallback when the image fails.
+- **Toast:** F6 moves focus to the notifications.
 - **Theme customizer** works inside a `ThemeScope` wrapper.
 
-The kit-side workarounds from the previous pass (`ModalPortal`/`OverlayLayer`, flexbox-centred dialogs, the 0x0 checkbox input, the tabs `[hidden]` rule) stay: they are harmless with the patches and keep the unpatched crates usable.
+### Fixed in the kit (2026-10-14)
+
+The kit's own `eval` calls now go through the element handle (`MountedData`) where that works on every renderer, and keep the script only where it adds something on the web:
+
+- **Multi select** returns focus to its button on Escape; **form** focuses the first invalid field on a failed submit (`TextField` does it; your own controls pass `onmounted` to `field.mounted`); **input OTP** moves focus between boxes, and typing over a filled box replaces its character.
+- **Carousel** Previous/Next scroll the track (instantly on native; smoothly on the web unless reduced motion is on).
+- **Sidebar:** Ctrl+B (Cmd+B) toggles it while focus is inside the layout.
+
+The `ModalPortal`/`OverlayLayer` workaround (and the `overlay` component) is gone: with the patched renderer, `position: fixed` covers the window by itself. The other workarounds from the first pass (flexbox-centred dialogs, the 0x0 checkbox input, the tabs `[hidden]` rule) stay; they look the same on the web. The kit's `native` feature now does nothing and is kept so apps that turn it on keep building.
 
 ### Limits (still open)
 
-- **`document::eval` answers every call with an error**, and there is no JavaScript engine. The primitives no longer need it for their main behaviour (see below). What still uses it does nothing on native: toast's F6 shortcut, the kit's `focus()`/`select()` helpers in multi select, form and input OTP, carousel scrolling, and the sidebar's keyboard shortcut and cookie.
+- **`document::eval` answers every call with an error**, and there is no JavaScript engine. Neither the primitives nor the kit need it for their behaviour any more. What still uses it only on the web: selecting a box's text in input OTP, smooth carousel scrolling, the sidebar's cookie and its mobile breakpoint (native always gets the desktop layout), and setting the theme on `<html>`.
 - `SwipeDismiss` drags (drawer) need pointer capture, which native does not have; the Close button and Escape are the way out.
 - **CSS on inline SVG is ignored:** chart bars and dots draw in the default black; grid lines are missing.
 - **Theme:** dark follows the window's colour scheme (`prefers-color-scheme`; X11 reports none, so Xvfb is light), and `data-theme="dark"` on any element switches its subtree. `ThemeCustomizer` changes it inside a `ThemeScope` wrapper (it can't reach `<html>` without `eval`); or set `data-theme` on a wrapper from Rust. A wrapper with `data-theme` resets an accent set on an outer element; put `data-accent` on the same wrapper.
-- **Overlay layer caveats:** it assumes the app is not scrolled (the layer scrolls with the page) and sets `body { margin: 0 }`. Portalled content sees contexts from above `ThemeStyles` and from inside the modal only.
 - **Window defaults to 800x600**; fonts fall back to the system serif (`Inter` is not bundled).
 - Limits of the renderer patches themselves are listed in [FORKS.md](FORKS.md#known-limits-of-the-patches).
 
 ### What to do next
 
-1. Replace the kit's remaining `eval` calls listed above with `MountedData` (`set_focus`, `scroll_to`), which works on every renderer.
-2. The `ModalPortal`/`OverlayLayer` workaround is no longer needed with the forks (the modal tests pass without it); dropping it would remove the overlay layer caveats.
-3. On the next dioxus-native release, move the fork branches to it (FORKS.md, "Moving to a new upstream release") and run `cargo test -p native` and the smoke test first.
+1. On the next dioxus-native release, move the fork branches to it (FORKS.md, "Moving to a new upstream release") and run `cargo test -p native` and the smoke test first.

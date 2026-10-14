@@ -15,6 +15,8 @@ DataTable {
 
 Cells are text. For custom content (a badge, a link, a row menu) pass `render_cell: move |(row, col)| rsx! { ... }`; `row` is the index into `rows`, and the text in `rows` is still what filtering and sorting use. For a different layout altogether, compose `Table` yourself and call `table_view(...)` for the filter, sort and page logic; it is a pure function.
 
+Outside filters or actions (a date range, a status select, an "Export" button) go in `toolbar: rsx! { ... }`; they sit in the same row as the filter box and wrap on narrow screens.
+
 Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
 ## Accessibility
@@ -27,3 +29,7 @@ Paging and selection are kept as row indices, so both reset when `rows` changes 
 ## Source
 
 Original to this repo (sorting headers come from our `Table`). The feature set follows Rust/UI's `data_table` / `data_grid`, which were not copied.
+
+## Stability
+
+Experimental. The column API and the `toolbar` slot are new and may change in any release; see `docs/STABILITY.md` in the kit repository.

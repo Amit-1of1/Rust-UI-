@@ -10,7 +10,6 @@ rust-version.workspace = true
 [dependencies]
 dioxus.workspace = true
 ui.workspace = true
-dioxus-icons.workspace = true
 time = { version = "0.3.44", features = ["std", "macros"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

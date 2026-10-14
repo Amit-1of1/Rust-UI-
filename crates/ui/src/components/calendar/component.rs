@@ -282,9 +282,8 @@ pub(crate) fn CalendarMonthView(offset: u8, month_count: u8) -> Element {
 fn CalendarView(props: CalendarViewProps) -> Element {
     rsx! {
         calendar::CalendarView {
-            class: Styles::dx_calendar_view,
             offset: props.offset,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_view }), props.attributes]),
             {props.children}
         }
     }
@@ -300,7 +299,7 @@ fn CalendarHeader(props: CalendarHeaderProps) -> Element {
 #[component]
 fn CalendarNavigation(props: CalendarNavigationProps) -> Element {
     rsx! {
-        calendar::CalendarNavigation { class: Styles::dx_calendar_navigation, attributes: props.attributes, {props.children} }
+        calendar::CalendarNavigation { attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_navigation }), props.attributes]), {props.children} }
     }
 }
 
@@ -345,8 +344,7 @@ fn CalendarSelectMonth(props: CalendarSelectMonthProps) -> Element {
 fn CalendarSelectMonthSelect(props: CalendarSelectMonthSelectProps) -> Element {
     rsx! {
         calendar::CalendarSelectMonthSelect {
-            class: Styles::dx_calendar_month_select,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_month_select }), props.attributes]),
         }
     }
 }
@@ -355,8 +353,7 @@ fn CalendarSelectMonthSelect(props: CalendarSelectMonthSelectProps) -> Element {
 fn CalendarSelectMonthValue(props: CalendarSelectMonthValueProps) -> Element {
     rsx! {
         calendar::CalendarSelectMonthValue {
-            class: Styles::dx_calendar_month_select_value,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_month_select_value }), props.attributes]),
             {props.children}
         }
     }
@@ -381,8 +378,7 @@ fn CalendarSelectYear(props: CalendarSelectYearProps) -> Element {
 fn CalendarSelectYearSelect(props: CalendarSelectYearSelectProps) -> Element {
     rsx! {
         calendar::CalendarSelectYearSelect {
-            class: Styles::dx_calendar_year_select,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_year_select }), props.attributes]),
         }
     }
 }
@@ -391,8 +387,7 @@ fn CalendarSelectYearSelect(props: CalendarSelectYearSelectProps) -> Element {
 fn CalendarSelectYearValue(props: CalendarSelectYearValueProps) -> Element {
     rsx! {
         calendar::CalendarSelectYearValue {
-            class: Styles::dx_calendar_year_select_value,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_year_select_value }), props.attributes]),
             {props.children}
         }
     }
@@ -438,9 +433,8 @@ fn CalendarGrid(
 fn CalendarGridRoot(props: CalendarGridRootProps) -> Element {
     rsx! {
         calendar::CalendarGridRoot {
-            class: Styles::dx_calendar_grid,
             id: props.id,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid }), props.attributes]),
             {props.children}
         }
     }
@@ -460,8 +454,7 @@ fn CalendarGridHead(props: CalendarGridHeadProps) -> Element {
 fn CalendarGridHeaderRow(props: CalendarGridHeaderRowProps) -> Element {
     rsx! {
         calendar::CalendarGridHeaderRow {
-            class: Styles::dx_calendar_grid_header,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid_header }), props.attributes]),
             {props.children}
         }
     }
@@ -471,9 +464,8 @@ fn CalendarGridHeaderRow(props: CalendarGridHeaderRowProps) -> Element {
 fn CalendarGridDayHeader(props: CalendarGridDayHeaderProps) -> Element {
     rsx! {
         calendar::CalendarGridDayHeader {
-            class: Styles::dx_calendar_grid_day_header,
             weekday: props.weekday,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid_day_header }), props.attributes]),
             {props.children}
         }
     }
@@ -483,8 +475,7 @@ fn CalendarGridDayHeader(props: CalendarGridDayHeaderProps) -> Element {
 fn CalendarGridBody(props: CalendarGridBodyProps) -> Element {
     rsx! {
         calendar::CalendarGridBody {
-            class: Styles::dx_calendar_grid_body,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid_body }), props.attributes]),
             {props.children}
         }
     }
@@ -494,8 +485,7 @@ fn CalendarGridBody(props: CalendarGridBodyProps) -> Element {
 fn CalendarGridWeek(props: CalendarGridWeekProps) -> Element {
     rsx! {
         calendar::CalendarGridWeek {
-            class: Styles::dx_calendar_grid_week,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid_week }), props.attributes]),
             {props.children}
         }
     }
@@ -515,9 +505,8 @@ fn CalendarGridCell(props: CalendarGridCellProps) -> Element {
 fn CalendarDay(props: CalendarDayProps) -> Element {
     rsx! {
         calendar::CalendarDay {
-            class: Styles::dx_calendar_grid_cell,
             date: props.date,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_calendar_grid_cell }), props.attributes]),
             children: props.children,
         }
     }

@@ -219,6 +219,111 @@ fn images_fire_load() {
 }
 
 #[test]
+fn images_fire_error_when_they_fail() {
+    use blitz_dom::net::{ImageHandler, Resource};
+    use blitz_dom::util::ImageType;
+    use blitz_traits::net::NetHandler;
+    use std::sync::{Arc, Mutex};
+    fn app() -> Element {
+        let mut failed = use_signal(|| 0);
+        rsx! {
+            img { id: "missing", src: "missing.png", "data-failed": "{failed}", onerror: move |_| failed += 1 }
+            img { id: "garbage", src: "garbage.png", "data-failed": "{failed}", onerror: move |_| failed += 1 }
+        }
+    }
+    let mut h = Harness::new(app);
+    // What the network provider does: a fetch that fails reaches the handler's `failed`,
+    // bytes that don't decode reach `bytes`. Both now report the node.
+    let got = Arc::new(Mutex::new(Vec::new()));
+    let sink = {
+        let got = got.clone();
+        Arc::new(move |_doc: usize, r: Result<Resource, Option<String>>| {
+            got.lock().unwrap().push(r.ok());
+        })
+    };
+    let missing = h.find("#missing").unwrap();
+    let garbage = h.find("#garbage").unwrap();
+    Box::new(ImageHandler::new(missing, ImageType::Image)).failed(0, sink.clone());
+    Box::new(ImageHandler::new(garbage, ImageType::Image)).bytes(
+        0,
+        b"not an image"[..].into(),
+        sink,
+    );
+    for resource in got.lock().unwrap().drain(..) {
+        h.doc
+            .load_resource(resource.expect("a resource, not an error"));
+    }
+    h.settle();
+    assert_eq!(attr(&h, "#missing", "data-failed").as_deref(), Some("2"));
+}
+
+#[test]
+fn submit_buttons_and_enter_fire_submit() {
+    fn app() -> Element {
+        let mut submits = use_signal(|| 0);
+        rsx! {
+            form {
+                id: "f",
+                "data-submits": "{submits}",
+                onsubmit: move |e| {
+                    e.prevent_default();
+                    submits += 1;
+                },
+                input { id: "field", r#type: "text" }
+                button { id: "go", "Send" }
+                button { id: "other", r#type: "button", "Not a submit" }
+            }
+        }
+    }
+    let mut h = Harness::new(app);
+    h.click("#go");
+    assert_eq!(attr(&h, "#f", "data-submits").as_deref(), Some("1"));
+    h.click("#other");
+    assert_eq!(attr(&h, "#f", "data-submits").as_deref(), Some("1"));
+    h.click("#field");
+    h.key(Key::Enter, Code::Enter, Modifiers::empty());
+    assert_eq!(attr(&h, "#f", "data-submits").as_deref(), Some("2"));
+}
+
+#[test]
+fn mounted_scroll_goes_to_a_position() {
+    use dioxus::html::geometry::PixelsVector2D;
+    fn app() -> Element {
+        let mut el = use_signal(|| None::<std::rc::Rc<MountedData>>);
+        let go = move |x: f64| {
+            if let Some(el) = el() {
+                spawn(async move {
+                    _ = el
+                        .scroll(PixelsVector2D::new(x, 0.0), ScrollBehavior::Instant)
+                        .await;
+                });
+            }
+        };
+        rsx! {
+            button { id: "to100", onclick: move |_| go(100.0), "100" }
+            button { id: "to40", onclick: move |_| go(40.0), "40" }
+            button { id: "far", onclick: move |_| go(1.0e6), "far" }
+            div {
+                id: "track",
+                style: "display: flex; width: 200px; height: 50px; overflow-x: auto;",
+                onmounted: move |e| el.set(Some(e.data())),
+                div { style: "flex: none; width: 600px; height: 40px;" }
+            }
+        }
+    }
+    let mut h = Harness::new(app);
+    let track = h.find("#track").unwrap();
+    let x = |h: &Harness| h.doc.get_node(track).unwrap().scroll_offset.x;
+    h.click("#to100");
+    assert_eq!(x(&h), 100.0);
+    // A position, like the web's `Element.scroll()`, not a step.
+    h.click("#to40");
+    assert_eq!(x(&h), 40.0);
+    h.click("#far");
+    assert!(x(&h) > 300.0 && x(&h) <= 400.0, "not clamped: {}", x(&h));
+}
+
+#[test]
 fn keyed_lists_reorder_without_losing_items() {
     fn app() -> Element {
         let mut items = use_signal(|| vec![1, 2, 3, 4]);

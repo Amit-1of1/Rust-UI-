@@ -94,15 +94,14 @@ pub fn Customers() -> Element {
             }
             div { class: "db-inline-field",
                 span { id: "status-filter-label", "Status" }
-                div { role: "group", "aria-labelledby": "status-filter-label",
-                    Select::<String> {
-                        default_value: Some("All".to_string()),
-                        on_value_change: move |v: Option<String>| {
-                            status.set(v.unwrap_or_else(|| "All".into()));
-                            page.set(0);
-                        },
-                        {status_options}
-                    }
+                Select::<String> {
+                    aria_labelledby: "status-filter-label",
+                    default_value: Some("All".to_string()),
+                    on_value_change: move |v: Option<String>| {
+                        status.set(v.unwrap_or_else(|| "All".into()));
+                        page.set(0);
+                    },
+                    {status_options}
                 }
             }
             div { class: "db-spacer" }
@@ -153,14 +152,14 @@ pub fn Customers() -> Element {
                                                     page.set(0);
                                                 })
                                             }),
-                                        style: if column.numeric { "text-align: right;" },
+                                        numeric: column.numeric,
                                         "{column.header}"
                                     }
                                 }
                             }
                         }
                         TableHead {
-                            span { class: "db-sr-only", "Actions" }
+                            span { class: "sr-only", "Actions" }
                         }
                     }
                 }
@@ -224,7 +223,7 @@ pub fn Customers() -> Element {
                     on_click: move |_| {
                         if let Some(id) = deleting.take() {
                             store.customers.write().retain(|c| c.id != id);
-                            toasts.success("Customer deleted".to_string(), ToastOptions::new());
+                            toasts.notify_success("Customer deleted");
                         }
                     },
                     "Delete"
@@ -249,7 +248,7 @@ fn CustomerRow(
             TableCell {
                 Badge { variant: status_badge(&customer.status), "{customer.status}" }
             }
-            TableCell { style: "text-align: right;", {money(customer.mrr)} }
+            TableCell { numeric: true, {money(customer.mrr)} }
             TableCell { style: "text-align: right;",
                 DropdownMenu {
                     DropdownMenuTrigger { aria_label: "Actions for {customer.name}", "…" }
@@ -281,9 +280,7 @@ fn CustomerSheet(customer: Option<Customer>, on_close: EventHandler<()>) -> Elem
     let form = use_form();
     let name = form.field(vec![required()]);
     let email_field = form.field(vec![required(), email()]);
-    let mut plan = use_signal(|| PLANS[0].to_string());
-    // A controlled Select wants a ReadSignal<Option<T>>, not a plain value.
-    let plan_value = use_memo(move || Some(plan()));
+    let plan = form.field_with(PLANS[0], vec![required()]);
 
     // Load the customer into the form whenever a different one is opened.
     let id = customer.as_ref().map(|c| c.id);
@@ -291,17 +288,11 @@ fn CustomerSheet(customer: Option<Customer>, on_close: EventHandler<()>) -> Elem
     use_effect(use_reactive!(|id| {
         let _ = id;
         if let Some(c) = &loaded {
-            name.set(c.name.clone());
-            email_field.set(c.email.clone());
-            plan.set(c.plan.clone());
+            name.load(c.name.clone());
+            email_field.load(c.email.clone());
+            plan.load(c.plan.clone());
         }
     }));
-
-    let plans = PLANS.iter().enumerate().map(|(i, p)| {
-        rsx! {
-            SelectOption::<String> { index: i, value: p.to_string(), text_value: "{p}", "{p}" }
-        }
-    });
 
     rsx! {
         Sheet {
@@ -324,27 +315,18 @@ fn CustomerSheet(customer: Option<Customer>, on_close: EventHandler<()>) -> Elem
                         if let Some(c) = store.customers.write().iter_mut().find(|c| c.id == id) {
                             c.name = name.value();
                             c.email = email_field.value();
-                            c.plan = plan();
+                            c.plan = plan.value();
                         }
                     }
-                    toasts.success("Customer saved".to_string(), ToastOptions::new());
+                    toasts.notify_success("Customer saved");
                     on_close.call(());
                 },
                 TextField { field: name, label: "Name", autocomplete: "off" }
                 TextField { field: email_field, label: "Email", r#type: "email", autocomplete: "off" }
-                div { class: "db-field",
-                    span { id: "edit-plan-label", class: "db-label", "Plan" }
-                    div { role: "group", "aria-labelledby": "edit-plan-label",
-                        Select::<String> {
-                            value: Some(plan_value.into()),
-                            on_value_change: move |v: Option<String>| {
-                                if let Some(v) = v {
-                                    plan.set(v);
-                                }
-                            },
-                            {plans}
-                        }
-                    }
+                SelectField {
+                    field: plan,
+                    label: "Plan",
+                    options: PLANS.iter().map(|p| FieldOption::from(*p)).collect::<Vec<_>>(),
                 }
                 SheetFooter {
                     Button { r#type: "submit", "Save changes" }
@@ -403,7 +385,7 @@ fn AddCustomer() -> Element {
                         );
                     form.reset();
                     store.adding.set(false);
-                    toasts.success("Customer added".to_string(), ToastOptions::new());
+                    toasts.notify_success("Customer added");
                 },
                 TextField { field: name, label: "Name", autocomplete: "off" }
                 TextField { field: email_field, label: "Email", r#type: "email", autocomplete: "off" }

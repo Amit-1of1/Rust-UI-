@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/ui", "crates/motion", "crates/cli", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/native"]
+members = ["crates/ui", "crates/motion", "crates/cli", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/booking", "apps/native"]
 
 [workspace.package]
 edition = "2021"
@@ -14,7 +14,7 @@ dioxus = "0.7.10"
 # Git-only upstream (DioxusLabs/components, 2026-09-07), used through our fork, pinned to a commit.
 # Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825: upstream DioxusLabs/components
 # 9a75825 plus the no-JavaScript fallbacks listed in docs/FORKS.md.
-dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "a1100155246be04c91cb0b485852c2063364775c" }
+dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "71fed6960350eafeff5699f9fd3a447a1418b7b7" }
 dioxus-icons = "0.1.0"
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
@@ -33,8 +33,12 @@ debug = 0
 # Pinned to commits; the branch each commit is on is named alongside. See docs/FORKS.md.
 [patch.crates-io]
 # Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4
-blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "ceca47f651b17ef8fb9143558e4ec9ebc7d3e729" }
+blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "a55f2909d06ea6168ee9bd5328c5c450be9ff0dd" }
+# Amit-1of1/blitz, branch rust-ui/blitz-traits-0.2.0
+blitz-traits = { git = "https://github.com/Amit-1of1/blitz", rev = "14f766f1e18a9daad1465ca5d9d9f7f52f0ccf9e" }
+# Amit-1of1/blitz, branch rust-ui/blitz-net-0.2.1
+blitz-net = { git = "https://github.com/Amit-1of1/blitz", rev = "505d30e40c295e5ea71bcc182167edcfcd6f86c5" }
 # Amit-1of1/blitz, branch rust-ui/blitz-paint-0.2.1
 blitz-paint = { git = "https://github.com/Amit-1of1/blitz", rev = "d69d92a512ed58a28d2015b6199a1bbf6878aa39" }
 # Amit-1of1/dioxus, branch rust-ui/dioxus-native-dom-0.7.10
-dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "e7eae74cfa55a8dd858bca81ec72b8a8b4c55b37" }
+dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "8f3d575287a6fe12c689aa09cef92ad7ac521aac" }

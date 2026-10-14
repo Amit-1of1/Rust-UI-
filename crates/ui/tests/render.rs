@@ -209,7 +209,7 @@ fn form_labels_fields_and_turns_native_validation_off() {
         rsx! { ui::demos::form::Demo {} }
     });
     assert!(html.contains("novalidate"), "{html}");
-    assert_eq!(html.matches("<label").count(), 2, "{html}");
+    assert_eq!(html.matches("<label").count(), 4, "{html}");
     assert!(html.contains("autocomplete=\"email\""), "{html}");
     // Pristine fields show no error and are not marked invalid.
     assert!(!html.contains("aria-invalid"), "{html}");
@@ -602,8 +602,14 @@ fn breadcrumb_is_labelled_nav_with_current_page() {
         html.contains("role=\"presentation\" aria-hidden=\"true\""),
         "{html}"
     );
-    assert!(html.contains("aria-current=\"page\">Breadcrumb"), "{html}");
-    assert!(html.contains("href=\"#\">Home"), "{html}");
+    assert!(
+        html.contains("<span aria-current=\"page\"") && html.contains(">Breadcrumb</span>"),
+        "{html}"
+    );
+    assert!(
+        html.contains("<a href=\"#\"") && html.contains(">Home</a>"),
+        "{html}"
+    );
 }
 
 #[test]
@@ -1273,7 +1279,290 @@ fn hooks_media_query_is_false_off_the_web() {
 }
 
 #[test]
-fn modal_portal_renders_its_children_in_place_off_native() {
-    let html = render(|| rsx! { div { id: "host", ModalPortal { "hello" } } });
-    assert!(html.contains(r#"<div id="host">hello</div>"#), "{html}");
+fn sidebar_is_a_navigation_landmark_that_can_be_renamed() {
+    let html = render(|| {
+        rsx! {
+            SidebarProvider {
+                Sidebar { SidebarContent { "links" } }
+                SidebarInset { "page" }
+            }
+        }
+    });
+    assert!(
+        html.contains("role=\"navigation\"") && html.contains("aria-label=\"Sidebar\""),
+        "{html}"
+    );
+    let html = render(|| {
+        rsx! {
+            SidebarProvider {
+                Sidebar { aria_label: "Main", SidebarContent { "links" } }
+            }
+        }
+    });
+    assert!(html.contains("aria-label=\"Main\""), "{html}");
+    assert!(!html.contains("aria-label=\"Sidebar\""), "{html}");
+}
+
+#[test]
+fn data_table_toolbar_sits_beside_the_filter() {
+    let html = render(|| {
+        rsx! {
+            DataTable {
+                columns: vec![DataColumn::new("Name")],
+                rows: vec![vec!["Ada".to_string()]],
+                caption: "People",
+                toolbar: rsx! { button { "Export" } },
+            }
+        }
+    });
+    let toolbar = html.find("dx-data-table-toolbar").expect("toolbar");
+    let filter = html.find("type=\"search\"").expect("filter");
+    let export = html.find(">Export<").expect("export");
+    assert!(toolbar < filter && filter < export, "{html}");
+    // Without a filter the toolbar still shows.
+    let html = render(|| {
+        rsx! {
+            DataTable {
+                columns: vec![DataColumn::new("Name")],
+                rows: vec![vec!["Ada".to_string()]],
+                caption: "People",
+                filterable: false,
+                toolbar: rsx! { button { "Export" } },
+            }
+        }
+    });
+    assert!(
+        html.contains(">Export<") && !html.contains("type=\"search\""),
+        "{html}"
+    );
+}
+
+#[test]
+fn theme_customizer_shares_its_state_with_use_theme() {
+    fn app() -> Element {
+        let theme = use_theme();
+        use_hook(|| {
+            theme.set_mode(ThemeMode::Dark);
+            theme.set_accent("rose");
+            theme.set_accent("not-an-accent");
+            theme.set_density("compact");
+            theme.set_radius(99);
+        });
+        rsx! {
+            p { "{theme.is_dark()} {theme.accent()} {theme.density()} {theme.radius()}" }
+            ThemeCustomizer {}
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("<p>true rose compact 20</p>"), "{html}");
+    for checked in [
+        "value=\"dark\" checked",
+        "value=\"rose\" checked",
+        "value=\"compact\" checked",
+    ] {
+        assert!(html.contains(checked), "{checked} in {html}");
+    }
+    assert!(html.contains("Corner radius: 20px"), "{html}");
+}
+
+#[test]
+fn form_select_and_combobox_fields_label_their_control() {
+    let html = render(|| rsx! { ui::demos::form::Demo {} });
+    // The select's id lands on its trigger button, so the label and focus-on-error reach it.
+    let trigger = html
+        .split("<button")
+        .find(|b| b.contains("aria-haspopup=\"listbox\""))
+        .expect("select trigger");
+    assert!(trigger.contains("id=\"dx-field-"), "{trigger}");
+    assert!(
+        trigger.contains("-label dx-field-"),
+        "labelled by the label, then itself: {trigger}"
+    );
+    assert!(html.contains("Choose a role"), "placeholder shows: {html}");
+    // The combobox's id and description land on its input.
+    let input = html
+        .split("<input")
+        .find(|i| i.contains("Search time zones"))
+        .expect("combobox input");
+    assert!(input.contains("id=\"dx-field-"), "{input}");
+    assert!(input.contains("aria-describedby=\"dx-field-"), "{input}");
+}
+
+#[test]
+fn form_field_with_starts_from_and_resets_to_its_initial_value() {
+    fn app() -> Element {
+        let form = use_form();
+        let name = form.field_with("Ada", vec![required()]);
+        let city = form.field(vec![]);
+        use_hook(|| {
+            name.set("Grace");
+            city.load("Paris");
+            city.set("Rome");
+            form.reset();
+        });
+        rsx! { p { "{name.value()} {city.value()}" } }
+    }
+    assert_eq!(render(app), "<p>Ada Paris</p>");
+}
+
+#[test]
+fn toast_notify_takes_plain_strings_and_pairs() {
+    #[component]
+    fn Send() -> Element {
+        let toasts = use_toast();
+        use_hook(move || {
+            toasts.notify_success("Saved");
+            toasts.notify_error(("Failed", "Try again."));
+        });
+        rsx! {}
+    }
+    let mut dom = VirtualDom::new(|| rsx! { ToastProvider { Send {} } });
+    dom.rebuild_in_place();
+    dom.mark_all_dirty();
+    dom.render_immediate_to_vec();
+    let html = dioxus_ssr::render(&dom);
+    for text in ["Saved", "Failed", "Try again."] {
+        assert!(html.contains(text), "missing {text} in {html}");
+    }
+}
+
+#[test]
+fn chart_marks_show_their_value_on_hover() {
+    let html = render(|| {
+        rsx! {
+            BarChart { data: vec![ChartDatum::new("Jan", 12.0)], label: "Bars" }
+            LineChart { data: vec![ChartDatum::new("Feb", 7.5), ChartDatum::new("Mar", 3.0)], label: "Line" }
+        }
+    });
+    for title in [
+        "<title>Jan: 12</title>",
+        "<title>Feb: 7.5</title>",
+        "<title>Mar: 3</title>",
+    ] {
+        assert!(html.contains(title), "missing {title} in {html}");
+    }
+}
+
+#[test]
+fn table_numeric_columns_are_marked_on_head_and_cell() {
+    let html = render(|| {
+        rsx! {
+            Table {
+                TableHeader { TableRow { TableHead { numeric: true, on_sort: |_| {}, "Amount" } } }
+                TableBody { TableRow { TableCell { numeric: true, "$5" } TableCell { "plain" } } }
+            }
+        }
+    });
+    assert_eq!(html.matches("data-numeric=\"true\"").count(), 2, "{html}");
+}
+
+// ---- Gaps found by apps/booking (apps/booking/GAPS.md) ----
+
+#[test]
+fn item_in_a_group_is_a_list_item() {
+    let html = render(|| {
+        rsx! {
+            ItemGroup {
+                Item { ItemContent { "Inside" } }
+            }
+            Item { ItemContent { "Outside" } }
+        }
+    });
+    assert_eq!(html.matches("role=\"listitem\"").count(), 1, "{html}");
+}
+
+#[test]
+fn stepper_follows_a_controlled_step() {
+    fn app() -> Element {
+        let step = use_signal(|| 2usize);
+        rsx! {
+            Stepper { total: 3, current: step,
+                StepperItem { step: 0usize, title: "One" }
+                StepperItem { step: 1usize, title: "Two" }
+                StepperItem { step: 2usize, title: "Three" }
+            }
+        }
+    }
+    let html = render(app);
+    let current = html
+        .split("<li")
+        .find(|li| li.contains("aria-current=\"step\""));
+    assert!(current.is_some_and(|li| li.contains("Three")), "{html}");
+}
+
+#[test]
+fn form_text_field_passes_extra_attributes_to_its_input() {
+    fn app() -> Element {
+        let form = use_form();
+        let card = form.field(vec![required()]);
+        rsx! {
+            TextField { field: card, label: "Card number", inputmode: "numeric", maxlength: "19" }
+        }
+    }
+    let html = render(app);
+    let input = html.split("<input").nth(1).expect("input");
+    assert!(input.contains("inputmode=\"numeric\""), "{input}");
+    assert!(input.contains("maxlength=\"19\""), "{input}");
+    assert!(
+        input.contains("id=\"dx-field-"),
+        "the field's own id stays: {input}"
+    );
+}
+
+#[test]
+fn form_checkbox_and_textarea_fields_are_labelled_and_report_errors() {
+    fn app() -> Element {
+        let form = use_form();
+        let notes = form.field_with("Late arrival", vec![]);
+        let terms = form.field(vec![required()]);
+        use_hook(move || {
+            terms.validate();
+        });
+        rsx! {
+            TextareaField { field: notes, label: "Notes", rows: "3" }
+            CheckboxField { field: terms, label: "I accept" }
+        }
+    }
+    let html = render(app);
+    let textarea = html.split("<textarea").nth(1).expect("textarea");
+    assert!(textarea.contains("rows=\"3\""), "{textarea}");
+    assert!(html.contains("Late arrival"), "{html}");
+    let checkbox = html
+        .split("<button")
+        .find(|b| b.contains("role=\"checkbox\""))
+        .expect("checkbox");
+    assert!(checkbox.contains("aria-invalid=\"true\""), "{checkbox}");
+    assert!(
+        checkbox.contains("aria-describedby=\"dx-field-"),
+        "{checkbox}"
+    );
+    // Both labels point at their control.
+    assert_eq!(html.matches("for=\"dx-field-").count(), 2, "{html}");
+}
+
+#[test]
+fn button_look_styles_another_element_as_a_button() {
+    let html = render(|| {
+        rsx! {
+            a { href: "/trips", ..button_look(ButtonVariant::Outline, ButtonSize::Sm), "Trips" }
+        }
+    });
+    assert!(html.contains("data-style=\"outline\""), "{html}");
+    assert!(html.contains("data-size=\"sm\""), "{html}");
+    assert!(html.contains("class=\"dx-button"), "{html}");
+}
+
+#[test]
+fn accordion_has_no_fixed_width() {
+    let html = render(|| {
+        rsx! {
+            Accordion {
+                AccordionItem { index: 0usize,
+                    AccordionTrigger { "Q" }
+                    AccordionContent { "A" }
+                }
+            }
+        }
+    });
+    assert!(!html.contains("width:15rem"), "fills its container: {html}");
 }

@@ -1,5 +1,4 @@
 use crate::components::icons::X;
-use crate::components::overlay::ModalPortal;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{
@@ -41,22 +40,21 @@ pub fn Sheet(props: DialogRootProps) -> Element {
     let content_attributes = merge_attributes(vec![content_base, props.attributes]);
 
     rsx! {
-        ModalPortal {
-            dialog::DialogRoot {
-                class: Styles::dx_sheet_root,
-                "data-slot": "sheet-root",
-                id: props.id,
-                is_modal: props.is_modal,
-                open: props.open,
-                default_open: props.default_open,
-                on_open_change: props.on_open_change,
-                dialog::DialogContent {
-                    class: None,
-                    attributes: content_attributes,
-                    {props.children}
-                }
+        dialog::DialogRoot {
+            class: Styles::dx_sheet_root,
+            "data-slot": "sheet-root",
+            id: props.id,
+            is_modal: props.is_modal,
+            open: props.open,
+            default_open: props.default_open,
+            on_open_change: props.on_open_change,
+            dialog::DialogContent {
+                class: None,
+                attributes: content_attributes,
+                {props.children}
             }
         }
+
     }
 }
 
@@ -85,7 +83,7 @@ pub fn SheetHeader(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_sheet_header, "data-slot": "sheet-header", ..attributes, {children} }
+        div { "data-slot": "sheet-header", ..merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_header }), attributes]), {children} }
     }
 }
 
@@ -95,7 +93,7 @@ pub fn SheetFooter(
     children: Element,
 ) -> Element {
     rsx! {
-        div { class: Styles::dx_sheet_footer, "data-slot": "sheet-footer", ..attributes, {children} }
+        div { "data-slot": "sheet-footer", ..merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_footer }), attributes]), {children} }
     }
 }
 
@@ -104,9 +102,8 @@ pub fn SheetTitle(props: DialogTitleProps) -> Element {
     rsx! {
         dialog::DialogTitle {
             id: props.id,
-            class: Styles::dx_sheet_title,
             "data-slot": "sheet-title",
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_title }), props.attributes]),
             {props.children}
         }
     }
@@ -117,9 +114,8 @@ pub fn SheetDescription(props: DialogDescriptionProps) -> Element {
     rsx! {
         dialog::DialogDescription {
             id: props.id,
-            class: Styles::dx_sheet_description,
             "data-slot": "sheet-description",
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_sheet_description }), props.attributes]),
             {props.children}
         }
     }

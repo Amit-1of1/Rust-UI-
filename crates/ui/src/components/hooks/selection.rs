@@ -18,6 +18,10 @@ use std::hash::Hash;
 /// let selected = use_selected(sel, id);
 /// rsx! { tr { class: if selected() { "selected" }, onclick: move |_| sel.select_only(id) } }
 /// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub struct Selection<K: 'static> {
     keys: CopyValue<HashSet<K>>,
     rows: CopyValue<HashMap<K, Signal<bool>>>,
@@ -37,6 +41,10 @@ impl<K: 'static> PartialEq for Selection<K> {
 }
 
 /// Creates an empty [`Selection`] owned by the calling component.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_selection<K: Hash + Eq + Clone + 'static>() -> Selection<K> {
     use_hook(|| Selection {
         keys: CopyValue::new(HashSet::new()),
@@ -47,6 +55,10 @@ pub fn use_selection<K: Hash + Eq + Clone + 'static>() -> Selection<K> {
 
 /// Whether the row `key` is selected. Re-renders the calling row only when its own state
 /// changes. The key must not change for the life of the row (key the row by it).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_selected<K: Hash + Eq + Clone + 'static>(
     selection: Selection<K>,
     key: K,

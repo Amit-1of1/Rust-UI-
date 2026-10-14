@@ -1,17 +1,19 @@
 # Forked dependencies
 
-Four crates carry small fixes on top of the exact versions we depend on. The fixes live on branches of forks under `Amit-1of1`, pinned to a commit in the workspace `Cargo.toml`.
+Six crates carry small fixes on top of the exact versions we depend on. The fixes live on branches of forks under `Amit-1of1`, pinned to a commit in the workspace `Cargo.toml`.
 
-- The three renderer crates (Blitz and `dioxus-native-dom`) are swapped in with `[patch.crates-io]`. Only builds that pull them in (the `native` feature, `apps/native`) are affected; the web and desktop builds never compile them.
-- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. Its fixes only switch on where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave exactly as upstream.
+- The five renderer crates (Blitz and `dioxus-native-dom`) are swapped in with `[patch.crates-io]`. Only builds that pull them in (the `native` feature, `apps/native`) are affected; the web and desktop builds never compile them.
+- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with one exception: the date range input freeze below is a plain bug fix that applies everywhere.
 
 | Crate | Release | Upstream commit of that release | Fork branch | Pinned commit |
 |---|---|---|---|---|
-| `blitz-dom` | 0.2.4 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-dom) | [Amit-1of1/blitz `rust-ui/blitz-dom-0.2.4`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-dom-0.2.4) | `ceca47f` |
+| `blitz-dom` | 0.2.4 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-dom) | [Amit-1of1/blitz `rust-ui/blitz-dom-0.2.4`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-dom-0.2.4) | `a55f290` |
+| `blitz-traits` | 0.2.0 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-traits) | [Amit-1of1/blitz `rust-ui/blitz-traits-0.2.0`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-traits-0.2.0) | `14f766f` |
+| `blitz-net` | 0.2.1 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-net) | [Amit-1of1/blitz `rust-ui/blitz-net-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-net-0.2.1) | `505d30e` |
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
-| `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `e7eae74` |
+| `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `8f3d575` |
 | `dioxus-cli` (`dx`, its wasm splitter) | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/wasm-split/wasm-split-cli) | [Amit-1of1/dioxus `claude/project-thread-xwtlc7`](https://github.com/Amit-1of1/dioxus/tree/claude/project-thread-xwtlc7) | `73a027c` |
-| `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) | `a110015` |
+| `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) | `71fed69` |
 
 `dx` is a tool, not a dependency: `scripts/install-dx.sh` installs it from the pinned commit (`dx --version` prints `0.7.10 (73a027c)`). Only split release builds (`scripts/release-web.sh`, the Pages workflow) need it; `dx serve` and debug builds work with stock 0.7.10. Its branch is the whole upstream workspace with one commit on top, so it needs no manifest swap.
 
@@ -23,7 +25,7 @@ Each renderer branch is three kinds of commit on top of the upstream commit (the
 2. **The fixes.** Every changed spot is marked `PATCH(rust-ui)`, so `git grep -n "PATCH(rust-ui)"` on the branch lists them. `git diff <upstream commit>..HEAD -- packages/<crate>/src` shows the whole patch.
 3. Anything else needed to ship it (blitz-dom carries `LICENSE-taffy-MIT`, because `src/layout/fixed.rs` adapts Taffy 0.9's absolute-positioning step).
 
-All four crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream's license files.
+All six crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream's license files.
 
 ## What the patches fix
 
@@ -32,7 +34,7 @@ All four crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream
 | No pointer events | dioxus-native-dom | `pointerdown/move/up` fired alongside the mouse events, with `PointerData` (one mouse pointer) |
 | No hover events | dioxus-native-dom | `mouseenter/leave`, `mouseover/out`, `pointerenter/leave/over/out` from Blitz's hover changes |
 | Mouse coordinates | dioxus-native-dom | real client, page and element coordinates (upstream panicked on page and element) |
-| No `onmounted` | dioxus-native-dom | fired after each render; `get_client_rect`, `set_focus`, `scroll_to`, `scroll`, `get_scroll_offset`, `get_scroll_size` answered by the document between frames |
+| No `onmounted` | dioxus-native-dom | fired after each render; `get_client_rect`, `set_focus`, `scroll_to`, `scroll`, `get_scroll_offset`, `get_scroll_size` answered by the document between frames. `scroll` goes to a position (clamped, this element only), like `Element.scroll()` on the web |
 | No focus events | dioxus-native-dom | `focus`, `blur`, `focusin`, `focusout` whenever Blitz's focus moves |
 | `disabled: false` disabled the element, `hidden: false` hid it | dioxus-native-dom | false boolean attributes are removed, the same list as dioxus' web interpreter |
 | Listener counting | dioxus-native-dom | counted per event name, so events Blitz does not produce itself are not skipped |
@@ -50,13 +52,17 @@ All four crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream
 | No `contextmenu` | dioxus-native-dom | a right-button press fires `contextmenu` after `mousedown` |
 | No image `load` | blitz-dom + dioxus-native-dom | Blitz records `<img>` nodes whose image arrived; `load` fires for them on the next poll |
 | Checkboxes and radios fire `input` only | dioxus-native-dom | they also fire `change`, as in browsers |
+| No image `error` | blitz-traits + blitz-net + blitz-dom + dioxus-native-dom | `NetHandler::failed` (a no-op by default) hears fetches that fail; the image handler reports the node for those and for bytes that don't decode (`Resource::ImageFailed`); `error` fires on the next poll |
+| No `submit` event | dioxus-native-dom | a click on a submit button and Enter in a single-line field fire `submit` on the form; preventing it also stops Blitz's own submission (navigation) |
+| Toast's F6 shortcut needs `eval` | dioxus-primitives | the provider wraps its children in a `display: contents` box that hears F6 where `eval` can't run (rendered everywhere, so server and client markup match) |
 | Escape, outside click and focus traps need `eval` | dioxus-primitives | where `eval` can't run: dialog, alert dialog and popover take focus when they open and handle Escape themselves; focus leaving them (a click outside moves or clears it) closes them, and Tab out of a modal one brings focus back; the context menu closes on focus leaving it |
 | Slider and color area drags need `eval` | dioxus-primitives | a window-sized `PointerShield` takes the pointer moves and release while dragging |
 | Lazy components stay in the main wasm (the gallery's lazy half, the dashboard's Settings page came out as ~450-byte files) | dioxus-cli (wasm-split-cli) | the call graph read type-index relocations (`call_indirect`) as symbol indices; split exports have low symbol indices, so main seemed to call them. Type-index relocations are skipped |
 | `dx build --wasm-split` panics with `assertion failed: !self.dead.contains(&id)` (a lazy command palette) | dioxus-cli (wasm-split-cli) | a function kept in main but in neither graph (a wasm-bindgen closure shim) could call one only a split reached, which was deleted. Callees of kept functions are kept |
 | Drag-and-drop list needs HTML drag and drop | dioxus-primitives | a press that moves more than 4px starts a pointer drag; items under the pointer pick the slot; release drops, leaving the list cancels |
+| Typing a complete start date into a date range input froze the page (web too; found by `apps/booking`) | dioxus-primitives | the range input and its two date inputs write each other's signals only when the value changes; a write of the same value used to notify and loop forever |
 
-Each renderer and primitives row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos). The splitter rows are checked by `scripts/release-web.sh`, which fails when a lazy part comes out nearly empty, and by `scripts/check.sh --release`, which runs the dashboard and gallery browser checks against split builds.
+Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates. The splitter rows are checked by `scripts/release-web.sh`, which fails when a lazy part comes out nearly empty, and by `scripts/check.sh --release`, which runs the dashboard and gallery browser checks against split builds.
 
 ## Known limits of the patches
 
@@ -66,15 +72,17 @@ Each renderer and primitives row has a test in `apps/native/tests/engine.rs` (re
 - `getBoundingClientRect`-style rects (`get_client_rect`) ignore transforms.
 - Pointer events have one pointer (`pointerId` 1, type `mouse`); no touch or pen, no pointer capture.
 - Space activates on keydown, not keyup.
-- Image `error` never fires: Blitz reports failed fetches without the node, so an avatar whose image fails keeps showing its fallback in the loading state.
+- An image whose `src` can't be resolved to a URL is never fetched, so it fires neither `load` nor `error`.
+- `submit` is fired for Enter in any single-line field of a form (browsers also require a submit button or a single field), and the form's `FormData` is empty: read values from your own state, as the kit's `Form` does.
+- Scrolling (wheel and `scroll`) only reaches content Blitz counts in the scroll size: a row of `inline-block` children isn't counted, a flex row is.
 - Without `eval`, Escape only reaches an overlay while focus is inside it (it is moved there on open), and Shift+Tab out of a modal brings focus to the modal itself, not its last element.
-- Toast's F6 shortcut is still a document-level key listener and does nothing on native.
+- Toast's F6 shortcut and the sidebar's Ctrl+B are heard only while focus is inside the app (the provider's box), not with nothing focused.
 - The no-script fallbacks are chosen at runtime (`document::eval("").send(())` fails). Server-side rendering also has no `eval`, so its markup carries the fallback `tabindex="-1"` on open overlays; hydrating that on the web is untested.
 
 ## Changing a fix
 
 1. Clone the fork, check out the branch, make the change (keep the `PATCH(rust-ui)` marker), commit and push the branch.
-2. Put the new commit in the `rev` of the matching line in `Cargo.toml` (`[patch.crates-io]`, or `dioxus-primitives`) and in the table above. For primitives, also run `cargo run -p rust-ui-cli -- registry` so the manifests follow.
+2. Put the new commit in the `rev` of the matching line in `Cargo.toml` (`[patch.crates-io]`, or `dioxus-primitives`) and in the table above. To try a change before pushing, point the crates at your checkouts for one command with `--config 'patch.crates-io.blitz-dom.path="../blitz/packages/blitz-dom"'` (and the same for the others). For primitives, also run `cargo run -p rust-ui-cli -- registry` so the manifests follow.
 3. Run `cargo test -p native` (both `engine` and `interactions`) and `scripts/native-smoke.sh --build`.
 
 ## Moving to a new upstream release

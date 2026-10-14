@@ -1,5 +1,6 @@
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/breadcrumb/style.css")]
 struct Styles;
@@ -11,7 +12,7 @@ pub fn Breadcrumb(
 ) -> Element {
     let label = use_ui_strings().breadcrumb;
     rsx! {
-        nav { aria_label: label, class: Styles::dx_breadcrumb, ..attributes,
+        nav { aria_label: label, ..merge_attributes(vec![attributes!(div { class: Styles::dx_breadcrumb }), attributes]),
             ol { class: Styles::dx_breadcrumb_list, {children} }
         }
     }
@@ -23,7 +24,7 @@ pub fn BreadcrumbItem(
     children: Element,
 ) -> Element {
     rsx! {
-        li { class: Styles::dx_breadcrumb_item, ..attributes, {children} }
+        li { ..merge_attributes(vec![attributes!(div { class: Styles::dx_breadcrumb_item }), attributes]), {children} }
     }
 }
 
@@ -38,14 +39,13 @@ pub fn BreadcrumbLink(
 ) -> Element {
     rsx! {
         a {
-            class: Styles::dx_breadcrumb_link,
             href,
             onclick: move |e| {
                 if let Some(f) = &onclick {
                     f.call(e);
                 }
             },
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_breadcrumb_link }), attributes]),
             {children}
         }
     }
@@ -58,7 +58,7 @@ pub fn BreadcrumbPage(
     children: Element,
 ) -> Element {
     rsx! {
-        span { class: Styles::dx_breadcrumb_page, aria_current: "page", ..attributes, {children} }
+        span { aria_current: "page", ..merge_attributes(vec![attributes!(div { class: Styles::dx_breadcrumb_page }), attributes]), {children} }
     }
 }
 

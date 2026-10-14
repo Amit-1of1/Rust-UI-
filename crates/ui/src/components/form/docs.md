@@ -13,6 +13,35 @@ rsx! {
 }
 ```
 
+Start a field with a value with `form.field_with("Acme", rules)`; `reset()` returns to it. To load a record into the form (an edit sheet), call `field.load(value)`: it sets the value, makes it the one `reset()` returns to, and clears the error. Both `set` and `load` are safe to call from an effect.
+
+`SelectField` and `ComboboxField` bind a `Select` or a searchable `Combobox` to a field the same way, so they can be required, show their error and get focus on a failed submit:
+
+```rust
+let plan = form.field(vec![required()]);
+let zone = form.field_with("UTC", vec![required()]);
+rsx! {
+    SelectField { field: plan, label: "Plan", placeholder: "Choose a plan",
+        options: vec![FieldOption::new("free", "Free"), FieldOption::new("pro", "Pro")] }
+    ComboboxField { field: zone, label: "Time zone", options: vec!["UTC".into(), "Asia/Tokyo".into()] }
+}
+```
+
+The field holds the option's `value` (empty while nothing is chosen). They validate when the list closes, as a text field does on blur.
+
+`TextareaField` is the multi-line `TextField`. `CheckboxField` puts a checkbox and its label on one line; the field holds `"true"` while it is ticked, so a rule makes it mandatory ("accept the terms") and it is focused on a failed submit like the rest:
+
+```rust
+let notes = form.field(vec![max_len(300)]);
+let terms = form.field(vec![custom(|v| if v == "true" { Ok(()) } else { Err("Accept the terms.".into()) })]);
+rsx! {
+    TextareaField { field: notes, label: "Notes", maxlength: "300" }
+    CheckboxField { field: terms, label: "I accept the terms" }
+}
+```
+
+`TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
+
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
 ## Accessibility
@@ -21,8 +50,12 @@ Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)`
 - Keyboard: on a failed submit focus moves to the first invalid field. Enter submits as usual.
 - Reduced motion: no animation.
 
-Use `FormField` directly (value, error, ids, set, blur) to wire your own controls such as a select or checkbox.
+Use `FormField` directly (value, error, ids, set, load, blur, mounted) to wire your own controls. Pass the control's `onmounted` to `field.mounted(e)` so a failed submit can focus it on every renderer, native included. `Select` and `Combobox` move `id`, `aria-describedby`, `aria-invalid` and `aria-required` to their focusable control (the trigger button or the text input), so a `<label for>` and focus-on-error reach it.
 
 ## Source
 
 Original to this repo. The idea (a form-state hook plus bound fields) follows the pattern in Rust/UI's `use_form`, but nothing is copied; it is not Leptos- or serde-based.
+
+## Stability
+
+Experimental. The form API was reshaped twice in October 2026 (`mounted`, then `field_with`, `load` and the select and combobox fields), and binding a raw `Select` is still open. It may change in any release; see `docs/STABILITY.md` in the kit repository.

@@ -73,11 +73,17 @@ pub fn ItemGroup(
         "data-slot": "item-group",
     });
     let merged = merge_attributes(vec![base, attributes]);
+    // The group is a list, so each Item inside it must be a list item (axe
+    // aria-required-children). Items outside a group stay plain.
+    use_context_provider(|| InItemGroup);
 
     rsx! {
         div { ..merged,{children} }
     }
 }
+
+#[derive(Clone, Copy)]
+struct InItemGroup;
 
 #[component]
 pub fn ItemSeparator(
@@ -113,6 +119,7 @@ pub fn Item(
         "data-slot": "item",
         "data-variant": variant.class(),
         "data-size": size.class(),
+        role: try_use_context::<InItemGroup>().map(|_| "listitem"),
     });
     let merged = merge_attributes(vec![base, attributes]);
 

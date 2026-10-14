@@ -125,12 +125,6 @@ body {
   font-weight: 500;
 }
 
-.db-error {
-  margin: 0;
-  color: var(--error-text-color);
-  font-size: 0.875rem;
-}
-
 .db-check,
 .db-switch-row {
   display: flex;
@@ -166,15 +160,6 @@ body {
 
 .db-sheet-form {
   padding-inline: 1rem;
-}
-
-.db-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }
 
 @media (max-width: 40rem) {

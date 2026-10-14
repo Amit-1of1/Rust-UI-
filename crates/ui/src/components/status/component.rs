@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/status/style.css")]
 struct Styles;
@@ -37,10 +38,9 @@ pub fn Status(
 ) -> Element {
     rsx! {
         span {
-            class: Styles::dx_status,
             "data-kind": kind.as_str(),
             "data-pulse": pulse.then_some("true"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_status }), attributes]),
             span { class: Styles::dx_status_dot, "aria-hidden": "true" }
             {children}
         }

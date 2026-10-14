@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/button_group/style.css")]
 struct Styles;
@@ -13,10 +14,9 @@ pub fn ButtonGroup(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_button_group,
             role: "group",
             "data-orientation": if vertical { "vertical" } else { "horizontal" },
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_button_group }), attributes]),
             {children}
         }
     }
@@ -29,6 +29,6 @@ pub fn ButtonGroupText(
     children: Element,
 ) -> Element {
     rsx! {
-        span { class: Styles::dx_button_group_text, ..attributes, {children} }
+        span { ..merge_attributes(vec![attributes!(div { class: Styles::dx_button_group_text }), attributes]), {children} }
     }
 }

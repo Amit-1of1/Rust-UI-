@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/stepper/style.css")]
 struct Styles;
@@ -72,6 +73,10 @@ pub fn Stepper(
     /// Number of steps.
     total: usize,
     #[props(default = 0)] default_step: usize,
+    /// Drive the step from outside (for example, move on only after a form validates). When
+    /// given, `default_step` is ignored and the stepper reads and writes this signal.
+    #[props(default)]
+    current: Option<Signal<usize>>,
     #[props(default)] vertical: bool,
     /// Called with the new index whenever the step changes.
     #[props(default)]
@@ -83,7 +88,8 @@ pub fn Stepper(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
-    let current = use_signal(|| default_step.min(total.saturating_sub(1)));
+    let own = use_signal(|| default_step.min(total.saturating_sub(1)));
+    let current = current.unwrap_or(own);
     use_context_provider(|| StepperContext { current, total });
     let mut last = use_signal(|| *current.peek());
     use_effect(move || {
@@ -96,9 +102,8 @@ pub fn Stepper(
     rsx! {
         div { class: Styles::dx_stepper_root,
             ol {
-                class: Styles::dx_stepper,
                 "data-orientation": if vertical { "vertical" } else { "horizontal" },
-                ..attributes,
+                ..merge_attributes(vec![attributes!(div { class: Styles::dx_stepper }), attributes]),
                 {children}
             }
             {footer}

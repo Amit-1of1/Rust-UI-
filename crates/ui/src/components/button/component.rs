@@ -59,6 +59,18 @@ impl ButtonSize {
     }
 }
 
+/// A [`Button`]'s look for an element that is not a `<button>`, such as the router's `Link`
+/// (which renders its own `<a>`):
+/// `Link { to: Route::Trips {}, attributes: button_look(ButtonVariant::Outline, ButtonSize::Default), "My trips" }`.
+/// Don't also pass `class` to that element: it would replace the button class.
+pub fn button_look(variant: ButtonVariant, size: ButtonSize) -> Vec<Attribute> {
+    attributes!(a {
+        class: Styles::dx_button,
+        "data-style": variant.class(),
+        "data-size": size.class(),
+    })
+}
+
 #[component]
 pub fn Button(
     #[props(default)] variant: ButtonVariant,

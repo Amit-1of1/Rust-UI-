@@ -247,11 +247,31 @@ pub fn SidebarProvider(
     });
     let merged = merge_attributes(vec![base, attributes]);
 
+    // Without scripts (native) there is no window listener; hear the shortcut on the wrapper
+    // instead, which works while focus is inside it.
+    let scripts = use_hook(|| document::eval("").send(()).is_ok());
     rsx! {
-        div { ..merged, {children} }
+        div {
+            onkeydown: move |e: KeyboardEvent| {
+                let m = e.modifiers();
+                if !scripts
+                    && (m.ctrl() || m.meta())
+                    && e.key() == Key::Character(SIDEBAR_KEYBOARD_SHORTCUT.into())
+                {
+                    e.prevent_default();
+                    ctx.toggle();
+                }
+            },
+            ..merged,
+            {children}
+        }
     }
 }
 
+/// The sidebar panel. It is a navigation landmark named [`UiStrings::sidebar`]
+/// (`role` and `aria_label` override it); on small screens it becomes a sheet.
+///
+/// [`UiStrings::sidebar`]: crate::components::ui_strings::UiStrings
 #[component]
 pub fn Sidebar(
     #[props(default)] side: SidebarSide,
@@ -275,6 +295,8 @@ pub fn Sidebar(
         let base = attributes!(div {
             class: Styles::dx_sidebar_static,
             "data-slot": "sidebar",
+            role: "navigation",
+            aria_label: t.sidebar.clone(),
         });
         let merged = merge_attributes(vec![base, attributes]);
 
@@ -303,7 +325,12 @@ pub fn Sidebar(
                     SheetTitle { {t.sidebar.clone()} }
                     SheetDescription { {t.sidebar_description.clone()} }
                 }
-                div { class: Styles::dx_sidebar_mobile_inner, {children} }
+                div {
+                    class: Styles::dx_sidebar_mobile_inner,
+                    role: "navigation",
+                    aria_label: t.sidebar.clone(),
+                    {children}
+                }
             }
         };
     }
@@ -314,9 +341,13 @@ pub fn Sidebar(
         ""
     };
 
+    // A navigation landmark by default, so the sidebar's links are not outside every landmark
+    // (axe `region`). Pass `role` / `aria_label` to override.
     let container_base = attributes!(div {
         class: Styles::dx_sidebar_container,
         "data-slot": "sidebar-container",
+        role: "navigation",
+        aria_label: t.sidebar.clone(),
     });
     let container_attrs = merge_attributes(vec![container_base, attributes]);
 
@@ -401,6 +432,8 @@ pub fn SidebarRail(#[props(extends = GlobalAttributes)] attributes: Vec<Attribut
     }
 }
 
+/// The page's main content beside the sidebar. It renders `<main>`, so it is the page's
+/// `main` landmark: don't put another `main` inside it.
 #[component]
 pub fn SidebarInset(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,

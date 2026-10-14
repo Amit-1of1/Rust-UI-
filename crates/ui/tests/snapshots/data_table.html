@@ -1,8 +1,10 @@
 <div style="display: grid; gap: 0.75rem;">
 <div class="dx-data-table-css">
 <div class="dx-data-table-toolbar-css">
-<input class="dx-input-css" type="search" placeholder="Filter rows" aria-label="Filter rows" value="">
+<input aria-label="Filter rows" class="dx-input-css dx-data-table-filter-css" placeholder="Filter rows" type="search" value="">
 </input>
+<button type="button" aria-pressed=false data-state="off" data-disabled=false class="dx-toggle-css">Research only
+</button>
 </div>
 <div class="dx-table-container-css">
 <table class="dx-table-css">
@@ -10,24 +12,24 @@
 </caption>
 <thead class="dx-table-header-css">
 <tr class="dx-table-row-css">
-<th class="dx-table-head-css" scope="col">
+<th scope="col" class="dx-table-head-css">
 <input type="checkbox" aria-label="Select all rows on this page"/>
 </th>
-<th class="dx-table-head-css" scope="col" aria-sort="none">
+<th scope="col" aria-sort="none" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Name
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
 </button>
 </th>
-<th class="dx-table-head-css" scope="col" aria-sort="none">
+<th scope="col" aria-sort="none" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Team
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
 </button>
 </th>
-<th class="dx-table-head-css" scope="col">Office
+<th scope="col" class="dx-table-head-css">Office
 </th>
-<th class="dx-table-head-css" scope="col" aria-sort="none" style="text-align: right;">
+<th scope="col" aria-sort="none" data-numeric="true" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Salary
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
@@ -46,7 +48,7 @@
 </td>
 <td class="dx-table-cell-css">London
 </td>
-<td class="dx-table-cell-css" style="text-align: right;">$142,000
+<td data-numeric="true" class="dx-table-cell-css">$142,000
 </td>
 </tr>
 <tr class="dx-table-row-css">
@@ -59,7 +61,7 @@
 </td>
 <td class="dx-table-cell-css">New York
 </td>
-<td class="dx-table-cell-css" style="text-align: right;">$151,500
+<td data-numeric="true" class="dx-table-cell-css">$151,500
 </td>
 </tr>
 <tr class="dx-table-row-css">
@@ -72,7 +74,7 @@
 </td>
 <td class="dx-table-cell-css">Manchester
 </td>
-<td class="dx-table-cell-css" style="text-align: right;">$138,250
+<td data-numeric="true" class="dx-table-cell-css">$138,250
 </td>
 </tr>
 <tr class="dx-table-row-css">
@@ -85,7 +87,7 @@
 </td>
 <td class="dx-table-cell-css">Hampton
 </td>
-<td class="dx-table-cell-css" style="text-align: right;">$129,900
+<td data-numeric="true" class="dx-table-cell-css">$129,900
 </td>
 </tr>
 <tr class="dx-table-row-css">
@@ -98,7 +100,7 @@
 </td>
 <td class="dx-table-cell-css">Boston
 </td>
-<td class="dx-table-cell-css" style="text-align: right;">$147,300
+<td data-numeric="true" class="dx-table-cell-css">$147,300
 </td>
 </tr>
 </tbody>

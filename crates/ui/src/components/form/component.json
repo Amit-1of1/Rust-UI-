@@ -1,6 +1,21 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "dioxus-primitives",
+      "rev": "71fed6960350eafeff5699f9fd3a447a1418b7b7"
+    }
+  ],
   "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "checkbox"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "combobox"
+    },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "field"
@@ -8,6 +23,14 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "input"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "select"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "textarea"
     }
   ],
   "description": "Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.",

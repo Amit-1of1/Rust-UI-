@@ -170,6 +170,29 @@ impl Harness {
         self.settle();
     }
 
+    /// Type `text` into the focused element, one key per character.
+    pub fn type_text(&mut self, text: &str) {
+        for c in text.chars() {
+            for state in [KeyState::Pressed, KeyState::Released] {
+                let ev = BlitzKeyEvent {
+                    key: Key::Character(c.to_string()),
+                    code: Code::Unidentified,
+                    modifiers: Modifiers::empty(),
+                    location: keyboard_types::Location::Standard,
+                    is_auto_repeating: false,
+                    is_composing: false,
+                    state,
+                    text: (state == KeyState::Pressed).then(|| c.to_string().into()),
+                };
+                self.doc.handle_ui_event(match state {
+                    KeyState::Pressed => UiEvent::KeyDown(ev),
+                    KeyState::Released => UiEvent::KeyUp(ev),
+                });
+            }
+            self.settle();
+        }
+    }
+
     /// The element that has keyboard focus.
     pub fn focused(&self) -> Option<usize> {
         self.doc.focus_node_id()

@@ -18,20 +18,12 @@ const TIMEZONES: [&str; 8] = [
 pub fn Settings() -> Element {
     let toasts = use_toast();
     let form = use_form();
-    let company = form.field(vec![required(), max_len(60)]);
-    let billing = form.field(vec![required(), email()]);
-    let mut tz = use_signal(|| Some("UTC".to_string()));
-    let mut tz_query = use_signal(String::new);
+    let company = form.field_with("Acme Inc", vec![required(), max_len(60)]);
+    let billing = form.field_with("billing@acme.example", vec![required(), email()]);
+    let tz = form.field_with("UTC", vec![required()]);
     let mut weekly = use_signal(|| true);
     let mut alerts = use_signal(|| false);
     let mut confirm_reset = use_signal(|| false);
-
-    use_hook(move || {
-        company.set("Acme Inc");
-        billing.set("billing@acme.example");
-    });
-
-    let tz_error = tz().is_none().then_some("Choose a time zone");
 
     rsx! {
         div { class: "db-grid-2 db-settings",
@@ -44,11 +36,7 @@ pub fn Settings() -> Element {
                     Form {
                         id: "settings-form",
                         state: form,
-                        on_valid: move |_| {
-                            if tz().is_some() {
-                                toasts.success("Settings saved".to_string(), ToastOptions::new());
-                            }
-                        },
+                        on_valid: move |_| toasts.notify_success("Settings saved"),
                         TextField { field: company, label: "Company name", autocomplete: "organization" }
                         TextField {
                             field: billing,
@@ -57,29 +45,12 @@ pub fn Settings() -> Element {
                             autocomplete: "email",
                             description: "Invoices go here.",
                         }
-                        div { class: "db-field",
-                            span { id: "tz-label", class: "db-label", "Time zone" }
-                            Combobox::<String> {
-                                value: Some(tz.into()),
-                                on_value_change: move |v: Option<String>| tz.set(v),
-                                query: Some(tz_query()),
-                                on_query_change: move |q| tz_query.set(q),
-                                placeholder: "Search time zones",
-                                aria_label: "Time zone",
-                                list_aria_label: "Time zones",
-                                ComboboxEmpty { "No time zone found." }
-                                for (i , z) in TIMEZONES.iter().enumerate() {
-                                    ComboboxOption::<String> {
-                                        index: i,
-                                        value: z.to_string(),
-                                        text_value: z.to_string(),
-                                        {*z}
-                                    }
-                                }
-                            }
-                            if let Some(e) = tz_error {
-                                p { class: "db-error", role: "alert", "{e}" }
-                            }
+                        ComboboxField {
+                            field: tz,
+                            label: "Time zone",
+                            placeholder: "Search time zones",
+                            empty: "No time zone found.",
+                            options: TIMEZONES.iter().map(|z| FieldOption::from(*z)).collect::<Vec<_>>(),
                         }
                         div { class: "db-actions",
                             Button { r#type: "submit", "Save" }
@@ -139,7 +110,7 @@ pub fn Settings() -> Element {
             AlertDialogActions {
                 AlertDialogCancel { "Cancel" }
                 AlertDialogAction {
-                    on_click: move |_| toasts.warning("Reset is disabled in the demo".to_string(), ToastOptions::new()),
+                    on_click: move |_| toasts.notify_warning("Reset is disabled in the demo"),
                     "Reset"
                 }
             }

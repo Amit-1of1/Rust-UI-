@@ -48,7 +48,7 @@ cargo publish -p rust-ui-motion
 cargo publish -p rust-ui-cli
 ```
 
-Publish `rust-ui-motion` before `rust-ui-kit`, because the kit depends on it. Bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`) together.
+Publish `rust-ui-motion` before `rust-ui-kit`, because the kit depends on it. Bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`) together, as [VERSIONING.md](VERSIONING.md) describes: the minor version when the CHANGELOG has a "Breaking" entry, otherwise the patch. In the same commit, rename the CHANGELOG's "Unreleased" heading to the version and date, then tag it `v<version>`.
 
 ## Docs site on GitHub Pages
 

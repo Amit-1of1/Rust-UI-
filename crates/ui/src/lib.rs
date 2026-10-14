@@ -2,9 +2,21 @@
 //!
 //! Behaviour and accessibility come from `dioxus-primitives`; the styled layer in
 //! [`components`] is copied from DioxusLabs/components and owned here from now on.
+//!
+//! # Stability
+//!
+//! Import from [`prelude`], [`hooks`], [`icons`] and [`motion`]. Which items are stable,
+//! experimental or internal is listed in docs/STABILITY.md; experimental and internal items
+//! also say so in their docs. Breaking changes follow docs/VERSIONING.md and are listed in
+//! CHANGELOG.md.
 
+/// Component modules. Internal paths: import from [`prelude`] instead (docs/STABILITY.md).
 pub mod components;
 pub mod css_bundle;
+/// Demos shown in the gallery and the docs site (feature `demos`).
+///
+/// Internal: not part of the public API (docs/STABILITY.md).
+#[cfg(feature = "demos")]
 pub mod demos;
 
 /// Shared hooks (`use_hotkey`, `Selection`, `use_media_query`, ...): `ui::hooks::*`.
@@ -23,15 +35,11 @@ pub const THEME_CSS: Asset = asset!("/assets/theme.css");
 /// Loads the theme stylesheet. Render once near the root of the app.
 ///
 /// It also switches to the single bundled stylesheet when the page has one (see [`css_bundle`]).
-///
-/// With the `native` feature it also renders the [`components::overlay::OverlayLayer`]
-/// that modals move into, so put it at the root, before the rest of the app.
 #[component]
 pub fn ThemeStyles() -> Element {
     use_hook(css_bundle::install);
     rsx! {
         document::Stylesheet { href: THEME_CSS }
-        components::overlay::OverlayLayer {}
     }
 }
 
@@ -81,7 +89,6 @@ pub mod prelude {
     pub use crate::components::menubar::*;
     pub use crate::components::multi_select::*;
     pub use crate::components::navbar::*;
-    pub use crate::components::overlay::*;
     pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
     pub use crate::components::progress::*;

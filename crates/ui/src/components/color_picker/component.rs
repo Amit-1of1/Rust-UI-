@@ -4,6 +4,7 @@ use dioxus_primitives::label::Label;
 use dioxus_primitives::popover;
 use dioxus_primitives::slider::*;
 use dioxus_primitives::use_controlled;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use palette::{encoding, FromColor, Hsv, IntoColor, RgbHue, Srgb};
 
 use crate::components::input::Input;
@@ -68,11 +69,10 @@ pub fn ColorPickerRoot(props: ColorPickerRootProps) -> Element {
 
     rsx! {
         color_picker::ColorPicker {
-            class: Styles::dx_color_picker,
             color: props.color,
             on_color_change: props.on_color_change,
             disabled: props.disabled,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_color_picker }), props.attributes]),
             popover::PopoverRoot {
                 is_modal: false,
                 open: Some(open()),
@@ -168,11 +168,10 @@ pub fn ColorPickerTrigger(props: ColorPickerTriggerProps) -> Element {
 
     rsx! {
         popover::PopoverTrigger {
-            class: Styles::dx_color_picker_button,
             disabled: if (ctx.disabled)() { true },
             aria_label: format!("Color picker {aria_hex}"),
             aria_expanded: (ctx.open)(),
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_color_picker_button }), props.attributes]),
             ColorSwatch { color: ctx.color }
             if let Some(label) = props.label { span { {label} } }
             {props.children}
@@ -257,8 +256,7 @@ fn ColorField(props: ColorFieldProps) -> Element {
 
     rsx! {
         div {
-            class: Styles::dx_color_field_container,
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_color_field_container }), props.attributes]),
             if let Some(label) = props.label {
                 Label {
                     html_for: "color_field",
@@ -326,9 +324,8 @@ fn ColorSwatch(props: ColorSwatchProps) -> Element {
         div {
             role: "img",
             aria_label: format!("Selected color {hex_color}"),
-            class: Styles::dx_color_swatch,
             style: "--swatch-color: {hex_color}",
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_color_swatch }), props.attributes]),
             {props.children}
         }
     }
@@ -390,8 +387,7 @@ fn ColorSlider(props: ColorSliderProps) -> Element {
     rsx! {
 
         div {
-            class: Styles::dx_color_slider_container,
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_color_slider_container }), props.attributes]),
             label { class: Styles::dx_color_slider_title, {props.title} }
             output { class: Styles::dx_color_slider_output, "{display_value}" }
             Slider {
@@ -425,9 +421,8 @@ fn ColorSlider(props: ColorSliderProps) -> Element {
 fn ColorArea(props: ColorAreaProps) -> Element {
     rsx! {
         color_picker::ColorArea {
-            class: Styles::dx_color_area_container,
             step: props.step,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_color_area_container }), props.attributes]),
             color_picker::AreaTrack {
                 class: Styles::dx_color_area_track,
                 color_picker::AreaThumb {
@@ -462,8 +457,7 @@ pub fn ColorPickerSelect(props: ColorPickerSelectProps) -> Element {
 
     rsx! {
         div {
-            class: Styles::dx_color_picker_dialog,
-            ..props.attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_color_picker_dialog }), props.attributes]),
             ColorArea {}
             ColorSlider { title: "Hue" }
             div {

@@ -1,0 +1,509 @@
+/* Page layout only. Every colour is a theme token, so light, dark and accents all work. */
+
+body {
+  margin: 0;
+  background: var(--primary-color);
+  color: var(--secondary-color-1);
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.tr-h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tr-muted {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.tr-label {
+  display: block;
+  margin: 0 0 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tr-error {
+  margin: 0;
+  color: var(--error-text-color);
+  font-size: 0.875rem;
+}
+
+/* Skip link: off screen until focused. */
+.tr-skip {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -3rem;
+  z-index: 10;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius, 0.5rem);
+  background: var(--secondary-color-1);
+  color: var(--primary-color);
+}
+
+.tr-skip:focus {
+  top: 0.5rem;
+}
+
+.tr-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-block-end: 1px solid var(--primary-color-6);
+}
+
+.tr-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tr-nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tr-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius, 0.5rem);
+  color: var(--secondary-color-4);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.tr-nav-link:hover {
+  background: var(--primary-color-3);
+}
+
+.tr-nav-link[aria-current="page"] {
+  background: var(--primary-color-3);
+  color: var(--secondary-color-1);
+}
+
+.tr-nav-link:focus-visible,
+.tr-brand:focus-visible,
+.tr-stretched:focus-visible,
+.tr-host-trigger:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.tr-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.tr-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  outline: none;
+}
+
+.tr-footer {
+  padding: 1.5rem;
+  border-block-start: 1px solid var(--primary-color-6);
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.tr-footer p {
+  margin: 0;
+}
+
+/* Explore */
+.tr-hero {
+  display: grid;
+  gap: 0.5rem;
+  margin-block-end: 1.5rem;
+}
+
+.tr-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-block-start: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: calc(var(--radius, 0.5rem) * 2);
+}
+
+.tr-search-field {
+  display: grid;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.tr-search-field .tr-label {
+  margin: 0;
+}
+
+.tr-grow {
+  flex: 1 1 14rem;
+}
+
+.tr-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tr-counter-value {
+  min-width: 4.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.tr-explore {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: 2rem;
+}
+
+.tr-filters {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+.tr-filter-group {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.tr-filter-group h3 {
+  margin: 0;
+}
+
+.tr-kinds {
+  flex-wrap: wrap;
+}
+
+.tr-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tr-results {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.tr-results-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tr-sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+.tr-sort .tr-label {
+  margin: 0;
+}
+
+.tr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tr-grid > li {
+  display: grid;
+}
+
+/* Edge-to-edge photo on top: Card has no media slot, and its padding wins over a single
+   app class (the kit's CSS loads later), hence the descendant selector. */
+.tr-grid .tr-card {
+  position: relative;
+  overflow: hidden;
+  padding-block-start: 0;
+}
+
+.tr-card:focus-within {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.tr-card-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* The title link covers the whole card, so the card is one click target and one tab stop. */
+.tr-stretched {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tr-stretched::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+
+.tr-stretched:focus-visible {
+  outline: none;
+}
+
+.tr-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tr-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.tr-price {
+  margin-inline-start: auto;
+  font-size: 0.875rem;
+}
+
+/* Stand-in photos: hue-shifted gradients (demos never load remote images). */
+.tr-photo {
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--photo-hue, 140) 35% 55%),
+    hsl(calc(var(--photo-hue, 140) + 50) 30% 30%)
+  );
+}
+
+/* Stay page */
+.tr-stay-head {
+  margin-block: 1rem;
+}
+
+.tr-stay-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.tr-stay {
+  display: grid;
+  grid-template-columns: 1fr 22rem;
+  gap: 2rem;
+  align-items: start;
+}
+
+.tr-stay-body {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.tr-stay-body .tr-photo {
+  border-radius: var(--radius, 0.5rem);
+}
+
+.tr-host-trigger {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.tr-host-card {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 18rem;
+}
+
+.tr-host-card p {
+  margin: 0.25rem 0 0;
+}
+
+.tr-amenities,
+.tr-reviews {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tr-amenities li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tr-reviews li {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tr-reviews p {
+  margin: 0 0 0.25rem;
+}
+
+.tr-accordion-text {
+  margin: 0;
+  padding-block-end: 1rem;
+}
+
+.tr-book {
+  position: sticky;
+  top: 1rem;
+}
+
+.tr-book-body,
+.tr-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.tr-quote {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.tr-quote > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tr-quote dt {
+  color: var(--secondary-color-4);
+}
+
+.tr-quote dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.tr-quote-total {
+  padding-block-start: 0.5rem;
+  border-block-start: 1px solid var(--primary-color-6);
+  font-weight: 600;
+}
+
+.tr-quote-total dt {
+  color: inherit;
+}
+
+.tr-wide {
+  width: 100%;
+}
+
+/* Checkout */
+.tr-checkout {
+  display: grid;
+  grid-template-columns: 1fr 20rem;
+  gap: 2rem;
+  align-items: start;
+  margin-block-start: 1.5rem;
+}
+
+.tr-checkout-step {
+  min-width: 0;
+}
+
+.tr-summary .tr-photo {
+  margin-block-start: -1.5rem;
+}
+
+.tr-summary > div {
+  overflow: hidden;
+}
+
+.tr-fieldset {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.tr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.tr-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Trips */
+.tr-trips {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-start: 1rem;
+}
+
+@media (max-width: 52rem) {
+  .tr-explore,
+  .tr-stay,
+  .tr-checkout {
+    grid-template-columns: 1fr;
+  }
+
+  .tr-book {
+    position: static;
+  }
+
+  .tr-wide-only {
+    display: none;
+  }
+}
+
+/* Carousel items centre their content, so a full-bleed photo needs its own width. */
+.tr-stay-body .tr-photo {
+  width: 100%;
+}

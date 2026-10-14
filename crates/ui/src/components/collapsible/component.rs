@@ -51,9 +51,8 @@ pub fn CollapsibleTrigger(props: CollapsibleTriggerProps) -> Element {
 pub fn CollapsibleContent(props: CollapsibleContentProps) -> Element {
     rsx! {
         collapsible::CollapsibleContent {
-            class: Styles::dx_collapsible_content,
             id: props.id,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_collapsible_content }), props.attributes]),
             {props.children}
         }
     }

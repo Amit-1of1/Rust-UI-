@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 use dioxus_primitives::dioxus_attributes::attributes;
+use dioxus_primitives::merge_attributes;
 use dioxus_primitives::slider::{self, RangeSliderProps, SliderProps};
 
 #[css_module("/src/components/slider/style.css")]
@@ -35,7 +36,6 @@ pub fn Slider(props: SliderProps) -> Element {
     });
     rsx! {
         slider::Slider {
-            class: Styles::dx_slider,
             value: current,
             min: props.min,
             max: props.max,
@@ -45,7 +45,7 @@ pub fn Slider(props: SliderProps) -> Element {
             inverted: props.inverted,
             on_value_change: set,
             label: props.label,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_slider }), props.attributes]),
             slider::SliderTrack {
                 class: Styles::dx_slider_track,
                 attributes: home_end,
@@ -60,7 +60,6 @@ pub fn Slider(props: SliderProps) -> Element {
 pub fn RangeSlider(props: RangeSliderProps) -> Element {
     rsx! {
         slider::RangeSlider {
-            class: Styles::dx_slider,
             value: props.value,
             default_value: props.default_value,
             min: props.min,
@@ -71,7 +70,7 @@ pub fn RangeSlider(props: RangeSliderProps) -> Element {
             inverted: props.inverted,
             on_value_change: props.on_value_change,
             label: props.label,
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_slider }), props.attributes]),
             slider::SliderTrack { class: Styles::dx_slider_track,
                 slider::SliderRange { class: Styles::dx_slider_range }
                 slider::SliderThumb { class: Styles::dx_slider_thumb, index: 0usize }

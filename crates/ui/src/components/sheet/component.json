@@ -4,17 +4,13 @@
       "features": [],
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "dioxus-primitives",
-      "rev": "a1100155246be04c91cb0b485852c2063364775c"
+      "rev": "71fed6960350eafeff5699f9fd3a447a1418b7b7"
     }
   ],
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "icons"
-    },
-    {
-      "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "overlay"
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",

@@ -27,12 +27,18 @@ fn now_ms() -> f64 {
 /// A pause this long between the last move and the release cancels the flick.
 const STALE_MS: f64 = 100.0;
 
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SwipeDirection {
     Left,
     Right,
 }
 
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum SwipeOutcome {
     /// Released far enough, or fast enough, in this direction.
@@ -42,6 +48,10 @@ pub enum SwipeOutcome {
 }
 
 /// Tracks one horizontal drag.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct SwipeTracker {
     start_x: f64,
@@ -146,6 +156,10 @@ fn capture_pointer(e: &Event<PointerData>) {
 /// element does not follow the pointer the other way: right for a bottom drawer you pull down.
 ///
 /// `on_dismiss` is called after the exit animation finishes (or at once under reduced motion).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
 pub fn SwipeDismiss(
     on_dismiss: EventHandler<()>,

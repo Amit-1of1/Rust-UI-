@@ -54,7 +54,8 @@ pub fn Orders() -> Element {
         })
         .sum();
 
-    rsx! {
+    // Outside filters sit in the DataTable's toolbar, next to its own filter box.
+    let filters = rsx! {
         div { class: "db-toolbar",
             div { class: "db-inline-field",
                 span { id: "range-label", "Dates" }
@@ -87,8 +88,12 @@ pub fn Orders() -> Element {
                 }
             }
         }
+    };
+
+    rsx! {
         p { class: "db-muted", "Total of matching orders: {money(total)}" }
         DataTable {
+            toolbar: filters,
             columns,
             rows: rows.clone(),
             caption: "Orders",

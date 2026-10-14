@@ -82,7 +82,7 @@ pub fn Demo() -> Element {
                         label: "Amount",
                         column: Column::Amount,
                         sort,
-                        style: "text-align: right;",
+                        numeric: true,
                     }
                 }
             }
@@ -97,14 +97,14 @@ pub fn Demo() -> Element {
                             }
                         }
                         TableCell { "{row.method}" }
-                        TableCell { style: "text-align: right;", "{money(row.cents)}" }
+                        TableCell { numeric: true, "{money(row.cents)}" }
                     }
                 }
             }
             TableFooter {
                 TableRow {
                     TableCell { colspan: "3", "Total" }
-                    TableCell { style: "text-align: right;", "{money(total)}" }
+                    TableCell { numeric: true, "{money(total)}" }
                 }
             }
         }
@@ -116,6 +116,7 @@ fn SortableHead(
     label: &'static str,
     column: Column,
     sort: Signal<(Column, SortDirection)>,
+    #[props(default)] numeric: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element {
     let (current, direction) = sort();
@@ -128,6 +129,7 @@ fn SortableHead(
     rsx! {
         TableHead {
             sort: shown,
+            numeric,
             on_sort: move |_| {
                 let next = if current == column { direction.cycle() } else { SortDirection::Ascending };
                 sort.set((column, next));

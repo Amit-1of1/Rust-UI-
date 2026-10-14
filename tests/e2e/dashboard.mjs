@@ -37,9 +37,10 @@ for (const scheme of ["light", "dark"]) {
   page.on("pageerror", (e) => check(false, `page error: ${e.message}`));
   await page.goto(url);
   await page.waitForSelector("body[data-ready='1'] .db-main", { timeout: 30000 });
-  if (scheme === "dark") {
-    await page.getByRole("switch", { name: "Dark mode" }).click();
-  }
+  // The page follows the system scheme and the switch reflects it; clicking it here would
+  // turn dark mode off and scan the light theme twice.
+  const dark = await page.getByRole("switch", { name: "Dark mode" }).getAttribute("aria-checked");
+  check(dark === String(scheme === "dark"), `${scheme}: the dark mode switch follows the system (${dark})`);
 
   for (const name of ["Overview", "Customers", "Orders", "Settings"]) {
     await nav(page, name);
@@ -125,6 +126,7 @@ const sheet = page.getByRole("dialog");
 await sheet.waitFor();
 check((await sheet.getByLabel("Name").inputValue()).length > 0, "sheet loads the customer's name");
 await axe(page, "edit sheet");
+check((await sheet.getByRole("button", { name: /^Plan / }).count()) === 1, "the plan select is named by its label and value");
 await sheet.getByLabel("Name").fill("Renamed Person");
 await sheet.getByRole("button", { name: "Save changes" }).click();
 await page.waitForTimeout(300);
@@ -139,8 +141,22 @@ await page.waitForTimeout(200);
 const fewer = await ordersStatus();
 check(all !== fewer, `turning off Refunded changes the rows (${all} -> ${fewer})`);
 
-// Settings: the reset confirmation is an alertdialog and passes axe.
+// Settings: the time zone is a labelled form field with its initial value.
 await nav(page, "Settings");
+const zone = page.getByRole("combobox", { name: "Time zone" });
+check((await zone.count()) === 1, "time zone combobox is named by its label");
+
+// One theme state: the header switch and the customizer agree both ways.
+const darkSwitch = page.getByRole("switch", { name: "Dark mode" });
+await darkSwitch.click();
+await page.waitForTimeout(200);
+check(await page.getByRole("radio", { name: "Dark" }).isChecked(), "header switch on: customizer shows Dark");
+check((await page.evaluate(() => document.documentElement.dataset.theme)) === "dark", "data-theme is dark");
+await page.getByRole("radio", { name: "Light" }).check({ force: true });
+await page.waitForTimeout(200);
+check((await darkSwitch.getAttribute("aria-checked")) === "false", "customizer Light: header switch turns off");
+
+// Settings: the reset confirmation is an alertdialog and passes axe.
 await page.getByRole("button", { name: "Reset workspace" }).click();
 await page.getByRole("alertdialog", { name: "Reset the workspace?" }).waitFor();
 await axe(page, "reset confirmation");

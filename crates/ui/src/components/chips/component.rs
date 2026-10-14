@@ -1,5 +1,6 @@
 use crate::components::icons::Check;
 use dioxus::prelude::*;
+use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/chips/style.css")]
 struct Styles;
@@ -15,10 +16,9 @@ pub fn Chips(
 ) -> Element {
     rsx! {
         div {
-            class: Styles::dx_chips,
             role: "group",
             "aria-label": label,
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_chips }), attributes]),
             {children}
         }
     }
@@ -48,10 +48,9 @@ pub fn Chip(
     let on = checked.unwrap_or_else(|| *own.read());
     rsx! {
         label {
-            class: Styles::dx_chip,
             "data-state": if on { "on" } else { "off" },
             "data-disabled": disabled.then_some("true"),
-            ..attributes,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_chip }), attributes]),
             input {
                 class: Styles::dx_chip_input,
                 r#type: "checkbox",
