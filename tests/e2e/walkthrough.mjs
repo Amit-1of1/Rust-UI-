@@ -1,7 +1,7 @@
 // Keyboard-only walkthrough of the whole gallery: Tab from the top of the page to the end, then
 // Shift+Tab back a stretch, and check what a keyboard or screen-reader user would run into.
 //   - every Tab stop is visible (not zero-size, hidden, aria-hidden or inert),
-//   - every Tab stop shows a focus indicator (outline or ring),
+//   - every Tab stop shows a focus indicator (something changes when it takes focus),
 //   - no positive tabindex reorders the page,
 //   - focus is never trapped outside a modal: the walk reaches the end of the page,
 //   - Shift+Tab retraces the same stops in reverse.
@@ -29,6 +29,21 @@ const positive = await page.evaluate(() =>
 );
 check(positive.length === 0, `no positive tabindex${positive.length ? ": " + positive.join(" | ") : ""}`);
 
+// The unfocused look of everything focusable, so a Tab stop's indicator is something that
+// changes on focus (outline, ring, fill or border on the element, its ::before/::after or its
+// wrapper), not a shadow it always has. Forced colors get an outline from theme.css instead.
+await page.evaluate(() => {
+  const ring = (el, p) => {
+    const s = getComputedStyle(el, p);
+    return `${s.outlineStyle} ${s.outlineWidth} ${s.outlineColor} | ${s.boxShadow} | ${s.backgroundColor} | ${s.borderColor}`;
+  };
+  window.__ring = (el) =>
+    [ring(el, null), ring(el, "::before"), ring(el, "::after"), el.parentElement ? ring(el.parentElement, null) : ""];
+  window.__base = new Map();
+  for (const el of document.querySelectorAll("a[href], button, input, select, textarea, [tabindex], [contenteditable]"))
+    window.__base.set(el, window.__ring(el));
+});
+
 // Describes the focused element and the problems a keyboard user would hit on it.
 const stop = () =>
   page.evaluate(() => {
@@ -39,9 +54,12 @@ const stop = () =>
       (s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0) || (s.boxShadow && s.boxShadow !== "none");
     // A control may draw its ring on a pseudo-element (radio dot) or on its wrapper via
     // :focus-within / :has(:focus-visible) (calendar's transparent native selects).
-    const self = [null, "::before", "::after"].some((p) => shows(getComputedStyle(el, p)));
+    const now = window.__ring(el);
+    const base = window.__base.get(el);
+    const changed = (i) => !base || base[i] !== now[i];
+    const self = [0, 1, 2].some(changed);
     const parent = el.parentElement;
-    const wrap = parent && shows(getComputedStyle(parent));
+    const wrap = parent && changed(3) && shows(getComputedStyle(parent));
     const boxOf = wrap && getComputedStyle(el).opacity === "0" ? parent : el;
     const r = boxOf.getBoundingClientRect();
     const s = getComputedStyle(boxOf);

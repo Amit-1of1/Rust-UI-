@@ -14,7 +14,7 @@ two.
 | Role, name and state of the main components, closed and opened from the keyboard, against snapshots in `tests/e2e/snapshots/aria/` | `tests/e2e/a11y_tree.mjs` |
 | Combobox `aria-controls` points at its list; tooltip describes its trigger only while open; toasts land in a live region | `tests/e2e/a11y_tree.mjs` |
 | Keys per WAI-ARIA APG pattern (tabs, accordion, checkbox, switch, radio, slider, dialog, menu, select, toggle) and focus return | `tests/e2e/keyboard.mjs` |
-| Tab through the whole gallery: every stop visible and showing focus, no positive tabindex, no trap, Shift+Tab retraces | `tests/e2e/walkthrough.mjs` |
+| Tab through the whole gallery: every stop visible and changing when focused, no positive tabindex, no trap, Shift+Tab retraces | `tests/e2e/walkthrough.mjs` |
 | Forced colors (Windows High Contrast) keep control edges and focus outlines | `tests/e2e/forced_colors.mjs` (WebKit cannot emulate it and skips) |
 
 Update the snapshots with `UPDATE_SNAPSHOTS=1 node a11y_tree.mjs` (in `tests/e2e`, against a
@@ -23,8 +23,9 @@ announced change.
 
 ## Found and fixed by the automated pass (2026-10-14)
 
-- Menubar and navbar triggers showed focus only as a fill, which forced colors drop: they now
-  get a focus ring, and their items a transparent outline that forced colors paint.
+- The sidebar's show-on-hover "More" buttons stayed invisible when focused in WebKit, had no
+  focus ring, and below 768px were never shown at all. They now show on their own focus, get a
+  ring, and stay visible on narrow screens.
 - The open Select list had no name; it is now labelled by the Select's label ("Fruit, list box").
 - Pagination's "More pages" text sat inside `aria-hidden`, so the ellipsis item was an empty
   list item; it is read now.

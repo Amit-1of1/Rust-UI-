@@ -43,14 +43,7 @@
   background: var(--light, var(--primary-color-4))
     var(--dark, var(--primary-color-7));
   color: var(--secondary-color-1);
-  /* Transparent, so the fill is the indicator; forced colors paint it (the fill is dropped there). */
-  outline: 2px solid transparent;
-  outline-offset: -2px;
-}
-
-/* The trigger is a Tab stop: a ring like the other triggers, not only a fill. */
-.dx-navbar-trigger:focus-visible {
-  box-shadow: 0 0 0 2px var(--focused-border-color);
+  outline: none;
 }
 
 /* Include the top margin in the navbar content pointer events */
@@ -131,9 +124,7 @@
   background: var(--light, var(--primary-color-4))
     var(--dark, var(--primary-color-7));
   color: var(--secondary-color-1);
-  /* Transparent, so the fill is the indicator; forced colors paint it (the fill is dropped there). */
-  outline: 2px solid transparent;
-  outline-offset: -2px;
+  outline: none;
 }
 
 .dx-navbar-expand-icon {
