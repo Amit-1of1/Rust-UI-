@@ -29,7 +29,9 @@ done
 FAILED=()
 CURRENT=""
 step() { CURRENT="$*"; printf '\n== %s\n' "$*"; }
-e2e() { (cd tests/e2e && "$@") || FAILED+=("$CURRENT"); }
+# A hung script (an engine that stops delivering events) fails its step after 10 minutes.
+LIMIT=(); command -v timeout >/dev/null && LIMIT=(timeout 600)
+e2e() { (cd tests/e2e && "${LIMIT[@]}" "$@") || FAILED+=("$CURRENT"); }
 
 PIDS=()
 cleanup() { for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null || true; done; }

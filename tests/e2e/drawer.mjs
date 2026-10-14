@@ -1,6 +1,6 @@
 // Behaviour of Drawer in the gallery: open, labelled dialog, Escape, drag down to dismiss.
 // Usage: serve the built gallery, then `GALLERY_URL=http://localhost:8765/ node drawer.mjs`.
-import { launch } from "./engine.mjs";
+import { ENGINE, launch } from "./engine.mjs";
 import assert from "node:assert/strict";
 
 const browser = await launch();
@@ -46,25 +46,26 @@ await page.mouse.up();
 await page.waitForTimeout(900);
 if (await page.getByRole("dialog", { name: "Move goal" }).count()) {
   console.log("pointer events during the drag:", (await page.evaluate(() => window.__events)).join(" "));
-  // The same press-and-drag on a bare page, with and without pointer capture, tells a bug in
-  // the kit apart from how this engine's automation delivers events.
-  for (const capture of [false, true]) {
-    const probe = await browser.newPage();
-    await probe.setContent(`<div id=d style="padding:40px;user-select:none"><p id=p>Pick a number</p></div>`);
-    await probe.evaluate((capture) => {
-      window.__ev = [];
-      for (const t of ["pointerdown", "pointermove", "pointerup", "pointercancel", "gotpointercapture", "lostpointercapture"])
-        document.addEventListener(t, (e) => (t !== "pointermove" || !window.__ev.includes("pointermove")) && window.__ev.push(t), true);
-      if (capture) document.getElementById("d").addEventListener("pointerdown", (e) => e.target.setPointerCapture(e.pointerId));
-    }, capture);
-    const b = await probe.locator("#p").boundingBox();
-    await probe.mouse.move(b.x + 10, b.y + 5);
-    await probe.mouse.down();
-    for (let i = 1; i <= 5; i++) await probe.mouse.move(b.x + 10, b.y + 5 + i * 25);
-    await probe.mouse.up();
-    console.log(`bare page, capture ${capture}:`, (await probe.evaluate(() => window.__ev)).join(" "));
-    await probe.close();
-  }
+  // Tell a bug in the kit apart from how this engine's automation delivers input: the same
+  // press-and-drag on a bare page in a fresh browser, with and without pointer capture.
+  const lost = await captureLosesEvents();
+  if (!lost) throw new Error("dragging down dismisses: this engine delivers captured drags on a bare page, so the drawer is at fault");
+  // The engine's synthesized mouse stops delivering moves once a pointer is captured (the bare
+  // page shows the same), so drive the drawer's own pointer handlers with DOM PointerEvents.
+  console.log(`${ENGINE}: captured mouse drags are not delivered by automation; dragging with dispatched PointerEvents`);
+  await page.evaluate(async () => {
+    const el = [...document.querySelectorAll("[role=dialog] p")].find((p) => p.textContent.includes("Pick a number"));
+    const r = el.getBoundingClientRect();
+    const at = (type, y) =>
+      el.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, composed: true, pointerId: 1, pointerType: "mouse", isPrimary: true, buttons: type === "pointerup" ? 0 : 1, clientX: r.x + 20, clientY: y }));
+    at("pointerdown", r.y + 5);
+    for (let i = 1; i <= 10; i++) {
+      at("pointermove", r.y + 5 + i * 25);
+      await new Promise((f) => setTimeout(f, 30));
+    }
+    at("pointerup", r.y + 255);
+  });
+  await page.waitForTimeout(900);
 }
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "dragging down dismisses");
 
@@ -82,3 +83,34 @@ await page.waitForTimeout(700);
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 1, "short drag springs back");
 console.log("drawer: ok");
 await browser.close();
+
+// True when a fresh browser of this engine gets moves and the release on a bare page without
+// pointer capture but not with it. Mouse actions take no timeout, so each try gets 20 s.
+async function captureLosesEvents() {
+  const within = (ms, work) => Promise.race([work, new Promise((done) => setTimeout(() => done(null), ms))]);
+  const probe = await launch();
+  const seen = {};
+  for (const capture of [false, true]) {
+    const p = await probe.newPage();
+    await p.setContent(`<div id=d style="padding:40px;user-select:none"><p id=p>Pick a number</p></div>`);
+    await p.evaluate((capture) => {
+      window.__ev = [];
+      for (const t of ["pointerdown", "pointermove", "pointerup", "gotpointercapture", "lostpointercapture"])
+        document.addEventListener(t, () => (t !== "pointermove" || !window.__ev.includes(t)) && window.__ev.push(t), true);
+      if (capture) document.getElementById("d").addEventListener("pointerdown", (e) => e.target.setPointerCapture(e.pointerId));
+    }, capture);
+    const b = await p.locator("#p").boundingBox();
+    const done = await within(20000, (async () => {
+      await p.mouse.move(b.x + 10, b.y + 5);
+      await p.mouse.down();
+      for (let i = 1; i <= 5; i++) await p.mouse.move(b.x + 10, b.y + 5 + i * 25);
+      await p.mouse.up();
+      return true;
+    })());
+    seen[capture] = (await within(5000, p.evaluate(() => window.__ev.join(" ")))) ?? "(page not answering)";
+    console.log(`bare page, capture ${capture}${done ? "" : " (mouse stuck)"}: ${seen[capture]}`);
+  }
+  await within(5000, probe.close());
+  const full = (s) => s.includes("pointermove") && s.includes("pointerup");
+  return full(seen[false]) && !full(seen[true]);
+}
