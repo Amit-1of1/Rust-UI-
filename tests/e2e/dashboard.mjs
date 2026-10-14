@@ -144,6 +144,8 @@ check(all !== fewer, `turning off Refunded changes the rows (${all} -> ${fewer})
 // Settings: the time zone is a labelled form field with its initial value.
 await nav(page, "Settings");
 const zone = page.getByRole("combobox", { name: "Time zone" });
+// Split release builds load the Settings page on first open.
+await zone.first().waitFor({ timeout: 10000 }).catch(() => {});
 check((await zone.count()) === 1, "time zone combobox is named by its label");
 
 // One theme state: the header switch and the customizer agree both ways.
