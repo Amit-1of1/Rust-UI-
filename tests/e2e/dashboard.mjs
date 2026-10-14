@@ -81,11 +81,16 @@ const status = () => page.locator(".db-table-footer [role='status']").textConten
 // In a split build the palette and the Customers page load on first use: wait for each.
 await page.keyboard.press("Control+k");
 await page.getByRole("combobox", { name: /search commands/i }).waitFor();
+// Focus moves in after the open dialog mounts; keys typed before that are lost.
+const focused = await page.waitForFunction(() => document.activeElement?.getAttribute("role") === "combobox",
+  null, { timeout: 10000 }).then(() => true, () => false);
+check(focused, "palette: focus moves to the search box");
 await page.keyboard.type("customers");
 await page.keyboard.press("Enter");
 await page.waitForFunction(() => document.querySelector("h1.db-title")?.textContent === "Customers",
   null, { timeout: 10000 }).catch(() => {});
-check((await heading(page)) === "Customers", "palette: 'customers' + Enter opens Customers");
+const after = await heading(page);
+check(after === "Customers", `palette: 'customers' + Enter opens Customers (${after})`);
 const before = await status();
 check(/of 48 customers/.test(before), `48 customers listed (${before})`);
 
