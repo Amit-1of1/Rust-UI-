@@ -22,8 +22,11 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-step() { printf '\n== %s\n' "$*"; }
-e2e() { (cd tests/e2e && "$@"); }
+# Every check runs even after one fails, so one run shows every engine difference.
+FAILED=()
+CURRENT=""
+step() { CURRENT="$*"; printf '\n== %s\n' "$*"; }
+e2e() { (cd tests/e2e && "$@") || FAILED+=("$CURRENT"); }
 
 PIDS=()
 cleanup() { for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null || true; done; }
@@ -98,4 +101,9 @@ for engine in ${BROWSERS//,/ }; do
   fi
 done
 
+if [ ${#FAILED[@]} -gt 0 ]; then
+  printf '\n%s browser check(s) failed:\n' "${#FAILED[@]}"
+  printf '  %s\n' "${FAILED[@]}"
+  exit 1
+fi
 printf '\nBrowser checks passed on: %s\n' "$BROWSERS"

@@ -40,7 +40,14 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 
 // Filter narrows the component list.
 await page.getByLabel("Filter components").fill("date");
-const names = await nav.getByRole("list").nth(1).getByRole("link").allInnerTexts();
+// The list re-renders after the input event; Firefox gets there a frame later than Chromium.
+const list = nav.getByRole("list").nth(1).getByRole("link");
+let names = [];
+for (let i = 0; i < 20; i++) {
+  names = await list.allInnerTexts();
+  if (names.length > 0 && names.every((n) => /date/i.test(n))) break;
+  await page.waitForTimeout(100);
+}
 assert.ok(names.length > 0 && names.every((n) => /date/i.test(n)), `filter result: ${names}`);
 
 // Code blocks that can scroll are keyboard reachable.
