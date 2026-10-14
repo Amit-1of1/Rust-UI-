@@ -3,6 +3,11 @@
 //!
 //! `?rows=N` sets the number of generated tasks; `?bench` swaps in the js-framework-benchmark
 //! style page that `bench/run.mjs` drives.
+//!
+//! Built with `--wasm-split --features wasm-split` (see bench/README.md), everything but the
+//! Tasks screen is a `#[component(lazy)]` in its own wasm file: the Stats and Settings tabs and
+//! the command menu download the first time they are shown, and the New task dialog right after
+//! the board is up. Without that flag they are ordinary components.
 
 use dioxus::prelude::*;
 use std::rc::Rc;
@@ -123,19 +128,24 @@ fn Board() -> Element {
     let mut new_open = use_signal(|| false);
     let mut page_size = use_signal(|| 20usize);
     use_hotkey("k", move || palette.set(true));
+    // The command menu mounts on first open, so its code downloads then, and stays mounted so
+    // closing still animates. The New task dialog's code downloads in the background as soon
+    // as the board is up. A dialog that mounts already open misses its focus trap, so each one
+    // stays closed until it has mounted (`on_ready`).
+    let mut palette_seen = use_signal(|| false);
+    let mut palette_ready = use_signal(|| false);
+    let mut new_ready = use_signal(|| false);
+    use_effect(move || {
+        if palette() {
+            palette_seen.set(true);
+        }
+    });
 
     let mut toggle_dark = move || {
         let v = !dark();
         dark.set(v);
         apply_theme(v);
     };
-
-    let commands = vec![
-        CommandItem::new("new", "New task"),
-        CommandItem::new("theme", "Toggle dark mode"),
-        CommandItem::new("stats", "Go to Stats"),
-        CommandItem::new("settings", "Go to Settings"),
-    ];
 
     rsx! {
         header { class: "tb-header",
@@ -169,31 +179,66 @@ fn Board() -> Element {
                     TasksTab { tasks: tasks(), page_size: page_size(), on_new: move |_| new_open.set(true) }
                 }
                 TabContent { index: 1usize, value: "stats".to_string(),
-                    StatsTab { tasks: tasks() }
+                    SuspenseBoundary { fallback: |_| rsx! { Spinner {} },
+                        StatsTab { tasks: tasks() }
+                    }
                 }
                 TabContent { index: 2usize, value: "settings".to_string(),
-                    SettingsTab { page_size: page_size(), on_page_size: move |n| page_size.set(n) }
+                    SuspenseBoundary { fallback: |_| rsx! { Spinner {} },
+                        SettingsTab { page_size: page_size(), on_page_size: move |n| page_size.set(n) }
+                    }
                 }
             }
         }
-        NewTask {
-            open: new_open(),
-            on_open_change: move |v| new_open.set(v),
-            next_id: tasks.read().len() + 1,
-            on_save: move |t: Task| tasks.write().insert(0, t),
+        SuspenseBoundary { fallback: |_| rsx! {},
+            NewTask {
+                open: new_open() && new_ready(),
+                on_open_change: move |v| new_open.set(v),
+                on_ready: move |_| new_ready.set(true),
+                next_id: tasks.read().len() + 1,
+                on_save: move |t: Task| tasks.write().insert(0, t),
+            }
         }
-        CommandDialog {
-            open: palette(),
-            on_open_change: move |v| palette.set(v),
-            items: commands,
-            on_select: move |id: String| match id.as_str() {
-                "new" => {
-                    tab.set("tasks".into());
-                    new_open.set(true);
+        if palette_seen() {
+            SuspenseBoundary { fallback: |_| rsx! {},
+                Palette {
+                    open: palette() && palette_ready(),
+                    on_open_change: move |v| palette.set(v),
+                    on_ready: move |_| palette_ready.set(true),
+                    on_select: move |id: String| match id.as_str() {
+                        "new" => {
+                            tab.set("tasks".into());
+                            new_open.set(true);
+                        }
+                        "theme" => toggle_dark(),
+                        other => tab.set(other.into()),
+                    },
                 }
-                "theme" => toggle_dark(),
-                other => tab.set(other.into()),
-            },
+            }
+        }
+    }
+}
+
+#[component(lazy)]
+fn Palette(
+    open: bool,
+    on_open_change: EventHandler<bool>,
+    on_ready: EventHandler<()>,
+    on_select: EventHandler<String>,
+) -> Element {
+    use_effect(move || on_ready.call(()));
+    let items = vec![
+        CommandItem::new("new", "New task"),
+        CommandItem::new("theme", "Toggle dark mode"),
+        CommandItem::new("stats", "Go to Stats"),
+        CommandItem::new("settings", "Go to Settings"),
+    ];
+    rsx! {
+        CommandDialog {
+            open,
+            on_open_change: move |v| on_open_change.call(v),
+            items,
+            on_select: move |id| on_select.call(id),
         }
     }
 }
@@ -227,13 +272,15 @@ fn TasksTab(tasks: Vec<Task>, page_size: usize, on_new: EventHandler<()>) -> Ele
     }
 }
 
-#[component]
+#[component(lazy)]
 fn NewTask(
     open: bool,
     on_open_change: EventHandler<bool>,
+    on_ready: EventHandler<()>,
     next_id: usize,
     on_save: EventHandler<Task>,
 ) -> Element {
+    use_effect(move || on_ready.call(()));
     let form = use_form();
     let title = form.field(vec![custom(|v| {
         if v.trim().is_empty() {
@@ -310,7 +357,7 @@ fn NewTask(
     }
 }
 
-#[component]
+#[component(lazy)]
 fn StatsTab(tasks: Vec<Task>) -> Element {
     let count = |s: &str| tasks.iter().filter(|t| t.status == s).count() as f32;
     let data = vec![
@@ -334,7 +381,7 @@ fn StatsTab(tasks: Vec<Task>) -> Element {
     }
 }
 
-#[component]
+#[component(lazy)]
 fn SettingsTab(page_size: usize, on_page_size: EventHandler<usize>) -> Element {
     rsx! {
         div { class: "tb-settings",
@@ -368,6 +415,13 @@ struct BenchItem {
 
 #[component]
 fn Bench() -> Element {
+    rsx! {
+        SuspenseBoundary { fallback: |_| rsx! {}, BenchPage {} }
+    }
+}
+
+#[component(lazy)]
+fn BenchPage() -> Element {
     let mut rows = use_signal(Vec::<BenchItem>::new);
     let mut next = use_signal(|| 0usize);
     let selected = use_selection::<usize>();

@@ -27,6 +27,26 @@ These are from `results/latest.json`: release builds served as static files, hea
 
 The wasm file is most of the Rust download. Once the bytes have arrived, startup is a three-way tie. The size cost shows up only on the network.
 
+### Shrinking the Rust download
+
+The table above is the plain `dx build --release`. [`scripts/release-web.sh trial`](../scripts/release-web.sh) adds two steps:
+
+- **One CSS file.** `rust-ui postbuild` puts the theme and the stylesheets of the components the app uses into one file linked from `index.html`, and `ui::ThemeStyles` stops components from linking their own. A stylesheet counts as used when its hashed class names appear in the wasm.
+- **Split wasm.** `dx build --wasm-split` with the Stats and Settings tabs, the New task dialog, the command menu and the bench page as `#[component(lazy)]`. Each gets its own wasm file. The dialog downloads in the background as soon as the board is up, and the rest on first open.
+
+| Rust only | Before | One CSS file | Both |
+|---|---|---|---|
+| Requests for the first screen | 15 | 6 | 6 |
+| First screen, brotli | 366 KB | 368 KB | **287 KB** |
+| Main wasm, brotli | 349 KB | 351 KB | **268 KB** |
+| Styled first screen on slow 4G (served brotli, 1.6 Mbps, 150 ms RTT) | 2.76 s | 2.60 s | **2.16 s** |
+| Ready to use (CPU slowed 4x) | 530 ms | | 450 ms |
+| Everything, after opening every screen, brotli | 368 KB | 368 KB | 444 KB |
+
+Medians of 7 runs on 2026-10-13, measured with scripts like `bench/run.mjs` against a server that sends brotli. The first screen is 22% smaller and comes up 0.6 s sooner on slow 4G. The later files hold 75 KB (the dialog, fetched right after start) and 16, 43 and 24 KB (Stats, Settings, command menu). The whole app grows by 76 KB, because split files repeat some shared code. DOM operations, keyboard checks (11/11) and axe (0 violations) didn't change.
+
+The CSS file alone saves requests, not bytes: the component styles are 6 KB brotli in total.
+
 ### DOM operations (`?bench`, ms, lower is better)
 
 Each time runs from the start of the click to the end of the last paint it causes, read from a Chrome trace, as js-framework-benchmark does.
@@ -97,17 +117,17 @@ Better:
 
 Worse:
 
-- The download is 3.7x React's and 5.3x Svelte's.
+- The download is 3.7x React's and 5.3x Svelte's. With the split build below it is 2.8x and 4x for the first screen.
 - Release builds are slow: 45 s for a one-line change. Day-to-day work uses `dx serve`, which hot-reloads.
-- Every component's CSS ships as its own file, so it makes 15 requests where the others make 3.
+- A plain build ships every component's CSS as its own file, so it makes 15 requests where the others make 3. `scripts/release-web.sh` brings that to 6.
 - Svelte is still faster at updating many rows in place, and React at creating 1,000 rows.
 
 ## Ideas for the gaps that remain
 
-These are untried. Each one needs the user's go-ahead, and the last one breaks a rule in GUARDRAILS.
+The first two are done (see [Shrinking the Rust download](#shrinking-the-rust-download)). The rest are untried. Each one needs the user's go-ahead, and the last one breaks a rule in GUARDRAILS.
 
-1. **Split the wasm by screen.** Dioxus 0.7 has an experimental `dx build --wasm-split` that loads code marked `#[wasm_split]` on first use. The Stats and Settings tabs, the dialogs and the command menu could load later, so the first download carries only the Tasks screen.
-2. **One CSS file for the components an app uses.** A `rust-ui css` command (or build script) could concatenate the styles of the components the app imports. That turns 15 requests into 2.
+1. ~~**Split the wasm by screen.**~~ Done with `#[component(lazy)]` and `dx build --wasm-split`.
+2. ~~**One CSS file for the components an app uses.**~~ Done as `rust-ui postbuild`.
 3. **A keyed list primitive.** Something like `use_keyed_list`, where each row's data lives in a signal owned by that row and keyed by id rather than position, so updates touch only the changed rows and moves touch none. This is the Stores idea, keyed properly.
 4. **A size budget in the gate.** Fail `scripts/check.sh` when the trial's brotli wasm grows past a set limit, and use `twiggy` to show what grew. The biggest items today are Dioxus's own runtime, keyboard-name tables and JSON code used by `document::eval`.
 5. **Compile templates to direct DOM calls** (how Svelte and Solid get their speed). This would bypass Dioxus's virtual DOM, which counts as building a renderer, so GUARDRAILS rules it out unless that decision changes.
@@ -115,8 +135,8 @@ These are untried. Each one needs the user's go-ahead, and the last one breaks a
 ## Running it
 
 ```sh
-# Rust: release build (needs wasm-opt on PATH)
-dx build --release --platform web -p trial
+# Rust: release build, split, one CSS file (needs dx 0.7.10 and wasm-opt on PATH)
+scripts/release-web.sh trial
 python3 -m http.server 8801 -d target/dx/trial/release/web/public &
 # React and Svelte
 (cd bench/react && npm ci && npm run build) && python3 -m http.server 8802 -d bench/react/dist &

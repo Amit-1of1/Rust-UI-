@@ -60,6 +60,12 @@ enum Command {
         #[arg(long, default_value = "brand")]
         name: String,
     },
+    /// After `dx build --release --platform web`: drop debug names from the wasm, and put the
+    /// theme and the component stylesheets the app uses into one file linked from index.html.
+    Postbuild {
+        /// The build's public folder, e.g. `target/dx/app/release/web/public`.
+        public: PathBuf,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -165,6 +171,18 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 return Err(format!("`{name}` must be letters, digits or `-`"));
             }
             print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
+        }
+        Command::Postbuild { public } => {
+            use rust_ui_cli::postbuild::{bundle_css, strip_wasm};
+            let saved = strip_wasm(&public)?;
+            println!("wasm: {} KB of names and debug info removed", saved / 1024);
+            let css = bundle_css(&public)?;
+            println!(
+                "css: assets/{} holds {} stylesheets ({} unused left out)",
+                css.file,
+                css.held.len(),
+                css.unused.len()
+            );
         }
         Command::Diff { names, dest } => {
             let reg = load(root)?;
