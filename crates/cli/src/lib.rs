@@ -10,6 +10,7 @@
 
 pub mod docsgen;
 pub mod doctor;
+pub mod llms;
 pub mod manifest;
 pub mod postbuild;
 pub mod scaffold;

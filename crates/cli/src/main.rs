@@ -69,6 +69,9 @@ enum Command {
         /// The build's public folder, e.g. `target/dx/app/release/web/public`.
         public: PathBuf,
     },
+    /// Print a component's page for coding agents (docs, props, example), or the index
+    /// (`llms.txt`) without a name.
+    Docs { name: Option<String> },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -102,11 +105,13 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let path = root.join("registry.json");
             if check {
                 let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
+                let llms = rust_ui_cli::llms::stale(root).map_err(err)?;
                 if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
                     || !stale.is_empty()
+                    || !llms.is_empty()
                 {
                     eprintln!(
-                        "registry.json or a component.json is out of date; run `rust-ui registry`"
+                        "registry.json, a component.json or the llms.txt files are out of date; run `rust-ui registry`"
                     );
                     return Ok(ExitCode::FAILURE);
                 }
@@ -119,6 +124,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                     "wrote {}",
                     rust_ui_cli::docsgen::write(root).map_err(err)?.display()
                 );
+                let n = rust_ui_cli::llms::write(root).map_err(err)?;
+                println!("wrote {n} llms.txt files");
             }
         }
         Command::Init { dest } => {
@@ -160,7 +167,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             .map_err(err)?;
             rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
             rust_ui_cli::docsgen::write(root).map_err(err)?;
-            println!("updated registry.json, component.json files and the docs index");
+            rust_ui_cli::llms::write(root).map_err(err)?;
+            println!("updated registry.json, component.json files, the docs index and llms.txt");
         }
         Command::Doctor { strict } => {
             use rust_ui_cli::doctor::{run as doctor, Level};
@@ -202,6 +210,21 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 css.held.len(),
                 css.unused.len()
             );
+        }
+        Command::Docs { name } => {
+            use rust_ui_cli::llms::{index, page};
+            let reg = build(root).map_err(err)?;
+            match name {
+                None => print!("{}", index(root, &reg).map_err(err)?),
+                Some(name) => match page(root, &reg, &name).map_err(err)? {
+                    Some(text) => print!("{text}"),
+                    None => {
+                        return Err(format!(
+                            "unknown component or block `{name}`; `rust-ui list` shows them all"
+                        ))
+                    }
+                },
+            }
         }
         Command::Diff {
             names,
