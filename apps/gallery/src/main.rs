@@ -3,8 +3,8 @@
 
 use dioxus::prelude::*;
 use ui::motion::{
-    use_reduced_motion, use_spring, AnimatePresence, FlipItem, FlipList, Pop, SpringPreset,
-    SwipeDismiss,
+    use_reduced_motion, use_spring, AnimatePresence, DragAxis, DragBounds, DragEnd, Draggable,
+    FlipItem, FlipList, LayoutGroup, LayoutItem, PinchZoom, Pop, SpringPreset, SwipeDismiss,
 };
 use ui::prelude::*;
 
@@ -198,6 +198,26 @@ fn MoreSections() -> Element {
             blurb: "Drag past 40% or flick to dismiss; Delete works from the keyboard.",
             SwipeDemo {}
         }
+        Section {
+            title: "Drag with momentum",
+            blurb: "Throw the card: it keeps the pointer's speed, bounces off the edges and stretches past them. Arrow keys move it, Shift moves further, Home brings it back.",
+            DragDemo {}
+        }
+        Section {
+            title: "Snap points",
+            blurb: "A throw lands on the stop nearest to where it would have coasted. Arrow keys jump between stops.",
+            SnapDemo {}
+        }
+        Section {
+            title: "Pinch to zoom",
+            blurb: "Two fingers, Ctrl + scroll or a double click zoom about the pointer; drag to pan once zoomed. From the keyboard: + and -, arrows to pan, 0 to reset.",
+            PinchDemo {}
+        }
+        Section {
+            title: "Shared layout",
+            blurb: "The highlight travels to the chosen option, and the cards slide to their new places when shuffled.",
+            LayoutDemo {}
+        }
     }
 }
 
@@ -336,6 +356,147 @@ fn SwipeDemo() -> Element {
             }
             if cards().is_empty() {
                 Button { onclick: move |_| cards.set(vec![1, 2, 3]), "Reset cards" }
+            }
+        }
+    }
+}
+
+/// Card size and the area it is thrown around in, in pixels (the CSS uses the same numbers).
+const DRAG_AREA: (f64, f64) = (320.0, 192.0);
+const DRAG_CARD: f64 = 80.0;
+
+#[component]
+fn DragDemo() -> Element {
+    let mut rest = use_signal(|| (0.0, 0.0));
+    let (x, y) = rest();
+    rsx! {
+        div { class: "gallery-drag-area", id: "drag-area",
+            Draggable {
+                id: "drag-card",
+                class: "gallery-drag-card",
+                "aria-label": "Throwable card",
+                "aria-describedby": "drag-status",
+                bounds: DragBounds::new(0.0, DRAG_AREA.0 - DRAG_CARD, 0.0, DRAG_AREA.1 - DRAG_CARD),
+                on_drag_end: move |end: DragEnd| rest.set((end.x, end.y)),
+                "Throw me"
+            }
+        }
+        p { id: "drag-status", class: "gallery-status", "aria-live": "polite",
+            "Resting at {x:.0}, {y:.0}"
+        }
+    }
+}
+
+const SNAP_STOPS: [&str; 3] = ["Off", "Half", "Full"];
+const SNAP_GAP: f64 = 120.0;
+
+#[component]
+fn SnapDemo() -> Element {
+    let mut stop = use_signal(|| 0_usize);
+    let points: Vec<(f64, f64)> = (0..SNAP_STOPS.len())
+        .map(|i| (i as f64 * SNAP_GAP, 0.0))
+        .collect();
+    let label = SNAP_STOPS[stop()];
+    rsx! {
+        div { class: "gallery-snap-rail",
+            for (i , name) in SNAP_STOPS.iter().copied().enumerate() {
+                span { key: "{name}", class: "gallery-snap-stop", style: "inset-inline-start: {i as f64 * SNAP_GAP}px;", {name} }
+            }
+            Draggable {
+                id: "snap-knob",
+                class: "gallery-snap-knob",
+                "aria-label": "Level",
+                "aria-describedby": "snap-status",
+                axis: DragAxis::X,
+                snap_points: points,
+                preset: SpringPreset::Bouncy,
+                on_drag_end: move |end: DragEnd| {
+                    stop.set(((end.x / SNAP_GAP).round().max(0.0) as usize).min(SNAP_STOPS.len() - 1));
+                },
+            }
+        }
+        p { id: "snap-status", class: "gallery-status", "aria-live": "polite", "Level: {label}" }
+    }
+}
+
+#[component]
+fn PinchDemo() -> Element {
+    let mut scale = use_signal(|| 1.0_f64);
+    let percent = (scale() * 100.0).round();
+    rsx! {
+        PinchZoom {
+            id: "pinch",
+            class: "gallery-pinch",
+            "aria-label": "Zoomable pattern",
+            "aria-describedby": "pinch-status",
+            on_zoom: move |s| scale.set(s),
+            svg {
+                view_box: "0 0 320 192",
+                width: "320",
+                height: "192",
+                "aria-hidden": "true",
+                for row in 0..6 {
+                    for col in 0..10 {
+                        circle {
+                            key: "{row}-{col}",
+                            cx: "{16 + col * 32}",
+                            cy: "{16 + row * 32}",
+                            r: "{4 + (row + col) % 4 * 3}",
+                            fill: "var(--secondary-color-4)",
+                        }
+                    }
+                }
+            }
+        }
+        p { id: "pinch-status", class: "gallery-status", "Zoom: {percent}%" }
+    }
+}
+
+const LAYOUT_OPTIONS: [&str; 3] = ["Day", "Week", "Month"];
+
+#[component]
+fn LayoutDemo() -> Element {
+    let mut chosen = use_signal(|| 0_usize);
+    let mut cards = use_signal(|| vec![1_u32, 2, 3, 4]);
+    rsx! {
+        LayoutGroup {
+            div { class: "gallery-segmented", role: "group", "aria-label": "Range",
+                for (i , name) in LAYOUT_OPTIONS.iter().copied().enumerate() {
+                    div { key: "{name}", class: "gallery-segment-slot",
+                        if chosen() == i {
+                            LayoutItem {
+                                layout_id: "range-highlight",
+                                class: "gallery-segment-highlight",
+                                "data-highlight": "true",
+                            }
+                        }
+                        button {
+                            r#type: "button",
+                            class: "gallery-segment",
+                            "aria-pressed": if chosen() == i { "true" } else { "false" },
+                            onclick: move |_| chosen.set(i),
+                            {name}
+                        }
+                    }
+                }
+            }
+        }
+        LayoutGroup {
+            div { class: "gallery-row", style: "margin-block: 1rem 0.5rem;",
+                Button {
+                    variant: ButtonVariant::Outline,
+                    onclick: move |_| {
+                        let mut c = cards.write();
+                        c.rotate_left(1);
+                        c.swap(0, 2);
+                    },
+                    "Shuffle"
+                }
+            }
+            div { id: "layout-cards", class: "gallery-layout-cards",
+                for id in cards() {
+                    LayoutItem { key: "{id}", class: "gallery-layout-card", "data-card": "{id}", "{id}" }
+                }
             }
         }
     }

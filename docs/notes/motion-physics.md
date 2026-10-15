@@ -1,0 +1,9 @@
+# Motion physics, gestures and layout animation
+
+- `motion::physics` is our own maths; `MotionValue` drives it with dioxus-motion's timer (`MotionTime::delay`: `requestAnimationFrame` on web, Tokio elsewhere). Without a timer (no Tokio runtime, `web` feature off on wasm) animations jump to their end instead of hanging.
+- Reduced motion: every `MotionValue` animation jumps to its end. Pointer-following (`set` while dragging) still happens; that is direct manipulation, not decoration. `tests/e2e/motion.mjs` checks the jumps with `reducedMotion: "reduce"`.
+- A task spawned on a component can still be polled after the component unmounts, and its signals then panic on `write()`. The frame loop and the layout measurement use `try_write`/`try_peek` and stop quietly; do the same in any new per-frame task.
+- An empty `style` attribute is not written to the DOM, so going from `style: "transform: ..."` to `style: ""` leaves the last frame in place. `LayoutItem` writes `transform: none;` at rest.
+- `LayoutItem` measures synchronously on the web (`MountedData::downcast::<web_sys::Element>()` then `getBoundingClientRect`), in page coordinates (scroll added), and falls back to async `get_client_rect` on desktop. `LayoutGroup` snapshots all items on pointer and key down: Playwright (and fast users) send down, up and click within one tick, before an async measurement would return. Items also re-measure quietly 500 ms after mount, because the gallery's stylesheet arrives after the first render.
+- `PinchZoom` calls `prevent_default` on Ctrl + wheel (trackpad pinches arrive this way); `motion.mjs` checks that the page's visual viewport stays unzoomed on Chromium.
+- Two-finger pinch is tested with synthetic `PointerEvent`s (two `pointerId`s); Dioxus' delegated listeners receive them like real touches.

@@ -105,6 +105,8 @@ for engine in ${BROWSERS//,/ }; do
 
   # Contrast of the accent presets depends on the CSS, not the engine: Chromium only.
   if [ "$engine" = chromium ]; then
+    # Timing-sensitive (samples frames mid-animation); verified on Chromium only so far.
+    step "[$engine] springs, gestures, layout animation (gallery)"; e2e env GALLERY_URL=$G node motion.mjs
     for accent in blue green violet rose orange; do
       for scheme in light dark; do
         step "[$engine] axe gallery ($accent, $scheme)"
