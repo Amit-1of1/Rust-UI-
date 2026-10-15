@@ -49,6 +49,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Context menu](llms/context_menu.md): The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element
 - [DataTable](llms/data_table.md): A table with sorting, a filter box, pagination and optional row selection, built on `Table`
 - [Date picker](llms/date_picker.md): The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value
+- [DateTimePicker](llms/date_time_picker.md): A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled
 - [Dialog](llms/dialog.md): The dialog component can be used to display additional information or actions related to an item
 - [Drag and drop list](llms/drag_and_drop_list.md): Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input
 - [Drawer](llms/drawer.md): A panel that slides up from the bottom and can be dragged down to dismiss
@@ -94,6 +95,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Tag group](llms/tag_group.md): A Tag Group is a focusable group of tags (labels, categories, filters and similar items) with keyboard navigation, optional selection and removal
 - [Textarea](llms/textarea.md): The textarea element is used to allow users to enter multi-line text input in a user interface
 - [ThemeCustomizer](llms/theme_customizer.md): Pick an accent colour, corner radius and light/dark mode for the whole page
+- [TimePicker](llms/time_picker.md): A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button
 - [Toast](llms/toast.md): The Toast component is used to display brief messages to the user, typically for notifications or alerts
 - [Toggle](llms/toggle.md): The Toggle component is used to create a toggle button that can be pressed or unpressed
 - [Toggle group](llms/toggle_group.md): The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set

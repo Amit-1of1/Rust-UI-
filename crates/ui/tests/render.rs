@@ -1671,3 +1671,79 @@ fn pagination_pager_renders_buttons_and_disables_the_ends() {
     assert!(!next.contains("aria-disabled"), "{html}");
     assert!(html.contains(r#"aria-current="page""#), "{html}");
 }
+
+#[test]
+fn time_picker_renders_named_spinbuttons() {
+    let html = render(|| {
+        rsx! {
+            TimePicker {
+                value: Time::from_hms(14, 5, 0).ok(),
+                hour_cycle: HourCycle::H12,
+                name: "start",
+            }
+        }
+    });
+    assert!(
+        html.contains(r#"role="group""#) && html.contains(r#"aria-label="Time""#),
+        "{html}"
+    );
+    assert_eq!(
+        html.matches(r#"role="spinbutton""#).count(),
+        3,
+        "hours, minutes, AM/PM: {html}"
+    );
+    for text in [
+        r#"aria-label="Hours""#,
+        r#"aria-valuenow="2""#,
+        r#"aria-valuemin="1""#,
+        r#"aria-valuemax="12""#,
+        r#"aria-valuetext="05""#,
+        r#"aria-valuetext="PM""#,
+        r#"value="14:05""#,
+        r#"name="start""#,
+    ] {
+        assert!(html.contains(text), "missing {text}: {html}");
+    }
+}
+
+#[test]
+fn time_picker_marks_empty_segments_and_links_a_label() {
+    let html = render(|| {
+        rsx! {
+            TimePicker { labelled_by: "lbl", first_segment_id: "first", invalid: true, described_by: "err" }
+        }
+    });
+    assert!(html.contains(r#"aria-valuetext="Empty""#), "{html}");
+    assert!(!html.contains("aria-valuenow"), "no value yet: {html}");
+    assert!(html.contains(r#"id="first""#), "{html}");
+    assert!(
+        html.contains(r#"aria-labelledby="first lbl""#),
+        "segment named by itself and the label: {html}"
+    );
+    assert!(
+        !html.contains(r#"aria-label="Time""#),
+        "the label replaces the default name: {html}"
+    );
+    assert!(
+        html.contains(r#"aria-invalid="true""#) && html.contains(r#"aria-describedby="err""#),
+        "{html}"
+    );
+}
+
+#[test]
+fn date_time_picker_renders_a_date_and_a_time() {
+    let html = render(|| {
+        rsx! {
+            DateTimePicker { value: parse_iso_date_time("2026-05-07T09:30"), name: "when" }
+        }
+    });
+    assert!(html.contains(r#"aria-label="Date and time""#), "{html}");
+    for text in [
+        "2026",
+        r#"aria-valuetext="09""#,
+        r#"aria-valuetext="30""#,
+        r#"value="2026-05-07T09:30""#,
+    ] {
+        assert!(html.contains(text), "missing {text}: {html}");
+    }
+}

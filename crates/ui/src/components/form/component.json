@@ -18,6 +18,10 @@
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "date_time_picker"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "field"
     },
     {
@@ -31,6 +35,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "textarea"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "time_picker"
     }
   ],
   "description": "Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.",

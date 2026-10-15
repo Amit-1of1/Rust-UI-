@@ -101,6 +101,18 @@ pub struct UiStrings {
     pub slides: String,
     // Date picker
     pub show_calendar: String,
+    // Time picker
+    pub time: String,
+    pub date_and_time: String,
+    pub hours: String,
+    pub minutes: String,
+    pub seconds: String,
+    /// Name of the AM/PM segment.
+    pub day_period: String,
+    pub am: String,
+    pub pm: String,
+    /// Read for a time segment that has no value yet.
+    pub empty_value: String,
     // Chart
     pub no_data: String,
     // Link

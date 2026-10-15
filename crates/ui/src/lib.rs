@@ -69,6 +69,7 @@ pub mod prelude {
     pub use crate::components::context_menu::*;
     pub use crate::components::data_table::*;
     pub use crate::components::date_picker::*;
+    pub use crate::components::date_time_picker::*;
     pub use crate::components::dialog::*;
     pub use crate::components::drawer::*;
     pub use crate::components::dropdown_menu::*;
@@ -111,6 +112,7 @@ pub mod prelude {
     pub use crate::components::tabs::*;
     pub use crate::components::textarea::*;
     pub use crate::components::theme_customizer::*;
+    pub use crate::components::time_picker::*;
     pub use crate::components::toast::*;
     pub use crate::components::toggle::*;
     pub use crate::components::toggle_group::*;
