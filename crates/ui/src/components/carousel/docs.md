@@ -9,7 +9,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport.
+Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 

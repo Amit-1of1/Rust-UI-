@@ -4,8 +4,8 @@ The Select component is used to create a dropdown menu that allows users to sele
 
 ```rust
 Select::<String> {
-    value: "option1",
-    on_value_change: |value: String| {
+    selected: "option1".to_string(),
+    on_value_change: |value: Option<String>| {
         // Handle the change in selected value.
     },
     SelectGroup {
@@ -18,6 +18,10 @@ Select::<String> {
     }
 }
 ```
+
+## Controlled values
+
+`selected` takes a plain value (`selected: filters.read().sort`): the select shows whatever the parent passes on each render, with no signal or `use_memo` adapter. `value` takes a `ReadSignal<Option<T>>` when the state already lives in one (`value: Some(choice.into())`), and `default_value` leaves the select uncontrolled. In forms, `SelectField` binds a `use_form` field instead.
 
 ## Labelling
 

@@ -132,13 +132,14 @@ await page.waitForTimeout(200);
 check(/of 1 customers/.test(await status()), "filter narrows to the new customer");
 await page.getByRole("button", { name: "Actions for Edsger Dijkstra" }).click();
 await page.getByRole("option", { name: "Delete" }).click();
-// Toasts are role="alertdialog" too (dioxus-primitives), so match the dialog by name.
 const alert = page.getByRole("alertdialog", { name: "Delete customer?" });
 await alert.waitFor();
 check((await alert.textContent()).includes("Edsger Dijkstra"), "confirmation names the customer");
 await alert.getByRole("button", { name: "Delete" }).click();
 await page.waitForTimeout(300);
 check(await page.getByText("No customers match").isVisible(), "empty state after deleting the only match");
+// The "deleted" toast is a status message, not a second alertdialog (GAPS.md 13).
+check((await page.getByRole("alertdialog").count()) === 0, "the toast is not an alertdialog");
 await page.getByRole("button", { name: "Clear filters" }).click();
 check(/of 48 customers/.test(await status()), "clear filters shows all 48 again");
 

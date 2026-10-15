@@ -100,6 +100,29 @@ pub fn CardAction(
     }
 }
 
+/// An edge-to-edge image, video or map in a card: no side padding, and as the first (or
+/// last) child it meets the card's top (or bottom) edge with the card's rounded corners.
+/// An `img` inside is cropped to fill it; give it an `alt`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardMedia(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    let (class, attributes) = merge_class(Styles::dx_card_media.to_string(), attributes);
+    rsx! {
+        div {
+            class,
+            "data-slot": "card-media",
+            ..attributes,
+            {children}
+        }
+    }
+}
+
 #[component]
 pub fn CardContent(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,

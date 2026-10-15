@@ -20,23 +20,27 @@ Severity: **High** means a real app hits it early and the result is broken or in
 | 8 | Low | `Accordion` set an inline `width: 15rem`, so it never filled its column. | Removed; it fills its container (the demos already cap their width). Snapshot updated. |
 | 9 | Medium | Test bug, not kit: `dashboard.mjs` clicked the "Dark mode" switch for its dark pass, but under a dark system scheme the switch is already on, so the click turned dark mode **off** and the "dark" axe scans ran on the light theme. | Both scripts now check that the switch follows the system and don't click it. |
 
-## Open (reported, not fixed here)
+## Fixed in the follow-up (PR #40)
 
-| # | Severity | Gap | Workaround in the app | Suggested fix |
-|---|---|---|---|---|
-| 10 | Medium | Kit links are plain `<a href>`: `BreadcrumbLink`, `TextLink`, `PaginationLink`, `SidebarMenuButton`. Under the router a plain `href` is a full page load, and on a static host a deep path 404s. | `onclick` + `prevent_default()` + `navigator().push(..)` on `BreadcrumbLink`; the router's own `Link` with app CSS for nav links (it sets `aria-current="page"` itself). | A `router` feature with thin wrappers that render the router's `Link` with the kit's look, or an `as` render prop on the link components. |
-| 11 | Medium | Nothing moves focus or announces the page after an in-app navigation; keyboard and screen reader users stay on the link they used. | An effect in the layout focuses `<main tabindex="-1">` when the route changes (not on first load). `booking.mjs` checks it. | A small `RouteFocus` helper (or a documented pattern) next to the router feature. |
-| 12 | Medium | No number input: a guest count needs a spin button with -/+, min/max and arrow keys. | Two icon `Button`s and an `<output aria-live>` inside a labelled group. | `NumberField` (`role="spinbutton"`, `aria-valuenow/min/max`, Up/Down/Home/End, -/+ buttons, `FormField` binding). |
-| 13 | Medium | `DateRangePicker` can't be labelled. Its group has a hard-coded English `aria-label="Date Range"` (not from `UiStrings`), and each segment's `aria-labelledby` points at an id that doesn't exist (`span-dxc-2-label`), so it falls back to "year", "month", "day". Same for `DatePicker` ("Date"). Also seen in the dashboard. | A `role="group"` wrapper with `aria-labelledby` on the visible label. | Fork fix: take the name from props or `UiStrings`, and drop the dangling `aria-labelledby`. Then a `DateRangeField` for forms. |
-| 14 | Low | `Avatar` is always `role="img"` and a fallback-only avatar (initials) has no way to get a name: axe `role-img-alt`. | `aria_hidden: "true"` where the name is shown beside it (host card, reviews). | A `label` prop for fallback avatars, or render decorative avatars `aria-hidden` by default. |
-| 15 | Low | `HoverCardTrigger` is itself `role="button"` with `tabindex="0"`; a button inside it is axe `nested-interactive`. | Text directly inside the trigger. | Say so in `hover_card/docs.md` (or render a real `<button>` as the trigger). |
-| 16 | Low | `CarouselItem` centres its content (flex), so a full-bleed photo has zero width until the app sets `width: 100%`. | App CSS. | A `media` variant, or `align-items: stretch` with the content filling the slide. |
-| 17 | Low | `Card` has no media slot: an edge-to-edge image means undoing the card's padding, and the kit's CSS loads after the app's, so one app class doesn't win. The card radius is `1rem`, not `var(--radius)`. | A descendant selector (`.tr-grid .tr-card`) and a negative margin. | `CardMedia`, and `--radius` for the card. |
-| 18 | Low | The date segments don't move on after "0" + a second digit for months or days ("09" stays on the month). | The test focuses each segment; people press Tab or the right arrow. | In the fork: advance when the segment has `max_length` digits. |
-| 19 | Low | `Pagination` is link-only. Client-side paging needs `href: "#"` plus `prevent_default()`, and Previous/Next on the first/last page stay focusable and clickable. | `aria_disabled` and a guard in `onclick`. | `on_page_change` + `page`/`pages` props that render buttons and disable the ends. |
-| 20 | Low | The controlled `Select` still wants `ReadSignal<Option<T>>` (dashboard gap 17). | `use_memo(move || Some(filters.read().sort))`. | As in the dashboard's GAPS.md. |
-| 21 | Low | No skip link in the kit. | `a.tr-skip` with app CSS. | A `SkipLink` component using the global `.sr-only` pattern on focus. |
-| 22 | Low | Toasts are still `role="alertdialog"` (dashboard gap 13). | Tests match dialogs by name. | As in the dashboard's GAPS.md. |
+| # | Severity | Gap | Fix |
+|---|---|---|---|
+| 10 | Medium | Kit links were plain `<a href>`: under the router a full page load. | Kit `router` feature: inside a `Router`, `TextLink`, `BreadcrumbLink` and `PaginationLink` send a plain left click on a path the route enum parses through the router, add the router's base path to the `href`, and `TextLink` marks the current route. Modified clicks, external links and unknown paths stay ordinary links. `SidebarMenuButton` takes the router's `Link` through `as`. The breadcrumb's `onclick` workaround is gone; `booking.mjs` checks the breadcrumb doesn't reload the page. |
+| 11 | Medium | Nothing moved focus after an in-app navigation. | `MainContent` (`main id="main-content" tabindex="-1"`) takes focus after each route change with the `router` feature, not on the first load. The layout's effect is gone. |
+| 12 | Medium | No number input. | `NumberInput` (`role="spinbutton"`, `aria-valuenow/min/max`, Up/Down, Page Up/Down, Home/End, -/+ buttons out of the Tab order) and `NumberField` for `use_form`. Guests use it; `booking.mjs` drives keys and buttons. |
+| 13 | Medium | `DateRangePicker` couldn't be labelled. | Primitives fork `5b21f56`: an `aria-labelledby`/`aria-label` passed to the picker names its group, and segments drop the dangling `aria-labelledby`. The app's `role="group"` wrappers are gone. A `DateRangeField` for `use_form` is still to do. |
+| 14 | Low | A fallback-only `Avatar` had no way to get a name. | `label` prop; without a name the avatar is decorative (`aria-hidden`). The app's `aria_hidden` is gone. |
+| 15 | Low | A button inside `HoverCardTrigger` is nested-interactive. | Documented in `hover_card/docs.md`. |
+| 16 | Low | `CarouselItem` centred a full-bleed photo to zero width. | `CarouselItem { media: true }`; the app CSS is gone. |
+| 17 | Low | `Card` had no media slot; its radius ignored `--radius`. | `CardMedia`; the card radius is `2 × --radius`. The descendant selector and negative margins are gone. |
+| 18 | Low | Date segments didn't move on after "01". | Primitives fork `5b21f56`: a segment that holds all its digits moves on. `booking.mjs` types "01". |
+| 19 | Low | `Pagination` was link-only. | `Pager { page, pages, on_page_change }`: buttons, ends `aria-disabled`, long ranges collapse. The app's own pager is gone. |
+| 20 | Low | The controlled `Select` wanted a memo. | `Select { selected: filters.read().sort }`. |
+| 21 | Low | No skip link in the kit. | `SkipLink`; the app CSS is gone. |
+| 22 | Low | Toasts were `role="alertdialog"`. | Primitives fork `5b21f56`: a named group with a `status` or `alert` message. `booking.mjs` checks the booking toast is a status. |
+
+## Open
+
+- A `DateRangeField` (date range bound to `use_form`) would let checkout validate dates like its other fields; checkout still keeps its own `trip_error`.
 
 ## Things that worked well
 

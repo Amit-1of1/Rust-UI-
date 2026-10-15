@@ -4,9 +4,11 @@
 mod clipboard;
 mod hotkey;
 mod media;
+mod router;
 mod selection;
 
 pub use clipboard::*;
 pub use hotkey::*;
 pub use media::*;
+pub use router::*;
 pub use selection::*;

@@ -32,6 +32,25 @@
   scroll-snap-align: start;
 }
 
+/* A media slide: the photo fills it, clipped to the slide's corners. */
+.dx-carousel-item[data-media="true"] {
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  padding: 0;
+}
+
+.dx-carousel-item[data-media="true"] > * {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.dx-carousel-item[data-media="true"] > :is(img, video, picture) {
+  height: 100%;
+  object-fit: cover;
+}
+
 .dx-carousel-controls {
   display: flex;
   gap: 0.5rem;

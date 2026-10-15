@@ -1661,3 +1661,108 @@ fn accordion_has_no_fixed_width() {
     });
     assert!(!html.contains("width:15rem"), "fills its container: {html}");
 }
+
+#[test]
+fn skip_link_points_at_main_content() {
+    let html = render(|| {
+        rsx! {
+            SkipLink {}
+            MainContent { h1 { "Page" } }
+        }
+    });
+    assert!(html.contains(r##"href="#main-content""##), "{html}");
+    assert!(html.contains("Skip to content"), "{html}");
+    assert!(
+        html.contains(r#"<main id="main-content" tabindex="-1""#),
+        "{html}"
+    );
+}
+
+#[test]
+fn number_field_is_a_spin_button_with_named_buttons() {
+    let html = render(|| {
+        rsx! {
+            NumberInput { label: "Guests", value: 2.0, min: 1.0, max: 2.0 }
+        }
+    });
+    assert!(html.contains(r#"role="spinbutton""#), "{html}");
+    assert!(html.contains(r#"aria-valuenow="2""#), "{html}");
+    assert!(html.contains(r#"aria-valuemin="1""#), "{html}");
+    assert!(html.contains(r#"aria-valuemax="2""#), "{html}");
+    assert!(html.contains(r#"aria-label="Guests""#), "{html}");
+    assert!(html.contains(r#"aria-label="Decrease Guests""#), "{html}");
+    assert!(html.contains(r#"aria-label="Increase Guests""#), "{html}");
+    // At the maximum, + is disabled.
+    let plus = html
+        .split("<button")
+        .find(|b| b.contains("Increase Guests"))
+        .unwrap();
+    assert!(plus.contains("disabled"), "{html}");
+}
+
+#[test]
+fn number_field_binds_a_form_field() {
+    let html = render(|| {
+        let form = use_form();
+        let nights = form.field_with("3", vec![required()]);
+        rsx! { NumberField { field: nights, label: "Nights" } }
+    });
+    assert!(html.contains(r#"value="3""#), "{html}");
+    assert!(html.contains("<label"), "{html}");
+    // Named by its <label for>, not a second aria-label.
+    assert!(!html.contains(r#"aria-label="Nights""#), "{html}");
+}
+
+#[test]
+fn select_takes_a_plain_selected_value() {
+    let html = render(|| {
+        rsx! {
+            Select::<String> { aria_label: "Fruit", selected: "b".to_string(),
+                SelectOption::<String> { index: 0usize, value: "a".to_string(), "Apple" }
+                SelectOption::<String> { index: 1usize, value: "b".to_string(), "Banana" }
+            }
+        }
+    });
+    // Something is selected (the option text only renders once the list has mounted).
+    assert!(html.contains("data-placeholder=false"), "{html}");
+    let html = render(|| {
+        rsx! {
+            Select::<String> { aria_label: "Fruit",
+                SelectOption::<String> { index: 0usize, value: "a".to_string(), "Apple" }
+            }
+        }
+    });
+    assert!(html.contains("data-placeholder=true"), "{html}");
+}
+
+#[test]
+fn avatar_without_a_name_is_decorative() {
+    let html = render(|| rsx! { Avatar { AvatarFallback { "AL" } } });
+    assert!(html.contains(r#"aria-hidden="true""#), "{html}");
+    let html = render(|| rsx! { Avatar { label: "Ada Lovelace", AvatarFallback { "AL" } } });
+    assert!(html.contains(r#"aria-label="Ada Lovelace""#), "{html}");
+    assert!(!html.contains("aria-hidden"), "{html}");
+}
+
+#[test]
+fn card_media_is_a_card_slot() {
+    let html = render(|| rsx! { Card { CardMedia { img { alt: "Cabin" } } } });
+    assert!(html.contains(r#"data-slot="card-media""#), "{html}");
+}
+
+#[test]
+fn pagination_pager_renders_buttons_and_disables_the_ends() {
+    let html = render(|| rsx! { Pager { page: 1usize, pages: 3usize, on_page_change: |_| {} } });
+    assert!(!html.contains("<a "), "{html}");
+    let prev = html
+        .split("<button")
+        .find(|b| b.contains("Go to previous page"))
+        .unwrap();
+    assert!(prev.contains(r#"aria-disabled="true""#), "{html}");
+    let next = html
+        .split("<button")
+        .find(|b| b.contains("Go to next page"))
+        .unwrap();
+    assert!(!next.contains("aria-disabled"), "{html}");
+    assert!(html.contains(r#"aria-current="page""#), "{html}");
+}

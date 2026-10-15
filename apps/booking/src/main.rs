@@ -100,21 +100,6 @@ fn Shell() -> Element {
     let mut palette = use_signal(|| false);
     use_hotkey("k", move || palette.set(true));
     let theme = use_theme();
-    // After an in-app navigation, move focus to <main> so keyboard and screen reader users
-    // start at the new page instead of on the link they used. Not on the first load.
-    let route = use_route::<Route>().to_string();
-    let mut main_el = use_signal(|| None::<std::rc::Rc<MountedData>>);
-    let mut seen = use_signal(|| route.clone());
-    use_effect(use_reactive!(|route| {
-        if *seen.peek() != route {
-            seen.set(route);
-            if let Some(el) = main_el.peek().clone() {
-                spawn(async move {
-                    _ = el.set_focus(true).await;
-                });
-            }
-        }
-    }));
 
     let upcoming = store
         .trips
@@ -133,7 +118,7 @@ fn Shell() -> Element {
     }));
 
     rsx! {
-        a { class: "tr-skip", href: "#main-content", "Skip to content" }
+        SkipLink {}
         header { class: "tr-header",
             Link { to: Route::Explore {}, class: "tr-brand",
                 Tent { "aria-hidden": "true", size: "1.25rem" }
@@ -176,13 +161,9 @@ fn Shell() -> Element {
                 }
             }
         }
-        main {
-            class: "tr-main",
-            id: "main-content",
-            tabindex: "-1",
-            onmounted: move |e| main_el.set(Some(e.data())),
-            Outlet::<Route> {}
-        }
+        // `MainContent` (kit `router` feature) moves focus here after an in-app navigation,
+        // so keyboard and screen reader users start at the new page.
+        MainContent { class: "tr-main", Outlet::<Route> {} }
         footer { class: "tr-footer",
             p { "Trailhead Stays is a demo app for the Rust UI kit. Nothing here is real." }
         }
