@@ -21,7 +21,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Added
 
-- **ui:** `TimePicker` (hour, minute, optional second and AM/PM spin buttons with typing, auto-advance and arrow keys; no JavaScript) and `DateTimePicker` (a date and a time as one `PrimitiveDateTime`), with `TimeField` and `DateTimeField` for `use_form` and `UiStrings` for their labels (experimental). (#PR)
+- **ui:** `TimePicker` (hour, minute, optional second and AM/PM spin buttons with typing, auto-advance and arrow keys; no JavaScript) and `DateTimePicker` (a date and a time as one `PrimitiveDateTime`), with `TimeField` and `DateTimeField` for `use_form` and `UiStrings` for their labels (experimental). (#39)
 - **ui:** All 1,890 Lucide icons (was 1,705), plus `Icon { icon: lucide::CHECK }` for icons chosen at runtime, `label` (named `role="img"`), theme sizes `IconSize::Xs` … `Xl` (`--icon-size-*`), `--icon-stroke-width`, and mirroring of directional icons in right-to-left text (experimental). `scripts/gen-lucide-icons.mjs` regenerates the set. (#35)
 - **ui:** `TextareaField` and `CheckboxField` for `use_form`; `TextField` passes other attributes (`inputmode`, `maxlength`, ...) to its input (experimental `form`). `Stepper` takes `current: Signal<usize>` to be driven from outside. `button_look(variant, size)` styles a router `Link` as a button. (#34)
 - **ui:** `use_theme()`, `Theme` and `ThemeMode`: one shared mode, accent, density and radius state with `is_dark()` (experimental). (#30)
