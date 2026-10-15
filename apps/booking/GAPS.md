@@ -20,7 +20,7 @@ Severity: **High** means a real app hits it early and the result is broken or in
 | 8 | Low | `Accordion` set an inline `width: 15rem`, so it never filled its column. | Removed; it fills its container (the demos already cap their width). Snapshot updated. |
 | 9 | Medium | Test bug, not kit: `dashboard.mjs` clicked the "Dark mode" switch for its dark pass, but under a dark system scheme the switch is already on, so the click turned dark mode **off** and the "dark" axe scans ran on the light theme. | Both scripts now check that the switch follows the system and don't click it. |
 
-## Fixed in the follow-up (PR #PRNUM)
+## Fixed in the follow-up (PR #40)
 
 | # | Severity | Gap | Fix |
 |---|---|---|---|

@@ -37,8 +37,8 @@ The app now uses each fix instead of its workaround, and `tests/e2e/dashboard.mj
 | 22 | Low | Icons needed a direct `dioxus-icons` dependency. | `ui::icons` already re-exported them; the app's direct dependency is removed. |
 | 23 | Low | The `demos` module was compiled into every app. | `ui::demos` is behind the kit's `demos` feature, turned on by the gallery, docs, `apps/native` and the kit's tests. The dashboard bundle no longer carries demo code or `sidebar/demo.css`. |
 | 24 | Low | Sortable header text didn't line up with the cells below it. | Measured in the gallery: start-aligned columns already lined up (the button's negative start margin); right-aligned numeric columns ended 22 px short (the button's end padding and arrow). `TableHead` and `TableCell` take `numeric: true` (end-aligned, tabular figures; the sort arrow goes before the text and the end padding is pulled back). `DataTable` uses it for numeric columns; `tests/e2e/table.mjs` checks both edges to 1 px. |
-| 13 | Medium | Toasts were `role="alertdialog"`. | Fixed on the primitives fork (`5b21f56`, docs/FORKS.md): a toast is a named, focusable group, and its message a `status` (info, success) or `alert` (error, warning). `dashboard.mjs` checks no alertdialog appears with the "Customer deleted" toast. (PR #PRNUM) The AlertDialogAction close-then-call order (gap 9) is unchanged. |
-| 17 | Low | A controlled raw `Select` needed a `use_memo` adapter. | `Select` takes `selected: T`, a plain value the parent passes on each render; `value` still takes a signal. (PR #PRNUM) |
+| 13 | Medium | Toasts were `role="alertdialog"`. | Fixed on the primitives fork (`5b21f56`, docs/FORKS.md): a toast is a named, focusable group, and its message a `status` (info, success) or `alert` (error, warning). `dashboard.mjs` checks no alertdialog appears with the "Customer deleted" toast. (PR #40) The AlertDialogAction close-then-call order (gap 9) is unchanged. |
+| 17 | Low | A controlled raw `Select` needed a `use_memo` adapter. | `Select` takes `selected: T`, a plain value the parent passes on each render; `value` still takes a signal. (PR #40) |
 
 ## Open (reported, not fixed here)
 

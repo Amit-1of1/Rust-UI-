@@ -6,7 +6,7 @@ What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIO
 
 ## Unreleased
 
-### Toasts are not dialogs; unnamed avatars are decorative (PR #PRNUM)
+### Toasts are not dialogs; unnamed avatars are decorative (PR #40)
 
 **Who:** tests or CSS that find toasts by `role="alertdialog"`; apps with avatars that have no name; code that names `dioxus_primitives::select::SelectProps` for the kit's `Select`.
 
