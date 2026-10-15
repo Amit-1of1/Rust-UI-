@@ -29,7 +29,7 @@ pub fn generate(root: &Path) -> io::Result<String> {
     let reg = build(root)?;
     let mut entries = String::new();
     let mut arms = String::new();
-    for item in &reg.items {
+    for item in reg.items.iter().filter(|i| i.kind.is_component()) {
         let name = &item.name;
         let docs_path = root.join(COMPONENTS_DIR).join(name).join("docs.md");
         let docs = fs::read_to_string(&docs_path).unwrap_or_default();

@@ -61,7 +61,7 @@ step "tests";   cargo test --workspace --exclude native
 # which then calls into JavaScript off wasm and panics in the native drawer test.
 step "native (headless Blitz)"; cargo test -p native
 step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard -p booking --target wasm32-unknown-unknown
-step "registry"; cargo run -q -p rust-ui-cli -- registry --check
+step "registry, component.json, llms.txt"; cargo run -q -p rust-ui-cli -- registry --check
 step "changelog fragments"; cargo run -q -p rust-ui-cli -- changelog --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
 

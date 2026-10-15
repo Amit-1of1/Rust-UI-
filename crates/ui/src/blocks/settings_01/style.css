@@ -1,0 +1,63 @@
+/* Layout only; every colour is a theme token, so light, dark and accents all work. */
+
+.dx-block-settings {
+  display: grid;
+  /* Never wider than the screen: a track sized to its content would grow past it. */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 1.5rem;
+  max-width: 48rem;
+  box-sizing: border-box;
+  margin-inline: auto;
+  padding: 1.5rem 1rem;
+}
+
+.dx-block-settings-header {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dx-block-settings-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Four tabs don't fit a phone in every engine: wrap them instead of widening the page. */
+.dx-block-settings-tabs {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.dx-block-settings-card-title {
+  margin: 0;
+  font: inherit;
+}
+
+.dx-block-settings-muted {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.dx-block-settings-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.dx-block-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.5rem;
+}
+
+.dx-block-settings-row + .dx-block-settings-row {
+  border-block-start: 1px solid var(--primary-color-6);
+}
+
+.dx-block-settings-danger {
+  border-color: var(--primary-error-color);
+}

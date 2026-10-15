@@ -1,0 +1,112 @@
+# Rust UI
+
+> Accessible, animated, shadcn-style components for Dioxus 0.7 (web and the desktop webview; native Blitz is a preview). Use them as source copied into your app (`rust-ui add <name>` or `dx components add`) or as the `rust-ui-kit` crate from git.
+
+Rules for writing app code with this kit:
+
+- Dioxus is pinned to `0.7.x`. Write Dioxus 0.7 code (`#[component]`, `rsx!`, signals); don't use 0.6 or 0.8 APIs.
+- Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `rust-ui init`. Without it components are unstyled.
+- Import components from `ui::prelude::*` with the crate, or `crate::components::<name>::*` after copying. Icons come from `ui::icons` by path (`ui::icons::Check`), hooks from `ui::hooks`, animation from `ui::motion`.
+- Restyle with `class` (it adds to the kit's class) and the theme's CSS custom properties (`--primary-color`, `--accent-color`, `--radius`, ...). Don't hard-code colours, and don't change a component's markup: ARIA roles, focus and keys come from `dioxus-primitives`.
+- Light and dark mode: `data-theme="light"` or `"dark"` on `<html>`; accent presets: `data-accent="blue|green|violet|rose|orange"`.
+- Every interactive component works with the keyboard and every animation respects `prefers-reduced-motion`; keep it that way in your own code.
+- Don't add JavaScript (`document::eval`) to get behaviour the kit already has. Ctrl+K and other shortcuts go through `ui::hooks::use_hotkey`.
+- Each component page below has its props (the Rust signatures) and a working example. Prefer the example's patterns over guessing prop names.
+
+Paths are relative to the repository root. `rust-ui docs <name>` prints a component page.
+
+## Docs
+
+- [Installing components](docs/INSTALL.md): copy the source with `rust-ui` or `dx`, or depend on the crate from git
+- [Theming](docs/THEMING.md): light and dark mode, accent presets, a brand colour, radius
+- [Icons](docs/ICONS.md): the Lucide set and when an icon needs a label
+- [Stability](docs/STABILITY.md): which items are stable, experimental or internal
+- [Everything](llms-full.txt): this index plus every component page in one file
+
+## Components
+
+- [Accordion](llms/accordion.md): The accordion component is used to display collapsible content panels for presenting information in a limited amount of space
+- [Alert](llms/alert.md): A message that interrupts: it is announced as soon as it appears
+- [Alert dialog](llms/alert_dialog.md): The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions)
+- [Aspect ratio](llms/aspect_ratio.md): The AspectRatio component is used to maintain a specific aspect ratio for its children
+- [Avatar](llms/avatar.md): The Avatar components display a user's profile picture or fallback initials
+- [Badge](llms/badge.md): The Badge is a component designed to display small, distinct labels that help highlight important content or status indicators
+- [BottomNav](llms/bottom_nav.md): A mobile-style tab bar of links or buttons
+- [Breadcrumb](llms/breadcrumb.md): A trail of links to the current page
+- [Button](llms/button.md): The button element is used to trigger actions or events in a user interface
+- [ButtonGroup](llms/button_group.md): Joins buttons or inputs into a segmented control, horizontal or vertical
+- [Calendar](llms/calendar.md): The Calendar component is used to display a calendar interface, allowing users to select dates
+- [Callout](llms/callout.md): An inline note (info, success, warning) for docs and forms
+- [Card](llms/card.md): The card component is a flexible container for grouping related content and actions
+- [Carousel](llms/carousel.md): A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons
+- [Chart](llms/chart.md): Charts drawn as SVG in Rust, coloured from theme tokens
+- [Checkbox](llms/checkbox.md): The Checkbox component is used to create an accessible checkbox input
+- [Chips](llms/chips.md): A row of on/off chips for filters and multi-choice tags
+- [Collapsible](llms/collapsible.md): The `Collapsible` component allows users to create expandable sections that can be toggled open or closed
+- [Color picker](llms/color_picker.md): Color picker used when the user needs to make a customized color selection
+- [Combobox](llms/combobox.md): The Combobox component is an autocomplete input with a filterable popup list
+- [Command](llms/command.md): A command palette: a search box over a filtered list, inside a dialog
+- [Context menu](llms/context_menu.md): The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element
+- [DataTable](llms/data_table.md): A table with sorting, a filter box, pagination and optional row selection, built on `Table`
+- [Date picker](llms/date_picker.md): The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value
+- [DateTimePicker](llms/date_time_picker.md): A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled
+- [Dialog](llms/dialog.md): The dialog component can be used to display additional information or actions related to an item
+- [Drag and drop list](llms/drag_and_drop_list.md): Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input
+- [Drawer](llms/drawer.md): A panel that slides up from the bottom and can be dragged down to dismiss
+- [Dropdown menu](llms/dropdown_menu.md): The DropdownMenu component is used to create a dropdown menu that can be triggered by a button click
+- [Dropzone](llms/dropzone.md): A file picker you can also drop files onto
+- [Empty](llms/empty.md): Placeholder for a list, table or page with nothing in it, with optional icon, text and actions
+- [Field](llms/field.md): Wires a label, description and error to a control with matching ids
+- [Form](llms/form.md): Validation state for a form, with the accessibility wiring done for you
+- [Hooks](llms/hooks.md): Hooks shared by the components and by apps
+- [Hover card](llms/hover_card.md): The HoverCard component can be used to display additional information when a user hovers over an element
+- [Icons](llms/icons.md): The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
+- [Input](llms/input.md): The input element is used to accept a text input from the user
+- [InputGroup](llms/input_group.md): An input with text, icons or buttons attached inside one bordered box
+- [InputOtp](llms/input_otp.md): A one-time-code input: one box per character
+- [Item](llms/item.md): A versatile component for displaying content with media, title, description, and actions
+- [Kbd](llms/kbd.md): A keyboard key cap, for showing shortcuts
+- [Label](llms/label.md): The Label component is used to provide a label for form elements, enhancing accessibility and usability
+- [Link](llms/link.md): `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring
+- [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
+- [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
+- [MultiSelect](llms/multi_select.md): Pick several options from a list
+- [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
+- [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
+- [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
+- [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
+- [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
+- [Radio group](llms/radio_group.md): The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set
+- [Scroll area](llms/scroll_area.md): The ScrollArea component is used to create a scrollable container for its children
+- [Select](llms/select.md): The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups
+- [Separator](llms/separator.md): The Separator component is a simple horizontal or vertical line that can be used to visually separate content in your application
+- [Sheet](llms/sheet.md): The sheet component is a panel that slides in from the edge of the screen
+- [Shimmer](llms/shimmer.md): Wraps loading content and sweeps a highlight across it
+- [Sidebar](llms/sidebar.md): The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application
+- [Skeleton](llms/skeleton.md): The Skeleton component is used to display a placeholder preview of content before the data gets loaded
+- [SkipLink](llms/skip_link.md): `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation
+- [Slider](llms/slider.md): The slider component allows users to select a value from a range by sliding a handle along a track
+- [Spinner](llms/spinner.md): A loading indicator
+- [Status](llms/status.md): A coloured dot plus required text label (idle, online, degraded, down)
+- [Stepper](llms/stepper.md): A multi-step progress indicator with Back/Next control via `use_stepper()`
+- [Switch](llms/switch.md): The Switch component allows users to toggle between two states, such as on and off
+- [Table](llms/table.md): A styled table
+- [Tabs](llms/tabs.md): The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content
+- [Tag group](llms/tag_group.md): A Tag Group is a focusable group of tags (labels, categories, filters and similar items) with keyboard navigation, optional selection and removal
+- [Textarea](llms/textarea.md): The textarea element is used to allow users to enter multi-line text input in a user interface
+- [ThemeCustomizer](llms/theme_customizer.md): Pick an accent colour, corner radius and light/dark mode for the whole page
+- [TimePicker](llms/time_picker.md): A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button
+- [Toast](llms/toast.md): The Toast component is used to display brief messages to the user, typically for notifications or alerts
+- [Toggle](llms/toggle.md): The Toggle component is used to create a toggle button that can be pressed or unpressed
+- [Toggle group](llms/toggle_group.md): The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set
+- [Toolbar](llms/toolbar.md): The toolbar component is a flexible and customizable component that can be used to create a variety of toolbars
+- [Tooltip](llms/tooltip.md): The Tooltip component is used to display additional information when a user hovers over an element
+- [UiStrings](llms/ui_strings.md): Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults
+- [Virtual list](llms/virtual_list.md): The VirtualList component virtualizes large lists by rendering only visible rows plus a buffer
+
+## Blocks
+
+- [Dashboard 01](llms/dashboard_01.md): An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table
+- [Login 01](llms/login_01.md): A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link
+- [Settings 01](llms/settings_01.md): A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation)
+- [Sign-up 01](llms/signup_01.md): A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code

@@ -9,7 +9,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use common::{render, DEMOS};
+use common::{render, BLOCKS, DEMOS};
 
 mod common;
 
@@ -594,7 +594,7 @@ const KNOWN: &[(&str, &str)] = &[];
 #[test]
 fn every_demo_passes_the_aria_check() {
     let mut found = Vec::new();
-    for (name, demo) in DEMOS {
+    for (name, demo) in DEMOS.iter().chain(BLOCKS) {
         for p in check(&render(*demo)) {
             found.push(format!("{name}: {p}"));
         }

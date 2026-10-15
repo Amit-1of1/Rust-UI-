@@ -168,6 +168,7 @@
         "chart/style.css"
       ],
       "registryDependencies": [
+        "table",
         "ui_strings"
       ]
     },
@@ -286,6 +287,21 @@
       ]
     },
     {
+      "name": "date_time_picker",
+      "files": [
+        "date_time_picker/component.rs",
+        "date_time_picker/docs.md",
+        "date_time_picker/mod.rs",
+        "date_time_picker/style.css"
+      ],
+      "registryDependencies": [
+        "date_picker",
+        "form",
+        "time_picker",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "dialog",
       "files": [
         "dialog/component.rs",
@@ -371,10 +387,12 @@
       "registryDependencies": [
         "checkbox",
         "combobox",
+        "date_time_picker",
         "field",
         "input",
         "select",
-        "textarea"
+        "textarea",
+        "time_picker"
       ]
     },
     {
@@ -797,6 +815,20 @@
       ]
     },
     {
+      "name": "time_picker",
+      "files": [
+        "time_picker/component.rs",
+        "time_picker/docs.md",
+        "time_picker/mod.rs",
+        "time_picker/style.css"
+      ],
+      "registryDependencies": [
+        "form",
+        "icons",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "toast",
       "files": [
         "toast/component.rs",
@@ -864,6 +896,85 @@
         "virtual_list/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "dashboard_01",
+      "kind": "block",
+      "files": [
+        "dashboard_01/block.rs",
+        "dashboard_01/docs.md",
+        "dashboard_01/mod.rs",
+        "dashboard_01/style.css"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "chart",
+        "dropdown_menu",
+        "empty",
+        "icons",
+        "separator",
+        "sidebar",
+        "switch",
+        "table",
+        "theme_customizer"
+      ]
+    },
+    {
+      "name": "login_01",
+      "kind": "block",
+      "files": [
+        "login_01/block.rs",
+        "login_01/docs.md",
+        "login_01/mod.rs",
+        "login_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "card",
+        "form",
+        "link"
+      ]
+    },
+    {
+      "name": "settings_01",
+      "kind": "block",
+      "files": [
+        "settings_01/block.rs",
+        "settings_01/docs.md",
+        "settings_01/mod.rs",
+        "settings_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert_dialog",
+        "button",
+        "card",
+        "form",
+        "label",
+        "switch",
+        "tabs",
+        "theme_customizer"
+      ]
+    },
+    {
+      "name": "signup_01",
+      "kind": "block",
+      "files": [
+        "signup_01/block.rs",
+        "signup_01/docs.md",
+        "signup_01/mod.rs",
+        "signup_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "card",
+        "form",
+        "input_otp",
+        "link"
+      ]
     }
   ]
 }

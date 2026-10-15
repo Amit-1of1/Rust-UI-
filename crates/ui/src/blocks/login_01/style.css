@@ -1,0 +1,46 @@
+/* Layout only; every colour is a theme token, so light, dark and accents all work. */
+
+.dx-block-login {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: 1.5rem 1rem;
+  background: var(--primary-color);
+}
+
+.dx-block-login-card {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.dx-block-login-title {
+  margin: 0;
+  font: inherit;
+  font-size: 1.25rem;
+}
+
+.dx-block-login-alert {
+  margin-block-end: 1rem;
+}
+
+.dx-block-login-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.dx-block-login-submit {
+  width: 100%;
+}
+
+.dx-block-login-footer {
+  width: 100%;
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+  text-align: center;
+}

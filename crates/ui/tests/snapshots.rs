@@ -6,14 +6,14 @@
 //! After an intended change, refresh them with
 //! `UPDATE_SNAPSHOTS=1 cargo test -p rust-ui-kit --test snapshots` and review the diff.
 
-use common::{render, DEMOS};
+use common::{render, BLOCKS, DEMOS};
 
 mod common;
 
 const DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/snapshots");
 
 /// Demos whose markup depends on today's date, so a snapshot would change every day.
-const CLOCK_DEPENDENT: &[&str] = &["calendar", "date_picker"];
+const CLOCK_DEPENDENT: &[&str] = &["calendar", "date_picker", "date_time_picker"];
 
 /// Generated ids (`dxc-12`, `dx-carousel-3`, `span-dxc-27-label`) come from process-wide
 /// counters, so they depend on what else rendered first. Renumber every number that
@@ -79,7 +79,7 @@ fn pretty(html: &str) -> String {
 fn demo_markup_matches_snapshots() {
     let update = std::env::var_os("UPDATE_SNAPSHOTS").is_some();
     let mut stale = Vec::new();
-    for (name, demo) in DEMOS {
+    for (name, demo) in DEMOS.iter().chain(BLOCKS) {
         if CLOCK_DEPENDENT.contains(name) {
             continue;
         }
@@ -104,7 +104,7 @@ fn demo_markup_matches_snapshots() {
 
 #[test]
 fn snapshots_are_stable_between_renders() {
-    for (name, demo) in DEMOS {
+    for (name, demo) in DEMOS.iter().chain(BLOCKS) {
         if !CLOCK_DEPENDENT.contains(name) {
             assert_eq!(
                 pretty(&render(*demo)),

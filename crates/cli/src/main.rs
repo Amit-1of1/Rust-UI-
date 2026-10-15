@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use rust_ui_cli::{
-    add, build, compare, load, materialize, mod_lines, resolve, to_json, FileState, COMPONENTS_DIR,
+    add_to, build, compare, load, materialize, mod_lines_of, resolve, to_json, FileState, Kind,
     THEME_FILE,
 };
 use std::path::{Path, PathBuf};
@@ -20,7 +20,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
-    /// List every component in the registry.
+    /// List every component and block in the registry.
     List,
     /// Regenerate registry.json from the component folders (`--check` only verifies it).
     Registry {
@@ -33,12 +33,15 @@ enum Command {
         #[arg(long, default_value = "assets/theme.css")]
         dest: PathBuf,
     },
-    /// Copy components (and the components they depend on) into a project.
+    /// Copy components or blocks (and the components they depend on) into a project.
     Add {
         names: Vec<String>,
         /// Destination components directory.
         #[arg(long, default_value = "src/components")]
         dest: PathBuf,
+        /// Destination for blocks (whole screens such as `login_01`).
+        #[arg(long, default_value = "src/blocks")]
+        blocks_dest: PathBuf,
         /// Overwrite files that differ.
         #[arg(long)]
         force: bool,
@@ -72,11 +75,16 @@ enum Command {
         /// The build's public folder, e.g. `target/dx/app/release/web/public`.
         public: PathBuf,
     },
+    /// Print a component's page for coding agents (docs, props, example), or the index
+    /// (`llms.txt`) without a name.
+    Docs { name: Option<String> },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
         #[arg(long, default_value = "src/components")]
         dest: PathBuf,
+        #[arg(long, default_value = "src/blocks")]
+        blocks_dest: PathBuf,
     },
 }
 
@@ -92,7 +100,10 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
     match cli.command {
         Command::List => {
             for item in load(root)?.items {
-                println!("{}", item.name);
+                match item.kind {
+                    Kind::Component => println!("{}", item.name),
+                    Kind::Block => println!("{} (block)", item.name),
+                }
             }
         }
         Command::Registry { check } => {
@@ -100,11 +111,13 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let path = root.join("registry.json");
             if check {
                 let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
+                let llms = rust_ui_cli::llms::stale(root).map_err(err)?;
                 if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
                     || !stale.is_empty()
+                    || !llms.is_empty()
                 {
                     eprintln!(
-                        "registry.json or a component.json is out of date; run `rust-ui registry`"
+                        "registry.json, a component.json or the llms.txt files are out of date; run `rust-ui registry`"
                     );
                     return Ok(ExitCode::FAILURE);
                 }
@@ -117,6 +130,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                     "wrote {}",
                     rust_ui_cli::docsgen::write(root).map_err(err)?.display()
                 );
+                let n = rust_ui_cli::llms::write(root).map_err(err)?;
+                println!("wrote {n} llms.txt files");
             }
         }
         Command::Init { dest } => {
@@ -126,14 +141,25 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             std::fs::copy(root.join(THEME_FILE), &dest).map_err(err)?;
             println!("wrote {}", dest.display());
         }
-        Command::Add { names, dest, force } => {
+        Command::Add {
+            names,
+            dest,
+            blocks_dest,
+            force,
+        } => {
             let items = resolve(&load(root)?, &names)?;
-            let (written, skipped) = add(root, &items, &dest, force).map_err(err)?;
-            println!("wrote {} file(s) to {}", written.len(), dest.display());
+            let (written, skipped) =
+                add_to(root, &items, &dest, &blocks_dest, force).map_err(err)?;
+            println!("wrote {} file(s)", written.len());
             for s in &skipped {
                 println!("kept {} (differs; use --force to overwrite)", s.display());
             }
-            println!("\nAdd to {}/mod.rs:\n{}", dest.display(), mod_lines(&items));
+            for (kind, dir) in [(Kind::Component, &dest), (Kind::Block, &blocks_dest)] {
+                let lines = mod_lines_of(&items, kind);
+                if !lines.is_empty() {
+                    println!("\nAdd to {}/mod.rs:\n{lines}", dir.display());
+                }
+            }
         }
         Command::New { name } => {
             let files = rust_ui_cli::scaffold::scaffold(root, &name)?;
@@ -147,7 +173,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             .map_err(err)?;
             rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
             rust_ui_cli::docsgen::write(root).map_err(err)?;
-            println!("updated registry.json, component.json files and the docs index");
+            rust_ui_cli::llms::write(root).map_err(err)?;
+            println!("updated registry.json, component.json files, the docs index and llms.txt");
         }
         Command::Changelog { check } => {
             use rust_ui_cli::changelog::{fold, load, unnamed};
@@ -209,13 +236,36 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 css.unused.len()
             );
         }
-        Command::Diff { names, dest } => {
+        Command::Docs { name } => {
+            use rust_ui_cli::llms::{index, page};
+            let reg = build(root).map_err(err)?;
+            match name {
+                None => print!("{}", index(root, &reg).map_err(err)?),
+                Some(name) => match page(root, &reg, &name).map_err(err)? {
+                    Some(text) => print!("{text}"),
+                    None => {
+                        return Err(format!(
+                            "unknown component or block `{name}`; `rust-ui list` shows them all"
+                        ))
+                    }
+                },
+            }
+        }
+        Command::Diff {
+            names,
+            dest,
+            blocks_dest,
+        } => {
             let reg = load(root)?;
             let items = resolve(&reg, &names)?;
             let mut differs = false;
             for item in &items {
+                let target = match item.kind {
+                    Kind::Component => &dest,
+                    Kind::Block => &blocks_dest,
+                };
                 for file in &item.files {
-                    let state = compare(&root.join(COMPONENTS_DIR).join(file), &dest.join(file))
+                    let state = compare(&root.join(item.kind.dir()).join(file), &target.join(file))
                         .map_err(err)?;
                     if state != FileState::Same {
                         differs = true;

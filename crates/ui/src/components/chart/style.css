@@ -5,6 +5,50 @@
   overflow: visible;
 }
 
+/* Wraps a chart with its legend or data table. */
+.dx-chart-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+/* Series colours: --chart-1 (the accent unless set) to --chart-5, from theme.css. */
+.dx-chart [data-series="0"],
+.dx-chart-legend-item[data-series="0"],
+.dx-chart-slice[data-series="0"],
+.dx-chart-ring[data-series="0"] {
+  --series-color: var(--chart-1, var(--accent-color, var(--secondary-color)));
+}
+
+.dx-chart [data-series="1"],
+.dx-chart-legend-item[data-series="1"],
+.dx-chart-slice[data-series="1"],
+.dx-chart-ring[data-series="1"] {
+  --series-color: var(--chart-2, var(--secondary-color-5));
+}
+
+.dx-chart [data-series="2"],
+.dx-chart-legend-item[data-series="2"],
+.dx-chart-slice[data-series="2"],
+.dx-chart-ring[data-series="2"] {
+  --series-color: var(--chart-3, var(--secondary-color-5));
+}
+
+.dx-chart [data-series="3"],
+.dx-chart-legend-item[data-series="3"],
+.dx-chart-slice[data-series="3"],
+.dx-chart-ring[data-series="3"] {
+  --series-color: var(--chart-4, var(--secondary-color-5));
+}
+
+.dx-chart [data-series="4"],
+.dx-chart-legend-item[data-series="4"],
+.dx-chart-slice[data-series="4"],
+.dx-chart-ring[data-series="4"] {
+  --series-color: var(--chart-5, var(--secondary-color-5));
+}
+
 .dx-chart-grid {
   stroke: var(--primary-color-6);
   stroke-dasharray: 3 3;
@@ -17,7 +61,7 @@
 }
 
 .dx-chart-bar {
-  fill: var(--accent-color, var(--secondary-color));
+  fill: var(--series-color, var(--accent-color, var(--secondary-color)));
   transition: opacity 150ms;
 }
 
@@ -26,14 +70,171 @@
 }
 
 .dx-chart-line {
-  stroke: var(--accent-color, var(--secondary-color));
+  stroke: var(--series-color, var(--accent-color, var(--secondary-color)));
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
+  pointer-events: none;
+}
+
+.dx-chart-area {
+  fill: var(--series-color, var(--accent-color, var(--secondary-color)));
+  fill-opacity: 0.2;
+  pointer-events: none;
 }
 
 .dx-chart-dot {
   fill: var(--primary-color);
-  stroke: var(--accent-color, var(--secondary-color));
+  stroke: var(--series-color, var(--accent-color, var(--secondary-color)));
   stroke-width: 2;
+}
+
+/* One per category on line and area charts: shows every value on hover. */
+.dx-chart-column {
+  fill: var(--secondary-color-5);
+  fill-opacity: 0;
+}
+
+.dx-chart-column:hover {
+  fill-opacity: 0.08;
+}
+
+.dx-chart-pie,
+.dx-chart-radial {
+  display: block;
+  width: 100%;
+  max-width: var(--chart-size, 200px);
+  height: auto;
+  margin-inline: auto;
+}
+
+.dx-chart-slice {
+  fill: var(--series-color);
+  /* A gap of page colour between neighbouring slices. */
+  stroke: var(--primary-color);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: opacity 150ms;
+}
+
+.dx-chart-slice:hover {
+  opacity: 0.8;
+}
+
+.dx-chart-track,
+.dx-chart-ring-track {
+  fill: var(--primary-color-5);
+}
+
+.dx-chart-ring-track {
+  fill: none;
+  stroke: var(--primary-color-5);
+  stroke-width: 16;
+}
+
+.dx-chart-ring {
+  stroke: var(--series-color);
+  stroke-width: 16;
+  stroke-linecap: round;
+}
+
+.dx-chart-center {
+  fill: var(--secondary-color-4);
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.dx-chart-caption {
+  fill: var(--secondary-color-5);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.dx-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--secondary-color-5);
+  font-size: 0.75rem;
+}
+
+.dx-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.dx-chart-legend-square {
+  width: 0.625rem;
+  height: 0.625rem;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: var(--series-color);
+}
+
+.dx-chart-legend-line {
+  flex-shrink: 0;
+  color: var(--series-color);
+}
+
+.dx-chart-data {
+  font-size: 0.875rem;
+}
+
+.dx-chart-data-toggle {
+  width: fit-content;
+  border-radius: calc(var(--radius) / 2);
+  color: var(--secondary-color-5);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.dx-chart-data-toggle:hover {
+  color: var(--secondary-color-4);
+}
+
+.dx-chart-data-toggle:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-chart-data[open] > .dx-chart-data-toggle {
+  margin-bottom: 0.5rem;
+}
+
+/* Entrances and value changes move only when the user hasn't asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .dx-chart-bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: dx-chart-grow var(--spring-gentle-duration, 400ms) var(--spring-gentle, ease-out) both;
+  }
+
+  .dx-chart-area,
+  .dx-chart-line,
+  .dx-chart-slice {
+    animation: dx-chart-fade 300ms ease-out both;
+  }
+
+  .dx-chart-ring {
+    transition: stroke-dashoffset var(--spring-gentle-duration, 400ms) var(--spring-gentle, ease-out);
+  }
+}
+
+@keyframes dx-chart-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes dx-chart-fade {
+  from {
+    opacity: 0;
+  }
 }

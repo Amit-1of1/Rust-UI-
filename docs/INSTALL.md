@@ -29,10 +29,11 @@ cargo install --git https://github.com/Amit-1of1/Rust-UI- rust-ui-cli   # instal
 export RUST_UI_SOURCE=https://github.com/Amit-1of1/Rust-UI-
 rust-ui init                 # theme.css into assets/
 rust-ui add button dialog    # components into src/components
+rust-ui add login_01         # a block (whole screen) into src/blocks, its components into src/components
 rust-ui diff button dialog   # which copied files differ from the registry
 ```
 
-It copies the same files and resolves component dependencies from `registry.json`. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
+It copies the same files and resolves component dependencies from `registry.json`. Blocks (`rust-ui list` marks them) are whole screens: add `mod blocks;` next to `mod components;` and use them like your own code. `dx components add` installs components only. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
 
 ## Path 2: depend on the crate from git
 
@@ -75,3 +76,14 @@ Each component's stylesheet is an asset inside the crate; `dx serve` and `dx bun
 ## Generated files
 
 `registry.json` and every `component.json` come from `cargo run -p rust-ui-cli -- registry`. A test fails when they are stale.
+
+## For coding agents
+
+`llms.txt` at the repository root is an index for AI coding agents (the [llms.txt](https://llmstxt.org) shape): what the kit is, the rules for using it, and one line per component linking to `llms/<name>.md`. A component page holds its `docs.md`, the Rust signatures of its public items (props, enums, hooks) and its demo as a working example. `llms-full.txt` is all of it in one file. The same `rust-ui registry` run writes them, so they can't drift from the components. Without a checkout, the CLI prints the same text:
+
+```sh
+rust-ui docs            # the index
+rust-ui docs dialog     # one component's page
+```
+
+Point your agent at `llms.txt` (or paste `rust-ui docs <name>` into it) before it writes UI code. The rules at the top come from `docs/llms-intro.md`.

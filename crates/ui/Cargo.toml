@@ -40,7 +40,10 @@ proptest = { version = "1", default-features = false, features = ["std"] }
 # The gallery and docs demos (`ui::demos`). Off by default so apps don't ship demo code and
 # demo CSS; the gallery, the docs site, apps/native and the kit's own tests turn it on.
 # Internal (docs/STABILITY.md).
-demos = []
+demos = ["blocks"]
+# Whole-screen blocks (`ui::blocks`): copy them with `rust-ui add`, or turn this on to use them
+# in place. Internal (docs/STABILITY.md).
+blocks = []
 web = ["dioxus-primitives/web", "motion/web"]
 desktop = ["motion/desktop"]
 # dioxus-native (Blitz). Nothing in the kit needs it any more (docs/NATIVE.md); kept so

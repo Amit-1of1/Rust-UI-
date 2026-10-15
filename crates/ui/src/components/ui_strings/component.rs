@@ -88,8 +88,30 @@ pub struct UiStrings {
     pub slides: String,
     // Date picker
     pub show_calendar: String,
+    // Time picker
+    pub time: String,
+    pub date_and_time: String,
+    pub hours: String,
+    pub minutes: String,
+    pub seconds: String,
+    /// Name of the AM/PM segment.
+    pub day_period: String,
+    pub am: String,
+    pub pm: String,
+    /// Read for a time segment that has no value yet.
+    pub empty_value: String,
     // Chart
     pub no_data: String,
+    /// Opens a chart's data table.
+    pub show_data: String,
+    /// Header of a chart table's first column.
+    pub chart_category: String,
+    /// Header of a single-series chart's value column.
+    pub chart_value: String,
+    /// Header of a pie chart's percentage column.
+    pub chart_share: String,
+    /// Radial chart summary. `{value}`, `{max}` and `{percent}` are filled in.
+    pub value_of_max: String,
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,
@@ -154,7 +176,21 @@ impl Default for UiStrings {
             sortable_list: s("Sortable list"),
             slides: s("{label} slides"),
             show_calendar: s("Show Calendar"),
+            time: s("Time"),
+            date_and_time: s("Date and time"),
+            hours: s("Hours"),
+            minutes: s("Minutes"),
+            seconds: s("Seconds"),
+            day_period: s("AM/PM"),
+            am: s("AM"),
+            pm: s("PM"),
+            empty_value: s("Empty"),
             no_data: s("No data."),
+            show_data: s("Show data"),
+            chart_category: s("Category"),
+            chart_value: s("Value"),
+            chart_share: s("Share"),
+            value_of_max: s("{value} of {max} ({percent})"),
             opens_in_new_tab: s("(opens in a new tab)"),
             skip_to_content: s("Skip to content"),
             decrease: s("Decrease {label}"),

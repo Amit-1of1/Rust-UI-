@@ -1444,6 +1444,101 @@ fn chart_marks_show_their_value_on_hover() {
 }
 
 #[test]
+fn multi_series_charts_have_a_legend_and_a_summary_per_series() {
+    let html = render(|| {
+        let categories: Vec<String> = vec!["Jan".into(), "Feb".into()];
+        let series = vec![
+            ChartSeries::new("Desktop", [186.0, 305.0]),
+            ChartSeries::new("Mobile", [80.0, 200.0]),
+        ];
+        rsx! {
+            BarChart { categories: categories.clone(), series: series.clone(), stacked: true, label: "Bars" }
+            AreaChart { categories, series, label: "Areas" }
+        }
+    });
+    assert_eq!(
+        html.matches("data-slot=\"chart-legend\"").count(),
+        2,
+        "{html}"
+    );
+    assert!(
+        html.contains("<desc>Desktop: Jan 186, Feb 305. Mobile: Jan 80, Feb 200.</desc>"),
+        "{html}"
+    );
+    // Bars name their series; area columns list every series.
+    assert!(html.contains("<title>Feb, Mobile: 200</title>"), "{html}");
+    assert!(
+        html.contains("<title>Jan: Desktop 186, Mobile 80</title>"),
+        "{html}"
+    );
+    // The second line differs by dash pattern, not only by colour.
+    assert!(html.contains("stroke-dasharray=\"6 4\""), "{html}");
+}
+
+#[test]
+fn single_series_charts_stay_a_bare_svg() {
+    let html =
+        render(|| rsx! { BarChart { data: vec![ChartDatum::new("Jan", 1.0)], label: "One" } });
+    assert!(html.starts_with("<svg"), "{html}");
+    assert!(!html.contains("chart-legend"), "{html}");
+}
+
+#[test]
+fn chart_table_lists_the_numbers() {
+    let html = render(|| {
+        rsx! {
+            LineChart { data: vec![ChartDatum::new("Jan", 12.0), ChartDatum::new("Feb", 7.5)], table: true, label: "Trend" }
+        }
+    });
+    for text in [
+        "<summary",
+        ">Show data</summary>",
+        "<caption",
+        ">Category</th>",
+        ">Value</th>",
+        ">7.5</td>",
+    ] {
+        assert!(html.contains(text), "missing {text} in {html}");
+    }
+}
+
+#[test]
+fn pie_and_radial_charts_describe_their_values() {
+    let html = render(|| {
+        rsx! {
+            PieChart {
+                data: vec![ChartDatum::new("Free", 1.0), ChartDatum::new("Pro", 3.0)],
+                donut: true,
+                center: "4",
+                center_caption: "Customers",
+                label: "Plans",
+            }
+            RadialChart { value: 64.0, label: "Goal" }
+        }
+    });
+    assert_eq!(html.matches("role=\"img\"").count(), 2, "{html}");
+    assert!(
+        html.contains("<desc>Free: 1 (25%), Pro: 3 (75%)</desc>"),
+        "{html}"
+    );
+    assert!(html.contains("<title>Pro: 3 (75%)</title>"), "{html}");
+    assert!(html.contains("<desc>64 of 100 (64%)</desc>"), "{html}");
+    assert!(html.contains(">64%</text>"), "{html}");
+    assert!(html.contains(">Customers</text>"), "{html}");
+}
+
+#[test]
+fn empty_pie_shows_a_track_and_says_no_data() {
+    let html = render(|| rsx! { PieChart { data: vec![], label: "Nothing" } });
+    assert!(html.contains("<desc>No data.</desc>"), "{html}");
+    assert_eq!(
+        html.matches("<title>").count(),
+        1,
+        "only the chart's own title: {html}"
+    );
+}
+
+#[test]
 fn table_numeric_columns_are_marked_on_head_and_cell() {
     let html = render(|| {
         rsx! {
@@ -1670,4 +1765,80 @@ fn pagination_pager_renders_buttons_and_disables_the_ends() {
         .unwrap();
     assert!(!next.contains("aria-disabled"), "{html}");
     assert!(html.contains(r#"aria-current="page""#), "{html}");
+}
+
+#[test]
+fn time_picker_renders_named_spinbuttons() {
+    let html = render(|| {
+        rsx! {
+            TimePicker {
+                value: Time::from_hms(14, 5, 0).ok(),
+                hour_cycle: HourCycle::H12,
+                name: "start",
+            }
+        }
+    });
+    assert!(
+        html.contains(r#"role="group""#) && html.contains(r#"aria-label="Time""#),
+        "{html}"
+    );
+    assert_eq!(
+        html.matches(r#"role="spinbutton""#).count(),
+        3,
+        "hours, minutes, AM/PM: {html}"
+    );
+    for text in [
+        r#"aria-label="Hours""#,
+        r#"aria-valuenow="2""#,
+        r#"aria-valuemin="1""#,
+        r#"aria-valuemax="12""#,
+        r#"aria-valuetext="05""#,
+        r#"aria-valuetext="PM""#,
+        r#"value="14:05""#,
+        r#"name="start""#,
+    ] {
+        assert!(html.contains(text), "missing {text}: {html}");
+    }
+}
+
+#[test]
+fn time_picker_marks_empty_segments_and_links_a_label() {
+    let html = render(|| {
+        rsx! {
+            TimePicker { labelled_by: "lbl", first_segment_id: "first", invalid: true, described_by: "err" }
+        }
+    });
+    assert!(html.contains(r#"aria-valuetext="Empty""#), "{html}");
+    assert!(!html.contains("aria-valuenow"), "no value yet: {html}");
+    assert!(html.contains(r#"id="first""#), "{html}");
+    assert!(
+        html.contains(r#"aria-labelledby="first lbl""#),
+        "segment named by itself and the label: {html}"
+    );
+    assert!(
+        !html.contains(r#"aria-label="Time""#),
+        "the label replaces the default name: {html}"
+    );
+    assert!(
+        html.contains(r#"aria-invalid="true""#) && html.contains(r#"aria-describedby="err""#),
+        "{html}"
+    );
+}
+
+#[test]
+fn date_time_picker_renders_a_date_and_a_time() {
+    let html = render(|| {
+        rsx! {
+            DateTimePicker { value: parse_iso_date_time("2026-05-07T09:30"), name: "when" }
+        }
+    });
+    assert!(html.contains(r#"aria-label="Date and time""#), "{html}");
+    for text in [
+        "2026",
+        r#"aria-valuetext="09""#,
+        r#"aria-valuetext="30""#,
+        r#"value="2026-05-07T09:30""#,
+    ] {
+        assert!(html.contains(text), "missing {text}: {html}");
+    }
 }

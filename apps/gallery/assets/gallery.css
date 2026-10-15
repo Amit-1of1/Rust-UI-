@@ -102,3 +102,45 @@ body {
   display: flex;
   align-items: center;
 }
+
+/* Blocks: links in the gallery, and the way back from a block's own page. */
+.gallery-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery-blocks li {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius, 0.5rem);
+}
+
+.gallery-blocks a {
+  color: var(--secondary-color-1);
+  font-weight: 600;
+}
+
+.gallery-blocks p {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+}
+
+.gallery-back {
+  position: fixed;
+  z-index: 60;
+  inset-block-end: 1rem;
+  inset-inline-end: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius, 0.5rem);
+  background: var(--primary-color-2);
+  font-size: 0.875rem;
+}
+
+.gallery-back a {
+  color: var(--secondary-color-1);
+}

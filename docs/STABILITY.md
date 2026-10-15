@@ -33,9 +33,10 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 
 | Item | Why |
 |---|---|
-| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `FieldOption`, `Validator` and the rules | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. |
+| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `FieldOption`, `Validator` and the rules | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. |
+| `time_picker` and `date_time_picker` (`TimePicker`, `TimeState`, `HourCycle`, `DateTimePicker` and the ISO helpers) | New on 2026-10-15; min/max times and a time list popover may change the props. |
 | `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
-| `chart` | Kit-written SVG; multi-series charts and a legend (dashboard gap 19) will change its props. |
+| `chart`: `BarChart`, `LineChart`, `AreaChart`, `PieChart`, `RadialChart`, `ChartLegend`, `ChartSeries`, `LegendMarker` | Kit-written SVG; multi-series, the legend, pie and radial charts are new (charts v2) and their props may still change with use. The `--chart-*` tokens are part of the theme contract once the props settle. |
 | `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
 | `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
 | `icons`: `Icon`, `IconData`, `IconNode`, the `icons::lucide` constants (`lucide::CHECK`, `ALL`), the `label` and `mirror_rtl` props and the named `IconSize` steps | New on 2026-10-14 with the generated Lucide set; the data shape may change when Lucide adds new SVG elements. |
@@ -49,6 +50,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Internal
 
 - `ui::demos` (feature `demos`): the gallery and docs demos. The feature exists for this repo's apps and tests.
+- `ui::blocks` (feature `blocks`, on with `demos`): whole screens meant to be copied with `rust-ui add` and then changed. Their props may change in any release; a copy you own doesn't change under you.
 - `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `rust-ui postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
 - `ui::components::<name>` module paths. Import from `ui::prelude` (or `ui::hooks`, `ui::icons`); the module layout follows the registry and may move. `drag_and_drop_list` and `tag_group` are the exception: both export `RemoveButton`, so import them by module path.
 
@@ -77,13 +79,15 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Stable
 
 - The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `RUST_UI_SOURCE`.
-- The `registry.json` format these commands read.
+- The `registry.json` format these commands read. Items with `"kind": "block"` (added 2026-10-15) keep their files under `crates/ui/src/blocks`; a CLI from before then can't install them, but reads everything else as before.
 
 ### Experimental
 
+- `rust-ui add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
 - `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
 - `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
+- `rust-ui docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
 
 ### Internal
 

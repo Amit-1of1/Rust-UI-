@@ -90,6 +90,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] drawer (gallery)";                 e2e env GALLERY_URL=$G node drawer.mjs
   step "[$engine] table (gallery)";                  e2e env GALLERY_URL=$G node table.mjs
   step "[$engine] select + combobox form fields";    e2e env GALLERY_URL=$G node form_fields.mjs
+  step "[$engine] time + date-time pickers (gallery)"; e2e env GALLERY_URL=$G node time_picker.mjs
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
   step "[$engine] keyboard-only walkthrough";        e2e env GALLERY_URL=$G node walkthrough.mjs
@@ -98,6 +99,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] forced colors (gallery)";          e2e env GALLERY_URL=$G node forced_colors.mjs
   step "[$engine] light-dark theme, chips, link";    e2e env GALLERY_URL=$G node theme.mjs
   step "[$engine] Ctrl+K hotkey (gallery)";          e2e env GALLERY_URL=$G node hotkey.mjs
+  step "[$engine] blocks: axe on every block + flows";   e2e env GALLERY_URL=$G node blocks.mjs
   step "[$engine] dashboard: axe on every page + flows"; e2e env GALLERY_URL=$A node dashboard.mjs
   step "[$engine] booking: axe on every route + flows"; e2e env GALLERY_URL=$B node booking.mjs
 

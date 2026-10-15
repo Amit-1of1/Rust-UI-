@@ -66,6 +66,10 @@ accordion, alert dialog, aspect ratio, avatar, badge, button, calendar, card, ch
 
 Original to this repo (not copied, accessible by construction): alert, breadcrumb, chart (SVG bar/line with a text summary), command palette, field (labels, hints, errors, `validate`), kbd, spinner, sortable table.
 
+## Blocks
+
+Whole screens built only from kit components, to copy and change: `login_01` (sign-in card), `signup_01` (sign-up with an email-code step), `dashboard_01` (`DashboardShell` with a collapsible sidebar, plus an overview page of key figures, charts and recent orders) and `settings_01` (profile, notifications, appearance and a danger zone in tabs). They live in `crates/ui/src/blocks/<name>/`; `rust-ui add login_01` copies one into `src/blocks/` with the components it uses. The gallery opens each on its own page (the Blocks section, or `#block/<name>`), and `tests/e2e/blocks.mjs` runs axe on them in light and dark and drives their flows.
+
 ## Demo site
 
 `apps/site` ("Orbit") is a small landing page built only from the kit: nav, theme switch, pricing tabs, chart, table, FAQ accordion, command palette, a validated signup form with toast and dialog, a swipe-dismiss banner and an animated waitlist. It is a real-world test of the kit; run it with `dx serve --platform web` in `apps/site`.
@@ -88,6 +92,7 @@ rust-ui --source https://github.com/Amit-1of1/Rust-UI- list
 rust-ui init  --dest assets/theme.css
 rust-ui add command --dest src/components   # also copies dialog, button, kbd
 rust-ui diff command --dest src/components  # exit 1 if your copy differs
+rust-ui docs dialog                         # page for coding agents; llms.txt is the index
 ```
 
 `add` never overwrites a file you changed unless you pass `--force`. It prints the `pub mod` lines to paste into your `components/mod.rs`. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL such as `https://github.com/Amit-1of1/Rust-UI-`; a URL is shallow-cloned into `~/.cache/rust-ui` and needs `git`.
