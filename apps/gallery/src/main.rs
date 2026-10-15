@@ -30,6 +30,8 @@ fn App() -> Element {
                 Section { title: "Input and label", blurb: "Text entry with an accessible label.", ui::demos::input::Demo {} }
                 Section { title: "Checkbox", blurb: "Binary choice; Space toggles.", ui::demos::checkbox::Demo {} }
                 Section { title: "Switch", blurb: "An on/off setting.", ui::demos::switch::Demo {} }
+                Section { title: "Skip link", blurb: "A hidden link to the main content, shown on keyboard focus.", ui::demos::skip_link::Demo {} }
+                Section { title: "Number field", blurb: "A number with - and + buttons and arrow keys.", ui::demos::number_field::Demo {} }
                 Section { title: "Card", blurb: "A grouped surface with header, content and footer.", ui::demos::card::Demo {} }
                 // With `wasm-split` (release builds, scripts/release-web.sh) everything below
                 // the first screen is one lazy wasm file, fetched as soon as the page is up.

@@ -87,6 +87,8 @@ pub const DEMOS: &[Demo] = &[
     ("hooks", ui::demos::hooks::Demo),
     ("chips", ui::demos::chips::Demo),
     ("link", ui::demos::link::Demo),
+    ("skip_link", ui::demos::skip_link::Demo),
+    ("number_field", ui::demos::number_field::Demo),
 ];
 
 /// Fails if a component folder has a `<name>_demo.rs` that [`DEMOS`] does not list.

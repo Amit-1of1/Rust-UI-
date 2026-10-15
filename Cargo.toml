@@ -13,8 +13,10 @@ repository = "https://github.com/Amit-1of1/Rust-UI-"
 dioxus = "0.7.10"
 # Git-only upstream (DioxusLabs/components, 2026-09-07), used through our fork, pinned to a commit.
 # Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825: upstream DioxusLabs/components
-# 9a75825 plus the no-JavaScript fallbacks listed in docs/FORKS.md.
-dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "71fed6960350eafeff5699f9fd3a447a1418b7b7" }
+# 9a75825 plus the no-JavaScript fallbacks and fixes listed in docs/FORKS.md. The newest
+# commit (5b21f56) is on branch claude/project-thread-pet69c until rust-ui/primitives-9a75825
+# is fast-forwarded to it.
+dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "5b21f56542274835bb4a0bac85b84212d2cff862" }
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
 motion = { path = "crates/motion", package = "rust-ui-motion", version = "0.1.0" }

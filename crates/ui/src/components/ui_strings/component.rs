@@ -93,6 +93,13 @@ pub struct UiStrings {
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,
+    // Skip link
+    pub skip_to_content: String,
+    // Number field
+    /// The - button's name. `{label}` is the field's name.
+    pub decrease: String,
+    /// The + button's name. `{label}` is the field's name.
+    pub increase: String,
 }
 
 impl Default for UiStrings {
@@ -149,6 +156,9 @@ impl Default for UiStrings {
             show_calendar: s("Show Calendar"),
             no_data: s("No data."),
             opens_in_new_tab: s("(opens in a new tab)"),
+            skip_to_content: s("Skip to content"),
+            decrease: s("Decrease {label}"),
+            increase: s("Increase {label}"),
         }
     }
 }
