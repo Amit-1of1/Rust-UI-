@@ -16,6 +16,7 @@ pub mod manifest;
 pub mod postbuild;
 pub mod scaffold;
 pub mod theme;
+pub mod update;
 
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;

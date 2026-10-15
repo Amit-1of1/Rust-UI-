@@ -1,4 +1,5 @@
 use clap::{Parser, Subcommand};
+use rust_ui_cli::update::{self, Lock};
 use rust_ui_cli::{
     add_to, build, compare, load, materialize, mod_lines_of, resolve, to_json, FileState, Kind,
     THEME_FILE,
@@ -12,8 +13,13 @@ use std::process::ExitCode;
 struct Cli {
     /// Where to copy from: a local checkout of the Rust UI repo, or a git URL
     /// (cloned into the cache directory on first use).
-    #[arg(long, global = true, default_value = ".", env = "RUST_UI_SOURCE")]
-    source: String,
+    /// `update` defaults to the source recorded in the lockfile, everything else to `.`.
+    #[arg(long, global = true, env = "RUST_UI_SOURCE")]
+    source: Option<String>,
+    /// The lockfile `add` writes and `update` reads; the pristine copies `update` merges
+    /// against go in `.rust-ui/base/` beside it.
+    #[arg(long, global = true, default_value = rust_ui_cli::update::LOCK_FILE)]
+    lock: PathBuf,
     #[command(subcommand)]
     command: Command,
 }
@@ -78,6 +84,20 @@ enum Command {
     /// Print a component's page for coding agents (docs, props, example), or the index
     /// (`llms.txt`) without a name.
     Docs { name: Option<String> },
+    /// Update copied components and blocks to the registry's current version, keeping your
+    /// edits: a three-way merge against the version `add` recorded in the lockfile.
+    Update {
+        /// Items to update (and any components they now need); all installed ones when empty.
+        names: Vec<String>,
+        /// Show what would change, as a diff, without writing anything.
+        #[arg(long)]
+        dry_run: bool,
+        /// Where newly needed components go when none is installed yet.
+        #[arg(long, default_value = "src/components")]
+        dest: PathBuf,
+        #[arg(long, default_value = "src/blocks")]
+        blocks_dest: PathBuf,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -94,7 +114,14 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
         .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".cache")))
         .unwrap_or_else(std::env::temp_dir)
         .join("rust-ui");
-    let source = materialize(&cli.source, &cache)?;
+    let source_arg = match (&cli.source, &cli.command) {
+        (Some(s), _) => s.clone(),
+        (None, Command::Update { .. }) => {
+            Lock::load(&cli.lock)?.source.unwrap_or_else(|| ".".into())
+        }
+        (None, _) => ".".into(),
+    };
+    let source = materialize(&source_arg, &cache)?;
     let root: &Path = &source;
     let err = |e: std::io::Error| e.to_string();
     match cli.command {
@@ -151,6 +178,9 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let (written, skipped) =
                 add_to(root, &items, &dest, &blocks_dest, force).map_err(err)?;
             println!("wrote {} file(s)", written.len());
+            let recorded =
+                update::record(&cli.lock, root, &source_arg, &items, &dest, &blocks_dest)?;
+            println!("recorded {recorded} file(s) in {}", cli.lock.display());
             for s in &skipped {
                 println!("kept {} (differs; use --force to overwrite)", s.display());
             }
@@ -249,6 +279,59 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                         ))
                     }
                 },
+            }
+        }
+        Command::Update {
+            names,
+            dry_run,
+            dest,
+            blocks_dest,
+        } => {
+            use update::Action;
+            let lock = Lock::load(&cli.lock)?;
+            if lock.items.is_empty() {
+                return Err(format!(
+                    "{} lists nothing to update; install with `rust-ui add` first",
+                    cli.lock.display()
+                ));
+            }
+            let reg = load(root)?;
+            let plan = update::plan(root, &reg, &lock, &cli.lock, &names, &dest, &blocks_dest)?;
+            for f in plan.files.iter().filter(|f| f.action != Action::UpToDate) {
+                let note = f.action.note();
+                let sep = if note.is_empty() { "" } else { " - " };
+                println!("{:<10} {}{sep}{note}", f.action.label(), f.path.display());
+            }
+            for name in &plan.gone {
+                println!("gone       {name} - no longer in the registry; left as it is");
+            }
+            let counts = [
+                Action::Updated,
+                Action::Merged,
+                Action::Added,
+                Action::Conflict,
+                Action::Unresolved,
+                Action::NoBase,
+                Action::KeptEdits,
+                Action::UpToDate,
+            ]
+            .into_iter()
+            .filter(|a| plan.count(*a) > 0)
+            .map(|a| format!("{} {}", plan.count(a), a.label().to_lowercase()))
+            .collect::<Vec<_>>()
+            .join(", ");
+            if dry_run {
+                print!("{}", update::render_diff(&plan));
+                println!("dry run: {counts}; nothing written");
+            } else {
+                update::apply(&plan, &cli.lock, &source_arg)?;
+                println!("{counts}");
+                for (item, dir) in &plan.new_items {
+                    println!("Add to {dir}/mod.rs: pub mod {};", item.name);
+                }
+            }
+            if plan.has_conflicts() {
+                return Ok(ExitCode::FAILURE);
             }
         }
         Command::Diff {

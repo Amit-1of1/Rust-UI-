@@ -4,6 +4,7 @@
 
 Rules for writing app code with this kit:
 
+- Copied components are your code: edit them freely. Update them with `rust-ui update` (three-way merge against `rust-ui-lock.json`; `--dry-run` shows the diff), not by re-running `rust-ui add --force`, which overwrites your edits. Resolve any `<<<<<<< yours` conflict markers it leaves.
 - Dioxus is pinned to `0.7.x`. Write Dioxus 0.7 code (`#[component]`, `rsx!`, signals); don't use 0.6 or 0.8 APIs.
 - Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `rust-ui init`. Without it components are unstyled.
 - Import components from `ui::prelude::*` with the crate, or `crate::components::<name>::*` after copying. Icons come from `ui::icons` by path (`ui::icons::Check`), hooks from `ui::hooks`, animation from `ui::motion`.
