@@ -28,16 +28,13 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
-      - run: cargo install dioxus-cli --version 0.7.10 --locked
+      # dx 0.7.10 with the wasm splitter fixes (docs/FORKS.md); the gallery is a split build.
+      - run: scripts/install-dx.sh
       # The docs site is the landing page; the gallery lives under /gallery/.
-      - run: dx bundle --platform web --release --base-path Rust-UI-
-        working-directory: apps/docs
-      - run: dx bundle --platform web --release --base-path Rust-UI-/gallery
-        working-directory: apps/gallery
-      # One stylesheet per app instead of one per component (see crates/cli/README.md).
-      - run: |
-          cargo run -q -p rust-ui-cli -- postbuild target/dx/docs/release/web/public
-          cargo run -q -p rust-ui-cli -- postbuild target/dx/gallery/release/web/public
+      # release-web.sh = dx release build (split where the app has a `wasm-split` feature),
+      # then one stylesheet per app instead of one per component (see crates/cli/README.md).
+      - run: scripts/release-web.sh docs --base-path Rust-UI-
+      - run: scripts/release-web.sh gallery --base-path Rust-UI-/gallery
       - run: |
           mkdir -p public
           cp -r target/dx/docs/release/web/public/. public/

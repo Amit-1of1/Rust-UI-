@@ -105,7 +105,14 @@ fn App() -> Element {
 fn Shell() -> Element {
     let mut store = use_store();
     let mut palette = use_signal(|| false);
+    let mut palette_seen = use_signal(|| false);
+    let mut palette_ready = use_signal(|| false);
     use_hotkey("k", move || palette.set(true));
+    use_effect(move || {
+        if palette() {
+            palette_seen.set(true);
+        }
+    });
     // The same state ThemeCustomizer (Settings) uses, so the switch and the customizer agree.
     let theme = use_theme();
     let set_dark = move |dark: bool| {
@@ -117,14 +124,6 @@ fn Shell() -> Element {
     };
 
     let page = (store.page)();
-    let mut commands: Vec<CommandItem> = Page::ALL
-        .iter()
-        .map(|p| CommandItem::new(p.id(), format!("Go to {}", p.title())).group("Navigate"))
-        .collect();
-    commands.extend([
-        CommandItem::new("add-customer", "Add customer").group("Actions"),
-        CommandItem::new("theme", "Toggle dark mode").group("Actions"),
-    ]);
 
     rsx! {
         SidebarProvider {
@@ -206,31 +205,67 @@ fn Shell() -> Element {
                 // SidebarInset is already the page's <main>.
                 div { class: "db-main", id: "main-content",
                     h1 { class: "db-title", {page.title()} }
-                    match page {
-                        Page::Overview => rsx! { overview::Overview {} },
-                        Page::Customers => rsx! { customers::Customers {} },
-                        Page::Orders => rsx! { orders::Orders {} },
-                        Page::Settings => rsx! { settings::Settings {} },
+                    // With `wasm-split`, every page but Overview downloads the first time it opens.
+                    SuspenseBoundary { fallback: |_| rsx! { Spinner {} },
+                        match page {
+                            Page::Overview => rsx! { overview::Overview {} },
+                            Page::Customers => rsx! { customers::Customers {} },
+                            Page::Orders => rsx! { orders::Orders {} },
+                            Page::Settings => rsx! { settings::Settings {} },
+                        }
                     }
                 }
             }
         }
+        // The palette mounts on first open (with `wasm-split`, its code downloads then) and
+        // stays mounted so closing still animates. It opens only once mounted: a dialog that
+        // mounts already open misses its focus trap.
+        if palette_seen() {
+            SuspenseBoundary { fallback: |_| rsx! {},
+                Palette {
+                    open: palette() && palette_ready(),
+                    on_open_change: move |v| palette.set(v),
+                    on_ready: move |_| palette_ready.set(true),
+                    on_select: move |id: String| match id.as_str() {
+                        "add-customer" => {
+                            store.page.set(Page::Customers);
+                            store.adding.set(true);
+                        }
+                        "theme" => set_dark(!theme.is_dark()),
+                        other => {
+                            if let Some(p) = Page::from_id(other) {
+                                store.page.set(p);
+                            }
+                        }
+                    },
+                }
+            }
+        }
+    }
+}
+
+#[component(lazy)]
+fn Palette(
+    open: bool,
+    on_open_change: EventHandler<bool>,
+    on_ready: EventHandler<()>,
+    on_select: EventHandler<String>,
+) -> Element {
+    use_effect(move || on_ready.call(()));
+    let mut items: Vec<CommandItem> = Page::ALL
+        .iter()
+        .map(|p| CommandItem::new(p.id(), format!("Go to {}", p.title())).group("Navigate"))
+        .collect();
+    items.extend([
+        CommandItem::new("add-customer", "Add customer").group("Actions"),
+        CommandItem::new("theme", "Toggle dark mode").group("Actions"),
+    ]);
+    rsx! {
         CommandDialog {
-            open: palette(),
-            on_open_change: move |v| palette.set(v),
-            items: commands,
-            on_select: move |id: String| match id.as_str() {
-                "add-customer" => {
-                    store.page.set(Page::Customers);
-                    store.adding.set(true);
-                }
-                "theme" => set_dark(!theme.is_dark()),
-                other => {
-                    if let Some(p) = Page::from_id(other) {
-                        store.page.set(p);
-                    }
-                }
-            },
+            open,
+            on_open_change: move |v| on_open_change.call(v),
+            items,
+            on_select: move |id| on_select.call(id),
         }
     }
 }
