@@ -1,0 +1,5 @@
+# Components that `ui::prelude` leaves out, one per line, with the reason after `#`.
+# Read by crates/ui/build.rs (which generates the prelude) and by `rust-ui registry` (llms pages).
+icons               # `ui::icons::Check`: import icons by path, not with a glob
+drag_and_drop_list  # drag_and_drop_list and tag_group both export `RemoveButton`
+tag_group           # use their module paths

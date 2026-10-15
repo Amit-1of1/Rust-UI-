@@ -8,6 +8,7 @@
 //! tests, and may change in any release. The commands are the supported interface; which of
 //! them are stable is in docs/STABILITY.md.
 
+pub mod changelog;
 pub mod docsgen;
 pub mod doctor;
 pub mod llms;

@@ -195,7 +195,8 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
         format!("`use ui::blocks::{name}::*;` with the `rust-ui-kit` crate's `blocks` feature (internal)")
     } else if lib.contains(&format!("pub use components::{name};")) {
         format!("`use ui::{name}::{{...}};` (by path, no glob)")
-    } else if lib.contains(&format!("crate::components::{name}::*;")) {
+    } else if !not_in_prelude(root).iter().any(|n| n == name) {
+        // The prelude is generated from every component folder (crates/ui/build.rs).
         "`use ui::prelude::*;`".to_string()
     } else {
         format!("`use ui::components::{name}::*;`")
@@ -347,6 +348,16 @@ pub fn stale(root: &Path) -> io::Result<Vec<PathBuf>> {
         }
     }
     Ok(stale)
+}
+
+/// Components `ui::prelude` leaves out (`crates/ui/not_in_prelude.txt`, shared with build.rs).
+fn not_in_prelude(root: &Path) -> Vec<String> {
+    read(&root.join("crates/ui/not_in_prelude.txt"))
+        .lines()
+        .filter_map(|l| l.split('#').next())
+        .map(|l| l.trim().to_string())
+        .filter(|l| !l.is_empty())
+        .collect()
 }
 
 #[cfg(test)]

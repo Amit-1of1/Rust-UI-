@@ -47,12 +47,42 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 ## Process traps
 
 - [ ] **Small PRs, one theme each** (one week's slice, or one component family).
-- [ ] **Every public API change gets a `CHANGELOG.md` line; a breaking one also gets a `docs/MIGRATION.md` section.** New public items start experimental and are marked as `docs/STABILITY.md` says. Don't bump crate versions in feature PRs ([docs/VERSIONING.md](VERSIONING.md)).
+- [ ] **Every public API change gets a changelog entry; a breaking one also gets a migration note.** Both go in the branch's own `changes/<topic>.md` and `changes/<topic>.migration.md`, never straight into `CHANGELOG.md` or `docs/MIGRATION.md` ([changes/README.md](../changes/README.md)). New public items start experimental and are marked as `docs/STABILITY.md` says. Don't bump crate versions in feature PRs ([docs/VERSIONING.md](VERSIONING.md)).
 - [ ] **Update this file and the plan when reality differs.** Don't silently drift.
 - [ ] **End every week with a demo:** the gallery running, plus a one-paragraph note of what changed.
 - [ ] **No timeline promises shorter than the plan.** If a week slips, cut scope, don't stack weeks.
 
+## Parallel sessions
+
+Several sessions (and PRs) run at once. Every conflict in PRs #17 to #40 came from two branches adding lines at the same place in a shared file: the top of `CHANGELOG.md` and `docs/MIGRATION.md` (all four PRs open on 2026-10-15), the end of this file (12 merges), the module, prelude, demo and test lists (`lib.rs`, `mod.rs`, `tests/common/mod.rs`, `tests/demos.rs`, `tests/render.rs`), and generated files (`registry.json`, `component.json`, `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots). Those places are now either generated or one file per change, so the steps below are mostly mechanical.
+
+**Starting**
+
+- [ ] **Branch from the latest `main`:** `git fetch origin main && git checkout -B <branch> origin/main`. Never from another open PR's branch, and never from an old checkout.
+- [ ] **One PR per session.** If the work needs a change that another open PR is making (a fork bump, a shared helper), say so and wait for that PR to merge instead of copying it.
+
+**While working: add files, don't append to shared ones**
+
+- [ ] **Changelog and migration notes:** `changes/<topic>.md` and `changes/<topic>.migration.md`. `scripts/check.sh` fails if a branch edits `CHANGELOG.md` or `docs/MIGRATION.md`.
+- [ ] **Components, demos and their tests:** add the folder, `src/demos/<name>.rs` and `tests/components/<name>.rs` (`rust-ui new` does all three). `crates/ui/build.rs` generates `components::*`, the prelude, `ui::demos::ALL` and the test list, so nothing else needs a line. New tests for an existing component also go in `tests/components/<name>.rs`, not at the end of `render.rs`.
+- [ ] **Platform notes and decisions:** a new file, `docs/notes/<topic>.md` or `docs/decisions/<date>-<topic>.md`. The two lists at the end of this file are closed to new lines; edit an existing line there only to correct it.
+- [ ] **Generated files** (`registry.json`, every `component.json`, `apps/docs/src/generated.rs`, `llms.txt` and `llms/`, `Cargo.lock`, snapshots) are never edited or merged by hand; regenerate them (`rust-ui registry`, `cargo metadata`, `UPDATE_SNAPSHOTS=1`).
+- [ ] **Lists that are still shared** (the gallery's sections, `scripts/check.sh`, `scripts/e2e.sh`, `tests/class.rs`, `apps/*/GAPS.md`, `docs/STABILITY.md`): change only your own lines, and add new lines next to related ones rather than at the end.
+
+**Syncing**
+
+- [ ] **Run `scripts/sync-main.sh` before every push, and whenever GitHub or a notice says the PR conflicts.** It merges `origin/main` (a merge commit, never a rebase or force-push), takes main's copy of each generated file and regenerates it, and lists anything left to resolve by hand; after resolving, `scripts/sync-main.sh --continue`. `scripts/check.sh` fails while the branch is behind `origin/main`.
+- [ ] **A conflict in `CHANGELOG.md` or `MIGRATION.md`** means the branch predates fragments: keep main's side and move the branch's entries into `changes/`.
+
+**Merging (the owner merges; sessions never merge)**
+
+- [ ] **One PR at a time, and only when it is green on a branch that contains the latest `main`.** After a merge, every other open PR's session syncs (sync-main, check, push) before the next merge.
+- [ ] **Order:** fork pins and dependency bumps first (they rewrite every `component.json` and `Cargo.lock`), then shared infrastructure (scripts, CI, build), then features, smallest first. When two PRs touch the same component, merge the one that was ready first and let the other sync.
+- [ ] **Before a release,** fold the fragments on `main` in a PR of its own: `cargo run -p rust-ui-cli -- changelog` (with `FOLDING_CHANGELOG=1 scripts/check.sh`).
+
 ## Platform notes (learned, keep current)
+
+Closed to new lines (see [Parallel sessions](#parallel-sessions)): new notes go in [docs/notes/](notes/README.md), one file per topic.
 
 - dioxus-primitives uses `document::eval` (JavaScript) for Escape-to-close, outside-click dismissal, focus traps, pointer tracking while dragging, avatars and context menus. Native (Blitz) has no JavaScript, so those stay inert there until the primitives get a Rust path (fork). Don't add *more* JavaScript of our own.
 - DioxusLabs' styled components use plain CSS via `#[css_module]`, not Tailwind. We keep that model. See the decision log.
@@ -94,7 +124,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `TimePicker` segments are our own `<input role="spinbutton">`s, not dioxus-primitives' date segments (private and `contenteditable`). Keyboard logic lives in the pure `TimeState::apply` (proptest in `tests/time_picker.rs`). Focus leaving a whole picker is detected with `focusin`/`focusout` plus an effect (`use_focus_exit`), no JavaScript. `tests/e2e/time_picker.mjs` waits by polling for state, never with fixed pauses; prefer that in new e2e scripts.
 - `crates/ui/tests/aria.rs` checks every demo's SSR HTML for broken idrefs, duplicate ids, unknown `aria-*`/roles, missing names and missing required states. It complements axe; it does not replace it. Known issues sit in its `KNOWN` list with a reason.
 
-- A component's own `class` goes through `merge_attributes` (dioxus-primitives) with the caller's attributes, never as a separate `class:` next to `..attributes` (that renders two `class` attributes and the browser drops one). Primitive props with a named `class: Option<String>` (radio item, navbar item, popover and dialog content) are joined by hand instead. `crates/ui/tests/class.rs` renders each component with a class; add new components to it.
+- A component's own `class` goes through `merge_attributes` (dioxus-primitives) with the caller's attributes, never as a separate `class:` next to `..attributes` (that renders two `class` attributes and the browser drops one). Primitive props with a named `class: Option<String>` (radio item, navbar item, popover and dialog content) are joined by hand instead. `crates/ui/tests/class.rs` renders each component with a class; for a new component, put that test in its `tests/components/<name>.rs` instead.
 - `Select` and `Combobox` move `id`, `aria-describedby`, `aria-invalid` and `aria-required` (and `aria-label`/`aria-labelledby` for `Select`) from their wrapper to the focusable control, so they can be form fields (`SelectField`, `ComboboxField`).
 - Theme mode, accent, density and radius have one source of truth, `use_theme()`; app code should not write `data-theme` itself.
 - `ui::demos` is behind the kit's `demos` feature (gallery, docs, apps/native and the kit's tests turn it on), so apps don't ship demo code or demo CSS.
@@ -106,6 +136,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Blocks (`crates/ui/src/blocks/<name>/`, `ui::blocks`) are whole screens built only from kit components; if a block needs something the kit lacks, add it to the kit or log the gap, don't hand-roll it in the block. Each block is the page's `main` (or takes `embedded` when a shell already provides one), has exactly one `h1`, and is listed in `BLOCKS` in `crates/ui/tests/common/mod.rs` (aria check, snapshot, `tests/blocks.rs`) and in the gallery's `BLOCKS` (its own page at `#block/<name>`, scanned by `tests/e2e/blocks.mjs`). The registry marks them `"kind": "block"`.
 
 ## Decision log
+
+Closed to new rows: new decisions go in [docs/decisions/](decisions/README.md), one file each. Older ones stay here.
 
 | Date | Decision | Why |
 |---|---|---|
