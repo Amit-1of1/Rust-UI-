@@ -104,6 +104,13 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [UiStrings](llms/ui_strings.md): Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults
 - [Virtual list](llms/virtual_list.md): The VirtualList component virtualizes large lists by rendering only visible rows plus a buffer
 
+## Blocks
+
+- [Dashboard 01](llms/dashboard_01.md): An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table
+- [Login 01](llms/login_01.md): A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link
+- [Settings 01](llms/settings_01.md): A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation)
+- [Sign-up 01](llms/signup_01.md): A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code
+
 ---
 
 # Accordion
@@ -9911,4 +9918,313 @@ pub fn Demo() -> Element {
         }
     }
 }
+```
+
+---
+
+# Dashboard 01
+
+- Copy into your app: `rust-ui add dashboard_01` (also copies `badge`, `button`, `card`, `chart`, `dropdown_menu`, `empty`, `icons`, `separator`, `sidebar`, `switch`, `table`, `theme_customizer`).
+- Import: `use crate::blocks::dashboard_01::*;` after copying, or `use ui::blocks::dashboard_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+
+An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table. Built from `sidebar`, `card`, `chart`, `table`, `badge`, `dropdown_menu`, `switch`, `empty` and `theme_customizer` (for `use_theme`).
+
+```sh
+rust-ui add dashboard_01
+```
+
+Use the whole screen, or only the shell around your own pages:
+
+```rust
+let mut page = use_signal(|| "home".to_string());
+rsx! {
+    DashboardShell {
+        brand: "Acme",
+        nav: vec![
+            NavItem::new("home", "Home", rsx! { House {} }),
+            NavItem::new("reports", "Reports", rsx! { ChartBar {} }),
+        ],
+        active: page(),
+        on_navigate: move |id| page.set(id),
+        on_sign_out: move |_| sign_out(),
+        match page().as_str() {
+            "home" => rsx! { Home {} },
+            _ => rsx! { Reports {} },
+        }
+    }
+}
+```
+
+## Props (`DashboardShell`)
+
+- `brand: String`: the name in the sidebar and header; its first letter is the logo.
+- `nav: Vec<NavItem>`: `NavItem::new(id, label, icon)`.
+- `active: String`: the current page's `id`. Its label becomes the page `h1`.
+- `on_navigate: Callback<String>`: called with the clicked item's `id`.
+- `initials`, `on_sign_out`: the account menu.
+
+## Accessibility
+
+- The sidebar is a `nav` landmark named "Main"; the current page's link has `aria-current="page"`.
+- `SidebarInset` is the page's `main`; it starts with the page title as an `h1`, and each card title is an `h2`.
+- Collapsed to icons, every link keeps its name (and a tooltip); icons are hidden from screen readers.
+- Charts are `role="img"` with a text summary; the table has a caption and right-aligned numbers.
+
+## API
+
+```rust
+/// One link in the [`DashboardShell`] sidebar.
+pub struct NavItem {
+    pub id: String,
+    pub label: String,
+    /// Shown before the label and alone when the sidebar is collapsed. Hidden from screen readers.
+    pub icon: Element,
+}
+
+/// The frame of an app screen: a collapsible sidebar (to icons), a header with the sidebar
+/// toggle, a dark-mode switch and an account menu, and a `<main>` with the page title as its
+/// `h1`. Put the page in `children`.
+#[component]
+pub fn DashboardShell(
+    #[props(into)] brand: String,
+    nav: Vec<NavItem>,
+    /// The `id` of the current page; its link gets `aria-current` and its label is the `h1`.
+    #[props(into)]
+    active: String,
+    #[props(default)] on_navigate: Callback<String>,
+    /// Two letters for the account button.
+    #[props(into, default = "ME".to_string())]
+    initials: String,
+    #[props(default)] on_sign_out: Callback<()>,
+    children: Element,
+) -> Element
+
+/// A complete dashboard screen: [`DashboardShell`] with an overview page (key figures, two
+/// charts, recent orders) and placeholders for the other pages. Replace the sample data with
+/// your own.
+#[component]
+pub fn Dashboard01() -> Element
+```
+
+---
+
+# Login 01
+
+- Copy into your app: `rust-ui add login_01` (also copies `alert`, `button`, `card`, `form`, `link`).
+- Import: `use crate::blocks::login_01::*;` after copying, or `use ui::blocks::login_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+
+A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link. Built from `card`, `form`, `alert` and `link`.
+
+```sh
+rust-ui add login_01   # copies src/blocks/login_01 and the components it uses
+```
+
+```rust
+let mut error = use_signal(|| None::<String>);
+rsx! {
+    Login01 {
+        error: error(),
+        on_submit: move |d: LoginDetails| {
+            if d.password != "secret" {
+                error.set(Some("Wrong email or password.".into()));
+            }
+        },
+    }
+}
+```
+
+## Props
+
+- `on_submit: Callback<LoginDetails>`: called only with valid fields (`email`, `password`, `remember`).
+- `error: Option<String>`: a server message shown in a destructive `Alert`.
+- `busy: bool`: disables the button while you wait for the server.
+- `forgot_href`, `sign_up_href`: where the two links go.
+
+## Accessibility
+
+- The block is the page's `main` landmark.
+- The page heading is an `h1` ("Sign in"); the form is named "Sign in".
+- Inputs carry `autocomplete="email"` and `"current-password"`, so password managers fill them.
+- Errors are tied to their inputs with `aria-describedby`; a failed submit focuses the first one.
+- The server error is a `role="alert"`, so it is announced when it appears.
+
+## API
+
+```rust
+/// What the person typed into [`Login01`].
+pub struct LoginDetails {
+    pub email: String,
+    pub password: String,
+    pub remember: bool,
+}
+
+/// A centred sign-in card: email, password, "remember me", a forgot-password link and a link
+/// to sign up. Fields are checked before `on_submit` runs; a failed submit moves focus to the
+/// first field that needs fixing.
+#[component]
+pub fn Login01(
+    /// Called with valid details. Check them on your server, then set `error` or move on.
+    #[props(default)]
+    on_submit: Callback<LoginDetails>,
+    /// A message from your server, such as "Wrong email or password." Announced when it appears.
+    #[props(into, default)]
+    error: Option<String>,
+    /// While true the button is disabled and says "Signing in…".
+    #[props(default)]
+    busy: bool,
+    #[props(into, default = "#forgot-password".to_string())] forgot_href: String,
+    #[props(into, default = "#sign-up".to_string())] sign_up_href: String,
+) -> Element
+```
+
+---
+
+# Settings 01
+
+- Copy into your app: `rust-ui add settings_01` (also copies `alert_dialog`, `button`, `card`, `form`, `label`, `switch`, `tabs`, `theme_customizer`).
+- Import: `use crate::blocks::settings_01::*;` after copying, or `use ui::blocks::settings_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+
+A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation). Built from `tabs`, `card`, `form`, `switch`, `label`, `theme_customizer` and `alert_dialog`.
+
+```sh
+rust-ui add settings_01
+```
+
+It stands alone (its root is the page's `main`), or fits inside `DashboardShell` from `dashboard_01` with `embedded: true`, which makes the root a plain `div` because the shell already has a `main`:
+
+```rust
+rsx! {
+    Settings01 {
+        profile: Profile { name: "Ada".into(), email: "ada@example.com".into(), bio: String::new() },
+        on_save_profile: move |p: Profile| save(p),
+        on_email_prefs: move |e: EmailPrefs| save_prefs(e),
+        on_delete_account: move |_| delete_account(),
+    }
+}
+```
+
+## Props
+
+- `profile: Profile`: the values the form starts with.
+- `on_save_profile: Callback<Profile>`: called only with valid fields.
+- `email_prefs: EmailPrefs`, `on_email_prefs: Callback<EmailPrefs>`: called on every switch change.
+- `on_delete_account: Callback<()>`: called after the person confirms.
+- `embedded: bool`: set inside a layout that already has a `main`.
+
+## Accessibility
+
+- The page title is an `h1` and each card title an `h2`; the tab list is named "Settings sections".
+- Tabs use manual activation: arrow keys move, Enter or Space opens (docs/GUARDRAILS.md).
+- "Saved." is a `role="status"` line, so it is announced without moving focus.
+- Each switch is labelled by its row text; deleting asks first in an alert dialog, which traps focus and returns it on close.
+
+## API
+
+```rust
+/// The profile fields of [`Settings01`].
+pub struct Profile {
+    pub name: String,
+    pub email: String,
+    pub bio: String,
+}
+
+/// Which emails the person wants, from the Notifications tab of [`Settings01`].
+pub struct EmailPrefs {
+    pub product: bool,
+    pub security: bool,
+    pub weekly: bool,
+}
+
+/// A settings page in four tabs: Profile (a form), Notifications (switches), Appearance
+/// (the theme customizer) and Account (a danger zone behind a confirmation).
+#[component]
+pub fn Settings01(
+    /// The values the profile form starts with.
+    #[props(default)]
+    profile: Profile,
+    /// Called with a valid profile from "Save".
+    #[props(default)]
+    on_save_profile: Callback<Profile>,
+    #[props(default)] email_prefs: EmailPrefs,
+    /// Called on every switch change.
+    #[props(default)]
+    on_email_prefs: Callback<EmailPrefs>,
+    /// Called once the person confirms "Delete account".
+    #[props(default)]
+    on_delete_account: Callback<()>,
+    /// Set when the page already has a `<main>`, as inside `DashboardShell`; otherwise this
+    /// block is the page's `main` landmark.
+    #[props(default)]
+    embedded: bool,
+) -> Element
+```
+
+---
+
+# Sign-up 01
+
+- Copy into your app: `rust-ui add signup_01` (also copies `alert`, `button`, `card`, `form`, `input_otp`, `link`).
+- Import: `use crate::blocks::signup_01::*;` after copying, or `use ui::blocks::signup_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+
+A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code. Built from `card`, `form`, `input_otp`, `alert` and `link`.
+
+```sh
+rust-ui add signup_01
+```
+
+```rust
+rsx! {
+    Signup01 {
+        on_submit: move |d: SignupDetails| send_code(&d.email),
+        on_verify: move |code: String| check_code(&code),
+        on_resend: move |_| resend(),
+    }
+}
+```
+
+## Props
+
+- `on_submit: Callback<SignupDetails>`: called only with valid fields (`name`, `email`, `password`); the card then shows the code step.
+- `on_verify: Option<Callback<String>>`: called with all 6 digits. Leave it out to stop after step one.
+- `on_resend: Callback<()>`: the "Send a new code" button.
+- `error: Option<String>`: a server message for the current step, shown in a destructive `Alert`.
+- `terms_href`, `sign_in_href`: where the two links go.
+
+## Accessibility
+
+- The block is the page's `main` landmark.
+- Each step has its own `h1`. Moving to the code step puts focus on its heading, so screen readers announce the new step.
+- "Confirm password" checks that both passwords match; errors are tied to their inputs and a failed submit focuses the first one.
+- Password inputs use `autocomplete="new-password"`, so password managers offer to generate one.
+- The code boxes are one labelled group ("Verification code"); a short code is reported in a `role="alert"` line.
+
+## API
+
+```rust
+/// What the person typed into [`Signup01`].
+pub struct SignupDetails {
+    pub name: String,
+    pub email: String,
+    pub password: String,
+}
+
+/// A two-step sign-up card. Step one asks for name, email, a password (typed twice) and
+/// agreement to the terms. Step two asks for the 6-digit code you emailed; leave out
+/// `on_verify` to skip it.
+#[component]
+pub fn Signup01(
+    /// Called with valid details. Send the code here; the card then shows the code step.
+    #[props(default)]
+    on_submit: Callback<SignupDetails>,
+    /// Called with the 6-digit code. Without it the card stops after step one.
+    on_verify: Option<Callback<String>>,
+    /// Called from "Send a new code".
+    #[props(default)]
+    on_resend: Callback<()>,
+    /// A message from your server for the current step, such as "That code has expired."
+    #[props(into, default)]
+    error: Option<String>,
+    #[props(into, default = "#terms".to_string())] terms_href: String,
+    #[props(into, default = "#sign-in".to_string())] sign_in_href: String,
+) -> Element
 ```

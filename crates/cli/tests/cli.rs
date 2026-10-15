@@ -57,6 +57,45 @@ fn add_copies_then_keeps_edits() {
 }
 
 #[test]
+fn blocks_are_listed_with_their_components() {
+    let reg = load(&repo_root()).unwrap();
+    let login = reg.items.iter().find(|i| i.name == "login_01").unwrap();
+    assert_eq!(login.kind, Kind::Block);
+    for dep in ["card", "form", "link"] {
+        assert!(
+            login.registry_dependencies.iter().any(|d| d == dep),
+            "{dep} missing from {:?}",
+            login.registry_dependencies
+        );
+    }
+    // Only blocks carry a `kind` in registry.json, so component entries stay as they were.
+    let json = std::fs::read_to_string(repo_root().join("registry.json")).unwrap();
+    assert_eq!(
+        json.matches("\"kind\"").count(),
+        reg.items.iter().filter(|i| i.kind == Kind::Block).count()
+    );
+}
+
+#[test]
+fn add_puts_blocks_and_components_in_their_own_folders() {
+    let root = repo_root();
+    let items = resolve(&load(&root).unwrap(), &["login_01".into()]).unwrap();
+    let tmp = tempfile::tempdir().unwrap();
+    let (components, blocks) = (tmp.path().join("components"), tmp.path().join("blocks"));
+    add_to(&root, &items, &components, &blocks, false).unwrap();
+    assert!(blocks.join("login_01/block.rs").is_file());
+    assert!(!components.join("login_01").exists());
+    assert!(components.join("card/component.rs").is_file());
+    assert!(components.join("form/component.rs").is_file());
+    // Every component the block imports came along.
+    let source = std::fs::read_to_string(blocks.join("login_01/block.rs")).unwrap();
+    for name in imports_in(&source) {
+        assert!(components.join(&name).is_dir(), "{name} not copied");
+    }
+    assert_eq!(mod_lines_of(&items, Kind::Block), "pub mod login_01;\n");
+}
+
+#[test]
 fn recognises_remotes_and_names_their_cache() {
     assert!(is_remote("https://github.com/Amit-1of1/Rust-UI-"));
     assert!(is_remote("git@github.com:Amit-1of1/Rust-UI-.git"));
@@ -199,10 +238,36 @@ fn every_component_has_an_agent_page_with_its_example() {
 }
 
 #[test]
+fn blocks_have_agent_pages_from_their_own_folder() {
+    let root = repo_root();
+    let reg = load(&root).unwrap();
+    let page = llms::page(&root, &reg, "login_01").unwrap().unwrap();
+    assert!(page.starts_with("# Login 01\n"));
+    assert!(page.contains("use crate::blocks::login_01::*;"));
+    assert!(
+        page.contains("pub fn Login01("),
+        "signatures come from the block's source"
+    );
+    assert!(!page.contains("dx components add"), "dx can't copy blocks");
+    let index = llms::index(&root, &reg).unwrap();
+    let blocks = index
+        .find("## Blocks")
+        .expect("llms.txt has a Blocks section");
+    assert!(index[blocks..].contains("(llms/login_01.md)"));
+    assert!(!index[..blocks].contains("(llms/login_01.md)"));
+}
+
+#[test]
 fn every_component_is_listed_in_the_root_manifest() {
     let root: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(repo_root().join("component.json")).unwrap())
             .unwrap();
     let members = root["members"].as_array().unwrap().len();
-    assert_eq!(members, load(&repo_root()).unwrap().items.len());
+    let components = load(&repo_root())
+        .unwrap()
+        .items
+        .iter()
+        .filter(|i| i.kind.is_component())
+        .count();
+    assert_eq!(members, components);
 }

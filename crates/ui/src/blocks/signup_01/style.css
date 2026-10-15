@@ -1,0 +1,65 @@
+/* Layout only; every colour is a theme token, so light, dark and accents all work. */
+
+.dx-block-signup {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: 1.5rem 1rem;
+  background: var(--primary-color);
+}
+
+.dx-block-signup-card {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.dx-block-signup-title {
+  margin: 0;
+  font: inherit;
+  font-size: 1.25rem;
+}
+
+.dx-block-signup-title:focus {
+  outline: none;
+}
+
+.dx-block-signup-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.dx-block-signup-alert {
+  margin-block-end: 1rem;
+}
+
+.dx-block-signup-error {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--error-text-color);
+  font-size: 0.875rem;
+}
+
+.dx-block-signup-muted {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.dx-block-signup-submit {
+  width: 100%;
+}
+
+.dx-block-signup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dx-block-signup-footer {
+  width: 100%;
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+  text-align: center;
+}

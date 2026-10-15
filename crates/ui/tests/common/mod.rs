@@ -93,6 +93,23 @@ pub const DEMOS: &[Demo] = &[
     ("date_time_picker", ui::demos::date_time_picker::Demo),
 ];
 
+/// Blocks (`ui::blocks`), checked like demos. Names start with `block_`.
+pub const BLOCKS: &[Demo] = &[
+    ("block_dashboard_01", ui::blocks::dashboard_01::Dashboard01),
+    (
+        "block_login_01",
+        || rsx! { ui::blocks::login_01::Login01 {} },
+    ),
+    (
+        "block_settings_01",
+        || rsx! { ui::blocks::settings_01::Settings01 {} },
+    ),
+    (
+        "block_signup_01",
+        || rsx! { ui::blocks::signup_01::Signup01 {} },
+    ),
+];
+
 /// Fails if a component folder has a `<name>_demo.rs` that [`DEMOS`] does not list.
 pub fn assert_demos_complete() {
     let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/src/components");

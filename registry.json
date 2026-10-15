@@ -896,6 +896,85 @@
         "virtual_list/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "dashboard_01",
+      "kind": "block",
+      "files": [
+        "dashboard_01/block.rs",
+        "dashboard_01/docs.md",
+        "dashboard_01/mod.rs",
+        "dashboard_01/style.css"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "chart",
+        "dropdown_menu",
+        "empty",
+        "icons",
+        "separator",
+        "sidebar",
+        "switch",
+        "table",
+        "theme_customizer"
+      ]
+    },
+    {
+      "name": "login_01",
+      "kind": "block",
+      "files": [
+        "login_01/block.rs",
+        "login_01/docs.md",
+        "login_01/mod.rs",
+        "login_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "card",
+        "form",
+        "link"
+      ]
+    },
+    {
+      "name": "settings_01",
+      "kind": "block",
+      "files": [
+        "settings_01/block.rs",
+        "settings_01/docs.md",
+        "settings_01/mod.rs",
+        "settings_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert_dialog",
+        "button",
+        "card",
+        "form",
+        "label",
+        "switch",
+        "tabs",
+        "theme_customizer"
+      ]
+    },
+    {
+      "name": "signup_01",
+      "kind": "block",
+      "files": [
+        "signup_01/block.rs",
+        "signup_01/docs.md",
+        "signup_01/mod.rs",
+        "signup_01/style.css"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "card",
+        "form",
+        "input_otp",
+        "link"
+      ]
     }
   ]
 }

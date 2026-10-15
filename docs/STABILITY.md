@@ -50,6 +50,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Internal
 
 - `ui::demos` (feature `demos`): the gallery and docs demos. The feature exists for this repo's apps and tests.
+- `ui::blocks` (feature `blocks`, on with `demos`): whole screens meant to be copied with `rust-ui add` and then changed. Their props may change in any release; a copy you own doesn't change under you.
 - `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `rust-ui postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
 - `ui::components::<name>` module paths. Import from `ui::prelude` (or `ui::hooks`, `ui::icons`); the module layout follows the registry and may move. `drag_and_drop_list` and `tag_group` are the exception: both export `RemoveButton`, so import them by module path.
 
@@ -78,10 +79,11 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Stable
 
 - The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `RUST_UI_SOURCE`.
-- The `registry.json` format these commands read.
+- The `registry.json` format these commands read. Items with `"kind": "block"` (added 2026-10-15) keep their files under `crates/ui/src/blocks`; a CLI from before then can't install them, but reads everything else as before.
 
 ### Experimental
 
+- `rust-ui add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
 - `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
 - `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.

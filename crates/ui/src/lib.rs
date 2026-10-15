@@ -10,6 +10,12 @@
 //! also say so in their docs. Breaking changes follow docs/VERSIONING.md and are listed in
 //! CHANGELOG.md.
 
+/// Whole screens to copy (`rust-ui add login_01`): sign-in, sign-up, dashboard, settings
+/// (feature `blocks`).
+///
+/// Internal: not part of the public API (docs/STABILITY.md).
+#[cfg(feature = "blocks")]
+pub mod blocks;
 /// Component modules. Internal paths: import from [`prelude`] instead (docs/STABILITY.md).
 pub mod components;
 pub mod css_bundle;

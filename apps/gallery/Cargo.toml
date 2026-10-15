@@ -10,6 +10,10 @@ rust-version.workspace = true
 dioxus.workspace = true
 ui = { workspace = true, features = ["demos"] }
 
+# Reads `#block/<name>` so a block can open on its own page (src/main.rs).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Window", "Location"] }
+
 [features]
 default = ["web"]
 web = ["dioxus/web", "ui/web"]

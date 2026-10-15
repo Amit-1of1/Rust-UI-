@@ -103,3 +103,10 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Tooltip](llms/tooltip.md): The Tooltip component is used to display additional information when a user hovers over an element
 - [UiStrings](llms/ui_strings.md): Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults
 - [Virtual list](llms/virtual_list.md): The VirtualList component virtualizes large lists by rendering only visible rows plus a buffer
+
+## Blocks
+
+- [Dashboard 01](llms/dashboard_01.md): An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table
+- [Login 01](llms/login_01.md): A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link
+- [Settings 01](llms/settings_01.md): A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation)
+- [Sign-up 01](llms/signup_01.md): A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code

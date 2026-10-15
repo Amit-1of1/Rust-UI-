@@ -2,11 +2,12 @@
 //! (every page in one file) and one page per component in `llms/<name>.md`. A page is the
 //! component's `docs.md`, the Rust signatures of its public items and its demo, so it is
 //! generated from the same sources as the registry and a test fails when it is stale.
-//! `rust-ui docs <name>` prints the same page.
+//! Blocks (whole screens) get pages too, from their `docs.md` and signatures; their docs carry
+//! the example. `rust-ui docs <name>` prints the same page.
 
 use crate::docsgen::title;
 use crate::manifest::description;
-use crate::{build, Registry, COMPONENTS_DIR, DEMOS_DIR};
+use crate::{build, Kind, Registry, DEMOS_DIR};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -164,17 +165,21 @@ fn read(path: &Path) -> String {
     fs::read_to_string(path).unwrap_or_default()
 }
 
-/// The agent page for one component, or `None` when there is no such component.
+/// The agent page for one component or block, or `None` when there is no such item.
 pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String>> {
     let Some(item) = reg.items.iter().find(|i| i.name == name) else {
         return Ok(None);
     };
-    let dir = root.join(COMPONENTS_DIR).join(name);
+    let dir = root.join(item.kind.dir()).join(name);
     let docs = read(&dir.join("docs.md"));
     let mut out = format!("# {}\n\n", title(&docs, name));
-    out.push_str(&format!(
-        "- Copy into your app: `rust-ui add {name}` or `dx components add {name} --git https://github.com/Amit-1of1/Rust-UI-`"
-    ));
+    // `dx components add` reads component.json files, which blocks don't have.
+    out.push_str(&match item.kind {
+        Kind::Component => format!(
+            "- Copy into your app: `rust-ui add {name}` or `dx components add {name} --git https://github.com/Amit-1of1/Rust-UI-`"
+        ),
+        Kind::Block => format!("- Copy into your app: `rust-ui add {name}`"),
+    });
     if !item.registry_dependencies.is_empty() {
         out.push_str(&format!(
             " (also copies {})",
@@ -186,7 +191,9 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
         ));
     }
     let lib = read(&root.join("crates/ui/src/lib.rs"));
-    let from_crate = if lib.contains(&format!("pub use components::{name};")) {
+    let from_crate = if item.kind == Kind::Block {
+        format!("`use ui::blocks::{name}::*;` with the `rust-ui-kit` crate's `blocks` feature (internal)")
+    } else if lib.contains(&format!("pub use components::{name};")) {
         format!("`use ui::{name}::{{...}};` (by path, no glob)")
     } else if lib.contains(&format!("crate::components::{name}::*;")) {
         "`use ui::prelude::*;`".to_string()
@@ -194,7 +201,17 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
         format!("`use ui::components::{name}::*;`")
     };
     out.push_str(&format!(
-        ".\n- Import: `use crate::components::{name}::*;` after copying, or {from_crate} with the `rust-ui-kit` crate.\n\n"
+        ".\n- Import: `use crate::{}::{name}::*;` after copying, or {from_crate}{}.\n\n",
+        if item.kind == Kind::Block {
+            "blocks"
+        } else {
+            "components"
+        },
+        if item.kind == Kind::Block {
+            ""
+        } else {
+            " with the `rust-ui-kit` crate"
+        },
     ));
     let text = body(&docs);
     if !text.is_empty() {
@@ -206,7 +223,7 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
     let mut sources: Vec<PathBuf> = item
         .files
         .iter()
-        .map(|f| root.join(COMPONENTS_DIR).join(f))
+        .map(|f| root.join(item.kind.dir()).join(f))
         .collect();
     sources.sort();
     for path in sources {
@@ -226,7 +243,11 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
         out.push_str(&format!("## API\n\n```rust\n{api}```\n\n"));
     }
 
-    let demo = read(&root.join(DEMOS_DIR).join(format!("{name}.rs")));
+    // A block's docs.md already shows it in use; a component's demo is its example.
+    let demo = match item.kind {
+        Kind::Component => read(&root.join(DEMOS_DIR).join(format!("{name}.rs"))),
+        Kind::Block => String::new(),
+    };
     if !demo.is_empty() {
         out.push_str(&format!(
             "## Example\n\n```rust\n{}\n```\n",
@@ -236,7 +257,7 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
     Ok(Some(out.trim_end().to_string() + "\n"))
 }
 
-/// `llms.txt`: the intro, the guides and one line per component.
+/// `llms.txt`: the intro, the guides and one line per component, then one per block.
 pub fn index(root: &Path, reg: &Registry) -> io::Result<String> {
     let mut out = fs::read_to_string(root.join(INTRO))?.trim_end().to_string();
     out.push_str("\n\nPaths are relative to the repository root. `rust-ui docs <name>` prints a component page.\n\n## Docs\n\n");
@@ -246,8 +267,13 @@ pub fn index(root: &Path, reg: &Registry) -> io::Result<String> {
     out.push_str(&format!(
         "- [Everything]({FULL}): this index plus every component page in one file\n\n## Components\n\n"
     ));
+    let mut blocks_heading = false;
     for item in &reg.items {
-        let docs = read(&root.join(COMPONENTS_DIR).join(&item.name).join("docs.md"));
+        if item.kind == Kind::Block && !blocks_heading {
+            blocks_heading = true;
+            out.push_str("\n## Blocks\n\n");
+        }
+        let docs = read(&root.join(item.kind.dir()).join(&item.name).join("docs.md"));
         let summary = description(&docs);
         let summary = summary
             .split(". ")

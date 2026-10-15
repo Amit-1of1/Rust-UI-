@@ -23,16 +23,45 @@ use std::io;
 use std::path::{Path, PathBuf};
 
 pub const COMPONENTS_DIR: &str = "crates/ui/src/components";
+/// Whole screens built from components (`login_01`, ...). `rust-ui add` copies them to
+/// `src/blocks/` and their components to `src/components/`.
+pub const BLOCKS_DIR: &str = "crates/ui/src/blocks";
 pub const DEMOS_DIR: &str = "crates/ui/src/demos";
 pub const THEME_FILE: &str = "crates/ui/assets/theme.css";
+
+/// What a registry item is. Only blocks say so in `registry.json`.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Kind {
+    #[default]
+    Component,
+    /// A whole screen built from components.
+    Block,
+}
+
+impl Kind {
+    pub fn is_component(&self) -> bool {
+        *self == Kind::Component
+    }
+
+    /// Where this kind of item lives in the repo.
+    pub fn dir(self) -> &'static str {
+        match self {
+            Kind::Component => COMPONENTS_DIR,
+            Kind::Block => BLOCKS_DIR,
+        }
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Item {
     pub name: String,
-    /// Paths relative to `COMPONENTS_DIR`.
+    #[serde(default, skip_serializing_if = "Kind::is_component")]
+    pub kind: Kind,
+    /// Paths relative to the kind's folder (`COMPONENTS_DIR` or `BLOCKS_DIR`).
     pub files: Vec<String>,
-    /// Other registry items this one imports from.
+    /// Other registry items this one imports from (always components).
     pub registry_dependencies: Vec<String>,
 }
 
@@ -66,40 +95,65 @@ pub fn imports_in(source: &str) -> BTreeSet<String> {
     found
 }
 
-/// Scan `<root>/crates/ui/src/components` and build the registry.
-pub fn build(root: &Path) -> io::Result<Registry> {
-    let dir = root.join(COMPONENTS_DIR);
-    let mut names: Vec<String> = fs::read_dir(&dir)?
+/// Item folders (those with a `mod.rs`) under `dir`, sorted; none when `dir` is missing.
+fn folders(dir: &Path) -> io::Result<Vec<String>> {
+    if !dir.is_dir() {
+        return Ok(Vec::new());
+    }
+    let mut names: Vec<String> = fs::read_dir(dir)?
         .filter_map(Result::ok)
         .filter(|e| e.path().join("mod.rs").is_file())
         .filter_map(|e| e.file_name().into_string().ok())
         .collect();
     names.sort();
+    Ok(names)
+}
+
+/// One item: its files (without `component.json`) and the components its sources import.
+fn scan(dir: &Path, name: &str, kind: Kind, components: &[String]) -> io::Result<Item> {
+    let mut files = Vec::new();
+    let mut deps = BTreeSet::new();
+    let mut entries: Vec<_> = fs::read_dir(dir.join(name))?
+        .filter_map(Result::ok)
+        .filter(|e| e.path().is_file())
+        .collect();
+    entries.sort_by_key(|e| e.file_name());
+    for e in entries {
+        let file = e.file_name().to_string_lossy().into_owned();
+        if file.ends_with(".rs") {
+            deps.extend(imports_in(&fs::read_to_string(e.path())?));
+        }
+        if file != "component.json" {
+            files.push(format!("{name}/{file}"));
+        }
+    }
+    deps.remove(name);
+    deps.retain(|d| components.contains(d));
+    Ok(Item {
+        name: name.to_string(),
+        kind,
+        files,
+        registry_dependencies: deps.into_iter().collect(),
+    })
+}
+
+/// Scan `<root>/crates/ui/src/components` and `<root>/crates/ui/src/blocks` and build the
+/// registry: components first, then blocks.
+pub fn build(root: &Path) -> io::Result<Registry> {
+    let dir = root.join(COMPONENTS_DIR);
+    let names = folders(&dir)?;
     let mut items = Vec::new();
     for name in &names {
-        let mut files = Vec::new();
-        let mut deps = BTreeSet::new();
-        let mut entries: Vec<_> = fs::read_dir(dir.join(name))?
-            .filter_map(Result::ok)
-            .filter(|e| e.path().is_file())
-            .collect();
-        entries.sort_by_key(|e| e.file_name());
-        for e in entries {
-            let file = e.file_name().to_string_lossy().into_owned();
-            if file.ends_with(".rs") {
-                deps.extend(imports_in(&fs::read_to_string(e.path())?));
-            }
-            if file != "component.json" {
-                files.push(format!("{name}/{file}"));
-            }
+        items.push(scan(&dir, name, Kind::Component, &names)?);
+    }
+    let blocks = root.join(BLOCKS_DIR);
+    for name in folders(&blocks)? {
+        if names.contains(&name) {
+            return Err(io::Error::other(format!(
+                "block `{name}` has the same name as a component"
+            )));
         }
-        deps.remove(name);
-        deps.retain(|d| names.contains(d));
-        items.push(Item {
-            name: name.clone(),
-            files,
-            registry_dependencies: deps.into_iter().collect(),
-        });
+        items.push(scan(&blocks, &name, Kind::Block, &names)?);
     }
     Ok(Registry {
         name: "rust-ui".into(),
@@ -129,11 +183,10 @@ pub fn resolve(reg: &Registry, wanted: &[String]) -> Result<Vec<Item>, String> {
         if out.iter().any(|i| i.name == name) {
             continue;
         }
-        let item = reg
-            .items
-            .iter()
-            .find(|i| i.name == name)
-            .ok_or_else(|| format!("unknown component `{name}` (try `rust-ui list`)"))?;
+        let item =
+            reg.items.iter().find(|i| i.name == name).ok_or_else(|| {
+                format!("unknown component or block `{name}` (try `rust-ui list`)")
+            })?;
         stack.extend(item.registry_dependencies.iter().rev().cloned());
         out.push(item.clone());
     }
@@ -159,7 +212,8 @@ pub fn compare(source: &Path, dest: &Path) -> io::Result<FileState> {
     })
 }
 
-/// Copy items into `dest`. Existing files that differ are kept unless `force`.
+/// Copy items into `dest`, and blocks into a `blocks` folder beside it (`src/components` ->
+/// `src/blocks`). Existing files that differ are kept unless `force`.
 /// Returns (written, skipped) relative paths.
 pub fn add(
     root: &Path,
@@ -167,11 +221,27 @@ pub fn add(
     dest: &Path,
     force: bool,
 ) -> io::Result<(Vec<PathBuf>, Vec<PathBuf>)> {
+    add_to(root, items, dest, &dest.with_file_name("blocks"), force)
+}
+
+/// Copy components into `dest` and blocks into `blocks_dest`. Existing files that differ are
+/// kept unless `force`. Returns (written, skipped) paths, relative to their destination.
+pub fn add_to(
+    root: &Path,
+    items: &[Item],
+    dest: &Path,
+    blocks_dest: &Path,
+    force: bool,
+) -> io::Result<(Vec<PathBuf>, Vec<PathBuf>)> {
     let (mut written, mut skipped) = (Vec::new(), Vec::new());
     for item in items {
+        let target = match item.kind {
+            Kind::Component => dest,
+            Kind::Block => blocks_dest,
+        };
         for file in &item.files {
-            let from = root.join(COMPONENTS_DIR).join(file);
-            let to = dest.join(file);
+            let from = root.join(item.kind.dir()).join(file);
+            let to = target.join(file);
             match compare(&from, &to)? {
                 FileState::Same => continue,
                 FileState::Changed if !force => {
@@ -190,12 +260,19 @@ pub fn add(
     Ok((written, skipped))
 }
 
-/// `pub mod` lines for the items, to paste into the target's `components/mod.rs`.
-pub fn mod_lines(items: &[Item]) -> String {
+/// `pub mod` lines for the items of one kind, to paste into the target's `components/mod.rs`
+/// (or `blocks/mod.rs`).
+pub fn mod_lines_of(items: &[Item], kind: Kind) -> String {
     items
         .iter()
+        .filter(|i| i.kind == kind)
         .map(|i| format!("pub mod {};\n", i.name))
         .collect()
+}
+
+/// `pub mod` lines for the components among the items, to paste into `components/mod.rs`.
+pub fn mod_lines(items: &[Item]) -> String {
+    mod_lines_of(items, Kind::Component)
 }
 
 /// Whether a `--source` value is a git remote rather than a local checkout.
