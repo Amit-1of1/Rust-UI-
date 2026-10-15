@@ -151,5 +151,6 @@ fn layout_items_render_without_a_transform_until_they_move() {
         html.contains("id=\"a\"") && html.contains("id=\"b\""),
         "{html}"
     );
-    assert!(!html.contains("transform"), "{html}");
+    assert!(!html.contains("translate"), "{html}");
+    assert!(html.contains("transform: none"), "{html}");
 }
