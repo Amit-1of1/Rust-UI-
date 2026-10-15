@@ -88,6 +88,10 @@ pub fn Carousel(
 #[component]
 pub fn CarouselItem(
     #[props(into, default)] label: Option<String>,
+    /// A full-bleed slide for a photo or video: the content fills the slide edge to edge
+    /// (an `img` is cropped to cover it) instead of being centred.
+    #[props(default)]
+    media: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
@@ -96,6 +100,7 @@ pub fn CarouselItem(
             role: "group",
             "aria-roledescription": "slide",
             "aria-label": label,
+            "data-media": media.then_some("true"),
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_carousel_item }), attributes]),
             {children}
         }

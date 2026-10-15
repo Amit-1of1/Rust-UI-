@@ -87,6 +87,8 @@ pub const DEMOS: &[Demo] = &[
     ("hooks", ui::demos::hooks::Demo),
     ("chips", ui::demos::chips::Demo),
     ("link", ui::demos::link::Demo),
+    ("skip_link", ui::demos::skip_link::Demo),
+    ("number_field", ui::demos::number_field::Demo),
 ];
 
 /// Blocks (`ui::blocks`), checked like demos. Names start with `block_`.

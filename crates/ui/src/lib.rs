@@ -95,6 +95,7 @@ pub mod prelude {
     pub use crate::components::menubar::*;
     pub use crate::components::multi_select::*;
     pub use crate::components::navbar::*;
+    pub use crate::components::number_field::*;
     pub use crate::components::pagination::*;
     pub use crate::components::popover::*;
     pub use crate::components::progress::*;
@@ -106,6 +107,7 @@ pub mod prelude {
     pub use crate::components::shimmer::*;
     pub use crate::components::sidebar::*;
     pub use crate::components::skeleton::*;
+    pub use crate::components::skip_link::*;
     pub use crate::components::slider::*;
     pub use crate::components::spinner::*;
     pub use crate::components::status::*;

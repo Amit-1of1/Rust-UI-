@@ -1,3 +1,4 @@
+use crate::components::hooks::{follow_in_app, in_app_href, is_current_route};
 use crate::components::icons::ExternalLink;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
@@ -9,8 +10,8 @@ struct Styles;
 /// An inline text link: a plain `<a href>` with the kit's colours and focus ring.
 ///
 /// Named `TextLink` so it does not clash with the router's `Link` when both preludes are
-/// imported. For in-app routes, pass the router's `Link` the same class, or use this with
-/// a path `href`.
+/// imported. With the kit's `router` feature, a path `href` inside a `Router` navigates in
+/// the app and is marked `aria-current="page"` while it is the current route.
 #[component]
 pub fn TextLink(
     #[props(into)] href: String,
@@ -25,12 +26,19 @@ pub fn TextLink(
     children: Element,
 ) -> Element {
     let t = use_ui_strings();
+    let current = current || (!external && is_current_route(&href));
+    let shown = in_app_href(&href);
     rsx! {
         a {
-            href,
+            href: shown,
             target: external.then_some("_blank"),
             rel: external.then_some("noopener noreferrer"),
             "aria-current": current.then_some("page"),
+            onclick: move |e| {
+                if !external {
+                    follow_in_app(&href, &e);
+                }
+            },
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_link }), attributes]),
             {children}
             if external {

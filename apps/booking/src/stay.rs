@@ -41,20 +41,12 @@ pub fn StayPage(id: usize) -> Element {
             }
         };
     };
-    let nav = navigator();
-
     rsx! {
         PageTitle { title: "{stay.name}" }
         Breadcrumb { aria_label: "Breadcrumb",
             BreadcrumbItem {
-                BreadcrumbLink {
-                    href: "/",
-                    onclick: move |e: MouseEvent| {
-                        e.prevent_default();
-                        nav.push(Route::Explore {});
-                    },
-                    "Explore"
-                }
+                // With the kit's `router` feature, a path href goes through the router.
+                BreadcrumbLink { href: "/", "Explore" }
             }
             BreadcrumbSeparator {}
             BreadcrumbItem { span { class: "tr-muted", "{stay.region}" } }
@@ -77,7 +69,7 @@ pub fn StayPage(id: usize) -> Element {
             div { class: "tr-stay-body",
                 Carousel { label: "Photos of {stay.name}",
                     for i in 0..4u32 {
-                        CarouselItem { key: "{i}", label: "{i + 1} of 4",
+                        CarouselItem { key: "{i}", label: "{i + 1} of 4", media: true,
                             Photo { hue: stay.hue, shift: i, label: "Photo {i + 1} of {stay.name}" }
                         }
                     }
@@ -101,9 +93,9 @@ pub fn StayPage(id: usize) -> Element {
                                 HoverCardTrigger { class: "tr-host-trigger", "{stay.host}" }
                                 HoverCardContent { side: ContentSide::Bottom,
                                     div { class: "tr-host-card",
-                                        // The name is right beside it; the avatar is role="img"
-                                        // with no name of its own, so hide it (GAPS.md).
-                                        Avatar { size: AvatarImageSize::Medium, aria_hidden: "true",
+                                        // No label: the name is right beside it, so the
+                                        // avatar is decorative (hidden from screen readers).
+                                        Avatar { size: AvatarImageSize::Medium,
                                             AvatarFallback { {initials(stay.host)} }
                                         }
                                         div {
@@ -129,7 +121,7 @@ pub fn StayPage(id: usize) -> Element {
                         ul { class: "tr-reviews",
                             for r in REVIEWS.iter() {
                                 li { key: "{r.author}",
-                                    Avatar { size: AvatarImageSize::Small, aria_hidden: "true",
+                                    Avatar { size: AvatarImageSize::Small,
                                         AvatarFallback { {initials(r.author)} }
                                     }
                                     div {
@@ -203,13 +195,12 @@ fn BookingBox(stay_id: usize) -> Element {
                 CardContent { class: "tr-book-body",
                     div { class: "tr-search-field",
                         span { id: "book-dates-label", class: "tr-label", "Dates" }
-                        div { role: "group", aria_labelledby: "book-dates-label",
-                            DateRangePicker {
-                                selected_range: range(),
-                                min_date: data::today(),
-                                disabled_ranges: booked(),
-                                on_range_change: move |r| range.set(r),
-                            }
+                        DateRangePicker {
+                            aria_labelledby: "book-dates-label",
+                            selected_range: range(),
+                            min_date: data::today(),
+                            disabled_ranges: booked(),
+                            on_range_change: move |r| range.set(r),
                         }
                     }
                     div { class: "tr-search-field",

@@ -1,11 +1,10 @@
 use crate::components::icons::{Check, ChevronDown};
 use dioxus::dioxus_core::AttributeValue;
 use dioxus::prelude::*;
-use dioxus_primitives::select::{
-    self, SelectGroupLabelProps, SelectMultiProps, SelectOptionProps, SelectProps,
-};
+use dioxus_primitives::select::{self, SelectGroupLabelProps, SelectMultiProps, SelectOptionProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::sync::atomic::{AtomicUsize, Ordering};
+use std::time::Duration;
 
 pub use dioxus_primitives::select::SelectGroup;
 
@@ -93,6 +92,58 @@ fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
     }
 }
 
+/// Props for [`Select`]: dioxus-primitives' `SelectProps` plus `selected`, a plain value.
+#[derive(Props, Clone, PartialEq)]
+pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
+    /// The selected option as a plain value: the select is controlled and shows whatever the
+    /// parent passes on each render (`selected: filters.read().sort`), with no signal or memo
+    /// needed. Wins over `value`.
+    #[props(default, into)]
+    pub selected: Option<T>,
+
+    /// The controlled value as a signal; its `None` means no option is selected.
+    #[props(default)]
+    pub value: Option<ReadSignal<Option<T>>>,
+
+    /// The initial value when uncontrolled. `None` shows the placeholder.
+    #[props(default)]
+    pub default_value: Option<T>,
+
+    /// Called when the selected value changes.
+    #[props(default)]
+    pub on_value_change: Callback<Option<T>>,
+
+    #[props(default)]
+    pub disabled: ReadSignal<bool>,
+
+    /// The controlled open state of the list.
+    #[props(default)]
+    pub open: ReadSignal<Option<bool>>,
+
+    #[props(default)]
+    pub default_open: ReadSignal<bool>,
+
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Name for form submission.
+    #[props(default)]
+    pub name: ReadSignal<String>,
+
+    /// Whether arrow keys wrap around at the ends of the list.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub roving_loop: ReadSignal<bool>,
+
+    /// How long typed letters are remembered for typeahead.
+    #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
+    pub typeahead_timeout: ReadSignal<Duration>,
+
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    pub children: Element,
+}
+
 #[component]
 pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element {
     let base = attributes!(div {
@@ -100,10 +151,19 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
     });
     let name = use_trigger_name(props.attributes);
     let merged = merge_attributes(vec![base, name.root]);
+    // A plain `selected` becomes the signal the primitive wants. The memo follows the prop.
+    let selected = props.selected.clone();
+    let has_selected = selected.is_some();
+    let from_prop = use_memo(use_reactive!(|selected| selected));
+    let value = if has_selected {
+        Some(from_prop.into())
+    } else {
+        props.value
+    };
 
     rsx! {
         select::Select {
-            value: props.value,
+            value,
             default_value: props.default_value,
             on_value_change: props.on_value_change,
             disabled: props.disabled,
