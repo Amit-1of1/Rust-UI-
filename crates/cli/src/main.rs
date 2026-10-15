@@ -98,6 +98,13 @@ enum Command {
         #[arg(long, default_value = "src/blocks")]
         blocks_dest: PathBuf,
     },
+    /// Serve the registry to AI coding tools over the Model Context Protocol (stdio):
+    /// list, search, read and add components. docs/MCP.md shows the client setup.
+    Mcp {
+        /// The app that `add_component` and `init_theme` write into.
+        #[arg(long, default_value = ".")]
+        project: PathBuf,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -333,6 +340,13 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             if plan.has_conflicts() {
                 return Ok(ExitCode::FAILURE);
             }
+        }
+        Command::Mcp { project } => {
+            let stdin = std::io::stdin();
+            rust_ui_cli::mcp::Server::new(root, project)
+                .with_source(source_arg.as_str())
+                .serve(stdin.lock(), std::io::stdout().lock())
+                .map_err(err)?;
         }
         Command::Diff {
             names,

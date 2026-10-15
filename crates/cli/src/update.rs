@@ -39,7 +39,8 @@ pub struct Lock {
 pub struct LockItem {
     #[serde(default, skip_serializing_if = "Kind::is_component")]
     pub kind: Kind,
-    /// The folder the item was copied into (`src/components`), relative to the project root.
+    /// The folder the item was copied into (`src/components`), relative to the project root
+    /// (the lockfile's folder).
     pub dir: String,
     /// The source's git commit when the item was installed or last updated, if it had one.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -112,13 +113,27 @@ fn write(path: &Path, bytes: &[u8]) -> io::Result<()> {
     fs::write(path, bytes)
 }
 
-fn dest_of(kind: Kind, dest: &Path, blocks_dest: &Path) -> String {
+fn dest_of<'a>(kind: Kind, dest: &'a Path, blocks_dest: &'a Path) -> &'a Path {
     match kind {
         Kind::Component => dest,
         Kind::Block => blocks_dest,
     }
-    .to_string_lossy()
-    .into_owned()
+}
+
+/// The project root: the lockfile's folder.
+fn project_of(lock_path: &Path) -> &Path {
+    lock_path.parent().unwrap_or(Path::new(""))
+}
+
+/// A folder as the lockfile stores it: relative to the project root when it is inside it.
+fn stored(lock_path: &Path, dir: &Path) -> String {
+    let project = project_of(lock_path);
+    let rel = if project.as_os_str().is_empty() {
+        dir
+    } else {
+        dir.strip_prefix(project).unwrap_or(dir)
+    };
+    rel.to_string_lossy().into_owned()
 }
 
 /// After `rust-ui add`: record every file of `items` whose copy in the project matches the
@@ -140,7 +155,8 @@ pub fn record(
     let bases = base_dir(lock_path);
     let mut n = 0;
     for item in items {
-        let dir = dest_of(item.kind, dest, blocks_dest);
+        let path = dest_of(item.kind, dest, blocks_dest);
+        let dir = stored(lock_path, path);
         let entry = lock
             .items
             .entry(item.name.clone())
@@ -155,7 +171,7 @@ pub fn record(
         entry.rev = rev.clone();
         for file in &item.files {
             let new = fs::read(root.join(item.kind.dir()).join(file)).map_err(err)?;
-            if read(&Path::new(&dir).join(file)).map_err(err)?.as_deref() == Some(&new[..]) {
+            if read(&path.join(file)).map_err(err)?.as_deref() == Some(&new[..]) {
                 write(&bases.join(file), &new).map_err(err)?;
                 entry.files.insert(file.clone(), hash(&new));
                 n += 1;
@@ -365,7 +381,7 @@ pub fn plan(
             .values()
             .find(|i| i.kind == kind)
             .map(|i| i.dir.clone())
-            .unwrap_or_else(|| dest_of(kind, dest, blocks_dest))
+            .unwrap_or_else(|| stored(lock_path, dest_of(kind, dest, blocks_dest)))
     };
 
     let mut out = Plan {
@@ -385,7 +401,7 @@ pub fn plan(
         }
         let mut all_new = true;
         for file in files {
-            let path = Path::new(&dir).join(file);
+            let path = project_of(lock_path).join(&dir).join(file);
             let local = read(&path).map_err(err)?;
             let new = if item.files.contains(file) {
                 Some(fs::read(root.join(item.kind.dir()).join(file)).map_err(err)?)

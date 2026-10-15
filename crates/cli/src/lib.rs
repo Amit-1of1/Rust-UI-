@@ -13,6 +13,7 @@ pub mod docsgen;
 pub mod doctor;
 pub mod llms;
 pub mod manifest;
+pub mod mcp;
 pub mod postbuild;
 pub mod scaffold;
 pub mod theme;
@@ -23,6 +24,9 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
+
+/// This CLI's version, as `rust-ui --version` prints it.
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub const COMPONENTS_DIR: &str = "crates/ui/src/components";
 /// Whole screens built from components (`login_01`, ...). `rust-ui add` copies them to

@@ -4,4 +4,4 @@
 
 ### Changed
 
-- **cli:** `rust-ui add` now records what it copied in `rust-ui-lock.json` (source, commit, file hashes) and keeps untouched copies in `.rust-ui/base/`, for `update` to merge against. Commit both. (#44)
+- **cli:** `rust-ui add` (and the MCP server's `add_component`) now records what it copied in `rust-ui-lock.json` (source, commit, file hashes) and keeps untouched copies in `.rust-ui/base/`, for `update` to merge against. Commit both. (#44)

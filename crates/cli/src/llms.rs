@@ -26,6 +26,11 @@ const GUIDES: &[(&str, &str, &str)] = &[
         "copy the source with `rust-ui` or `dx`, or depend on the crate from git",
     ),
     (
+        "MCP server",
+        "docs/MCP.md",
+        "`rust-ui mcp` lets MCP clients list, search, read and add components",
+    ),
+    (
         "Theming",
         "docs/THEMING.md",
         "light and dark mode, accent presets, a brand colour, radius",

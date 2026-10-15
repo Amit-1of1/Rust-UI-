@@ -107,3 +107,5 @@ rust-ui docs dialog     # one component's page
 ```
 
 Point your agent at `llms.txt` (or paste `rust-ui docs <name>` into it) before it writes UI code. The rules at the top come from `docs/llms-intro.md`.
+
+Tools that speak MCP (Claude Code, Cursor, VS Code, Codex) can instead run `rust-ui mcp`, which lets the agent list, search, read and add components itself. Setup for each client is in [MCP.md](MCP.md).

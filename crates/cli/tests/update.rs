@@ -120,7 +120,7 @@ fn add_records_files_and_pristine_copies() {
     let lock = Lock::load(&s.lock()).unwrap();
     assert_eq!(lock.source.as_deref(), Some("test-source"));
     let badge = &lock.items["badge"];
-    assert_eq!(badge.dir, s.dest().to_string_lossy());
+    assert_eq!(badge.dir, "src/components");
     assert_eq!(
         badge.files["badge/component.rs"],
         update::hash(ORIGINAL.as_bytes())
