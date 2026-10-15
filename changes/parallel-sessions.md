@@ -1,6 +1,6 @@
 ### Added
 
-- **cli:** `rust-ui changelog` folds the per-PR fragments in `changes/` into CHANGELOG.md and docs/MIGRATION.md (`--check` validates them). `scripts/sync-main.sh` merges `main` into a branch and regenerates generated files; `scripts/check.sh` fails when a branch is behind `main` or edits the changelog directly.
+- **cli:** `rust-ui changelog` folds the per-PR fragments in `changes/` into CHANGELOG.md and docs/MIGRATION.md (`--check` validates them). `scripts/sync-main.sh` merges `main` into a branch and regenerates generated files; `scripts/check.sh` fails when a branch is behind `main` or edits the changelog directly. (#41)
 
 ### Changed
 
