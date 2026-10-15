@@ -24,7 +24,7 @@ jobs:
       - run: scripts/install-dx.sh
       # Built as Pages ships them: gallery and dashboard split, CSS bundled (scripts/release-web.sh).
       - run: |
-          for app in gallery site docs dashboard booking; do
+          for app in gallery site docs dashboard booking showcase; do
             scripts/release-web.sh $app
           done
       - run: tar -cf web.tar target/dx/*/release/web/public
