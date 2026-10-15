@@ -69,7 +69,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - Demos must never touch the network (no remote images, no httpbin). The avatar error-state demo requests a missing local path on purpose and shows one 404 in the console.
 - `navbar` has no demo: its upstream demo needs a router.
 - Ctrl+K opens the command palette through `CommandDialog { hotkey: "k" }` (which calls `ui::hooks::use_hotkey`): a web-sys `keydown` listener on `window`, written in Rust (no `eval`, no JS of ours). Web only; keep the visible button, which is the only way in on desktop and native.
-- Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus.
+- Charts are hand-written SVG. Accessibility comes from `role="img"`, `<title>` and a `<desc>` text summary, not per-point focus. Charts v2 adds a `table: true` "Show data" table (native `<details>`) as the keyboard-reachable alternative. Series colours come from `--chart-1` (falls back to the accent) to `--chart-5`; keep new ones at 3:1 against the page in both modes (`tests/theme.rs`), and give line series a dash pattern too so colour isn't the only cue.
 - Text colours must pass WCAG AA in both themes. Use `--error-text-color` (not `--secondary-error-color`, which is a fill) for error text. `--secondary-color-5` in light was darkened to #6b6b6b for contrast; upstream's #848484 fails.
 - The registry (`registry.json`) is generated; never hand-edit it. The CLI copies from a local checkout or a git URL (cloned with the `git` command, cached in `~/.cache/rust-ui`).
 - The gallery has its own `apps/gallery/index.html` (lang, no Google Fonts import). Keep `{app_title}` and `{style_include}`; dx injects the script itself.

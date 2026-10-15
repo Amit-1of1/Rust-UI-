@@ -35,7 +35,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 |---|---|
 | `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `FieldOption`, `Validator` and the rules | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. |
 | `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
-| `chart` | Kit-written SVG; multi-series charts and a legend (dashboard gap 19) will change its props. |
+| `chart`: `BarChart`, `LineChart`, `AreaChart`, `PieChart`, `RadialChart`, `ChartLegend`, `ChartSeries`, `LegendMarker` | Kit-written SVG; multi-series, the legend, pie and radial charts are new (charts v2) and their props may still change with use. The `--chart-*` tokens are part of the theme contract once the props settle. |
 | `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
 | `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
 | `icons`: `Icon`, `IconData`, `IconNode`, the `icons::lucide` constants (`lucide::CHECK`, `ALL`), the `label` and `mirror_rtl` props and the named `IconSize` steps | New on 2026-10-14 with the generated Lucide set; the data shape may change when Lucide adds new SVG elements. |

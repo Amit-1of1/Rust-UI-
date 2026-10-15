@@ -31,7 +31,8 @@ The app now uses each fix instead of its workaround, and `tests/e2e/dashboard.mj
 | 15 | Medium | Only text fields joined `use_form`. | `SelectField` and `ComboboxField` bind a `Select` or `Combobox` to a `FormField`: label, `aria-invalid`, error in `aria-describedby`, focus on a failed submit. `Select` and `Combobox` now move `id` and those attributes to their focusable control, and `Select` takes a placeholder. Settings uses `ComboboxField` (no hand-written alert); the edit sheet uses `SelectField`. `tests/e2e/form_fields.mjs` covers it in the gallery. |
 | 16 | Low | No initial values; `reset()` emptied. | `form.field_with(initial, rules)`; `field.load(value)` for loading a record (sets the value and what `reset()` returns to, clears the error). |
 | 18 | Low | Outside filters couldn't sit next to `DataTable`'s filter box. | `toolbar: rsx! { .. }` slot beside the filter box (shown even with `filterable: false`). Orders puts its date range and status toggles there; the gallery demo has a "Research only" toggle. |
-| 19 | Low | Chart marks were solid `currentColor`, no hover values. | Marks use `--accent-color`; each bar and point has an SVG `<title>` with its value, shown on hover. Multi-series and a legend are still open (below). |
+| 19 | Low | Chart marks were solid `currentColor`, no hover values. | Marks use `--accent-color`; each bar and point has an SVG `<title>` with its value, shown on hover. Multi-series and a legend: see 19 (rest). |
+| 19 (rest) | Low | Charts were single-series with no legend. | Charts v2: `categories` + `series` on `BarChart`/`LineChart`/`AreaChart` (grouped or stacked), a legend for two or more series, `PieChart` (donut) and `RadialChart`, and `table: true` for a keyboard-reachable "Show data" table. The overview now shows revenue 2026 against 2025 as an area chart, plans as a donut and a Q3 target ring. |
 | 20 | Low | `toasts.success(...)` needed `String` and `ToastOptions`. | `ToastsExt` (prelude): `toasts.notify_success("Saved")`, or a `(title, description)` pair. |
 | 21 | Low | No `sr-only` class. | `.sr-only` in `theme.css`; the icons demo uses it, the app's own copy is gone. |
 | 22 | Low | Icons needed a direct `dioxus-icons` dependency. | `ui::icons` already re-exported them; the app's direct dependency is removed. |
@@ -44,7 +45,6 @@ The app now uses each fix instead of its workaround, and `tests/e2e/dashboard.mj
 |---|---|---|---|---|
 | 13 | Medium | Toasts are `role="alertdialog"` (dioxus-primitives). Screen readers announce each as a dialog, and `getByRole("alertdialog")` in tests matches both a confirm dialog and a toast. | Tests match dialogs by name. | A marked patch on the `Amit-1of1/dioxus-components` fork (`role="status"`, or `alert` for errors), per the 2026-10-14 fork rule. Left out here because the native thread owns the fork pin right now. Also report the AlertDialogAction close-then-call order (gap 9). |
 | 17 | Low | A controlled raw `Select` wants `Option<ReadSignal<Option<T>>>`, so a plain `Signal<String>` needs a `use_memo` adapter. | Forms use `SelectField` (no adapter); a raw `Select` still needs the memo. | Give the kit's `Select` its own props struct that accepts a plain value, or add the conversion to the primitive on the fork. |
-| 19 | Low | Charts are single-series with no legend. | None. | Multi-series with a legend, and a focusable data-table fallback. |
 
 ## Things that worked well
 

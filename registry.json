@@ -167,6 +167,7 @@
         "chart/style.css"
       ],
       "registryDependencies": [
+        "table",
         "ui_strings"
       ]
     },
