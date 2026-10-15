@@ -100,6 +100,8 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 - `apps/booking` is the first app on the Dioxus router (`dioxus` feature `router`). Kit links are plain `<a href>` (a full page load under the router): use the router's `Link` (with `button_look` for a button look) or `onclick` + `navigator()`. See `apps/booking/GAPS.md`.
 - In e2e scripts, don't click a "Dark mode" switch to get the dark theme: under `colorScheme: "dark"` it is already on, and the click turns it off.
 
+- Blocks (`crates/ui/src/blocks/<name>/`, `ui::blocks`) are whole screens built only from kit components; if a block needs something the kit lacks, add it to the kit or log the gap, don't hand-roll it in the block. Each block is the page's `main` (or takes `embedded` when a shell already provides one), has exactly one `h1`, and is listed in `BLOCKS` in `crates/ui/tests/common/mod.rs` (aria check, snapshot, `tests/blocks.rs`) and in the gallery's `BLOCKS` (its own page at `#block/<name>`, scanned by `tests/e2e/blocks.mjs`). The registry marks them `"kind": "block"`.
+
 ## Decision log
 
 | Date | Decision | Why |

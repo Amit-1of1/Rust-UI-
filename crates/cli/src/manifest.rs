@@ -151,7 +151,8 @@ pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
     let reg = build(root)?;
     let mut out = Vec::new();
     let mut members = Vec::new();
-    for item in &reg.items {
+    // Blocks are installed with `rust-ui add`; `dx components add` only knows components.
+    for item in reg.items.iter().filter(|i| i.kind.is_component()) {
         let dir = Path::new(COMPONENTS_DIR).join(&item.name);
         let mut source = String::new();
         for f in &item.files {

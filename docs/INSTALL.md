@@ -29,10 +29,11 @@ cargo install --git https://github.com/Amit-1of1/Rust-UI- rust-ui-cli   # instal
 export RUST_UI_SOURCE=https://github.com/Amit-1of1/Rust-UI-
 rust-ui init                 # theme.css into assets/
 rust-ui add button dialog    # components into src/components
+rust-ui add login_01         # a block (whole screen) into src/blocks, its components into src/components
 rust-ui diff button dialog   # which copied files differ from the registry
 ```
 
-It copies the same files and resolves component dependencies from `registry.json`. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
+It copies the same files and resolves component dependencies from `registry.json`. Blocks (`rust-ui list` marks them) are whole screens: add `mod blocks;` next to `mod components;` and use them like your own code. `dx components add` installs components only. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
 
 ## Path 2: depend on the crate from git
 

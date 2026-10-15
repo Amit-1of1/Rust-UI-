@@ -14,8 +14,64 @@ fn main() {
     dioxus::launch(App);
 }
 
+/// The blocks (`ui::blocks`): `(name, title, blurb)`. Each opens on its own page at
+/// `#block/<name>`, because a block is a whole screen with its own `h1` and landmarks.
+const BLOCKS: &[(&str, &str, &str)] = &[
+    (
+        "login_01",
+        "Login",
+        "Sign-in card with remember me, forgot password and a server error slot.",
+    ),
+    (
+        "signup_01",
+        "Sign-up",
+        "Two steps: details with a password check, then a 6-digit email code.",
+    ),
+    (
+        "dashboard_01",
+        "Dashboard",
+        "Sidebar shell, key figures, two charts and recent orders.",
+    ),
+    (
+        "settings_01",
+        "Settings",
+        "Profile, notifications, appearance and a danger zone, in tabs.",
+    ),
+];
+
+/// The block named in the URL (`#block/login_01`), if any.
+fn block_in_url() -> Option<String> {
+    #[cfg(target_arch = "wasm32")]
+    {
+        let hash = web_sys::window()?.location().hash().ok()?;
+        let name = hash.strip_prefix("#block/")?;
+        BLOCKS
+            .iter()
+            .any(|(n, ..)| *n == name)
+            .then(|| name.to_string())
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    None
+}
+
 #[component]
 fn App() -> Element {
+    let mut block = use_signal(block_in_url);
+    if let Some(name) = block() {
+        return rsx! {
+            ThemeStyles {}
+            document::Stylesheet { href: GALLERY_CSS }
+            nav { class: "gallery-back", aria_label: "Gallery",
+                a { href: "#blocks", onclick: move |_| block.set(None), "Back to the gallery" }
+            }
+            SuspenseBoundary {
+                fallback: |_| rsx! {
+                    div { class: "gallery-loading", Spinner { label: "Loading the block" } }
+                },
+                BlockPage { name }
+            }
+        };
+    }
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: GALLERY_CSS }
@@ -31,6 +87,12 @@ fn App() -> Element {
                 Section { title: "Checkbox", blurb: "Binary choice; Space toggles.", ui::demos::checkbox::Demo {} }
                 Section { title: "Switch", blurb: "An on/off setting.", ui::demos::switch::Demo {} }
                 Section { title: "Card", blurb: "A grouped surface with header, content and footer.", ui::demos::card::Demo {} }
+                Section {
+                    id: "blocks",
+                    title: "Blocks",
+                    blurb: "Whole screens built from the kit. Copy one with `rust-ui add login_01`; each opens on its own page.",
+                    BlockLinks { open: move |name| block.set(Some(name)) }
+                }
                 // With `wasm-split` (release builds, scripts/release-web.sh) everything below
                 // the first screen is one lazy wasm file, fetched as soon as the page is up.
                 SuspenseBoundary {
@@ -135,10 +197,48 @@ fn MoreSections() -> Element {
     }
 }
 
+/// Links to each block's own page.
 #[component]
-fn Section(title: &'static str, blurb: &'static str, children: Element) -> Element {
+fn BlockLinks(open: Callback<String>) -> Element {
     rsx! {
-        section { class: "gallery-section",
+        ul { class: "gallery-blocks",
+            for (name , title , blurb) in BLOCKS.iter().copied() {
+                li { key: "{name}",
+                    a {
+                        href: "#block/{name}",
+                        onclick: move |_| open.call(name.to_string()),
+                        "{title}"
+                    }
+                    p { "{blurb}" }
+                }
+            }
+        }
+    }
+}
+
+/// One block on the whole page. Lazy: with `wasm-split` a block's code downloads when opened.
+#[component(lazy)]
+fn BlockPage(name: String) -> Element {
+    match name.as_str() {
+        "login_01" => rsx! { ui::blocks::login_01::Login01 {} },
+        "signup_01" => rsx! {
+            ui::blocks::signup_01::Signup01 { on_verify: move |_: String| {} }
+        },
+        "dashboard_01" => rsx! { ui::blocks::dashboard_01::Dashboard01 {} },
+        "settings_01" => rsx! { ui::blocks::settings_01::Settings01 {} },
+        _ => rsx! {},
+    }
+}
+
+#[component]
+fn Section(
+    title: &'static str,
+    blurb: &'static str,
+    #[props(default)] id: Option<&'static str>,
+    children: Element,
+) -> Element {
+    rsx! {
+        section { class: "gallery-section", id,
             h2 { {title} }
             p { {blurb} }
             {children}

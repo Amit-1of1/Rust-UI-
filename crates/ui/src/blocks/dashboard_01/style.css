@@ -1,0 +1,113 @@
+/* Layout only; every colour is a theme token, so light, dark and accents all work. */
+
+.dx-block-dashboard {
+  background: var(--primary-color);
+}
+
+.dx-block-dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  overflow: hidden;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dx-block-dashboard-logo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius, 0.5rem);
+  background: var(--secondary-color-1);
+  color: var(--primary-color);
+}
+
+.dx-block-dashboard-brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dx-block-dashboard-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.dx-block-dashboard-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.5rem;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--primary-color-6);
+}
+
+.dx-block-dashboard-crumb {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.dx-block-dashboard-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.dx-block-dashboard-main {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+  min-width: 0;
+  padding: 1.5rem;
+  overflow-x: hidden;
+}
+
+.dx-block-dashboard-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.dx-block-dashboard-card-title {
+  margin: 0;
+  font: inherit;
+}
+
+.dx-block-dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}
+
+.dx-block-dashboard-kpi-value {
+  font-size: 1.75rem;
+}
+
+.dx-block-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+  align-items: start;
+  gap: 1rem;
+}
+
+.dx-block-dashboard-muted {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 40rem) {
+  .dx-block-dashboard-crumb {
+    display: none;
+  }
+
+  .dx-block-dashboard-main {
+    padding: 1rem;
+  }
+}

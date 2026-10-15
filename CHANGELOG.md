@@ -21,6 +21,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Added
 
+- **ui, cli:** Blocks: whole screens built only from kit components, copied with `rust-ui add <block>` into `src/blocks/` (their components go to `src/components/`): `login_01`, `signup_01` (with an email-code step), `dashboard_01` (`DashboardShell` plus an overview page) and `settings_01`. In the kit they are `ui::blocks` behind the new `blocks` feature (internal); the gallery opens each at `#block/<name>`. `registry.json` items gain an optional `"kind": "block"`, whose files are relative to `crates/ui/src/blocks`; component entries are unchanged. `rust-ui add` and `rust-ui diff` take `--blocks-dest`. (#PR)
 - **ui:** All 1,890 Lucide icons (was 1,705), plus `Icon { icon: lucide::CHECK }` for icons chosen at runtime, `label` (named `role="img"`), theme sizes `IconSize::Xs` … `Xl` (`--icon-size-*`), `--icon-stroke-width`, and mirroring of directional icons in right-to-left text (experimental). `scripts/gen-lucide-icons.mjs` regenerates the set. (#35)
 - **ui:** `TextareaField` and `CheckboxField` for `use_form`; `TextField` passes other attributes (`inputmode`, `maxlength`, ...) to its input (experimental `form`). `Stepper` takes `current: Signal<usize>` to be driven from outside. `button_look(variant, size)` styles a router `Link` as a button. (#34)
 - **ui:** `use_theme()`, `Theme` and `ThemeMode`: one shared mode, accent, density and radius state with `is_dark()` (experimental). (#30)
