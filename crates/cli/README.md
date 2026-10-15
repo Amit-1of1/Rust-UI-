@@ -14,6 +14,8 @@ rust-ui --source https://github.com/Amit-1of1/Rust-UI- diff command --dest src/c
 
 `rust-ui postbuild <public dir>` shrinks a `dx build --release --platform web` output in place: it drops the wasm's debug names (which `--wasm-split` builds keep) and bundles the theme and the component stylesheets the app uses into one file linked from `index.html`. The app must render `ui::ThemeStyles` (or call `ui::css_bundle::install()`) so components stop linking their own files. `scripts/release-web.sh <app>` runs both steps.
 
+`rust-ui mcp` is a Model Context Protocol server (stdio) for AI coding tools: they can list, search and read components and add them to the project. Client setup is in [docs/MCP.md](../../docs/MCP.md).
+
 `--source` is a local checkout or a git URL (shallow-cloned into `~/.cache/rust-ui` and fast-forwarded on later runs; needs `git` on PATH). Set `RUST_UI_SOURCE` to avoid repeating it. `add` keeps files you have edited unless you pass `--force`, and prints the `pub mod` lines for your `components/mod.rs`.
 
 The components themselves are not on crates.io: they depend on a git-pinned `dioxus-primitives`, which crates.io cannot host. That is why this tool copies source instead.
