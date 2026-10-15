@@ -1,0 +1,57 @@
+<div style="display: grid; gap: 1rem; max-width: 22rem;">
+<form novalidate=true class="dx-form-css">
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n0" class="dx-field-label-css">Name
+</label>
+<input aria-required="true" autocomplete="name" class="dx-input-css" id="dx-field-n0" type="text" value="">
+</input>
+</div>
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n1" class="dx-field-label-css">Email
+</label>
+<input aria-describedby="dx-field-n1-description" aria-required="true" autocomplete="email" class="dx-input-css" id="dx-field-n1" type="email" value="">
+</input>
+<p id="dx-field-n1-description" class="dx-field-description-css">For the confirmation only.
+</p>
+</div>
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n2" class="dx-field-label-css">Guests
+</label>
+<input aria-required="true" class="dx-input-css" id="dx-field-n2" inputmode="numeric" type="text" value="">
+</input>
+</div>
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n3" class="dx-field-label-css" id="dx-field-n3-label">Room
+</label>
+<div data-state="closed" data-disabled=false class="dx-select-css">
+<button type="button" aria-haspopup="listbox" aria-expanded=false class="dx-select-trigger-css" id="dx-field-n3" aria-labelledby="dx-field-n3-label dx-field-n3">
+<span data-placeholder=true>Choose a room
+</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-down" aria-hidden="true" class="dx-select-expand-icon" stroke="var(--primary-color-n0)">
+<path d="m6 9 6 6 6-6">
+</path>
+</svg>
+</button>
+</div>
+</div>
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n4" class="dx-field-label-css">Requests
+</label>
+<textarea data-slot="textarea" data-style="default" class="dx-textarea-css" id="dx-field-n4" value="">
+</textarea>
+</div>
+<div data-slot="field" class="dx-field-css">
+<div class="dx-form-check-css">
+<button type="button" value="on" role="checkbox" aria-checked="false" aria-required=true data-state="unchecked" data-disabled=false class="dx-checkbox-css" id="dx-field-n5">
+<span data-state="unchecked" data-disabled=false class="dx-checkbox-indicator-css">
+</span>
+</button>
+<input id="dxc-n0" type="checkbox" aria-hidden="true" tabindex="-1" required=true name="" value="on" style="position:absolute;pointer-events:none;opacity:0;margin:0;transform:translateX(-100%);"/>
+<label for="dx-field-n5" class="dx-field-label-css">I accept the house rules
+</label>
+</div>
+</div>
+<button class="dx-button-css" data-size="default" data-style="primary" type="submit">Book
+</button>
+</form>
+</div>

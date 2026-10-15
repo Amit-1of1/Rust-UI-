@@ -33,7 +33,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 
 | Item | Why |
 |---|---|
-| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `FieldOption`, `Validator` and the rules | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. |
+| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `FieldOption`, `Validator` and the rules, and `#[derive(Form)]` (crate `rust-ui-form-derive`) | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. The derive is new on 2026-10-15 and its attributes may change with use. |
 | `time_picker` and `date_time_picker` (`TimePicker`, `TimeState`, `HourCycle`, `DateTimePicker` and the ISO helpers) | New on 2026-10-15; min/max times and a time list popover may change the props. |
 | `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
 | `chart`: `BarChart`, `LineChart`, `AreaChart`, `PieChart`, `RadialChart`, `ChartLegend`, `ChartSeries`, `LegendMarker` | Kit-written SVG; multi-series, the legend, pie and radial charts are new (charts v2) and their props may still change with use. The `--chart-*` tokens are part of the theme contract once the props settle. |

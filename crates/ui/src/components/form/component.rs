@@ -260,6 +260,8 @@ pub fn use_form() -> FormState {
 /// and submit validates, focuses the first error, or calls `on_valid`.
 #[component]
 pub fn Form(
+    /// The form's state: a [`FormState`], or a `#[derive(Form)]` form (it converts).
+    #[props(into)]
     state: FormState,
     #[props(default)] on_valid: Callback<()>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
@@ -368,6 +370,9 @@ pub fn SelectField(
     options: Vec<FieldOption>,
     #[props(into, default)] description: Option<String>,
     #[props(into, default)] placeholder: Option<String>,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element {
     let ids = field.ids();
     let error = field.error();
@@ -388,6 +393,7 @@ pub fn SelectField(
                 id: ids.control.clone(),
                 aria_labelledby: label_id,
                 aria_invalid: invalid.then_some("true"),
+                aria_required: required.then_some("true"),
                 aria_describedby: field.described_by(description.is_some()),
                 "placeholder": placeholder,
                 for (i , option) in options.iter().enumerate() {
@@ -422,6 +428,9 @@ pub fn ComboboxField(
     #[props(into, default)] description: Option<String>,
     #[props(into, default)] placeholder: String,
     #[props(into, default = "No results.".to_string())] empty: String,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element {
     let ids = field.ids();
     let error = field.error();
@@ -444,6 +453,7 @@ pub fn ComboboxField(
                 id: ids.control.clone(),
                 aria_labelledby: label_id,
                 aria_invalid: invalid.then_some("true"),
+                aria_required: required.then_some("true"),
                 aria_describedby: field.described_by(description.is_some()),
                 ComboboxEmpty { "{empty}" }
                 for (i , option) in options.iter().enumerate() {
@@ -516,6 +526,9 @@ pub fn CheckboxField(
     field: FormField,
     #[props(into)] label: String,
     #[props(into, default)] description: Option<String>,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element {
     let ids = field.ids();
     let error = field.error();
@@ -526,6 +539,7 @@ pub fn CheckboxField(
             div { class: Styles::dx_form_check,
                 Checkbox {
                     id: ids.control.clone(),
+                    required,
                     checked: Some(if checked { CheckboxState::Checked } else { CheckboxState::Unchecked }),
                     on_checked_change: move |state: CheckboxState| {
                         field.set(if state == CheckboxState::Checked { "true" } else { "" });
@@ -641,5 +655,73 @@ pub fn DateTimeField(
             }
             FieldError { id: ids.error.clone(), message: error }
         }
+    }
+}
+
+/// Helpers for the code `#[derive(Form)]` generates. Not public API: they may change with the
+/// derive at any time.
+#[doc(hidden)]
+pub mod __derive {
+    use super::Validator;
+    use std::fmt::Display;
+    use std::rc::Rc;
+    use std::str::FromStr;
+
+    /// Not empty (whitespace only counts as empty), with a message that names the field.
+    pub fn required(message: &'static str) -> Validator {
+        Rc::new(move |v| {
+            if v.trim().is_empty() {
+                Err(message.into())
+            } else {
+                Ok(())
+            }
+        })
+    }
+
+    /// A checkbox that must be ticked.
+    pub fn checked(message: &'static str) -> Validator {
+        Rc::new(move |v| if v == "true" { Ok(()) } else { Err(message.into()) })
+    }
+
+    /// Run `rule` only when something was entered (optional fields).
+    pub fn when_filled(rule: Validator) -> Validator {
+        Rc::new(move |v| {
+            if v.trim().is_empty() {
+                Ok(())
+            } else {
+                rule(v)
+            }
+        })
+    }
+
+    /// `rule`, with its message replaced.
+    pub fn with_message(rule: Validator, message: &'static str) -> Validator {
+        Rc::new(move |v| rule(v).map_err(|_| message.into()))
+    }
+
+    /// The trimmed value parses as `T`.
+    pub fn parses<T: FromStr>(message: &'static str) -> Validator {
+        Rc::new(move |v| {
+            v.trim()
+                .parse::<T>()
+                .map(|_| ())
+                .map_err(|_| message.into())
+        })
+    }
+
+    /// At least `min`. A value that does not parse passes here; [`parses`] reports it.
+    pub fn at_least<T: FromStr + PartialOrd + Display + 'static>(min: T) -> Validator {
+        Rc::new(move |v| match v.trim().parse::<T>() {
+            Ok(n) if n < min => Err(format!("Must be at least {min}.")),
+            _ => Ok(()),
+        })
+    }
+
+    /// At most `max`. A value that does not parse passes here; [`parses`] reports it.
+    pub fn at_most<T: FromStr + PartialOrd + Display + 'static>(max: T) -> Validator {
+        Rc::new(move |v| match v.trim().parse::<T>() {
+            Ok(n) if n > max => Err(format!("Must be at most {max}.")),
+            _ => Ok(()),
+        })
     }
 }

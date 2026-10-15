@@ -58,6 +58,53 @@ rsx! {
 
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
+## Derive a form from a struct
+
+`#[derive(Form)]` (in `ui::prelude`) turns a struct into the same fields, so the rules and messages live next to the types:
+
+```rust
+#[derive(Form, Clone, PartialEq)]
+struct SignUp {
+    #[form(required, min_len = 3, autocomplete = "username")]
+    user_name: String,
+    #[form(required, email, description = "We never share it.")]
+    email: String,
+    #[form(min = 18)]
+    age: u32,
+    #[form(select = plans, placeholder = "Choose a plan")]
+    plan: Option<String>,
+    #[form(required = "Accept the terms to continue.", label = "I accept the terms")]
+    terms: bool,
+}
+
+let form = SignUp::use_form(); // or SignUp::use_form_with(&saved)
+rsx! {
+    Form { state: form, on_valid: move |_| if let Some(v) = form.value() { save(v) },
+        {form.fields()}
+        Button { r#type: "submit", "Sign up" }
+    }
+}
+```
+
+It generates `SignUpForm`, with one public `FormField` per struct field (`form.email`), plus `fields()` (every field, rendered in order), `value()` (the typed struct, `None` while a field does not parse), `load(&value)`, `reset()`, `validate()` and `state()`. Render a field yourself to lay it out differently: `TextField { field: form.email, label: "Email" }`.
+
+The type picks the control and the base rules:
+
+- `String`: a `TextField`. `Option<String>`: the same, optional (empty is `None`).
+- `bool`: a `CheckboxField`; `required` means it must be ticked.
+- Numbers and any other `FromStr + Display` type: a `TextField` (`inputmode` numeric or decimal for numbers) that must parse, so it is required. `Option<T>` makes it optional.
+
+Attributes, all inside `#[form(...)]`:
+
+- `label = "..."` (default: the field name, `user_name` becomes "User name"), `description`, `placeholder`, `autocomplete`, `input = "password"` (the input `type`; `email` sets `type="email"` itself).
+- `required` or `required = "message"`. The default message names the field ("Email is required."), since an error is announced on its own.
+- `email`, `min_len = n`, `max_len = n` for text; `min = n`, `max = n` and `invalid = "message"` (when it doesn't parse) for parsed types; `validate = my_rule` (any `fn(&str) -> Result<(), String>`, repeatable).
+- `textarea`, `select = options_fn` or `combobox = options_fn` (a `fn() -> Vec<FieldOption>`) to change the control.
+
+Rules run in that order and the first failure shows. On an optional field the rules only check what was typed. Required fields get `aria-required`, and the errors use the same `aria-invalid` / `aria-describedby` / `role="alert"` wiring as the hand-written fields. Unknown attributes, and ones that don't fit the type (`email` on a number, `required` on an `Option`), are compile errors.
+
+The generated code names the kit as `::ui`. If you copied the form component into your app (`rust-ui add form`), add the `rust-ui-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
+
 ## Accessibility
 
 - Role and name: each control has a `<label>`; invalid controls get `aria-invalid="true"` and `aria-describedby` pointing at the description and the error. The error is `role="alert"` so it is announced.
@@ -72,7 +119,7 @@ Original to this repo. The idea (a form-state hook plus bound fields) follows th
 
 ## Stability
 
-Experimental. The form API was reshaped twice in October 2026 (`mounted`, then `field_with`, `load` and the select and combobox fields), and binding a raw `Select` is still open. It may change in any release; see `docs/STABILITY.md` in the kit repository.
+Experimental, `#[derive(Form)]` included. The form API was reshaped twice in October 2026 (`mounted`, then `field_with`, `load` and the select and combobox fields), and binding a raw `Select` is still open. It may change in any release; see `docs/STABILITY.md` in the kit repository.
 
 ## API
 
@@ -135,6 +182,8 @@ pub fn use_form() -> FormState
 /// and submit validates, focuses the first error, or calls `on_valid`.
 #[component]
 pub fn Form(
+    /// The form's state: a [`FormState`], or a `#[derive(Form)]` form (it converts).
+    #[props(into)]
     state: FormState,
     #[props(default)] on_valid: Callback<()>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
@@ -184,6 +233,9 @@ pub fn SelectField(
     options: Vec<FieldOption>,
     #[props(into, default)] description: Option<String>,
     #[props(into, default)] placeholder: Option<String>,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element
 
 /// A searchable [`Combobox`] bound to a [`FormField`], wired like [`SelectField`]. `empty` is
@@ -200,6 +252,9 @@ pub fn ComboboxField(
     #[props(into, default)] description: Option<String>,
     #[props(into, default)] placeholder: String,
     #[props(into, default = "No results.".to_string())] empty: String,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element
 
 /// A multi-line [`Textarea`] bound to a [`FormField`], wired like [`TextField`]. Extra
@@ -227,6 +282,9 @@ pub fn CheckboxField(
     field: FormField,
     #[props(into)] label: String,
     #[props(into, default)] description: Option<String>,
+    /// Mark the control `aria-required` (pair it with a `required()` rule).
+    #[props(default)]
+    required: bool,
 ) -> Element
 
 /// A [`TimePicker`](crate::components::time_picker::TimePicker) bound to a [`FormField`], wired
