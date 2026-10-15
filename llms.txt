@@ -18,6 +18,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 ## Docs
 
 - [Installing components](docs/INSTALL.md): copy the source with `rust-ui` or `dx`, or depend on the crate from git
+- [MCP server](docs/MCP.md): `rust-ui mcp` lets MCP clients list, search, read and add components
 - [Theming](docs/THEMING.md): light and dark mode, accent presets, a brand colour, radius
 - [Icons](docs/ICONS.md): the Lucide set and when an icon needs a label
 - [Stability](docs/STABILITY.md): which items are stable, experimental or internal
