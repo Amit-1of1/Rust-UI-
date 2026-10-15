@@ -43,7 +43,7 @@ pub fn Demo() -> Element {
                     form.reset();
                 },
                 {form.fields()}
-                Button { r#type: "submit", "Book" }
+                Button { r#type: "submit", "Reserve a room" }
             }
             if let Some(b) = booked() {
                 Callout { variant: CalloutVariant::Success,
