@@ -197,16 +197,15 @@ pub fn Checkout(id: usize) -> Element {
                             CardContent { class: "tr-stack",
                                 div { class: "tr-search-field",
                                     span { id: "co-dates-label", class: "tr-label", "Dates" }
-                                    div { role: "group", aria_labelledby: "co-dates-label",
-                                        DateRangePicker {
-                                            selected_range: range(),
-                                            min_date: data::today(),
-                                            disabled_ranges: booked(),
-                                            on_range_change: move |r| {
-                                                range.set(r);
-                                                trip_error.set(None);
-                                            },
-                                        }
+                                    DateRangePicker {
+                                        aria_labelledby: "co-dates-label",
+                                        selected_range: range(),
+                                        min_date: data::today(),
+                                        disabled_ranges: booked(),
+                                        on_range_change: move |r| {
+                                            range.set(r);
+                                            trip_error.set(None);
+                                        },
                                     }
                                 }
                                 div { class: "tr-search-field",
@@ -331,7 +330,7 @@ pub fn Checkout(id: usize) -> Element {
             }
             aside { class: "tr-summary", aria_labelledby: "summary-title",
                 Card {
-                    Photo { hue: stay.hue, label: "Photo of {stay.name}" }
+                    CardMedia { Photo { hue: stay.hue, label: "Photo of {stay.name}" } }
                     CardHeader {
                         CardTitle { h2 { id: "summary-title", class: "tr-h3", "{stay.name}" } }
                         CardDescription { "{stay.region}" }

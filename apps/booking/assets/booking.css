@@ -39,21 +39,6 @@ h1 {
 }
 
 /* Skip link: off screen until focused. */
-.tr-skip {
-  position: absolute;
-  inset-inline-start: 1rem;
-  top: -3rem;
-  z-index: 10;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius, 0.5rem);
-  background: var(--secondary-color-1);
-  color: var(--primary-color);
-}
-
-.tr-skip:focus {
-  top: 0.5rem;
-}
-
 .tr-header {
   display: flex;
   flex-wrap: wrap;
@@ -248,12 +233,9 @@ h1 {
   display: grid;
 }
 
-/* Edge-to-edge photo on top: Card has no media slot, and its padding wins over a single
-   app class (the kit's CSS loads later), hence the descendant selector. */
-.tr-grid .tr-card {
+/* The stretched title link covers the card. */
+.tr-card {
   position: relative;
-  overflow: hidden;
-  padding-block-start: 0;
 }
 
 .tr-card:focus-within {
@@ -335,10 +317,6 @@ h1 {
   display: grid;
   gap: 1.5rem;
   min-width: 0;
-}
-
-.tr-stay-body .tr-photo {
-  border-radius: var(--radius, 0.5rem);
 }
 
 .tr-host-trigger {
@@ -452,14 +430,6 @@ h1 {
   min-width: 0;
 }
 
-.tr-summary .tr-photo {
-  margin-block-start: -1.5rem;
-}
-
-.tr-summary > div {
-  overflow: hidden;
-}
-
 .tr-fieldset {
   display: grid;
   gap: 0.5rem;
@@ -501,9 +471,4 @@ h1 {
   .tr-wide-only {
     display: none;
   }
-}
-
-/* Carousel items centre their content, so a full-bleed photo needs its own width. */
-.tr-stay-body .tr-photo {
-  width: 100%;
 }

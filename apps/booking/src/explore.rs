@@ -5,7 +5,7 @@ use crate::data::{self, money, Kind, Stay, AMENITIES};
 use crate::{use_store, PageTitle, Route};
 use dioxus::prelude::*;
 use std::collections::HashSet;
-use ui::icons::{Minus, Plus, Star};
+use ui::icons::Star;
 use ui::prelude::*;
 
 pub const PRICE_MIN: f64 = 50.0;
@@ -139,8 +139,6 @@ pub fn Explore() -> Element {
         f(&mut w);
         w.page = 0;
     };
-    let sort = use_memo(move || Some(filters.read().sort));
-
     rsx! {
         PageTitle { title: "Explore stays" }
         section { class: "tr-hero", aria_labelledby: "hero-title",
@@ -159,12 +157,11 @@ pub fn Explore() -> Element {
                 }
                 div { class: "tr-search-field",
                     span { id: "dates-label", class: "tr-label", "Dates" }
-                    div { role: "group", aria_labelledby: "dates-label",
-                        DateRangePicker {
-                            selected_range: filters.read().range,
-                            min_date: data::today(),
-                            on_range_change: move |r| update(&|f| f.range = r),
-                        }
+                    DateRangePicker {
+                        aria_labelledby: "dates-label",
+                        selected_range: filters.read().range,
+                        min_date: data::today(),
+                        on_range_change: move |r| update(&|f| f.range = r),
                     }
                 }
                 div { class: "tr-search-field",
@@ -197,7 +194,7 @@ pub fn Explore() -> Element {
                         span { id: "sort-label", class: "tr-label", "Sort by" }
                         Select::<Sort> {
                             aria_labelledby: "sort-label",
-                            value: Some(sort.into()),
+                            selected: filters.read().sort,
                             on_value_change: move |s: Option<Sort>| {
                                 if let Some(s) = s {
                                     update(&|f| f.sort = s);
@@ -236,7 +233,12 @@ pub fn Explore() -> Element {
                         }
                     }
                     if pages > 1 {
-                        Pager { page, pages }
+                        Pager {
+                            aria_label: "Pages of stays",
+                            page: page + 1,
+                            pages,
+                            on_page_change: move |p: usize| filters.write().page = p - 1,
+                        }
                     }
                 }
             }
@@ -325,7 +327,7 @@ fn FilterPanel() -> Element {
     }
 }
 
-/// - [n] + for the number of guests. The kit has no number field (GAPS.md 1).
+/// The guest count: the kit's `NumberInput` (a spin button with - and +).
 #[component]
 pub fn GuestCounter(
     #[props(into)] labelledby: String,
@@ -333,26 +335,14 @@ pub fn GuestCounter(
     max: u32,
     on_change: EventHandler<u32>,
 ) -> Element {
-    let label = if value == 1 { "guest" } else { "guests" };
     rsx! {
-        div { class: "tr-counter", role: "group", aria_labelledby: "{labelledby}",
-            Button {
-                variant: ButtonVariant::Outline,
-                size: ButtonSize::IconSm,
-                aria_label: "Fewer guests",
-                disabled: value <= 1,
-                onclick: move |_| on_change.call(value.saturating_sub(1).max(1)),
-                Minus { "aria-hidden": "true", size: "1rem" }
-            }
-            output { class: "tr-counter-value", aria_live: "polite", "{value} {label}" }
-            Button {
-                variant: ButtonVariant::Outline,
-                size: ButtonSize::IconSm,
-                aria_label: "More guests",
-                disabled: value >= max,
-                onclick: move |_| on_change.call((value + 1).min(max)),
-                Plus { "aria-hidden": "true", size: "1rem" }
-            }
+        NumberInput {
+            label: "guests",
+            aria_labelledby: "{labelledby}",
+            value: value as f64,
+            min: 1.0,
+            max: max as f64,
+            on_value_change: move |v: f64| on_change.call(v as u32),
         }
     }
 }
@@ -375,7 +365,7 @@ pub fn Photo(hue: u32, #[props(into)] label: String, #[props(default)] shift: u3
 fn StayCard(stay: Stay) -> Element {
     rsx! {
         Card { class: "tr-card",
-            Photo { hue: stay.hue, label: "Photo of {stay.name}" }
+            CardMedia { Photo { hue: stay.hue, label: "Photo of {stay.name}" } }
             CardHeader {
                 CardTitle {
                     h3 { class: "tr-card-title",
@@ -399,55 +389,6 @@ fn StayCard(stay: Stay) -> Element {
                 span { class: "tr-price",
                     strong { "{money(stay.price)}" }
                     " night"
-                }
-            }
-        }
-    }
-}
-
-#[component]
-fn Pager(page: usize, pages: usize) -> Element {
-    let mut filters = use_store().filters;
-    let mut go = move |p: usize| filters.write().page = p;
-    rsx! {
-        Pagination { aria_label: "Pages of stays",
-            PaginationContent {
-                PaginationItem {
-                    PaginationPrevious {
-                        href: "#",
-                        aria_disabled: (page == 0).then_some("true"),
-                        onclick: move |e: MouseEvent| {
-                            e.prevent_default();
-                            if page > 0 {
-                                go(page - 1);
-                            }
-                        },
-                    }
-                }
-                for p in 0..pages {
-                    PaginationItem { key: "{p}",
-                        PaginationLink {
-                            href: "#",
-                            is_active: p == page,
-                            onclick: move |e: MouseEvent| {
-                                e.prevent_default();
-                                go(p);
-                            },
-                            "{p + 1}"
-                        }
-                    }
-                }
-                PaginationItem {
-                    PaginationNext {
-                        href: "#",
-                        aria_disabled: (page + 1 >= pages).then_some("true"),
-                        onclick: move |e: MouseEvent| {
-                            e.prevent_default();
-                            if page + 1 < pages {
-                                go(page + 1);
-                            }
-                        },
-                    }
                 }
             }
         }
