@@ -15,7 +15,6 @@ dioxus = "0.7.10"
 # Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825: upstream DioxusLabs/components
 # 9a75825 plus the no-JavaScript fallbacks listed in docs/FORKS.md.
 dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "71fed6960350eafeff5699f9fd3a447a1418b7b7" }
-dioxus-icons = "0.1.0"
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
 motion = { path = "crates/motion", package = "rust-ui-motion", version = "0.1.0" }

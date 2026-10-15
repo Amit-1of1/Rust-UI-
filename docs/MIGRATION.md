@@ -6,6 +6,26 @@ What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIO
 
 ## Unreleased
 
+### Icons are generated in the kit (PR #35)
+
+**Who:** apps that use `ui::icons`, name `dioxus_icons` directly, or match icon markup in tests or CSS.
+
+**Before:** `ui::icons` re-exported `dioxus-icons` 0.1.0 (Lucide 1.14.0). Icons rendered exactly the attributes you passed.
+
+**After:** the kit generates every Lucide 1.57.0 icon itself. Every name `dioxus-icons` exported still exists (renamed icons keep their old name as an alias), and `Check { size: "1rem" }` still compiles. What changed:
+- Icons without a `label` (or an `aria-label`) get `aria-hidden="true"`. With a `label` they are `role="img"`.
+- Without a `size`, an icon gets `data-size="lg"` and follows `--icon-size-lg` (1.5rem, 24px by default).
+- The `<svg>` carries `data-icon="<lucide name>"`, `data-stroke="theme"` (when you pass no `stroke_width`) and, on arrows, chevrons and the like, `data-mirror-rtl`, which mirrors it inside `dir="rtl"`.
+- `IconSize` is an enum (`Xs`, `Sm`, `Md`, `Lg`, `Xl`, `Custom`); numbers and strings still convert into it.
+- Some icons were redrawn upstream between Lucide 1.14 and 1.57 (for example `BadgeCheck`).
+- `dioxus-icons` is no longer a dependency of the kit.
+
+**What to do:**
+- If an icon carries meaning on its own, give it `label: "..."` instead of relying on surrounding text. Remove `"aria-hidden": "true"` where you like; it is the default now (passing it is still fine).
+- If your app imported `dioxus_icons` directly, import from `ui::icons` instead, or keep your own `dioxus-icons` dependency.
+- If an icon should not mirror in right-to-left text, pass `mirror_rtl: false`.
+- Copy users: `rust-ui add --force icons`, then drop `dioxus-icons` from your `Cargo.toml` if nothing else uses it.
+
 ### `class` adds to the kit's class (PR #30)
 
 **Who:** apps that pass `class` to a styled component.

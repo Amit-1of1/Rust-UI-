@@ -47,7 +47,7 @@ Skip for now: `input_phone` (546 lines, large data tables), `workflow`, `bubble`
 
 ## Essentials that are not components
 
-1. ~~**Icons.**~~ Done: Lucide via `dioxus-icons`, wrapped as the `icons` item (`docs/ICONS.md`).
+1. ~~**Icons.**~~ Done: every Lucide icon generated into the `icons` item (`docs/ICONS.md`).
 2. **Hooks**: the `hooks` item ships `use_hotkey`, `Selection`, `use_media_query`, `use_copy_clipboard`. Still to borrow if a component needs them: `use_click_outside`, `use_lock_body_scroll`, a debounce helper.
 3. **Theming guide** (accent, radius, dark mode, brand colour). Tokens exist; the guide does not.
 4. **Docs site**: a page per component from each `docs.md`, with the live demo.

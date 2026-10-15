@@ -8,6 +8,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Breaking
 
+- **ui:** Icons are generated from Lucide 1.57.0 inside the kit instead of coming from `dioxus-icons` (Lucide 1.14.0). Every old icon name still works, but some icons are redrawn upstream, icons are `aria-hidden` unless labelled, `IconSize` is now an enum, and `dioxus-icons` is no longer a dependency. (#35) [Migration](docs/MIGRATION.md#icons-are-generated-in-the-kit-pr-35)
 - **ui:** `class` on a styled component now adds to the kit's class instead of rendering a second `class` attribute, where one of the two was lost. Applies to every component. (#30) [Migration](docs/MIGRATION.md#class-adds-to-the-kits-class-pr-30)
 - **ui:** `Select` and `Combobox` move `id`, `aria-describedby`, `aria-invalid` and `aria-required` (and on `Combobox`, `aria-labelledby`) from the wrapper to the focusable control. (#30) [Migration](docs/MIGRATION.md#select-and-combobox-put-form-attributes-on-the-focusable-control-pr-30)
 - **ui (experimental `form`):** `FormField::reset` returns to the field's initial value (`field_with`, `load`) instead of always emptying it. (#30) [Migration](docs/MIGRATION.md#formfieldreset-returns-to-the-initial-value-pr-30)
@@ -20,6 +21,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Added
 
+- **ui:** All 1,890 Lucide icons (was 1,705), plus `Icon { icon: lucide::CHECK }` for icons chosen at runtime, `label` (named `role="img"`), theme sizes `IconSize::Xs` … `Xl` (`--icon-size-*`), `--icon-stroke-width`, and mirroring of directional icons in right-to-left text (experimental). `scripts/gen-lucide-icons.mjs` regenerates the set. (#35)
 - **ui:** `TextareaField` and `CheckboxField` for `use_form`; `TextField` passes other attributes (`inputmode`, `maxlength`, ...) to its input (experimental `form`). `Stepper` takes `current: Signal<usize>` to be driven from outside. `button_look(variant, size)` styles a router `Link` as a button. (#34)
 - **ui:** `use_theme()`, `Theme` and `ThemeMode`: one shared mode, accent, density and radius state with `is_dark()` (experimental). (#30)
 - **ui:** `SelectField`, `ComboboxField`, `FieldOption`, `FormState::field_with` and `FormField::load` (experimental). `Select` takes a `placeholder`. (#30)
