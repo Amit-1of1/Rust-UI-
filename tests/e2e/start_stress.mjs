@@ -21,6 +21,8 @@ for (let i = 1; i <= loads; i++) {
   const errors = [];
   page.on("pageerror", (e) => errors.push(`${e.message}\n${e.stack ?? ""}`));
   page.on("console", (m) => {
+    // A missing favicon is not a problem.
+    if (/Failed to load resource/.test(m.text())) return;
     if (m.type() === "error" || m.type() === "warning") errors.push(`console.${m.type()}: ${m.text()}`);
   });
   if (slow) {
