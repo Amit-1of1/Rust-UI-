@@ -1,6 +1,7 @@
 // Which browser engine the e2e scripts drive: BROWSER=chromium (default), firefox or webkit.
 // Every script launches through here so scripts/check.sh --browsers can run the same checks
 // on each engine. Engines come from PLAYWRIGHT_BROWSERS_PATH; nothing is downloaded here.
+import { existsSync } from "node:fs";
 import { chromium, firefox, webkit } from "playwright";
 
 const ENGINES = { chromium, firefox, webkit };
@@ -13,6 +14,15 @@ export const TIMEOUT = ENGINE === "webkit" ? 90000 : 30000;
 export async function launch(options) {
   const type = ENGINES[ENGINE];
   if (!type) throw new Error(`BROWSER=${ENGINE}: expected chromium, firefox or webkit`);
+  // A Chromium Playwright did not download itself (cloud containers ship one older build at
+  // /opt/pw-browsers/chromium): use it when the one this Playwright expects is missing.
+  if (ENGINE === "chromium" && !existsSync(type.executablePath())) {
+    const fallback = process.env.CHROMIUM_PATH ?? "/opt/pw-browsers/chromium";
+    if (existsSync(fallback)) {
+      console.log(`chromium: using ${fallback} (${type.executablePath()} is not installed)`);
+      options = { ...options, executablePath: fallback };
+    }
+  }
   try {
     const browser = await type.launch(options);
     const newPage = browser.newPage.bind(browser);

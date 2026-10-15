@@ -1,6 +1,6 @@
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `field`, `input`, `select`, `textarea`).
+- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
@@ -40,6 +40,17 @@ let terms = form.field(vec![custom(|v| if v == "true" { Ok(()) } else { Err("Acc
 rsx! {
     TextareaField { field: notes, label: "Notes", maxlength: "300" }
     CheckboxField { field: terms, label: "I accept the terms" }
+}
+```
+
+`TimeField` and `DateTimeField` bind a `TimePicker` or `DateTimePicker`. The field holds `14:05` or `2026-10-15T14:05` (the formats of `<input type="time">` and `datetime-local`), empty until every part is entered; they validate when focus leaves the picker:
+
+```rust
+let start = form.field(vec![required()]);
+let departure = form.field(vec![required()]);
+rsx! {
+    TimeField { field: start, label: "Start", hour_cycle: HourCycle::H12, minute_step: 5 }
+    DateTimeField { field: departure, label: "Departure", default_time: Time::from_hms(9, 0, 0).ok() }
 }
 ```
 
@@ -216,6 +227,45 @@ pub fn CheckboxField(
     field: FormField,
     #[props(into)] label: String,
     #[props(into, default)] description: Option<String>,
+) -> Element
+
+/// A [`TimePicker`](crate::components::time_picker::TimePicker) bound to a [`FormField`], wired
+/// like [`TextField`]. The field holds `"14:05"` (`"14:05:09"` with `seconds`), the format of
+/// `<input type="time">`, and stays empty until every segment is filled, so `required()`
+/// works. It validates when focus leaves the picker.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn TimeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default)] hour_cycle: HourCycle,
+    #[props(default)] seconds: bool,
+    #[props(default = 1)] minute_step: u8,
+) -> Element
+
+/// A [`DateTimePicker`] bound to a [`FormField`], wired like [`TextField`]. The field holds
+/// `"2026-10-15T14:05"`, the format of `<input type="datetime-local">`, and stays empty until
+/// both the date and the time are entered. It validates when focus leaves the picker; a
+/// failed submit focuses the time's first segment.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DateTimeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default)] hour_cycle: HourCycle,
+    #[props(default)] seconds: bool,
+    #[props(default = 1)] minute_step: u8,
+    /// Filled in when a date is picked while the time is still empty.
+    #[props(default)]
+    default_time: Option<Time>,
 ) -> Element
 ```
 

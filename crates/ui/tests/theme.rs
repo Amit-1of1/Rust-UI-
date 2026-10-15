@@ -96,6 +96,20 @@ fn accent_presets_meet_aa_contrast_in_both_modes() {
     assert!(checked >= 5, "expected at least the five shipped presets");
 }
 
+/// Chart series are graphics, so WCAG 1.4.11 asks for 3:1 against the page
+/// (`--primary-color`: #fff in light, #000 in dark).
+#[test]
+fn chart_colours_meet_non_text_contrast_in_both_modes() {
+    let theme = outside_fallback(THEME);
+    for n in 2..=5 {
+        let (dark, light) = pair(&declared(&theme, &format!("--chart-{n}:")));
+        let on_dark = contrast(&dark, "#000");
+        let on_light = contrast(&light, "#fff");
+        assert!(on_dark >= 3.0, "--chart-{n} dark: {on_dark:.2}:1");
+        assert!(on_light >= 3.0, "--chart-{n} light: {on_light:.2}:1");
+    }
+}
+
 /// The theme without the generated fallback block.
 fn outside_fallback(theme: &str) -> String {
     match (theme.find(FALLBACK_BEGIN), theme.find(FALLBACK_END)) {

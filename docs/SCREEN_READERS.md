@@ -32,14 +32,21 @@ announced change.
 - Demo names a reader would stumble on: "Demo Slider", "Progressbar Demo", toggle buttons named
   "B", "I", "U" and emoji read before each fruit name.
 
-## Open engine issue
+## Engine issue found and fixed: WebKit 26.0 wasm traps (2026-10-15)
 
-- WebKit (Playwright's WebKit 26 on Linux CI) sometimes traps inside the gallery's wasm within a
-  second of loading ("Out of bounds memory access" in a wasm-bindgen closure call, then
-  "Unreachable code"), and the page stops responding. It hit 2 of about 18 gallery loads in
-  some CI runs and none in others, never in Chromium or Firefox, and not in 80 plain loads
-  with any JSC wasm tier turned off. The cause is not known. Check the gallery in real Safari;
-  a failing WebKit job whose log shows this trap is this issue, not the check that timed out.
+- Playwright 1.56.1's WebKit (26.0, build 2215) trapped inside the apps' wasm at random:
+  "Out of bounds memory access", "Unreachable code" (a Rust panic) or "access to a null
+  reference", in a different place each time (the allocator, a component's render, the diff),
+  always under a wasm-bindgen closure call. Split and unsplit builds alike, the gallery, the
+  booking app and debug builds, never in Chromium or Firefox. It failed most WebKit CI jobs.
+- `tests/e2e/start_stress.mjs` measured it: 18 traps in 1,250 gallery loads on WebKit 26.0, none
+  in 450 loads on Playwright 1.63.0's WebKit 26.6 (build 2359), on the same build. Three full
+  WebKit runs of `scripts/e2e.sh` on 26.6 had no trap either. A trap reading a null native
+  address from Rust code, which never emits a null check, points at the engine's compiled code,
+  not at the app.
+- Fix: Playwright is pinned to 1.63.0. To check a future WebKit, run
+  `BROWSER=webkit LOADS=150 GALLERY_URL=... node start_stress.mjs` in `tests/e2e`; every trap
+  prints with its stack.
 
 ## Needs a person with a screen reader
 

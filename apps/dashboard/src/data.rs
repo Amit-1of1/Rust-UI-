@@ -87,6 +87,12 @@ pub const REVENUE: [(&str, f32); 9] = [
     ("Sep", 32.4),
 ];
 
+/// The same months a year earlier, for comparison.
+pub const REVENUE_2025: [f32; 9] = [12.1, 12.9, 14.0, 14.6, 15.2, 17.8, 18.3, 19.0, 21.5];
+
+/// Revenue target for the quarter Jul-Sep 2026, in thousands of dollars.
+pub const Q3_TARGET: f32 = 100.0;
+
 pub fn money(n: u32) -> String {
     let s = n.to_string();
     let mut out = String::new();

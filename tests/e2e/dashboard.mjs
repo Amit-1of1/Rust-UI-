@@ -52,6 +52,21 @@ for (const scheme of ["light", "dark"]) {
     await axe(page, `${scheme} ${name}`);
   }
 
+  // Charts: named images with a keyboard-reachable data table.
+  await nav(page, "Overview");
+  for (const name of [/^Revenue per month/, /^Customers by plan$/, /^Q3 revenue against target$/]) {
+    check((await page.getByRole("img", { name }).count()) === 1, `${scheme}: chart ${name} is a named image`);
+  }
+  check((await page.locator("[data-slot='chart-legend'] li").count()) >= 5, `${scheme}: charts show legends`);
+  const toggle = page.locator("[data-slot='chart-data'] summary").first();
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  const table = page.getByRole("table", { name: /^Revenue per month/ });
+  check(await table.isVisible(), `${scheme}: Enter on "Show data" opens the revenue table`);
+  check((await table.locator("tbody tr").count()) === 9, `${scheme}: the revenue table has a row per month`);
+  await axe(page, `${scheme} Overview with a chart table open`);
+  await page.keyboard.press("Enter");
+
   // Overlays: each one is scanned while open.
   await nav(page, "Customers");
   await page.getByRole("button", { name: "Add customer" }).click();
@@ -175,6 +190,19 @@ await page.getByRole("button", { name: "Reset workspace" }).click();
 await page.getByRole("alertdialog", { name: "Reset the workspace?" }).waitFor();
 await axe(page, "reset confirmation");
 await page.keyboard.press("Escape");
+
+// Reduced motion: chart marks don't animate in.
+{
+  const page = await browser.newPage({ reducedMotion: "reduce" });
+  await page.goto(url);
+  await page.waitForSelector("body[data-ready='1'] .db-main");
+  const motion = await page.evaluate(() => {
+    const slice = document.querySelector("[data-slot='chart'] path[data-series]");
+    return slice ? getComputedStyle(slice).animationName : "missing";
+  });
+  check(motion === "none", `reduced motion: chart slices don't animate (${motion})`);
+  await page.close();
+}
 
 await browser.close();
 if (failed) {

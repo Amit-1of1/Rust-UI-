@@ -132,6 +132,8 @@ fn MoreSections() -> Element {
         Section { title: "Combobox", blurb: "Type to filter, arrow keys to choose.", ui::demos::combobox::Demo {} }
         Section { title: "Context menu", blurb: "Right-click for actions.", ui::demos::context_menu::Demo {} }
         Section { title: "Date picker", blurb: "Calendar in a popover.", ui::demos::date_picker::Demo {} }
+        Section { title: "Time picker", blurb: "Hour and minute fields; type digits or use the arrow keys.", ui::demos::time_picker::Demo {} }
+        Section { title: "Date and time picker", blurb: "A date picker and a time picker as one value.", ui::demos::date_time_picker::Demo {} }
         Section { title: "Drag and drop list", blurb: "Reorder with the pointer or keyboard.", ui::demos::drag_and_drop_list::Demo {} }
         Section { title: "Hover card", blurb: "Rich preview on hover or focus.", ui::demos::hover_card::Demo {} }
         Section { title: "Item", blurb: "A flexible row for lists.", ui::demos::item::Demo {} }

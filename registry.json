@@ -168,6 +168,7 @@
         "chart/style.css"
       ],
       "registryDependencies": [
+        "table",
         "ui_strings"
       ]
     },
@@ -286,6 +287,21 @@
       ]
     },
     {
+      "name": "date_time_picker",
+      "files": [
+        "date_time_picker/component.rs",
+        "date_time_picker/docs.md",
+        "date_time_picker/mod.rs",
+        "date_time_picker/style.css"
+      ],
+      "registryDependencies": [
+        "date_picker",
+        "form",
+        "time_picker",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "dialog",
       "files": [
         "dialog/component.rs",
@@ -371,10 +387,12 @@
       "registryDependencies": [
         "checkbox",
         "combobox",
+        "date_time_picker",
         "field",
         "input",
         "select",
-        "textarea"
+        "textarea",
+        "time_picker"
       ]
     },
     {
@@ -794,6 +812,20 @@
       ],
       "registryDependencies": [
         "hooks"
+      ]
+    },
+    {
+      "name": "time_picker",
+      "files": [
+        "time_picker/component.rs",
+        "time_picker/docs.md",
+        "time_picker/mod.rs",
+        "time_picker/style.css"
+      ],
+      "registryDependencies": [
+        "form",
+        "icons",
+        "ui_strings"
       ]
     },
     {

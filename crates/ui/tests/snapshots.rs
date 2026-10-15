@@ -13,7 +13,7 @@ mod common;
 const DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/snapshots");
 
 /// Demos whose markup depends on today's date, so a snapshot would change every day.
-const CLOCK_DEPENDENT: &[&str] = &["calendar", "date_picker"];
+const CLOCK_DEPENDENT: &[&str] = &["calendar", "date_picker", "date_time_picker"];
 
 /// Generated ids (`dxc-12`, `dx-carousel-3`, `span-dxc-27-label`) come from process-wide
 /// counters, so they depend on what else rendered first. Renumber every number that
