@@ -82,7 +82,7 @@ pub fn Settings01(
             p { class: Styles::dx_block_settings_muted, "Manage your profile, emails and appearance." }
         }
         Tabs { default_value: "profile".to_string(), horizontal: true,
-            TabList { aria_label: "Settings sections",
+            TabList { class: Styles::dx_block_settings_tabs, aria_label: "Settings sections",
                 TabTrigger { value: "profile".to_string(), index: 0usize, "Profile" }
                 TabTrigger { value: "notifications".to_string(), index: 1usize, "Notifications" }
                 TabTrigger { value: "appearance".to_string(), index: 2usize, "Appearance" }

@@ -66,9 +66,9 @@ for (const scheme of ["light", "dark"]) {
 
 // Phone width: nothing scrolls sideways.
 for (const name of BLOCKS) {
-  const page = await open(browser, name, "light", { width: 375, height: 800 });
+  const page = await open(browser, name, "light", { width: 320, height: 800 });
   const wide = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  check(wide <= 0, `${name}: no sideways scroll at 375px (${wide}px over)`);
+  check(wide <= 0, `${name}: no sideways scroll at 320px (${wide}px over)`);
   await page.close();
 }
 
