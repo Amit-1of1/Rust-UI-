@@ -2,7 +2,8 @@
 //! component no longer conflict over the same lines (docs/GUARDRAILS.md, "Parallel sessions").
 //!
 //! - `components.rs`: `pub mod <name>;` for every folder in `src/components` with a `mod.rs`.
-//! - `prelude.rs`: `pub use crate::components::<name>::*;` for the same, minus [`NOT_IN_PRELUDE`].
+//! - `prelude.rs`: `pub use crate::components::<name>::*;` for the same, minus the names in
+//!   `not_in_prelude.txt`.
 //! - `demos.rs`: `pub mod <name>;` for every `src/demos/<name>.rs`, and `ALL`, the list the
 //!   tests, gallery checks and snapshots walk.
 //! - `component_tests.rs`: `mod <name>;` for every `tests/components/<name>.rs`.
@@ -12,24 +13,23 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-/// Components left out of the prelude, with the reason.
-const NOT_IN_PRELUDE: &[&str] = &[
-    // `ui::icons::Check`: import icons by path, not with a glob (lib.rs).
-    "icons",
-    // drag_and_drop_list and tag_group both export `RemoveButton`; use their module paths.
-    "drag_and_drop_list",
-    "tag_group",
-];
-
 fn main() {
     let root = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR"));
     let out = PathBuf::from(std::env::var("OUT_DIR").expect("OUT_DIR"));
     let components_dir = root.join("src/components");
     let demos_dir = root.join("src/demos");
     let tests_dir = root.join("tests/components");
-    for dir in [&components_dir, &demos_dir, &tests_dir] {
+    let exclude_file = root.join("not_in_prelude.txt");
+    for dir in [&components_dir, &demos_dir, &tests_dir, &exclude_file] {
         println!("cargo::rerun-if-changed={}", dir.display());
     }
+    let excluded = fs::read_to_string(&exclude_file).expect("not_in_prelude.txt");
+    let not_in_prelude: Vec<&str> = excluded
+        .lines()
+        .filter_map(|l| l.split('#').next())
+        .map(str::trim)
+        .filter(|l| !l.is_empty())
+        .collect();
 
     let components: Vec<String> = names(&components_dir, |p| {
         p.is_dir() && p.join("mod.rs").is_file()
@@ -51,7 +51,7 @@ fn main() {
             "#[path = {:?}]\npub mod {name};\n",
             path.display().to_string()
         ));
-        if !NOT_IN_PRELUDE.contains(&name.as_str()) {
+        if !not_in_prelude.contains(&name.as_str()) {
             prelude.push_str(&format!("pub use crate::components::{name}::*;\n"));
         }
     }

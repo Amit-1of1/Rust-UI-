@@ -5,8 +5,8 @@
 #   scripts/sync-main.sh          fetch origin/main, merge it, fix generated files, commit
 #   scripts/sync-main.sh --continue   after resolving the remaining conflicts by hand
 #
-# Generated files (registry.json, every component.json, apps/docs/src/generated.rs, Cargo.lock,
-# markup snapshots) are never resolved by hand: the script takes main's copy and regenerates
+# Generated files (registry.json, every component.json, apps/docs/src/generated.rs, llms.txt and
+# llms/, Cargo.lock, markup snapshots) are never resolved by hand: the script takes main's copy and regenerates
 # it from the merged sources. Anything else that conflicts is listed and left for you; fix it,
 # `git add` it, then run the script again with --continue.
 # It never pushes, rebases or force-pushes. Run scripts/check.sh afterwards, then push.
@@ -34,7 +34,7 @@ MARK="$(git rev-parse --git-dir)/sync-main-snapshots"
 # Paths that are generated from other files in the repo.
 is_generated() {
   case "$1" in
-    registry.json|Cargo.lock|apps/docs/src/generated.rs) return 0 ;;
+    registry.json|Cargo.lock|apps/docs/src/generated.rs|llms.txt|llms-full.txt|llms/*) return 0 ;;
     crates/ui/src/components/*/component.json|component.json) return 0 ;;
     crates/ui/tests/snapshots/*) return 0 ;;
   esac
@@ -43,7 +43,7 @@ is_generated() {
 
 regenerate_and_commit() {
   local snapshots="$1"
-  echo "== regenerating registry.json, component.json files and the docs index"
+  echo "== regenerating registry.json, component.json files, llms pages and the docs index"
   cargo run -q -p rust-ui-cli -- registry >/dev/null
   echo "== refreshing Cargo.lock"
   cargo metadata -q --format-version 1 >/dev/null
@@ -52,7 +52,7 @@ regenerate_and_commit() {
     UPDATE_SNAPSHOTS=1 cargo test -q -p rust-ui-kit --test snapshots >/dev/null
   fi
   git add -A registry.json Cargo.lock apps/docs/src/generated.rs component.json \
-    crates/ui/src/components crates/ui/tests/snapshots
+    crates/ui/src/components crates/ui/tests/snapshots llms.txt llms-full.txt llms
   if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
     git commit -q --no-edit
   elif ! git diff --cached --quiet; then

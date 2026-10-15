@@ -66,7 +66,7 @@ Several sessions (and PRs) run at once. Every conflict in PRs #17 to #40 came fr
 - [ ] **Changelog and migration notes:** `changes/<topic>.md` and `changes/<topic>.migration.md`. `scripts/check.sh` fails if a branch edits `CHANGELOG.md` or `docs/MIGRATION.md`.
 - [ ] **Components, demos and their tests:** add the folder, `src/demos/<name>.rs` and `tests/components/<name>.rs` (`rust-ui new` does all three). `crates/ui/build.rs` generates `components::*`, the prelude, `ui::demos::ALL` and the test list, so nothing else needs a line. New tests for an existing component also go in `tests/components/<name>.rs`, not at the end of `render.rs`.
 - [ ] **Platform notes and decisions:** a new file, `docs/notes/<topic>.md` or `docs/decisions/<date>-<topic>.md`. The two lists at the end of this file are closed to new lines; edit an existing line there only to correct it.
-- [ ] **Generated files** (`registry.json`, every `component.json`, `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots) are never edited or merged by hand; regenerate them (`rust-ui registry`, `cargo metadata`, `UPDATE_SNAPSHOTS=1`).
+- [ ] **Generated files** (`registry.json`, every `component.json`, `apps/docs/src/generated.rs`, `llms.txt` and `llms/`, `Cargo.lock`, snapshots) are never edited or merged by hand; regenerate them (`rust-ui registry`, `cargo metadata`, `UPDATE_SNAPSHOTS=1`).
 - [ ] **Lists that are still shared** (the gallery's sections, `scripts/check.sh`, `scripts/e2e.sh`, `tests/class.rs`, `apps/*/GAPS.md`, `docs/STABILITY.md`): change only your own lines, and add new lines next to related ones rather than at the end.
 
 **Syncing**
