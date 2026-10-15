@@ -75,3 +75,14 @@ Each component's stylesheet is an asset inside the crate; `dx serve` and `dx bun
 ## Generated files
 
 `registry.json` and every `component.json` come from `cargo run -p rust-ui-cli -- registry`. A test fails when they are stale.
+
+## For coding agents
+
+`llms.txt` at the repository root is an index for AI coding agents (the [llms.txt](https://llmstxt.org) shape): what the kit is, the rules for using it, and one line per component linking to `llms/<name>.md`. A component page holds its `docs.md`, the Rust signatures of its public items (props, enums, hooks) and its demo as a working example. `llms-full.txt` is all of it in one file. The same `rust-ui registry` run writes them, so they can't drift from the components. Without a checkout, the CLI prints the same text:
+
+```sh
+rust-ui docs            # the index
+rust-ui docs dialog     # one component's page
+```
+
+Point your agent at `llms.txt` (or paste `rust-ui docs <name>` into it) before it writes UI code. The rules at the top come from `docs/llms-intro.md`.

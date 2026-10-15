@@ -21,6 +21,7 @@ Nothing has been released, tagged or published yet. All three crates are at `0.1
 
 ### Added
 
+- **cli:** `rust-ui docs [name]` prints a page for coding agents (docs, props as Rust signatures, the demo as an example), and `rust-ui registry` writes the same pages to `llms/<name>.md` plus `llms.txt` and `llms-full.txt` at the repository root; `registry --check` and a test fail when they are stale (experimental).
 - **ui:** All 1,890 Lucide icons (was 1,705), plus `Icon { icon: lucide::CHECK }` for icons chosen at runtime, `label` (named `role="img"`), theme sizes `IconSize::Xs` … `Xl` (`--icon-size-*`), `--icon-stroke-width`, and mirroring of directional icons in right-to-left text (experimental). `scripts/gen-lucide-icons.mjs` regenerates the set. (#35)
 - **ui:** `TextareaField` and `CheckboxField` for `use_form`; `TextField` passes other attributes (`inputmode`, `maxlength`, ...) to its input (experimental `form`). `Stepper` takes `current: Signal<usize>` to be driven from outside. `button_look(variant, size)` styles a router `Link` as a button. (#34)
 - **ui:** `use_theme()`, `Theme` and `ThemeMode`: one shared mode, accent, density and radius state with `is_dark()` (experimental). (#30)

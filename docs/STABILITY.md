@@ -81,6 +81,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
 - `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
+- `rust-ui docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
 
 ### Internal
 
