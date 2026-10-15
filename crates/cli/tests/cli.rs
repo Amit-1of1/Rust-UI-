@@ -166,6 +166,39 @@ fn committed_component_manifests_are_up_to_date() {
 }
 
 #[test]
+fn committed_llms_files_are_up_to_date() {
+    let stale = llms::stale(&repo_root()).unwrap();
+    assert!(
+        stale.is_empty(),
+        "run `cargo run -p rust-ui-cli -- registry`: {stale:?}"
+    );
+}
+
+#[test]
+fn every_component_has_an_agent_page_with_its_example() {
+    let root = repo_root();
+    let reg = load(&root).unwrap();
+    for item in &reg.items {
+        let text = llms::page(&root, &reg, &item.name).unwrap().unwrap();
+        assert!(text.contains(&format!("rust-ui add {}", item.name)));
+        if root
+            .join(DEMOS_DIR)
+            .join(format!("{}.rs", item.name))
+            .is_file()
+        {
+            assert!(
+                text.contains("## Example"),
+                "{} page has no example",
+                item.name
+            );
+        }
+    }
+    assert!(llms::page(&root, &reg, "no_such_component")
+        .unwrap()
+        .is_none());
+}
+
+#[test]
 fn every_component_is_listed_in_the_root_manifest() {
     let root: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(repo_root().join("component.json")).unwrap())
