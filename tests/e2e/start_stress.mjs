@@ -1,5 +1,5 @@
 // Load an app many times and report every wasm trap with its whole stack. Used to chase the
-// WebKit trap at gallery start (docs/notes/webkit-wasm-trap.md).
+// WebKit 26.0 wasm traps (docs/SCREEN_READERS.md).
 //   GALLERY_URL=... LOADS=40 BROWSER=webkit node start_stress.mjs
 // READY_SELECTOR: what marks the app as started (default: the gallery's last section).
 // SLOW_LAZY_MS: hold back each lazy wasm part (assets/module_*, chunk_*) this long, to widen any
