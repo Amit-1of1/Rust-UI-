@@ -587,14 +587,9 @@ fn checker_catches_the_mistakes_it_claims_to() {
 /// Problems found on the first run, kept visible instead of silenced. Each entry is a
 /// substring of the reported problem and why it is not fixed yet. The test fails if one
 /// of these goes away, so the list can't go stale.
-const KNOWN: &[(&str, &str)] = &[(
-    "date_picker: <span class=\"dx-date-segment",
-    "dioxus-primitives: DateSegment sets aria-labelledby=\"{id}-label\" but never renders \
-     that element. Browsers fall back to its aria-label (\"day\" etc.), so the name still \
-     works. Not fixable from the styled layer: the segment writes the attribute before \
-     spreading ours, so passing our own value emits it twice. Upstream draft: \
-     rust-ui/upstream/dioxus-primitives-a11y-issues.md in the project files.",
-)];
+/// Empty since the dangling date segment `aria-labelledby` was fixed on the primitives fork
+/// (docs/FORKS.md).
+const KNOWN: &[(&str, &str)] = &[];
 
 #[test]
 fn every_demo_passes_the_aria_check() {

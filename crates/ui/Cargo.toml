@@ -46,3 +46,7 @@ desktop = ["motion/desktop"]
 # dioxus-native (Blitz). Nothing in the kit needs it any more (docs/NATIVE.md); kept so
 # apps that turn it on keep building. Experimental (docs/STABILITY.md).
 native = []
+# Kit links (`TextLink`, `BreadcrumbLink`, `PaginationLink`) navigate through the Dioxus router
+# when one is present, and `MainContent` moves focus after a route change. Experimental
+# (docs/STABILITY.md).
+router = ["dioxus/router"]

@@ -71,6 +71,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
 - [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
+- [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
 - [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
 - [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
 - [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
@@ -82,6 +83,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Shimmer](llms/shimmer.md): Wraps loading content and sweeps a highlight across it
 - [Sidebar](llms/sidebar.md): The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application
 - [Skeleton](llms/skeleton.md): The Skeleton component is used to display a placeholder preview of content before the data gets loaded
+- [SkipLink](llms/skip_link.md): `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation
 - [Slider](llms/slider.md): The slider component allows users to select a value from a range by sliding a handle along a track
 - [Spinner](llms/spinner.md): A loading indicator
 - [Status](llms/status.md): A coloured dot plus required text label (idle, online, degraded, down)
@@ -411,7 +413,7 @@ The Avatar components display a user's profile picture or fallback initials. Use
 
 ```rust
 Avatar {
-    aria_label: "Jane Doe",
+    label: "Jane Doe",
     AvatarImage {
         src: "https://example.com/avatar.png",
         alt: "Jane Doe",
@@ -428,6 +430,10 @@ ImageAvatar {
     "JD"
 }
 ```
+
+## Naming
+
+The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.
 
 ## API
 
@@ -464,6 +470,13 @@ pub struct AvatarProps {
 
     #[props(default)]
     pub shape: AvatarShape,
+
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
 
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]
@@ -528,6 +541,13 @@ pub struct ImageAvatarProps {
 
     #[props(default)]
     pub shape: AvatarShape,
+
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
 
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]
@@ -779,7 +799,7 @@ pub fn Demo() -> Element {
 
 # Breadcrumb
 
-- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A trail of links to the current page.
@@ -809,6 +829,7 @@ pub fn BreadcrumbItem(
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
     /// For in-app navigation without a router: call `prevent_default()` and switch the view.
+    /// With the kit's `router` feature, a path `href` goes through the router by itself.
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
@@ -1305,6 +1326,15 @@ Card {
 ## Layout Notes
 
 - When `CardAction` is present inside `CardHeader`, the header automatically switches to a two-column grid layout.
+- `CardMedia` holds an edge-to-edge image: put it first (or last) and it meets the card's edge with the card's rounded corners, no negative margins needed. An `img` inside is cropped to fill it.
+- The card's corner radius is twice the theme `--radius` (1rem by default), so the theme's radius setting reaches cards.
+
+```rust
+Card {
+    CardMedia { img { src: "/cabin.jpg", alt: "The cabin from the lake", style: "aspect-ratio: 16 / 9;" } }
+    CardHeader { CardTitle { "Lakeside cabin" } }
+}
+```
 
 ## API
 
@@ -1335,6 +1365,19 @@ pub fn CardDescription(
 
 #[component]
 pub fn CardAction(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// An edge-to-edge image, video or map in a card: no side padding, and as the first (or
+/// last) child it meets the card's top (or bottom) edge with the card's rounded corners.
+/// An `img` inside is cropped to fill it; give it an `alt`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardMedia(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -1400,7 +1443,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport.
+Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 
@@ -1430,6 +1473,10 @@ pub fn Carousel(
 #[component]
 pub fn CarouselItem(
     #[props(into, default)] label: Option<String>,
+    /// A full-bleed slide for a photo or video: the content fills the slide edge to edge
+    /// (an `img` is cropped to cover it) instead of being centred.
+    #[props(default)]
+    media: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -2576,6 +2623,10 @@ DatePicker {
 ```
 
 The styled `DatePicker` and `DateRangePicker` render the input, trigger, popover content, and calendar by default.
+
+## Naming
+
+Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates-label", .. }` (or `aria_label`). The picker's group then carries that name; the English "Date" / "Date Range" is only used when you pass none. The segments are named "year", "month" and "day" inside it, and a segment moves on to the next once it holds all its digits ("01" for January).
 
 ## API
 
@@ -3974,6 +4025,20 @@ pub const MOBILE_QUERY: &str;
 /// make `false` the layout that works everywhere.
 pub fn use_media_query(query: &'static str) -> ReadSignal<bool>
 
+/// The `href` to render for `href`: inside a router with a base path (for example a site
+/// served from `/my-app/`), an in-app path gets that prefix, so opening it in a new tab or
+/// copying it works. Anything else is returned unchanged.
+pub fn in_app_href(href: &str) -> String
+
+/// Sends a plain left click on a link to `href` through the router, when there is one and
+/// it knows the path. Returns `true` when it did (the browser's own navigation is then
+/// cancelled). Clicks with a modifier key (new tab, new window), other buttons, links with
+/// a `target`, and clicks whose default was already prevented are left alone.
+pub fn follow_in_app(href: &str, event: &MouseEvent) -> bool
+
+/// Whether `href` is the path the router is showing now, for `aria-current="page"`.
+pub fn is_current_route(href: &str) -> bool
+
 /// Which rows of a list are selected, with updates that touch only the rows that change.
 ///
 /// A plain `Signal<HashSet<K>>` re-renders every row that reads it whenever the selection
@@ -4087,6 +4152,10 @@ HoverCard {
     }
 }
 ```
+
+## Don't put controls in the trigger
+
+`HoverCardTrigger` is itself focusable (`role="button"`, `tabindex="0"`), so keyboard users can open the card. A button or link inside it is a control inside a control (axe `nested-interactive`), and screen readers announce it badly. Put text, an avatar or an icon directly inside the trigger, and put links and buttons inside `HoverCardContent` (or next to the trigger).
 
 ## API
 
@@ -5000,7 +5069,7 @@ pub fn Demo() -> Element {
 
 # Link
 
-- Copy into your app: `rust-ui add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Copy into your app: `rust-ui add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring. `external: true` opens it in a new tab safely and says so; `current: true` marks the page you are on.
@@ -5010,13 +5079,17 @@ p { "Read the " TextLink { href: "/docs/theming", "theming guide" } "." }
 TextLink { href: "https://lucide.dev", external: true, "Lucide" }
 ```
 
-It is named `TextLink` so it never clashes with the router's `Link`. For buttons that look like links, use `Button { variant: ButtonVariant::Link }`; for actions that do not navigate, use a button.
+It is named `TextLink` so it never clashes with the router's `Link`.
+
+## With the Dioxus router
+
+Turn on the kit's `router` feature (`ui = { ..., features = ["router"] }`). Inside a `Router`, `TextLink`, `BreadcrumbLink` and `PaginationLink` then send a plain left click on a path `href` (`"/stays/3"`) through the router instead of loading the page again, add the router's base path to the rendered `href`, and `TextLink` marks itself `aria-current="page"` while its path is the current route. Ctrl/Cmd-click, middle-click, external links and `href`s the route enum doesn't parse stay ordinary links. `SidebarMenuButton` renders a button; for a route, pass the router's `Link` through its `as` prop. The helpers (`follow_in_app`, `in_app_href`, `is_current_route`) are in `ui::hooks` for your own links. For buttons that look like links, use `Button { variant: ButtonVariant::Link }`; for actions that do not navigate, use a button.
 
 ## Accessibility
 
 - Role and name: a native link named by its text; external links add "(opens in a new tab)" (from `UiStrings`) and a hidden icon
 - Keyboard: Tab reaches it, Enter follows it
-- State: `aria-current="page"` when `current`, shown with a thicker underline, not colour alone
+- State: `aria-current="page"` when `current` (or, with the `router` feature, when its path is the current route), shown with a thicker underline, not colour alone
 - Reduced motion: the hover underline changes without transition
 
 ## Source
@@ -5029,8 +5102,8 @@ Idea from Rust/UI `link.rs` (rust-ui/ui@43ddc65, MIT). Not copied: its `force_re
 /// An inline text link: a plain `<a href>` with the kit's colours and focus ring.
 ///
 /// Named `TextLink` so it does not clash with the router's `Link` when both preludes are
-/// imported. For in-app routes, pass the router's `Link` the same class, or use this with
-/// a path `href`.
+/// imported. With the kit's `router` feature, a path `href` inside a `Router` navigates in
+/// the app and is marked `aria-current="page"` while it is the current route.
 #[component]
 pub fn TextLink(
     #[props(into)] href: String,
@@ -5420,9 +5493,137 @@ pub fn NavbarItem(props: NavbarItemProps) -> Element
 
 ---
 
+# NumberField
+
+- Copy into your app: `rust-ui add number_field` or `dx components add number_field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `field`, `form`, `icons`, `ui_strings`).
+- Import: `use crate::components::number_field::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+`NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights). `NumberField` is the same control bound to a `use_form` field, with a label, a description and the field's error.
+
+```rust
+let mut guests = use_signal(|| 2.0);
+rsx! {
+    NumberInput { label: "Guests", value: guests(), min: 1.0, max: 8.0, on_value_change: move |v| guests.set(v) }
+}
+
+let form = use_form();
+let nights = form.field_with("2", vec![required()]);
+rsx! { NumberField { field: nights, label: "Nights", min: 1.0, max: 30.0 } }
+```
+
+`value` is a plain number (no signal needed); leave it out and use `default_value` for an uncontrolled one. `step` defaults to 1. Typed numbers outside `min`/`max` are pulled back into range when the box loses focus. `NumberField` keeps the number as text in the form field (`"2"`, `"2.5"`), so `field.value().parse()` reads it back.
+
+## Accessibility
+
+- Role and name: the box is `role="spinbutton"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; it is named by `label` (or by the visible label in `NumberField`). The buttons are named "Decrease {label}" and "Increase {label}" (`UiStrings::decrease` / `increase`)
+- Keyboard: Up/Down change it by `step`, Page Up/Page Down by ten steps, Home/End go to `min`/`max`, Enter applies typed text. The buttons are left out of the Tab order, as in the WAI-ARIA spin button pattern, and disable themselves at the ends
+- Forms: `NumberField` wires `aria-invalid` and `aria-describedby`, and a failed submit focuses the box
+- Reduced motion: nothing animates
+
+## Source
+
+Original to this repo (booking app gap 12). Keyboard behaviour follows the WAI-ARIA APG spin button pattern.
+
+## Stability
+
+Experimental (docs/STABILITY.md): new on 2026-10-15; the `f64` value and the `empty` prop may change once forms need decimals or units.
+
+## API
+
+```rust
+/// A number with - and + buttons: a `role="spinbutton"` text box that Up/Down change by
+/// `step`, Page Up/Down by ten steps, and Home/End set to `min`/`max`. Typing works too;
+/// the value is kept between `min` and `max` when the box loses focus.
+///
+/// Controlled with `value` + `on_value_change` (a plain number, no signal needed), or
+/// uncontrolled with `default_value`. `label` names the buttons ("Increase Guests") and,
+/// unless `aria-label`, `aria-labelledby` or an `id` for a `<label for>` is passed, the box
+/// itself. For `use_form`, use [`NumberField`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NumberInput(
+    #[props(into)] label: String,
+    #[props(default)] value: Option<f64>,
+    #[props(default)] default_value: f64,
+    #[props(default)] min: Option<f64>,
+    #[props(default)] max: Option<f64>,
+    #[props(default = 1.0)] step: f64,
+    #[props(default)] disabled: bool,
+    /// Shows an empty box: no number has been entered yet. Typing, a key or a button sets one
+    /// (starting from `value`).
+    #[props(default)]
+    empty: bool,
+    #[props(default)] on_value_change: Callback<f64>,
+    #[props(default)] onblur: Option<EventHandler<FocusEvent>>,
+    #[props(default)] onmounted: Option<EventHandler<MountedEvent>>,
+    /// Goes on the text box: `id`, `name`, `aria-*`, `class`, ...
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=input)]
+    attributes: Vec<Attribute>,
+) -> Element
+
+/// A [`NumberInput`] bound to a `use_form` field, with a visible label, an optional
+/// description and the field's error. The field holds the number as text: start it with
+/// `form.field_with("2", ..)`, or leave it empty (the box is empty and `required()` applies).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NumberField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default)] min: Option<f64>,
+    #[props(default)] max: Option<f64>,
+    #[props(default = 1.0)] step: f64,
+    #[props(default)] disabled: bool,
+    /// Anything else for the text box (`name`, `class`, ...). The field's wiring wins.
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=input)]
+    attributes: Vec<Attribute>,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::form::{required, use_form};
+use crate::components::number_field::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut guests = use_signal(|| 2.0);
+    let form = use_form();
+    let nights = form.field_with("3", vec![required()]);
+    rsx! {
+        div { style: "display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start;",
+            div { style: "display: flex; flex-direction: column; gap: 0.5rem;",
+                span { id: "number-demo-guests", style: "font-size: 0.875rem; font-weight: 500;", "Guests" }
+                NumberInput {
+                    label: "Guests",
+                    "aria-labelledby": "number-demo-guests",
+                    value: guests(),
+                    min: 1.0,
+                    max: 8.0,
+                    on_value_change: move |v| guests.set(v),
+                }
+            }
+            NumberField { field: nights, label: "Nights", description: "Between 1 and 30.", min: 1.0, max: 30.0 }
+        }
+    }
+}
+```
+
+---
+
 # Pagination
 
-- Copy into your app: `rust-ui add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Copy into your app: `rust-ui add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
@@ -5511,7 +5712,7 @@ pub struct PaginationLinkProps {
 }
 
 #[component]
-pub fn PaginationLink(props: PaginationLinkProps) -> Element
+pub fn PaginationLink(mut props: PaginationLinkProps) -> Element
 
 #[component]
 pub fn PaginationPrevious(
@@ -5537,6 +5738,31 @@ pub fn PaginationNext(
 pub fn PaginationEllipsis(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element
+
+/// Client-side paging: Previous, numbered pages and Next as buttons, for a list that pages
+/// in place (no URL per page). `page` is 1-based. Previous and Next are `aria-disabled` on
+/// the first and last page, so they keep focus but do nothing; long ranges collapse to
+/// "1 … 4 5 6 … 20" (`siblings` pages each side of the current one).
+///
+/// For pages that are URLs, compose [`Pagination`] with [`PaginationLink`] instead.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn Pager(
+    page: usize,
+    pages: usize,
+    on_page_change: EventHandler<usize>,
+    #[props(default = 1)] siblings: usize,
+    /// Goes on the `<nav>`: give it an `aria-label` ("Pages of results").
+    #[props(extends = GlobalAttributes)]
+    attributes: Vec<Attribute>,
+) -> Element
+
+/// The page numbers [`Pager`] shows, `None` for a gap: the first and last page, and
+/// `siblings` pages each side of `page`. A gap of one page shows that page instead.
+pub fn page_items(page: usize, pages: usize, siblings: usize) -> Vec<Option<usize>>
 ```
 
 ## Example
@@ -5547,7 +5773,9 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
+    let mut page = use_signal(|| 6usize);
     rsx! {
+        div { style: "display: flex; flex-direction: column; gap: 1.5rem;",
         Pagination {
             PaginationContent {
                 PaginationItem {
@@ -5569,6 +5797,14 @@ pub fn Demo() -> Element {
                     PaginationNext { href: "#" }
                 }
             }
+        }
+        // Client-side paging: buttons, and the ends do nothing on the first and last page.
+        Pager {
+            aria_label: "Pages of results",
+            page: page(),
+            pages: 20,
+            on_page_change: move |p| page.set(p),
+        }
         }
     }
 }
@@ -5824,8 +6060,8 @@ The Select component is used to create a dropdown menu that allows users to sele
 
 ```rust
 Select::<String> {
-    value: "option1",
-    on_value_change: |value: String| {
+    selected: "option1".to_string(),
+    on_value_change: |value: Option<String>| {
         // Handle the change in selected value.
     },
     SelectGroup {
@@ -5838,6 +6074,10 @@ Select::<String> {
     }
 }
 ```
+
+## Controlled values
+
+`selected` takes a plain value (`selected: filters.read().sort`): the select shows whatever the parent passes on each render, with no signal or `use_memo` adapter. `value` takes a `ReadSignal<Option<T>>` when the state already lives in one (`value: Some(choice.into())`), and `default_value` leaves the select uncontrolled. In forms, `SelectField` binds a `use_form` field instead.
 
 ## Labelling
 
@@ -5856,6 +6096,57 @@ Select::<String> { aria_label: "Fruit", /* options */ }
 
 ```rust
 pub use dioxus_primitives::select::SelectGroup;
+
+/// Props for [`Select`]: dioxus-primitives' `SelectProps` plus `selected`, a plain value.
+pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
+    /// The selected option as a plain value: the select is controlled and shows whatever the
+    /// parent passes on each render (`selected: filters.read().sort`), with no signal or memo
+    /// needed. Wins over `value`.
+    #[props(default, into)]
+    pub selected: Option<T>,
+
+    /// The controlled value as a signal; its `None` means no option is selected.
+    #[props(default)]
+    pub value: Option<ReadSignal<Option<T>>>,
+
+    /// The initial value when uncontrolled. `None` shows the placeholder.
+    #[props(default)]
+    pub default_value: Option<T>,
+
+    /// Called when the selected value changes.
+    #[props(default)]
+    pub on_value_change: Callback<Option<T>>,
+
+    #[props(default)]
+    pub disabled: ReadSignal<bool>,
+
+    /// The controlled open state of the list.
+    #[props(default)]
+    pub open: ReadSignal<Option<bool>>,
+
+    #[props(default)]
+    pub default_open: ReadSignal<bool>,
+
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Name for form submission.
+    #[props(default)]
+    pub name: ReadSignal<String>,
+
+    /// Whether arrow keys wrap around at the ends of the list.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub roving_loop: ReadSignal<bool>,
+
+    /// How long typed letters are remembered for typeahead.
+    #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
+    pub typeahead_timeout: ReadSignal<Duration>,
+
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    pub children: Element,
+}
 
 #[component]
 pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element
@@ -7074,6 +7365,102 @@ fn SkeletonCardDemo() -> Element {
             div { style: "display: flex; flex-direction: column; gap: 0.5rem;",
                 Skeleton { style: "width: 15.625rem; height: 1rem;" }
                 Skeleton { style: "width: 12.5rem; height: 1rem;" }
+            }
+        }
+    }
+}
+```
+
+---
+
+# SkipLink
+
+- Copy into your app: `rust-ui add skip_link` or `dx components add skip_link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::skip_link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+`SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation. `MainContent` is the page's `<main>` landmark it points at.
+
+```rust
+rsx! {
+    SkipLink {}
+    header { /* logo, nav */ }
+    MainContent { Outlet::<Route> {} }
+}
+```
+
+`SkipLink` points at `#main-content` by default (`target` changes it) and reads `UiStrings::skip_to_content` unless it has children. It is positioned against the nearest positioned ancestor, usually the page. `MainContent` renders `main id="main-content" tabindex="-1"`, so following the skip link moves focus into it.
+
+With the kit's `router` feature, `MainContent` inside a `Router` also takes focus after every in-app navigation (not on the first load). Keyboard and screen reader users then start at the new page, and a screen reader reads the main landmark, instead of staying on the link they used. Set the page's title (`document::Title`) and give each page a heading.
+
+## Accessibility
+
+- Role and name: `SkipLink` is a native link named by its text; `MainContent` is the `main` landmark
+- Keyboard: the skip link is the first Tab stop; Enter moves focus to the main content
+- Focus: shown with the kit's focus ring when focused; `MainContent` shows no ring, since it is not a control
+- Reduced motion: nothing animates
+
+## Source
+
+Original to this repo (booking app gaps 11 and 21).
+
+## Stability
+
+`SkipLink` and `MainContent` are stable; the focus move after a route change (the `router` feature) is experimental (docs/STABILITY.md).
+
+## API
+
+```rust
+/// The id [`SkipLink`] points at and [`MainContent`] carries unless told otherwise.
+pub const MAIN_CONTENT_ID: &str;
+
+/// A "Skip to content" link for keyboard users: hidden until it has focus, then shown at
+/// the top corner of the nearest positioned ancestor. Put it first in the page, before the
+/// header and navigation, and point it at the page's [`MainContent`].
+#[component]
+pub fn SkipLink(
+    /// The id of the element to skip to, without `#`.
+    #[props(into, default = MAIN_CONTENT_ID.to_string())]
+    target: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    /// The link text. Defaults to `UiStrings::skip_to_content`.
+    children: Option<Element>,
+) -> Element
+
+/// The page's `<main>` landmark: the target of [`SkipLink`] (`id="main-content"`,
+/// focusable from script with `tabindex="-1"`).
+///
+/// With the kit's `router` feature, inside a `Router`, it also takes focus after an in-app
+/// navigation (not on the first load), so keyboard and screen reader users start at the new
+/// page instead of on the link they used. Give the page a heading inside it.
+#[component]
+pub fn MainContent(
+    #[props(into, default = MAIN_CONTENT_ID.to_string())] id: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::skip_link::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    rsx! {
+        div { style: "position: relative; display: flex; flex-direction: column; gap: 0.5rem; padding-top: 2.75rem;",
+            SkipLink { target: "skip-link-demo-main" }
+            p { style: "margin: 0;", "Tab into this demo: the skip link appears above, and Enter jumps past the links below." }
+            nav { "aria-label": "Skip link demo",
+                a { href: "#skip-link", "One" }
+                " · "
+                a { href: "#skip-link", "Two" }
+            }
+            // A page has one `MainContent` (`<main>`); the gallery already has its own, so the
+            // demo skips to a plain focusable block.
+            div { id: "skip-link-demo-main", tabindex: "-1", style: "outline: none;",
+                p { style: "margin: 0;", "The main content." }
             }
         }
     }
@@ -8656,6 +9043,13 @@ pub struct UiStrings {
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,
+    // Skip link
+    pub skip_to_content: String,
+    // Number field
+    /// The - button's name. `{label}` is the field's name.
+    pub decrease: String,
+    /// The + button's name. `{label}` is the field's name.
+    pub increase: String,
 }
 
 /// Provides `strings` to every kit component below it. Pass a signal to switch language

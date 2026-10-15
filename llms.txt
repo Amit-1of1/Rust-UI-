@@ -71,6 +71,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
 - [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
+- [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
 - [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
 - [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
 - [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
@@ -82,6 +83,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Shimmer](llms/shimmer.md): Wraps loading content and sweeps a highlight across it
 - [Sidebar](llms/sidebar.md): The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application
 - [Skeleton](llms/skeleton.md): The Skeleton component is used to display a placeholder preview of content before the data gets loaded
+- [SkipLink](llms/skip_link.md): `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation
 - [Slider](llms/slider.md): The slider component allows users to select a value from a range by sliding a handle along a track
 - [Spinner](llms/spinner.md): A loading indicator
 - [Status](llms/status.md): A coloured dot plus required text label (idle, online, degraded, down)

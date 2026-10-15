@@ -30,3 +30,12 @@ Card {
 ## Layout Notes
 
 - When `CardAction` is present inside `CardHeader`, the header automatically switches to a two-column grid layout.
+- `CardMedia` holds an edge-to-edge image: put it first (or last) and it meets the card's edge with the card's rounded corners, no negative margins needed. An `img` inside is cropped to fill it.
+- The card's corner radius is twice the theme `--radius` (1rem by default), so the theme's radius setting reaches cards.
+
+```rust
+Card {
+    CardMedia { img { src: "/cabin.jpg", alt: "The cabin from the lake", style: "aspect-ratio: 16 / 9;" } }
+    CardHeader { CardTitle { "Lakeside cabin" } }
+}
+```

@@ -74,6 +74,20 @@ pub const MOBILE_QUERY: &str;
 /// make `false` the layout that works everywhere.
 pub fn use_media_query(query: &'static str) -> ReadSignal<bool>
 
+/// The `href` to render for `href`: inside a router with a base path (for example a site
+/// served from `/my-app/`), an in-app path gets that prefix, so opening it in a new tab or
+/// copying it works. Anything else is returned unchanged.
+pub fn in_app_href(href: &str) -> String
+
+/// Sends a plain left click on a link to `href` through the router, when there is one and
+/// it knows the path. Returns `true` when it did (the browser's own navigation is then
+/// cancelled). Clicks with a modifier key (new tab, new window), other buttons, links with
+/// a `target`, and clicks whose default was already prevented are left alone.
+pub fn follow_in_app(href: &str, event: &MouseEvent) -> bool
+
+/// Whether `href` is the path the router is showing now, for `aria-current="page"`.
+pub fn is_current_route(href: &str) -> bool
+
 /// Which rows of a list are selected, with updates that touch only the rows that change.
 ///
 /// A plain `Signal<HashSet<K>>` re-renders every row that reads it whenever the selection

@@ -1,0 +1,39 @@
+/* Use theme tokens (var(--...)), never literal colors, so light and dark both work.
+   Any animation needs a prefers-reduced-motion fallback (docs/GUARDRAILS.md). */
+
+/* Off-screen until focused (the global .sr-only pattern), then a small chip in the corner. */
+.dx-skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 0.5rem;
+  z-index: 50;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius, 0.5rem);
+  background: var(--secondary-color-1);
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  box-shadow: 0 0 0 1px var(--primary-color-6);
+}
+
+.dx-skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.dx-skip-link:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+/* Focus lands here after a skip or a route change; it is not a control, so no ring. */
+.dx-main-content:focus {
+  outline: none;
+}

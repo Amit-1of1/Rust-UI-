@@ -106,6 +106,13 @@ pub struct UiStrings {
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,
+    // Skip link
+    pub skip_to_content: String,
+    // Number field
+    /// The - button's name. `{label}` is the field's name.
+    pub decrease: String,
+    /// The + button's name. `{label}` is the field's name.
+    pub increase: String,
 }
 
 /// Provides `strings` to every kit component below it. Pass a signal to switch language

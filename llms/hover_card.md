@@ -22,6 +22,10 @@ HoverCard {
 }
 ```
 
+## Don't put controls in the trigger
+
+`HoverCardTrigger` is itself focusable (`role="button"`, `tabindex="0"`), so keyboard users can open the card. A button or link inside it is a control inside a control (axe `nested-interactive`), and screen readers announce it badly. Put text, an avatar or an icon directly inside the trigger, and put links and buttons inside `HoverCardContent` (or next to the trigger).
+
 ## API
 
 ```rust

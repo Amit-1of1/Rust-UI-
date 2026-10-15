@@ -9,7 +9,7 @@ The Avatar components display a user's profile picture or fallback initials. Use
 
 ```rust
 Avatar {
-    aria_label: "Jane Doe",
+    label: "Jane Doe",
     AvatarImage {
         src: "https://example.com/avatar.png",
         alt: "Jane Doe",
@@ -26,6 +26,10 @@ ImageAvatar {
     "JD"
 }
 ```
+
+## Naming
+
+The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.
 
 ## API
 
@@ -62,6 +66,13 @@ pub struct AvatarProps {
 
     #[props(default)]
     pub shape: AvatarShape,
+
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
 
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]
@@ -126,6 +137,13 @@ pub struct ImageAvatarProps {
 
     #[props(default)]
     pub shape: AvatarShape,
+
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
 
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]

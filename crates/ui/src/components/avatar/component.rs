@@ -61,6 +61,13 @@ pub struct AvatarProps {
     #[props(default)]
     pub shape: AvatarShape,
 
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
+
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -77,7 +84,16 @@ pub fn Avatar(props: AvatarProps) -> Element {
         props.size.to_class(),
         props.shape.to_class()
     );
-    let base = attributes!(span { class });
+    let named = props.label.is_some()
+        || props
+            .attributes
+            .iter()
+            .any(|a| matches!(a.name, "aria-label" | "aria-labelledby"));
+    let base = attributes!(span {
+        class,
+        aria_label: props.label.clone(),
+        aria_hidden: (!named).then_some("true"),
+    });
     let merged = merge_attributes(vec![base, props.attributes]);
 
     rsx! {
@@ -174,6 +190,13 @@ pub struct ImageAvatarProps {
     #[props(default)]
     pub shape: AvatarShape,
 
+    /// The person or thing shown, read by screen readers ("Ada Lovelace"). The avatar is
+    /// `role="img"`, so neither the image's `alt` nor the fallback initials name it. Without
+    /// a `label` (or an `aria-label` / `aria-labelledby`), the avatar is decorative and
+    /// hidden from assistive technology: use that when the name is shown beside it.
+    #[props(default, into)]
+    pub label: Option<String>,
+
     /// Additional attributes for the avatar element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -191,6 +214,8 @@ pub fn ImageAvatar(props: ImageAvatarProps) -> Element {
             on_state_change: props.on_state_change,
             size: props.size,
             shape: props.shape,
+            // The image's `alt` names the avatar unless a `label` is given.
+            label: props.label.or_else(|| (!props.alt.is_empty()).then(|| props.alt.clone())),
             attributes: props.attributes,
             AvatarImage {
                 src: props.src,

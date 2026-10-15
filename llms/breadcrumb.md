@@ -1,6 +1,6 @@
 # Breadcrumb
 
-- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A trail of links to the current page.
@@ -30,6 +30,7 @@ pub fn BreadcrumbItem(
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
     /// For in-app navigation without a router: call `prevent_default()` and switch the view.
+    /// With the kit's `router` feature, a path `href` goes through the router by itself.
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
