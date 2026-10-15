@@ -14,7 +14,7 @@ const TIMEZONES: [&str; 8] = [
     "Australia/Sydney",
 ];
 
-#[component]
+#[component(lazy)]
 pub fn Settings() -> Element {
     let toasts = use_toast();
     let form = use_form();

@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-14T10:14:03.189Z",
+  "runs": 5,
+  "targets": {
+    "gallery:base": {
+      "firstRequests": 9,
+      "firstKB": 816.7,
+      "first4gMs": 5099,
+      "totalRequests": 9,
+      "totalKB": 816.7,
+      "files": {
+        "": 1.1,
+        "assets/gallery-dxhe1413f78f76af6a4.js": 11.5,
+        "assets/rust-ui-3522d3a5d3fe42e8.css": 18.1,
+        "assets/gallery_bg-dxh284369522054de8e.wasm": 781.6,
+        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23888'/><circle cx='32' cy='25' r='11' fill='%23fff'/><path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>": 0,
+        "assets/gallery-dxh796f44ca95d69161.css": 0.7,
+        "assets/demo-dxh7399e52386d83f6.css": 0.5,
+        "does-not-exist.png": 2.6,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "gallery:split": {
+      "firstRequests": 5,
+      "firstKB": 238.2,
+      "first4gMs": 1874,
+      "totalRequests": 10,
+      "totalKB": 912.7,
+      "files": {
+        "": 1.1,
+        "assets/gallery-dxh14477bcad320dda9.js": 12.1,
+        "assets/rust-ui-3522d3a5d3fe42e8.css": 18.1,
+        "assets/gallery_bg-dxh79e28a5b9499384a.wasm": 206.2,
+        "assets/gallery-dxh5ab323d4aed3c314.css": 0.7,
+        "assets/module_0_LazyMoreSections-dxhc4761c80b461b0ac.wasm": 670.8,
+        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23888'/><circle cx='32' cy='25' r='11' fill='%23fff'/><path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>": 0,
+        "assets/demo-dxh7399e52386d83f6.css": 0.5,
+        "does-not-exist.png": 2.6,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "dashboard:base": {
+      "firstRequests": 6,
+      "firstKB": 510.2,
+      "first4gMs": 3330,
+      "totalRequests": 6,
+      "totalKB": 510.2,
+      "files": {
+        "": 0.8,
+        "assets/dashboard-dxh309e6c46ef6b320.js": 10.6,
+        "assets/rust-ui-b4b95a220e779c9d.css": 11.5,
+        "assets/dashboard_bg-dxhee38f25757ed2eb.wasm": 485.8,
+        "assets/dashboard-dxhe185e6fa315959e1.css": 0.9,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "dashboard:split": {
+      "firstRequests": 5,
+      "firstKB": 316.1,
+      "first4gMs": 2315,
+      "totalRequests": 10,
+      "totalKB": 700.4,
+      "files": {
+        "": 0.8,
+        "assets/dashboard-dxha9f7da4cce649c8.js": 11.3,
+        "assets/rust-ui-07b383852cda74a6.css": 11.6,
+        "assets/dashboard_bg-dxh6b27f6fe7bcb8d.wasm": 291.5,
+        "assets/dashboard-dxhe185e6fa315959e1.css": 0.9,
+        "assets/module_1_LazyCustomers-dxhc97a3ddb275c772e.wasm": 131,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6,
+        "assets/module_2_LazyOrders-dxhb99d2299c104de5.wasm": 151.5,
+        "assets/module_0_LazySettings-dxh6094e15ebc974f48.wasm": 80.8,
+        "assets/module_3_LazyPalette-dxh7b345cdf6f91b121.wasm": 20.4
+      }
+    },
+    "trial": {
+      "firstRequests": 5,
+      "firstKB": 290.5,
+      "first4gMs": 2285,
+      "totalRequests": 7,
+      "totalKB": 369.1,
+      "files": {
+        "": 0.7,
+        "assets/trial-dxh42ec7f218436353.js": 11.6,
+        "assets/rust-ui-8a518cd038c68b27.css": 6.6,
+        "assets/trial_bg-dxh1456a1cb9bc0ea9c.wasm": 271,
+        "assets/trial-dxh7615ef6370b947f3.css": 0.6,
+        "assets/module_3_LazyNewTask-dxh194d22a7170bfc2.wasm": 77.9,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "react": {
+      "firstRequests": 3,
+      "firstKB": 100.9,
+      "first4gMs": 969,
+      "totalRequests": 3,
+      "totalKB": 100.9,
+      "files": {
+        "": 0.4,
+        "assets/index-DXHCnhAJ.css": 2.3,
+        "assets/index-ChZip5rW.js": 98.2
+      }
+    },
+    "svelte": {
+      "firstRequests": 3,
+      "firstKB": 70.7,
+      "first4gMs": 813,
+      "totalRequests": 3,
+      "totalKB": 70.7,
+      "files": {
+        "": 0.4,
+        "assets/index-DWEUA5ip.js": 65.7,
+        "assets/index-Dh4PfTRh.css": 4.6
+      }
+    }
+  },
+  "note": "bench/size.mjs, brotli served, slow 4G = 1.6 Mbps / 150 ms RTT; base = plain release build on main, split = scripts/release-web.sh with dx from scripts/install-dx.sh"
+}

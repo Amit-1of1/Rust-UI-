@@ -37,7 +37,7 @@ const BLACK = "rgb(0, 0, 0)";
 for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme });
   await page.goto(url);
-  await page.waitForSelector(".gallery-main");
+  await page.waitForSelector(".gallery-main > .gallery-section:last-child");
   const os = scheme === "dark" ? BLACK : WHITE;
   check((await token(page, "--primary-color", { "data-theme": null })) === os, `${scheme} OS: --primary-color follows it`);
   check((await token(page, "--primary-color", { "data-theme": "dark" })) === BLACK, `${scheme} OS + data-theme=dark: dark`);
@@ -53,7 +53,7 @@ for (const scheme of ["light", "dark"]) {
 // Chips: Space on the focused checkbox toggles the chip and its check mark.
 const page = await browser.newPage();
 await page.goto(url);
-await page.waitForSelector(".gallery-main");
+await page.waitForSelector(".gallery-main > .gallery-section:last-child");
 const chip = page.getByRole("group", { name: "Filter by status" }).getByRole("checkbox", { name: "In review" });
 const label = chip.locator("xpath=..");
 check((await label.getAttribute("data-state")) === "off", "chip starts off");

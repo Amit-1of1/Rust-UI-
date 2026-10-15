@@ -17,7 +17,7 @@ const DIR = new URL("./snapshots/aria/", import.meta.url);
 const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1100, height: 900 }, reducedMotion: "reduce" });
 await page.goto(url);
-await page.waitForSelector(".gallery-main");
+await page.waitForSelector(".gallery-main > .gallery-section:last-child");
 await page.waitForTimeout(1000);
 
 let failed = 0;

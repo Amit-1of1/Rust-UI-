@@ -4,7 +4,9 @@
 #   scripts/e2e.sh                          build the apps with dx, then test on Chromium
 #   scripts/e2e.sh --browsers chromium,firefox,webkit
 #   scripts/e2e.sh --prebuilt               use the existing target/dx/*/debug/web/public
-#   scripts/e2e.sh --release                test release builds (target/dx/*/release)
+#   scripts/e2e.sh --release                test release builds (target/dx/*/release) made by
+#                                           scripts/release-web.sh: split where the app has a
+#                                           `wasm-split` feature, as CI and Pages ship them
 # Needs `npm ci` in tests/e2e and each engine under PLAYWRIGHT_BROWSERS_PATH (this script never
 # downloads one; `npx playwright install <engine>` does, and CI does it in .github/workflows/e2e.yml).
 set -euo pipefail
@@ -19,7 +21,7 @@ while [ $# -gt 0 ]; do
     --browsers=*) BROWSERS="${1#*=}" ;;
     --prebuilt) BUILD=0 ;;
     --release) PROFILE=release ;;
-    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,11p' "$0"; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
   shift
@@ -49,7 +51,7 @@ booking|apps/booking|target/dx/booking/$PROFILE/web/public|8773"
 while IFS='|' read -r name dir out port; do
   if [ "$BUILD" = 1 ]; then
     step "build $name"
-    if [ "$PROFILE" = release ]; then (cd "$dir" && dx build --platform web --release)
+    if [ "$PROFILE" = release ]; then scripts/release-web.sh "$name"
     else (cd "$dir" && dx build --platform web); fi
   fi
   [ -f "$out/index.html" ] || { echo "$out/index.html missing: build $name first" >&2; exit 1; }
@@ -67,7 +69,7 @@ for engine in ${BROWSERS//,/ }; do
 
   for scheme in light dark; do
     step "[$engine] axe gallery ($scheme)"
-    e2e env GALLERY_URL=$G READY_SELECTOR=.gallery-main node axe.mjs "$scheme"
+    e2e env GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs "$scheme"
     step "[$engine] axe site ($scheme)"
     e2e env GALLERY_URL=$S READY_SELECTOR=#pricing node axe.mjs "$scheme"
     step "[$engine] axe docs ($scheme)"
@@ -78,7 +80,7 @@ for engine in ${BROWSERS//,/ }; do
     e2e env GALLERY_URL="$D$route" READY_SELECTOR=.docs-main node axe.mjs light
   done
   step "[$engine] axe gallery (rtl)"
-  e2e env DIR=rtl GALLERY_URL=$G READY_SELECTOR=.gallery-main node axe.mjs light
+  e2e env DIR=rtl GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs light
 
   step "[$engine] docs navigation behaviour";        e2e env GALLERY_URL=$D node docs.mjs
   step "[$engine] form behaviour (site)";            e2e env GALLERY_URL=$S node form.mjs
@@ -104,7 +106,7 @@ for engine in ${BROWSERS//,/ }; do
     for accent in blue green violet rose orange; do
       for scheme in light dark; do
         step "[$engine] axe gallery ($accent, $scheme)"
-        e2e env ACCENT="$accent" GALLERY_URL=$G READY_SELECTOR=.gallery-main node axe.mjs "$scheme"
+        e2e env ACCENT="$accent" GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs "$scheme"
       done
     done
   fi

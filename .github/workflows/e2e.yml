@@ -20,12 +20,12 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: dioxus-cli@0.7.10
+      # dx from the fork: stock 0.7.10's splitter drops or crashes on the lazy parts (docs/FORKS.md).
+      - run: scripts/install-dx.sh
+      # Built as Pages ships them: gallery and dashboard split, CSS bundled (scripts/release-web.sh).
       - run: |
           for app in gallery site docs dashboard booking; do
-            (cd apps/$app && dx build --platform web --release)
+            scripts/release-web.sh $app
           done
       - run: tar -cf web.tar target/dx/*/release/web/public
       - uses: actions/upload-artifact@v4

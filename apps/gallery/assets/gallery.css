@@ -95,3 +95,10 @@ body {
   border: 1px solid var(--primary-color-6);
   border-radius: 0.5rem;
 }
+
+/* Shown while a split demo's wasm file is downloading (release builds). */
+.gallery-loading {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}

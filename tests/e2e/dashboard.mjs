@@ -78,11 +78,19 @@ await page.waitForSelector("body[data-ready='1'] .db-main");
 const status = () => page.locator(".db-table-footer [role='status']").textContent();
 
 // Ctrl+K navigates.
+// In a split build the palette and the Customers page load on first use: wait for each.
 await page.keyboard.press("Control+k");
+await page.getByRole("combobox", { name: /search commands/i }).waitFor();
+// Focus moves in after the open dialog mounts; keys typed before that are lost.
+const focused = await page.waitForFunction(() => document.activeElement?.getAttribute("role") === "combobox",
+  null, { timeout: 10000 }).then(() => true, () => false);
+check(focused, "palette: focus moves to the search box");
 await page.keyboard.type("customers");
 await page.keyboard.press("Enter");
-await page.waitForTimeout(200);
-check((await heading(page)) === "Customers", "palette: 'customers' + Enter opens Customers");
+await page.waitForFunction(() => document.querySelector("h1.db-title")?.textContent === "Customers",
+  null, { timeout: 10000 }).catch(() => {});
+const after = await heading(page);
+check(after === "Customers", `palette: 'customers' + Enter opens Customers (${after})`);
 const before = await status();
 check(/of 48 customers/.test(before), `48 customers listed (${before})`);
 
@@ -144,6 +152,8 @@ check(all !== fewer, `turning off Refunded changes the rows (${all} -> ${fewer})
 // Settings: the time zone is a labelled form field with its initial value.
 await nav(page, "Settings");
 const zone = page.getByRole("combobox", { name: "Time zone" });
+// Split release builds load the Settings page on first open.
+await zone.first().waitFor({ timeout: 10000 }).catch(() => {});
 check((await zone.count()) === 1, "time zone combobox is named by its label");
 
 // One theme state: the header switch and the customizer agree both ways.

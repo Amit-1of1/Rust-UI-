@@ -12,7 +12,10 @@ Six crates carry small fixes on top of the exact versions we depend on. The fixe
 | `blitz-net` | 0.2.1 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-net) | [Amit-1of1/blitz `rust-ui/blitz-net-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-net-0.2.1) | `505d30e` |
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
 | `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `8f3d575` |
+| `dioxus-cli` (`dx`, its wasm splitter) | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/wasm-split/wasm-split-cli) | [Amit-1of1/dioxus `claude/project-thread-xwtlc7`](https://github.com/Amit-1of1/dioxus/tree/claude/project-thread-xwtlc7) | `73a027c` |
 | `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) | `71fed69` |
+
+`dx` is a tool, not a dependency: `scripts/install-dx.sh` installs it from the pinned commit (`dx --version` prints `0.7.10 (73a027c)`). Only split release builds (`scripts/release-web.sh`, the Pages workflow) need it; `dx serve` and debug builds work with stock 0.7.10. Its branch is the whole upstream workspace with one commit on top, so it needs no manifest swap.
 
 The `component.json` manifests that `rust-ui-cli registry` generates name the same fork and commit, so `dx components add` installs the fixed primitives too.
 
@@ -54,10 +57,12 @@ All six crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream'
 | Toast's F6 shortcut needs `eval` | dioxus-primitives | the provider wraps its children in a `display: contents` box that hears F6 where `eval` can't run (rendered everywhere, so server and client markup match) |
 | Escape, outside click and focus traps need `eval` | dioxus-primitives | where `eval` can't run: dialog, alert dialog and popover take focus when they open and handle Escape themselves; focus leaving them (a click outside moves or clears it) closes them, and Tab out of a modal one brings focus back; the context menu closes on focus leaving it |
 | Slider and color area drags need `eval` | dioxus-primitives | a window-sized `PointerShield` takes the pointer moves and release while dragging |
+| Lazy components stay in the main wasm (the gallery's lazy half, the dashboard's Settings page came out as ~450-byte files) | dioxus-cli (wasm-split-cli) | the call graph read type-index relocations (`call_indirect`) as symbol indices; split exports have low symbol indices, so main seemed to call them. Type-index relocations are skipped |
+| `dx build --wasm-split` panics with `assertion failed: !self.dead.contains(&id)` (a lazy command palette) | dioxus-cli (wasm-split-cli) | a function kept in main but in neither graph (a wasm-bindgen closure shim) could call one only a split reached, which was deleted. Callees of kept functions are kept |
 | Drag-and-drop list needs HTML drag and drop | dioxus-primitives | a press that moves more than 4px starts a pointer drag; items under the pointer pick the slot; release drops, leaving the list cancels |
 | Typing a complete start date into a date range input froze the page (web too; found by `apps/booking`) | dioxus-primitives | the range input and its two date inputs write each other's signals only when the value changes; a write of the same value used to notify and loop forever |
 
-Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates.
+Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/native/tests/interactions.rs` (kit demos); the date range row is covered by `tests/e2e/booking.mjs`, which types both dates. The splitter rows are checked by `scripts/release-web.sh`, which fails when a lazy part comes out nearly empty, and by the browser checks on release builds (`scripts/check.sh --release` locally, `.github/workflows/e2e.yml` in CI on each engine), which test the split dashboard and gallery.
 
 ## Known limits of the patches
 
