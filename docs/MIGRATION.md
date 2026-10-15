@@ -4,6 +4,8 @@ Upgrade steps for each breaking change in the [CHANGELOG](../CHANGELOG.md), newe
 
 What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIONING.md).
 
+Notes for changes merged since the last fold are in `changes/*.migration.md` ([changes/README.md](../changes/README.md)).
+
 ## Unreleased
 
 ### Toasts are not dialogs; unnamed avatars are decorative (PR #40)

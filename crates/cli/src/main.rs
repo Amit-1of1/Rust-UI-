@@ -43,8 +43,14 @@ enum Command {
         #[arg(long)]
         force: bool,
     },
-    /// Scaffold a new component in this repo (files, mod/prelude lines, demo, tests, registry).
+    /// Scaffold a new component in this repo (files, demo, test, gallery section, registry).
     New { name: String },
+    /// Fold the per-PR fragments in `changes/` into CHANGELOG.md and docs/MIGRATION.md
+    /// (`--check` only validates them). Run on `main` before a release; changes/README.md.
+    Changelog {
+        #[arg(long)]
+        check: bool,
+    },
     /// Check components against the guardrails (colours, RTL, docs, demos, tests).
     Doctor {
         /// Also fail on warnings.
@@ -142,6 +148,25 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
             rust_ui_cli::docsgen::write(root).map_err(err)?;
             println!("updated registry.json, component.json files and the docs index");
+        }
+        Command::Changelog { check } => {
+            use rust_ui_cli::changelog::{fold, load, unnamed};
+            if check {
+                let fragments = load(root)?;
+                for p in unnamed(&fragments) {
+                    println!(
+                        "warn {}: no PR number yet; add `(#N)` once the PR is open",
+                        p.display()
+                    );
+                }
+                println!("{} fragment(s) OK", fragments.len());
+            } else {
+                let folded = fold(root)?;
+                println!(
+                    "folded {} fragment(s) into CHANGELOG.md and docs/MIGRATION.md",
+                    folded.len()
+                );
+            }
         }
         Command::Doctor { strict } => {
             use rust_ui_cli::doctor::{run as doctor, Level};

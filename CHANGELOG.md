@@ -4,6 +4,8 @@ Changes to `rust-ui-kit` (`ui`), `rust-ui-motion` (`motion`) and `rust-ui-cli` (
 
 Nothing has been released, tagged or published yet. All three crates are at `0.1.0`, and everything since the first commit is under "Unreleased"; the first tag, `v0.1.0`, will close it. Entries name the pull request that made the change.
 
+Pull requests don't edit this file: each adds its entries as a fragment in [changes/](changes/README.md), and `rust-ui changelog` folds them in here before a release. Until then, the newest changes are in `changes/`.
+
 ## Unreleased
 
 ### Breaking

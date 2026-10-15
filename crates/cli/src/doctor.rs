@@ -204,11 +204,16 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
     names.sort();
 
     let tests = root.join("crates/ui/tests");
-    let render: String = ["render.rs", "form.rs", "data_table.rs", "pickers.rs"]
+    let mut render: String = ["render.rs", "form.rs", "data_table.rs", "pickers.rs"]
         .iter()
         .map(|f| read(&tests.join(f)))
         .collect();
-    let demos = read(&tests.join("demos.rs"));
+    // One file per component (tests/components/<name>.rs); build.rs lists them.
+    if let Ok(entries) = fs::read_dir(tests.join("components")) {
+        for e in entries.filter_map(Result::ok) {
+            render.push_str(&read(&e.path()));
+        }
+    }
     let gallery = read(&root.join("apps/gallery/src/main.rs"));
 
     let mut out = Vec::new();
@@ -286,17 +291,14 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
             if !NO_DEMO_OK.contains(&name.as_str()) {
                 add(Level::Warning, name, format!("no demo in {DEMOS_DIR}"));
             }
-        } else {
-            if !demos.contains(&format!("{name}_demo")) {
-                add(Level::Error, name, "demo is not in tests/demos.rs".into());
-            }
-            if !gallery.contains(&format!("demos::{name}::Demo")) {
-                add(
-                    Level::Error,
-                    name,
-                    "demo is not shown in the gallery".into(),
-                );
-            }
+        } else if !gallery.contains(&format!("demos::{name}::Demo")) {
+            // Every demo is smoke-tested through `ui::demos::ALL` (generated), so only the
+            // gallery still needs a line.
+            add(
+                Level::Error,
+                name,
+                "demo is not shown in the gallery".into(),
+            );
         }
         if !has_test(&render, name) {
             add(Level::Warning, name, "no render test".into());

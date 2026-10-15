@@ -94,7 +94,7 @@ rust-ui diff command --dest src/components  # exit 1 if your copy differs
 
 ### Adding a component
 
-`cargo run -p rust-ui-cli -- new status_dot` (run from the repo root) creates the component folder (`component.rs`, `style.css`, `docs.md`, a `Demo`), adds the `pub mod` and prelude lines in sorted order, appends the demo smoke test and render test, adds a gallery section and regenerates `registry.json`. Then fill in the TODOs, add a `THIRD_PARTY.md` row if you copied anything, and run `scripts/check.sh`.
+`cargo run -p rust-ui-cli -- new status_dot` (run from the repo root) creates the component folder (`component.rs`, `style.css`, `docs.md`), its demo (`crates/ui/src/demos/status_dot.rs`), its test file (`crates/ui/tests/components/status_dot.rs`) and a gallery section, and regenerates `registry.json`. There are no module, prelude, demo or test lists to edit: `crates/ui/build.rs` generates them from the folders. Then fill in the TODOs, add a `THIRD_PARTY.md` row if you copied anything, add a `changes/<topic>.md` entry ([changes/README.md](changes/README.md)) and run `scripts/check.sh`.
 
 ## Gate
 
