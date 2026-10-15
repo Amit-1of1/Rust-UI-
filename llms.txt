@@ -39,7 +39,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Callout](llms/callout.md): An inline note (info, success, warning) for docs and forms
 - [Card](llms/card.md): The card component is a flexible container for grouping related content and actions
 - [Carousel](llms/carousel.md): A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons
-- [Chart](llms/chart.md): `BarChart` and `LineChart` drawn as SVG from a list of `ChartDatum`
+- [Chart](llms/chart.md): Charts drawn as SVG in Rust, coloured from theme tokens
 - [Checkbox](llms/checkbox.md): The Checkbox component is used to create an accessible checkbox input
 - [Chips](llms/chips.md): A row of on/off chips for filters and multi-choice tags
 - [Collapsible](llms/collapsible.md): The `Collapsible` component allows users to create expandable sections that can be toggled open or closed

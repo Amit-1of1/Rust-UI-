@@ -3,10 +3,14 @@
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "table"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "ui_strings"
     }
   ],
-  "description": "`BarChart` and `LineChart` drawn as SVG from a list of `ChartDatum`. `describe()` builds the text alternative.",
+  "description": "Charts drawn as SVG in Rust, coloured from theme tokens. No JavaScript chart library.",
   "exclude": [
     "docs.md",
     "component.json"

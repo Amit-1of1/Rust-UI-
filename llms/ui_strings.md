@@ -115,6 +115,16 @@ pub struct UiStrings {
     pub empty_value: String,
     // Chart
     pub no_data: String,
+    /// Opens a chart's data table.
+    pub show_data: String,
+    /// Header of a chart table's first column.
+    pub chart_category: String,
+    /// Header of a single-series chart's value column.
+    pub chart_value: String,
+    /// Header of a pie chart's percentage column.
+    pub chart_share: String,
+    /// Radial chart summary. `{value}`, `{max}` and `{percent}` are filled in.
+    pub value_of_max: String,
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,

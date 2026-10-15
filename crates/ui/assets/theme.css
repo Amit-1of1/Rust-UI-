@@ -69,6 +69,13 @@ html[data-theme="dark"],
   --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
   --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
   --secondary-info-color: light-dark(var(--secondary-color-3), var(--primary-color-7));
+  /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
+     accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
+     (tests/theme.rs). */
+  --chart-2: light-dark(#0f766e, #2dd4bf);
+  --chart-3: light-dark(#c2410c, #fb923c);
+  --chart-4: light-dark(#7c3aed, #a78bfa);
+  --chart-5: light-dark(#be185d, #f472b6);
 }
 
 /* Accent presets, light-dark(light, dark). Light fills carry white text (>=4.5:1); dark fills
@@ -160,6 +167,10 @@ html[data-theme="light"],
     --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
     --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
     --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
+    --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
+    --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
+    --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
+    --chart-5: var(--dark, #f472b6) var(--light, #be185d);
   }
   [data-accent="blue"][data-accent="blue"] {
     --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);

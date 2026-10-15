@@ -1,4 +1,4 @@
-use crate::data::{self, money, PLANS, REVENUE};
+use crate::data::{self, money, PLANS, Q3_TARGET, REVENUE, REVENUE_2025};
 use crate::{use_store, Page};
 use dioxus::prelude::*;
 use ui::prelude::*;
@@ -21,14 +21,17 @@ pub fn Overview() -> Element {
         (churned as f64 / customers.len() as f64 * 100.0).round()
     };
 
-    let revenue: Vec<ChartDatum> = REVENUE
-        .iter()
-        .map(|(m, v)| ChartDatum::new(*m, *v))
-        .collect();
+    let months: Vec<String> = REVENUE.iter().map(|(m, _)| m.to_string()).collect();
+    let revenue = vec![
+        ChartSeries::new("2026", REVENUE.map(|(_, v)| v)),
+        ChartSeries::new("2025", REVENUE_2025),
+    ];
     let by_plan: Vec<ChartDatum> = PLANS
         .iter()
         .map(|p| ChartDatum::new(*p, customers.iter().filter(|c| c.plan == *p).count() as f32))
         .collect();
+    let q3: f32 = REVENUE[6..].iter().map(|(_, v)| v).sum();
+    let q3 = (q3 * 10.0).round() / 10.0;
     let recent = data::orders(&customers, 5);
 
     rsx! {
@@ -42,10 +45,15 @@ pub fn Overview() -> Element {
             Card {
                 CardHeader {
                     CardTitle { "Revenue" }
-                    CardDescription { "Thousands of dollars per month, 2026" }
+                    CardDescription { "Thousands of dollars per month, 2026 against 2025" }
                 }
                 CardContent {
-                    LineChart { data: revenue, label: "Revenue per month, thousands of dollars" }
+                    AreaChart {
+                        categories: months,
+                        series: revenue,
+                        table: true,
+                        label: "Revenue per month, thousands of dollars, 2026 and 2025",
+                    }
                 }
             }
             Card {
@@ -54,7 +62,28 @@ pub fn Overview() -> Element {
                     CardDescription { "All customers, including churned" }
                 }
                 CardContent {
-                    BarChart { data: by_plan, label: "Customers by plan" }
+                    PieChart {
+                        data: by_plan,
+                        donut: true,
+                        center: customers.len().to_string(),
+                        center_caption: "Customers",
+                        table: true,
+                        label: "Customers by plan",
+                    }
+                }
+            }
+            Card {
+                CardHeader {
+                    CardTitle { "Q3 target" }
+                    CardDescription { "Revenue July to September against the ${Q3_TARGET}k target" }
+                }
+                CardContent {
+                    RadialChart {
+                        value: q3,
+                        max: Q3_TARGET,
+                        caption: "${q3}k of ${Q3_TARGET}k",
+                        label: "Q3 revenue against target",
+                    }
                 }
             }
         }

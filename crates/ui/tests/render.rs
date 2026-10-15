@@ -1444,6 +1444,101 @@ fn chart_marks_show_their_value_on_hover() {
 }
 
 #[test]
+fn multi_series_charts_have_a_legend_and_a_summary_per_series() {
+    let html = render(|| {
+        let categories: Vec<String> = vec!["Jan".into(), "Feb".into()];
+        let series = vec![
+            ChartSeries::new("Desktop", [186.0, 305.0]),
+            ChartSeries::new("Mobile", [80.0, 200.0]),
+        ];
+        rsx! {
+            BarChart { categories: categories.clone(), series: series.clone(), stacked: true, label: "Bars" }
+            AreaChart { categories, series, label: "Areas" }
+        }
+    });
+    assert_eq!(
+        html.matches("data-slot=\"chart-legend\"").count(),
+        2,
+        "{html}"
+    );
+    assert!(
+        html.contains("<desc>Desktop: Jan 186, Feb 305. Mobile: Jan 80, Feb 200.</desc>"),
+        "{html}"
+    );
+    // Bars name their series; area columns list every series.
+    assert!(html.contains("<title>Feb, Mobile: 200</title>"), "{html}");
+    assert!(
+        html.contains("<title>Jan: Desktop 186, Mobile 80</title>"),
+        "{html}"
+    );
+    // The second line differs by dash pattern, not only by colour.
+    assert!(html.contains("stroke-dasharray=\"6 4\""), "{html}");
+}
+
+#[test]
+fn single_series_charts_stay_a_bare_svg() {
+    let html =
+        render(|| rsx! { BarChart { data: vec![ChartDatum::new("Jan", 1.0)], label: "One" } });
+    assert!(html.starts_with("<svg"), "{html}");
+    assert!(!html.contains("chart-legend"), "{html}");
+}
+
+#[test]
+fn chart_table_lists_the_numbers() {
+    let html = render(|| {
+        rsx! {
+            LineChart { data: vec![ChartDatum::new("Jan", 12.0), ChartDatum::new("Feb", 7.5)], table: true, label: "Trend" }
+        }
+    });
+    for text in [
+        "<summary",
+        ">Show data</summary>",
+        "<caption",
+        ">Category</th>",
+        ">Value</th>",
+        ">7.5</td>",
+    ] {
+        assert!(html.contains(text), "missing {text} in {html}");
+    }
+}
+
+#[test]
+fn pie_and_radial_charts_describe_their_values() {
+    let html = render(|| {
+        rsx! {
+            PieChart {
+                data: vec![ChartDatum::new("Free", 1.0), ChartDatum::new("Pro", 3.0)],
+                donut: true,
+                center: "4",
+                center_caption: "Customers",
+                label: "Plans",
+            }
+            RadialChart { value: 64.0, label: "Goal" }
+        }
+    });
+    assert_eq!(html.matches("role=\"img\"").count(), 2, "{html}");
+    assert!(
+        html.contains("<desc>Free: 1 (25%), Pro: 3 (75%)</desc>"),
+        "{html}"
+    );
+    assert!(html.contains("<title>Pro: 3 (75%)</title>"), "{html}");
+    assert!(html.contains("<desc>64 of 100 (64%)</desc>"), "{html}");
+    assert!(html.contains(">64%</text>"), "{html}");
+    assert!(html.contains(">Customers</text>"), "{html}");
+}
+
+#[test]
+fn empty_pie_shows_a_track_and_says_no_data() {
+    let html = render(|| rsx! { PieChart { data: vec![], label: "Nothing" } });
+    assert!(html.contains("<desc>No data.</desc>"), "{html}");
+    assert_eq!(
+        html.matches("<title>").count(),
+        1,
+        "only the chart's own title: {html}"
+    );
+}
+
+#[test]
 fn table_numeric_columns_are_marked_on_head_and_cell() {
     let html = render(|| {
         rsx! {
