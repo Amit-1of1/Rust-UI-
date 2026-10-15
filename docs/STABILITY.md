@@ -41,6 +41,9 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 | `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
 | `icons`: `Icon`, `IconData`, `IconNode`, the `icons::lucide` constants (`lucide::CHECK`, `ALL`), the `label` and `mirror_rtl` props and the named `IconSize` steps | New on 2026-10-14 with the generated Lucide set; the data shape may change when Lucide adds new SVG elements. |
 | `hooks::Selection`, `use_selection`, `use_selected` | Built for the benchmark app; the API may change with its next use. |
+| `number_field`: `NumberInput`, `NumberField` | New on 2026-10-15 (booking gap 12); `f64` values and the `empty` prop may change once forms need decimals or units. |
+| The `router` feature, `hooks::follow_in_app`, `in_app_href`, `is_current_route`, and `MainContent`'s focus move | New on 2026-10-15 (booking gaps 10 and 11); rides on the Dioxus router's untyped context. |
+| `Pager`, `page_items`, `CardMedia`, `CarouselItem`'s `media`, `Select`'s `selected` | New on 2026-10-15 (booking and dashboard gaps). |
 | Feature `native` | Does nothing today and is kept so apps that enable it keep building. Native (Blitz) support is a preview ([NATIVE.md](NATIVE.md)). |
 | Re-exports from `dioxus-primitives` in the prelude (`use_toast`, `ToastOptions`, `ContentSide`) | Their shape follows the pinned primitives rev (our fork). A rev bump that changes them is announced as breaking. |
 

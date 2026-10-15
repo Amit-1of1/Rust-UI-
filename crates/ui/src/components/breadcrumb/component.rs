@@ -1,3 +1,4 @@
+use crate::components::hooks::{follow_in_app, in_app_href};
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
@@ -32,18 +33,21 @@ pub fn BreadcrumbItem(
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
     /// For in-app navigation without a router: call `prevent_default()` and switch the view.
+    /// With the kit's `router` feature, a path `href` goes through the router by itself.
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let shown = in_app_href(&href);
     rsx! {
         a {
-            href,
-            onclick: move |e| {
+            href: shown,
+            onclick: move |e: MouseEvent| {
                 if let Some(f) = &onclick {
-                    f.call(e);
+                    f.call(e.clone());
                 }
+                follow_in_app(&href, &e);
             },
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_breadcrumb_link }), attributes]),
             {children}

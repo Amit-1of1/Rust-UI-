@@ -21,3 +21,7 @@ DatePicker {
 ```
 
 The styled `DatePicker` and `DateRangePicker` render the input, trigger, popover content, and calendar by default.
+
+## Naming
+
+Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates-label", .. }` (or `aria_label`). The picker's group then carries that name; the English "Date" / "Date Range" is only used when you pass none. The segments are named "year", "month" and "day" inside it, and a segment moves on to the next once it holds all its digits ("01" for January).

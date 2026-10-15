@@ -6,6 +6,23 @@ What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIO
 
 ## Unreleased
 
+### Toasts are not dialogs; unnamed avatars are decorative (PR #40)
+
+**Who:** tests or CSS that find toasts by `role="alertdialog"`; apps with avatars that have no name; code that names `dioxus_primitives::select::SelectProps` for the kit's `Select`.
+
+**Before:** every toast was `role="alertdialog"` with `aria-modal="false"`, and its content a `role="alert"`. `Avatar` was `role="img"` with no name unless you passed `aria-label`, which axe reports (`role-img-alt`). The kit's `Select` took dioxus-primitives' `SelectProps<T>`.
+
+**After:**
+- A toast is `role="group"`, named by its title and still focusable (F6). Its content is `role="status"` for info and success toasts and `role="alert"` for errors and warnings (primitives fork `5b21f56`).
+- `Avatar` takes a `label`. Without `label`, `aria-label` or `aria-labelledby` it renders `aria-hidden="true"`. `ImageAvatar` uses its `alt` as the name when there is no `label`.
+- `Select` takes the kit's own `SelectProps<T>`: the same props plus `selected`.
+
+**What to do:**
+- Tests: find a toast by its text or `getByRole("status")` / `getByRole("alert")`; `getByRole("alertdialog")` now only matches real alert dialogs.
+- Avatars: pass `label: "Ada Lovelace"` where the avatar is the only place the name appears; leave it out where the name is shown beside it.
+- `Select`: nothing, unless you built its props by hand; use `ui::prelude::SelectProps`.
+- Copy users: `rust-ui add --force toast avatar select`, and bump `dioxus-primitives` to the fork commit in `Cargo.toml`.
+
 ### Icons are generated in the kit (PR #35)
 
 **Who:** apps that use `ui::icons`, name `dioxus_icons` directly, or match icon markup in tests or CSS.

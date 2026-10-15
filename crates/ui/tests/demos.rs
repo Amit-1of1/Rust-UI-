@@ -448,6 +448,18 @@ fn link_demo_renders() {
 }
 
 #[test]
+fn skip_link_demo_renders() {
+    let html = render(ui::demos::skip_link::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn number_field_demo_renders() {
+    let html = render(ui::demos::number_field::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
 fn time_picker_demo_renders() {
     let html = render(ui::demos::time_picker::Demo);
     assert!(!html.is_empty());

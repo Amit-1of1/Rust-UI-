@@ -91,6 +91,7 @@
         "breadcrumb/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "ui_strings"
       ]
     },
@@ -401,6 +402,7 @@
         "hooks/hotkey.rs",
         "hooks/media.rs",
         "hooks/mod.rs",
+        "hooks/router.rs",
         "hooks/selection.rs"
       ],
       "registryDependencies": []
@@ -498,6 +500,7 @@
         "link/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "icons",
         "ui_strings"
       ]
@@ -549,6 +552,22 @@
       ]
     },
     {
+      "name": "number_field",
+      "files": [
+        "number_field/component.rs",
+        "number_field/docs.md",
+        "number_field/mod.rs",
+        "number_field/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "form",
+        "icons",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "pagination",
       "files": [
         "pagination/component.rs",
@@ -557,6 +576,7 @@
         "pagination/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "icons",
         "ui_strings"
       ]
@@ -674,6 +694,18 @@
         "skeleton/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "skip_link",
+      "files": [
+        "skip_link/component.rs",
+        "skip_link/docs.md",
+        "skip_link/mod.rs",
+        "skip_link/style.css"
+      ],
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "slider",

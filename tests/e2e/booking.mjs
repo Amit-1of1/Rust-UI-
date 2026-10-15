@@ -106,10 +106,17 @@ await page.waitForTimeout(200);
 const titles = await page.locator(".tr-card-title").allTextContents();
 check(titles.length > 0 && titles.every((t) => t.includes("Treehouse")), `type filter keeps treehouses (${titles.length})`);
 await page.getByRole("checkbox", { name: "Hot tub" }).click();
-await page.getByRole("button", { name: "More guests" }).first().click();
-await page.getByRole("button", { name: "More guests" }).first().click();
-await page.getByRole("button", { name: "More guests" }).first().click();
-await page.getByRole("button", { name: "More guests" }).first().click();
+// Guests is the kit's NumberInput: a spin button named by its label, -/+ buttons, arrow keys.
+const guests = page.getByRole("spinbutton", { name: "Guests" }).first();
+check((await guests.getAttribute("aria-valuenow")) === "2", "guests is a spin button at 2");
+await guests.focus();
+await page.keyboard.press("ArrowUp");
+check((await guests.getAttribute("aria-valuenow")) === "3", "ArrowUp adds a guest");
+await page.getByRole("button", { name: "Increase guests" }).first().click();
+await page.getByRole("button", { name: "Increase guests" }).first().click();
+await page.getByRole("button", { name: "Increase guests" }).first().click();
+check((await guests.getAttribute("aria-valuenow")) === "6", "+ adds guests up to the maximum");
+check(await page.getByRole("button", { name: "Increase guests" }).first().isDisabled(), "+ is disabled at the maximum");
 await page.waitForTimeout(200);
 const narrowed = await count(page);
 check(/^\d+ stays?$/.test(narrowed), `filters combine (${narrowed})`);
@@ -120,7 +127,10 @@ await page.getByRole("button", { name: "Clear filters" }).click();
 await page.waitForTimeout(200);
 check((await count(page)) !== narrowed || narrowed === all, "clear filters widens the list again");
 // Back to 2 guests for the booking below.
-for (let i = 0; i < 4; i++) await page.getByRole("button", { name: "Fewer guests" }).first().click();
+await guests.focus();
+await page.keyboard.press("Home");
+await page.getByRole("button", { name: "Increase guests" }).first().click();
+check((await guests.getAttribute("aria-valuenow")) === "2", "Home goes to 1, + back to 2");
 
 // Sort by price: the first card is the cheapest.
 await page.getByRole("button", { name: /^Sort by/ }).click();
@@ -129,10 +139,15 @@ await page.waitForTimeout(200);
 const prices = (await page.locator(".tr-price strong").allTextContents()).map((p) => Number(p.replace(/[$,]/g, "")));
 check(prices.every((p, i) => i === 0 || prices[i - 1] <= p), `sorted by price (${prices.slice(0, 4).join(", ")}…)`);
 
-// Paging.
-await page.getByRole("link", { name: "2", exact: true }).click();
+// Paging: the kit's Pager renders buttons; Previous does nothing on page 1.
+const pages = page.getByRole("navigation", { name: "Pages of stays" });
+check(
+  (await pages.getByRole("button", { name: "Go to previous page" }).getAttribute("aria-disabled")) === "true",
+  "Previous is disabled on page 1",
+);
+await pages.getByRole("button", { name: "2", exact: true }).click();
 await page.waitForTimeout(200);
-check((await page.getByRole("link", { name: "2", exact: true }).getAttribute("aria-current")) === "page", "page 2 is current");
+check((await pages.getByRole("button", { name: "2", exact: true }).getAttribute("aria-current")) === "page", "page 2 is current");
 
 // Open the cheapest stay through the command palette.
 await page.keyboard.press("Control+k");
@@ -147,6 +162,17 @@ check((await page.title()).startsWith("Fern Hollow"), "stay page sets the title"
 const reserve = page.getByRole("button", { name: "Reserve" });
 check(await reserve.isDisabled(), "Reserve waits for dates");
 const box = page.locator(".tr-book");
+// The range picker is named by its visible label (no hard-coded "Date Range"), and its
+// segments have no dangling aria-labelledby.
+check((await box.getByRole("group", { name: "Dates" }).count()) === 1, "the date range picker is named Dates");
+check((await box.locator("span[role='spinbutton'][aria-labelledby]").count()) === 0, "date segments have no dangling aria-labelledby");
+// "0" then "1" fills a month: focus moves on to the day.
+await box.getByRole("spinbutton", { name: "month" }).nth(0).focus();
+await page.keyboard.type("01");
+check(
+  (await page.evaluate(() => document.activeElement?.getAttribute("aria-label"))) === "day",
+  "a full two-digit month moves on to the day",
+);
 await typeDate(box, iso(20), 0);
 await typeDate(box, iso(23), 1);
 await page.waitForTimeout(200);
@@ -216,6 +242,12 @@ await page.getByRole("button", { name: /^Confirm and pay/ }).click();
 await page.waitForTimeout(300);
 check((await h1(page)) === "My trips", "confirming opens My trips");
 check(await page.getByText(`Booked ${stayName}`).isVisible(), "toast confirms the booking");
+// A toast is a status message, not a dialog.
+check(
+  (await page.getByRole("status").filter({ hasText: `Booked ${stayName}` }).count()) === 1,
+  "the toast is announced as a status",
+);
+check((await page.getByRole("alertdialog").count()) === 0, "no alertdialog while the toast shows");
 check(
   (await page.getByRole("tabpanel").first().textContent()).includes(stayName),
   "the new trip is listed under Upcoming",
@@ -235,11 +267,20 @@ check(
 await page.getByRole("tab", { name: /^Past/ }).click();
 check(await page.getByText("Cancelled").first().isVisible(), "it shows as Cancelled under Past");
 
-// After in-app navigation focus moves to <main>; on a fresh load the first Tab reaches the
-// skip link.
+// After in-app navigation focus moves to <main> (the kit's MainContent); on a fresh load
+// the first Tab reaches the skip link.
 await nav(page, "Explore");
 await page.waitForTimeout(200);
 check(await page.evaluate(() => document.activeElement?.id === "main-content"), "navigation moves focus to main");
+
+// Kit links go through the router: the breadcrumb's plain href does not reload the page.
+await page.locator(".tr-grid a").first().click();
+await page.locator(".tr-stay").waitFor();
+await page.evaluate(() => (window.__noReload = true));
+await page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Explore" }).click();
+await page.locator(".tr-grid").waitFor();
+check(await page.evaluate(() => window.__noReload === true), "the breadcrumb link navigates in the app (no reload)");
+check(await page.evaluate(() => document.activeElement?.id === "main-content"), "and focus moves to main");
 await page.goto(url);
 await ready(page);
 await page.keyboard.press("Tab");

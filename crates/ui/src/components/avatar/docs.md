@@ -4,7 +4,7 @@ The Avatar components display a user's profile picture or fallback initials. Use
 
 ```rust
 Avatar {
-    aria_label: "Jane Doe",
+    label: "Jane Doe",
     AvatarImage {
         src: "https://example.com/avatar.png",
         alt: "Jane Doe",
@@ -21,3 +21,7 @@ ImageAvatar {
     "JD"
 }
 ```
+
+## Naming
+
+The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.

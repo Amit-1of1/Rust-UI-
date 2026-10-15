@@ -159,7 +159,7 @@ impl FormField {
 
     /// `aria-describedby` for the control: the description when there is one, and the error
     /// while there is one.
-    fn described_by(&self, has_description: bool) -> Option<String> {
+    pub(crate) fn described_by(&self, has_description: bool) -> Option<String> {
         let ids = self.ids.peek();
         let mut described = Vec::new();
         if has_description {

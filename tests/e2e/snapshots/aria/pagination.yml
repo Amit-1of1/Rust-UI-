@@ -20,3 +20,21 @@
       - link "Go to next page":
         - /url: "#"
         - text: Next
+- navigation "Pages of results":
+  - list:
+    - listitem:
+      - button "Go to previous page": Previous
+    - listitem:
+      - button "1"
+    - listitem: More pages
+    - listitem:
+      - button "5"
+    - listitem:
+      - button "6"
+    - listitem:
+      - button "7"
+    - listitem: More pages
+    - listitem:
+      - button "20"
+    - listitem:
+      - button "Go to next page": Next
