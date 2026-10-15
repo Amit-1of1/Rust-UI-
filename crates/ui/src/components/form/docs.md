@@ -40,6 +40,17 @@ rsx! {
 }
 ```
 
+`TimeField` and `DateTimeField` bind a `TimePicker` or `DateTimePicker`. The field holds `14:05` or `2026-10-15T14:05` (the formats of `<input type="time">` and `datetime-local`), empty until every part is entered; they validate when focus leaves the picker:
+
+```rust
+let start = form.field(vec![required()]);
+let departure = form.field(vec![required()]);
+rsx! {
+    TimeField { field: start, label: "Start", hour_cycle: HourCycle::H12, minute_step: 5 }
+    DateTimeField { field: departure, label: "Departure", default_time: Time::from_hms(9, 0, 0).ok() }
+}
+```
+
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
 
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.

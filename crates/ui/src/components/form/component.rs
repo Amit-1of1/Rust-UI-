@@ -1,9 +1,13 @@
 use crate::components::checkbox::{Checkbox, CheckboxState};
 use crate::components::combobox::{Combobox, ComboboxEmpty, ComboboxOption};
+use crate::components::date_time_picker::{
+    format_iso_date_time, parse_iso_date_time, DateTimePicker, PrimitiveDateTime,
+};
 use crate::components::field::*;
 use crate::components::input::Input;
 use crate::components::select::{Select, SelectOption};
 use crate::components::textarea::Textarea;
+use crate::components::time_picker::{format_iso_time, parse_iso_time, HourCycle, Time};
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
@@ -531,6 +535,106 @@ pub fn CheckboxField(
                     aria_describedby: field.described_by(description.is_some()),
                 }
                 FieldLabel { html_for: ids.control.clone(), "{label}" }
+            }
+            if let Some(description) = description {
+                FieldDescription { id: ids.description.clone(), "{description}" }
+            }
+            FieldError { id: ids.error.clone(), message: error }
+        }
+    }
+}
+
+/// A [`TimePicker`](crate::components::time_picker::TimePicker) bound to a [`FormField`], wired
+/// like [`TextField`]. The field holds `"14:05"` (`"14:05:09"` with `seconds`), the format of
+/// `<input type="time">`, and stays empty until every segment is filled, so `required()`
+/// works. It validates when focus leaves the picker.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn TimeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default)] hour_cycle: HourCycle,
+    #[props(default)] seconds: bool,
+    #[props(default = 1)] minute_step: u8,
+) -> Element {
+    let ids = field.ids();
+    let error = field.error();
+    let invalid = error.is_some();
+    let label_id = format!("{}-label", ids.control);
+    let value = use_memo(move || parse_iso_time(&field.value()));
+    rsx! {
+        Field { invalid,
+            FieldLabel { id: label_id.clone(), html_for: ids.control.clone(), "{label}" }
+            crate::components::time_picker::TimePicker {
+                value: value(),
+                on_value_change: move |t: Option<Time>| {
+                    field.set(t.map(|t| format_iso_time(t, seconds)).unwrap_or_default())
+                },
+                hour_cycle,
+                seconds,
+                minute_step,
+                labelled_by: label_id,
+                first_segment_id: ids.control.clone(),
+                invalid,
+                described_by: field.described_by(description.is_some()),
+                on_blur: move |_| field.blur(),
+                on_mounted: move |e| field.mounted(e),
+            }
+            if let Some(description) = description {
+                FieldDescription { id: ids.description.clone(), "{description}" }
+            }
+            FieldError { id: ids.error.clone(), message: error }
+        }
+    }
+}
+
+/// A [`DateTimePicker`] bound to a [`FormField`], wired like [`TextField`]. The field holds
+/// `"2026-10-15T14:05"`, the format of `<input type="datetime-local">`, and stays empty until
+/// both the date and the time are entered. It validates when focus leaves the picker; a
+/// failed submit focuses the time's first segment.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DateTimeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default)] hour_cycle: HourCycle,
+    #[props(default)] seconds: bool,
+    #[props(default = 1)] minute_step: u8,
+    /// Filled in when a date is picked while the time is still empty.
+    #[props(default)]
+    default_time: Option<Time>,
+) -> Element {
+    let ids = field.ids();
+    let error = field.error();
+    let invalid = error.is_some();
+    let label_id = format!("{}-label", ids.control);
+    let value = use_memo(move || parse_iso_date_time(&field.value()));
+    rsx! {
+        Field { invalid,
+            FieldLabel { id: label_id.clone(), html_for: ids.control.clone(), "{label}" }
+            DateTimePicker {
+                value: value(),
+                on_value_change: move |v: Option<PrimitiveDateTime>| {
+                    field.set(v.map(|v| format_iso_date_time(v, seconds)).unwrap_or_default())
+                },
+                hour_cycle,
+                seconds,
+                minute_step,
+                default_time,
+                labelled_by: label_id,
+                time_segment_id: ids.control.clone(),
+                invalid,
+                described_by: field.described_by(description.is_some()),
+                on_blur: move |_| field.blur(),
+                on_mounted: move |e| field.mounted(e),
             }
             if let Some(description) = description {
                 FieldDescription { id: ids.description.clone(), "{description}" }

@@ -1,7 +1,8 @@
 // What a screen reader is handed, without a screen reader: the accessibility tree.
-//  1. The engine's own tree (page.accessibility.snapshot: Chromium, Firefox and WebKit each
-//     build theirs) for the whole gallery page: every control has a role and a name, and the state
-//     a screen reader announces (checked, selected, expanded, pressed, value) is exposed.
+//  1. The tree for the whole gallery page (Playwright's ARIA snapshot of the DOM each engine
+//     built): every control has a role and a name, and the state a screen reader announces
+//     (checked, selected, expanded, pressed, value) is exposed. Playwright 1.57 removed
+//     page.accessibility, which read each engine's own tree.
 //  2. Per main component, Playwright's ARIA snapshot (role, name, state as YAML), closed and
 //     opened from the keyboard, compared with tests/e2e/snapshots/aria/<name>.yml.
 //     UPDATE_SNAPSHOTS=1 rewrites the files; read the diff before committing it.
@@ -28,46 +29,46 @@ const check = (ok, msg) => {
 const section = (title) =>
   page.locator("section.gallery-section").filter({ has: page.locator(`h2:text-is("${title}")`) });
 
-// ---- 1. the engine's tree -------------------------------------------------------------
-// Roles the engines report for controls. Firefox and WebKit use a few names of their own.
+// ---- 1. the page's tree -------------------------------------------------------------
 const CONTROL = new Set([
-  "button", "pushbutton", "togglebutton", "link", "checkbox", "checkbutton", "switch", "radio",
-  "radiobutton", "slider", "tab", "pagetab", "combobox", "textbox", "entry", "searchbox", "spinbutton",
-  "menuitem", "menuitemcheckbox", "menuitemradio", "option", "listbox", "textarea", "textfield",
+  "button", "link", "checkbox", "switch", "radio", "slider", "tab", "combobox", "textbox",
+  "searchbox", "spinbutton", "menuitem", "menuitemcheckbox", "menuitemradio", "option", "listbox",
 ]);
-// The whole page: with a `root`, Playwright drops the subtree when the root itself is not
-// "interesting", and the gallery's main pane is a plain container.
-const tree = await page.accessibility.snapshot({ interestingOnly: true });
-const nodes = [];
-(function walk(n) {
-  if (!n) return;
-  nodes.push(n);
-  for (const c of n.children ?? []) walk(c);
-})(tree);
+// One node per line of the YAML: `- role "name" [state] [key=value]: value`, quoted in single
+// quotes when YAML needs it.
+async function pageTree() {
+  const nodes = [];
+  for (let line of (await page.locator("body").ariaSnapshot()).split("\n")) {
+    line = line.trim();
+    if (!line.startsWith("- ")) continue;
+    let key = line.slice(2);
+    const quoted = key.match(/^'((?:[^']|'')*)'/);
+    key = quoted ? quoted[1].replace(/''/g, "'") : key;
+    const m = key.match(/^(\w+)(?: "((?:[^"\\]|\\.)*)")?((?: \[[^\]]*\])*)/);
+    if (!m) continue;
+    const node = { role: m[1], name: m[2] ? JSON.parse(`"${m[2]}"`) : "" };
+    for (const [, k, v] of m[3].matchAll(/\[([\w-]+)(?:=([^\]]*))?\]/g)) node[k] = v ?? true;
+    nodes.push(node);
+  }
+  return nodes;
+}
+const nodes = await pageTree();
 const controls = nodes.filter((n) => CONTROL.has(n.role));
-const unnamed = controls.filter((n) => !(n.name ?? "").trim());
-for (const n of unnamed.slice(0, 20)) console.log(`     unnamed ${n.role}${n.value ? ` (value "${n.value}")` : ""}`);
-// Text fields may take their name from a visible label the engine reports as `value`-less;
-// an empty name on any control means a screen reader says only its role.
-check(unnamed.length === 0, `every control in the engine tree has a name (${controls.length} controls, ${unnamed.length} unnamed)`);
+const unnamed = controls.filter((n) => !n.name.trim());
+for (const n of unnamed.slice(0, 20)) console.log(`     unnamed ${n.role}`);
+// An empty name on any control means a screen reader says only its role.
+check(unnamed.length === 0, `every control in the tree has a name (${controls.length} controls, ${unnamed.length} unnamed)`);
 
 const byRole = (...roles) => nodes.filter((n) => roles.includes(n.role));
 const has = (list, key) => list.length > 0 && list.every((n) => n[key] !== undefined);
-// Engines differ in how they report "not checked" (Firefox leaves the field out), so check the
-// state the engine reports changes when the control is toggled.
+// "Not checked" is left out of the tree, so check the state changes when the control is toggled.
 async function engineState(name, role) {
-  const t = await page.accessibility.snapshot({ interestingOnly: true });
-  let found;
-  (function walk(n) {
-    if (!n || found) return;
-    if (n.name === name && role.includes(n.role)) found = n;
-    for (const c of n.children ?? []) walk(c);
-  })(t);
+  const found = (await pageTree()).find((n) => n.name === name && role.includes(n.role));
   return found?.checked ?? false;
 }
 for (const [title, role, name] of [
-  ["Checkbox", ["checkbox", "checkbutton"], "Accept terms"],
-  ["Switch", ["switch", "checkbox", "checkbutton", "togglebutton"], "Airplane mode"],
+  ["Checkbox", ["checkbox"], "Accept terms"],
+  ["Switch", ["switch"], "Airplane mode"],
 ]) {
   const before = await engineState(name, role);
   await section(title).getByRole(role[0]).first().focus();
@@ -78,20 +79,21 @@ for (const [title, role, name] of [
   await page.keyboard.press("Space");
   await page.waitForTimeout(200);
 }
-const tabs = byRole("tab", "pagetab");
+const tabs = byRole("tab");
 check(tabs.some((n) => n.selected === true), `the selected tab is exposed as selected (${tabs.length} tabs)`);
-const sliders = byRole("slider");
-check(
-  sliders.length > 0 && sliders.every((n) => n.valuetext !== undefined || n.value !== undefined || n.valuemax !== undefined),
-  `sliders expose a value (${sliders.length})`,
+// The ARIA snapshot leaves out a slider's value, so read what each slider exposes.
+const sliders = await page.getByRole("slider").evaluateAll((els) =>
+  els.map((e) => e.getAttribute("aria-valuenow") ?? e.getAttribute("aria-valuetext") ?? (e.type === "range" ? e.value : null)),
 );
+check(sliders.length > 0 && sliders.every((v) => v !== null), `sliders expose a value (${sliders.length})`);
 const pressed = nodes.filter((n) => n.pressed !== undefined);
-// Playwright's WebKit snapshot does not carry `pressed` at all (aria-pressed itself is
-// covered by the ARIA snapshots below and keyboard.mjs).
-if (ENGINE === "webkit") console.log(`skip toggle pressed state: not in the WebKit snapshot API`);
-else check(pressed.length > 0, `toggle buttons expose pressed state (${pressed.length})`);
-const expandable = nodes.filter((n) => n.expanded !== undefined);
-check(expandable.length > 0, `disclosures and popups expose expanded state (${expandable.length})`);
+check(pressed.length > 0, `toggle buttons expose pressed state (${pressed.length} pressed)`);
+// The tree writes only `[expanded]`; collapsed triggers are found by role and state.
+let expandable = 0;
+for (const role of ["button", "combobox", "link", "menuitem"]) {
+  for (const expanded of [true, false]) expandable += await page.getByRole(role, { expanded }).count();
+}
+check(expandable > 0, `disclosures and popups expose expanded state (${expandable})`);
 const headings = byRole("heading");
 check(headings.every((n) => n.level !== undefined), `headings expose a level (${headings.length})`);
 

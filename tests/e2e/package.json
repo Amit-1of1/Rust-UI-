@@ -4,5 +4,5 @@
   "type": "module",
   "description": "Accessibility check of the built gallery (axe-core in headless Chromium)",
   "scripts": { "axe": "node axe.mjs" },
-  "devDependencies": { "axe-core": "4.10.2", "playwright": "1.56.1" }
+  "devDependencies": { "axe-core": "4.10.2", "playwright": "1.63.0" }
 }

@@ -90,6 +90,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] drawer (gallery)";                 e2e env GALLERY_URL=$G node drawer.mjs
   step "[$engine] table (gallery)";                  e2e env GALLERY_URL=$G node table.mjs
   step "[$engine] select + combobox form fields";    e2e env GALLERY_URL=$G node form_fields.mjs
+  step "[$engine] time + date-time pickers (gallery)"; e2e env GALLERY_URL=$G node time_picker.mjs
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
   step "[$engine] keyboard-only walkthrough";        e2e env GALLERY_URL=$G node walkthrough.mjs
