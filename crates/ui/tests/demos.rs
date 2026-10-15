@@ -446,3 +446,15 @@ fn link_demo_renders() {
     let html = render(ui::demos::link::Demo);
     assert!(!html.is_empty());
 }
+
+#[test]
+fn time_picker_demo_renders() {
+    let html = render(ui::demos::time_picker::Demo);
+    assert!(!html.is_empty());
+}
+
+#[test]
+fn date_time_picker_demo_renders() {
+    let html = render(ui::demos::date_time_picker::Demo);
+    assert!(!html.is_empty());
+}
