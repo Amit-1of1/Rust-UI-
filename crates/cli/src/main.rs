@@ -78,6 +78,13 @@ enum Command {
     /// Print a component's page for coding agents (docs, props, example), or the index
     /// (`llms.txt`) without a name.
     Docs { name: Option<String> },
+    /// Serve the registry to AI coding tools over the Model Context Protocol (stdio):
+    /// list, search, read and add components. docs/MCP.md shows the client setup.
+    Mcp {
+        /// The app that `add_component` and `init_theme` write into.
+        #[arg(long, default_value = ".")]
+        project: PathBuf,
+    },
     /// Show which copied files differ from the registry.
     Diff {
         names: Vec<String>,
@@ -250,6 +257,12 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                     }
                 },
             }
+        }
+        Command::Mcp { project } => {
+            let stdin = std::io::stdin();
+            rust_ui_cli::mcp::Server::new(root, project)
+                .serve(stdin.lock(), std::io::stdout().lock())
+                .map_err(err)?;
         }
         Command::Diff {
             names,
