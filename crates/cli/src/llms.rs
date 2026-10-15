@@ -350,6 +350,16 @@ pub fn stale(root: &Path) -> io::Result<Vec<PathBuf>> {
     Ok(stale)
 }
 
+/// Components `ui::prelude` leaves out (`crates/ui/not_in_prelude.txt`, shared with build.rs).
+fn not_in_prelude(root: &Path) -> Vec<String> {
+    read(&root.join("crates/ui/not_in_prelude.txt"))
+        .lines()
+        .filter_map(|l| l.split('#').next())
+        .map(|l| l.trim().to_string())
+        .filter(|l| !l.is_empty())
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -368,14 +378,4 @@ mod tests {
         assert_eq!(body("# Button\n\nText.\n"), "Text.");
         assert_eq!(body("Text.\n"), "Text.");
     }
-}
-
-/// Components `ui::prelude` leaves out (`crates/ui/not_in_prelude.txt`, shared with build.rs).
-fn not_in_prelude(root: &Path) -> Vec<String> {
-    read(&root.join("crates/ui/not_in_prelude.txt"))
-        .lines()
-        .filter_map(|l| l.split('#').next())
-        .map(|l| l.trim().to_string())
-        .filter(|l| !l.is_empty())
-        .collect()
 }
