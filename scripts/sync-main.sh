@@ -7,9 +7,12 @@
 #
 # Generated files (registry.json, every component.json, apps/docs/src/generated.rs, llms.txt and
 # llms/, Cargo.lock, markup snapshots) are never resolved by hand: the script takes main's copy and regenerates
-# it from the merged sources. Anything else that conflicts is listed and left for you; fix it,
-# `git add` it, then run the script again with --continue.
+# it from the merged sources. Cargo.toml files where both sides only added lines (two new
+# dependencies at the same spot) keep both, if cargo still reads the result. Anything else that
+# conflicts is listed and left for you; fix it, `git add` it, then run the script again with --continue.
+# First it merges origin/<your branch> if someone else (the sync-prs workflow) pushed to it.
 # It never pushes, rebases or force-pushes. Run scripts/check.sh afterwards, then push.
+# The rules around it are in docs/PROTOCOL.md.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -17,7 +20,7 @@ CONTINUE=0
 case "${1:-}" in
   --continue) CONTINUE=1 ;;
   "") ;;
-  -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
+  -h|--help) sed -n '2,16p' "$0"; exit 0 ;;
   *) echo "unknown argument: $1" >&2; exit 2 ;;
 esac
 
@@ -84,6 +87,16 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   exit 2
 fi
 
+# Pick up commits pushed to this branch from elsewhere (the sync-prs workflow merges main into
+# open PR branches after every merge), so the next push is not rejected.
+if git fetch -q origin "$branch" 2>/dev/null && ! git merge-base --is-ancestor "origin/$branch" HEAD; then
+  echo "== merging origin/$branch (pushed from elsewhere) into $branch"
+  if ! git merge -q --no-edit "origin/$branch"; then
+    echo "sync-main: origin/$branch conflicts with your local commits; resolve, commit, run again" >&2
+    exit 1
+  fi
+fi
+
 git fetch -q origin "$BASE"
 if git merge-base --is-ancestor "origin/$BASE" HEAD; then
   echo "Already up to date with origin/$BASE."
@@ -96,10 +109,27 @@ if git merge -q --no-edit "origin/$BASE"; then
   exit 0
 fi
 
+# Cargo.toml where both sides added lines at the same place: keep both sides' lines. Checked
+# below with `cargo metadata`; a duplicate key or a changed line puts the conflict back.
+union_toml() {
+  local f="$1"
+  git cat-file -e ":1:$f" 2>/dev/null || return 1
+  local tmp
+  tmp=$(mktemp -d)
+  git show ":2:$f" >"$tmp/ours"; git show ":1:$f" >"$tmp/base"; git show ":3:$f" >"$tmp/theirs"
+  git merge-file --union -p "$tmp/ours" "$tmp/base" "$tmp/theirs" >"$f"
+  rm -rf "$tmp"
+}
+
 snapshots=0
 left=()
+unioned=()
 while IFS= read -r f; do
   [ -z "$f" ] && continue
+  case "$f" in
+    Cargo.toml|*/Cargo.toml)
+      if union_toml "$f"; then unioned+=("$f"); continue; fi ;;
+  esac
   if is_generated "$f"; then
     # Main's copy; regenerated below from the merged sources.
     git checkout -q --theirs -- "$f" 2>/dev/null || git rm -q -- "$f"
@@ -110,6 +140,20 @@ while IFS= read -r f; do
     left+=("$f")
   fi
 done < <(git diff --name-only --diff-filter=U)
+
+if [ "${#unioned[@]}" -gt 0 ]; then
+  if cargo metadata -q --format-version 1 --no-deps >/dev/null 2>&1; then
+    for f in "${unioned[@]}"; do
+      git add -- "$f"
+      echo "   Cargo.toml: $f (both sides' added lines kept; review the diff)"
+    done
+  else
+    for f in "${unioned[@]}"; do
+      git checkout -q -m -- "$f"
+      left+=("$f")
+    done
+  fi
+fi
 
 if [ "${#left[@]}" -gt 0 ]; then
   if [ "$snapshots" = 1 ]; then touch "$MARK"; fi

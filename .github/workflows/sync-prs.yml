@@ -1,0 +1,85 @@
+name: Sync open PRs with main
+
+# After every merge to main, merge main into each open PR branch from this repo with
+# scripts/sync-main.sh (generated files regenerated, Cargo.toml additions kept) and push the
+# merge, so GitHub stops showing conflicts that are only mechanical. A PR that still conflicts
+# gets one comment naming the files, which wakes the session that owns it. docs/PROTOCOL.md.
+#
+# Pushes made with GITHUB_TOKEN don't start pull_request runs, so this dispatches CI and the
+# browser checks on each branch it pushed. It can't push a merge that changes a workflow file
+# (GITHUB_TOKEN has no `workflows` permission); those PRs get a comment instead.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: sync-prs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Merge main into each open PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          comment() {
+            gh pr comment "$1" --repo "$REPO" --body "$2
+
+          ---
+          _Posted by the sync-prs workflow (docs/PROTOCOL.md)._" || true
+          }
+          gh pr list --repo "$REPO" --state open --base main --limit 100 \
+            --json number,headRefName,isCrossRepository \
+            --jq '.[] | select(.isCrossRepository | not) | "\(.number) \(.headRefName)"' |
+          while read -r pr branch; do
+            echo "::group::#$pr $branch"
+            git fetch -q origin "$branch"
+            git checkout -q -B "$branch" "origin/$branch"
+            if git merge-base --is-ancestor origin/main HEAD; then
+              echo "already contains main"; echo "::endgroup::"; continue
+            fi
+            if out=$(scripts/sync-main.sh 2>&1); then
+              echo "$out"
+              if git push -q origin "HEAD:$branch"; then
+                gh workflow run ci.yml --repo "$REPO" --ref "$branch" || true
+                gh workflow run e2e.yml --repo "$REPO" --ref "$branch" || true
+              else
+                comment "$pr" "Main moved and the merge is clean, but this workflow could not push it (the branch moved meanwhile, or main changed a workflow file). The session that owns this PR: run \`scripts/sync-main.sh\`, \`scripts/check.sh\`, then push."
+              fi
+            else
+              echo "$out"
+              files=$(git diff --name-only --diff-filter=U | sed 's/^/- `/; s/$/`/')
+              git merge --abort 2>/dev/null || git reset -q --hard "origin/$branch"
+              if [ -z "$files" ]; then
+                tail=$(printf '%s\n' "$out" | tail -n 15)
+                comment "$pr" "Main moved and \`scripts/sync-main.sh\` failed on this branch (not a conflict). The session that owns this PR: run it, fix what it reports, \`scripts/check.sh\`, then push. Last lines:
+
+          \`\`\`
+          $tail
+          \`\`\`"
+                echo "::endgroup::"; continue
+              fi
+              comment "$pr" "Main moved and this PR now conflicts in files only its session can resolve:
+
+          $files
+
+          The session that owns this PR: run \`scripts/sync-main.sh\`, resolve these, \`scripts/sync-main.sh --continue\`, \`scripts/check.sh\`, then push. Generated files and Cargo.toml additions are handled by the script."
+            fi
+            echo "::endgroup::"
+          done

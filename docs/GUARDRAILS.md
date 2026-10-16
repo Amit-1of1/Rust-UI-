@@ -54,7 +54,7 @@ The goal is a personal shadcn-inspired component library with Motion-style anima
 
 ## Parallel sessions
 
-Several sessions (and PRs) run at once. Every conflict in PRs #17 to #40 came from two branches adding lines at the same place in a shared file: the top of `CHANGELOG.md` and `docs/MIGRATION.md` (all four PRs open on 2026-10-15), the end of this file (12 merges), the module, prelude, demo and test lists (`lib.rs`, `mod.rs`, `tests/common/mod.rs`, `tests/demos.rs`, `tests/render.rs`), and generated files (`registry.json`, `component.json`, `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots). Those places are now either generated or one file per change, so the steps below are mostly mechanical.
+Several sessions (and PRs) run at once. Every conflict in PRs #17 to #40 came from two branches adding lines at the same place in a shared file: the top of `CHANGELOG.md` and `docs/MIGRATION.md` (all four PRs open on 2026-10-15), the end of this file (12 merges), the module, prelude, demo and test lists (`lib.rs`, `mod.rs`, `tests/common/mod.rs`, `tests/demos.rs`, `tests/render.rs`), and generated files (`registry.json`, `component.json`, `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots). Those places are now either generated or one file per change, so the steps below are mostly mechanical. Who does what, and the sync bot that merges main into every open PR after each merge, are in [PROTOCOL.md](PROTOCOL.md).
 
 **Starting**
 
@@ -71,12 +71,12 @@ Several sessions (and PRs) run at once. Every conflict in PRs #17 to #40 came fr
 
 **Syncing**
 
-- [ ] **Run `scripts/sync-main.sh` before every push, and whenever GitHub or a notice says the PR conflicts.** It merges `origin/main` (a merge commit, never a rebase or force-push), takes main's copy of each generated file and regenerates it, and lists anything left to resolve by hand; after resolving, `scripts/sync-main.sh --continue`. `scripts/check.sh` fails while the branch is behind `origin/main`.
+- [ ] **Run `scripts/sync-main.sh` before every push, and whenever GitHub, a notice or the sync bot says the PR conflicts.** It merges `origin/main` (a merge commit, never a rebase or force-push), takes main's copy of each generated file and regenerates it, and lists anything left to resolve by hand; after resolving, `scripts/sync-main.sh --continue`. `scripts/check.sh` fails while the branch is behind `origin/main`.
 - [ ] **A conflict in `CHANGELOG.md` or `MIGRATION.md`** means the branch predates fragments: keep main's side and move the branch's entries into `changes/`.
 
 **Merging (the owner merges; sessions never merge)**
 
-- [ ] **One PR at a time, and only when it is green on a branch that contains the latest `main`.** After a merge, every other open PR's session syncs (sync-main, check, push) before the next merge.
+- [ ] **One PR at a time, and only when it is green on a branch that contains the latest `main`.** After a merge, wait for the "Sync open PRs with main" workflow to finish; a PR it could not sync gets a comment, and that PR's session syncs (sync-main, check, push) before the next merge.
 - [ ] **Order:** fork pins and dependency bumps first (they rewrite every `component.json` and `Cargo.lock`), then shared infrastructure (scripts, CI, build), then features, smallest first. When two PRs touch the same component, merge the one that was ready first and let the other sync.
 - [ ] **Before a release,** fold the fragments on `main` in a PR of its own: `cargo run -p rust-ui-cli -- changelog` (with `FOLDING_CHANGELOG=1 scripts/check.sh`).
 
