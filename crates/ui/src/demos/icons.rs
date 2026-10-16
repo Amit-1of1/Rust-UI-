@@ -1,4 +1,4 @@
-use crate::components::button::{Button, ButtonVariant};
+use crate::components::button::{Button, ButtonVariant, IconButton};
 use crate::components::icons::{
     lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings, Star,
     Trash,
@@ -53,8 +53,8 @@ pub fn Demo() -> Element {
                     Trash { size: "1rem", "aria-hidden": "true" }
                     "Delete"
                 }
-                // Icon-only: the button carries the name.
-                Button { variant: ButtonVariant::Ghost, "aria-label": "Search",
+                // Icon-only: `IconButton`'s required `label` carries the name.
+                IconButton { label: "Search", variant: ButtonVariant::Ghost,
                     Search { size: "1rem", "aria-hidden": "true" }
                 }
                 // Or with hidden text (the theme's `sr-only` class), which translators and

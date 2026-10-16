@@ -64,8 +64,8 @@ pub fn Trips() -> Element {
         AlertDialog {
             open: confirming(),
             on_open_change: move |v| confirming.set(v),
-            AlertDialogTitle { "Cancel this trip?" }
-            AlertDialogDescription { "{target_name}: the host is told right away. This can't be undone." }
+            title: "Cancel this trip?",
+            description: "{target_name}: the host is told right away. This can't be undone.",
             AlertDialogActions {
                 AlertDialogCancel { "Keep trip" }
                 AlertDialogAction {

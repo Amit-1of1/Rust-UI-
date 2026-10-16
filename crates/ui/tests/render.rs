@@ -86,8 +86,8 @@ fn closed_overlays_render_without_panicking() {
         rsx! {
             ThemeStyles {}
             ToastProvider {
-                Dialog { open: false, DialogTitle { "Dialog" } }
-                Sheet { open: false, SheetTitle { "Sheet" } }
+                Dialog { open: false, title: "Dialog" }
+                Sheet { open: false, title: "Sheet" }
                 PopoverRoot { PopoverTrigger { "Pop" } PopoverContent { "Body" } }
                 DropdownMenu {
                     DropdownMenuTrigger { "Menu" }
@@ -339,7 +339,7 @@ fn drawer_renders_nothing_visible_while_closed() {
     let html = render(|| {
         rsx! {
             Drawer { open: false,
-                DrawerTitle { "Move goal" }
+                title: "Move goal",
             }
         }
     });
@@ -541,8 +541,8 @@ fn alert_dialog_closed_renders_no_dialog() {
         rsx! {
             p { "outside" }
             AlertDialog { open: false,
-                AlertDialogTitle { "Delete item" }
-                AlertDialogDescription { "Are you sure?" }
+                title: "Delete item",
+                description: "Are you sure?",
                 AlertDialogActions {
                     AlertDialogCancel { "Cancel" }
                     AlertDialogAction { "Delete" }
@@ -790,8 +790,8 @@ fn dialog_renders_nothing_while_closed() {
     let html = render(|| {
         rsx! {
             Dialog { open: false,
-                DialogTitle { "Are you sure?" }
-                DialogDescription { "This cannot be undone." }
+                title: "Are you sure?",
+                description: "This cannot be undone.",
             }
         }
     });
@@ -1048,9 +1048,7 @@ fn separator_exposes_separator_role_and_orientation() {
 fn sheet_renders_nothing_during_ssr() {
     let html = render(|| {
         rsx! {
-            Sheet { open: true,
-                SheetHeader { SheetTitle { "Edit profile" } }
-            }
+            Sheet { open: true, title: "Edit profile" }
         }
     });
     // The dialog mounts client-side only, so even an open sheet leaves no markup.

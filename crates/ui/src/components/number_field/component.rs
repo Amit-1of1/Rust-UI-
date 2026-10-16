@@ -1,4 +1,4 @@
-use crate::components::button::{Button, ButtonSize, ButtonVariant};
+use crate::components::button::{ButtonVariant, IconButton, IconButtonSize};
 use crate::components::field::{Field, FieldDescription, FieldError, FieldLabel};
 use crate::components::form::FormField;
 use crate::components::icons::{Minus, Plus};
@@ -89,11 +89,11 @@ pub fn NumberInput(
         div { class: Styles::dx_number_input, "data-disabled": disabled.then_some("true"),
             // The buttons are for pointers; keyboard users have the arrow keys, so they are
             // left out of the Tab order (WAI-ARIA spin button pattern).
-            Button {
+            IconButton {
+                label: decrease,
                 variant: ButtonVariant::Outline,
-                size: ButtonSize::IconSm,
+                size: IconButtonSize::Sm,
                 tabindex: "-1",
-                aria_label: decrease,
                 disabled: disabled || at_min,
                 onclick: move |_| commit(current - step),
                 Minus { "aria-hidden": "true", size: "1rem" }
@@ -145,11 +145,11 @@ pub fn NumberInput(
                 },
                 ..merge_attributes(vec![attributes!(input { class: Styles::dx_number_input_box }), attributes, wiring]),
             }
-            Button {
+            IconButton {
+                label: increase,
                 variant: ButtonVariant::Outline,
-                size: ButtonSize::IconSm,
+                size: IconButtonSize::Sm,
                 tabindex: "-1",
-                aria_label: increase,
                 disabled: disabled || at_max,
                 onclick: move |_| commit(current + step),
                 Plus { "aria-hidden": "true", size: "1rem" }

@@ -1,6 +1,5 @@
 use crate::components::alert_dialog::{
-    AlertDialog, AlertDialogAction, AlertDialogActions, AlertDialogCancel, AlertDialogDescription,
-    AlertDialogTitle,
+    AlertDialog, AlertDialogAction, AlertDialogActions, AlertDialogCancel,
 };
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::card::{
@@ -199,8 +198,8 @@ pub fn Settings01(
         AlertDialog {
             open: confirm_delete(),
             on_open_change: move |v| confirm_delete.set(v),
-            AlertDialogTitle { "Delete your account?" }
-            AlertDialogDescription { "Your profile and everything in it will be removed. This can't be undone." }
+            title: "Delete your account?",
+            description: "Your profile and everything in it will be removed. This can't be undone.",
             AlertDialogActions {
                 AlertDialogCancel { "Cancel" }
                 AlertDialogAction { on_click: move |_| on_delete_account.call(()), "Delete account" }

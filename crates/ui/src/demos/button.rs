@@ -1,4 +1,5 @@
 use crate::components::button::*;
+use crate::components::icons::{Plus, Settings, Trash};
 use dioxus::prelude::*;
 
 #[component]
@@ -18,6 +19,17 @@ pub fn Demo() -> Element {
             Button { "Default" }
             Button { size: ButtonSize::Lg, "Large" }
             Button { disabled: true, "Disabled" }
+        }
+        // Icon-only buttons need a `label` (their accessible name); leaving it out doesn't compile.
+        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
+            IconButton { label: "Add", size: IconButtonSize::Xs, Plus { size: "0.75rem", "aria-hidden": "true" } }
+            IconButton { label: "Settings", variant: ButtonVariant::Outline, size: IconButtonSize::Sm,
+                Settings { size: "1rem", "aria-hidden": "true" }
+            }
+            IconButton { label: "Settings", variant: ButtonVariant::Secondary, Settings { size: "1rem", "aria-hidden": "true" } }
+            IconButton { label: "Delete", variant: ButtonVariant::Destructive, size: IconButtonSize::Lg,
+                Trash { size: "1.25rem", "aria-hidden": "true" }
+            }
         }
     }
 }

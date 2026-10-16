@@ -1,9 +1,7 @@
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::icons::PanelLeft;
 use crate::components::separator::Separator;
-use crate::components::sheet::{
-    Sheet, SheetContentClose, SheetDescription, SheetHeader, SheetSide, SheetTitle,
-};
+use crate::components::sheet::{Sheet, SheetContentClose, SheetSide};
 use crate::components::skeleton::Skeleton;
 use crate::components::tooltip::{Tooltip, TooltipContent, TooltipTrigger};
 use crate::components::ui_strings::use_ui_strings;
@@ -320,11 +318,10 @@ pub fn Sidebar(
                 "data-sidebar": "sidebar",
                 "data-slot": "sidebar",
                 "data-mobile": "true",
+                title: t.sidebar.clone(),
+                description: t.sidebar_description.clone(),
+                hide_title: true,
                 SheetContentClose { class: Styles::dx_sidebar_sheet_close }
-                SheetHeader { class: Styles::dx_sr_only,
-                    SheetTitle { {t.sidebar.clone()} }
-                    SheetDescription { {t.sidebar_description.clone()} }
-                }
                 div {
                     class: Styles::dx_sidebar_mobile_inner,
                     role: "navigation",

@@ -114,7 +114,10 @@ pub struct AvatarImageProps {
 
     pub src: String,
 
-    #[props(default)]
+    /// The image's text alternative. Required, so leaving it out is a compile error; pass
+    /// `alt: ""` on purpose when the image adds nothing (the avatar's `label` names it, or the
+    /// name is shown beside it).
+    #[props(into)]
     pub alt: String,
 
     #[props(extends = GlobalAttributes)]
@@ -163,13 +166,42 @@ pub fn AvatarFallback(props: AvatarFallbackProps) -> Element {
 }
 
 /// The props for the [`ImageAvatar`] convenience component.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ImageAvatar { src: "/ada.png", alt: "Ada Lovelace", "AL" } }
+/// # }
+/// ```
+///
+/// Leaving `alt` out is a compile error ("Missing required field alt"), for
+/// [`AvatarImage`] too:
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ImageAvatar { src: "/ada.png", "AL" } }
+/// # }
+/// ```
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Avatar { AvatarImage { src: "/ada.png" } } }
+/// # }
+/// ```
 #[derive(Props, Clone, PartialEq)]
 pub struct ImageAvatarProps {
     /// The image source URL.
     pub src: String,
 
-    /// The image alt text.
-    #[props(default)]
+    /// The image's text alternative, which also names the avatar when there is no `label`.
+    /// Required, so leaving it out is a compile error; pass `alt: ""` on purpose when the name
+    /// is shown beside the avatar.
+    #[props(into)]
     pub alt: String,
 
     /// Callback when image loads successfully.

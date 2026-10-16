@@ -301,8 +301,8 @@ fn NewTask(
 
     rsx! {
         Dialog { open, on_open_change: move |v| on_open_change.call(v),
-            DialogTitle { "New task" }
-            DialogDescription { "Add a task to the top of the board." }
+            title: "New task",
+            description: "Add a task to the top of the board.",
             Form {
                 state: form,
                 on_valid: move |_| {
