@@ -105,8 +105,8 @@ pub fn Settings() -> Element {
         AlertDialog {
             open: confirm_reset(),
             on_open_change: move |v| confirm_reset.set(v),
-            AlertDialogTitle { "Reset the workspace?" }
-            AlertDialogDescription { "This demo only pretends; nothing is deleted." }
+            title: "Reset the workspace?",
+            description: "This demo only pretends; nothing is deleted.",
             AlertDialogActions {
                 AlertDialogCancel { "Cancel" }
                 AlertDialogAction {

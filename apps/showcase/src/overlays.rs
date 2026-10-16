@@ -117,8 +117,8 @@ pub fn Overlays() -> Element {
             }
         }
         Dialog { open: dialog(), on_open_change: move |v| dialog.set(v),
-            DialogTitle { "Delete project?" }
-            DialogDescription { "This removes the project and its deployments. It cannot be undone." }
+            title: "Delete project?",
+            description: "This removes the project and its deployments. It cannot be undone.",
             div { class: "sc-dialog-actions",
                 Button { variant: ButtonVariant::Outline, onclick: move |_| dialog.set(false), "Cancel" }
                 Button {
@@ -132,11 +132,11 @@ pub fn Overlays() -> Element {
                 }
             }
         }
-        Sheet { open: sheet(), on_open_change: move |v| sheet.set(v),
-            SheetHeader {
-                SheetTitle { "Notifications" }
-                SheetDescription { "Choose what reaches you." }
-            }
+        Sheet {
+            open: sheet(),
+            on_open_change: move |v| sheet.set(v),
+            title: "Notifications",
+            description: "Choose what reaches you.",
             div { class: "sc-sheet-body",
                 for (i , label) in ["Mentions", "Deploys", "Billing"].into_iter().enumerate() {
                     div { key: "{label}", class: "sc-row",

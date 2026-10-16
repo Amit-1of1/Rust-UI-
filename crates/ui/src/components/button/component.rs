@@ -30,6 +30,8 @@ impl ButtonVariant {
     }
 }
 
+/// A [`Button`]'s size. A button that shows only an icon is an [`IconButton`], which has its own
+/// [`IconButtonSize`] and a required `label`.
 #[derive(Copy, Clone, PartialEq, Default)]
 #[non_exhaustive]
 pub enum ButtonSize {
@@ -38,10 +40,6 @@ pub enum ButtonSize {
     #[default]
     Default,
     Lg,
-    Icon,
-    IconXs,
-    IconSm,
-    IconLg,
 }
 
 impl ButtonSize {
@@ -51,10 +49,6 @@ impl ButtonSize {
             ButtonSize::Sm => "sm",
             ButtonSize::Default => "default",
             ButtonSize::Lg => "lg",
-            ButtonSize::Icon => "icon",
-            ButtonSize::IconXs => "icon-xs",
-            ButtonSize::IconSm => "icon-sm",
-            ButtonSize::IconLg => "icon-lg",
         }
     }
 }
@@ -88,6 +82,115 @@ pub fn Button(
         class: Styles::dx_button,
         "data-style": variant.class(),
         "data-size": size.class(),
+    });
+    let merged = merge_attributes(vec![base, attributes]);
+
+    rsx! {
+        button {
+            onclick: move |event| {
+                if let Some(f) = &onclick {
+                    f.call(event);
+                }
+            },
+            onmousedown: move |event| {
+                if let Some(f) = &onmousedown {
+                    f.call(event);
+                }
+            },
+            onmouseup: move |event| {
+                if let Some(f) = &onmouseup {
+                    f.call(event);
+                }
+            },
+            onkeydown: move |event| {
+                if let Some(f) = &onkeydown {
+                    f.call(event);
+                }
+            },
+            ..merged,
+            {children}
+        }
+    }
+}
+
+/// An [`IconButton`]'s size: a square button sized for one icon.
+#[derive(Copy, Clone, PartialEq, Default)]
+#[non_exhaustive]
+pub enum IconButtonSize {
+    Xs,
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
+impl IconButtonSize {
+    pub fn class(&self) -> &'static str {
+        match self {
+            IconButtonSize::Xs => "icon-xs",
+            IconButtonSize::Sm => "icon-sm",
+            IconButtonSize::Default => "icon",
+            IconButtonSize::Lg => "icon-lg",
+        }
+    }
+}
+
+/// A button that shows only an icon, such as a close or search button.
+///
+/// `label` is required: with no text inside, it is the button's only accessible name
+/// (`aria-label`), so "Close" or "Search" instead of nothing. Mark the icon itself decorative.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # use ui::icons::Search;
+/// # fn app() -> Element {
+/// rsx! { IconButton { label: "Search", variant: ButtonVariant::Ghost, Search { "aria-hidden": "true" } } }
+/// # }
+/// ```
+///
+/// Leaving `label` out is a compile error ("Missing required field label"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # use ui::icons::Search;
+/// # fn app() -> Element {
+/// rsx! { IconButton { variant: ButtonVariant::Ghost, Search { "aria-hidden": "true" } } }
+/// # }
+/// ```
+///
+/// and so is squaring a plain [`Button`] with an icon size, which no longer exists:
+///
+/// ```compile_fail,E0599
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Button { size: ButtonSize::Icon, "+" } }
+/// # }
+/// ```
+#[component]
+pub fn IconButton(
+    /// What the button does, read by screen readers ("Close", "Search").
+    #[props(into)]
+    label: String,
+    #[props(default)] variant: ButtonVariant,
+    #[props(default)] size: IconButtonSize,
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=button)]
+    attributes: Vec<Attribute>,
+    onclick: Option<EventHandler<MouseEvent>>,
+    onmousedown: Option<EventHandler<MouseEvent>>,
+    onmouseup: Option<EventHandler<MouseEvent>>,
+    onkeydown: Option<EventHandler<KeyboardEvent>>,
+    /// The icon.
+    children: Element,
+) -> Element {
+    let base = attributes!(button {
+        class: Styles::dx_button,
+        "data-style": variant.class(),
+        "data-size": size.class(),
+        aria_label: label,
     });
     let merged = merge_attributes(vec![base, attributes]);
 

@@ -11,3 +11,7 @@
 - button "Default"
 - button "Large"
 - button "Disabled" [disabled]
+- button "Add"
+- button "Settings"
+- button "Settings"
+- button "Delete"

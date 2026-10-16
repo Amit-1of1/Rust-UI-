@@ -213,10 +213,8 @@ pub fn Customers() -> Element {
         AlertDialog {
             open: confirm_delete(),
             on_open_change: move |v: bool| confirm_delete.set(v),
-            AlertDialogTitle { "Delete customer?" }
-            AlertDialogDescription {
-                "{deleting_name.clone().unwrap_or_default()} and their history will be removed. This can't be undone."
-            }
+            title: "Delete customer?",
+            description: "{deleting_name.clone().unwrap_or_default()} and their history will be removed. This can't be undone.",
             AlertDialogActions {
                 AlertDialogCancel { "Cancel" }
                 AlertDialogAction {
@@ -303,10 +301,8 @@ fn CustomerSheet(customer: Option<Customer>, on_close: EventHandler<()>) -> Elem
                 }
             },
             "data-side": SheetSide::Right.as_str(),
-            SheetHeader {
-                SheetTitle { "Edit customer" }
-                SheetDescription { "Changes are saved to this session only." }
-            }
+            title: "Edit customer",
+            description: "Changes are saved to this session only.",
             Form {
                 class: "db-sheet-form",
                 state: form,
@@ -362,8 +358,8 @@ fn AddCustomer() -> Element {
         Dialog {
             open: (store.adding)() && mounted(),
             on_open_change: move |v| store.adding.set(v),
-            DialogTitle { "Add customer" }
-            DialogDescription { "They'll get an invite email (not in this demo)." }
+            title: "Add customer",
+            description: "They'll get an invite email (not in this demo).",
             Form {
                 state: form,
                 on_valid: move |_| {
