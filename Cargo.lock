@@ -5071,6 +5071,8 @@ dependencies = [
  "manganis-core",
  "rust-ui-kit",
  "showcase",
+ "stylo",
+ "taffy",
  "tokio",
 ]
 
