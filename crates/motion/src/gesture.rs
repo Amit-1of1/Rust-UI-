@@ -7,7 +7,7 @@ use crate::{use_spring, Spring, SpringPreset};
 use dioxus::prelude::*;
 
 /// Milliseconds on a monotonic clock.
-fn now_ms() -> f64 {
+pub(crate) fn now_ms() -> f64 {
     #[cfg(target_arch = "wasm32")]
     {
         web_sys::window()
@@ -139,7 +139,7 @@ impl SwipeTracker {
 /// Keep receiving this pointer's events after it leaves the element (web only; no JS needed).
 /// Captures on the event target (a child of the element is fine: its events bubble to us); with
 /// Dioxus' delegated listeners `current_target` would be the document root, not the element.
-fn capture_pointer(e: &Event<PointerData>) {
+pub(crate) fn capture_pointer(e: &Event<PointerData>) {
     #[cfg(target_arch = "wasm32")]
     {
         use web_sys::wasm_bindgen::JsCast;

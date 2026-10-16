@@ -69,6 +69,11 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 | `use_spring`, `Spring` | Thin wrapper that may change when the engine does. |
 | `FlipList`, `FlipItem` | Own FLIP implementation; web and desktop webview only. |
 | `SwipeDismiss`, `SwipeDirection`, `SwipeOutcome`, `SwipeTracker` | Gesture API grew `vertical`/`one_way` recently and depends on pointer capture (none on native). |
+| `motion::physics` (`SpringConfig`, `SpringState`, `Glide`, `GlideConfig`, `Animation`, `VelocityTracker`, `rubber_band`, `rubber_band_clamp`, `zoom_about`, `pan_bounds`) | Our own spring and momentum maths, new; names and defaults may still move. |
+| `use_motion_value`, `MotionValue` | New frame loop over `motion::physics`; may change with the engine's timer. |
+| `Draggable`, `DragAxis`, `DragBounds`, `DragEnd`, `DragModel` | New gesture API; pointer capture on web only. |
+| `PinchZoom`, `PinchTracker`, `PinchFrame`, `pinch_view`, `zoom_view`, `clamp_view` | New gesture API; two-finger pinch needs touch, the rest works with mouse and keyboard. |
+| `LayoutGroup`, `LayoutItem`, `LayoutRect`, `LayoutDelta` | New layout and shared-element animation; web and desktop webview only (needs element measurement). |
 
 ### Internal
 
