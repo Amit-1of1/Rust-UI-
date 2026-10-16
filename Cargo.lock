@@ -5072,6 +5072,8 @@ dependencies = [
  "rust-ui-kit",
  "serde",
  "showcase",
+ "stylo",
+ "taffy",
  "tokio",
  "toml",
 ]
