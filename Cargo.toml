@@ -33,8 +33,9 @@ debug = 0
 # Native (Blitz) fixes, carried on forks as small patches on the exact upstream releases we use.
 # Pinned to commits; the branch each commit is on is named alongside. See docs/FORKS.md.
 [patch.crates-io]
-# Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4
-blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "a55f2909d06ea6168ee9bd5328c5c450be9ff0dd" }
+# Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4; the newest commit (a095949) is on branch
+# claude/showcase-multi-target-tc6fhc until rust-ui/blitz-dom-0.2.4 is fast-forwarded to it.
+blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "a0959491764b9cf8694fe32ba68b420d11cf9fb6" }
 # Amit-1of1/blitz, branch rust-ui/blitz-traits-0.2.0
 blitz-traits = { git = "https://github.com/Amit-1of1/blitz", rev = "14f766f1e18a9daad1465ca5d9d9f7f52f0ccf9e" }
 # Amit-1of1/blitz, branch rust-ui/blitz-net-0.2.1

@@ -42,7 +42,7 @@ Only what was actually run is marked as working.
 | Target | Status | How it was checked |
 | --- | --- | --- |
 | Web (Chromium) | Works | `showcase.mjs` passes at desktop and phone size, light and dark |
-| Web (Firefox, WebKit) | Not run here | CI runs `showcase.mjs` on both through `scripts/e2e.sh` |
+| Web (Firefox, WebKit) | Works | `showcase.mjs` passes on both in CI (`scripts/e2e.sh`) |
 | Desktop, native, Linux | Works, with the gaps below | Real `dx build --renderer native` window under Xvfb (software Vulkan): navigated with real clicks, dark mode, window resized to 390x844 to get the phone layout, opened a dialog; no panics. Plus the headless tests |
 | Desktop, native, macOS / Windows | Not run | Same crate and renderer; no machine here |
 | Phone layout on native | Works (headless and resized window) | Headless tests at 390x844, and the real window resized to 390x844 |
@@ -52,16 +52,13 @@ Only what was actually run is marked as working.
 
 ## Known gaps on native
 
-Found while building this app; none needs code in the app except the first workaround.
+Found while building this app; none needs code in the app.
 
-1. **`display: contents` wrappers (Blitz 0.2.4 bug).** An element whose parent is
-   `display: contents` loses its own box: Blitz lays out its children in its place. With the
-   app inside `ThemeScope` and `ToastProvider` (both such wrappers) the whole app was as wide
-   as its longest line. `showcase.css` turns those two wrappers into plain blocks under
-   `.sc-root`. The real fix is a small patch to `collect_complex_layout_children` in
-   blitz-dom (recurse into a contents child's children as direct children), the same thing
-   upstream Blitz main does; it belongs on the `rust-ui/blitz-dom-0.2.4` fork branch.
-   Every app that wraps content in `ThemeScope` on native is affected.
+1. **`display: contents` wrappers (fixed in the blitz-dom fork).** Blitz 0.2.4 dropped the
+   box of an element inside a `display: contents` parent (`ThemeScope`, `ToastProvider`),
+   so the whole app was as wide as its longest line. The pinned blitz-dom fork now treats a
+   contents child's children as direct children (docs/FORKS.md); the engine test
+   `children_of_display_contents_keep_their_box` covers it, and the app needs no CSS for it.
 2. **Hairline outlines.** `box-shadow` with zero blur and a spread (the kit's 1px input,
    select, popover and menu outlines) is not drawn by the CPU painter used in headless
    captures, so those controls look borderless in `target/native-headless`. The windowed

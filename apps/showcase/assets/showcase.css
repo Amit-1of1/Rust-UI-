@@ -9,15 +9,6 @@ body {
   font-family: system-ui, sans-serif;
 }
 
-/* Blitz 0.2.4 drops the box of an element whose parent is `display: contents` (it lays out
-   the element's children in its place), so the whole app came out at the width of its longest
-   line. ThemeScope and ToastProvider are such wrappers; as plain blocks they look the same on
-   every renderer. README.md, "Known gaps". */
-.sc-root > div[style^="display: contents"],
-.sc-root > div[style^="display: contents"] > div[style^="display: contents"] {
-  display: block !important;
-}
-
 /* The app paints its own background: on native the theme lives on ThemeScope, below <body>. */
 .sc-app {
   display: flex;

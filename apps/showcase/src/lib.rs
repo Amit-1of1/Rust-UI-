@@ -95,13 +95,10 @@ pub fn App() -> Element {
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: SHOWCASE_CSS }
-        // Native has no JavaScript to set the theme on <html>; ThemeScope carries it there.
-        // `.sc-root` turns it and ToastProvider from `display: contents` into plain blocks
-        // (showcase.css explains why).
-        div { class: "sc-root",
-            ThemeScope {
-                ToastProvider { Shell {} }
-            }
+        // Native has no JavaScript to set the theme on <html>; ThemeScope carries it there
+        // (a `display: contents` box, so the web layout is unchanged).
+        ThemeScope {
+            ToastProvider { Shell {} }
         }
     }
 }
