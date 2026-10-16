@@ -164,10 +164,15 @@ pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
         // `crates/ui/src/components/<name>/../../../assets/theme.css`
         let theme =
             Path::new("../../..").join(Path::new(THEME_FILE).strip_prefix("crates/ui").unwrap());
+        // The keyboard contract drives this repo's tests (docs/CONTRACTS.md); apps don't need it.
+        let mut exclude = vec!["docs.md", "component.json"];
+        if root.join(&dir).join(crate::contract::FILE).is_file() {
+            exclude.push(crate::contract::FILE);
+        }
         let manifest = json!({
             "name": item.name,
             "description": description(&docs),
-            "exclude": ["docs.md", "component.json"],
+            "exclude": exclude,
             "cargoDependencies": cargo_dependencies(&source, &primitives, &git),
             "componentDependencies": item.registry_dependencies.iter().map(|d| json!({"name": d, "git": git})).collect::<Vec<_>>(),
             "globalAssets": [theme.to_string_lossy()],

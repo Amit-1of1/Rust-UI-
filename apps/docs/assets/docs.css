@@ -102,6 +102,15 @@ body {
   line-height: 1.5;
 }
 .docs-prose pre code { padding: 0; background: none; }
+/* The keyboard table generated from contract.toml. */
+.docs-prose table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.docs-prose th, .docs-prose td {
+  padding: 0.5rem 0.75rem;
+  border-block-end: 1px solid var(--primary-color-6);
+  text-align: start;
+  vertical-align: top;
+}
+.docs-prose th { font-weight: 600; }
 
 @media (max-width: 52rem) {
   .docs-layout { grid-template-columns: minmax(0, 1fr); }

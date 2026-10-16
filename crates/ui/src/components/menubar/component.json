@@ -11,7 +11,8 @@
   "description": "The Menubar component can be used to display a menu bar with collapsible menus.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

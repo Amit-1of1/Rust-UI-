@@ -5,9 +5,10 @@
 //! Blocks (whole screens) get pages too, from their `docs.md` and signatures; their docs carry
 //! the example. `rust-ui docs <name>` prints the same page.
 
+use crate::contract::Contract;
 use crate::docsgen::title;
 use crate::manifest::description;
-use crate::{build, Kind, Registry, DEMOS_DIR};
+use crate::{build, Kind, Registry, COMPONENTS_DIR, DEMOS_DIR};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -223,6 +224,15 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
     if !text.is_empty() {
         out.push_str(text);
         out.push_str("\n\n");
+    }
+    // The keyboard table and ARIA pattern, from contract.toml (tested on web and native).
+    if item.kind == Kind::Component {
+        if let Some(c) =
+            Contract::load(&root.join(COMPONENTS_DIR), name).map_err(io::Error::other)?
+        {
+            out.push_str(&c.markdown());
+            out.push('\n');
+        }
     }
 
     let mut api = String::new();

@@ -11,7 +11,8 @@
   "description": "The Toggle component is used to create a toggle button that can be pressed or unpressed. It is useful for creating a binary option, such as enabling or disabling a feature.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

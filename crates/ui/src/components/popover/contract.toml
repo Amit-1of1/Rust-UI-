@@ -1,0 +1,34 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Disclosure (non-modal dialog)"
+roles = ["dialog"]
+
+native_note = "Closing works, but focus is left on the removed content instead of going back to the trigger."
+
+[parts]
+trigger = "button"
+content = "[role=dialog]"
+
+[[keys]]
+key = "Enter"
+when = "On the trigger"
+does = "Opens the popover."
+native = true
+test = """
+focus trigger
+press Enter
+visible content
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open popover"
+does = "Closes it and returns focus to the trigger."
+native = false
+test = """
+focus trigger
+press Enter
+press Escape
+hidden content
+focused trigger
+"""

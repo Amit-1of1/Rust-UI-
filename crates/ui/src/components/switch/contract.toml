@@ -1,0 +1,22 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Switch"
+apg = "switch"
+roles = ["switch"]
+
+gaps = ["Enter does not toggle it (optional in the APG); Space does."]
+
+[parts]
+switch = "[role=switch]"
+
+[[keys]]
+key = "Space"
+when = "On the switch"
+does = "Turns it on or off."
+native = true
+test = """
+focus switch
+press Space
+attr switch aria-checked=true
+"""
+

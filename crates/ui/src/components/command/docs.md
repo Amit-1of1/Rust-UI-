@@ -7,5 +7,4 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 ## Accessibility
 
 - Role and name: a `combobox` input controlling a labelled `listbox`, with `aria-activedescendant` on the highlighted option
-- Keyboard: Ctrl+K opens it (web, with `hotkey: "k"`); type to filter, Arrow keys move the highlight, Enter runs it, Escape closes
 - Reduced motion: none

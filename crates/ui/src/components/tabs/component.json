@@ -11,7 +11,8 @@
   "description": "The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

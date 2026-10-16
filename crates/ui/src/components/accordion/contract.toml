@@ -1,0 +1,43 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Accordion"
+apg = "accordion"
+roles = []
+
+[parts]
+header = "button[aria-expanded]"
+
+[[keys]]
+key = "Enter"
+when = "On a section header"
+does = "Opens or closes that section."
+native = true
+test = """
+focus header@1
+press Enter
+attr header@1 aria-expanded=true
+press Enter
+attr header@1 aria-expanded=false
+"""
+
+[[keys]]
+key = "Space"
+when = "On a section header"
+does = "Opens or closes that section."
+native = true
+test = """
+focus header@1
+press Space
+attr header@1 aria-expanded=true
+"""
+
+[[keys]]
+key = "Tab"
+when = "On a section header"
+does = "Moves to the next header (or into the open section)."
+native = true
+test = """
+focus header@1
+press Tab
+focused header@2
+"""

@@ -3,6 +3,7 @@
 //! Errors fail the command; warnings are reported but do not. Everything here reads
 //! files only, so it is fast enough to run in the gate.
 
+use crate::contract::{self, Contract};
 use crate::{COMPONENTS_DIR, DEMOS_DIR, THEME_FILE};
 use std::collections::HashSet;
 use std::fs;
@@ -303,6 +304,9 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
         if !has_test(&render, name) {
             add(Level::Warning, name, "no render test".into());
         }
+        for (level, message) in contract_findings(root, name, has_demo) {
+            add(level, name, message);
+        }
         let css = read(&folder.join("style.css"));
         for (line, text) in hard_coded_colours(&css) {
             add(
@@ -327,6 +331,76 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
     }
     out.sort_by_key(|a| a.level == Level::Warning);
     Ok(out)
+}
+
+/// Markup in a demo's snapshot that means the component has keyboard behaviour worth a
+/// contract.
+const INTERACTIVE: &[&str] = &[
+    "role=\"tablist\"",
+    "role=\"radiogroup\"",
+    "role=\"slider\"",
+    "role=\"switch\"",
+    "role=\"checkbox\"",
+    "role=\"combobox\"",
+    "role=\"listbox\"",
+    "role=\"menubar\"",
+    "role=\"menu\"",
+    "role=\"toolbar\"",
+    "role=\"spinbutton\"",
+    "aria-haspopup",
+    "aria-expanded",
+];
+
+/// The contract checks (docs/CONTRACTS.md): a contract must be sound (every documented key and
+/// role is tested), its component needs a demo for the tests to drive, and the docs may not
+/// hand-write a keyboard section beside it. Components whose demo has interactive markup and
+/// no contract get a warning.
+fn contract_findings(root: &Path, name: &str, has_demo: bool) -> Vec<(Level, String)> {
+    let mut out = Vec::new();
+    let contract = match Contract::load(&root.join(COMPONENTS_DIR), name) {
+        Ok(c) => c,
+        Err(e) => return vec![(Level::Error, e)],
+    };
+    let Some(contract) = contract else {
+        let snapshot = read(&root.join(format!("crates/ui/tests/snapshots/{name}.html")));
+        if INTERACTIVE.iter().any(|m| snapshot.contains(m)) {
+            out.push((
+                Level::Warning,
+                format!(
+                    "keyboard-operable demo but no {} (docs/CONTRACTS.md)",
+                    contract::FILE
+                ),
+            ));
+        }
+        return out;
+    };
+    for p in contract.problems() {
+        out.push((Level::Error, format!("{}: {p}", contract::FILE)));
+    }
+    if !has_demo {
+        out.push((
+            Level::Error,
+            format!(
+                "{} needs a demo for the keyboard tests to run",
+                contract::FILE
+            ),
+        ));
+    }
+    let docs = read(&root.join(COMPONENTS_DIR).join(name).join("docs.md"));
+    for (i, line) in docs.lines().enumerate() {
+        let l = line.trim_start();
+        if l.starts_with("## Keyboard") || l.starts_with("- Keyboard:") {
+            out.push((
+                Level::Error,
+                format!(
+                    "docs.md:{} describes the keyboard by hand; the table generated from {} replaces it",
+                    i + 1,
+                    contract::FILE
+                ),
+            ));
+        }
+    }
+    out
 }
 
 #[cfg(test)]

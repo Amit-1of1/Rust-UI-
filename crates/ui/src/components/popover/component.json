@@ -11,7 +11,8 @@
   "description": "The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

@@ -15,6 +15,17 @@ Toggle {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Button (toggle)](https://www.w3.org/WAI/ARIA/apg/patterns/button/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On the toggle | Presses or releases it. | yes |
+| Enter | On the toggle | Presses or releases it. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

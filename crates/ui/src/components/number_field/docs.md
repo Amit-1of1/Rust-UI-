@@ -18,7 +18,7 @@ rsx! { NumberField { field: nights, label: "Nights", min: 1.0, max: 30.0 } }
 ## Accessibility
 
 - Role and name: the box is `role="spinbutton"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; it is named by `label` (or by the visible label in `NumberField`). The buttons are named "Decrease {label}" and "Increase {label}" (`UiStrings::decrease` / `increase`)
-- Keyboard: Up/Down change it by `step`, Page Up/Page Down by ten steps, Home/End go to `min`/`max`, Enter applies typed text. The buttons are left out of the Tab order, as in the WAI-ARIA spin button pattern, and disable themselves at the ends
+- Buttons: left out of the Tab order, as in the WAI-ARIA spin button pattern, and disabled at the ends. Typed text is applied on Enter or when the field loses focus. The keys are in the table below
 - Forms: `NumberField` wires `aria-invalid` and `aria-describedby`, and a failed submit focuses the box
 - Reduced motion: nothing animates
 

@@ -139,6 +139,18 @@ Accordion {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Accordion](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a section header | Opens or closes that section. | yes |
+| Space | On a section header | Opens or closes that section. | yes |
+| Tab | On a section header | Moves to the next header (or into the open section). | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -301,6 +313,25 @@ rsx! {
 ## Accessibility
 
 - `title` is a required prop, so an alert dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). It can't be hidden.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the alert dialog and moves focus into it. | yes |
+| Tab | Inside the alert dialog | Moves between its buttons; focus stays inside. | yes |
+| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The alert dialog is shown over the page.
+- `closed`: Only the trigger is shown.
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -2012,6 +2043,16 @@ Checkbox {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Checkbox](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/) pattern. Roles: `checkbox`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On the checkbox | Checks or unchecks it. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -2149,6 +2190,17 @@ Collapsible {
     CollapsibleContent {}
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure (Show/Hide)](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Shows or hides the content. | yes |
+| Space | On the trigger | Shows or hides the content. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -2485,6 +2537,24 @@ Combobox::<String> {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Combobox (list autocomplete)](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `combobox`, `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | In the input | Opens the list. | yes |
+| d | In the input | Typing opens the list and filters it to the matching options. | yes |
+| Enter | On a highlighted option | Picks the option and closes the list; focus stays in the input. | yes |
+| Escape | In the open list | Closes the list; focus stays in the input. | yes |
+
+States:
+
+- `open`: The list of options is shown.
+- `closed`: Only the input is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -2604,8 +2674,27 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 ## Accessibility
 
 - Role and name: a `combobox` input controlling a labelled `listbox`, with `aria-activedescendant` on the highlighted option
-- Keyboard: Ctrl+K opens it (web, with `hotkey: "k"`); type to filter, Arrow keys move the highlight, Enter runs it, Escape closes
 - Reduced motion: none
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): not yet.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the palette with focus in the search input. | not yet |
+| Control + k | Anywhere on the page, with hotkey set (web only) | Opens the palette. | not yet |
+| z | In the search input | Typing filters the commands. | not yet |
+| Escape | In the palette | Closes it and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The palette is shown and the search input has focus.
+- `closed`: Only the trigger is shown.
+
+Native: The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -3359,6 +3448,27 @@ Dialog {
 - `hide_title: true` hides the title and `description` visually but keeps them for screen readers, for dialogs whose content already makes the purpose clear (the command palette uses it).
 - For a description with links or formatting, put a `DialogDescription` in the children instead of `description` (not both).
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the dialog and moves focus into it. | yes |
+| Space | On the button that opens it | Opens the dialog and moves focus into it. | yes |
+| Tab | Inside the dialog | Moves to the next control; from the last one it wraps to the first, so focus stays in the dialog. | yes |
+| Shift + Tab | Inside the dialog | Moves to the previous control, wrapping from the first to the last. | yes |
+| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The dialog is shown over the page.
+- `closed`: Only the trigger is shown.
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -3932,6 +4042,30 @@ DropdownMenu {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the menu; focus stays on the trigger until an arrow key moves it in (the APG moves it to the first item at once). | yes |
+| Space | On the trigger | Opens the menu, as Enter does. | yes |
+| ArrowDown | In the open menu | Moves focus to the first item, then to the next one. | yes |
+| ArrowUp | In the open menu | Moves focus to the previous item, wrapping from the first to the last. | yes |
+| Escape | In the open menu | Closes the menu and returns focus to the trigger. | yes |
+
+States:
+
+- `open`: The list of actions is shown.
+- `closed`: Only the trigger is shown.
+
+Known gaps:
+
+- The items are a `listbox` of `option`s, not a `menu` of `menuitem`s (upstream markup).
+- Opening does not move focus to the first item; the first arrow key does.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -6032,6 +6166,25 @@ Menubar {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a menu bar item | Moves focus to the next menu bar item. | yes |
+| ArrowLeft | On a menu bar item | Moves focus to the previous menu bar item. | yes |
+| ArrowDown | On a menu bar item | Opens its menu and moves focus to the first item. | yes |
+| Enter | On a menu bar item | Opens or closes its menu. | yes |
+| Escape | In an open menu | Closes the menu. | yes |
+
+States:
+
+- `file-open`: The first menu is open.
+- `file-closed`: The first menu is closed.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -6146,13 +6299,30 @@ A button shows the selection ("Design, Engineering +2"). It opens a panel with a
 ## Accessibility
 
 - Role and name: the button has `aria-expanded` and `aria-controls` and is named "label: current selection"; the panel is a `role="group"` of real checkboxes, so no custom listbox keyboard model is needed; the count or "No options match." is in a `role="status"` region.
-- Keyboard: Enter/Space opens the button, Tab moves through the filter, checkboxes and the Clear/Done buttons, Space toggles a checkbox, Escape closes and returns focus to the button.
+- Focus: inside the open list, Tab moves through the filter, the checkboxes and the Clear/Done buttons. The keys are in the table below.
 - Pointer: a click outside the panel closes it.
 - Reduced motion: no animation.
 
 ## Source
 
 Original to this repo (a checkbox-group disclosure, not an ARIA listbox). Rust/UI's `multi_select.rs` was only used to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure with a checkbox list](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button | Opens the list of choices. | yes |
+| Space | On the button | Opens the list of choices. | yes |
+| Escape | In the open list | Closes it and returns focus to the button. | yes |
+
+States:
+
+- `open`: The list of choices is shown.
+- `closed`: Only the button, showing the current choice, is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -6303,7 +6473,7 @@ rsx! { NumberField { field: nights, label: "Nights", min: 1.0, max: 30.0 } }
 ## Accessibility
 
 - Role and name: the box is `role="spinbutton"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; it is named by `label` (or by the visible label in `NumberField`). The buttons are named "Decrease {label}" and "Increase {label}" (`UiStrings::decrease` / `increase`)
-- Keyboard: Up/Down change it by `step`, Page Up/Page Down by ten steps, Home/End go to `min`/`max`, Enter applies typed text. The buttons are left out of the Tab order, as in the WAI-ARIA spin button pattern, and disable themselves at the ends
+- Buttons: left out of the Tab order, as in the WAI-ARIA spin button pattern, and disabled at the ends. Typed text is applied on Enter or when the field loses focus. The keys are in the table below
 - Forms: `NumberField` wires `aria-invalid` and `aria-describedby`, and a failed submit focuses the box
 - Reduced motion: nothing animates
 
@@ -6314,6 +6484,24 @@ Original to this repo (booking app gap 12). Keyboard behaviour follows the WAI-A
 ## Stability
 
 Experimental (docs/STABILITY.md): new on 2026-10-15; the `f64` value and the `empty` prop may change once forms need decimals or units.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Spinbutton](https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/) pattern. Roles: `spinbutton`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowUp | In the field | Increases the value by one step. | yes |
+| ArrowDown | In the field | Decreases the value by one step. | yes |
+| Home | In the field | Sets the minimum. | yes |
+| End | In the field | Sets the maximum. | yes |
+| PageUp | In the field | Increases the value by ten steps, up to the maximum. | yes |
+| PageDown | In the field | Decreases the value by ten steps, down to the minimum. | yes |
+| Enter | After typing a number | Applies the typed value. | not yet |
+
+Native: Typing a new value into the field does not apply on Enter yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -6624,6 +6812,19 @@ PopoverRoot {
 }
 ```
 
+## Keyboard and accessibility
+
+Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the popover. | yes |
+| Escape | In the open popover | Closes it and returns focus to the trigger. | not yet |
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -6748,6 +6949,18 @@ RadioGroup {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Radio Group](https://www.w3.org/WAI/ARIA/apg/patterns/radio/) pattern. Roles: `radiogroup`, `radio`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On a radio | Checks the focused radio. | yes |
+| ArrowDown | On a radio | Moves focus to the next radio, skipping disabled ones. | yes |
+| ArrowUp | On a radio | Moves focus to the previous radio. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -6878,6 +7091,30 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 // No visible label.
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the list. | yes |
+| Space | On the trigger | Opens the list. | yes |
+| ArrowDown | In the open list | Moves focus to the first option, then to the next one, skipping disabled ones. | yes |
+| Enter | On an option | Picks the option, closes the list and shows the value on the trigger. | yes |
+| Escape | In the open list | Closes the list without changing the value. | yes |
+
+States:
+
+- `open`: The list of options is shown.
+- `closed`: Only the trigger, showing the current value, is shown.
+
+Known gaps:
+
+- Escape does not return focus to the trigger yet; on the web it falls to the page.
+- The trigger is a button with `aria-haspopup=listbox`, not `role=combobox` as in the APG example.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -8350,6 +8587,19 @@ RangeSlider {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) pattern. Roles: `slider`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On the thumb | Increases the value by one step. | yes |
+| ArrowLeft | On the thumb | Decreases the value by one step. | yes |
+| Home | On the thumb | Sets the minimum. | yes |
+| End | On the thumb | Sets the maximum. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -8644,6 +8894,20 @@ Switch {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Switch](https://www.w3.org/WAI/ARIA/apg/patterns/switch/) pattern. Roles: `switch`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On the switch | Turns it on or off. | yes |
+
+Known gaps:
+
+- Enter does not toggle it (optional in the APG); Space does.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -8921,6 +9185,29 @@ Tabs {
 ## Accessibility
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) pattern. Roles: `tablist`, `tab`, `tabpanel`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On a tab | Leaves the tab list and moves focus to the shown panel. | not yet |
+| ArrowRight | On a tab | Moves focus to the next tab without selecting it (manual activation). | yes |
+| ArrowLeft | On a tab | Moves focus to the previous tab. | yes |
+| Enter | On a tab | Selects the focused tab and shows its panel. | yes |
+| Space | On a tab | Selects the focused tab and shows its panel. | yes |
+| Home | On a tab | Moves focus to the first tab. | yes |
+| End | On a tab | Moves focus to the last tab. | yes |
+
+States:
+
+- `first-selected`: The first tab is selected and its panel is shown.
+- `second-selected`: The second tab is selected and its panel is shown.
+
+Native: Tab moves to the next tab instead of leaving the tab list for the panel.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -9731,6 +10018,17 @@ Toggle {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Button (toggle)](https://www.w3.org/WAI/ARIA/apg/patterns/button/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On the toggle | Presses or releases it. | yes |
+| Enter | On the toggle | Presses or releases it. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -9850,6 +10148,22 @@ Toolbar {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Toolbar](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) pattern. Roles: `toolbar`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a toolbar button | Moves focus to the next button. | yes |
+| ArrowLeft | On a toolbar button | Moves focus to the previous button. | yes |
+| Home | On a toolbar button | Moves focus to the first button. | yes |
+
+Known gaps:
+
+- Home works, End does not: the primitive moves focus to an item index that does not exist.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

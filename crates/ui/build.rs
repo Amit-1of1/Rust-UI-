@@ -9,6 +9,14 @@
 //! - `component_tests.rs`: `mod <name>;` for every `tests/components/<name>.rs`.
 //!
 //! Adding a component is now "add files": nothing else needs a new line.
+//!
+//! It also checks every `contract.toml` (docs/CONTRACTS.md) with the same rules as
+//! `rust-ui doctor`, so a contract that documents a key its test never presses, or a role no
+//! test looks at, fails the build instead of reaching the docs.
+
+#[path = "../cli/src/contract.rs"]
+#[allow(dead_code)]
+mod contract;
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -42,6 +50,24 @@ fn main() {
         .into_iter()
         .map(|n| n.trim_end_matches(".rs").to_string())
         .collect();
+
+    let mut broken = Vec::new();
+    for name in &components {
+        match contract::Contract::load(&components_dir, name) {
+            Ok(Some(c)) => broken.extend(
+                c.problems()
+                    .into_iter()
+                    .map(|p| format!("{name}/{}: {p}", contract::FILE)),
+            ),
+            Ok(None) => {}
+            Err(e) => broken.push(e),
+        }
+    }
+    assert!(
+        broken.is_empty(),
+        "component contracts are not sound (docs/CONTRACTS.md):\n  {}",
+        broken.join("\n  ")
+    );
 
     let mut mods = String::new();
     let mut prelude = String::new();

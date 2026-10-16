@@ -32,7 +32,8 @@
   "description": "`NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights). `NumberField` is the same control bound to a `use_form` field, with a label, a description and the field's error.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

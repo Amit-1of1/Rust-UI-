@@ -21,7 +21,7 @@ rsx! { NumberField { field: nights, label: "Nights", min: 1.0, max: 30.0 } }
 ## Accessibility
 
 - Role and name: the box is `role="spinbutton"` with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; it is named by `label` (or by the visible label in `NumberField`). The buttons are named "Decrease {label}" and "Increase {label}" (`UiStrings::decrease` / `increase`)
-- Keyboard: Up/Down change it by `step`, Page Up/Page Down by ten steps, Home/End go to `min`/`max`, Enter applies typed text. The buttons are left out of the Tab order, as in the WAI-ARIA spin button pattern, and disable themselves at the ends
+- Buttons: left out of the Tab order, as in the WAI-ARIA spin button pattern, and disabled at the ends. Typed text is applied on Enter or when the field loses focus. The keys are in the table below
 - Forms: `NumberField` wires `aria-invalid` and `aria-describedby`, and a failed submit focuses the box
 - Reduced motion: nothing animates
 
@@ -32,6 +32,24 @@ Original to this repo (booking app gap 12). Keyboard behaviour follows the WAI-A
 ## Stability
 
 Experimental (docs/STABILITY.md): new on 2026-10-15; the `f64` value and the `empty` prop may change once forms need decimals or units.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Spinbutton](https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/) pattern. Roles: `spinbutton`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowUp | In the field | Increases the value by one step. | yes |
+| ArrowDown | In the field | Decreases the value by one step. | yes |
+| Home | In the field | Sets the minimum. | yes |
+| End | In the field | Sets the maximum. | yes |
+| PageUp | In the field | Increases the value by ten steps, up to the maximum. | yes |
+| PageDown | In the field | Decreases the value by ten steps, down to the minimum. | yes |
+| Enter | After typing a number | Applies the typed value. | not yet |
+
+Native: Typing a new value into the field does not apply on Enter yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

@@ -84,6 +84,14 @@ enum Command {
     /// Print a component's page for coding agents (docs, props, example), or the index
     /// (`llms.txt`) without a name.
     Docs { name: Option<String> },
+    /// Print the keyboard and accessibility contracts (`contract.toml`): the docs table, or
+    /// with `--json` every row's test steps, which the keyboard test runners read.
+    Contract {
+        /// Only this component.
+        name: Option<String>,
+        #[arg(long)]
+        json: bool,
+    },
     /// Update copied components and blocks to the registry's current version, keeping your
     /// edits: a three-way merge against the version `add` recorded in the lockfile.
     Update {
@@ -286,6 +294,31 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                         ))
                     }
                 },
+            }
+        }
+        Command::Contract { name, json } => {
+            use rust_ui_cli::contract::Contract;
+            let all = Contract::load_all(&root.join(rust_ui_cli::COMPONENTS_DIR))?;
+            let picked: Vec<&Contract> = all
+                .iter()
+                .filter(|c| name.as_deref().is_none_or(|n| n == c.name))
+                .collect();
+            if let (Some(n), true) = (&name, picked.is_empty()) {
+                return Err(format!("`{n}` has no contract.toml"));
+            }
+            if json {
+                let runnable = picked
+                    .iter()
+                    .map(|c| c.runnable())
+                    .collect::<Result<Vec<_>, _>>()?;
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&runnable).map_err(|e| e.to_string())?
+                );
+            } else {
+                for c in picked {
+                    println!("# {}\n\n{}", c.name, c.markdown());
+                }
             }
         }
         Command::Update {

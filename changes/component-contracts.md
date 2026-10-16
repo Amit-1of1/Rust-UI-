@@ -1,0 +1,4 @@
+### Added
+
+- **ui:** A `contract.toml` per component (dialog, alert dialog, popover, tabs, dropdown menu, select, combobox, command, menubar, toolbar, radio group, slider, accordion, collapsible, checkbox, switch, toggle): its WAI-ARIA pattern, roles, states and keyboard map, with a test for every key. The docs site, `llms/<name>.md` and the MCP `get_component` answer show the table generated from it, `tests/e2e/contracts.mjs` runs every row in the browser and `apps/native/tests/contracts.rs` on Blitz, where the table's Native column is checked both ways. `crates/ui/build.rs` and `rust-ui doctor` refuse a contract that documents a key, role or state no test checks. Format in docs/CONTRACTS.md (experimental).
+- **cli:** `rust-ui contract [name] [--json]` prints a component's keyboard table, or the parsed test steps (experimental).

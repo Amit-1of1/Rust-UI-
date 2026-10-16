@@ -16,7 +16,8 @@
   "description": "The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

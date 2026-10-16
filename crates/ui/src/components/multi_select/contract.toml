@@ -1,0 +1,54 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Disclosure with a checkbox list"
+apg = "disclosure"
+roles = []
+
+[parts]
+button = "button[aria-controls]"
+
+[[states]]
+name = "open"
+means = "The list of choices is shown."
+check = "attr button aria-expanded=true"
+
+[[states]]
+name = "closed"
+means = "Only the button, showing the current choice, is shown."
+check = "attr button aria-expanded=false"
+
+[[keys]]
+key = "Enter"
+when = "On the button"
+does = "Opens the list of choices."
+native = true
+test = """
+focus button
+press Enter
+state open
+"""
+
+[[keys]]
+key = "Space"
+when = "On the button"
+does = "Opens the list of choices."
+native = true
+test = """
+focus button
+press Space
+state open
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open list"
+does = "Closes it and returns focus to the button."
+native = true
+test = """
+focus button
+press Enter
+press Tab
+press Escape
+state closed
+focused button
+"""

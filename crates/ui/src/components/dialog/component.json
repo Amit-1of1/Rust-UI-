@@ -11,7 +11,8 @@
   "description": "The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

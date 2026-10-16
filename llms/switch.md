@@ -19,6 +19,20 @@ Switch {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Switch](https://www.w3.org/WAI/ARIA/apg/patterns/switch/) pattern. Roles: `switch`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On the switch | Turns it on or off. | yes |
+
+Known gaps:
+
+- Enter does not toggle it (optional in the APG); Space does.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
