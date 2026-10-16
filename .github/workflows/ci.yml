@@ -4,6 +4,8 @@ on:
   push:
     branches: [master, main]
   pull_request:
+  # The sync-prs workflow starts it on PR branches it pushed to.
+  workflow_dispatch:
 
 jobs:
   check:

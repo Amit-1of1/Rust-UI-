@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["crates/ui", "crates/motion", "crates/cli", "crates/form-derive", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/booking", "apps/native", "apps/showcase"]
+# Globs, so a branch that adds a crate or app does not edit this line (docs/PROTOCOL.md).
+members = ["crates/*", "apps/*"]
 
 [workspace.package]
 edition = "2021"
