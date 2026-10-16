@@ -38,6 +38,29 @@ Tabs {
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) pattern. Roles: `tablist`, `tab`, `tabpanel`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On a tab | Leaves the tab list and moves focus to the shown panel. | not yet |
+| ArrowRight | On a tab | Moves focus to the next tab without selecting it (manual activation). | yes |
+| ArrowLeft | On a tab | Moves focus to the previous tab. | yes |
+| Enter | On a tab | Selects the focused tab and shows its panel. | yes |
+| Space | On a tab | Selects the focused tab and shows its panel. | yes |
+| Home | On a tab | Moves focus to the first tab. | yes |
+| End | On a tab | Moves focus to the last tab. | yes |
+
+States:
+
+- `first-selected`: The first tab is selected and its panel is shown.
+- `second-selected`: The second tab is selected and its panel is shown.
+
+Native: Tab moves to the next tab instead of leaving the tab list for the panel.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

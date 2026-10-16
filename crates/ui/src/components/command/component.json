@@ -17,7 +17,8 @@
   "description": "A command palette: a search box over a filtered list, inside a dialog. `filter_items` and `step_active` are pure helpers.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

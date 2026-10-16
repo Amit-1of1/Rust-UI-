@@ -1,0 +1,72 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Combobox (list autocomplete)"
+apg = "combobox"
+roles = ["combobox", "listbox", "option"]
+
+[parts]
+input = "[role=combobox]"
+list = "[role=listbox]"
+option = "[role=option]"
+
+[[states]]
+name = "open"
+means = "The list of options is shown."
+check = "attr input aria-expanded=true"
+
+[[states]]
+name = "closed"
+means = "Only the input is shown."
+check = "attr input aria-expanded=false"
+
+[[keys]]
+key = "ArrowDown"
+when = "In the input"
+does = "Opens the list."
+native = true
+test = """
+focus input
+press ArrowDown
+state open
+visible list
+visible option@1
+"""
+
+[[keys]]
+key = "d"
+when = "In the input"
+does = "Typing opens the list and filters it to the matching options."
+native = true
+test = """
+focus input
+press d
+state open
+hidden option@3
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a highlighted option"
+does = "Picks the option and closes the list; focus stays in the input."
+native = true
+test = """
+focus input
+press ArrowDown
+press ArrowDown
+press Enter
+state closed
+focused input
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open list"
+does = "Closes the list; focus stays in the input."
+native = true
+test = """
+focus input
+press ArrowDown
+press Escape
+state closed
+focused input
+"""

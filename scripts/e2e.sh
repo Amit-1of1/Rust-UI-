@@ -61,6 +61,13 @@ while IFS='|' read -r name dir out port; do
 done <<<"$APPS"
 sleep 1
 
+# Every contract.toml's test steps (docs/CONTRACTS.md); CI's build job ships the file.
+CONTRACTS="$PWD/target/contracts.json"
+if [ "$BUILD" = 1 ] || [ ! -f "$CONTRACTS" ] \
+  || [ -n "$(find crates/ui/src/components -name contract.toml -newer "$CONTRACTS")" ]; then
+  mkdir -p target && cargo run -q -p rust-ui-cli -- contract --json >"$CONTRACTS"
+fi
+
 G=http://localhost:8765/ S=http://localhost:8767/ D=http://localhost:8769/ A=http://localhost:8771/
 B=http://localhost:8773/
 W=http://localhost:8775/
@@ -95,6 +102,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] time + date-time pickers (gallery)"; e2e env GALLERY_URL=$G node time_picker.mjs
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
+  step "[$engine] component contracts (docs pages)"; e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node contracts.mjs
   step "[$engine] keyboard-only walkthrough";        e2e env GALLERY_URL=$G node walkthrough.mjs
   step "[$engine] accessibility tree (roles, names, states)"; e2e env GALLERY_URL=$G node a11y_tree.mjs
   step "[$engine] density presets (gallery)";        e2e env GALLERY_URL=$G node density.mjs

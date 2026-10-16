@@ -16,7 +16,8 @@
   "description": "The Checkbox component is used to create an accessible checkbox input.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

@@ -11,7 +11,8 @@
   "description": "The slider component allows users to select a value from a range by sliding a handle along a track.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

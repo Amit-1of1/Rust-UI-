@@ -1,0 +1,59 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Alert and Message Dialogs"
+apg = "alertdialog"
+roles = ["alertdialog"]
+
+native_note = "Closing works, but focus is left on the removed content instead of going back to the trigger."
+
+[parts]
+trigger = "button"
+dialog = "[role=alertdialog]"
+
+[[states]]
+name = "open"
+means = "The alert dialog is shown over the page."
+check = "visible dialog"
+
+[[states]]
+name = "closed"
+means = "Only the trigger is shown."
+check = "hidden dialog"
+
+[[keys]]
+key = "Enter"
+when = "On the button that opens it"
+does = "Opens the alert dialog and moves focus into it."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+focus-in dialog
+"""
+
+[[keys]]
+key = "Tab"
+when = "Inside the alert dialog"
+does = "Moves between its buttons; focus stays inside."
+native = true
+test = """
+focus trigger
+press Enter
+press Tab*5
+state open
+focus-in dialog
+"""
+
+[[keys]]
+key = "Escape"
+when = "Inside the alert dialog"
+does = "Closes it as Cancel would and returns focus to the button that opened it."
+native = false
+test = """
+focus trigger
+press Enter
+press Escape
+state closed
+focused trigger
+"""

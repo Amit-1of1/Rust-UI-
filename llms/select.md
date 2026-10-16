@@ -41,6 +41,30 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the list. | yes |
+| Space | On the trigger | Opens the list. | yes |
+| ArrowDown | In the open list | Moves focus to the first option, then to the next one, skipping disabled ones. | yes |
+| Enter | On an option | Picks the option, closes the list and shows the value on the trigger. | yes |
+| Escape | In the open list | Closes the list without changing the value. | yes |
+
+States:
+
+- `open`: The list of options is shown.
+- `closed`: Only the trigger, showing the current value, is shown.
+
+Known gaps:
+
+- Escape does not return focus to the trigger yet; on the web it falls to the page.
+- The trigger is a button with `aria-haspopup=listbox`, not `role=combobox` as in the APG example.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

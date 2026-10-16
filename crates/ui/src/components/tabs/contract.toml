@@ -1,0 +1,104 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Tabs"
+apg = "tabs"
+roles = ["tablist", "tab", "tabpanel"]
+
+native_note = "Tab moves to the next tab instead of leaving the tab list for the panel."
+
+[parts]
+list = "[role=tablist]"
+tab = "[role=tab]"
+panel = "[role=tabpanel]"
+
+[[states]]
+name = "first-selected"
+means = "The first tab is selected and its panel is shown."
+check = "attr tab@1 aria-selected=true"
+
+[[states]]
+name = "second-selected"
+means = "The second tab is selected and its panel is shown."
+check = "attr tab@2 aria-selected=true"
+
+[[keys]]
+key = "Tab"
+when = "On a tab"
+does = "Leaves the tab list and moves focus to the shown panel."
+native = false
+test = """
+focus tab@1
+press Tab
+focus-in panel@1
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On a tab"
+does = "Moves focus to the next tab without selecting it (manual activation)."
+native = true
+test = """
+focus tab@1
+press ArrowRight
+focused tab@2
+focus-in list
+state first-selected
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a tab"
+does = "Moves focus to the previous tab."
+native = true
+test = """
+focus tab@2
+press ArrowLeft
+focused tab@1
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a tab"
+does = "Selects the focused tab and shows its panel."
+native = true
+test = """
+focus tab@1
+press ArrowRight
+press Enter
+state second-selected
+visible panel@2
+"""
+
+[[keys]]
+key = "Space"
+when = "On a tab"
+does = "Selects the focused tab and shows its panel."
+native = true
+test = """
+focus tab@1
+press ArrowRight
+press Space
+state second-selected
+"""
+
+[[keys]]
+key = "Home"
+when = "On a tab"
+does = "Moves focus to the first tab."
+native = true
+test = """
+focus tab@2
+press Home
+focused tab@1
+"""
+
+[[keys]]
+key = "End"
+when = "On a tab"
+does = "Moves focus to the last tab."
+native = true
+test = """
+focus tab@1
+press End
+focused tab@2
+"""

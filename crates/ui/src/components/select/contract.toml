@@ -1,0 +1,91 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Select-Only Combobox"
+apg = "combobox"
+roles = ["listbox", "option"]
+gaps = [
+    "Escape does not return focus to the trigger yet; on the web it falls to the page.",
+    "The trigger is a button with `aria-haspopup=listbox`, not `role=combobox` as in the APG example.",
+]
+
+[parts]
+trigger = "button[aria-haspopup=listbox]"
+list = "[role=listbox]"
+option = "[role=option]"
+
+[[states]]
+name = "open"
+means = "The list of options is shown."
+check = "attr trigger aria-expanded=true"
+
+[[states]]
+name = "closed"
+means = "Only the trigger, showing the current value, is shown."
+check = "attr trigger aria-expanded=false"
+
+[[keys]]
+key = "Enter"
+when = "On the trigger"
+does = "Opens the list."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+visible list
+focus-in list
+"""
+
+[[keys]]
+key = "Space"
+when = "On the trigger"
+does = "Opens the list."
+native = true
+test = """
+focus trigger
+press Space
+state open
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "In the open list"
+does = "Moves focus to the first option, then to the next one, skipping disabled ones."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown
+focused option@1
+press ArrowDown
+focused option@2
+press ArrowDown
+focused option@4
+"""
+
+[[keys]]
+key = "Enter"
+when = "On an option"
+does = "Picks the option, closes the list and shows the value on the trigger."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*2
+press Enter
+state closed
+text trigger Banana
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open list"
+does = "Closes the list without changing the value."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown
+press Escape
+state closed
+"""

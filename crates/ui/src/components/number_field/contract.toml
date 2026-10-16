@@ -1,0 +1,90 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Spinbutton"
+apg = "spinbutton"
+roles = ["spinbutton"]
+
+native_note = "Typing a new value into the field does not apply on Enter yet."
+
+[parts]
+input = "[role=spinbutton]"
+
+[[keys]]
+key = "ArrowUp"
+when = "In the field"
+does = "Increases the value by one step."
+native = true
+test = """
+focus input
+press ArrowUp
+attr input aria-valuenow=3
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "In the field"
+does = "Decreases the value by one step."
+native = true
+test = """
+focus input
+press ArrowDown
+attr input aria-valuenow=1
+"""
+
+[[keys]]
+key = "Home"
+when = "In the field"
+does = "Sets the minimum."
+native = true
+test = """
+focus input
+press Home
+attr input aria-valuenow=1
+"""
+
+[[keys]]
+key = "End"
+when = "In the field"
+does = "Sets the maximum."
+native = true
+test = """
+focus input
+press End
+attr input aria-valuenow=8
+"""
+
+[[keys]]
+key = "PageUp"
+when = "In the field"
+does = "Increases the value by ten steps, up to the maximum."
+native = true
+test = """
+focus input
+press PageUp
+attr input aria-valuenow=8
+"""
+
+[[keys]]
+key = "PageDown"
+when = "In the field"
+does = "Decreases the value by ten steps, down to the minimum."
+native = true
+test = """
+focus input
+press PageDown
+attr input aria-valuenow=1
+"""
+
+[[keys]]
+key = "Enter"
+when = "After typing a number"
+does = "Applies the typed value."
+native = false
+test = """
+focus input
+press End
+press Backspace
+type 5
+press Enter
+attr input aria-valuenow=5
+"""

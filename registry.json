@@ -10,6 +10,7 @@
       "name": "accordion",
       "files": [
         "accordion/component.rs",
+        "accordion/contract.toml",
         "accordion/docs.md",
         "accordion/mod.rs",
         "accordion/style.css"
@@ -32,6 +33,7 @@
       "name": "alert_dialog",
       "files": [
         "alert_dialog/component.rs",
+        "alert_dialog/contract.toml",
         "alert_dialog/docs.md",
         "alert_dialog/mod.rs",
         "alert_dialog/style.css"
@@ -176,6 +178,7 @@
       "name": "checkbox",
       "files": [
         "checkbox/component.rs",
+        "checkbox/contract.toml",
         "checkbox/docs.md",
         "checkbox/mod.rs",
         "checkbox/style.css"
@@ -200,6 +203,7 @@
       "name": "collapsible",
       "files": [
         "collapsible/component.rs",
+        "collapsible/contract.toml",
         "collapsible/docs.md",
         "collapsible/mod.rs",
         "collapsible/style.css"
@@ -224,6 +228,7 @@
       "name": "combobox",
       "files": [
         "combobox/component.rs",
+        "combobox/contract.toml",
         "combobox/docs.md",
         "combobox/mod.rs",
         "combobox/style.css"
@@ -236,6 +241,7 @@
       "name": "command",
       "files": [
         "command/component.rs",
+        "command/contract.toml",
         "command/docs.md",
         "command/mod.rs",
         "command/style.css"
@@ -305,6 +311,7 @@
       "name": "dialog",
       "files": [
         "dialog/component.rs",
+        "dialog/contract.toml",
         "dialog/docs.md",
         "dialog/mod.rs",
         "dialog/style.css"
@@ -338,6 +345,7 @@
       "name": "dropdown_menu",
       "files": [
         "dropdown_menu/component.rs",
+        "dropdown_menu/contract.toml",
         "dropdown_menu/docs.md",
         "dropdown_menu/mod.rs",
         "dropdown_menu/style.css"
@@ -522,6 +530,7 @@
       "name": "menubar",
       "files": [
         "menubar/component.rs",
+        "menubar/contract.toml",
         "menubar/docs.md",
         "menubar/mod.rs",
         "menubar/style.css"
@@ -532,6 +541,7 @@
       "name": "multi_select",
       "files": [
         "multi_select/component.rs",
+        "multi_select/contract.toml",
         "multi_select/docs.md",
         "multi_select/mod.rs",
         "multi_select/style.css"
@@ -556,6 +566,7 @@
       "name": "number_field",
       "files": [
         "number_field/component.rs",
+        "number_field/contract.toml",
         "number_field/docs.md",
         "number_field/mod.rs",
         "number_field/style.css"
@@ -586,6 +597,7 @@
       "name": "popover",
       "files": [
         "popover/component.rs",
+        "popover/contract.toml",
         "popover/docs.md",
         "popover/mod.rs",
         "popover/style.css"
@@ -606,6 +618,7 @@
       "name": "radio_group",
       "files": [
         "radio_group/component.rs",
+        "radio_group/contract.toml",
         "radio_group/docs.md",
         "radio_group/mod.rs",
         "radio_group/style.css"
@@ -626,6 +639,7 @@
       "name": "select",
       "files": [
         "select/component.rs",
+        "select/contract.toml",
         "select/docs.md",
         "select/mod.rs",
         "select/style.css"
@@ -712,6 +726,7 @@
       "name": "slider",
       "files": [
         "slider/component.rs",
+        "slider/contract.toml",
         "slider/docs.md",
         "slider/mod.rs",
         "slider/style.css"
@@ -754,6 +769,7 @@
       "name": "switch",
       "files": [
         "switch/component.rs",
+        "switch/contract.toml",
         "switch/docs.md",
         "switch/mod.rs",
         "switch/style.css"
@@ -774,6 +790,7 @@
       "name": "tabs",
       "files": [
         "tabs/component.rs",
+        "tabs/contract.toml",
         "tabs/docs.md",
         "tabs/mod.rs",
         "tabs/style.css"
@@ -842,6 +859,7 @@
       "name": "toggle",
       "files": [
         "toggle/component.rs",
+        "toggle/contract.toml",
         "toggle/docs.md",
         "toggle/mod.rs",
         "toggle/style.css"
@@ -862,6 +880,7 @@
       "name": "toolbar",
       "files": [
         "toolbar/component.rs",
+        "toolbar/contract.toml",
         "toolbar/docs.md",
         "toolbar/mod.rs",
         "toolbar/style.css"

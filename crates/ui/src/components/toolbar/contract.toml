@@ -1,0 +1,45 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Toolbar"
+apg = "toolbar"
+roles = ["toolbar"]
+
+gaps = ["Home works, End does not: the primitive moves focus to an item index that does not exist."]
+
+[parts]
+toolbar = "[role=toolbar]"
+button = "[role=toolbar] button"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a toolbar button"
+does = "Moves focus to the next button."
+native = true
+test = """
+focus button@1
+press ArrowRight
+focused button@2
+focus-in toolbar
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a toolbar button"
+does = "Moves focus to the previous button."
+native = true
+test = """
+focus button@2
+press ArrowLeft
+focused button@1
+"""
+
+[[keys]]
+key = "Home"
+when = "On a toolbar button"
+does = "Moves focus to the first button."
+native = true
+test = """
+focus button@2
+press Home
+focused button@1
+"""

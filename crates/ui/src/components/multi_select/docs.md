@@ -12,7 +12,7 @@ A button shows the selection ("Design, Engineering +2"). It opens a panel with a
 ## Accessibility
 
 - Role and name: the button has `aria-expanded` and `aria-controls` and is named "label: current selection"; the panel is a `role="group"` of real checkboxes, so no custom listbox keyboard model is needed; the count or "No options match." is in a `role="status"` region.
-- Keyboard: Enter/Space opens the button, Tab moves through the filter, checkboxes and the Clear/Done buttons, Space toggles a checkbox, Escape closes and returns focus to the button.
+- Focus: inside the open list, Tab moves through the filter, the checkboxes and the Clear/Done buttons. The keys are in the table below.
 - Pointer: a click outside the panel closes it.
 - Reduced motion: no animation.
 

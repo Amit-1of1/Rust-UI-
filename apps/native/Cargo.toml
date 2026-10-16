@@ -23,5 +23,8 @@ anyrender_vello_cpu = "0.8.1"
 image = { version = "0.25.6", default-features = false, features = ["png"] }
 blitz-dom = { version = "0.2.4", default-features = false }
 keyboard-types = { version = "0.7", default-features = false }
+# tests/contracts.rs reads the component contracts (crates/cli/src/contract.rs).
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
 # Toasts start a timer, which needs a Tokio runtime (the windowed shell has one).
 tokio = { version = "1", features = ["rt", "time"] }

@@ -23,6 +23,27 @@ Dialog {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the dialog and moves focus into it. | yes |
+| Space | On the button that opens it | Opens the dialog and moves focus into it. | yes |
+| Tab | Inside the dialog | Moves to the next control; from the last one it wraps to the first, so focus stays in the dialog. | yes |
+| Shift + Tab | Inside the dialog | Moves to the previous control, wrapping from the first to the last. | yes |
+| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The dialog is shown over the page.
+- `closed`: Only the trigger is shown.
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

@@ -30,6 +30,25 @@ rsx! {
 - **AlertDialogAction**: Main action button (e.g., confirm/delete). Closes the dialog, *then* calls the optional `on_click`. So if `on_open_change(false)` clears state (such as "which item to delete"), `on_click` sees it already cleared: keep that state separate from the open flag.
 - **AlertDialogCancel**: Cancel/close button. Closes dialog and calls optional `on_click`.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the alert dialog and moves focus into it. | yes |
+| Tab | Inside the alert dialog | Moves between its buttons; focus stays inside. | yes |
+| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The alert dialog is shown over the page.
+- `closed`: Only the trigger is shown.
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

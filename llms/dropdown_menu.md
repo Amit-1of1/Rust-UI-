@@ -32,6 +32,30 @@ DropdownMenu {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the menu; focus stays on the trigger until an arrow key moves it in (the APG moves it to the first item at once). | yes |
+| Space | On the trigger | Opens the menu, as Enter does. | yes |
+| ArrowDown | In the open menu | Moves focus to the first item, then to the next one. | yes |
+| ArrowUp | In the open menu | Moves focus to the previous item, wrapping from the first to the last. | yes |
+| Escape | In the open menu | Closes the menu and returns focus to the trigger. | yes |
+
+States:
+
+- `open`: The list of actions is shown.
+- `closed`: Only the trigger is shown.
+
+Known gaps:
+
+- The items are a `listbox` of `option`s, not a `menu` of `menuitem`s (upstream markup).
+- Opening does not move focus to the first item; the first arrow key does.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

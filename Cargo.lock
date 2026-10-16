@@ -5070,8 +5070,10 @@ dependencies = [
  "keyboard-types",
  "manganis-core",
  "rust-ui-kit",
+ "serde",
  "showcase",
  "tokio",
+ "toml",
 ]
 
 [[package]]
@@ -6893,6 +6895,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tempfile",
+ "toml",
 ]
 
 [[package]]
@@ -6916,8 +6919,10 @@ dependencies = [
  "rust-ui-form-derive",
  "rust-ui-kit",
  "rust-ui-motion",
+ "serde",
  "strum",
  "time",
+ "toml",
  "tracing",
  "wasm-bindgen",
  "wasm-bindgen-futures",

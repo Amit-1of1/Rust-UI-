@@ -10,8 +10,27 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 ## Accessibility
 
 - Role and name: a `combobox` input controlling a labelled `listbox`, with `aria-activedescendant` on the highlighted option
-- Keyboard: Ctrl+K opens it (web, with `hotkey: "k"`); type to filter, Arrow keys move the highlight, Enter runs it, Escape closes
 - Reduced motion: none
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): not yet.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the palette with focus in the search input. | not yet |
+| Control + k | Anywhere on the page, with hotkey set (web only) | Opens the palette. | not yet |
+| z | In the search input | Typing filters the commands. | not yet |
+| Escape | In the palette | Closes it and returns focus to the button that opened it. | not yet |
+
+States:
+
+- `open`: The palette is shown and the search input has focus.
+- `closed`: Only the trigger is shown.
+
+Native: The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

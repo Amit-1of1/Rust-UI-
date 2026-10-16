@@ -27,7 +27,9 @@ jobs:
           for app in gallery site docs dashboard booking showcase; do
             scripts/release-web.sh $app
           done
-      - run: tar -cf web.tar target/dx/*/release/web/public
+      # The component contracts' test steps, for tests/e2e/contracts.mjs (no Rust in the e2e job).
+      - run: cargo run -q -p rust-ui-cli -- contract --json > target/contracts.json
+      - run: tar -cf web.tar target/dx/*/release/web/public target/contracts.json
       - uses: actions/upload-artifact@v4
         with:
           name: web

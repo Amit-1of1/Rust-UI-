@@ -1,0 +1,21 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Checkbox"
+apg = "checkbox"
+roles = ["checkbox"]
+
+[parts]
+box = "[role=checkbox]"
+
+[[keys]]
+key = "Space"
+when = "On the checkbox"
+does = "Checks or unchecks it."
+native = true
+test = """
+focus box
+press Space
+attr box aria-checked=true
+press Space
+attr box aria-checked=false
+"""

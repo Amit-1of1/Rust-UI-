@@ -11,7 +11,8 @@
   "description": "The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

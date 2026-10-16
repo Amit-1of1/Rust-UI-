@@ -1,0 +1,30 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Button (toggle)"
+apg = "button"
+roles = []
+
+[parts]
+toggle = "[aria-pressed]"
+
+[[keys]]
+key = "Space"
+when = "On the toggle"
+does = "Presses or releases it."
+native = true
+test = """
+focus toggle
+press Space
+attr toggle aria-pressed=true
+"""
+
+[[keys]]
+key = "Enter"
+when = "On the toggle"
+does = "Presses or releases it."
+native = true
+test = """
+focus toggle
+press Enter
+attr toggle aria-pressed=true
+"""

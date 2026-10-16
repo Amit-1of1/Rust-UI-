@@ -22,6 +22,18 @@ Accordion {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Accordion](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a section header | Opens or closes that section. | yes |
+| Space | On a section header | Opens or closes that section. | yes |
+| Tab | On a section header | Moves to the next header (or into the open section). | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

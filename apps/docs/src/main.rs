@@ -36,7 +36,9 @@ fn markdown(source: &str) -> String {
         None => source,
     };
     let mut html = String::new();
-    pulldown_cmark::html::push_html(&mut html, pulldown_cmark::Parser::new(body));
+    // Tables: the keyboard table generated from each component's contract.toml.
+    let parser = pulldown_cmark::Parser::new_ext(body, pulldown_cmark::Options::ENABLE_TABLES);
+    pulldown_cmark::html::push_html(&mut html, parser);
     // Code blocks can scroll sideways, so keyboard users must be able to focus them.
     html.replace("<pre>", "<pre tabindex=\"0\">")
 }
@@ -154,5 +156,8 @@ fn Page(slug: String) -> Element {
             }
         }
         div { class: "docs-prose", dangerous_inner_html: markdown(entry.docs) }
+        if !entry.contract.is_empty() {
+            div { class: "docs-prose", dangerous_inner_html: markdown(entry.contract) }
+        }
     }
 }

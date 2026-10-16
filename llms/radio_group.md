@@ -28,6 +28,18 @@ RadioGroup {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Radio Group](https://www.w3.org/WAI/ARIA/apg/patterns/radio/) pattern. Roles: `radiogroup`, `radio`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On a radio | Checks the focused radio. | yes |
+| ArrowDown | On a radio | Moves focus to the next radio, skipping disabled ones. | yes |
+| ArrowUp | On a radio | Moves focus to the previous radio. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
