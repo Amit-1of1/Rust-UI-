@@ -1,4 +1,4 @@
-### Dialogs need a `title`; icon-only buttons are `IconButton`; avatar images need `alt`
+### Dialogs need a `title`; icon-only buttons are `IconButton`; avatar images need `alt` (PR #48)
 
 **Who:** apps that use `Dialog`, `Sheet`, `Drawer`, `AlertDialog`, `ButtonSize::Icon*`, `AvatarImage` or `ImageAvatar`.
 
