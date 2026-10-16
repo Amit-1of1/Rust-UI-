@@ -12,6 +12,8 @@ dioxus = { workspace = true, features = ["native"] }
 ui = { workspace = true, features = ["native", "demos"] }
 
 [dev-dependencies]
+# tests/showcase.rs drives the showcase app headless, at desktop and phone sizes.
+showcase = { path = "../showcase", default-features = false, features = ["native"] }
 dioxus-native-dom = "=0.7.10"
 blitz-traits = "0.2"
 manganis-core = "=0.7.10"
@@ -21,3 +23,5 @@ anyrender_vello_cpu = "0.8.1"
 image = { version = "0.25.6", default-features = false, features = ["png"] }
 blitz-dom = { version = "0.2.4", default-features = false }
 keyboard-types = { version = "0.7", default-features = false }
+# Toasts start a timer, which needs a Tokio runtime (the windowed shell has one).
+tokio = { version = "1", features = ["rt", "time"] }

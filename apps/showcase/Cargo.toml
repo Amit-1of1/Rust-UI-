@@ -1,0 +1,25 @@
+[package]
+name = "showcase"
+version = "0.1.0"
+description = "One codebase on the web, the desktop and phones: the kit on every Dioxus renderer, native ones without a webview"
+publish = false
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+dioxus.workspace = true
+ui.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+web-sys = { version = "0.3", features = ["Window", "Document", "HtmlElement", "DomStringMap"] }
+
+[features]
+default = ["web"]
+# Browsers (WebAssembly).
+web = ["dioxus/web", "ui/web"]
+# Native: Blitz draws the app itself with wgpu; no webview, no JavaScript. Desktop
+# (Linux, macOS, Windows) and, through the same crate, Android and iOS.
+native = ["dioxus/native", "ui/native"]
+# Desktop in a system webview (wry), for comparison with `native`.
+desktop = ["dioxus/desktop", "ui/desktop"]

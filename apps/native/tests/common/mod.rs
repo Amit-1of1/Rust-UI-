@@ -55,6 +55,9 @@ static PAINT: std::sync::Mutex<()> = std::sync::Mutex::new(());
 
 pub struct Harness {
     pub doc: DioxusDocument,
+    /// Viewport size in CSS pixels (`WIDTH` x `HEIGHT` unless made with `with_viewport`).
+    pub width: u32,
+    pub height: u32,
     /// Animation clock in seconds. Every `settle` moves it a second on, so CSS enter
     /// animations have finished by the time a test looks (the real shell ticks the same clock).
     pub time: f64,
@@ -100,12 +103,32 @@ impl Harness {
     }
 
     pub fn with_scheme(app: fn() -> Element, scheme: ColorScheme) -> Self {
+        Self::with_viewport(app, WIDTH, HEIGHT, scheme, "")
+    }
+
+    /// A `width` x `height` window (a phone, say), with `extra_css` (an app's own stylesheet)
+    /// injected after the kit's.
+    pub fn with_viewport(
+        app: fn() -> Element,
+        width: u32,
+        height: u32,
+        scheme: ColorScheme,
+        extra_css: &str,
+    ) -> Self {
         let vdom = VirtualDom::new(app);
         let mut doc = DioxusDocument::new(vdom, DocumentConfig::default());
-        doc.set_viewport(Viewport::new(WIDTH, HEIGHT, 1.0, scheme));
+        doc.set_viewport(Viewport::new(width, height, 1.0, scheme));
         doc.create_head_element("style", &[], &Some(kit_css()));
+        if !extra_css.is_empty() {
+            doc.create_head_element("style", &[], &Some(extra_css.to_string()));
+        }
         doc.initial_build();
-        let mut h = Self { doc, time: 0.0 };
+        let mut h = Self {
+            doc,
+            width,
+            height,
+            time: 0.0,
+        };
         h.settle();
         h
     }
@@ -131,9 +154,11 @@ impl Harness {
         let node = self.doc.get_node(id)?;
         let pos = node.absolute_position(0.0, 0.0);
         let size = node.final_layout.size;
+        // Window coordinates: take off how far the page is scrolled (see `scroll_into_view`).
+        let scroll = self.doc.viewport_scroll();
         Some(Rect {
-            x: pos.x,
-            y: pos.y,
+            x: pos.x - scroll.x as f32,
+            y: pos.y - scroll.y as f32,
             w: size.width,
             h: size.height,
         })
@@ -144,9 +169,38 @@ impl Harness {
         let r = self
             .rect(selector)
             .unwrap_or_else(|| panic!("no element for {selector}"));
-        assert!(r.on_screen(), "{selector} is not on screen: {r:?}");
+        assert!(
+            r.w > 0.0
+                && r.h > 0.0
+                && r.x < self.width as f32
+                && r.y < self.height as f32
+                && r.x + r.w > 0.0
+                && r.y + r.h > 0.0,
+            "{selector} is not on screen: {r:?}"
+        );
         let (x, y) = r.center();
         self.click_at(x, y);
+    }
+
+    /// Scroll the page (as the mouse wheel does over it) until the first element matching
+    /// `selector` is inside the window.
+    pub fn scroll_into_view(&mut self, selector: &str) {
+        let r = self
+            .rect(selector)
+            .unwrap_or_else(|| panic!("no element for {selector}"));
+        let margin = 16.0;
+        let dy = if r.y < 0.0 {
+            r.y - margin
+        } else if r.y + r.h > self.height as f32 {
+            r.y + r.h - self.height as f32 + margin
+        } else {
+            0.0
+        };
+        if dy != 0.0 {
+            // Negative deltas scroll down, as for a wheel event.
+            self.doc.scroll_viewport_by(0.0, -dy as f64);
+            self.settle();
+        }
     }
 
     /// Press and release a key (sent to the focused element, as the shell does).
@@ -283,30 +337,32 @@ impl Harness {
     /// Paint the current frame on the CPU and save it as a PNG (for a human to look at).
     pub fn screenshot(&self, path: impl AsRef<Path>) {
         use anyrender::ImageRenderer as _;
-        let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(WIDTH, HEIGHT);
+        let (w, h) = (self.width, self.height);
+        let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(w, h);
         let mut buf = Vec::new();
         let _paint = PAINT.lock().unwrap_or_else(|e| e.into_inner());
         renderer.render_to_vec(
-            |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, WIDTH, HEIGHT),
+            |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, w, h),
             &mut buf,
         );
         if let Some(dir) = path.as_ref().parent() {
             let _ = std::fs::create_dir_all(dir);
         }
-        image::save_buffer(path, &buf, WIDTH, HEIGHT, image::ColorType::Rgba8).expect("png");
+        image::save_buffer(path, &buf, w, h, image::ColorType::Rgba8).expect("png");
     }
 
     /// RGBA of the pixel at (x, y) in a CPU-painted frame.
     pub fn pixel(&self, x: u32, y: u32) -> [u8; 4] {
         use anyrender::ImageRenderer as _;
-        let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(WIDTH, HEIGHT);
+        let (w, h) = (self.width, self.height);
+        let mut renderer = anyrender_vello_cpu::VelloCpuImageRenderer::new(w, h);
         let mut buf = Vec::new();
         let _paint = PAINT.lock().unwrap_or_else(|e| e.into_inner());
         renderer.render_to_vec(
-            |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, WIDTH, HEIGHT),
+            |scene| blitz_paint::paint_scene(scene, &self.doc, 1.0, w, h),
             &mut buf,
         );
-        let i = ((y * WIDTH + x) * 4) as usize;
+        let i = ((y * w + x) * 4) as usize;
         [buf[i], buf[i + 1], buf[i + 2], buf[i + 3]]
     }
 

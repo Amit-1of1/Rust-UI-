@@ -493,3 +493,38 @@ fn z_index_escapes_its_parent() {
     h.click_at(m.x + 100.0, m.y + 80.0);
     assert_eq!(attr(&h, "#menu", "data-n").as_deref(), Some("1"));
 }
+
+// ---- layout ---------------------------------------------------------------------------
+
+#[test]
+fn children_of_display_contents_keep_their_box() {
+    const LONG: &str = "word word word word word word word word word word word word word \
+        word word word word word word word word word word word word word word word word word \
+        word word word word word word word word word word word word word word word word word";
+    fn app() -> Element {
+        // ThemeScope and ToastProvider are such wrappers, nested, around a whole app.
+        rsx! {
+            div { style: "display: contents;",
+                div { style: "display: contents;",
+                    div { id: "flex", style: "display: flex; background: red;", "{LONG}" }
+                }
+            }
+            div { style: "display: contents;",
+                div { id: "block", style: "padding: 4px;", "{LONG}" }
+            }
+        }
+    }
+    let h = Harness::new(app);
+    // As on the web: each child stretches to the body's width and its text wraps.
+    for id in ["#flex", "#block"] {
+        let r = h.rect(id).unwrap();
+        assert!((r.w - (WIDTH as f32 - 16.0)).abs() < 1.0, "{id}: {r:?}");
+        assert!(r.h > 30.0, "{id}: text did not wrap: {r:?}");
+    }
+    let r = h.rect("#flex").unwrap();
+    assert_eq!(
+        rgb(&h, r.x + 4.0, r.y + 4.0),
+        RED,
+        "#flex lost its background"
+    );
+}

@@ -7,7 +7,7 @@ Six crates carry small fixes on top of the exact versions we depend on. The fixe
 
 | Crate | Release | Upstream commit of that release | Fork branch | Pinned commit |
 |---|---|---|---|---|
-| `blitz-dom` | 0.2.4 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-dom) | [Amit-1of1/blitz `rust-ui/blitz-dom-0.2.4`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-dom-0.2.4) | `a55f290` |
+| `blitz-dom` | 0.2.4 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-dom) | [Amit-1of1/blitz `rust-ui/blitz-dom-0.2.4`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-dom-0.2.4) (`a095949` is on `claude/showcase-multi-target-tc6fhc` until that branch is fast-forwarded) | `a095949` |
 | `blitz-traits` | 0.2.0 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-traits) | [Amit-1of1/blitz `rust-ui/blitz-traits-0.2.0`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-traits-0.2.0) | `14f766f` |
 | `blitz-net` | 0.2.1 | [DioxusLabs/blitz `0a77560`](https://github.com/DioxusLabs/blitz/tree/0a77560e59440d3c6b5f14b673b9c722a08a3d4c/packages/blitz-net) | [Amit-1of1/blitz `rust-ui/blitz-net-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-net-0.2.1) | `505d30e` |
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
@@ -48,6 +48,7 @@ All six crates are `MIT OR Apache-2.0`, and the fork repositories keep upstream'
 | `z-index` only orders siblings | blitz-dom + blitz-paint | positioned elements with a z-index are painted and hit tested with their nearest stacking context (root, z-indexed or fixed box, `opacity < 1`, `transform`) |
 | Percentage transforms dropped; vertical `transform-origin` used the width | blitz-paint (via blitz-dom `css_transform_2d`) | resolved against the border box |
 | Transforms not inherited; text not transformed | blitz-paint | ancestor transforms are combined and applied to children, text, inline SVG and SVG backgrounds |
+| An element directly inside a `display: contents` wrapper (`ThemeScope`, `ToastProvider`) loses its box; an app wrapped in them came out as wide as its longest line (found by `apps/showcase`) | blitz-dom | a block whose children are contents wrappers no longer counts as all-inline, and a contents child's own children are collected as the container's layout children (upstream hoisted its grandchildren). `engine.rs` `children_of_display_contents_keep_their_box` |
 | Keyed lists lose items when reordered | blitz-dom | a node moved within its own parent is detached before it is inserted (upstream removed the inserted copy too) |
 | No `contextmenu` | dioxus-native-dom | a right-button press fires `contextmenu` after `mousedown` |
 | No image `load` | blitz-dom + dioxus-native-dom | Blitz records `<img>` nodes whose image arrived; `load` fires for them on the next poll |
