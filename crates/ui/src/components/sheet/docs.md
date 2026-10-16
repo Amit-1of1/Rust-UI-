@@ -7,16 +7,18 @@ Sheet {
     open: open(),
     // Which edge to slide in from. Available sides: Top, Right (default), Bottom, Left.
     "data-side": SheetSide::Right.as_str(),
+    // Required: shown in the sheet's header and used as its accessible name.
+    // Leaving it out is a compile error.
+    title: "Edit Profile",
+    description: "Make changes to your profile here.",
     SheetContentClose {}
-    SheetHeader {
-        SheetTitle { "Edit Profile" }
-        SheetDescription { "Make changes to your profile here." }
-    }
     SheetFooter {
         SheetClose { "Close" }
     }
 }
 ```
+
+The sheet renders its own header (`title`, then `description`) above the children. `hide_title: true` hides that header visually but keeps it for screen readers, as the mobile sidebar does. For a description with links or formatting, put a `SheetDescription` in the children instead of `description`.
 
 ## SheetClose with `as` prop
 

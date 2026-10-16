@@ -289,9 +289,12 @@ The AlertDialog primitive provides an accessible, composable modal dialog for cr
 let mut open = use_signal(|| false);
 rsx! {
     button { onclick: move |_| open.set(true), type: "button", "Show Alert Dialog" }
-    AlertDialog { open: open(), on_open_change: move |v| open.set(v),
-        AlertDialogTitle { "Title" }
-        AlertDialogDescription { "Description" }
+    AlertDialog {
+        open: open(),
+        on_open_change: move |v| open.set(v),
+        // Required: leaving it out is a compile error.
+        title: "Delete item?",
+        description: "This can't be undone.",
         AlertDialogActions {
             AlertDialogCancel { "Cancel" }
             AlertDialogAction { on_click: move |_| { /* destructive action */ }, "Confirm" }
@@ -301,12 +304,15 @@ rsx! {
 ```
 
 ### Components
-- **AlertDialog**: Provides context, manages open state, renders the backdrop and the content panel.
-- **AlertDialogTitle**: The dialog's heading.
-- **AlertDialogDescription**: Additional description for the dialog.
+- **AlertDialog**: Provides context, manages open state, renders the backdrop and the content panel. `title` (required) is the heading and the dialog's accessible name; `description` is the message read after it.
+- **AlertDialogDescription**: A longer message with formatting or links, as a child, instead of `description`.
 - **AlertDialogActions**: Container for action buttons.
 - **AlertDialogAction**: Main action button (e.g., confirm/delete). Closes the dialog, *then* calls the optional `on_click`. So if `on_open_change(false)` clears state (such as "which item to delete"), `on_click` sees it already cleared: keep that state separate from the open flag.
 - **AlertDialogCancel**: Cancel/close button. Closes dialog and calls optional `on_click`.
+
+## Accessibility
+
+- `title` is a required prop, so an alert dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). It can't be hidden.
 
 ## Keyboard and accessibility
 
@@ -330,12 +336,67 @@ Every row is run as a keyboard test on the web, and on native where it says yes.
 ## API
 
 ```rust
-#[component]
-pub fn AlertDialog(props: AlertDialogRootProps) -> Element
+/// The props for [`AlertDialog`].
+///
+/// `title` is required: it names the alert dialog for screen readers. Unlike a
+/// plain `Dialog` it can't be hidden, since an interruption
+/// should say what it is about.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { AlertDialog { open: true, title: "Rename file", p { "…" } } }
+/// # }
+/// ```
+///
+/// Leaving `title` out is a compile error ("Missing required field title"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { AlertDialog { open: true, p { "…" } } }
+/// # }
+/// ```
+pub struct AlertDialogProps {
+    /// The heading, and the dialog's accessible name (`aria-labelledby`).
+    #[props(into)]
+    pub title: String,
+
+    /// The message read after the title (`aria-describedby`), such as what will be lost. For
+    /// richer text, put an [`AlertDialogDescription`] in the children instead (not both).
+    #[props(default, into)]
+    pub description: Option<String>,
+
+    /// The id of the alert dialog root element. If not provided, a unique id will be generated.
+    pub id: ReadSignal<Option<String>>,
+
+    /// Whether the alert dialog should be open by default. Only used if `open` is not provided.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// The controlled open state of the alert dialog.
+    #[props(default)]
+    pub open: ReadSignal<Option<bool>>,
+
+    /// Called when the open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Attributes for the backdrop element.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// The content below the title: usually [`AlertDialogActions`].
+    pub children: Element,
+}
 
 #[component]
-pub fn AlertDialogTitle(props: AlertDialogTitleProps) -> Element
+pub fn AlertDialog(props: AlertDialogProps) -> Element
 
+/// A longer message for an [`AlertDialog`] (links, formatting). For plain text, use the
+/// alert dialog's `description` prop instead.
 #[component]
 pub fn AlertDialogDescription(props: AlertDialogDescriptionProps) -> Element
 
@@ -370,9 +431,11 @@ pub fn Demo() -> Element {
             onclick: move |_| open.set(true),
             "Show Alert Dialog"
         }
-        AlertDialog { open: open(), on_open_change: move |v| open.set(v),
-            AlertDialogTitle { "Delete item" }
-            AlertDialogDescription { "Are you sure you want to delete this item? This action cannot be undone." }
+        AlertDialog {
+            open: open(),
+            on_open_change: move |v| open.set(v),
+            title: "Delete item",
+            description: "Are you sure you want to delete this item? This action cannot be undone.",
             AlertDialogActions {
                 AlertDialogCancel { "Cancel" }
                 AlertDialogAction { on_click: move |_| confirmed.set(true), "Delete" }
@@ -477,6 +540,8 @@ ImageAvatar {
 
 The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.
 
+`alt` on `AvatarImage` and `ImageAvatar` is required, so an image with no text alternative doesn't compile. Pass `alt: ""` on purpose when the name is shown beside the avatar.
+
 ## API
 
 ```rust
@@ -537,7 +602,10 @@ pub struct AvatarImageProps {
 
     pub src: String,
 
-    #[props(default)]
+    /// The image's text alternative. Required, so leaving it out is a compile error; pass
+    /// `alt: ""` on purpose when the image adds nothing (the avatar's `label` names it, or the
+    /// name is shown beside it).
+    #[props(into)]
     pub alt: String,
 
     #[props(extends = GlobalAttributes)]
@@ -558,12 +626,41 @@ pub struct AvatarFallbackProps {
 pub fn AvatarFallback(props: AvatarFallbackProps) -> Element
 
 /// The props for the [`ImageAvatar`] convenience component.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ImageAvatar { src: "/ada.png", alt: "Ada Lovelace", "AL" } }
+/// # }
+/// ```
+///
+/// Leaving `alt` out is a compile error ("Missing required field alt"), for
+/// [`AvatarImage`] too:
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ImageAvatar { src: "/ada.png", "AL" } }
+/// # }
+/// ```
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Avatar { AvatarImage { src: "/ada.png" } } }
+/// # }
+/// ```
 pub struct ImageAvatarProps {
     /// The image source URL.
     pub src: String,
 
-    /// The image alt text.
-    #[props(default)]
+    /// The image's text alternative, which also names the avatar when there is no `label`.
+    /// Required, so leaving it out is a compile error; pass `alt: ""` on purpose when the name
+    /// is shown beside the avatar.
+    #[props(into)]
     pub alt: String,
 
     /// Callback when image loads successfully.
@@ -921,6 +1018,16 @@ The button element is used to trigger actions or events in a user interface.
 
 For a link that should look like a button (the router's `Link`, which renders its own `<a>`), spread `button_look(variant, size)` onto it: `Link { to: Route::Trips {}, attributes: button_look(ButtonVariant::Outline, ButtonSize::Default), "My trips" }`. Don't also pass `class`. A link keeps link semantics: it navigates on Enter, not Space.
 
+## Icon-only buttons
+
+A button that shows only an icon is an `IconButton`. Its `label` is required (it becomes the `aria-label`), so an icon button with no name doesn't compile; `ButtonSize` has no icon sizes, so a plain `Button` can't be squared into one either. Mark the icon decorative.
+
+```rust
+IconButton { label: "Search", variant: ButtonVariant::Ghost, size: IconButtonSize::Sm,
+    Search { "aria-hidden": "true" }
+}
+```
+
 ## Component Structure
 
 ```rust
@@ -947,16 +1054,14 @@ pub enum ButtonVariant {
     Link,
 }
 
+/// A [`Button`]'s size. A button that shows only an icon is an [`IconButton`], which has its own
+/// [`IconButtonSize`] and a required `label`.
 pub enum ButtonSize {
     Xs,
     Sm,
     #[default]
     Default,
     Lg,
-    Icon,
-    IconXs,
-    IconSm,
-    IconLg,
 }
 
 /// A [`Button`]'s look for an element that is not a `<button>`, such as the router's `Link`
@@ -978,12 +1083,74 @@ pub fn Button(
     onkeydown: Option<EventHandler<KeyboardEvent>>,
     children: Element,
 ) -> Element
+
+/// An [`IconButton`]'s size: a square button sized for one icon.
+pub enum IconButtonSize {
+    Xs,
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
+/// A button that shows only an icon, such as a close or search button.
+///
+/// `label` is required: with no text inside, it is the button's only accessible name
+/// (`aria-label`), so "Close" or "Search" instead of nothing. Mark the icon itself decorative.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # use ui::icons::Search;
+/// # fn app() -> Element {
+/// rsx! { IconButton { label: "Search", variant: ButtonVariant::Ghost, Search { "aria-hidden": "true" } } }
+/// # }
+/// ```
+///
+/// Leaving `label` out is a compile error ("Missing required field label"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # use ui::icons::Search;
+/// # fn app() -> Element {
+/// rsx! { IconButton { variant: ButtonVariant::Ghost, Search { "aria-hidden": "true" } } }
+/// # }
+/// ```
+///
+/// and so is squaring a plain [`Button`] with an icon size, which no longer exists:
+///
+/// ```compile_fail,E0599
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Button { size: ButtonSize::Icon, "+" } }
+/// # }
+/// ```
+#[component]
+pub fn IconButton(
+    /// What the button does, read by screen readers ("Close", "Search").
+    #[props(into)]
+    label: String,
+    #[props(default)] variant: ButtonVariant,
+    #[props(default)] size: IconButtonSize,
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=button)]
+    attributes: Vec<Attribute>,
+    onclick: Option<EventHandler<MouseEvent>>,
+    onmousedown: Option<EventHandler<MouseEvent>>,
+    onmouseup: Option<EventHandler<MouseEvent>>,
+    onkeydown: Option<EventHandler<KeyboardEvent>>,
+    /// The icon.
+    children: Element,
+) -> Element
 ```
 
 ## Example
 
 ```rust
 use crate::components::button::*;
+use crate::components::icons::{Plus, Settings, Trash};
 use dioxus::prelude::*;
 
 #[component]
@@ -1003,6 +1170,17 @@ pub fn Demo() -> Element {
             Button { "Default" }
             Button { size: ButtonSize::Lg, "Large" }
             Button { disabled: true, "Disabled" }
+        }
+        // Icon-only buttons need a `label` (their accessible name); leaving it out doesn't compile.
+        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
+            IconButton { label: "Add", size: IconButtonSize::Xs, Plus { size: "0.75rem", "aria-hidden": "true" } }
+            IconButton { label: "Settings", variant: ButtonVariant::Outline, size: IconButtonSize::Sm,
+                Settings { size: "1rem", "aria-hidden": "true" }
+            }
+            IconButton { label: "Settings", variant: ButtonVariant::Secondary, Settings { size: "1rem", "aria-hidden": "true" } }
+            IconButton { label: "Delete", variant: ButtonVariant::Destructive, size: IconButtonSize::Lg,
+                Trash { size: "1.25rem", "aria-hidden": "true" }
+            }
         }
     }
 }
@@ -3255,16 +3433,20 @@ The dialog component can be used to display additional information or actions re
 Dialog {
     // The open prop determines if the dialog is currently open or closed.
     open: open(),
-    // The dialog title defines the heading of the dialog.
-    DialogTitle {
-        "Item information"
-    }
-    // The dialog description provides additional information about the dialog.
-    DialogDescription {
-        "Here is some additional information about the item."
-    }
+    // Required: the heading and the dialog's accessible name. Leaving it out is a compile error.
+    title: "Item information",
+    // Optional: one line read after the title.
+    description: "Here is some additional information about the item.",
+    // The content follows the title and description.
+    p { "..." }
 }
 ```
+
+## Accessibility
+
+- `title` is a required prop, so a dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). Radix and shadcn only warn about this at runtime.
+- `hide_title: true` hides the title and `description` visually but keeps them for screen readers, for dialogs whose content already makes the purpose clear (the command palette uses it).
+- For a description with links or formatting, put a `DialogDescription` in the children instead of `description` (not both).
 
 ## Keyboard and accessibility
 
@@ -3290,12 +3472,73 @@ Every row is run as a keyboard test on the web, and on native where it says yes.
 ## API
 
 ```rust
-#[component]
-pub fn Dialog(props: DialogRootProps) -> Element
+/// The props for [`Dialog`].
+///
+/// `title` is required: a dialog without a name is announced as just "dialog". Hide it with
+/// `hide_title` when the content already makes the purpose clear to sighted users.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Dialog { open: true, title: "Rename file", p { "…" } } }
+/// # }
+/// ```
+///
+/// Leaving `title` out is a compile error ("Missing required field title"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Dialog { open: true, p { "…" } } }
+/// # }
+/// ```
+pub struct DialogProps {
+    /// The dialog's heading, and its accessible name (`aria-labelledby`).
+    #[props(into)]
+    pub title: String,
+
+    /// One line read after the title (`aria-describedby`). For richer text, put a
+    /// [`DialogDescription`] in the children instead (not both).
+    #[props(default, into)]
+    pub description: Option<String>,
+
+    /// Hide the title and `description` visually; screen readers still read them.
+    #[props(default)]
+    pub hide_title: bool,
+
+    /// The ID of the dialog root element.
+    pub id: ReadSignal<Option<String>>,
+
+    /// Whether the dialog is modal. If true, it will trap focus within the dialog when open.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub is_modal: ReadSignal<bool>,
+
+    /// The controlled `open` state of the dialog.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// The default `open` state of the dialog if it is not controlled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Called when the open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Attributes for the dialog panel.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// The dialog's content, shown below the title.
+    pub children: Element,
+}
 
 #[component]
-pub fn DialogTitle(props: DialogTitleProps) -> Element
+pub fn Dialog(props: DialogProps) -> Element
 
+/// A longer description for a [`Dialog`] (links, formatting). For one line of text, use the
+/// dialog's `description` prop instead.
 #[component]
 pub fn DialogDescription(props: DialogDescriptionProps) -> Element
 ```
@@ -3312,9 +3555,11 @@ pub fn Demo() -> Element {
     let mut open = use_signal(|| false);
     rsx! {
         Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
-        Dialog { open: open(), on_open_change: move |v| open.set(v),
-            DialogTitle { "Are you sure?" }
-            DialogDescription { "This action cannot be undone." }
+        Dialog {
+            open: open(),
+            on_open_change: move |v| open.set(v),
+            title: "Are you sure?",
+            description: "This action cannot be undone.",
             div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;",
                 Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(false), "Cancel" }
                 Button { variant: ButtonVariant::Destructive, onclick: move |_| open.set(false), "Delete" }
@@ -3632,9 +3877,11 @@ fn task_item(t: TaskView) -> Element {
 A panel that slides up from the bottom and can be dragged down to dismiss.
 
 ```rust
-Drawer { open: open(), on_open_change: move |v| open.set(v),
-    DrawerTitle { "Move goal" }
-    DrawerDescription { "Set your daily goal." }
+Drawer {
+    open: open(),
+    on_open_change: move |v| open.set(v),
+    title: "Move goal", // required
+    description: "Set your daily goal.",
     DrawerClose { "Close" }
 }
 ```
@@ -3643,7 +3890,7 @@ It is built on the dialog primitive plus the motion layer's vertical `SwipeDismi
 
 ## Accessibility
 
-- Role and name: a modal `dialog` named by `DrawerTitle` (always include one) and described by `DrawerDescription`; the handle is decorative (`aria-hidden`).
+- Role and name: a modal `dialog` named by its `title` (a required prop: leaving it out is a compile error; `hide_title` hides it visually) and described by `description` or a `DrawerDescription` child; the handle is decorative (`aria-hidden`).
 - Keyboard: focus is trapped inside; Escape closes; the Close button always works, so dragging is never required.
 - Reduced motion: the slide-in is removed and the drag release becomes a near-instant tween.
 
@@ -3654,16 +3901,77 @@ Original to this repo, on `dioxus-primitives` dialog and `crates/motion`. Rust/U
 ## API
 
 ```rust
+/// The props for [`Drawer`].
+///
+/// `title` is required: a drawer is a modal dialog, and one without a name is announced as just
+/// "dialog". Hide it with `hide_title` when the content makes the purpose clear to sighted users.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Drawer { open: true, title: "Rename file", p { "…" } } }
+/// # }
+/// ```
+///
+/// Leaving `title` out is a compile error ("Missing required field title"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Drawer { open: true, p { "…" } } }
+/// # }
+/// ```
+pub struct DrawerProps {
+    /// The drawer's heading, and its accessible name (`aria-labelledby`).
+    #[props(into)]
+    pub title: String,
+
+    /// One line read after the title (`aria-describedby`), shown under it. For richer text, put
+    /// a [`DrawerDescription`] in the children instead (not both).
+    #[props(default, into)]
+    pub description: Option<String>,
+
+    /// Hide the title and `description` visually; screen readers still read them.
+    #[props(default)]
+    pub hide_title: bool,
+
+    /// The ID of the dialog root element.
+    pub id: ReadSignal<Option<String>>,
+
+    /// Whether the drawer is modal. If true, it will trap focus within the drawer when open.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub is_modal: ReadSignal<bool>,
+
+    /// The controlled `open` state of the drawer.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// The default `open` state of the drawer if it is not controlled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Called when the open state changes, including after a drag dismisses it.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Attributes for the drawer panel.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// The drawer's content, shown below the title.
+    pub children: Element,
+}
+
 /// A panel that slides up from the bottom of the screen and can be dragged down to dismiss.
 ///
 /// It is a modal dialog underneath (focus is trapped, Escape closes, the page behind is inert),
-/// so it needs a `DrawerTitle`. Dragging is an extra: the Close button and Escape always work.
+/// named by its required `title`. Dragging is an extra: the Close button and Escape always work.
 #[component]
-pub fn Drawer(props: DialogRootProps) -> Element
+pub fn Drawer(props: DrawerProps) -> Element
 
-#[component]
-pub fn DrawerTitle(props: DialogTitleProps) -> Element
-
+/// A longer description for a [`Drawer`] (links, formatting). For one line of text, use the
+/// drawer's `description` prop instead.
 #[component]
 pub fn DrawerDescription(props: DialogDescriptionProps) -> Element
 
@@ -3687,9 +3995,11 @@ pub fn Demo() -> Element {
     let mut open = use_signal(|| false);
     rsx! {
         Button { onclick: move |_| open.set(true), "Open drawer" }
-        Drawer { open: open(), on_open_change: move |v| open.set(v),
-            DrawerTitle { "Move goal" }
-            DrawerDescription { "Set your daily activity goal. Drag the handle down, or press Escape, to close." }
+        Drawer {
+            open: open(),
+            on_open_change: move |v| open.set(v),
+            title: "Move goal",
+            description: "Set your daily activity goal. Drag the handle down, or press Escape, to close.",
             p { style: "margin: 0.5rem 0;", "Pick a number that feels realistic for this week." }
             DrawerClose { "Close" }
         }
@@ -4982,7 +5292,7 @@ pub use lucide::components::*;
 ## Example
 
 ```rust
-use crate::components::button::{Button, ButtonVariant};
+use crate::components::button::{Button, ButtonVariant, IconButton};
 use crate::components::icons::{
     lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings, Star,
     Trash,
@@ -5037,8 +5347,8 @@ pub fn Demo() -> Element {
                     Trash { size: "1rem", "aria-hidden": "true" }
                     "Delete"
                 }
-                // Icon-only: the button carries the name.
-                Button { variant: ButtonVariant::Ghost, "aria-label": "Search",
+                // Icon-only: `IconButton`'s required `label` carries the name.
+                IconButton { label: "Search", variant: ButtonVariant::Ghost,
                     Search { size: "1rem", "aria-hidden": "true" }
                 }
                 // Or with hidden text (the theme's `sr-only` class), which translators and
@@ -7003,16 +7313,18 @@ Sheet {
     open: open(),
     // Which edge to slide in from. Available sides: Top, Right (default), Bottom, Left.
     "data-side": SheetSide::Right.as_str(),
+    // Required: shown in the sheet's header and used as its accessible name.
+    // Leaving it out is a compile error.
+    title: "Edit Profile",
+    description: "Make changes to your profile here.",
     SheetContentClose {}
-    SheetHeader {
-        SheetTitle { "Edit Profile" }
-        SheetDescription { "Make changes to your profile here." }
-    }
     SheetFooter {
         SheetClose { "Close" }
     }
 }
 ```
+
+The sheet renders its own header (`title`, then `description`) above the children. `hide_title: true` hides that header visually but keeps it for screen readers, as the mobile sidebar does. For a description with links or formatting, put a `SheetDescription` in the children instead of `description`.
 
 ## SheetClose with `as` prop
 
@@ -7041,8 +7353,70 @@ pub enum SheetSide {
     Left,
 }
 
+/// The props for [`Sheet`].
+///
+/// `title` is required: a sheet is a dialog, and one without a name is announced as just
+/// "dialog". Hide it with `hide_title` when the content makes the purpose clear to sighted users.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Sheet { open: true, title: "Rename file", p { "…" } } }
+/// # }
+/// ```
+///
+/// Leaving `title` out is a compile error ("Missing required field title"):
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Sheet { open: true, p { "…" } } }
+/// # }
+/// ```
+pub struct SheetProps {
+    /// The sheet's heading, and its accessible name (`aria-labelledby`). Shown in the header.
+    #[props(into)]
+    pub title: String,
+
+    /// One line read after the title (`aria-describedby`), shown under it. For richer text, put
+    /// a [`SheetDescription`] in the children instead (not both).
+    #[props(default, into)]
+    pub description: Option<String>,
+
+    /// Hide the header (title and `description`) visually; screen readers still read it.
+    #[props(default)]
+    pub hide_title: bool,
+
+    /// The ID of the dialog root element.
+    pub id: ReadSignal<Option<String>>,
+
+    /// Whether the sheet is modal. If true, it will trap focus within the sheet when open.
+    #[props(default = ReadSignal::new(Signal::new(true)))]
+    pub is_modal: ReadSignal<bool>,
+
+    /// The controlled `open` state of the sheet.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// The default `open` state of the sheet if it is not controlled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Called when the open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Attributes for the sheet panel (`"data-side"` picks the edge).
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// The sheet's content, shown below the header.
+    pub children: Element,
+}
+
 #[component]
-pub fn Sheet(props: DialogRootProps) -> Element
+pub fn Sheet(props: SheetProps) -> Element
 
 #[component]
 pub fn SheetContentClose(
@@ -7061,9 +7435,8 @@ pub fn SheetFooter(
     children: Element,
 ) -> Element
 
-#[component]
-pub fn SheetTitle(props: DialogTitleProps) -> Element
-
+/// A longer description for a [`Sheet`] (links, formatting). For one line of text, use the
+/// sheet's `description` prop instead.
 #[component]
 pub fn SheetDescription(props: DialogDescriptionProps) -> Element
 
@@ -7099,11 +7472,12 @@ pub fn Demo() -> Element {
             Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Top), "Top" }
             Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Bottom), "Bottom" }
         }
-        Sheet { open: open(), on_open_change: move |v| open.set(v), "data-side": side().as_str(),
-            SheetHeader {
-                SheetTitle { "Edit profile" }
-                SheetDescription { "Make changes to your profile here." }
-            }
+        Sheet {
+            open: open(),
+            on_open_change: move |v| open.set(v),
+            "data-side": side().as_str(),
+            title: "Edit profile",
+            description: "Make changes to your profile here.",
             div { style: "display: grid; gap: 0.5rem; max-width: 20rem; padding: 0 1rem;",
                 Label { html_for: "sheet-name", "Name" }
                 Input { id: "sheet-name", initial_value: "Ferris" }

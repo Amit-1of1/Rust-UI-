@@ -331,8 +331,8 @@ fn Signup() -> Element {
             }
         }
         Dialog { open: welcome(), on_open_change: move |v| welcome.set(v),
-            DialogTitle { "You are on the list" }
-            DialogDescription { "Thanks for joining. We will email you when your invite is ready." }
+            title: "You are on the list",
+            description: "Thanks for joining. We will email you when your invite is ready.",
             div { style: "display: flex; justify-content: flex-end; margin-top: 1rem;",
                 Button { id: "welcome-close", onclick: move |_| welcome.set(false), "Great" }
             }
