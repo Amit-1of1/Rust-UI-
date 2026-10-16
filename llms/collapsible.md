@@ -17,6 +17,17 @@ Collapsible {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure (Show/Hide)](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Shows or hides the content. | yes |
+| Space | On the trigger | Shows or hides the content. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

@@ -1,0 +1,54 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Slider"
+apg = "slider"
+roles = ["slider"]
+
+[parts]
+thumb = "[role=slider]"
+
+[[keys]]
+key = "ArrowRight"
+when = "On the thumb"
+does = "Increases the value by one step."
+native = true
+test = """
+focus thumb
+press ArrowRight
+attr thumb aria-valuenow!=50
+attr thumb aria-valuenow!=49
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On the thumb"
+does = "Decreases the value by one step."
+native = true
+test = """
+focus thumb
+press ArrowLeft
+attr thumb aria-valuenow!=50
+attr thumb aria-valuenow!=51
+"""
+
+[[keys]]
+key = "Home"
+when = "On the thumb"
+does = "Sets the minimum."
+native = true
+test = """
+focus thumb
+press Home
+attr thumb aria-valuenow=0
+"""
+
+[[keys]]
+key = "End"
+when = "On the thumb"
+does = "Sets the maximum."
+native = true
+test = """
+focus thumb
+press End
+attr thumb aria-valuenow=100
+"""

@@ -16,7 +16,8 @@
   "description": "The Combobox component is an autocomplete input with a filterable popup list.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

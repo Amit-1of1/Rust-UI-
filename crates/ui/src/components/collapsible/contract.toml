@@ -1,0 +1,32 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Disclosure (Show/Hide)"
+apg = "disclosure"
+roles = []
+
+[parts]
+trigger = "button[aria-expanded]"
+
+[[keys]]
+key = "Enter"
+when = "On the trigger"
+does = "Shows or hides the content."
+native = true
+test = """
+focus trigger
+press Enter
+attr trigger aria-expanded=true
+press Enter
+attr trigger aria-expanded=false
+"""
+
+[[keys]]
+key = "Space"
+when = "On the trigger"
+does = "Shows or hides the content."
+native = true
+test = """
+focus trigger
+press Space
+attr trigger aria-expanded=true
+"""

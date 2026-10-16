@@ -28,6 +28,19 @@ RangeSlider {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Slider](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) pattern. Roles: `slider`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On the thumb | Increases the value by one step. | yes |
+| ArrowLeft | On the thumb | Decreases the value by one step. | yes |
+| Home | On the thumb | Sets the minimum. | yes |
+| End | On the thumb | Sets the maximum. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

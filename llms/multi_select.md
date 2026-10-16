@@ -15,13 +15,30 @@ A button shows the selection ("Design, Engineering +2"). It opens a panel with a
 ## Accessibility
 
 - Role and name: the button has `aria-expanded` and `aria-controls` and is named "label: current selection"; the panel is a `role="group"` of real checkboxes, so no custom listbox keyboard model is needed; the count or "No options match." is in a `role="status"` region.
-- Keyboard: Enter/Space opens the button, Tab moves through the filter, checkboxes and the Clear/Done buttons, Space toggles a checkbox, Escape closes and returns focus to the button.
+- Focus: inside the open list, Tab moves through the filter, the checkboxes and the Clear/Done buttons. The keys are in the table below.
 - Pointer: a click outside the panel closes it.
 - Reduced motion: no animation.
 
 ## Source
 
 Original to this repo (a checkbox-group disclosure, not an ARIA listbox). Rust/UI's `multi_select.rs` was only used to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure with a checkbox list](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button | Opens the list of choices. | yes |
+| Space | On the button | Opens the list of choices. | yes |
+| Escape | In the open list | Closes it and returns focus to the button. | yes |
+
+States:
+
+- `open`: The list of choices is shown.
+- `closed`: Only the button, showing the current choice, is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

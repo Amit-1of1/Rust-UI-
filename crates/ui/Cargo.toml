@@ -31,6 +31,11 @@ web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlE
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 
+[build-dependencies]
+# build.rs checks every component's contract.toml (crates/cli/src/contract.rs).
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
 [dev-dependencies]
 # The integration tests walk every demo.
 rust-ui-kit = { path = ".", features = ["demos"] }

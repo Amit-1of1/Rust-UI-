@@ -32,6 +32,22 @@ Toolbar {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Toolbar](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) pattern. Roles: `toolbar`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a toolbar button | Moves focus to the next button. | yes |
+| ArrowLeft | On a toolbar button | Moves focus to the previous button. | yes |
+| Home | On a toolbar button | Moves focus to the first button. | yes |
+
+Known gaps:
+
+- Home works, End does not: the primitive moves focus to an item index that does not exist.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

@@ -23,6 +23,19 @@ PopoverRoot {
 }
 ```
 
+## Keyboard and accessibility
+
+Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the trigger | Opens the popover. | yes |
+| Escape | In the open popover | Closes it and returns focus to the trigger. | not yet |
+
+Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

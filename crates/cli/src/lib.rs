@@ -9,6 +9,9 @@
 //! them are stable is in docs/STABILITY.md.
 
 pub mod changelog;
+pub mod contract;
+#[cfg(test)]
+mod contract_tests;
 pub mod docsgen;
 pub mod doctor;
 pub mod llms;

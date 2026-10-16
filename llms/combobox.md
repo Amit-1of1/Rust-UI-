@@ -35,6 +35,24 @@ Combobox::<String> {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Combobox (list autocomplete)](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `combobox`, `listbox`, `option`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | In the input | Opens the list. | yes |
+| d | In the input | Typing opens the list and filters it to the matching options. | yes |
+| Enter | On a highlighted option | Picks the option and closes the list; focus stays in the input. | yes |
+| Escape | In the open list | Closes the list; focus stays in the input. | yes |
+
+States:
+
+- `open`: The list of options is shown.
+- `closed`: Only the input is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

@@ -1,0 +1,74 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Dialog (Modal) with a Combobox"
+apg = "combobox"
+roles = ["dialog", "combobox", "listbox"]
+
+native_note = "The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only."
+
+[parts]
+trigger = "button"
+dialog = "[role=dialog]"
+input = "[role=dialog] [role=combobox]"
+list = "[role=dialog] [role=listbox]"
+option = "[role=dialog] [role=option]"
+
+[[states]]
+name = "open"
+means = "The palette is shown and the search input has focus."
+check = "visible dialog"
+
+[[states]]
+name = "closed"
+means = "Only the trigger is shown."
+check = "hidden dialog"
+
+[[keys]]
+key = "Enter"
+when = "On the button that opens it"
+does = "Opens the palette with focus in the search input."
+native = false
+test = """
+focus trigger
+press Enter
+state open
+focused input
+visible list
+"""
+
+[[keys]]
+key = "Control+k"
+when = "Anywhere on the page, with hotkey set (web only)"
+does = "Opens the palette."
+native = false
+test = """
+focus trigger
+press Control+k
+state open
+"""
+
+[[keys]]
+key = "z"
+when = "In the search input"
+does = "Typing filters the commands."
+native = false
+test = """
+focus trigger
+press Enter
+press z
+visible option@1
+hidden option@3
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the palette"
+does = "Closes it and returns focus to the button that opened it."
+native = false
+test = """
+focus trigger
+press Enter
+press Escape
+state closed
+focused trigger
+"""

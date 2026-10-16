@@ -26,5 +26,8 @@ keyboard-types = { version = "0.7", default-features = false }
 # tests/layout.rs reads computed styles (visibility, display) and layout overflow.
 style = { package = "stylo", version = "0.8" }
 taffy = { version = "0.9", default-features = false }
+# tests/contracts.rs reads the component contracts (crates/cli/src/contract.rs).
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
 # Toasts start a timer, which needs a Tokio runtime (the windowed shell has one).
 tokio = { version = "1", features = ["rt", "time"] }

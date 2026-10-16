@@ -35,6 +35,25 @@ Menubar {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a menu bar item | Moves focus to the next menu bar item. | yes |
+| ArrowLeft | On a menu bar item | Moves focus to the previous menu bar item. | yes |
+| ArrowDown | On a menu bar item | Opens its menu and moves focus to the first item. | yes |
+| Enter | On a menu bar item | Opens or closes its menu. | yes |
+| Escape | In an open menu | Closes the menu. | yes |
+
+States:
+
+- `file-open`: The first menu is open.
+- `file-closed`: The first menu is closed.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

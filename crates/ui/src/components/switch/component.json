@@ -11,7 +11,8 @@
   "description": "The Switch component allows users to toggle between two states, such as on and off.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

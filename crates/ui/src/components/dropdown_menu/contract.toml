@@ -1,0 +1,92 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Menu Button"
+apg = "menu-button"
+roles = ["listbox", "option"]
+gaps = [
+    "The items are a `listbox` of `option`s, not a `menu` of `menuitem`s (upstream markup).",
+    "Opening does not move focus to the first item; the first arrow key does.",
+]
+
+[parts]
+trigger = "button[aria-haspopup]"
+list = "[role=listbox]"
+item = "[role=option]"
+
+[[states]]
+name = "open"
+means = "The list of actions is shown."
+check = "attr trigger aria-expanded=true"
+
+[[states]]
+name = "closed"
+means = "Only the trigger is shown."
+check = "attr trigger aria-expanded=false"
+
+[[keys]]
+key = "Enter"
+when = "On the trigger"
+does = "Opens the menu; focus stays on the trigger until an arrow key moves it in (the APG moves it to the first item at once)."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+visible list
+focused trigger
+"""
+
+[[keys]]
+key = "Space"
+when = "On the trigger"
+does = "Opens the menu, as Enter does."
+native = true
+test = """
+focus trigger
+press Space
+state open
+visible list
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "In the open menu"
+does = "Moves focus to the first item, then to the next one."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown
+focused item@1
+press ArrowDown
+focused item@2
+focus-in list
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "In the open menu"
+does = "Moves focus to the previous item, wrapping from the first to the last."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*2
+press ArrowUp
+focused item@1
+press ArrowUp
+focused item@4
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open menu"
+does = "Closes the menu and returns focus to the trigger."
+native = true
+test = """
+focus trigger
+press Enter
+press Escape
+state closed
+focused trigger
+"""

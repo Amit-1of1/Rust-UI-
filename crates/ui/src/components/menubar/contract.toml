@@ -1,0 +1,81 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Menu Bar"
+apg = "menubar"
+roles = ["menubar", "menu", "menuitem"]
+
+[parts]
+bar = "[role=menubar]"
+menu = "[role=menubar] > [role=menu]"
+top = "[role=menubar] > [role=menu] > [role=menuitem]"
+item = "[role=menubar] [role=menu] [role=menu] [role=menuitem]"
+
+[[states]]
+name = "file-open"
+means = "The first menu is open."
+check = "attr menu@1 data-state=open"
+
+[[states]]
+name = "file-closed"
+means = "The first menu is closed."
+check = "attr menu@1 data-state=closed"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a menu bar item"
+does = "Moves focus to the next menu bar item."
+native = true
+test = """
+focus bar
+press ArrowRight
+focused top@2
+focus-in bar
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a menu bar item"
+does = "Moves focus to the previous menu bar item."
+native = true
+test = """
+focus bar
+press ArrowRight
+press ArrowLeft
+focused top@1
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a menu bar item"
+does = "Opens its menu and moves focus to the first item."
+native = true
+test = """
+focus top@1
+press ArrowDown
+state file-open
+visible item@1
+focus-in menu@1
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a menu bar item"
+does = "Opens or closes its menu."
+native = true
+test = """
+focus top@1
+press Enter
+state file-open
+"""
+
+[[keys]]
+key = "Escape"
+when = "In an open menu"
+does = "Closes the menu."
+native = true
+test = """
+focus top@1
+press ArrowDown
+press Escape
+state file-closed
+"""

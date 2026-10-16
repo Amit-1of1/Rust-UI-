@@ -1,0 +1,43 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Radio Group"
+apg = "radio"
+roles = ["radiogroup", "radio"]
+
+[parts]
+group = "[role=radiogroup]"
+radio = "[role=radio]"
+
+[[keys]]
+key = "Space"
+when = "On a radio"
+does = "Checks the focused radio."
+native = true
+test = """
+focus radio@1
+press Space
+attr radio@1 aria-checked=true
+focus-in group
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a radio"
+does = "Moves focus to the next radio, skipping disabled ones."
+native = true
+test = """
+focus radio@1
+press ArrowDown
+focused radio@2
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On a radio"
+does = "Moves focus to the previous radio."
+native = true
+test = """
+focus radio@2
+press ArrowUp
+focused radio@1
+"""
