@@ -171,6 +171,7 @@ fn MoreSections() -> Element {
         Section { title: "Stepper", blurb: "Multi-step progress with Back and Next.", ui::demos::stepper::Demo {} }
         Section { title: "Bottom nav", blurb: "Mobile tab bar with aria-current.", ui::demos::bottom_nav::Demo {} }
         Section { title: "Form", blurb: "Validation state, a Form and bound TextFields; focus jumps to the first error on submit.", ui::demos::form::Demo {} }
+        Section { title: "Form derive", blurb: "#[derive(Form)] on a struct: fields, rules and named error messages from one type.", ui::demos::form_derive::Demo {} }
         Section { title: "Data table", blurb: "Sort, filter, paginate and select rows; status is announced to screen readers.", ui::demos::data_table::Demo {} }
         Section { title: "Input otp", blurb: "One box per character: auto-advance, Backspace, arrow keys and paste.", ui::demos::input_otp::Demo {} }
         Section { title: "Input group", blurb: "An input with text or buttons attached inside one border.", ui::demos::input_group::Demo {} }

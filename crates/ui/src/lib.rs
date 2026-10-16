@@ -33,6 +33,12 @@ pub use components::icons;
 /// Spring presets, presence animations and reduced-motion handling.
 pub use motion;
 
+/// `#[derive(Form)]`: a struct's fields become a validated, accessible form (see the `form`
+/// component's docs). Also in [`prelude`].
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub use form_derive::Form;
+
 use dioxus::prelude::*;
 
 /// Theme tokens (colors, light/dark) shared by every component.
@@ -56,4 +62,5 @@ pub mod prelude {
     pub use crate::ThemeStyles;
     pub use dioxus_primitives::toast::{use_toast, ToastOptions};
     pub use dioxus_primitives::ContentSide;
+    pub use form_derive::Form;
 }

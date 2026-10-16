@@ -6896,6 +6896,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust-ui-form-derive"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "rust-ui-kit"
 version = "0.1.0"
 dependencies = [
@@ -6904,6 +6913,7 @@ dependencies = [
  "dioxus-ssr",
  "palette",
  "proptest",
+ "rust-ui-form-derive",
  "rust-ui-kit",
  "rust-ui-motion",
  "strum",

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/ui", "crates/motion", "crates/cli", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/booking", "apps/native", "apps/showcase"]
+members = ["crates/ui", "crates/motion", "crates/cli", "crates/form-derive", "apps/gallery", "apps/site", "apps/docs", "apps/trial", "apps/dashboard", "apps/booking", "apps/native", "apps/showcase"]
 
 [workspace.package]
 edition = "2021"
@@ -20,6 +20,7 @@ dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", re
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
 motion = { path = "crates/motion", package = "rust-ui-motion", version = "0.1.0" }
+form-derive = { path = "crates/form-derive", package = "rust-ui-form-derive", version = "0.1.0" }
 
 [profile.release]
 opt-level = "z"

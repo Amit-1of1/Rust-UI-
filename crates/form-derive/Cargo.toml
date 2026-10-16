@@ -1,0 +1,19 @@
+[package]
+name = "rust-ui-form-derive"
+version = "0.1.0"
+description = "`#[derive(Form)]` for the Rust UI kit: fields, validation and accessible errors from a struct"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["dioxus", "ui", "form", "derive"]
+categories = ["gui", "wasm"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }
