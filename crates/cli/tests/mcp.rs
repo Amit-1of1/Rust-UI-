@@ -215,6 +215,10 @@ fn add_component_copies_into_the_project() {
         std::fs::read(&copied).unwrap(),
         std::fs::read(original).unwrap()
     );
+    // Recorded for `rust-ui update`, with the folder relative to the project.
+    let lock = rust_ui_cli::update::Lock::load(&tmp.path().join("rust-ui-lock.json")).unwrap();
+    assert_eq!(lock.items["badge"].dir, "src/components");
+    assert!(lock.items["badge"].files.contains_key("badge/component.rs"));
     // Edits are kept unless forced, like `rust-ui add`.
     std::fs::write(&copied, "// mine").unwrap();
     let (text, _) = c.call("add_component", json!({ "names": ["badge"] }));
