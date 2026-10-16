@@ -33,6 +33,9 @@ pub struct Server {
     root: PathBuf,
     /// The app `add_component` and `init_theme` write into (`--project`).
     project: PathBuf,
+    /// The `--source` as given, recorded in the project's `rust-ui-lock.json` so
+    /// `rust-ui update` can find it again (the checkout path when not set).
+    source: Option<String>,
 }
 
 impl Server {
@@ -40,7 +43,14 @@ impl Server {
         Self {
             root: root.into(),
             project: project.into(),
+            source: None,
         }
+    }
+
+    /// The `--source` to record in the lockfile when components are added.
+    pub fn with_source(mut self, source: impl Into<String>) -> Self {
+        self.source = Some(source.into());
+        self
     }
 
     /// Answer messages from `input` until it closes.
@@ -243,6 +253,16 @@ impl Server {
                 let items = resolve(&reg, &names)?;
                 let (written, kept) =
                     add_to(&self.root, &items, &dest, &blocks, force).map_err(|e| e.to_string())?;
+                let source = (self.source.clone())
+                    .unwrap_or_else(|| self.root.to_string_lossy().into_owned());
+                crate::update::record(
+                    &self.project.join(crate::update::LOCK_FILE),
+                    &self.root,
+                    &source,
+                    &items,
+                    &dest,
+                    &blocks,
+                )?;
                 let mut out = format!(
                     "Added {} (wrote {} file(s)).\n",
                     items

@@ -103,3 +103,54 @@ fn flip_item_wraps_content_without_changing_it() {
     assert!(html.contains("<span>row</span>"), "{html}");
     assert!(html.contains("translateY(0px)"), "{html}");
 }
+
+#[test]
+fn draggable_is_a_focusable_named_group_at_rest() {
+    fn app() -> Element {
+        rsx! {
+            motion::Draggable { "aria-label": "Card", axis: motion::DragAxis::X, "Card" }
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("tabindex=\"0\""), "{html}");
+    assert!(html.contains("role=\"group\""), "{html}");
+    assert!(
+        html.contains("aria-roledescription=\"draggable\""),
+        "{html}"
+    );
+    assert!(html.contains("translate(0px, 0px)"), "{html}");
+    assert!(html.contains("touch-action: pan-y"), "{html}");
+}
+
+#[test]
+fn pinch_zoom_starts_unzoomed_and_announces_its_scale() {
+    fn app() -> Element {
+        rsx! {
+            motion::PinchZoom { "aria-label": "Map", "Content" }
+        }
+    }
+    let html = render(app);
+    assert!(html.contains("scale(1)"), "{html}");
+    assert!(html.contains("data-scale=\"1.000\""), "{html}");
+    assert!(html.contains("aria-live=\"polite\""), "{html}");
+    assert!(html.contains("100%"), "{html}");
+}
+
+#[test]
+fn layout_items_render_without_a_transform_until_they_move() {
+    fn app() -> Element {
+        rsx! {
+            motion::LayoutGroup {
+                motion::LayoutItem { layout_id: "x", id: "a", "A" }
+                motion::LayoutItem { id: "b", "B" }
+            }
+        }
+    }
+    let html = render(app);
+    assert!(
+        html.contains("id=\"a\"") && html.contains("id=\"b\""),
+        "{html}"
+    );
+    assert!(!html.contains("translate"), "{html}");
+    assert!(html.contains("transform: none"), "{html}");
+}

@@ -1,0 +1,5 @@
+[application]
+name = "showcase"
+
+[web.app]
+title = "Rust UI Showcase"

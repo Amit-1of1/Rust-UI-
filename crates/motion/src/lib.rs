@@ -11,26 +11,45 @@
 //! * [`FlipList`] and [`FlipItem`]: siblings slide into place when a row is added or removed.
 //! * [`SwipeDismiss`]: drag sideways (or press Delete) to dismiss.
 //! * [`use_spring`]: a spring-driven `f32`, e.g. for hover and press effects.
+//! * [`physics`]: our own spring solver (closed form), momentum glides, velocity tracking,
+//!   rubber banding and zoom maths, all plain Rust and unit tested.
+//! * [`use_motion_value`]: a value driven by that physics; set it while dragging, then spring
+//!   or throw it with the pointer's speed.
+//! * [`Draggable`]: drag and throw with momentum, bounds, rubber banding and snap points.
+//! * [`PinchZoom`]: pinch, Ctrl + wheel, double click and keyboard zoom with pan.
+//! * [`LayoutGroup`] and [`LayoutItem`]: position and size changes animate, and items sharing
+//!   a `layout_id` morph into each other (shared-element transitions).
 //! * [`css`]: the same presets traced as CSS `linear()` easings, for CSS-animated overlays.
 //!
 //! # Stability
 //!
 //! Stable: [`SpringPreset`], [`Transition`], [`use_reduced_motion`], [`Pop`], and
 //! [`AnimatePresence`], [`use_is_present`] and [`PresenceMode`] as used with `Pop`.
-//! Experimental: [`use_spring`], [`FlipList`]/[`FlipItem`], [`SwipeDismiss`] and its types, and
-//! the other items re-exported from `dioxus-motion` (they change when the engine does).
+//! Experimental: [`use_spring`], [`FlipList`]/[`FlipItem`], [`SwipeDismiss`] and its types,
+//! [`physics`], [`use_motion_value`], [`Draggable`], [`PinchZoom`], [`LayoutGroup`]/[`LayoutItem`]
+//! and their types, and the other items re-exported from `dioxus-motion` (they change when the
+//! engine does).
 //! Internal: [`css`]. Details in docs/STABILITY.md.
 
 pub mod css;
+mod drag;
 mod flip;
 mod gesture;
+mod layout;
+pub mod physics;
+mod pinch;
 mod preset;
 mod reduced;
+mod value;
 
+pub use drag::{DragAxis, DragBounds, DragEnd, DragModel, Draggable};
 pub use flip::{FlipItem, FlipList};
 pub use gesture::{SwipeDirection, SwipeDismiss, SwipeOutcome, SwipeTracker};
+pub use layout::{LayoutDelta, LayoutGroup, LayoutItem, LayoutRect};
+pub use pinch::{clamp_view, pinch_view, zoom_view, PinchFrame, PinchTracker, PinchZoom};
 pub use preset::{SpringPreset, Transition};
 pub use reduced::use_reduced_motion;
+pub use value::{use_motion_value, MotionValue};
 
 // Engine re-exports. AnimatePresence, use_is_present and PresenceMode are stable; the rest is
 // experimental: their types are dioxus-motion's and change with it (docs/STABILITY.md).

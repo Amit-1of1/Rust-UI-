@@ -1,0 +1,222 @@
+/* Page layout only. Every colour is a theme token, so light, dark and accents work, and
+   every rule here also works on the native renderer (no grid row around a scrolling list,
+   no padding on a block whose children are all inline; see docs/NATIVE.md). */
+
+body {
+  margin: 0;
+  background: var(--primary-color);
+  color: var(--secondary-color-1);
+  font-family: system-ui, sans-serif;
+}
+
+/* The app paints its own background: on native the theme lives on ThemeScope, below <body>. */
+.sc-app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: var(--primary-color);
+  color: var(--secondary-color-1);
+  font-family: system-ui, sans-serif;
+}
+
+.sc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  padding-inline: 1rem;
+  border-block-end: 1px solid var(--primary-color-6);
+}
+
+.sc-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sc-logo {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius, 0.5rem);
+  background: var(--secondary-color-1);
+  color: var(--primary-color);
+}
+
+.sc-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.sc-theme {
+  display: flex;
+  align-items: center;
+}
+
+.sc-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sc-rail {
+  display: flex;
+  width: 12rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 0.75rem;
+  border-inline-end: 1px solid var(--primary-color-6);
+}
+
+.sc-rail .sc-rail-link {
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.sc-rail .sc-rail-link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.sc-main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.sc-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.sc-bottom {
+  display: none;
+}
+
+.sc-chips,
+.sc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sc-muted {
+  margin: 0;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+}
+
+.sc-stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sc-stat .sc-stat-value {
+  font-size: 1.75rem;
+}
+
+.sc-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.sc-form-card {
+  max-width: 36rem;
+}
+
+.sc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sc-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sc-accordion-text {
+  margin: 0;
+  padding-bottom: 1rem;
+}
+
+.sc-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.sc-sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1rem;
+}
+
+.sc-tab-body {
+  padding-top: 1rem;
+}
+
+.sc-table {
+  overflow-x: auto;
+}
+
+/* Phones: the rail becomes a bottom tab bar, columns stack. */
+@media (max-width: 640px) {
+  .sc-rail,
+  .sc-header .sc-renderer {
+    display: none;
+  }
+
+  .sc-main {
+    padding: 1rem;
+    /* room for the tab bar */
+    padding-bottom: 5rem;
+  }
+
+  .sc-stats,
+  .sc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sc-bottom {
+    display: block;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+  }
+}

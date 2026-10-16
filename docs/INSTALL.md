@@ -31,9 +31,29 @@ rust-ui init                 # theme.css into assets/
 rust-ui add button dialog    # components into src/components
 rust-ui add login_01         # a block (whole screen) into src/blocks, its components into src/components
 rust-ui diff button dialog   # which copied files differ from the registry
+rust-ui update --dry-run     # what updating to the registry's current version would change
+rust-ui update               # update every installed component, keeping your edits
 ```
 
 It copies the same files and resolves component dependencies from `registry.json`. Blocks (`rust-ui list` marks them) are whole screens: add `mod blocks;` next to `mod components;` and use them like your own code. `dx components add` installs components only. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
+
+#### Updating copied components
+
+`rust-ui add` records what it copied in `rust-ui-lock.json` (the source, its commit, and a hash of each file) and keeps an untouched copy of each file in `.rust-ui/base/`. Commit both with your app. Run the CLI from the project root, where the lockfile is.
+
+`rust-ui update [names]` (all installed items when no names are given) then brings each file up to the registry's current version with a three-way merge, the way `git merge` does: the recorded copy is the common ancestor, your file is one side and the registry's file is the other.
+
+| You | The registry | `update` |
+|---|---|---|
+| didn't touch the file | changed it | `updated`: replaced with the new version |
+| edited it | changed other lines | `merged`: both changes kept |
+| edited it | changed the same lines | `CONFLICT`: written with `<<<<<<< yours` / `\|\|\|\|\|\|\| registry <old>` / `=======` / `>>>>>>> registry <new>` markers; edit them out |
+| edited it | didn't change it | `kept` |
+| deleted it | anything | `deleted`: not restored |
+| had it | removed it | `removed`: your copy stays, no longer tracked |
+| - | added a file or a new dependency | `added` (it prints the `pub mod` line for a new component) |
+
+`--dry-run` prints the same list plus a unified diff of every file that would change, and writes nothing. The command exits with status 1 while a file has conflict markers, or when a file differs from the registry but was never recorded (copied by hand or edited before the lockfile existed); compare that one with `rust-ui diff` and take the registry's copy with `rust-ui add --force <name>`. Without `--source`, `update` uses the source the lockfile names. `--lock <path>` uses another lockfile.
 
 ## Path 2: depend on the crate from git
 

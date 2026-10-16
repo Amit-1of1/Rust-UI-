@@ -69,6 +69,11 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 | `use_spring`, `Spring` | Thin wrapper that may change when the engine does. |
 | `FlipList`, `FlipItem` | Own FLIP implementation; web and desktop webview only. |
 | `SwipeDismiss`, `SwipeDirection`, `SwipeOutcome`, `SwipeTracker` | Gesture API grew `vertical`/`one_way` recently and depends on pointer capture (none on native). |
+| `motion::physics` (`SpringConfig`, `SpringState`, `Glide`, `GlideConfig`, `Animation`, `VelocityTracker`, `rubber_band`, `rubber_band_clamp`, `zoom_about`, `pan_bounds`) | Our own spring and momentum maths, new; names and defaults may still move. |
+| `use_motion_value`, `MotionValue` | New frame loop over `motion::physics`; may change with the engine's timer. |
+| `Draggable`, `DragAxis`, `DragBounds`, `DragEnd`, `DragModel` | New gesture API; pointer capture on web only. |
+| `PinchZoom`, `PinchTracker`, `PinchFrame`, `pinch_view`, `zoom_view`, `clamp_view` | New gesture API; two-finger pinch needs touch, the rest works with mouse and keyboard. |
+| `LayoutGroup`, `LayoutItem`, `LayoutRect`, `LayoutDelta` | New layout and shared-element animation; web and desktop webview only (needs element measurement). |
 
 ### Internal
 
@@ -87,6 +92,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
 - `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
+- `rust-ui update [names] [--dry-run]`, the `rust-ui-lock.json` format, the `.rust-ui/base/` folder and the global `--lock`: new on 2026-10-15. `add` writes the lockfile since then.
 - `rust-ui docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
 - `rust-ui mcp` (MCP server over stdio) and its tool names, arguments and replies: new on 2026-10-15.
 
