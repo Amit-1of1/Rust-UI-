@@ -1,4 +1,4 @@
-use crate::components::dialog::{Dialog, DialogDescription, DialogTitle};
+use crate::components::dialog::Dialog;
 use crate::components::hooks::use_hotkey;
 use crate::components::ui_strings::use_ui_strings;
 use dioxus::prelude::*;
@@ -139,9 +139,12 @@ pub fn CommandDialog(
     };
 
     rsx! {
-        Dialog { open, on_open_change: move |v| on_open_change.call(v),
-            DialogTitle { class: Styles::dx_command_sr_only, {t.command_palette} }
-            DialogDescription { class: Styles::dx_command_sr_only, {t.command_help} }
+        Dialog {
+            open,
+            on_open_change: move |v| on_open_change.call(v),
+            title: t.command_palette,
+            description: t.command_help,
+            hide_title: true,
             div { class: Styles::dx_command,
                 input {
                     class: Styles::dx_command_input,

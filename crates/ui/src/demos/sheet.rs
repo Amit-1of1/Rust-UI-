@@ -19,11 +19,12 @@ pub fn Demo() -> Element {
             Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Top), "Top" }
             Button { variant: ButtonVariant::Outline, onclick: move |_| show(SheetSide::Bottom), "Bottom" }
         }
-        Sheet { open: open(), on_open_change: move |v| open.set(v), "data-side": side().as_str(),
-            SheetHeader {
-                SheetTitle { "Edit profile" }
-                SheetDescription { "Make changes to your profile here." }
-            }
+        Sheet {
+            open: open(),
+            on_open_change: move |v| open.set(v),
+            "data-side": side().as_str(),
+            title: "Edit profile",
+            description: "Make changes to your profile here.",
             div { style: "display: grid; gap: 0.5rem; max-width: 20rem; padding: 0 1rem;",
                 Label { html_for: "sheet-name", "Name" }
                 Input { id: "sheet-name", initial_value: "Ferris" }
