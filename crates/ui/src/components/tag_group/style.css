@@ -30,8 +30,9 @@
 }
 
 .dx-tag[data-selected="true"] {
-  border-color: var(--focused-border-color);
-  background-color: var(--focused-border-color);
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: var(--accent-contrast);
 }
 
 .dx-tag[data-disabled="true"] {
@@ -54,7 +55,7 @@
   border-radius: 6px;
   margin-inline-start: 0.25rem;
   background-color: transparent;
-  color: var(--secondary-color-6);
+  color: var(--secondary-color-5);
   cursor: pointer;
   transition:
     background-color 120ms ease,

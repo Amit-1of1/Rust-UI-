@@ -66,9 +66,13 @@ html[data-theme="dark"],
   --secondary-error-color: light-dark(#ef4444, #9b1c1c);
   /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
   --error-text-color: light-dark(#b91c1c, #f87171);
+  /* Success and warning as text on their tinted fills (toasts); the --secondary-* ones are
+     fills and fail as text in light mode (2.4:1 and 2.1:1). */
+  --success-text-color: light-dark(#047857, #b6fae3);
+  --warning-text-color: light-dark(#b45309, #feeac7);
   --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
   --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
-  --secondary-info-color: light-dark(var(--secondary-color-3), var(--primary-color-7));
+  --secondary-info-color: var(--secondary-color-3);
   /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
      accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
      (tests/theme.rs). */
@@ -164,9 +168,10 @@ html[data-theme="light"],
     --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
     --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
     --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
+    --success-text-color: var(--dark, #b6fae3) var(--light, #047857);
+    --warning-text-color: var(--dark, #feeac7) var(--light, #b45309);
     --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
     --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
-    --secondary-info-color: var(--dark, var(--primary-color-7)) var(--light, var(--secondary-color-3));
     --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
     --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
     --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
