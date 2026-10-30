@@ -16,6 +16,7 @@ pub fn Demo() -> Element {
             Ok(())
         }
     })]);
+    let night_shift = form.field(vec![]);
     let mut saved = use_signal(|| None::<String>);
     let meeting_text = meeting()
         .map(|t| format_time(t, HourCycle::H24, false, &strings))
@@ -30,6 +31,13 @@ pub fn Demo() -> Element {
             }
             p { style: "margin: 0;", "Meeting: {meeting_text}" }
             TimePicker { label: "Alarm", hour_cycle: HourCycle::H12, seconds: true }
+            // Up and Down skip hours outside 9:00 to 17:00; a typed 18:00 is marked invalid.
+            TimePicker {
+                label: "Office hours",
+                min: Time::from_hms(9, 0, 0).ok(),
+                max: Time::from_hms(17, 0, 0).ok(),
+                minute_step: 30,
+            }
             Form {
                 state: form,
                 on_valid: move |_| {
@@ -42,6 +50,13 @@ pub fn Demo() -> Element {
                     label: "Reminder",
                     hour_cycle: HourCycle::H12,
                     description: "Type the hour, minutes, then A or P.",
+                }
+                TimeField {
+                    field: night_shift,
+                    label: "Night shift start",
+                    min: Time::from_hms(22, 0, 0).ok(),
+                    max: Time::from_hms(2, 0, 0).ok(),
+                    description: "Between 22:00 and 02:00.",
                 }
                 Button { r#type: "submit", "Set reminder" }
             }

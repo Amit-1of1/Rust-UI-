@@ -12,12 +12,9 @@ struct Styles;
 /// `<input type="datetime-local">`, used by
 /// [`DateTimeField`](crate::components::form::DateTimeField) to keep a value in a form field.
 pub fn format_iso_date_time(value: PrimitiveDateTime, seconds: bool) -> String {
-    let date = value.date();
     format!(
-        "{:04}-{:02}-{:02}T{}",
-        date.year(),
-        date.month() as u8,
-        date.day(),
+        "{}T{}",
+        format_iso_date(value.date()),
         format_iso_time(value.time(), seconds)
     )
 }
@@ -26,15 +23,10 @@ pub fn format_iso_date_time(value: PrimitiveDateTime, seconds: bool) -> String {
 pub fn parse_iso_date_time(text: &str) -> Option<PrimitiveDateTime> {
     let text = text.trim();
     let (date, time) = text.split_once(['T', ' '])?;
-    let mut parts = date.split('-');
-    let year: i32 = parts.next().filter(|p| p.len() == 4)?.parse().ok()?;
-    let month: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
-    let day: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
-    if parts.next().is_some() {
-        return None;
-    }
-    let date = Date::from_calendar_date(year, Month::try_from(month).ok()?, day).ok()?;
-    Some(PrimitiveDateTime::new(date, parse_iso_time(time)?))
+    Some(PrimitiveDateTime::new(
+        parse_iso_date(date)?,
+        parse_iso_time(time)?,
+    ))
 }
 
 /// A [`DatePicker`] and a [`TimePicker`] that edit one value. The value is `Some` once both a
