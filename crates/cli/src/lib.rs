@@ -8,6 +8,7 @@
 //! tests, and may change in any release. The commands are the supported interface; which of
 //! them are stable is in docs/STABILITY.md.
 
+pub mod app;
 pub mod changelog;
 pub mod contract;
 #[cfg(test)]
@@ -20,6 +21,7 @@ pub mod manifest;
 pub mod mcp;
 pub mod postbuild;
 pub mod scaffold;
+pub mod scope;
 pub mod theme;
 pub mod update;
 

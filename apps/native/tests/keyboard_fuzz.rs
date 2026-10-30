@@ -73,54 +73,9 @@ const BASE_KEYS: &[&str] = &[
 ];
 
 /// (demo, invariant, shortest sequence that breaks it, why). Each must still reproduce.
-const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
-    (
-        "alert_dialog",
-        Invariant::FocusLost,
-        &["Enter", "Escape"],
-        RETURN,
-    ),
-    (
-        "color_picker",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    (
-        "command",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    (
-        "date_picker",
-        Invariant::FocusLost,
-        &["Enter", "Escape"],
-        RETURN,
-    ),
-    (
-        "date_time_picker",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    ("dialog", Invariant::FocusLost, &["Space", "Escape"], RETURN),
-    ("drawer", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
-    (
-        "popover",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    ("sheet", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
-];
-
-/// The dialog and popover primitives return focus to whatever had it before they opened
-/// with a script on the web. Native has no script and Dioxus has no "focused element" API,
-/// and these overlays have no trigger component of ours to hold on to, so focus stays on the
-/// removed panel. The contracts record the same gap (`native = false` Escape rows).
-const RETURN: &str =
-    "Escape leaves focus on the removed overlay on native (no focus return without a script)";
+/// Empty since overlays return focus to their opener through element handles
+/// (`hooks::ReturnFocus`), which also works without a script.
+const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[];
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Invariant {

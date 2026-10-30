@@ -33,11 +33,21 @@ enum Command {
         #[arg(long)]
         check: bool,
     },
-    /// Copy the theme stylesheet into a project.
+    /// Copy the theme stylesheet into a project, new or existing: checks the Dioxus version,
+    /// reports CSS in the app that clashes with the kit's, and prints how to load the theme.
     Init {
         /// Destination file for the theme CSS.
         #[arg(long, default_value = "assets/theme.css")]
         dest: PathBuf,
+        /// Confine the theme to `ThemeScope` (data-rui-scope), for an app with its own CSS.
+        #[arg(long)]
+        scoped: bool,
+        /// Also copy the small base stylesheet (`reset.css`) beside the theme.
+        #[arg(long)]
+        reset: bool,
+        /// The app's root folder (where its Cargo.toml is).
+        #[arg(long, default_value = ".")]
+        app: PathBuf,
     },
     /// Copy components or blocks (and the components they depend on) into a project.
     Add {
@@ -51,6 +61,12 @@ enum Command {
         /// Overwrite files that differ.
         #[arg(long)]
         force: bool,
+        /// Only copy files: don't edit `mod.rs`, `main.rs`/`lib.rs` or `Cargo.toml`.
+        #[arg(long)]
+        no_wire: bool,
+        /// The app's root folder (where its Cargo.toml is).
+        #[arg(long, default_value = ".")]
+        app: PathBuf,
     },
     /// Scaffold a new component in this repo (files, demo, test, gallery section, registry).
     New { name: String },
@@ -87,6 +103,9 @@ enum Command {
     Postbuild {
         /// The build's public folder, e.g. `target/dx/app/release/web/public`.
         public: PathBuf,
+        /// The app renders `ThemeStyles { scoped: true }`: bundle the scoped theme instead.
+        #[arg(long)]
+        scoped: bool,
     },
     /// Print a component's page for coding agents (docs, props, example), or the index
     /// (`llms.txt`) without a name.
@@ -161,12 +180,14 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             if check {
                 let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
                 let llms = rust_ui_cli::llms::stale(root).map_err(err)?;
+                let scoped = rust_ui_cli::scope::stale(root).map_err(err)?;
                 if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
                     || !stale.is_empty()
                     || !llms.is_empty()
+                    || !scoped.is_empty()
                 {
                     eprintln!(
-                        "registry.json, a component.json or the llms.txt files are out of date; run `rust-ui registry`"
+                        "registry.json, a component.json, the llms.txt files or a *.scoped.css theme are out of date; run `rust-ui registry`"
                     );
                     return Ok(ExitCode::FAILURE);
                 }
@@ -181,20 +202,24 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 );
                 let n = rust_ui_cli::llms::write(root).map_err(err)?;
                 println!("wrote {n} llms.txt files");
+                for p in rust_ui_cli::scope::write(root).map_err(err)? {
+                    println!("wrote {}", p.display());
+                }
             }
         }
-        Command::Init { dest } => {
-            if let Some(parent) = dest.parent() {
-                std::fs::create_dir_all(parent).map_err(err)?;
-            }
-            std::fs::copy(root.join(THEME_FILE), &dest).map_err(err)?;
-            println!("wrote {}", dest.display());
-        }
+        Command::Init {
+            dest,
+            scoped,
+            reset,
+            app,
+        } => init(root, &app, &dest, scoped, reset)?,
         Command::Add {
             names,
             dest,
             blocks_dest,
             force,
+            no_wire,
+            app,
         } => {
             let items = resolve(&load(root)?, &names)?;
             let (written, skipped) =
@@ -206,11 +231,15 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             for s in &skipped {
                 println!("kept {} (differs; use --force to overwrite)", s.display());
             }
-            for (kind, dir) in [(Kind::Component, &dest), (Kind::Block, &blocks_dest)] {
-                let lines = mod_lines_of(&items, kind);
-                if !lines.is_empty() {
-                    println!("\nAdd to {}/mod.rs:\n{lines}", dir.display());
+            if no_wire {
+                for (kind, dir) in [(Kind::Component, &dest), (Kind::Block, &blocks_dest)] {
+                    let lines = mod_lines_of(&items, kind);
+                    if !lines.is_empty() {
+                        println!("\nAdd to {}/mod.rs:\n{lines}", dir.display());
+                    }
                 }
+            } else {
+                wire(root, &app, &items, &dest, &blocks_dest)?;
             }
         }
         Command::New { name } => {
@@ -292,11 +321,11 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
             print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
         }
-        Command::Postbuild { public } => {
-            use rust_ui_cli::postbuild::{bundle_css, strip_wasm};
+        Command::Postbuild { public, scoped } => {
+            use rust_ui_cli::postbuild::{bundle_css_with, strip_wasm};
             let saved = strip_wasm(&public)?;
             println!("wasm: {} KB of names and debug info removed", saved / 1024);
-            let css = bundle_css(&public)?;
+            let css = bundle_css_with(&public, scoped)?;
             println!(
                 "css: assets/{} holds {} stylesheets ({} unused left out)",
                 css.file,
@@ -441,5 +470,168 @@ fn main() -> ExitCode {
             eprintln!("error: {e}");
             ExitCode::FAILURE
         }
+    }
+}
+
+/// `rust-ui init`: copy the theme (scoped or not, plus the reset if asked), then check the
+/// app it lands in.
+fn init(root: &Path, app: &Path, dest: &Path, scoped: bool, reset: bool) -> Result<(), String> {
+    use rust_ui_cli::{app as wiring, scope};
+    let err = |e: std::io::Error| e.to_string();
+    let write = |to: &Path, from: &str| -> Result<(), String> {
+        let css = std::fs::read_to_string(root.join(from)).map_err(err)?;
+        let name = Path::new(from)
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy();
+        let text = if scoped {
+            scope::scoped_file(&name, &css)
+        } else {
+            css
+        };
+        if let Some(parent) = to.parent() {
+            std::fs::create_dir_all(parent).map_err(err)?;
+        }
+        std::fs::write(to, text).map_err(err)?;
+        println!(
+            "wrote {}{}",
+            to.display(),
+            if scoped { " (scoped)" } else { "" }
+        );
+        Ok(())
+    };
+    write(dest, THEME_FILE)?;
+    let reset_dest = dest.with_file_name("reset.css");
+    if reset {
+        write(&reset_dest, "crates/ui/assets/reset.css")?;
+    }
+
+    let manifest = app.join("Cargo.toml");
+    match wiring::dioxus_version(&manifest) {
+        Some(v) if wiring::on_supported_line(&v) => println!("dioxus {v}: supported"),
+        Some(v) => println!(
+            "warn: this app is on dioxus {v}; the kit is built and tested on {}.x only",
+            wiring::DIOXUS_LINE
+        ),
+        None if manifest.is_file() => {
+            println!("warn: no dioxus dependency in {}", manifest.display())
+        }
+        None => {}
+    }
+
+    let theme = std::fs::read_to_string(root.join(THEME_FILE)).map_err(err)?;
+    let clashes = wiring::clashes(app, &theme, &[dest.to_path_buf(), reset_dest.clone()]);
+    if !clashes.is_empty() {
+        println!(
+            "\nYour CSS defines {} thing(s) the kit's theme also defines:",
+            clashes.len()
+        );
+        for c in clashes.iter().take(20) {
+            println!("  {}:{}  {}", c.file.display(), c.line, c.what);
+        }
+        if clashes.len() > 20 {
+            println!("  ... and {} more", clashes.len() - 20);
+        }
+        if scoped {
+            println!("The scoped theme keeps them apart: the kit's apply only inside ThemeScope.");
+        } else {
+            println!(
+                "Re-run with --scoped to keep the kit's tokens inside ThemeScope (docs/EXISTING_APP.md)."
+            );
+        }
+    }
+    if wiring::uses_tailwind(app) {
+        println!(
+            "\nTailwind found: it and the kit don't share class names (the kit's are hashed CSS modules).{}",
+            if reset {
+                " Its preflight already resets the page; you can drop reset.css."
+            } else {
+                ""
+            }
+        );
+    }
+
+    let asset = |p: &Path| {
+        let rel = p
+            .strip_prefix(app)
+            .unwrap_or(p)
+            .to_string_lossy()
+            .replace('\\', "/");
+        format!("asset!(\"/{}\")", rel.trim_start_matches("./"))
+    };
+    println!("\nLoad it once near the root of the app:\n");
+    println!("    document::Stylesheet {{ href: {} }}", asset(dest));
+    if reset {
+        println!(
+            "    document::Stylesheet {{ href: {} }}",
+            asset(&reset_dest)
+        );
+    }
+    if scoped {
+        println!("    // copied theme_customizer: call set_writes_html(false) once at startup");
+        println!("    ThemeScope {{ /* the part of the app that uses the kit */ }}");
+        println!(
+            "\n(With the kit as a crate instead: ThemeStyles {{ scoped: true }} + ThemeScope.)"
+        );
+    }
+    Ok(())
+}
+
+/// After `rust-ui add`: declare the copied modules and add the crates they need, so the app
+/// builds without hand edits.
+fn wire(
+    root: &Path,
+    app: &Path,
+    items: &[rust_ui_cli::Item],
+    dest: &Path,
+    blocks_dest: &Path,
+) -> Result<(), String> {
+    use rust_ui_cli::app::{self as wiring, DepChange};
+    let err = |e: std::io::Error| e.to_string();
+    for (kind, dir) in [(Kind::Component, dest), (Kind::Block, blocks_dest)] {
+        let names: Vec<String> = items
+            .iter()
+            .filter(|i| i.kind == kind)
+            .map(|i| i.name.clone())
+            .collect();
+        if names.is_empty() {
+            continue;
+        }
+        let mod_rs = dir.join("mod.rs");
+        let added = wiring::ensure_mod_lines(&mod_rs, &names).map_err(err)?;
+        if !added.is_empty() {
+            println!("declared {} in {}", added.join(", "), mod_rs.display());
+        }
+        // `src/components` -> `mod components;` in the crate root.
+        let module = dir.file_name().map(|n| n.to_string_lossy().into_owned());
+        let in_src = dir.parent().is_some_and(|p| same_dir(p, &app.join("src")));
+        if let (Some(module), true) = (module, in_src) {
+            if let Some(f) = wiring::ensure_root_mod(app, &module).map_err(err)? {
+                println!("added `mod {module};` to {}", f.display());
+            }
+        }
+    }
+    let manifest = app.join("Cargo.toml");
+    if manifest.is_file() {
+        let deps = wiring::cargo_deps(root, items)?;
+        for change in wiring::add_cargo_deps(&manifest, &deps)? {
+            match change {
+                DepChange::Added(name) => println!("added {name} to {}", manifest.display()),
+                DepChange::Features(name, f) => {
+                    println!("added features {} to {name}", f.join(", "))
+                }
+                DepChange::Differs { name, ours } => {
+                    println!("kept your {name}; the registry's components are tested with {ours}")
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+fn same_dir(a: &Path, b: &Path) -> bool {
+    match (a.canonicalize(), b.canonicalize()) {
+        (Ok(a), Ok(b)) => a == b,
+        _ => a == b,
     }
 }

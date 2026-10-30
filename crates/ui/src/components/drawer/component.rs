@@ -3,6 +3,7 @@ use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 use motion::SwipeDismiss;
+use crate::components::hooks::{use_return_focus, ReturnFocus};
 
 #[css_module("/src/components/drawer/style.css")]
 struct Styles;
@@ -80,7 +81,8 @@ pub fn Drawer(props: DrawerProps) -> Element {
     let base = attributes!(div {
         class: Styles::dx_drawer,
     });
-    let merged = merge_attributes(vec![base, props.attributes]);
+    let (inside, return_focus) = use_return_focus();
+    let merged = merge_attributes(vec![base, return_focus, props.attributes]);
     let hide = props.hide_title;
     let title_class = with_sr_only(Styles::dx_drawer_title.to_string(), hide);
     let description_class = with_sr_only(Styles::dx_drawer_description.to_string(), hide);
@@ -106,6 +108,7 @@ pub fn Drawer(props: DrawerProps) -> Element {
                     }
                     {props.children}
                 }
+                ReturnFocus { inside }
             }
         }
 

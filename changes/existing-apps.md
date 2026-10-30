@@ -1,0 +1,10 @@
+### Added
+
+- **ui:** Scoped theme for apps that already have their own CSS: `ThemeStyles { scoped: true }` loads `theme.scoped.css`, the same tokens and rules applied only inside `ThemeScope` (which now renders `data-rui-scope`), and `use_theme` then leaves `<html>` alone (`set_writes_html`). `theme.scoped.css` is generated from `theme.css` by `rust-ui registry` and checked by `rust-ui registry --check`. Opt-in base styles: `ThemeStyles { reset: true }` / `reset.css` (box sizing, the page colours and font the contrast proof assumes). Constants `THEME_SCOPED_CSS`, `RESET_CSS`, `RESET_SCOPED_CSS` (experimental).
+- **ui:** `hooks::use_focus_opener`, `use_return_focus` and `ReturnFocus` (experimental): an overlay that closes with focus inside returns it to the control that opened it, through element handles, so it also works without a script.
+- **cli:** `rust-ui init --scoped --reset` for an existing app: checks the app's Dioxus version, lists CSS that defines the kit's tokens or switches (file and line), notices Tailwind, and prints how to load the theme. `rust-ui add` now wires what it copies into the app: `pub mod` lines in `mod.rs`, `mod components;` in the crate root, and the crates from each `component.json` in `Cargo.toml` (layout and comments kept; an existing dependency is never rewritten, a differing pin is reported). `--no-wire` keeps the old copy-only behaviour. `rust-ui postbuild --scoped` bundles the scoped theme. (experimental)
+- **docs:** `docs/EXISTING_APP.md`: adding the kit to an app you already have, one screen at a time, using the kit's checks (compile-time names, contrast proof, contracts, MCP) on your own screens.
+
+### Fixed
+
+- **ui:** On native, Escape (or a Cancel button) in a dialog, alert dialog, sheet, drawer, popover, command palette, colour picker, date picker or date-time picker left focus on the removed panel. Focus now goes back to the button that opened it, as on the web. The keyboard fuzzer's known-gap list is empty, and the Escape rows of the dialog, alert dialog, popover and command contracts are `native = true`.

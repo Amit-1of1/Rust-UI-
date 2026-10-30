@@ -7,7 +7,12 @@
       "rev": "5b21f56542274835bb4a0bac85b84212d2cff862"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).",
   "exclude": [
     "docs.md",

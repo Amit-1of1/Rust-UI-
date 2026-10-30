@@ -23,6 +23,8 @@ diffy = { version = "0.5.2", features = ["std"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 toml = "0.8"
+# The version toml 0.8 already uses: keeps an app's Cargo.toml layout when `add` edits it.
+toml_edit = "0.20"
 
 [dev-dependencies]
 tempfile = "3"

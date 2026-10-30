@@ -3,7 +3,6 @@
 pattern = "Disclosure (non-modal dialog)"
 roles = ["dialog"]
 
-native_note = "Closing works, but focus is left on the removed content instead of going back to the trigger."
 
 [parts]
 trigger = "button"
@@ -24,7 +23,7 @@ visible content
 key = "Escape"
 when = "In the open popover"
 does = "Closes it and returns focus to the trigger."
-native = false
+native = true
 test = """
 focus trigger
 press Enter

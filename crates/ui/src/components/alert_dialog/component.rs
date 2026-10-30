@@ -4,6 +4,7 @@ use dioxus_primitives::alert_dialog::{
     AlertDialogDescriptionProps,
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
+use crate::components::hooks::{use_return_focus, ReturnFocus};
 
 #[css_module("/src/components/alert_dialog/style.css")]
 struct Styles;
@@ -67,6 +68,7 @@ pub struct AlertDialogProps {
 
 #[component]
 pub fn AlertDialog(props: AlertDialogProps) -> Element {
+    let (inside, return_focus) = use_return_focus();
     rsx! {
         alert_dialog::AlertDialogRoot {
             id: props.id,
@@ -76,6 +78,7 @@ pub fn AlertDialog(props: AlertDialogProps) -> Element {
             attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_alert_dialog_backdrop }), props.attributes]),
             alert_dialog::AlertDialogContent {
                 class: Styles::dx_alert_dialog.to_string(),
+                attributes: return_focus,
                 alert_dialog::AlertDialogTitle {
                     attributes: attributes!(div { class: Styles::dx_alert_dialog_title }),
                     {props.title}
@@ -84,6 +87,7 @@ pub fn AlertDialog(props: AlertDialogProps) -> Element {
                     AlertDialogDescription { {description} }
                 }
                 {props.children}
+                ReturnFocus { inside }
             }
         }
 

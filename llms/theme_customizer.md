@@ -52,6 +52,16 @@ Original to this repo.
 /// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` is the default.
 pub const ACCENTS: [&str; 6];
 
+/// Whether [`use_theme`]'s setters also write `<html>` (on by default).
+/// `ThemeStyles { scoped: true }` turns it off, so an existing app's own `data-theme` on
+/// `<html>` is left alone; an app that copied the components and loads `theme.scoped.css`
+/// itself calls `set_writes_html(false)` once at startup instead.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn set_writes_html(on: bool)
+
 /// Light or dark, or whatever the operating system prefers.
 ///
 /// # Stability
@@ -84,11 +94,16 @@ pub struct Theme {
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_theme() -> Theme
 
-/// Applies [`ThemeCustomizer`]'s choices to its children.
+/// Applies [`ThemeCustomizer`]'s choices to its children, and marks where the kit's scoped
+/// theme applies (`data-rui-scope`).
 ///
 /// On the web and in desktop webviews the customizer sets them on `<html>` and this wrapper
 /// is not needed. Renderers without JavaScript (dioxus-native) can't reach `<html>`, so wrap
 /// the app in `ThemeScope` there. It is a `display: contents` box: it doesn't change layout.
+///
+/// With `ThemeStyles { scoped: true }` (an existing app with its own CSS) the kit's tokens
+/// and rules apply only inside a `ThemeScope`; wrap each part of the app that uses the kit,
+/// or the whole app. Several scopes share one [`use_theme`] state.
 ///
 /// # Stability
 ///

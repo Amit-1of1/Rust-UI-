@@ -1,6 +1,6 @@
 # Popover
 
-- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.
@@ -25,14 +25,12 @@ PopoverRoot {
 
 ## Keyboard and accessibility
 
-Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): partly.
+Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the trigger | Opens the popover. | yes |
-| Escape | In the open popover | Closes it and returns focus to the trigger. | not yet |
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+| Escape | In the open popover | Closes it and returns focus to the trigger. | yes |
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
