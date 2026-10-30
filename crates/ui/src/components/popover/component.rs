@@ -58,7 +58,7 @@ pub fn PopoverContent(props: PopoverContentProps) -> Element {
             align: props.align,
             attributes,
             {props.children}
-            ReturnFocus { inside }
+            ReturnFocus { inside: Some(inside) }
         }
     }
 }

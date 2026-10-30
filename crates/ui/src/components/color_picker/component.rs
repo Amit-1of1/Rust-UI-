@@ -200,7 +200,7 @@ pub fn ColorPickerPopover(props: ColorPickerPopoverProps) -> Element {
             class: Styles::dx_color_picker_popover.to_string(),
             attributes: merge_attributes(vec![return_focus, props.attributes]),
             {props.children}
-            ReturnFocus { inside }
+            ReturnFocus { inside: Some(inside) }
         }
     }
 }

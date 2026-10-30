@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 use dioxus_primitives::dialog::{self, DialogDescriptionProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
-use crate::components::hooks::{use_return_focus, ReturnFocus};
+use crate::components::hooks::ReturnFocus;
 
 #[css_module("/src/components/dialog/style.css")]
 struct Styles;
@@ -75,8 +75,7 @@ pub fn Dialog(props: DialogProps) -> Element {
     let base = attributes!(div {
         class: Styles::dx_dialog,
     });
-    let (inside, return_focus) = use_return_focus();
-    let merged = merge_attributes(vec![base, return_focus, props.attributes]);
+    let merged = merge_attributes(vec![base, props.attributes]);
     let hide = props.hide_title;
     let title_class = with_sr_only(Styles::dx_dialog_title.to_string(), hide);
     let description_class = with_sr_only(Styles::dx_dialog_description.to_string(), hide);
@@ -103,7 +102,12 @@ pub fn Dialog(props: DialogProps) -> Element {
                     }
                 }
                 {props.children}
-                ReturnFocus { inside }
+                // Modal panels keep focus inside while open (the primitive's trap), so
+                // closing always returns it. Not on the panel's own listeners: those are
+                // the trap's.
+                if (props.is_modal)() {
+                    ReturnFocus { inside: None }
+                }
             }
         }
 

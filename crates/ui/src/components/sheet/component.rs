@@ -4,7 +4,7 @@ use dioxus::prelude::*;
 use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
-use crate::components::hooks::{use_return_focus, ReturnFocus};
+use crate::components::hooks::ReturnFocus;
 
 #[css_module("/src/components/sheet/style.css")]
 struct Styles;
@@ -99,8 +99,7 @@ pub fn Sheet(props: SheetProps) -> Element {
         "data-slot": "sheet-content",
         "data-side": SheetSide::Right.as_str(),
     });
-    let (inside, return_focus) = use_return_focus();
-    let content_attributes = merge_attributes(vec![content_base, return_focus, props.attributes]);
+    let content_attributes = merge_attributes(vec![content_base, props.attributes]);
     let header_class = if props.hide_title {
         format!("{} sr-only", Styles::dx_sheet_header)
     } else {
@@ -134,7 +133,12 @@ pub fn Sheet(props: SheetProps) -> Element {
                     }
                 }
                 {props.children}
-                ReturnFocus { inside }
+                // Modal panels keep focus inside while open (the primitive's trap), so
+                // closing always returns it. Not on the panel's own listeners: those are
+                // the trap's.
+                if (props.is_modal)() {
+                    ReturnFocus { inside: None }
+                }
             }
         }
 

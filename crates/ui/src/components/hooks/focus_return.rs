@@ -68,6 +68,11 @@ pub struct FocusInside(Signal<bool>);
 /// to [`ReturnFocus`], and the attributes to spread on the panel (they track whether focus
 /// is inside it).
 ///
+/// Dioxus runs one listener per event name on an element, so only spread these on a panel
+/// whose primitive has no `onfocusin`/`onfocusout` of its own (the popover content). The
+/// dialog primitives trap focus with exactly those two listeners; a modal dialog passes
+/// `inside: None` to [`ReturnFocus`] instead, since its focus is always inside while open.
+///
 /// # Stability
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
@@ -81,18 +86,24 @@ pub fn use_return_focus() -> (FocusInside, Vec<Attribute>) {
 }
 
 /// Render inside an overlay's panel (it renders nothing): takes the opener when the panel
-/// opens, and returns focus to it when the panel closes with focus inside.
+/// opens, and returns focus to it when the panel closes with focus inside. `inside: None`
+/// means "always": for a modal panel, which keeps focus inside while it is open.
 ///
 /// # Stability
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 #[component]
-pub fn ReturnFocus(inside: FocusInside) -> Element {
+pub fn ReturnFocus(inside: Option<FocusInside>) -> Element {
     let to = use_hook(|| opener().0.peek().clone());
     use_drop(move || {
-        let FocusInside(mut inside) = inside;
-        let had_focus = *inside.peek();
-        inside.set(false);
+        let had_focus = match inside {
+            Some(FocusInside(mut inside)) => {
+                let had = *inside.peek();
+                inside.set(false);
+                had
+            }
+            None => true,
+        };
         if let (true, Some(el)) = (had_focus, to.clone()) {
             // This scope is going away; the task must outlive it.
             spawn_forever(async move {
