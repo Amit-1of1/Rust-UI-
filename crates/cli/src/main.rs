@@ -312,8 +312,8 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Skill { dest, print } => {
-            let skill = std::fs::read_to_string(root.join(rust_ui_cli::info::SKILL_FILE))
-                .map_err(|e| {
+            let skill =
+                std::fs::read_to_string(root.join(rust_ui_cli::info::SKILL_FILE)).map_err(|e| {
                     format!(
                         "{} in {}: {e}; pass --source <the kit's git URL or checkout>",
                         rust_ui_cli::info::SKILL_FILE,

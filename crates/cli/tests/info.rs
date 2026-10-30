@@ -74,16 +74,31 @@ fn reports_dioxus_theme_items_edits_and_conflicts() {
 #[test]
 fn skill_file_has_frontmatter_and_names_real_items() {
     let text = std::fs::read_to_string(repo_root().join(SKILL_FILE)).unwrap();
-    assert!(text.starts_with("---\nname: rust-ui\ndescription: "), "frontmatter");
+    assert!(
+        text.starts_with("---\nname: rust-ui\ndescription: "),
+        "frontmatter"
+    );
     // Every snake_case item named in backticks in the skill must exist in the registry, so the
     // skill can't send agents to a component that was renamed or removed.
     let reg = load(&repo_root()).unwrap();
     let known: Vec<&str> = reg.items.iter().map(|i| i.name.as_str()).collect();
-    let table = text.split("| Need | Use |").nth(1).unwrap().split("\n\n").next().unwrap();
+    let table = text
+        .split("| Need | Use |")
+        .nth(1)
+        .unwrap()
+        .split("\n\n")
+        .next()
+        .unwrap();
     let mut checked = 0;
     for name in table.split('`').skip(1).step_by(2) {
-        if name.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_') {
-            assert!(known.contains(&name), "SKILL.md names `{name}`, which the registry lacks");
+        if name
+            .chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
+        {
+            assert!(
+                known.contains(&name),
+                "SKILL.md names `{name}`, which the registry lacks"
+            );
             checked += 1;
         }
     }
