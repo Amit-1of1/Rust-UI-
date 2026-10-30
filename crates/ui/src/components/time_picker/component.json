@@ -32,7 +32,8 @@
   "description": "A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button. Type digits and focus moves on by itself, or use the arrow keys. Written in Rust on plain inputs, with no JavaScript, so it also runs on the desktop webview and native.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"
