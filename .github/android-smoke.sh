@@ -12,19 +12,27 @@ adb install -r "$apk"
 adb logcat -c
 adb shell am start -W -n "$package/$activity"
 
-# Give the webview time to load the app, then check it is still running.
+# Give the webview time to load the app; stop early if the process goes away.
+pid="$(adb shell pidof "$package" || true)"
+echo "pid ${pid:-none} after launch"
+alive=yes
 for _ in $(seq 1 30); do
   sleep 2
-  if adb logcat -d | grep -qE "panicked at|FATAL EXCEPTION"; then
+  if ! adb shell pidof "$package" >/dev/null; then
+    alive=no
     break
   fi
 done
 adb logcat -d > logcat.txt || true
-if grep -nE "panicked at|FATAL EXCEPTION" logcat.txt; then
-  echo "the app crashed"; tail -200 logcat.txt; exit 1
+# What the app and the system said about it: its own process, crashes, kills.
+grep -nE "${pid:-^$}|$package|Fatal signal|DEBUG +:|AndroidRuntime|RustStdoutStderr|lmkd|lowmemorykiller|am_kill|Process .* has died|dioxus" logcat.txt \
+  | tail -150 > app-log.txt || true
+cat app-log.txt
+if grep -nE "panicked at|FATAL EXCEPTION|Fatal signal" logcat.txt; then
+  echo "the app crashed"; exit 1
 fi
-if ! adb shell pidof "$package" >/dev/null; then
-  echo "the app is not running"; tail -200 logcat.txt; exit 1
+if [ "$alive" = no ]; then
+  echo "the app stopped running"; exit 1
 fi
 adb shell screencap -p /sdcard/gallery.png && adb pull /sdcard/gallery.png . || true
-echo "the gallery started and kept running"
+echo "the gallery started and kept running for a minute"

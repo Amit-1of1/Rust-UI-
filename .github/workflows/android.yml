@@ -96,4 +96,5 @@ jobs:
           path: |
             gallery.png
             logcat.txt
+            app-log.txt
           if-no-files-found: ignore
