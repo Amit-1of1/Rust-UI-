@@ -6892,6 +6892,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "diffy",
+ "image",
  "serde",
  "serde_json",
  "tempfile",

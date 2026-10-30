@@ -15,6 +15,7 @@ mod contract_tests;
 pub mod docsgen;
 pub mod doctor;
 pub mod llms;
+pub mod logo;
 pub mod manifest;
 pub mod mcp;
 pub mod postbuild;
