@@ -203,11 +203,18 @@
 }
 
 .dx-typing-dot {
+  display: block;
+  animation: dx-chat-bounce 1.2s ease-in-out infinite;
+}
+
+/* The dot is drawn by an empty pseudo-element: pure decoration, no text sits on it. */
+.dx-typing-dot::before {
+  display: block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--secondary-color-5);
-  animation: dx-chat-bounce 1.2s ease-in-out infinite;
+  content: "";
 }
 
 .dx-typing-dot:nth-child(2) {

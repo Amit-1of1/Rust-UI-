@@ -97,7 +97,7 @@
 }
 
 .dx-tool-glyph[data-status="succeeded"] {
-  color: var(--secondary-success-color);
+  color: var(--success-text-color);
 }
 
 .dx-tool-glyph[data-status="failed"] {
@@ -105,7 +105,7 @@
 }
 
 .dx-tool-glyph[data-status="needs-approval"] {
-  color: var(--secondary-warning-color);
+  color: var(--warning-text-color);
 }
 
 .dx-tool-glyph[data-status="running"] {
