@@ -73,6 +73,8 @@ struct Follow {
     height: Signal<f64>,
     top: Signal<Option<f64>>,
     saw_scroll_event: Signal<bool>,
+    /// The scroll offset the last scroll event reported (web).
+    seen_top: Signal<Option<f64>>,
 }
 
 impl Follow {
@@ -179,6 +181,7 @@ pub fn ChatLog(
         height: use_signal(|| 0.0),
         top: use_signal(|| None),
         saw_scroll_event: use_signal(|| false),
+        seen_top: use_signal(|| None),
     };
     // Parents re-render the log when they add a message; follow after every render.
     dioxus::core::use_after_render(move || {
@@ -209,10 +212,18 @@ pub fn ChatLog(
                     if !*f.saw_scroll_event.peek() {
                         f.saw_scroll_event.set(true);
                     }
-                    let gap = f64::from(e.scroll_height()) - e.scroll_top() - f64::from(e.client_height());
+                    let top = e.scroll_top();
+                    let gap = f64::from(e.scroll_height()) - top - f64::from(e.client_height());
                     let at_end = gap <= SLACK;
-                    if at_end != *f.pinned.peek() {
-                        f.pinned.set(at_end);
+                    // Only the reader moving up lets go. Scroll events arrive a frame late, and
+                    // by then a streaming reply may have grown the content below a scroll
+                    // that did reach the end (WebKit shows this often).
+                    let moved_up = f.seen_top.peek().or(*f.top.peek()).is_some_and(|before| top + 1.0 < before);
+                    f.seen_top.set(Some(top));
+                    if at_end && !*f.pinned.peek() {
+                        f.pinned.set(true);
+                    } else if !at_end && moved_up && *f.pinned.peek() {
+                        f.pinned.set(false);
                     }
                     if at_end && *f.unseen.peek() {
                         f.unseen.set(false);
