@@ -61,7 +61,7 @@ fn reports_dioxus_theme_items_edits_and_conflicts() {
     assert!(info.mcp);
     assert_eq!(info.source.as_deref(), Some("kit"));
     let b = info.installed.iter().find(|i| i.name == "button").unwrap();
-    assert_eq!(b.edited, [edited.clone()]);
+    assert_eq!(b.edited, std::slice::from_ref(edited));
     assert!(b.dir.ends_with("src/components"), "{}", b.dir);
     let g = info.installed.iter().find(|i| i.name == "badge").unwrap();
     assert_eq!(g.conflicts, [badge.files[0].clone()]);
