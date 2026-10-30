@@ -1,4 +1,4 @@
-### Copied components ask for `rust-ui-primitives` (PR #56)
+### Copied components ask for `rust-ui-primitives` (PR #62)
 
 **Who:** apps that copied components with `dx components add` or `rust-ui add` before this change. Apps that depend on `rust-ui-kit` need to do nothing.
 
