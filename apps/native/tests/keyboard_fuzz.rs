@@ -107,18 +107,44 @@ const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
     ("dialog", Invariant::FocusLost, &["Space", "Escape"], RETURN),
     ("drawer", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
     (
+        "dropdown_menu",
+        Invariant::FocusLost,
+        &["Enter", "ArrowDown", "Space"],
+        MENU,
+    ),
+    (
+        "menubar",
+        Invariant::FocusLost,
+        &["ArrowDown", "Escape"],
+        MENU,
+    ),
+    (
         "popover",
         Invariant::FocusLost,
         &["Space", "Escape"],
         RETURN,
     ),
+    ("select", Invariant::FocusLost, &["Enter", "Escape"], MENU),
     ("sheet", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
+    (
+        "sidebar",
+        Invariant::FocusLost,
+        &["Space", "ArrowUp", "Escape"],
+        MENU,
+    ),
 ];
 
 /// The dialog and popover primitives return focus to whatever had it before they opened
 /// with a script on the web. Native has no script and Dioxus has no "focused element" API,
 /// and these overlays have no trigger component of ours to hold on to, so focus stays on the
 /// removed panel. The contracts record the same gap (`native = false` Escape rows).
+/// The kit returns focus to the trigger on the web (web-sys, see `refocus_within` in each
+/// component). On native that needs the trigger's `MountedData`, i.e. an `onmounted` on it,
+/// which would replace the primitive's own (`merge_attributes` keeps one listener per name).
+/// Fixable in the primitives fork: the primitive already holds the trigger's element.
+const MENU: &str =
+    "closing a menu or list from the keyboard leaves focus on the removed item on native";
+
 const RETURN: &str =
     "Escape leaves focus on the removed overlay on native (no focus return without a script)";
 

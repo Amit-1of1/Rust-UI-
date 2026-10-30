@@ -144,20 +144,39 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     pub children: Element,
 }
 
-/// The trigger's element, so closing from the keyboard can put focus back on it. Through
-/// the element handle rather than the DOM, so it also works on native, where focus would
-/// otherwise stay on the removed list.
-#[derive(Clone, Copy)]
-struct TriggerEl(Signal<Option<std::rc::Rc<MountedData>>>);
-
-fn refocus_trigger() {
-    if let Some(TriggerEl(el)) = try_consume_context::<TriggerEl>() {
-        if let Some(el) = el() {
-            spawn(async move {
-                _ = el.set_focus(true).await;
-            });
+/// Moves focus from the focused element to `selector` inside its nearest ancestor with
+/// class `container`: back to the trigger when the keyboard closes the list, as the APG
+/// pattern asks. `only_single` skips it inside a multi-select list, which stays open.
+///
+/// Web only. A `MountedData` handle would also work on native, but getting one means an
+/// `onmounted` on the trigger, and `merge_attributes` keeps one listener per event name, so
+/// it would replace the primitive's own (which focuses the trigger on click in Safari and
+/// Firefox). On native focus stays on the removed list; the fuzz test lists that gap.
+fn refocus_within(container: &str, selector: &str, only_single: bool) {
+    #[cfg(all(target_arch = "wasm32", feature = "web"))]
+    {
+        use wasm_bindgen::JsCast;
+        let active = web_sys::window()
+            .and_then(|w| w.document())
+            .and_then(|d| d.active_element());
+        let multi = active
+            .as_ref()
+            .and_then(|el| el.closest("[role=listbox]").ok().flatten())
+            .and_then(|list| list.get_attribute("aria-multiselectable"))
+            .is_some_and(|v| v == "true");
+        if only_single && multi {
+            return;
+        }
+        let target = active
+            .and_then(|el| el.closest(&format!(".{container}")).ok().flatten())
+            .and_then(|root| root.query_selector(selector).ok().flatten())
+            .and_then(|el| el.dyn_into::<web_sys::HtmlElement>().ok());
+        if let Some(el) = target {
+            let _ = el.focus();
         }
     }
+    #[cfg(not(all(target_arch = "wasm32", feature = "web")))]
+    let _ = (container, selector, only_single);
 }
 
 fn is_close_key(e: &KeyboardEvent) -> bool {
@@ -169,14 +188,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
     let base = attributes!(div {
         class: Styles::dx_select
     });
-    let mut trigger_el = use_context_provider(|| TriggerEl(Signal::new(None))).0;
     let name = use_trigger_name(props.attributes);
-    let trigger_attrs = merge_attributes(vec![
-        attributes!(button {
-            onmounted: move |e: MountedEvent| trigger_el.set(Some(e.data())),
-        }),
-        name.trigger,
-    ]);
     let merged = merge_attributes(vec![base, name.root]);
     // A plain `selected` becomes the signal the primitive wants. The memo follows the prop.
     let selected = props.selected.clone();
@@ -208,7 +220,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 class: Styles::dx_select_trigger,
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
-                attributes: trigger_attrs,
+                attributes: name.trigger,
                 if let Some(placeholder) = name.placeholder {
                     select::SelectValue { placeholder }
                 } else {
@@ -228,7 +240,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 attributes: attributes!(div {
                     onkeydown: move |e: KeyboardEvent| {
                         if is_close_key(&e) {
-                            refocus_trigger();
+                            refocus_within(&Styles::dx_select.to_string(), "[aria-haspopup=listbox]", true);
                         }
                     },
                 }),
@@ -308,10 +320,10 @@ pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>)
     let base = attributes!(div {
         class: Styles::dx_select_option,
         // Choosing an option closes a single select (the primitive stops the key here).
-        // `SelectMulti` provides no `TriggerEl`, so its list stays open and keeps focus.
+        // A multi-select list stays open and keeps focus.
         onkeydown: move |e: KeyboardEvent| {
             if is_close_key(&e) {
-                refocus_trigger();
+                refocus_within(&Styles::dx_select.to_string(), "[aria-haspopup=listbox]", true);
             }
         },
     });

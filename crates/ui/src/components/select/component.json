@@ -5,6 +5,21 @@
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "dioxus-primitives",
       "rev": "5b21f56542274835bb4a0bac85b84212d2cff862"
+    },
+    {
+      "features": [
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget"
+      ],
+      "name": "web-sys",
+      "version": "0.3"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2"
     }
   ],
   "componentDependencies": [
