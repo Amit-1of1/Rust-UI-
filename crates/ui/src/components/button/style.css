@@ -132,11 +132,9 @@
 }
 
 .dx-button[data-style="primary"]:not(:disabled):hover {
-  background-color: color-mix(
-    in oklab,
-    var(--accent-color) 90%,
-    transparent
-  );
+  /* Towards grey, not towards the page: a fill that fades into a white page loses
+     contrast with its white label (crates/cli/tests/contrast.rs). */
+  background-color: color-mix(in oklab, var(--accent-color) 85%, var(--secondary-color-5));
 }
 
 .dx-button[data-style="secondary"] {
@@ -181,11 +179,10 @@
 }
 
 .dx-button[data-style="destructive"]:not(:disabled):hover {
-  background-color: color-mix(
-    in oklab,
-    var(--primary-error-color) 90%,
-    transparent
-  );
+  /* Towards grey, not towards the page: a fill that fades into a white page loses
+     contrast with its white label (crates/cli/tests/contrast.rs). */
+  background-color: var(--light, color-mix(in oklab, var(--primary-error-color) 85%, var(--secondary-color-5)))
+    var(--dark, color-mix(in oklab, var(--primary-error-color) 85%, var(--primary-color)));
 }
 
 .dx-button[data-style="destructive"]:focus-visible {
@@ -216,7 +213,6 @@
 }
 
 .dx-button[aria-invalid="true"]:focus-visible {
-  box-shadow: 0 0 0 3px
-    var(--light, color-mix(in oklab, var(--primary-error-color) 20%, transparent))
-    var(--dark, color-mix(in oklab, var(--primary-error-color) 40%, transparent));
+  /* The border stays red here, so the ring is the only focus cue: keep it solid. */
+  box-shadow: 0 0 0 2px var(--error-text-color);
 }

@@ -1,6 +1,6 @@
 # Date picker
 
-- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `icons`, `popover`, `ui_strings`).
+- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
 - Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.
@@ -31,12 +31,30 @@ The styled `DatePicker` and `DateRangePicker` render the input, trigger, popover
 
 Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates-label", .. }` (or `aria_label`). The picker's group then carries that name; the English "Date" / "Date Range" is only used when you pass none. The segments are named "year", "month" and "day" inside it, and a segment moves on to the next once it holds all its digits ("01" for January).
 
+## In a form
+
+`DateRangeField` (in the form component) binds a `DateRangePicker` to a `use_form` field, labelled, described and validated like the other fields. Its value is `2026-10-15/2026-10-20`; `format_iso_date_range` and `parse_iso_date_range` write and read that, and `format_iso_date` / `parse_iso_date` do the same for one date (`2026-10-15`, the `<input type="date">` format).
+
 ## API
 
 ```rust
 pub use dioxus_primitives::calendar::DateRange;
 
 pub use time::{Date, Month};
+
+/// `"2026-10-15"`: the format of `<input type="date">`.
+pub fn format_iso_date(date: Date) -> String
+
+/// Reads `"2026-10-15"`; anything else (including a date that doesn't exist) is `None`.
+pub fn parse_iso_date(text: &str) -> Option<Date>
+
+/// `"2026-10-15/2026-10-20"`: an ISO 8601 interval of two dates, the format
+/// [`DateRangeField`](crate::components::form::DateRangeField) keeps in a form field.
+pub fn format_iso_date_range(range: DateRange) -> String
+
+/// Reads `"2026-10-15/2026-10-20"`. The dates may come in either order; the range is always
+/// start to end.
+pub fn parse_iso_date_range(text: &str) -> Option<DateRange>
 
 pub struct DatePickerProps {
     /// Callback when value changes
@@ -156,7 +174,9 @@ pub fn DateRangePicker(props: DateRangePickerProps) -> Element
 ## Example
 
 ```rust
+use crate::components::button::Button;
 use crate::components::date_picker::*;
+use crate::components::form::*;
 use dioxus::prelude::*;
 
 use time::Date;
@@ -165,6 +185,18 @@ use time::Date;
 pub fn Demo() -> Element {
     let mut selected_date = use_signal(|| None::<Date>);
     let mut selected_range = use_signal(|| None::<DateRange>);
+    let form = use_form();
+    let stay = form.field(vec![
+        custom(|v| {
+            if v.is_empty() {
+                Err("Choose your dates.".to_string())
+            } else {
+                Ok(())
+            }
+        }),
+        days_between(Some(2), Some(14), "Stays are 2 to 14 nights."),
+    ]);
+    let mut booked = use_signal(|| None::<String>);
 
     rsx! {
         div { style: "display: grid; gap: 1rem; justify-items: start;",
@@ -178,6 +210,19 @@ pub fn Demo() -> Element {
             DateRangePicker {
                 selected_range: selected_range(),
                 on_range_change: move |r| selected_range.set(r),
+            }
+            Form {
+                state: form,
+                on_valid: move |_| booked.set(Some(stay.value())),
+                DateRangeField {
+                    field: stay,
+                    label: "Stay",
+                    description: "Check-in and check-out, 2 to 14 nights.",
+                }
+                Button { r#type: "submit", "Check availability" }
+            }
+            if let Some(range) = booked() {
+                p { role: "status", style: "margin: 0;", "Looking for {range}" }
             }
         }
     }

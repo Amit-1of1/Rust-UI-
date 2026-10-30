@@ -1,4 +1,6 @@
 <div style="display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));">
+<div class="dx-chart-root-css" data-slot="chart">
+<div class="dx-chart-explore-css" role="group" tabindex="0" aria-label="Visitors per month, January to June" aria-describedby="dx-chart-hint-n0">
 <svg class="dx-chart-css" role="img" aria-label="Visitors per month, January to June" viewBox="0 0 400 200">
 <title>Visitors per month, January to June
 </title>
@@ -63,6 +65,12 @@
 <text class="dx-chart-tick-css" x="362.3333" y="194" text-anchor="middle">Jun
 </text>
 </svg>
+<p id="dx-chart-hint-n0" class="sr-only">Use the arrow keys to move between points.
+</p>
+<p class="dx-chart-readout-css" role="status" data-slot="chart-readout">
+</p>
+</div>
+</div>
 <svg class="dx-chart-css" role="img" aria-label="Visitors per month, January to June (line)" viewBox="0 0 400 200">
 <title>Visitors per month, January to June (line)
 </title>
@@ -416,6 +424,7 @@
 </ul>
 </div>
 <div class="dx-chart-root-css" data-slot="chart">
+<div class="dx-chart-explore-css" role="group" tabindex="0" aria-label="Visitors by device, January to June (lines)" aria-describedby="dx-chart-hint-n1">
 <svg class="dx-chart-css" role="img" aria-label="Visitors by device, January to June (lines)" viewBox="0 0 400 200">
 <title>Visitors by device, January to June (lines)
 </title>
@@ -534,6 +543,11 @@
 <text class="dx-chart-tick-css" x="362.3333" y="194" text-anchor="middle">Jun
 </text>
 </svg>
+<p id="dx-chart-hint-n1" class="sr-only">Use the arrow keys to move between points.
+</p>
+<p class="dx-chart-readout-css" role="status" data-slot="chart-readout">
+</p>
+</div>
 <ul class="dx-chart-legend-css" data-slot="chart-legend">
 <li class="dx-chart-legend-item-css" data-series=0>
 <svg class="dx-chart-legend-line-css" aria-hidden="true" viewBox="0 0 16 4" width="16" height="4">
@@ -548,6 +562,220 @@
 </svg>Mobile
 </li>
 </ul>
+</div>
+<div class="dx-chart-root-css" data-slot="chart" style="--chart-size: 300px">
+<div class="dx-chart-explore-css" role="group" tabindex="0" aria-label="Two phones scored out of 10" aria-describedby="dx-chart-hint-n2">
+<svg class="dx-chart-radar-css" role="img" aria-label="Two phones scored out of 10" viewBox="0 0 300 300">
+<title>Two phones scored out of 10
+</title>
+<desc>Phone A: Speed 8, Battery 6, Camera 9, Screen 7, Price 4, Storage 8. Phone B: Speed 6, Battery 9, Camera 6, Screen 8, Price 8, Storage 5.
+</desc>
+<g>
+<polygon class="dx-chart-grid-css" points="150.0,125.0 171.7,137.5 171.7,162.5 150.0,175.0 128.3,162.5 128.3,137.5" fill="none">
+</polygon>
+<text class="dx-chart-tick-css" x="154" y="122">2.5
+</text>
+</g>
+<g>
+<polygon class="dx-chart-grid-css" points="150.0,100.0 193.3,125.0 193.3,175.0 150.0,200.0 106.7,175.0 106.7,125.0" fill="none">
+</polygon>
+<text class="dx-chart-tick-css" x="154" y="97">5
+</text>
+</g>
+<g>
+<polygon class="dx-chart-grid-css" points="150.0,75.0 215.0,112.5 215.0,187.5 150.0,225.0 85.0,187.5 85.0,112.5" fill="none">
+</polygon>
+<text class="dx-chart-tick-css" x="154" y="72">7.5
+</text>
+</g>
+<g>
+<polygon class="dx-chart-grid-css" points="150.0,50.0 236.6,100.0 236.6,200.0 150.0,250.0 63.4,200.0 63.4,100.0" fill="none">
+</polygon>
+<text class="dx-chart-tick-css" x="154" y="47">10
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="150" y2="50">
+</line>
+<text class="dx-chart-tick-css" x="150" y="39" text-anchor="middle">Speed
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="236.60254" y2="100">
+</line>
+<text class="dx-chart-tick-css" x="248.7269" y="96" text-anchor="start">Battery
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="236.60254" y2="200">
+</line>
+<text class="dx-chart-tick-css" x="248.7269" y="215" text-anchor="start">Camera
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="149.99998" y2="250">
+</line>
+<text class="dx-chart-tick-css" x="149.99998" y="272" text-anchor="middle">Screen
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="63.397453" y2="200">
+</line>
+<text class="dx-chart-tick-css" x="51.2731" y="214.99998" text-anchor="end">Price
+</text>
+</g>
+<g>
+<line class="dx-chart-grid-css" x1="150" y1="150" x2="63.397476" y2="99.99997">
+</line>
+<text class="dx-chart-tick-css" x="51.273125" y="95.999954" text-anchor="end">Storage
+</text>
+</g>
+<g data-series=0>
+<polygon class="dx-chart-radar-area-css" points="150.0,70.0 202.0,120.0 227.9,195.0 150.0,220.0 115.4,170.0 80.7,110.0" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-dasharray="none">
+</polygon>
+<circle class="dx-chart-dot-css" cx="150" cy="70" r="3">
+<title>Speed, Phone A: 8
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="201.96153" cy="120" r="3">
+<title>Battery, Phone A: 6
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="227.94229" cy="195" r="3">
+<title>Camera, Phone A: 9
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="150" cy="220" r="3">
+<title>Screen, Phone A: 7
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="115.35898" cy="170" r="3">
+<title>Price, Phone A: 4
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="80.71799" cy="109.99997" r="3">
+<title>Storage, Phone A: 8
+</title>
+</circle>
+</g>
+<g data-series=1>
+<polygon class="dx-chart-radar-area-css" points="150.0,90.0 227.9,105.0 202.0,180.0 150.0,230.0 80.7,190.0 106.7,125.0" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6 4">
+</polygon>
+<circle class="dx-chart-dot-css" cx="150" cy="90" r="3">
+<title>Speed, Phone B: 6
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="227.94229" cy="105" r="3">
+<title>Battery, Phone B: 9
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="201.96152" cy="180" r="3">
+<title>Camera, Phone B: 6
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="150" cy="230" r="3">
+<title>Screen, Phone B: 8
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="80.717964" cy="190" r="3">
+<title>Price, Phone B: 8
+</title>
+</circle>
+<circle class="dx-chart-dot-css" cx="106.69874" cy="124.999985" r="3">
+<title>Storage, Phone B: 5
+</title>
+</circle>
+</g>
+</svg>
+<p id="dx-chart-hint-n2" class="sr-only">Use the arrow keys to move between points.
+</p>
+<p class="dx-chart-readout-css" role="status" data-slot="chart-readout">
+</p>
+</div>
+<ul class="dx-chart-legend-css" data-slot="chart-legend">
+<li class="dx-chart-legend-item-css" data-series=0>
+<svg class="dx-chart-legend-line-css" aria-hidden="true" viewBox="0 0 16 4" width="16" height="4">
+<line x1="0" x2="16" y1="2" y2="2" stroke="currentColor" stroke-width="2" stroke-dasharray="none">
+</line>
+</svg>Phone A
+</li>
+<li class="dx-chart-legend-item-css" data-series=1>
+<svg class="dx-chart-legend-line-css" aria-hidden="true" viewBox="0 0 16 4" width="16" height="4">
+<line x1="0" x2="16" y1="2" y2="2" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4">
+</line>
+</svg>Phone B
+</li>
+</ul>
+<details class="dx-chart-data-css" data-slot="chart-data">
+<summary class="dx-chart-data-toggle-css">Show data
+</summary>
+<div class="dx-table-container-css">
+<table class="dx-table-css">
+<caption class="dx-table-caption-css">Two phones scored out of 10
+</caption>
+<thead class="dx-table-header-css">
+<tr class="dx-table-row-css">
+<th scope="col" class="dx-table-head-css">Category
+</th>
+<th scope="col" data-numeric="true" class="dx-table-head-css">Phone A
+</th>
+<th scope="col" data-numeric="true" class="dx-table-head-css">Phone B
+</th>
+</tr>
+</thead>
+<tbody class="dx-table-body-css">
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Speed
+</td>
+<td data-numeric="true" class="dx-table-cell-css">8
+</td>
+<td data-numeric="true" class="dx-table-cell-css">6
+</td>
+</tr>
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Battery
+</td>
+<td data-numeric="true" class="dx-table-cell-css">6
+</td>
+<td data-numeric="true" class="dx-table-cell-css">9
+</td>
+</tr>
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Camera
+</td>
+<td data-numeric="true" class="dx-table-cell-css">9
+</td>
+<td data-numeric="true" class="dx-table-cell-css">6
+</td>
+</tr>
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Screen
+</td>
+<td data-numeric="true" class="dx-table-cell-css">7
+</td>
+<td data-numeric="true" class="dx-table-cell-css">8
+</td>
+</tr>
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Price
+</td>
+<td data-numeric="true" class="dx-table-cell-css">4
+</td>
+<td data-numeric="true" class="dx-table-cell-css">8
+</td>
+</tr>
+<tr class="dx-table-row-css">
+<td class="dx-table-cell-css">Storage
+</td>
+<td data-numeric="true" class="dx-table-cell-css">8
+</td>
+<td data-numeric="true" class="dx-table-cell-css">5
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
 </div>
 <div class="dx-chart-root-css" data-slot="chart" style="--chart-size: 200px">
 <svg class="dx-chart-pie-css" role="img" aria-label="Visitors by browser" viewBox="0 0 200 200">
@@ -666,6 +894,7 @@
 </details>
 </div>
 <div class="dx-chart-root-css" data-slot="chart" style="--chart-size: 200px">
+<div class="dx-chart-explore-css" role="group" tabindex="0" aria-label="Visitors by browser (pie)" aria-describedby="dx-chart-hint-n3">
 <svg class="dx-chart-pie-css" role="img" aria-label="Visitors by browser (pie)" viewBox="0 0 200 200">
 <title>Visitors by browser (pie)
 </title>
@@ -692,6 +921,11 @@
 </title>
 </path>
 </svg>
+<p id="dx-chart-hint-n3" class="sr-only">Use the arrow keys to move between points.
+</p>
+<p class="dx-chart-readout-css" role="status" data-slot="chart-readout">
+</p>
+</div>
 <ul class="dx-chart-legend-css" data-slot="chart-legend">
 <li class="dx-chart-legend-item-css" data-series=0>
 <span class="dx-chart-legend-square-css" aria-hidden="true">

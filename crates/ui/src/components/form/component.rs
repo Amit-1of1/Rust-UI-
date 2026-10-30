@@ -7,7 +7,13 @@ use crate::components::field::*;
 use crate::components::input::Input;
 use crate::components::select::{Select, SelectOption};
 use crate::components::textarea::Textarea;
-use crate::components::time_picker::{format_iso_time, parse_iso_time, HourCycle, Time};
+use crate::components::date_picker::{
+    format_iso_date_range, parse_iso_date_range, Date, DateRange, DateRangePicker, Month,
+};
+use crate::components::time_picker::{
+    format_iso_time, format_time, parse_iso_time, use_focus_exit, HourCycle, Time, TimeState,
+};
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
@@ -36,6 +42,40 @@ pub fn max_len(max: usize) -> Validator {
     Rc::new(move |v| {
         if v.chars().count() > max {
             Err(format!("Must be at most {max} characters."))
+        } else {
+            Ok(())
+        }
+    })
+}
+
+/// A time (`"14:05"`) from `min` to `max`, both inclusive; a `max` earlier than `min` wraps
+/// past midnight (22:00 to 02:00). Empty and unreadable values pass, so pair it with
+/// `required()` when the time must be given. [`TimeField`] adds this rule itself when given
+/// `min` or `max`.
+pub fn time_between(
+    min: Option<Time>,
+    max: Option<Time>,
+    message: impl Into<String>,
+) -> Validator {
+    let message = message.into();
+    let state = TimeState::new(HourCycle::H24, true, 1).with_range(min, max);
+    Rc::new(move |v| match parse_iso_time(v) {
+        Some(time) if !state.in_range(time) => Err(message.clone()),
+        _ => Ok(()),
+    })
+}
+
+/// A date range (`"2026-10-15/2026-10-20"`) that spans at least `min` and at most `max`
+/// days (nights, for a stay). Empty and unreadable values pass, like [`time_between`].
+pub fn days_between(min: Option<u32>, max: Option<u32>, message: impl Into<String>) -> Validator {
+    let message = message.into();
+    Rc::new(move |v| {
+        let Some(range) = parse_iso_date_range(v) else {
+            return Ok(());
+        };
+        let days = (range.end() - range.start()).whole_days().max(0) as u32;
+        if min.is_some_and(|m| days < m) || max.is_some_and(|m| days > m) {
+            Err(message.clone())
         } else {
             Ok(())
         }
@@ -106,6 +146,13 @@ impl FormField {
         if *self.touched.peek() || self.error.peek().is_some() {
             self.validate();
         }
+    }
+
+    /// Add a rule after the ones the field was declared with. Used by fields whose props imply
+    /// a rule (`TimeField`'s `min`/`max`); call it once, from a hook.
+    pub(crate) fn add_validator(&self, rule: Validator) {
+        let mut validators = self.validators;
+        validators.write().push(ValidatorBox(rule));
     }
 
     /// Call from the control's `onmounted`, so a failed submit can focus it on every renderer
@@ -574,7 +621,30 @@ pub fn TimeField(
     #[props(default)] hour_cycle: HourCycle,
     #[props(default)] seconds: bool,
     #[props(default = 1)] minute_step: u8,
+    /// Earliest allowed time. With `min` or `max` the field also gets a range rule
+    /// ([`time_between`]), with the message from `UiStrings::time_out_of_range`.
+    #[props(default)]
+    min: Option<Time>,
+    /// Latest allowed time (inclusive); earlier than `min` wraps past midnight.
+    #[props(default)]
+    max: Option<Time>,
 ) -> Element {
+    let strings = use_ui_strings();
+    use_hook(|| {
+        if min.is_some() || max.is_some() {
+            let show = |t: Option<Time>, fallback: Time| {
+                format_time(t.unwrap_or(fallback), hour_cycle, seconds, &strings)
+            };
+            let message = fill(
+                &strings.time_out_of_range,
+                &[
+                    ("min", &show(min, Time::MIDNIGHT)),
+                    ("max", &show(max, Time::from_hms(23, 59, 59).unwrap_or(Time::MIDNIGHT))),
+                ],
+            );
+            field.add_validator(time_between(min, max, message));
+        }
+    });
     let ids = field.ids();
     let error = field.error();
     let invalid = error.is_some();
@@ -591,6 +661,8 @@ pub fn TimeField(
                 hour_cycle,
                 seconds,
                 minute_step,
+                min,
+                max,
                 labelled_by: label_id,
                 first_segment_id: ids.control.clone(),
                 invalid,
@@ -649,6 +721,71 @@ pub fn DateTimeField(
                 described_by: field.described_by(description.is_some()),
                 on_blur: move |_| field.blur(),
                 on_mounted: move |e| field.mounted(e),
+            }
+            if let Some(description) = description {
+                FieldDescription { id: ids.description.clone(), "{description}" }
+            }
+            FieldError { id: ids.error.clone(), message: error }
+        }
+    }
+}
+
+/// A [`DateRangePicker`] bound to a [`FormField`]. The field holds `"2026-10-15/2026-10-20"`
+/// (an ISO 8601 interval; [`parse_iso_date_range`] reads it back) and stays empty until both
+/// dates are entered, so `required()` works; [`days_between`] limits the length. The picker
+/// group is named by the label and described by the description and error. It validates when
+/// focus leaves the picker, its calendar included; a failed submit focuses the group.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DateRangeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default = Date::from_calendar_date(1925, Month::January, 1).expect("valid date"))]
+    min_date: Date,
+    #[props(default = Date::from_calendar_date(2050, Month::December, 31).expect("valid date"))]
+    max_date: Date,
+    /// Dates that can't be picked (already booked, closed).
+    #[props(default)]
+    disabled_ranges: ReadSignal<Vec<DateRange>>,
+    /// How many months the calendar shows at once.
+    #[props(default = 1)]
+    month_count: u8,
+) -> Element {
+    let ids = field.ids();
+    let error = field.error();
+    let invalid = error.is_some();
+    let label_id = format!("{}-label", ids.control);
+    let value = use_memo(move || parse_iso_date_range(&field.value()));
+    let mut within = use_focus_exit(Callback::new(move |_| field.blur()));
+    rsx! {
+        Field { invalid,
+            // `for` points at the group, which a label can't focus; the group's
+            // `aria-labelledby` is what names it.
+            FieldLabel { id: label_id.clone(), html_for: ids.control.clone(), "{label}" }
+            div {
+                onfocusin: move |_| within.set(true),
+                onfocusout: move |_| within.set(false),
+                DateRangePicker {
+                    // The group itself: a failed submit focuses it by id, and it is read with
+                    // its label, description and error.
+                    id: ids.control.clone(),
+                    tabindex: "-1",
+                    aria_labelledby: label_id,
+                    aria_describedby: field.described_by(description.is_some()),
+                    "data-invalid": invalid.then_some("true"),
+                    selected_range: value(),
+                    on_range_change: move |range: Option<DateRange>| {
+                        field.set(range.map(format_iso_date_range).unwrap_or_default())
+                    },
+                    min_date,
+                    max_date,
+                    disabled_ranges,
+                    month_count,
+                }
             }
             if let Some(description) = description {
                 FieldDescription { id: ids.description.clone(), "{description}" }
