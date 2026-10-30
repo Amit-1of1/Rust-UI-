@@ -171,8 +171,12 @@ fn refocus_within(container: &str, selector: &str, only_single: bool) {
             .and_then(|el| el.closest(&format!(".{container}")).ok().flatten())
             .and_then(|root| root.query_selector(selector).ok().flatten())
             .and_then(|el| el.dyn_into::<web_sys::HtmlElement>().ok());
+        // Focus after the list has handled the key: moving it now would blur the list,
+        // which closes it before Enter or Space picks the option.
         if let Some(el) = target {
-            let _ = el.focus();
+            wasm_bindgen_futures::spawn_local(async move {
+                let _ = el.focus();
+            });
         }
     }
     #[cfg(not(all(target_arch = "wasm32", feature = "web")))]
@@ -235,15 +239,8 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
             select::SelectList {
                 class: Styles::dx_select_list,
                 aria_labelledby: name.list_labelledby,
-                // The primitive closes on Escape, Enter and Space but leaves focus on the
-                // removed list; the APG select-only combobox returns it to the trigger.
-                attributes: attributes!(div {
-                    onkeydown: move |e: KeyboardEvent| {
-                        if is_close_key(&e) {
-                            refocus_within(&Styles::dx_select.to_string(), "[aria-haspopup=listbox]", true);
-                        }
-                    },
-                }),
+                // No `onkeydown` here: the list has its own, and an attribute with the same
+                // name replaces it (Enter would stop picking). Options return focus instead.
                 {props.children}
             }
         }
@@ -319,8 +316,8 @@ pub fn SelectGroupLabel(props: SelectGroupLabelProps) -> Element {
 pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>) -> Element {
     let base = attributes!(div {
         class: Styles::dx_select_option,
-        // Choosing an option closes a single select (the primitive stops the key here).
-        // A multi-select list stays open and keeps focus.
+        // Choosing an option or Escape closes a single select; the APG select-only combobox
+        // then returns focus to the trigger. A multi-select list stays open and keeps focus.
         onkeydown: move |e: KeyboardEvent| {
             if is_close_key(&e) {
                 refocus_within(&Styles::dx_select.to_string(), "[aria-haspopup=listbox]", true);

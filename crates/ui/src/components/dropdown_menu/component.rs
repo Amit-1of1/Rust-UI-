@@ -14,9 +14,10 @@ struct Styles;
 /// pattern asks. `only_single` skips it inside a multi-select list, which stays open.
 ///
 /// Web only. A `MountedData` handle would also work on native, but getting one means an
-/// `onmounted` on the trigger, and `merge_attributes` keeps one listener per event name, so
-/// it would replace the primitive's own (which focuses the trigger on click in Safari and
-/// Firefox). On native focus stays on the removed item; the fuzz test lists that gap.
+/// `onmounted` on the trigger, and an element keeps one listener per event name, so it would
+/// replace the primitive's own (which focuses the trigger on click in Safari and Firefox).
+/// For the same reason nothing here adds a listener the primitive already sets on that
+/// element. On native focus stays on the removed item; the fuzz test lists that gap.
 fn refocus_within(container: &str, selector: &str, only_single: bool) {
     #[cfg(all(target_arch = "wasm32", feature = "web"))]
     {
@@ -36,8 +37,11 @@ fn refocus_within(container: &str, selector: &str, only_single: bool) {
             .and_then(|el| el.closest(&format!(".{container}")).ok().flatten())
             .and_then(|root| root.query_selector(selector).ok().flatten())
             .and_then(|el| el.dyn_into::<web_sys::HtmlElement>().ok());
+        // Focus after the primitive has handled the key and closed the menu.
         if let Some(el) = target {
-            let _ = el.focus();
+            wasm_bindgen_futures::spawn_local(async move {
+                let _ = el.focus();
+            });
         }
     }
     #[cfg(not(all(target_arch = "wasm32", feature = "web")))]
@@ -105,22 +109,23 @@ pub fn DropdownMenuItem<T: Clone + PartialEq + 'static>(
 ) -> Element {
     let base = attributes!(div {
         class: Styles::dx_dropdown_menu_item,
-        // Choosing an item closes the menu; the primitive stops the key here, so the
-        // content's handler never sees it.
-        onkeydown: move |e: KeyboardEvent| {
-            if is_close_key(&e) {
-                refocus_within(&Styles::dx_dropdown_menu.to_string(), "[aria-haspopup]", false);
-            }
-        },
     });
     let merged = merge_attributes(vec![base, props.attributes.clone()]);
+    // Choosing an item closes the menu. The item's own `onkeydown` picks it and stops the
+    // key, and another `onkeydown` here would replace that one, so focus goes back to the
+    // trigger from `on_select` instead (it runs while the item still has focus).
+    let user_select = props.on_select;
+    let on_select = move |value: T| {
+        refocus_within(&Styles::dx_dropdown_menu.to_string(), "[aria-haspopup]", false);
+        user_select.call(value);
+    };
 
     rsx! {
         dropdown_menu::DropdownMenuItem {
             disabled: props.disabled,
             value: props.value,
             index: props.index,
-            on_select: props.on_select,
+            on_select,
             attributes: merged,
             {props.children}
         }
