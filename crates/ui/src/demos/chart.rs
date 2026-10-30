@@ -42,12 +42,25 @@ fn browsers() -> Vec<ChartDatum> {
     .collect()
 }
 
+fn skills() -> Vec<String> {
+    ["Speed", "Battery", "Camera", "Screen", "Price", "Storage"]
+        .map(String::from)
+        .to_vec()
+}
+
+fn phones() -> Vec<ChartSeries> {
+    vec![
+        ChartSeries::new("Phone A", [8.0, 6.0, 9.0, 7.0, 4.0, 8.0]),
+        ChartSeries::new("Phone B", [6.0, 9.0, 6.0, 8.0, 8.0, 5.0]),
+    ]
+}
+
 #[component]
 pub fn Demo() -> Element {
     let mut goal = use_signal(|| 64.0_f32);
     rsx! {
         div { style: "display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));",
-            BarChart { data: monthly(), label: "Visitors per month, January to June" }
+            BarChart { data: monthly(), keyboard: true, label: "Visitors per month, January to June" }
             LineChart { data: monthly(), label: "Visitors per month, January to June (line)" }
             AreaChart {
                 categories: months(),
@@ -57,7 +70,15 @@ pub fn Demo() -> Element {
                 label: "Visitors by device, January to June, stacked",
             }
             BarChart { categories: months(), series: devices(), label: "Visitors by device, January to June" }
-            LineChart { categories: months(), series: devices(), label: "Visitors by device, January to June (lines)" }
+            LineChart { categories: months(), series: devices(), keyboard: true, label: "Visitors by device, January to June (lines)" }
+            RadarChart {
+                categories: skills(),
+                series: phones(),
+                max: 10.0,
+                keyboard: true,
+                table: true,
+                label: "Two phones scored out of 10",
+            }
             PieChart {
                 data: browsers(),
                 donut: true,
@@ -66,7 +87,7 @@ pub fn Demo() -> Element {
                 table: true,
                 label: "Visitors by browser",
             }
-            PieChart { data: browsers(), label: "Visitors by browser (pie)" }
+            PieChart { data: browsers(), keyboard: true, label: "Visitors by browser (pie)" }
             div { style: "display: grid; gap: 0.75rem; justify-items: center;",
                 RadialChart { value: goal(), label: "Monthly goal reached", caption: "of goal" }
                 Button {

@@ -40,7 +40,7 @@ Severity: **High** means a real app hits it early and the result is broken or in
 
 ## Open
 
-- A `DateRangeField` (date range bound to `use_form`) would let checkout validate dates like its other fields; checkout still keeps its own `trip_error`.
+- A `DateRangeField` (date range bound to `use_form`) would let checkout validate dates like its other fields. The kit has one since 2026-10-30 (with `days_between`); checkout still keeps its own `trip_error` until it is moved over.
 
 ## Things that worked well
 

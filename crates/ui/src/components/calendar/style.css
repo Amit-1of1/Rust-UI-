@@ -144,6 +144,7 @@
 .dx-calendar-grid-cell[data-month="last"][data-selected="true"],
 .dx-calendar-grid-cell[data-month="next"][data-selected="true"] {
     background-color: var(--secondary-color-6);
+    color: var(--secondary-color-1);
 }
 
 .dx-calendar-grid-cell[data-month="current"][data-selected="true"] {
