@@ -1133,6 +1133,9 @@ pub fn PieChart(
     }
 }
 
+/// One radar axis: where its spoke ends, where its label goes, the label's anchor and text.
+type RadarAxis = ((f32, f32), (f32, f32), &'static str, String);
+
 const RADAR_SIZE: f32 = 300.0;
 const RADAR_CENTER: f32 = RADAR_SIZE / 2.0;
 const RADAR_RADIUS: f32 = 100.0;
@@ -1205,7 +1208,7 @@ pub fn RadarChart(
             (radar_polygon(&vec![fraction; count]), y, axis_max * fraction)
         })
         .collect();
-    let axes: Vec<((f32, f32), (f32, f32), &'static str, String)> = model
+    let axes: Vec<RadarAxis> = model
         .categories
         .iter()
         .enumerate()
