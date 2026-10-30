@@ -7,3 +7,5 @@
 ### Fixed
 
 - **ui:** Contrast failures the proof found: toast success (2.4:1) and warning (2.1:1) text in light mode, toast info text in dark mode (1.4:1); white text on the hovered error action in alert dialog and popover (3.8:1); primary (green, orange accents) and destructive button hover fills that faded under AA; the focus ring of an invalid button (a 20% red halo was the only cue), switch, colour picker button and sidebar items (1.9 to 2.9:1); selected tag text on the focus colour; a selected outside-month day in the calendar; drag handle and remove icons in drag-and-drop list and tag group (1.5:1); the sheet close button (2.2:1).
+- **ui:** Focus is no longer lost when a dropdown menu, select or menubar menu closes from the keyboard (Escape, or Enter/Space on an item): it goes back to the trigger, through `MountedData`, so on native too. The select fix also covers the web, where focus fell to the page. Contracts now check it.
+- **ui:** `Pager` keeps focus on the page button you pressed; its items were keyed by position too, so the pressed button was replaced and focus fell to the page.
