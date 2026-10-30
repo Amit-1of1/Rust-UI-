@@ -13,7 +13,8 @@
   "description": "Charts drawn as SVG in Rust, coloured from theme tokens. No JavaScript chart library.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

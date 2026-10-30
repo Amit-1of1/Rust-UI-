@@ -50,8 +50,8 @@ Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patt
 | Enter | On the trigger | Opens the list. | yes |
 | Space | On the trigger | Opens the list. | yes |
 | ArrowDown | In the open list | Moves focus to the first option, then to the next one, skipping disabled ones. | yes |
-| Enter | On an option | Picks the option, closes the list and shows the value on the trigger. | yes |
-| Escape | In the open list | Closes the list without changing the value. | yes |
+| Enter | On an option | Picks the option, closes the list, shows the value on the trigger and returns focus to it. | yes |
+| Escape | In the open list | Closes the list without changing the value and returns focus to the trigger. | yes |
 
 States:
 
@@ -60,7 +60,6 @@ States:
 
 Known gaps:
 
-- Escape does not return focus to the trigger yet; on the web it falls to the page.
 - The trigger is a button with `aria-haspopup=listbox`, not `role=combobox` as in the APG example.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.

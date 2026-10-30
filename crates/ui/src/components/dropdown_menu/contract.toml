@@ -79,6 +79,20 @@ focused item@4
 """
 
 [[keys]]
+key = "Enter"
+when = "On an item"
+does = "Chooses the item, closes the menu and returns focus to the trigger."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown
+press Enter
+state closed
+focused trigger
+"""
+
+[[keys]]
 key = "Escape"
 when = "In the open menu"
 does = "Closes the menu and returns focus to the trigger."

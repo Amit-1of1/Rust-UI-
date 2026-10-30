@@ -112,6 +112,13 @@ pub struct UiStrings {
     pub chart_share: String,
     /// Radial chart summary. `{value}`, `{max}` and `{percent}` are filled in.
     pub value_of_max: String,
+    /// Read when a keyboard-explorable chart gets focus.
+    pub chart_keys_hint: String,
+    /// The focused point of a chart. `{point}`, `{index}` and `{count}` are filled in.
+    pub chart_point: String,
+    /// Read for a time picker whose time is outside `min`/`max`. `{min}` and `{max}` are
+    /// filled in.
+    pub time_out_of_range: String,
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,
@@ -191,6 +198,9 @@ impl Default for UiStrings {
             chart_value: s("Value"),
             chart_share: s("Share"),
             value_of_max: s("{value} of {max} ({percent})"),
+            chart_keys_hint: s("Use the arrow keys to move between points."),
+            chart_point: s("{point}. {index} of {count}."),
+            time_out_of_range: s("Choose a time from {min} to {max}."),
             opens_in_new_tab: s("(opens in a new tab)"),
             skip_to_content: s("Skip to content"),
             decrease: s("Decrease {label}"),

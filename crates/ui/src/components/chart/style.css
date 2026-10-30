@@ -15,6 +15,7 @@
 
 /* Series colours: --chart-1 (the accent unless set) to --chart-5, from theme.css. */
 .dx-chart [data-series="0"],
+.dx-chart-radar [data-series="0"],
 .dx-chart-legend-item[data-series="0"],
 .dx-chart-slice[data-series="0"],
 .dx-chart-ring[data-series="0"] {
@@ -22,6 +23,7 @@
 }
 
 .dx-chart [data-series="1"],
+.dx-chart-radar [data-series="1"],
 .dx-chart-legend-item[data-series="1"],
 .dx-chart-slice[data-series="1"],
 .dx-chart-ring[data-series="1"] {
@@ -29,6 +31,7 @@
 }
 
 .dx-chart [data-series="2"],
+.dx-chart-radar [data-series="2"],
 .dx-chart-legend-item[data-series="2"],
 .dx-chart-slice[data-series="2"],
 .dx-chart-ring[data-series="2"] {
@@ -36,6 +39,7 @@
 }
 
 .dx-chart [data-series="3"],
+.dx-chart-radar [data-series="3"],
 .dx-chart-legend-item[data-series="3"],
 .dx-chart-slice[data-series="3"],
 .dx-chart-ring[data-series="3"] {
@@ -43,6 +47,7 @@
 }
 
 .dx-chart [data-series="4"],
+.dx-chart-radar [data-series="4"],
 .dx-chart-legend-item[data-series="4"],
 .dx-chart-slice[data-series="4"],
 .dx-chart-ring[data-series="4"] {
@@ -100,7 +105,8 @@
 }
 
 .dx-chart-pie,
-.dx-chart-radial {
+.dx-chart-radial,
+.dx-chart-radar {
   display: block;
   width: 100%;
   max-width: var(--chart-size, 200px);
@@ -119,6 +125,54 @@
 
 .dx-chart-slice:hover {
   opacity: 0.8;
+}
+
+.dx-chart-radar-area {
+  fill: var(--series-color, var(--accent-color, var(--secondary-color)));
+  fill-opacity: 0.2;
+  stroke: var(--series-color, var(--accent-color, var(--secondary-color)));
+  stroke-width: 2;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* keyboard: true. The chart is one tab stop; the mark under the cursor is outlined. */
+.dx-chart-explore {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-radius: calc(var(--radius) / 2);
+}
+
+.dx-chart-explore:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 4px;
+}
+
+.dx-chart-bar[data-active="true"],
+.dx-chart-slice[data-active="true"] {
+  stroke: var(--secondary-color-4);
+  stroke-width: 2;
+}
+
+.dx-chart-dot[data-active="true"] {
+  fill: var(--series-color, var(--accent-color, var(--secondary-color)));
+  stroke: var(--secondary-color-4);
+}
+
+.dx-chart-column[data-active="true"] {
+  fill-opacity: 0.08;
+}
+
+/* What the cursor is on, shown and announced (role="status"); empty without focus. */
+.dx-chart-readout {
+  min-height: 1rem;
+  margin: 0;
+  color: var(--secondary-color-4);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1rem;
+  text-align: center;
 }
 
 .dx-chart-track,
@@ -218,7 +272,8 @@
 
   .dx-chart-area,
   .dx-chart-line,
-  .dx-chart-slice {
+  .dx-chart-slice,
+  .dx-chart-radar-area {
     animation: dx-chart-fade 300ms ease-out both;
   }
 
