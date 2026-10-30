@@ -1,0 +1,123 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Digits are typed into the focused segment (focus moves on after two digits) and A or P sets
+# AM/PM; those are text entry, covered by crates/ui/tests/time_picker.rs.
+pattern = "Spinbutton (one per segment)"
+apg = "spinbutton"
+roles = ["group", "spinbutton"]
+
+[parts]
+group = "[role=group][aria-label=Meeting]"
+segment = "[role=group][aria-label=Meeting] [role=spinbutton]"
+office = "[role=group][aria-label='Office hours'] [role=spinbutton]"
+
+[[keys]]
+key = "ArrowUp"
+when = "On a segment"
+does = "Increases the segment (minutes by `minute_step`), wrapping at the top. With `min`/`max`, skips values outside the range."
+native = true
+test = """
+visible group
+focus office@1
+press ArrowUp
+attr office@1 aria-valuenow=9
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a segment"
+does = "Decreases the segment, wrapping at the bottom. With `min`/`max`, skips values outside the range."
+native = true
+test = """
+focus office@1
+press ArrowDown
+attr office@1 aria-valuenow=17
+"""
+
+[[keys]]
+key = "PageUp"
+when = "On minutes or seconds"
+does = "Increases by 10 (or the minute step, when larger)."
+native = true
+test = """
+focus segment@2
+press PageUp
+attr segment@2 aria-valuenow=45
+"""
+
+[[keys]]
+key = "PageDown"
+when = "On minutes or seconds"
+does = "Decreases by 10 (or the minute step, when larger)."
+native = true
+test = """
+focus segment@2
+press PageDown
+attr segment@2 aria-valuenow=15
+"""
+
+[[keys]]
+key = "Home"
+when = "On a segment"
+does = "Sets the lowest allowed value."
+native = true
+test = """
+focus segment@2
+press Home
+attr segment@2 aria-valuenow=0
+"""
+
+[[keys]]
+key = "End"
+when = "On a segment"
+does = "Sets the highest allowed value on the step grid."
+native = true
+test = """
+focus segment@2
+press End
+attr segment@2 aria-valuenow=45
+"""
+
+[[keys]]
+key = "Backspace"
+when = "On a segment"
+does = "Undoes the digit just typed, then clears the segment, then moves to the segment before."
+native = true
+test = """
+focus segment@2
+press Backspace
+attr segment@2 aria-valuetext=Empty
+"""
+
+[[keys]]
+key = "Delete"
+when = "On a segment"
+does = "Clears the segment."
+native = true
+test = """
+focus segment@1
+press Delete
+attr segment@1 aria-valuetext=Empty
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On a segment"
+does = "Moves to the next segment."
+native = true
+test = """
+focus segment@1
+press ArrowRight
+focused segment@2
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a segment"
+does = "Moves to the previous segment."
+native = true
+test = """
+focus segment@2
+press ArrowLeft
+focused segment@1
+"""

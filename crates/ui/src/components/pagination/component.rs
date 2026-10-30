@@ -254,8 +254,8 @@ pub fn Pager(
                         span { class: Styles::dx_pagination_label, {t.previous.clone()} }
                     }
                 }
-                for (i, item) in page_items(page, pages, siblings).into_iter().enumerate() {
-                    PaginationItem { key: "{i}-{item:?}",
+                for (slot, item) in keyed_items(page, pages, siblings) {
+                    PaginationItem { key: "{slot}",
                         if let Some(p) = item {
                             button {
                                 r#type: "button",
@@ -296,6 +296,20 @@ pub fn Pager(
             }
         }
     }
+}
+
+/// [`page_items`] with a key for each: the page number, so the button you pressed survives
+/// the re-render and keeps focus (a key that also held the position replaced it, and focus
+/// fell to the page). An ellipsis has no number; its position is enough.
+fn keyed_items(page: usize, pages: usize, siblings: usize) -> Vec<(String, Option<usize>)> {
+    page_items(page, pages, siblings)
+        .into_iter()
+        .enumerate()
+        .map(|(i, item)| match item {
+            Some(p) => (format!("page-{p}"), item),
+            None => (format!("gap-{i}"), item),
+        })
+        .collect()
 }
 
 /// The page numbers [`Pager`] shows, `None` for a gap: the first and last page, and

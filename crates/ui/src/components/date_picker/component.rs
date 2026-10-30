@@ -24,6 +24,45 @@ use super::super::popover::*;
 #[css_module("/src/components/date_picker/style.css")]
 struct Styles;
 
+/// `"2026-10-15"`: the format of `<input type="date">`.
+pub fn format_iso_date(date: Date) -> String {
+    format!(
+        "{:04}-{:02}-{:02}",
+        date.year(),
+        date.month() as u8,
+        date.day()
+    )
+}
+
+/// Reads `"2026-10-15"`; anything else (including a date that doesn't exist) is `None`.
+pub fn parse_iso_date(text: &str) -> Option<Date> {
+    let mut parts = text.trim().split('-');
+    let year: i32 = parts.next().filter(|p| p.len() == 4)?.parse().ok()?;
+    let month: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
+    let day: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
+    if parts.next().is_some() {
+        return None;
+    }
+    Date::from_calendar_date(year, Month::try_from(month).ok()?, day).ok()
+}
+
+/// `"2026-10-15/2026-10-20"`: an ISO 8601 interval of two dates, the format
+/// [`DateRangeField`](crate::components::form::DateRangeField) keeps in a form field.
+pub fn format_iso_date_range(range: DateRange) -> String {
+    format!(
+        "{}/{}",
+        format_iso_date(range.start()),
+        format_iso_date(range.end())
+    )
+}
+
+/// Reads `"2026-10-15/2026-10-20"`. The dates may come in either order; the range is always
+/// start to end.
+pub fn parse_iso_date_range(text: &str) -> Option<DateRange> {
+    let (start, end) = text.trim().split_once('/')?;
+    Some(DateRange::new(parse_iso_date(start)?, parse_iso_date(end)?))
+}
+
 fn fixed_date(year: i32, month: Month, day: u8) -> Date {
     Date::from_calendar_date(year, month, day).expect("valid fixed date")
 }
