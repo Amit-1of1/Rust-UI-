@@ -38,4 +38,4 @@ Every finding was compared with Chromium, using the demo's server-rendered marku
 - **Time picker** segments were 20x18px side by side (2.5.8). They are 24x24; the picker keeps its height.
 - **Showcase** at phone size: focus scrolled into view ended up under the fixed tab bar (browsers do this too). `html { scroll-padding-bottom: 5rem }` in the phone layout.
 
-Still open: the **date range field** needs about 315px and can't wrap between its two dates without changing the primitive's markup (`KNOWN`, `reflow: date_picker`).
+Still open: the **date range field** needs about 315px and can't wrap between its two dates without changing the primitive's markup (`KNOWN`, `reflow: date_picker` and, for `DateRangeField` with longer text, `long-text: date_picker`).

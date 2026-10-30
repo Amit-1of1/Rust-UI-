@@ -39,6 +39,7 @@ const INLINE_BOX: &str = "Blitz ignores the width and height of an inline-flex o
 /// Blitz has no `::after` hit area and no painting order for positioned elements.
 const SIDEBAR_ACTION: &str = "the menu action's ::after hit area is 36x36 in browsers; Blitz builds no box for it and paints positioned elements in DOM order, so the menu button sits on top of it";
 const CALENDAR_TABLE: &str = "Blitz's table layout makes the calendar wider than browsers do (Chromium fits it at 320px) and lays out the hidden month and year options";
+const DATE_RANGE: &str = "Real: the date range field (and the DateRangeField around it) needs about 315px and can't wrap between its two dates without changing the primitive's markup";
 const BLITZ_TEXT: &str = "Blitz-only: it falls back to a wider serif font (Inter isn't bundled) and doesn't break these long strings the way Chromium does; Chromium shows no overflow";
 
 /// Accepted findings, as a prefix of `check: demo: element ...`, with the reason they stay.
@@ -53,6 +54,7 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: combobox: ", INPUT_WIDTH),
     ("long-text: data_table: ", BLITZ_TEXT),
     ("long-text: date_time_picker: ", INPUT_WIDTH),
+    ("long-text: date_picker: ", DATE_RANGE),
     ("long-text: drag_and_drop_list: ", BLITZ_TEXT),
     ("long-text: hooks: ", BLITZ_TEXT),
     ("long-text: input: ", INPUT_WIDTH),
@@ -66,10 +68,7 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: time_picker: ", INPUT_WIDTH),
     ("reflow: calendar: ", CALENDAR_TABLE),
     ("reflow: card: ", INPUT_WIDTH),
-    (
-        "reflow: date_picker: ",
-        "Real: the date range field needs about 315px and can't wrap between its two dates without changing the primitive's markup",
-    ),
+    ("reflow: date_picker: ", DATE_RANGE),
     ("reflow: field: ", INPUT_WIDTH),
     ("reflow: form: ", INPUT_WIDTH),
     ("reflow: form_derive: ", INPUT_WIDTH),
