@@ -62,9 +62,10 @@ fn Announcer() -> Element {
 }
 
 /// Keeps the log at the newest message while the reader is there, and lets go when they
-/// scroll up. Works from measurements alone, so it needs no scroll events on renderers that
-/// have none (Blitz): there a scroll offset that moved up since the last follow means the
-/// reader scrolled.
+/// scroll up. Before each follow it compares the scroll offset with the one it last set: one
+/// that moved up means the reader scrolled. That works without scroll events (Blitz has none)
+/// and catches a scroll whose event has not arrived yet (browsers send them a frame late,
+/// and a follow in between would otherwise undo it).
 #[derive(Clone, Copy)]
 struct Follow {
     el: Signal<Option<Rc<MountedData>>>,
@@ -72,7 +73,6 @@ struct Follow {
     unseen: Signal<bool>,
     height: Signal<f64>,
     top: Signal<Option<f64>>,
-    saw_scroll_event: Signal<bool>,
     /// The scroll offset the last scroll event reported (web).
     seen_top: Signal<Option<f64>>,
 }
@@ -95,7 +95,7 @@ impl Follow {
             }
             return;
         }
-        if !*self.saw_scroll_event.peek() && !shrank {
+        if !shrank {
             if let (Some(top), Ok(now)) = (*self.top.peek(), el.get_scroll_offset().await) {
                 if now.y + SLACK < top {
                     self.pinned.set(false);
@@ -180,7 +180,6 @@ pub fn ChatLog(
         unseen: use_signal(|| false),
         height: use_signal(|| 0.0),
         top: use_signal(|| None),
-        saw_scroll_event: use_signal(|| false),
         seen_top: use_signal(|| None),
     };
     // Parents re-render the log when they add a message; follow after every render.
@@ -209,9 +208,6 @@ pub fn ChatLog(
                 },
                 onscroll: move |e: ScrollEvent| {
                     let mut f = follow;
-                    if !*f.saw_scroll_event.peek() {
-                        f.saw_scroll_event.set(true);
-                    }
                     let top = e.scroll_top();
                     let gap = f64::from(e.scroll_height()) - top - f64::from(e.client_height());
                     let at_end = gap <= SLACK;

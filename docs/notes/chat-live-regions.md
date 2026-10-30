@@ -13,6 +13,11 @@
   dispatched there (dioxus-native-dom's converters are `unimplemented!`, so don't send them
   synthetically either). `ChatLog` follows by measuring after each render instead; a scroll
   offset lower than the one it last set means the reader scrolled.
+- **Browsers deliver scroll events a frame late.** While a reply streams, a follow can run
+  between the reader's scroll and its event and undo it, and an event can report a gap that
+  only the newly streamed text made. So `ChatLog` decides from the offset it reads before each
+  follow, and a scroll event only lets go when the offset moved up (CI caught both, on release
+  builds in all three engines).
 - **Blitz's absolute position of a scrolled element subtracts its own scroll offset.** Measure a
   scroll container's box on a wrapper, not on itself (`log_rect` in `apps/native/tests/chat.rs`).
 - **Timers in native tests need a Tokio runtime** (`dioxus-sdk-time` sleeps through Tokio
