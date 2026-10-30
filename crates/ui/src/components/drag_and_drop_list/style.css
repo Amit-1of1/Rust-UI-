@@ -90,7 +90,7 @@
 .dx-item-icon {
   flex-shrink: 0;
   margin-inline-end: 6px;
-  color: var(--secondary-color-6);
+  color: var(--secondary-color-5);
   transition: color 150ms ease;
 }
 
@@ -121,7 +121,7 @@
   border-radius: 6px;
   margin-inline-start: 10px;
   background-color: transparent;
-  color: var(--secondary-color-6);
+  color: var(--secondary-color-5);
   cursor: pointer;
   transition:
     background-color 120ms ease,
