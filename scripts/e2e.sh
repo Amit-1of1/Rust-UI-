@@ -100,6 +100,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] table (gallery)";                  e2e env GALLERY_URL=$G node table.mjs
   step "[$engine] select + combobox form fields";    e2e env GALLERY_URL=$G node form_fields.mjs
   step "[$engine] time + date-time pickers (gallery)"; e2e env GALLERY_URL=$G node time_picker.mjs
+  step "[$engine] chat, composer, tool calls (gallery)"; e2e env GALLERY_URL=$G node chat.mjs
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
   step "[$engine] component contracts (docs pages)"; e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node contracts.mjs

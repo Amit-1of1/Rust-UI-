@@ -43,6 +43,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 | `hooks::Selection`, `use_selection`, `use_selected` | Built for the benchmark app; the API may change with its next use. |
 | `number_field`: `NumberInput`, `NumberField` | New on 2026-10-15 (booking gap 12); `f64` values and the `empty` prop may change once forms need decimals or units. |
 | The `router` feature, `hooks::follow_in_app`, `in_app_href`, `is_current_route`, and `MainContent`'s focus move | New on 2026-10-15 (booking gaps 10 and 11); rides on the Dioxus router's untyped context. |
+| `chat`, `chat_composer`, `tool_call`: `ChatLog`, `ChatMessage`, `ChatRole`, `StreamingText`, `TypingIndicator`, `ChatAnnouncer`, `use_chat_announcer`, `ChatComposer`, `composer_key`, `ToolCall`, `ToolStatus`, `AgentSteps`, `AgentStep` | New on 2026-10-30 (agent UI set); props may change once a real agent app uses them (attachments, message grouping, retry). |
 | `Pager`, `page_items`, `CardMedia`, `CarouselItem`'s `media`, `Select`'s `selected` | New on 2026-10-15 (booking and dashboard gaps). |
 | Feature `native` | Does nothing today and is kept so apps that enable it keep building. Native (Blitz) support is a preview ([NATIVE.md](NATIVE.md)). |
 | Re-exports from `dioxus-primitives` in the prelude (`use_toast`, `ToastOptions`, `ContentSide`) | Their shape follows the pinned primitives rev (our fork). A rev bump that changes them is announced as breaking. |

@@ -184,6 +184,9 @@ fn MoreSections() -> Element {
         Section { title: "Hooks", blurb: "Shared hooks: media queries, copy to clipboard, Ctrl+K and row selection. They install with the components that use them.", ui::demos::hooks::Demo {} }
         Section { title: "Chips", blurb: "On/off chips for filters: native checkboxes with a check mark, so state never relies on colour.", ui::demos::chips::Demo {} }
         Section { title: "Link", blurb: "Inline text links. External links open in a new tab and say so; the current page is marked with aria-current.", ui::demos::link::Demo {} }
+        Section { title: "Chat", blurb: "A conversation that follows new messages until you scroll up; replies stream in and are announced once, whole.", ui::demos::chat::Demo {} }
+        Section { title: "Chat composer", blurb: "Grows with the text; Enter sends, Shift+Enter adds a line, and IME input never sends early.", ui::demos::chat_composer::Demo {} }
+        Section { title: "Tool calls and steps", blurb: "An agent's plan and tool calls, with status in words; failures and approvals are announced.", ui::demos::tool_call::Demo {} }
         Section {
             title: "Spring motion",
             blurb: "Three presets retargeting mid-flight keep their momentum. Click Go repeatedly.",

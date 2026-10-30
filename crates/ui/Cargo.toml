@@ -25,6 +25,8 @@ time = { version = "0.3.44", features = ["std", "macros"] }
 palette = "0.7.6"
 strum = { version = "0.27.2", features = ["derive"] }
 tracing = "0.1"
+# Timers that work on the web and native (already used by dioxus-primitives).
+dioxus-sdk-time = "0.7.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget", "MediaQueryList", "Navigator", "Clipboard"] }

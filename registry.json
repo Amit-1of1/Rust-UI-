@@ -175,6 +175,36 @@
       ]
     },
     {
+      "name": "chat",
+      "files": [
+        "chat/component.rs",
+        "chat/contract.toml",
+        "chat/docs.md",
+        "chat/mod.rs",
+        "chat/style.css"
+      ],
+      "registryDependencies": [
+        "icons",
+        "ui_strings"
+      ]
+    },
+    {
+      "name": "chat_composer",
+      "files": [
+        "chat_composer/component.rs",
+        "chat_composer/contract.toml",
+        "chat_composer/docs.md",
+        "chat_composer/mod.rs",
+        "chat_composer/style.css"
+      ],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "textarea",
+        "ui_strings"
+      ]
+    },
+    {
       "name": "checkbox",
       "files": [
         "checkbox/component.rs",
@@ -875,6 +905,22 @@
         "toggle_group/style.css"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "tool_call",
+      "files": [
+        "tool_call/component.rs",
+        "tool_call/contract.toml",
+        "tool_call/docs.md",
+        "tool_call/mod.rs",
+        "tool_call/style.css"
+      ],
+      "registryDependencies": [
+        "chat",
+        "collapsible",
+        "icons",
+        "ui_strings"
+      ]
     },
     {
       "name": "toolbar",
