@@ -50,6 +50,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Internal
 
 - `ui::demos` (feature `demos`): the gallery and docs demos. The feature exists for this repo's apps and tests.
+- Feature `contract-check`: makes the kit's build script check every `contract.toml`. It only builds inside this repository, because it reads the CLI's source.
 - `ui::blocks` (feature `blocks`, on with `demos`): whole screens meant to be copied with `rust-ui add` and then changed. Their props may change in any release; a copy you own doesn't change under you.
 - `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `rust-ui postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
 - `ui::components::<name>` module paths. Import from `ui::prelude` (or `ui::hooks`, `ui::icons`); the module layout follows the registry and may move. `drag_and_drop_list` and `tag_group` are the exception: both export `RemoveButton`, so import them by module path.

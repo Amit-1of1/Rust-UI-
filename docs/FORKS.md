@@ -3,7 +3,7 @@
 Six crates carry small fixes on top of the exact versions we depend on. The fixes live on branches of forks under `Amit-1of1`, pinned to a commit in the workspace `Cargo.toml`.
 
 - The five renderer crates (Blitz and `dioxus-native-dom`) are swapped in with `[patch.crates-io]`. Only builds that pull them in (the `native` feature, `apps/native`) are affected; the web and desktop builds never compile them.
-- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with these exceptions, plain bug fixes that apply everywhere: the date range input freeze, the date pickers' naming and segment advance, and the toast roles below.
+- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. The fork's packages are named `rust-ui-primitives` and `rust-ui-attributes` so they can be published (the library names are unchanged; [PUBLISHING.md](PUBLISHING.md#dioxus-primitives)), and the kit's line says `package = "rust-ui-primitives"`. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with these exceptions, plain bug fixes that apply everywhere: the date range input freeze, the date pickers' naming and segment advance, and the toast roles below.
 
 | Crate | Release | Upstream commit of that release | Fork branch | Pinned commit |
 |---|---|---|---|---|
@@ -13,7 +13,7 @@ Six crates carry small fixes on top of the exact versions we depend on. The fixe
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
 | `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `8f3d575` |
 | `dioxus-cli` (`dx`, its wasm splitter) | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/wasm-split/wasm-split-cli) | [Amit-1of1/dioxus `claude/project-thread-xwtlc7`](https://github.com/Amit-1of1/dioxus/tree/claude/project-thread-xwtlc7) | `73a027c` |
-| `dioxus-primitives` | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) (`5b21f56` is on `claude/project-thread-pet69c` until that branch is fast-forwarded) | `5b21f56` |
+| `dioxus-primitives` (published by us as `rust-ui-primitives`, with `dioxus-attributes` as `rust-ui-attributes`) | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) (`fd533b7` is on `claude/project-thread-6c30v9` until that branch is fast-forwarded) | `fd533b7` |
 
 `dx` is a tool, not a dependency: `scripts/install-dx.sh` installs it from the pinned commit (`dx --version` prints `0.7.10 (73a027c)`). Only split release builds (`scripts/release-web.sh`, the Pages workflow) need it; `dx serve` and debug builds work with stock 0.7.10. Its branch is the whole upstream workspace with one commit on top, so it needs no manifest swap.
 
@@ -98,8 +98,16 @@ Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/n
 
 ## Using the fixes in an app outside this repo
 
-`[patch]` only applies to the workspace that declares it. An app that git-installs the kit and uses the `native` feature needs the same `[patch.crates-io]` section, copied from this repository's `Cargo.toml` (not yet tried from an outside app).
+`[patch]` only applies to the workspace that declares it, so the renderer forks never reach an app that depends on the kit. On the web and desktop that is what you want: those builds never compile the patched crates, and `scripts/consumer-check.sh` (CI, every PR) builds an outside app on stock Dioxus from crates.io to prove it. The primitives fork is the only fork such an app gets, as the ordinary dependency `rust-ui-primitives`.
+
+An app that uses the `native` feature and wants the renderer fixes copies the `[patch.crates-io]` section from this repository's `Cargo.toml`. Without it, native runs with upstream's gaps (the left column of the table above).
+
+## Keeping up with upstream
+
+`scripts/fork-drift.sh` lists, for each forked crate, the release we patch, the newest compatible release and the newest overall. `--try-rebase` also replays each branch's fix commits onto both of those in throwaway clones. A fix that replays as empty is already upstream and can be dropped. `.github/workflows/fork-drift.yml` runs it every Monday and keeps the result in one issue, "Fork drift". The table at the top of the script must match this page, and the script fails if a pin in `Cargo.toml` or `scripts/install-dx.sh` has no row.
+
+On 2026-10-30 nothing newer is compatible. Blitz `main` is 0.3 and Dioxus `main` is 0.8, and the renderer fixes conflict with both, so the move to Dioxus 0.8 includes porting them. The splitter fix and all the primitives fixes still apply cleanly to upstream `main`.
 
 ## Upstream
 
-Nothing is sent upstream (no PRs or issues on DioxusLabs repositories) without the owner's say-so. The fixes are written so they could go upstream as they are.
+Nothing is sent upstream (no PRs or issues on DioxusLabs repositories) without the owner's say-so. The fixes are written so they could go upstream as they are. [notes/upstreaming.md](notes/upstreaming.md) groups them into the PRs and issues we would open, in order, with whether each still applies.
