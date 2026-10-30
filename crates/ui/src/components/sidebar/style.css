@@ -17,7 +17,7 @@
   --dx-sidebar-border: var(--primary-color-6);
   --dx-sidebar-accent: var(--primary-color-4);
   --dx-sidebar-accent-foreground: var(--secondary-color-4);
-  --dx-sidebar-ring: var(--primary-color-7);
+  --dx-sidebar-ring: var(--focused-border-color);
 
   display: flex;
   overflow: hidden;

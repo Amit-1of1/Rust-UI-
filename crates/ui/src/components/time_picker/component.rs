@@ -78,6 +78,11 @@ pub struct TimeState {
     pub seconds: bool,
     /// Arrow keys move minutes by this much (1 to 30).
     pub minute_step: u8,
+    /// Earliest allowed time. With [`max`](Self::max) earlier than this, the range runs past
+    /// midnight (22:00 to 02:00).
+    pub min: Option<Time>,
+    /// Latest allowed time.
+    pub max: Option<Time>,
     /// Index into [`segments`](Self::segments).
     pub focus: usize,
     /// Digits typed into the focused segment since it got focus.
@@ -94,8 +99,106 @@ impl TimeState {
             cycle,
             seconds,
             minute_step: minute_step.clamp(1, 30),
+            min: None,
+            max: None,
             focus: 0,
             typed: String::new(),
+        }
+    }
+
+    /// Limit the arrow keys to times from `min` to `max` (either may be open). Typing still takes
+    /// any time; [`out_of_range`](Self::out_of_range) then reports it.
+    pub fn with_range(mut self, min: Option<Time>, max: Option<Time>) -> Self {
+        self.min = min;
+        self.max = max;
+        self
+    }
+
+    /// Whether `time` is inside `min..=max`, wrapping past midnight when `max < min`.
+    pub fn in_range(&self, time: Time) -> bool {
+        let t = seconds_of_day(time);
+        self.allowed().iter().any(|&(a, b)| a <= t && t <= b)
+    }
+
+    /// A complete time that is outside `min..=max`.
+    pub fn out_of_range(&self) -> bool {
+        self.time().is_some_and(|t| !self.in_range(t))
+    }
+
+    /// The allowed range as inclusive spans of seconds since midnight.
+    fn allowed(&self) -> Vec<(u32, u32)> {
+        let min = self.min.map_or(0, seconds_of_day);
+        let max = self.max.map_or(DAY - 1, seconds_of_day);
+        if min <= max {
+            vec![(min, max)]
+        } else {
+            vec![(min, DAY - 1), (0, max)]
+        }
+    }
+
+    fn limited(&self) -> bool {
+        self.min.is_some() || self.max.is_some()
+    }
+
+    /// The 24-hour hours a 12-hour `hour` can mean: one once AM/PM is known, both before.
+    fn hours_for(&self, hour: u8, period: Option<Period>) -> Vec<u8> {
+        match self.cycle {
+            HourCycle::H24 => vec![hour],
+            HourCycle::H12 => {
+                let base = hour % 12;
+                match period {
+                    Some(Period::Am) => vec![base],
+                    Some(Period::Pm) => vec![base + 12],
+                    None => vec![base, base + 12],
+                }
+            }
+        }
+    }
+
+    /// Whether `value` in `segment` can still lead to an allowed time, given the segments
+    /// above it (hours, then minutes, then seconds; AM/PM goes with the hours). Segments below
+    /// are not looked at, so the hours can be picked first.
+    fn can_reach(&self, segment: TimeSegment, value: u8) -> bool {
+        if !self.limited() {
+            return true;
+        }
+        let allowed = self.allowed();
+        let hits = |from: u32, to: u32| allowed.iter().any(|&(a, b)| from <= b && to >= a);
+        let hour_span = |h: u8| (h as u32 * 3600, h as u32 * 3600 + 3599);
+        match segment {
+            TimeSegment::Hour => self
+                .hours_for(value, self.period)
+                .into_iter()
+                .any(|h| hits(hour_span(h).0, hour_span(h).1)),
+            TimeSegment::Period => {
+                let period = if value == 0 { Period::Am } else { Period::Pm };
+                match self.hour {
+                    Some(hour) => self
+                        .hours_for(hour, Some(period))
+                        .into_iter()
+                        .any(|h| hits(hour_span(h).0, hour_span(h).1)),
+                    None => {
+                        let start = value as u32 * 12 * 3600;
+                        hits(start, start + 12 * 3600 - 1)
+                    }
+                }
+            }
+            TimeSegment::Minute => {
+                let Some(hour) = self.hour else { return true };
+                self.hours_for(hour, self.period).into_iter().any(|h| {
+                    let from = h as u32 * 3600 + value as u32 * 60;
+                    hits(from, from + 59)
+                })
+            }
+            TimeSegment::Second => {
+                let (Some(hour), Some(minute)) = (self.hour, self.minute) else {
+                    return true;
+                };
+                self.hours_for(hour, self.period).into_iter().any(|h| {
+                    let at = h as u32 * 3600 + minute as u32 * 60 + value as u32;
+                    hits(at, at)
+                })
+            }
         }
     }
 
@@ -233,7 +336,7 @@ impl TimeState {
                 } else {
                     step
                 };
-                Some(match current {
+                let up = |current: Option<u8>| match current {
                     None => min,
                     Some(v) => {
                         let next = (v - min) / by * by + by + min;
@@ -243,7 +346,8 @@ impl TimeState {
                             next
                         }
                     }
-                })
+                };
+                Some(self.first_reachable(segment, current, up))
             }
             TimeKey::Down | TimeKey::PageDown => {
                 let by = if key == TimeKey::PageDown && segment != TimeSegment::Hour {
@@ -253,15 +357,22 @@ impl TimeState {
                 };
                 // Wrap to the highest value on this key's grid (50 for Page Down on minutes).
                 let top = min + (max - min) / by * by;
-                Some(match current {
+                let down = |current: Option<u8>| match current {
                     None => top,
                     Some(v) if (v - min) % by != 0 => (v - min) / by * by + min,
                     Some(v) if v >= min + by => v - by,
                     Some(_) => top,
-                })
+                };
+                Some(self.first_reachable(segment, current, down))
             }
-            TimeKey::Home => Some(min),
-            TimeKey::End => Some(top),
+            TimeKey::Home => Some(self.first_reachable(segment, None, |v| match v {
+                None => min,
+                Some(v) => (v + step).min(top),
+            })),
+            TimeKey::End => Some(self.first_reachable(segment, None, |v| match v {
+                None => top,
+                Some(v) => v.saturating_sub(step).max(min),
+            })),
             TimeKey::Backspace if !self.typed.is_empty() => {
                 self.typed.pop();
                 self.typed.parse::<u8>().ok().filter(|v| *v >= min)
@@ -279,6 +390,26 @@ impl TimeState {
         TimeOutcome::Changed
     }
 
+    /// Step with `next` from `current` until a value can still reach an allowed time (see
+    /// `can_reach`). When none can, the first step is taken anyway, as without a range.
+    fn first_reachable(
+        &self,
+        segment: TimeSegment,
+        current: Option<u8>,
+        next: impl Fn(Option<u8>) -> u8,
+    ) -> u8 {
+        let first = next(current);
+        let mut value = first;
+        // A segment has at most 60 values; a step can't visit more.
+        for _ in 0..61 {
+            if self.can_reach(segment, value) {
+                return value;
+            }
+            value = next(Some(value));
+        }
+        first
+    }
+
     fn move_to(&mut self, index: Option<usize>) -> TimeOutcome {
         match index {
             Some(index) => {
@@ -289,6 +420,13 @@ impl TimeState {
             None => TimeOutcome::Ignored,
         }
     }
+}
+
+const DAY: u32 = 86_400;
+
+fn seconds_of_day(time: Time) -> u32 {
+    let (h, m, s) = time.as_hms();
+    h as u32 * 3600 + m as u32 * 60 + s as u32
 }
 
 /// `"14:05"`, or `"14:05:09"` with seconds: the format of `<input type="time">`, used by
@@ -400,6 +538,13 @@ pub fn TimePicker(
     /// Up and Down move minutes by this much; typing still takes any minute.
     #[props(default = 1)]
     minute_step: u8,
+    /// Earliest allowed time. The arrow keys skip what is outside `min`..`max`; a typed time
+    /// outside it is kept but marked invalid. A `max` earlier than `min` wraps past midnight.
+    #[props(default)]
+    min: Option<Time>,
+    /// Latest allowed time (inclusive).
+    #[props(default)]
+    max: Option<Time>,
     #[props(default)] disabled: ReadSignal<bool>,
     #[props(default)] read_only: ReadSignal<bool>,
     /// Accessible name of the group when no visible label is linked with `labelled_by`.
@@ -437,7 +582,7 @@ pub fn TimePicker(
     // Start from the value, so the first frame (and server rendering) shows it.
     let mut emitted = use_signal(|| *value.peek());
     let mut state = use_signal(move || {
-        let mut state = TimeState::new(hour_cycle, seconds, minute_step);
+        let mut state = TimeState::new(hour_cycle, seconds, minute_step).with_range(min, max);
         state.set_time(*value.peek());
         state
     });
@@ -455,7 +600,12 @@ pub fn TimePicker(
 
     let mut apply = move |key: TimeKey| -> TimeOutcome {
         let before = state.peek().focus;
-        let outcome = state.write().apply(key);
+        let outcome = {
+            // The range props may have changed since the state was made.
+            let mut state = state.write();
+            (state.min, state.max) = (min, max);
+            state.apply(key)
+        };
         let now = state.peek().clone();
         if outcome == TimeOutcome::Changed {
             let time = now.time();
@@ -470,7 +620,8 @@ pub fn TimePicker(
         outcome
     };
 
-    let current = state.read().clone();
+    let current = state.read().clone().with_range(min, max);
+    let invalid = invalid || current.out_of_range();
     let segments = current.segments();
     let is_disabled = disabled();
     let is_read_only = read_only();

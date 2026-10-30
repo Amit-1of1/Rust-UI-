@@ -165,6 +165,7 @@
       "name": "chart",
       "files": [
         "chart/component.rs",
+        "chart/contract.toml",
         "chart/docs.md",
         "chart/mod.rs",
         "chart/style.css"
@@ -317,6 +318,7 @@
       ],
       "registryDependencies": [
         "calendar",
+        "form",
         "icons",
         "popover",
         "ui_strings"
@@ -425,12 +427,14 @@
       "registryDependencies": [
         "checkbox",
         "combobox",
+        "date_picker",
         "date_time_picker",
         "field",
         "input",
         "select",
         "textarea",
-        "time_picker"
+        "time_picker",
+        "ui_strings"
       ]
     },
     {
@@ -865,6 +869,7 @@
       "name": "time_picker",
       "files": [
         "time_picker/component.rs",
+        "time_picker/contract.toml",
         "time_picker/docs.md",
         "time_picker/mod.rs",
         "time_picker/style.css"

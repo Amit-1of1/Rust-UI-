@@ -210,7 +210,8 @@
 }
 
 .dx-popover-content-action:hover {
-  background-color: var(--secondary-error-color);
+  /* Light: --secondary-error-color is too pale for white text (3.8:1). */
+  background-color: var(--light, var(--error-text-color)) var(--dark, var(--secondary-error-color));
 }
 
 .dx-popover-content-action:focus-visible {
