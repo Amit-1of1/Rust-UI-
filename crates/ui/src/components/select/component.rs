@@ -144,12 +144,39 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     pub children: Element,
 }
 
+/// The trigger's element, so closing from the keyboard can put focus back on it. Through
+/// the element handle rather than the DOM, so it also works on native, where focus would
+/// otherwise stay on the removed list.
+#[derive(Clone, Copy)]
+struct TriggerEl(Signal<Option<std::rc::Rc<MountedData>>>);
+
+fn refocus_trigger() {
+    if let Some(TriggerEl(el)) = try_consume_context::<TriggerEl>() {
+        if let Some(el) = el() {
+            spawn(async move {
+                _ = el.set_focus(true).await;
+            });
+        }
+    }
+}
+
+fn is_close_key(e: &KeyboardEvent) -> bool {
+    matches!(e.key(), Key::Escape | Key::Enter) || e.key() == Key::Character(" ".into())
+}
+
 #[component]
 pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element {
     let base = attributes!(div {
         class: Styles::dx_select
     });
+    let mut trigger_el = use_context_provider(|| TriggerEl(Signal::new(None))).0;
     let name = use_trigger_name(props.attributes);
+    let trigger_attrs = merge_attributes(vec![
+        attributes!(button {
+            onmounted: move |e: MountedEvent| trigger_el.set(Some(e.data())),
+        }),
+        name.trigger,
+    ]);
     let merged = merge_attributes(vec![base, name.root]);
     // A plain `selected` becomes the signal the primitive wants. The memo follows the prop.
     let selected = props.selected.clone();
@@ -181,7 +208,7 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 class: Styles::dx_select_trigger,
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
-                attributes: name.trigger,
+                attributes: trigger_attrs,
                 if let Some(placeholder) = name.placeholder {
                     select::SelectValue { placeholder }
                 } else {
@@ -196,6 +223,15 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
             select::SelectList {
                 class: Styles::dx_select_list,
                 aria_labelledby: name.list_labelledby,
+                // The primitive closes on Escape, Enter and Space but leaves focus on the
+                // removed list; the APG select-only combobox returns it to the trigger.
+                attributes: attributes!(div {
+                    onkeydown: move |e: KeyboardEvent| {
+                        if is_close_key(&e) {
+                            refocus_trigger();
+                        }
+                    },
+                }),
                 {props.children}
             }
         }
@@ -270,7 +306,14 @@ pub fn SelectGroupLabel(props: SelectGroupLabelProps) -> Element {
 #[component]
 pub fn SelectOption<T: Clone + PartialEq + 'static>(props: SelectOptionProps<T>) -> Element {
     let base = attributes!(div {
-        class: Styles::dx_select_option
+        class: Styles::dx_select_option,
+        // Choosing an option closes a single select (the primitive stops the key here).
+        // `SelectMulti` provides no `TriggerEl`, so its list stays open and keeps focus.
+        onkeydown: move |e: KeyboardEvent| {
+            if is_close_key(&e) {
+                refocus_trigger();
+            }
+        },
     });
     let merged = merge_attributes(vec![base, props.attributes]);
 

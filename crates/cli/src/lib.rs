@@ -12,6 +12,7 @@ pub mod changelog;
 pub mod contract;
 #[cfg(test)]
 mod contract_tests;
+pub mod contrast;
 pub mod docsgen;
 pub mod doctor;
 pub mod explain;

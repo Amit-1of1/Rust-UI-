@@ -86,6 +86,13 @@ enum Command {
         #[arg(long)]
         strict: bool,
     },
+    /// Prove every text colour the components draw is readable (WCAG AA) on the background
+    /// it is drawn on, in light and dark, under every accent preset.
+    Contrast {
+        /// Your own theme or preset files, loaded after the kit's theme (repeatable).
+        #[arg(long)]
+        theme: Vec<PathBuf>,
+    },
     /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
     Theme {
         /// Brand colour as hex, e.g. `#7c3aed`.
@@ -322,6 +329,22 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
             println!("{errors} error(s), {warnings} warning(s)");
             if errors > 0 || (strict && warnings > 0) {
+                return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Contrast { theme } => {
+            use rust_ui_cli::contrast::{run as contrast, summary};
+            let report = contrast(root, &theme)?;
+            let failures = summary(&report);
+            for f in &failures {
+                println!("fail {f}");
+            }
+            println!(
+                "{} pairs checked, {} rules failing",
+                report.pairs.len(),
+                failures.len()
+            );
+            if !failures.is_empty() {
                 return Ok(ExitCode::FAILURE);
             }
         }
