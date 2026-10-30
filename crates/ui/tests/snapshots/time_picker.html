@@ -29,6 +29,18 @@
 </path>
 </svg>
 </div>
+<div role="group" aria-label="Office hours" class="dx-time-picker-css">
+<input id="dx-time-n2-n0" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Hours" aria-valuemin="0" aria-valuemax="23" aria-valuetext="Empty"/>
+<span class="dx-time-separator-css" aria-hidden="true">:
+</span>
+<input id="dx-time-n2-n1" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Minutes" aria-valuemin="0" aria-valuemax="59" aria-valuetext="Empty"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="clock" class="dx-time-icon-css" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<path d="M12 6v6l4 2">
+</path>
+</svg>
+</div>
 <form novalidate=true class="dx-form-css">
 <div data-slot="field" class="dx-field-css">
 <label for="dx-field-n0" class="dx-field-label-css" id="dx-field-n0-label">Reminder
@@ -37,8 +49,8 @@
 <input id="dx-field-n0" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Hours" aria-labelledby="dx-field-n0 dx-field-n0-label" aria-valuemin="1" aria-valuemax="12" aria-valuetext="Empty" aria-describedby="dx-field-n0-description"/>
 <span class="dx-time-separator-css" aria-hidden="true">:
 </span>
-<input id="dx-time-n2-n0" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Minutes" aria-labelledby="dx-time-n2-n0 dx-field-n0-label" aria-valuemin="0" aria-valuemax="59" aria-valuetext="Empty" aria-describedby="dx-field-n0-description"/>
-<input id="dx-time-n2-n1" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="text" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="AM/PM" aria-labelledby="dx-time-n2-n1 dx-field-n0-label" aria-valuemin="0" aria-valuemax="1" aria-valuetext="Empty" aria-describedby="dx-field-n0-description"/>
+<input id="dx-time-n3-n0" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Minutes" aria-labelledby="dx-time-n3-n0 dx-field-n0-label" aria-valuemin="0" aria-valuemax="59" aria-valuetext="Empty" aria-describedby="dx-field-n0-description"/>
+<input id="dx-time-n3-n1" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="text" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="AM/PM" aria-labelledby="dx-time-n3-n1 dx-field-n0-label" aria-valuemin="0" aria-valuemax="1" aria-valuetext="Empty" aria-describedby="dx-field-n0-description"/>
 <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="clock" class="dx-time-icon-css" aria-hidden="true">
 <circle cx="12" cy="12" r="10">
 </circle>
@@ -51,5 +63,25 @@
 </div>
 <button class="dx-button-css" data-size="default" data-style="primary" type="submit">Set reminder
 </button>
+</form>
+<form novalidate=true class="dx-form-css">
+<div data-slot="field" class="dx-field-css">
+<label for="dx-field-n1" class="dx-field-label-css" id="dx-field-n1-label">Night shift start
+</label>
+<div role="group" aria-labelledby="dx-field-n1-label" class="dx-time-picker-css">
+<input id="dx-field-n1" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Hours" aria-labelledby="dx-field-n1 dx-field-n1-label" aria-valuemin="0" aria-valuemax="23" aria-valuetext="Empty" aria-describedby="dx-field-n1-description"/>
+<span class="dx-time-separator-css" aria-hidden="true">:
+</span>
+<input id="dx-time-n4-n0" class="dx-time-segment-css" type="text" role="spinbutton" inputmode="numeric" autocomplete="off" spellcheck="false" size="2" style="--segment-width: 2ch" placeholder="––" value="" aria-label="Minutes" aria-labelledby="dx-time-n4-n0 dx-field-n1-label" aria-valuemin="0" aria-valuemax="59" aria-valuetext="Empty" aria-describedby="dx-field-n1-description"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="clock" class="dx-time-icon-css" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<path d="M12 6v6l4 2">
+</path>
+</svg>
+</div>
+<p id="dx-field-n1-description" class="dx-field-description-css">Between 22:00 and 02:00.
+</p>
+</div>
 </form>
 </div>

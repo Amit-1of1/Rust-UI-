@@ -1,6 +1,6 @@
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`).
+- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
@@ -54,9 +54,20 @@ rsx! {
 }
 ```
 
+`TimeField` also takes `min` and `max`; it then adds a range rule itself ("Choose a time from 9:00 to 17:00."). `DateRangeField` binds a `DateRangePicker`: the field holds `2026-10-15/2026-10-20` (an ISO 8601 interval, read back with `parse_iso_date_range`), empty until both dates are picked, and `days_between(min, max, message)` limits the length of the stay:
+
+```rust
+let stay = form.field(vec![required(), days_between(Some(2), Some(14), "Stays are 2 to 14 nights.")]);
+rsx! {
+    DateRangeField { field: stay, label: "Stay", min_date: today, disabled_ranges: booked() }
+}
+```
+
+A failed submit focuses the range picker's group, which is read with its label and error.
+
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
 
-Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
+Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
 ## Derive a form from a struct
 
@@ -136,6 +147,20 @@ pub fn email() -> Validator
 pub fn min_len(min: usize) -> Validator
 
 pub fn max_len(max: usize) -> Validator
+
+/// A time (`"14:05"`) from `min` to `max`, both inclusive; a `max` earlier than `min` wraps
+/// past midnight (22:00 to 02:00). Empty and unreadable values pass, so pair it with
+/// `required()` when the time must be given. [`TimeField`] adds this rule itself when given
+/// `min` or `max`.
+pub fn time_between(
+    min: Option<Time>,
+    max: Option<Time>,
+    message: impl Into<String>,
+) -> Validator
+
+/// A date range (`"2026-10-15/2026-10-20"`) that spans at least `min` and at most `max`
+/// days (nights, for a stay). Empty and unreadable values pass, like [`time_between`].
+pub fn days_between(min: Option<u32>, max: Option<u32>, message: impl Into<String>) -> Validator
 
 /// Your own rule: return `Err(message)` to reject.
 pub fn custom(rule: impl Fn(&str) -> Result<(), String> + 'static) -> Validator
@@ -303,6 +328,13 @@ pub fn TimeField(
     #[props(default)] hour_cycle: HourCycle,
     #[props(default)] seconds: bool,
     #[props(default = 1)] minute_step: u8,
+    /// Earliest allowed time. With `min` or `max` the field also gets a range rule
+    /// ([`time_between`]), with the message from `UiStrings::time_out_of_range`.
+    #[props(default)]
+    min: Option<Time>,
+    /// Latest allowed time (inclusive); earlier than `min` wraps past midnight.
+    #[props(default)]
+    max: Option<Time>,
 ) -> Element
 
 /// A [`DateTimePicker`] bound to a [`FormField`], wired like [`TextField`]. The field holds
@@ -324,6 +356,32 @@ pub fn DateTimeField(
     /// Filled in when a date is picked while the time is still empty.
     #[props(default)]
     default_time: Option<Time>,
+) -> Element
+
+/// A [`DateRangePicker`] bound to a [`FormField`]. The field holds `"2026-10-15/2026-10-20"`
+/// (an ISO 8601 interval; [`parse_iso_date_range`] reads it back) and stays empty until both
+/// dates are entered, so `required()` works; [`days_between`] limits the length. The picker
+/// group is named by the label and described by the description and error. It validates when
+/// focus leaves the picker, its calendar included; a failed submit focuses the group.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DateRangeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default = Date::from_calendar_date(1925, Month::January, 1).expect("valid date"))]
+    min_date: Date,
+    #[props(default = Date::from_calendar_date(2050, Month::December, 31).expect("valid date"))]
+    max_date: Date,
+    /// Dates that can't be picked (already booked, closed).
+    #[props(default)]
+    disabled_ranges: ReadSignal<Vec<DateRange>>,
+    /// How many months the calendar shows at once.
+    #[props(default = 1)]
+    month_count: u8,
 ) -> Element
 ```
 
