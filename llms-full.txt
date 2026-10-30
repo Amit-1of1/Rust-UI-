@@ -10118,7 +10118,9 @@ pub fn Demo() -> Element {
             Ok(())
         }
     })]);
-    let night_shift = form.field(vec![]);
+    // Its own form, so the reminder form above keeps one time field.
+    let shift_form = use_form();
+    let night_shift = shift_form.field(vec![]);
     let mut saved = use_signal(|| None::<String>);
     let meeting_text = meeting()
         .map(|t| format_time(t, HourCycle::H24, false, &strings))
@@ -10153,6 +10155,9 @@ pub fn Demo() -> Element {
                     hour_cycle: HourCycle::H12,
                     description: "Type the hour, minutes, then A or P.",
                 }
+                Button { r#type: "submit", "Set reminder" }
+            }
+            Form { state: shift_form,
                 TimeField {
                     field: night_shift,
                     label: "Night shift start",
@@ -10160,7 +10165,6 @@ pub fn Demo() -> Element {
                     max: Time::from_hms(2, 0, 0).ok(),
                     description: "Between 22:00 and 02:00.",
                 }
-                Button { r#type: "submit", "Set reminder" }
             }
             if let Some(text) = saved() {
                 p { role: "status", style: "margin: 0;", "Reminder set for {text}" }
