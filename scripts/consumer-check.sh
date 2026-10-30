@@ -86,7 +86,7 @@ cargo check -q --no-default-features
 
 step "where every crate comes from"
 # `(*)` marks a crate already listed; `(proc-macro)` its kind. Neither is a source.
-tree=$(cargo tree -q --target all -e normal,build --prefix none --format '{p}' |
+tree=$(cargo tree -q --color never --target all -e normal,build --prefix none --format '{p}' |
   sed -E 's/ \((\*|proc-macro)\)//g' | sort -u)
 git_sources=$(grep -F '(https://' <<<"$tree" | grep -F '#' || true)
 grep -E '^dioxus v' <<<"$tree"
