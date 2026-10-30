@@ -132,10 +132,10 @@ evidence = []
 id = "1.4.3"
 name = "Contrast (Minimum)"
 level = "AA"
-kit = "partial"
-remarks = "Text tokens meet 4.5:1 in light and dark; every accent preset's label colour is tested at 4.5:1 in both modes; axe scans every demo in light, dark and each accent preset. Hover, pressed and other interaction states are not all covered by axe, which only sees the resting page."
-app = "Check custom colours and any theme you generate (`rust-ui theme --brand`)."
-evidence = ["crates/ui/tests/theme.rs::accent_presets_meet_aa_contrast_in_both_modes", "tests/e2e/axe.mjs"]
+kit = "supports"
+remarks = "Proven from the stylesheets, not sampled: every text colour each component draws, including hover, pressed, selected and focus states, is checked against the background it is drawn on, in light and dark and under every accent preset (4.5:1, or 3:1 for large text). axe also scans every demo in light, dark and each accent."
+app = "Run `rust-ui contrast --theme <your theme.css>` on any theme you generate or edit, and check colours in your own CSS."
+evidence = ["crates/cli/tests/contrast.rs::every_pair_meets_wcag_aa_in_both_modes_and_every_accent", "crates/cli/tests/contrast.rs::the_proof_covers_every_component_mode_and_accent", "tests/e2e/axe.mjs"]
 
 [[criterion]]
 id = "1.4.4"
@@ -168,8 +168,8 @@ id = "1.4.11"
 name = "Non-text Contrast"
 level = "AA"
 kit = "partial"
-remarks = "Chart series colours are tested at 3:1 against the background in both modes, and forced-colors mode keeps every control's edge. Input borders and focus rings are not all measured."
-evidence = ["crates/ui/tests/theme.rs::chart_colours_meet_non_text_contrast_in_both_modes", "tests/e2e/forced_colors.mjs"]
+remarks = "Focus rings are proven at 3:1 against what is around them and icons at 3:1, from the stylesheets in both modes and every accent; chart series colours are tested at 3:1; forced-colors mode keeps every control's edge. Input and control borders at rest are not yet part of the proof."
+evidence = ["crates/cli/tests/contrast.rs::every_pair_meets_wcag_aa_in_both_modes_and_every_accent", "crates/ui/tests/theme.rs::chart_colours_meet_non_text_contrast_in_both_modes", "tests/e2e/forced_colors.mjs"]
 
 [[criterion]]
 id = "1.4.12"
