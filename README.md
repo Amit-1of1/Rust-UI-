@@ -93,6 +93,7 @@ rust-ui init  --dest assets/theme.css
 rust-ui add command --dest src/components   # also copies dialog, button, kbd
 rust-ui diff command --dest src/components  # exit 1 if your copy differs
 rust-ui docs dialog                         # page for coding agents; llms.txt is the index
+rust-ui acr --product MyApp --out acr.md    # draft accessibility conformance report (docs/ACR.md)
 rust-ui mcp                                 # MCP server for AI coding tools (docs/MCP.md)
 ```
 

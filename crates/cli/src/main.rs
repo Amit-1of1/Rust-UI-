@@ -92,6 +92,23 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
+    /// Write a draft Accessibility Conformance Report (VPAT 2.5 layout, WCAG 2.2 A and AA) for
+    /// the kit components your app uses, from the kit's tests and keyboard contracts.
+    /// docs/ACR.md explains what it covers.
+    Acr {
+        /// Components or blocks to report on (with what they use). Default: the items in the
+        /// lockfile, or every component when there is none.
+        names: Vec<String>,
+        /// The product name in the title.
+        #[arg(long, default_value = "Your app")]
+        product: String,
+        /// Write the Markdown here instead of printing it.
+        #[arg(long)]
+        out: Option<PathBuf>,
+        /// The report date (YYYY-MM-DD); today by default.
+        #[arg(long)]
+        date: Option<String>,
+    },
     /// Update copied components and blocks to the registry's current version, keeping your
     /// edits: a three-way merge against the version `add` recorded in the lockfile.
     Update {
@@ -319,6 +336,44 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 for c in picked {
                     println!("# {}\n\n{}", c.name, c.markdown());
                 }
+            }
+        }
+        Command::Acr {
+            names,
+            product,
+            out,
+            date,
+        } => {
+            use rust_ui_cli::acr::{components_of, load_criteria, markdown, report};
+            let reg = load(root)?;
+            let wanted: Vec<String> = if !names.is_empty() {
+                names
+            } else {
+                let lock = Lock::load(&cli.lock)?;
+                if lock.items.is_empty() {
+                    reg.items
+                        .iter()
+                        .filter(|i| i.kind == Kind::Component)
+                        .map(|i| i.name.clone())
+                        .collect()
+                } else {
+                    lock.items.keys().cloned().collect()
+                }
+            };
+            let components = components_of(&reg, &wanted)?;
+            let criteria = load_criteria(root)?;
+            let date = date.unwrap_or_else(rust_ui_cli::acr::today);
+            let text = markdown(&report(root, &criteria, &components, &product)?, &date);
+            match out {
+                Some(path) => {
+                    std::fs::write(&path, text).map_err(err)?;
+                    println!(
+                        "wrote {} ({} components); read it and fill in the rows marked review",
+                        path.display(),
+                        components.len()
+                    );
+                }
+                None => print!("{text}"),
             }
         }
         Command::Update {
