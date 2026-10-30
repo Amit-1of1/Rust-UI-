@@ -19,6 +19,18 @@
     rotate: 180deg;
 }
 
+/* DateRangeField: an error outlines the input, like a text field's. */
+.dx-date-picker[data-invalid="true"] .dx-date-picker-group {
+    box-shadow: inset 0 0 0 1px var(--error-text-color);
+}
+
+/* A failed submit focuses the group itself (tabindex -1) so it is read with its error. */
+.dx-date-picker:focus-visible {
+    border-radius: var(--radius);
+    outline: 2px solid var(--focused-border-color);
+    outline-offset: 2px;
+}
+
 .dx-date-picker[data-disabled="true"],
 .dx-date-picker [data-disabled="true"] {
     cursor: not-allowed;

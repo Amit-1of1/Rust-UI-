@@ -51,9 +51,20 @@ rsx! {
 }
 ```
 
+`TimeField` also takes `min` and `max`; it then adds a range rule itself ("Choose a time from 9:00 to 17:00."). `DateRangeField` binds a `DateRangePicker`: the field holds `2026-10-15/2026-10-20` (an ISO 8601 interval, read back with `parse_iso_date_range`), empty until both dates are picked, and `days_between(min, max, message)` limits the length of the stay:
+
+```rust
+let stay = form.field(vec![required(), days_between(Some(2), Some(14), "Stays are 2 to 14 nights.")]);
+rsx! {
+    DateRangeField { field: stay, label: "Stay", min_date: today, disabled_ranges: booked() }
+}
+```
+
+A failed submit focuses the range picker's group, which is read with its label and error.
+
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
 
-Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
+Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
 ## Derive a form from a struct
 

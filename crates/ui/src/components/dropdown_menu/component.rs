@@ -9,29 +9,25 @@ use dioxus_primitives::merge_attributes;
 #[css_module("/src/components/dropdown_menu/style.css")]
 struct Styles;
 
-/// Moves focus from the focused element to `selector` inside its nearest ancestor with
-/// class `container`, e.g. back to a menu's trigger when Escape closes the menu.
-/// Web only; does nothing elsewhere.
-fn refocus_within(container: &str, selector: &str) {
-    #[cfg(all(target_arch = "wasm32", feature = "web"))]
-    {
-        use wasm_bindgen::JsCast;
-        let target = web_sys::window()
-            .and_then(|w| w.document())
-            .and_then(|d| d.active_element())
-            .and_then(|el| el.closest(&format!(".{container}")).ok().flatten())
-            .and_then(|root| root.query_selector(selector).ok().flatten())
-            .and_then(|el| el.dyn_into::<web_sys::HtmlElement>().ok());
-        if let Some(el) = target {
-            let _ = el.focus();
+/// The trigger's element, so closing the menu from the keyboard can put focus back on it.
+/// Through the element handle rather than the DOM, so it also works on native, where the
+/// focused item would otherwise be removed with focus still on it.
+#[derive(Clone, Copy)]
+struct TriggerEl(Signal<Option<std::rc::Rc<MountedData>>>);
+
+fn refocus_trigger() {
+    if let Some(TriggerEl(el)) = try_consume_context::<TriggerEl>() {
+        if let Some(el) = el() {
+            spawn(async move {
+                _ = el.set_focus(true).await;
+            });
         }
     }
-    #[cfg(not(all(target_arch = "wasm32", feature = "web")))]
-    let _ = (container, selector);
 }
 
 #[component]
 pub fn DropdownMenu(props: DropdownMenuProps) -> Element {
+    use_context_provider(|| TriggerEl(Signal::new(None)));
     let base = attributes!(div {
         class: Styles::dx_dropdown_menu,
     });
@@ -52,8 +48,14 @@ pub fn DropdownMenu(props: DropdownMenuProps) -> Element {
 
 #[component]
 pub fn DropdownMenuTrigger(props: DropdownMenuTriggerProps) -> Element {
+    let trigger = try_use_context::<TriggerEl>();
     let base = attributes!(button {
         class: Styles::dx_dropdown_menu_trigger,
+        onmounted: move |e: MountedEvent| {
+            if let Some(TriggerEl(mut el)) = trigger {
+                el.set(Some(e.data()));
+            }
+        },
     });
     let merged = merge_attributes(vec![base, props.attributes]);
 
@@ -66,11 +68,12 @@ pub fn DropdownMenuTrigger(props: DropdownMenuTriggerProps) -> Element {
 pub fn DropdownMenuContent(props: DropdownMenuContentProps) -> Element {
     let base = attributes!(div {
         class: Styles::dx_dropdown_menu_content,
-        // The primitive closes on Escape but leaves focus on the removed item; the APG
-        // menu button pattern returns it to the trigger.
+        // The primitive closes on Escape, Enter and Space but leaves focus on the removed
+        // item; the APG menu button pattern returns it to the trigger.
         onkeydown: move |e: KeyboardEvent| {
-            if e.key() == Key::Escape {
-                refocus_within(&Styles::dx_dropdown_menu.to_string(), "[aria-haspopup]");
+            let space = e.key() == Key::Character(" ".into());
+            if e.key() == Key::Escape || e.key() == Key::Enter || space {
+                refocus_trigger();
             }
         },
     });
@@ -87,6 +90,13 @@ pub fn DropdownMenuItem<T: Clone + PartialEq + 'static>(
 ) -> Element {
     let base = attributes!(div {
         class: Styles::dx_dropdown_menu_item,
+        // Choosing an item closes the menu; the primitive stops the key here, so the
+        // content's handler never sees it.
+        onkeydown: move |e: KeyboardEvent| {
+            if e.key() == Key::Enter || e.key() == Key::Character(" ".into()) {
+                refocus_trigger();
+            }
+        },
     });
     let merged = merge_attributes(vec![base, props.attributes.clone()]);
 

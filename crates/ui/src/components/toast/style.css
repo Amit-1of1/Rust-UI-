@@ -133,7 +133,7 @@
 
 .dx-toast[data-type="success"] {
   background-color: var(--primary-success-color);
-  color: var(--secondary-success-color);
+  color: var(--success-text-color);
 }
 
 .dx-toast[data-type="error"] {
@@ -143,7 +143,7 @@
 
 .dx-toast[data-type="warning"] {
   background-color: var(--primary-warning-color);
-  color: var(--secondary-warning-color);
+  color: var(--warning-text-color);
 }
 
 .dx-toast[data-type="info"] {

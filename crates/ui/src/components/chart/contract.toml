@@ -1,0 +1,101 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Applies to charts with `keyboard: true`; without it a chart is a static image and has no keys.
+# There is no APG pattern for charts: this follows the Highcharts and Apple Audio Graphs model
+# (one tab stop, arrows move between data points, the point is announced).
+pattern = "Chart with keyboard point navigation (no APG pattern)"
+roles = ["group", "img", "status"]
+native_note = "Tabbing into the chart does not start the cursor on Blitz yet (the status line stays empty); the arrow keys work once it has focus."
+
+[parts]
+chart = "[role=group][tabindex='0']"
+picture = "[role=group][tabindex='0'] [role=img]"
+readout = "[role=group][tabindex='0'] [role=status]"
+
+[[states]]
+name = "exploring"
+means = "The chart has focus: the point under the cursor is outlined and named in the status line."
+check = "text readout@1 1 of 6"
+
+[[keys]]
+key = "Tab"
+when = "Before the chart"
+does = "Focuses the chart; the cursor starts on the first point, which is announced."
+native = false
+test = """
+focus chart@1
+visible picture@1
+press Shift+Tab
+press Tab
+state exploring
+text readout@1 Jan: 186
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On the chart"
+does = "Moves to the next category's point."
+native = true
+test = """
+focus chart@1
+press ArrowRight
+text readout@1 Feb: 305. 2 of 6.
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On the chart"
+does = "Moves to the previous category's point; stops at the first."
+native = true
+test = """
+focus chart@1
+press End
+press ArrowLeft
+text readout@1 May: 209. 5 of 6.
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On the chart"
+does = "Moves to the next series at the same category (with one series, the next point)."
+native = true
+test = """
+focus chart@2
+press ArrowDown
+text readout@2 Jan, Mobile: 80
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On the chart"
+does = "Moves to the previous series at the same category (with one series, the previous point)."
+native = true
+test = """
+focus chart@2
+press ArrowDown
+press ArrowUp
+text readout@2 Jan, Desktop: 186
+"""
+
+[[keys]]
+key = "Home"
+when = "On the chart"
+does = "Moves to the first category."
+native = true
+test = """
+focus chart@1
+press End
+press Home
+text readout@1 Jan: 186. 1 of 6.
+"""
+
+[[keys]]
+key = "End"
+when = "On the chart"
+does = "Moves to the last category."
+native = true
+test = """
+focus chart@1
+press End
+text readout@1 Jun: 214. 6 of 6.
+"""
