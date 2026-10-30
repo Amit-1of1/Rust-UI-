@@ -1733,9 +1733,11 @@ Charts drawn as SVG in Rust, coloured from theme tokens. No JavaScript chart lib
 
 - `BarChart`, `LineChart`, `AreaChart`: give `data: Vec<ChartDatum>` for one series, or `categories: Vec<String>` and `series: Vec<ChartSeries>` for several. Bars sit side by side or, with `stacked: true`, on top of each other; areas overlap translucently or stack.
 - `PieChart`: shares of a total from `data`. `donut: true` cuts a hole, with `center` and `center_caption` text inside it.
+- `RadarChart`: one axis per category around a circle and one closed shape per series, for comparing profiles across the same measures. Takes `data`, or `categories` and `series`, like `LineChart`; `max` sets the value at the outer ring (otherwise a round number above the largest value).
 - `RadialChart`: one `value` out of `max` (default 100) as a ring, with the percentage (or `center`) in the middle and an optional `caption`.
 - `ChartLegend`: the colour key. Charts with two or more series, and pie charts, show one; `legend: false` hides it, `legend: Some(true)` forces it.
 - `table: true` adds a "Show data" disclosure with the numbers as a table.
+- `keyboard: true` (bar, line, area, pie and radar charts) makes the chart one tab stop: the arrow keys move between points, and the point under the cursor is outlined and named in a status line under the chart ("Feb: 305. 2 of 6."). Off by default, so a page full of charts doesn't fill the tab order; turn it on for charts people need to read point by point.
 
 ```rust
 AreaChart {
@@ -1749,6 +1751,13 @@ AreaChart {
     label: "Visitors by device, January to March",
 }
 PieChart { data: plans, donut: true, center: "42", center_caption: "Customers", label: "Customers by plan" }
+RadarChart {
+    categories: vec!["Speed".into(), "Battery".into(), "Camera".into()],
+    series: vec![ChartSeries::new("Phone A", [8.0, 6.0, 9.0]), ChartSeries::new("Phone B", [6.0, 9.0, 6.0])],
+    max: 10.0,
+    keyboard: true,
+    label: "Two phones scored out of 10",
+}
 RadialChart { value: 89.6, max: 100.0, caption: "of target", label: "Q3 revenue against target" }
 ```
 
@@ -1765,12 +1774,34 @@ Series 1 uses `--chart-1` when you set it and the accent (`--accent-color`) othe
 - Role and name: each chart is `role="img"` named by `label`, with a `<desc>` that lists every value (`describe`, `describe_series`, `describe_shares`). Radial charts read "64 of 100 (64%)" (`UiStrings::value_of_max`).
 - Hover: each bar, point and slice has a `<title>` with its value; line and area charts also show every series' value for the column under the pointer.
 - Not by colour alone: line and area series also differ by dash pattern, matched in the legend; `table: true` gives a keyboard-reachable table of the numbers.
-- Keyboard: the chart itself is not interactive; the "Show data" toggle is a native `<summary>` (Enter or Space).
-- Reduced motion: bars grow, areas, lines and slices fade in, and the radial ring slides to a new value only under `prefers-reduced-motion: no-preference`.
+- Focus: without `keyboard` a chart is a static image, not a tab stop. With it, the chart is a `role="group"` named by `label` and described by a hint ("Use the arrow keys to move between points.", `UiStrings::chart_keys_hint`); the cursor starts on the first point when focus arrives, and a `role="status"` line reads the point (`UiStrings::chart_point`). The keys are in the table below. The "Show data" toggle is a native `<summary>` (Enter or Space).
+- Reduced motion: bars grow, areas, lines, radar shapes and slices fade in, and the radial ring slides to a new value only under `prefers-reduced-motion: no-preference`.
 
 ## Stability
 
 Experimental; see `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Pattern: Chart with keyboard point navigation (no APG pattern). Roles: `group`, `img`, `status`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | Before the chart | Focuses the chart; the cursor starts on the first point, which is announced. | not yet |
+| ArrowRight | On the chart | Moves to the next category's point. | yes |
+| ArrowLeft | On the chart | Moves to the previous category's point; stops at the first. | yes |
+| ArrowDown | On the chart | Moves to the next series at the same category (with one series, the next point). | yes |
+| ArrowUp | On the chart | Moves to the previous series at the same category (with one series, the previous point). | yes |
+| Home | On the chart | Moves to the first category. | yes |
+| End | On the chart | Moves to the last category. | yes |
+
+States:
+
+- `exploring`: The chart has focus: the point under the cursor is outlined and named in the status line.
+
+Native: Tabbing into the chart does not start the cursor on Blitz yet (the status line stays empty); the arrow keys work once it has focus.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -1826,6 +1857,37 @@ pub fn shares(data: &[ChartDatum]) -> Vec<f32>
 /// [`describe`] for a pie or donut: each value with its share, `Free: 12 (40%), Pro: 18 (60%)`.
 pub fn describe_shares(data: &[ChartDatum]) -> String
 
+/// A move of the keyboard cursor in a chart with `keyboard: true`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ChartKey {
+    /// Right arrow: the next category (bar, point, slice or axis).
+    Next,
+    /// Left arrow.
+    Previous,
+    /// Down arrow: the next series in legend order. With one series, the next category.
+    NextSeries,
+    /// Up arrow.
+    PreviousSeries,
+    /// Home: the first category.
+    First,
+    /// End: the last category.
+    Last,
+}
+
+/// The mark under the keyboard cursor: a category (column, slice or radar axis) and a series.
+/// Pure, so the moves are tested without a browser.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct ChartCursor {
+    pub category: usize,
+    pub series: usize,
+}
+
 /// The colour key for a multi-series chart, or for the slices of a pie. A list of names, each
 /// with a marker in its series' colour (and, for [`LegendMarker::Line`], its dash pattern).
 /// Charts render one themselves; use this to place a key elsewhere.
@@ -1855,6 +1917,11 @@ pub fn BarChart(
     #[props(default)] stacked: bool,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element
 
 /// A line chart drawn as SVG with theme colours: `data` for one line, `categories` and
@@ -1873,6 +1940,11 @@ pub fn LineChart(
     #[props(default = 200.0)] height: f32,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element
 
 /// An area chart: lines with the region below them filled. Several series overlap
@@ -1892,6 +1964,11 @@ pub fn AreaChart(
     #[props(default)] stacked: bool,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element
 
 /// A pie chart, or with `donut: true` a ring with an optional `center` value and
@@ -1912,6 +1989,36 @@ pub fn PieChart(
     #[props(default = true)] legend: bool,
     #[props(default)] table: bool,
     #[props(default = 200.0)] size: f32,
+    /// One tab stop; the arrow keys, Home and End then move between the slices.
+    #[props(default)]
+    keyboard: bool,
+) -> Element
+
+/// A radar (spider) chart: one axis per category, all starting at the centre, and one closed
+/// shape per series through its values. Good for comparing a few profiles across the same
+/// measures. Give it `data` for one shape, or `categories` and `series` for several (each in
+/// its own colour and dash pattern). The axis limit is `max`, or a round number above the
+/// largest value. Same accessibility contract as [`LineChart`]; `size` caps the width in CSS
+/// pixels.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn RadarChart(
+    #[props(default)] data: Vec<ChartDatum>,
+    #[props(default)] categories: Vec<String>,
+    #[props(default)] series: Vec<ChartSeries>,
+    #[props(into)] label: String,
+    /// The value at the outer ring. Defaults to a round number above the largest value.
+    #[props(default)]
+    max: Option<f32>,
+    #[props(default)] legend: Option<bool>,
+    #[props(default)] table: bool,
+    #[props(default = 300.0)] size: f32,
+    /// One tab stop; Left/Right then move between the axes, Up/Down between the series.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element
 
 /// Fraction of `max` that `value` reaches, between 0 and 1 (0 for a non-positive `max`).
@@ -1982,12 +2089,25 @@ fn browsers() -> Vec<ChartDatum> {
     .collect()
 }
 
+fn skills() -> Vec<String> {
+    ["Speed", "Battery", "Camera", "Screen", "Price", "Storage"]
+        .map(String::from)
+        .to_vec()
+}
+
+fn phones() -> Vec<ChartSeries> {
+    vec![
+        ChartSeries::new("Phone A", [8.0, 6.0, 9.0, 7.0, 4.0, 8.0]),
+        ChartSeries::new("Phone B", [6.0, 9.0, 6.0, 8.0, 8.0, 5.0]),
+    ]
+}
+
 #[component]
 pub fn Demo() -> Element {
     let mut goal = use_signal(|| 64.0_f32);
     rsx! {
         div { style: "display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));",
-            BarChart { data: monthly(), label: "Visitors per month, January to June" }
+            BarChart { data: monthly(), keyboard: true, label: "Visitors per month, January to June" }
             LineChart { data: monthly(), label: "Visitors per month, January to June (line)" }
             AreaChart {
                 categories: months(),
@@ -1997,7 +2117,15 @@ pub fn Demo() -> Element {
                 label: "Visitors by device, January to June, stacked",
             }
             BarChart { categories: months(), series: devices(), label: "Visitors by device, January to June" }
-            LineChart { categories: months(), series: devices(), label: "Visitors by device, January to June (lines)" }
+            LineChart { categories: months(), series: devices(), keyboard: true, label: "Visitors by device, January to June (lines)" }
+            RadarChart {
+                categories: skills(),
+                series: phones(),
+                max: 10.0,
+                keyboard: true,
+                table: true,
+                label: "Two phones scored out of 10",
+            }
             PieChart {
                 data: browsers(),
                 donut: true,
@@ -2006,7 +2134,7 @@ pub fn Demo() -> Element {
                 table: true,
                 label: "Visitors by browser",
             }
-            PieChart { data: browsers(), label: "Visitors by browser (pie)" }
+            PieChart { data: browsers(), keyboard: true, label: "Visitors by browser (pie)" }
             div { style: "display: grid; gap: 0.75rem; justify-items: center;",
                 RadialChart { value: goal(), label: "Monthly goal reached", caption: "of goal" }
                 Button {
@@ -3078,7 +3206,7 @@ pub fn Demo() -> Element {
 
 # Date picker
 
-- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `icons`, `popover`, `ui_strings`).
+- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
 - Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.
@@ -3109,12 +3237,30 @@ The styled `DatePicker` and `DateRangePicker` render the input, trigger, popover
 
 Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates-label", .. }` (or `aria_label`). The picker's group then carries that name; the English "Date" / "Date Range" is only used when you pass none. The segments are named "year", "month" and "day" inside it, and a segment moves on to the next once it holds all its digits ("01" for January).
 
+## In a form
+
+`DateRangeField` (in the form component) binds a `DateRangePicker` to a `use_form` field, labelled, described and validated like the other fields. Its value is `2026-10-15/2026-10-20`; `format_iso_date_range` and `parse_iso_date_range` write and read that, and `format_iso_date` / `parse_iso_date` do the same for one date (`2026-10-15`, the `<input type="date">` format).
+
 ## API
 
 ```rust
 pub use dioxus_primitives::calendar::DateRange;
 
 pub use time::{Date, Month};
+
+/// `"2026-10-15"`: the format of `<input type="date">`.
+pub fn format_iso_date(date: Date) -> String
+
+/// Reads `"2026-10-15"`; anything else (including a date that doesn't exist) is `None`.
+pub fn parse_iso_date(text: &str) -> Option<Date>
+
+/// `"2026-10-15/2026-10-20"`: an ISO 8601 interval of two dates, the format
+/// [`DateRangeField`](crate::components::form::DateRangeField) keeps in a form field.
+pub fn format_iso_date_range(range: DateRange) -> String
+
+/// Reads `"2026-10-15/2026-10-20"`. The dates may come in either order; the range is always
+/// start to end.
+pub fn parse_iso_date_range(text: &str) -> Option<DateRange>
 
 pub struct DatePickerProps {
     /// Callback when value changes
@@ -3234,7 +3380,9 @@ pub fn DateRangePicker(props: DateRangePickerProps) -> Element
 ## Example
 
 ```rust
+use crate::components::button::Button;
 use crate::components::date_picker::*;
+use crate::components::form::*;
 use dioxus::prelude::*;
 
 use time::Date;
@@ -3243,6 +3391,18 @@ use time::Date;
 pub fn Demo() -> Element {
     let mut selected_date = use_signal(|| None::<Date>);
     let mut selected_range = use_signal(|| None::<DateRange>);
+    let form = use_form();
+    let stay = form.field(vec![
+        custom(|v| {
+            if v.is_empty() {
+                Err("Choose your dates.".to_string())
+            } else {
+                Ok(())
+            }
+        }),
+        days_between(Some(2), Some(14), "Stays are 2 to 14 nights."),
+    ]);
+    let mut booked = use_signal(|| None::<String>);
 
     rsx! {
         div { style: "display: grid; gap: 1rem; justify-items: start;",
@@ -3256,6 +3416,19 @@ pub fn Demo() -> Element {
             DateRangePicker {
                 selected_range: selected_range(),
                 on_range_change: move |r| selected_range.set(r),
+            }
+            Form {
+                state: form,
+                on_valid: move |_| booked.set(Some(stay.value())),
+                DateRangeField {
+                    field: stay,
+                    label: "Stay",
+                    description: "Check-in and check-out, 2 to 14 nights.",
+                }
+                Button { r#type: "submit", "Check availability" }
+            }
+            if let Some(range) = booked() {
+                p { role: "status", style: "margin: 0;", "Looking for {range}" }
             }
         }
     }
@@ -4471,7 +4644,7 @@ mod tests {
 
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`).
+- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
@@ -4525,9 +4698,20 @@ rsx! {
 }
 ```
 
+`TimeField` also takes `min` and `max`; it then adds a range rule itself ("Choose a time from 9:00 to 17:00."). `DateRangeField` binds a `DateRangePicker`: the field holds `2026-10-15/2026-10-20` (an ISO 8601 interval, read back with `parse_iso_date_range`), empty until both dates are picked, and `days_between(min, max, message)` limits the length of the stay:
+
+```rust
+let stay = form.field(vec![required(), days_between(Some(2), Some(14), "Stays are 2 to 14 nights.")]);
+rsx! {
+    DateRangeField { field: stay, label: "Stay", min_date: today, disabled_ranges: booked() }
+}
+```
+
+A failed submit focuses the range picker's group, which is read with its label and error.
+
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
 
-Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
+Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
 ## Derive a form from a struct
 
@@ -4607,6 +4791,20 @@ pub fn email() -> Validator
 pub fn min_len(min: usize) -> Validator
 
 pub fn max_len(max: usize) -> Validator
+
+/// A time (`"14:05"`) from `min` to `max`, both inclusive; a `max` earlier than `min` wraps
+/// past midnight (22:00 to 02:00). Empty and unreadable values pass, so pair it with
+/// `required()` when the time must be given. [`TimeField`] adds this rule itself when given
+/// `min` or `max`.
+pub fn time_between(
+    min: Option<Time>,
+    max: Option<Time>,
+    message: impl Into<String>,
+) -> Validator
+
+/// A date range (`"2026-10-15/2026-10-20"`) that spans at least `min` and at most `max`
+/// days (nights, for a stay). Empty and unreadable values pass, like [`time_between`].
+pub fn days_between(min: Option<u32>, max: Option<u32>, message: impl Into<String>) -> Validator
 
 /// Your own rule: return `Err(message)` to reject.
 pub fn custom(rule: impl Fn(&str) -> Result<(), String> + 'static) -> Validator
@@ -4774,6 +4972,13 @@ pub fn TimeField(
     #[props(default)] hour_cycle: HourCycle,
     #[props(default)] seconds: bool,
     #[props(default = 1)] minute_step: u8,
+    /// Earliest allowed time. With `min` or `max` the field also gets a range rule
+    /// ([`time_between`]), with the message from `UiStrings::time_out_of_range`.
+    #[props(default)]
+    min: Option<Time>,
+    /// Latest allowed time (inclusive); earlier than `min` wraps past midnight.
+    #[props(default)]
+    max: Option<Time>,
 ) -> Element
 
 /// A [`DateTimePicker`] bound to a [`FormField`], wired like [`TextField`]. The field holds
@@ -4795,6 +5000,32 @@ pub fn DateTimeField(
     /// Filled in when a date is picked while the time is still empty.
     #[props(default)]
     default_time: Option<Time>,
+) -> Element
+
+/// A [`DateRangePicker`] bound to a [`FormField`]. The field holds `"2026-10-15/2026-10-20"`
+/// (an ISO 8601 interval; [`parse_iso_date_range`] reads it back) and stays empty until both
+/// dates are entered, so `required()` works; [`days_between`] limits the length. The picker
+/// group is named by the label and described by the description and error. It validates when
+/// focus leaves the picker, its calendar included; a failed submit focuses the group.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DateRangeField(
+    field: FormField,
+    #[props(into)] label: String,
+    #[props(into, default)] description: Option<String>,
+    #[props(default = Date::from_calendar_date(1925, Month::January, 1).expect("valid date"))]
+    min_date: Date,
+    #[props(default = Date::from_calendar_date(2050, Month::December, 31).expect("valid date"))]
+    max_date: Date,
+    /// Dates that can't be picked (already booked, closed).
+    #[props(default)]
+    disabled_ranges: ReadSignal<Vec<DateRange>>,
+    /// How many months the calendar shows at once.
+    #[props(default = 1)]
+    month_count: u8,
 ) -> Element
 ```
 
@@ -9673,12 +9904,17 @@ rsx! {
 
 `value` is `Option<Time>` (`time::Time`, re-exported). It is `Some` once every segment is filled and `None` while any is empty; a half-typed entry stays on screen. `name` submits the time with a native `<form>` as `HH:MM`. `format_time` writes a time the way the picker shows it ("2:05 PM"); `format_iso_time` / `parse_iso_time` read and write `14:05`, the `<input type="time">` format.
 
+## Earliest and latest time
+
+`min` and `max` limit the picker to a range, inclusive: `min: Time::from_hms(9, 0, 0).ok(), max: Time::from_hms(17, 0, 0).ok()`. Up, Down, Home and End only stop on hours and minutes that can still make an allowed time (17 is the last hour, and at 17 the only minute is :00). Typing is not blocked: a typed 18:30 stays on screen, is reported in `on_value_change` and is marked invalid, the way React Aria's TimeField handles it. A `max` earlier than `min` means the range runs past midnight (22:00 to 02:00, a night shift). `TimeField` takes the same props and adds a range rule itself, with the message from `UiStrings::time_out_of_range` ("Choose a time from 9:00 AM to 5:00 PM."); `time_between(min, max, message)` is that rule for your own fields.
+
 In a `use_form` form, use `TimeField { field, label: "Start" }`: the field holds `14:05` (empty until complete, so `required()` works), is labelled, marked invalid with its error linked, and gets focus on a failed submit. For a time with a date, see `DateTimePicker`. When a plain native control is enough (mobile-first forms), `TextField { r#type: "time" }` gives the browser's own time input.
 
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label` (default "Time") or by a visible label through `labelled_by`. Each segment is an `<input role="spinbutton">` named "Hours", "Minutes", "Seconds" or "AM/PM" (from `UiStrings`), plus the visible label when `labelled_by` is set, with `aria-valuenow`, `aria-valuemin`, `aria-valuemax` and `aria-valuetext` ("Empty" while empty). `first_segment_id` lets a `<label for>` reach the hours.
-- Keyboard: digits fill the focused segment and move on after two digits, or at once when no second digit could follow ("3" in hours). Up/Down step and wrap (minutes by `minute_step`), Page Up/Page Down move minutes and seconds by 10, Home/End jump to the lowest/highest value, Backspace undoes a digit, then clears, then goes back a segment; Delete clears. A or P (the first letters of `UiStrings::am`/`pm`) set AM/PM. Left/Right move between segments; Tab moves through them and out.
+- Typing: digits fill the focused segment and move on after two digits, or at once when no second digit could follow ("3" in hours). A or P (the first letters of `UiStrings::am`/`pm`) set AM/PM. Tab moves through the segments and out. The other keys are in the table below.
+- Out of range: a time outside `min`/`max` sets `aria-invalid` on every segment; `TimeField` also shows the range message.
 - Touch: segments are real inputs with `inputmode="numeric"`, so phones show a number pad.
 - Reduced motion: no animation.
 
@@ -9688,7 +9924,26 @@ Original to this repo. The segment behaviour follows the WAI-ARIA spin button pa
 
 ## Stability
 
-Experimental. New on 2026-10-15; the props may change once a real app uses it (min/max times are not supported yet). See `docs/STABILITY.md` in the kit repository.
+Experimental. New on 2026-10-15, `min`/`max` on 2026-10-30; the props may change once a real app uses it. See `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Spinbutton (one per segment)](https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/) pattern. Roles: `group`, `spinbutton`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowUp | On a segment | Increases the segment (minutes by `minute_step`), wrapping at the top. With `min`/`max`, skips values outside the range. | yes |
+| ArrowDown | On a segment | Decreases the segment, wrapping at the bottom. With `min`/`max`, skips values outside the range. | yes |
+| PageUp | On minutes or seconds | Increases by 10 (or the minute step, when larger). | yes |
+| PageDown | On minutes or seconds | Decreases by 10 (or the minute step, when larger). | yes |
+| Home | On a segment | Sets the lowest allowed value. | yes |
+| End | On a segment | Sets the highest allowed value on the step grid. | yes |
+| Backspace | On a segment | Undoes the digit just typed, then clears the segment, then moves to the segment before. | yes |
+| Delete | On a segment | Clears the segment. | yes |
+| ArrowRight | On a segment | Moves to the next segment. | yes |
+| ArrowLeft | On a segment | Moves to the previous segment. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -9756,6 +10011,11 @@ pub struct TimeState {
     pub seconds: bool,
     /// Arrow keys move minutes by this much (1 to 30).
     pub minute_step: u8,
+    /// Earliest allowed time. With [`max`](Self::max) earlier than this, the range runs past
+    /// midnight (22:00 to 02:00).
+    pub min: Option<Time>,
+    /// Latest allowed time.
+    pub max: Option<Time>,
     /// Index into [`segments`](Self::segments).
     pub focus: usize,
     /// Digits typed into the focused segment since it got focus.
@@ -9799,6 +10059,13 @@ pub fn TimePicker(
     /// Up and Down move minutes by this much; typing still takes any minute.
     #[props(default = 1)]
     minute_step: u8,
+    /// Earliest allowed time. The arrow keys skip what is outside `min`..`max`; a typed time
+    /// outside it is kept but marked invalid. A `max` earlier than `min` wraps past midnight.
+    #[props(default)]
+    min: Option<Time>,
+    /// Latest allowed time (inclusive).
+    #[props(default)]
+    max: Option<Time>,
     #[props(default)] disabled: ReadSignal<bool>,
     #[props(default)] read_only: ReadSignal<bool>,
     /// Accessible name of the group when no visible label is linked with `labelled_by`.
@@ -9851,6 +10118,9 @@ pub fn Demo() -> Element {
             Ok(())
         }
     })]);
+    // Its own form, so the reminder form above keeps one time field.
+    let shift_form = use_form();
+    let night_shift = shift_form.field(vec![]);
     let mut saved = use_signal(|| None::<String>);
     let meeting_text = meeting()
         .map(|t| format_time(t, HourCycle::H24, false, &strings))
@@ -9865,6 +10135,13 @@ pub fn Demo() -> Element {
             }
             p { style: "margin: 0;", "Meeting: {meeting_text}" }
             TimePicker { label: "Alarm", hour_cycle: HourCycle::H12, seconds: true }
+            // Up and Down skip hours outside 9:00 to 17:00; a typed 18:00 is marked invalid.
+            TimePicker {
+                label: "Office hours",
+                min: Time::from_hms(9, 0, 0).ok(),
+                max: Time::from_hms(17, 0, 0).ok(),
+                minute_step: 30,
+            }
             Form {
                 state: form,
                 on_valid: move |_| {
@@ -9879,6 +10156,15 @@ pub fn Demo() -> Element {
                     description: "Type the hour, minutes, then A or P.",
                 }
                 Button { r#type: "submit", "Set reminder" }
+            }
+            Form { state: shift_form,
+                TimeField {
+                    field: night_shift,
+                    label: "Night shift start",
+                    min: Time::from_hms(22, 0, 0).ok(),
+                    max: Time::from_hms(2, 0, 0).ok(),
+                    description: "Between 22:00 and 02:00.",
+                }
             }
             if let Some(text) = saved() {
                 p { role: "status", style: "margin: 0;", "Reminder set for {text}" }
@@ -10467,6 +10753,13 @@ pub struct UiStrings {
     pub chart_share: String,
     /// Radial chart summary. `{value}`, `{max}` and `{percent}` are filled in.
     pub value_of_max: String,
+    /// Read when a keyboard-explorable chart gets focus.
+    pub chart_keys_hint: String,
+    /// The focused point of a chart. `{point}`, `{index}` and `{count}` are filled in.
+    pub chart_point: String,
+    /// Read for a time picker whose time is outside `min`/`max`. `{min}` and `{max}` are
+    /// filled in.
+    pub time_out_of_range: String,
     // Link
     /// Read after a link that opens in a new tab.
     pub opens_in_new_tab: String,

@@ -4,6 +4,7 @@ use crate::components::table::{
 use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::prelude::*;
 use std::f32::consts::{PI, TAU};
+use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/chart/style.css")]
 struct Styles;
@@ -159,6 +160,179 @@ pub fn describe_shares(data: &[ChartDatum]) -> String {
         .join(", ")
 }
 
+/// A move of the keyboard cursor in a chart with `keyboard: true`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ChartKey {
+    /// Right arrow: the next category (bar, point, slice or axis).
+    Next,
+    /// Left arrow.
+    Previous,
+    /// Down arrow: the next series in legend order. With one series, the next category.
+    NextSeries,
+    /// Up arrow.
+    PreviousSeries,
+    /// Home: the first category.
+    First,
+    /// End: the last category.
+    Last,
+}
+
+impl ChartKey {
+    /// The move a key makes, or `None` for keys a chart leaves alone.
+    pub fn from_key(key: &Key) -> Option<Self> {
+        Some(match key {
+            Key::ArrowRight => Self::Next,
+            Key::ArrowLeft => Self::Previous,
+            Key::ArrowDown => Self::NextSeries,
+            Key::ArrowUp => Self::PreviousSeries,
+            Key::Home => Self::First,
+            Key::End => Self::Last,
+            _ => return None,
+        })
+    }
+}
+
+/// The mark under the keyboard cursor: a category (column, slice or radar axis) and a series.
+/// Pure, so the moves are tested without a browser.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct ChartCursor {
+    pub category: usize,
+    pub series: usize,
+}
+
+impl ChartCursor {
+    /// Where `key` moves the cursor in a chart of `categories` × `series` marks. Moves stop at
+    /// the ends rather than wrap, so the first and last points are easy to find.
+    pub fn apply(self, key: ChartKey, categories: usize, series: usize) -> Self {
+        if categories == 0 || series == 0 {
+            return Self::default();
+        }
+        let (last_c, last_s) = (categories - 1, series - 1);
+        let (c, s) = (self.category.min(last_c), self.series.min(last_s));
+        let key = match key {
+            // One series: Up and Down walk the points too (a pie, a single line).
+            ChartKey::NextSeries if series == 1 => ChartKey::Next,
+            ChartKey::PreviousSeries if series == 1 => ChartKey::Previous,
+            key => key,
+        };
+        let (category, series) = match key {
+            ChartKey::Next => ((c + 1).min(last_c), s),
+            ChartKey::Previous => (c.saturating_sub(1), s),
+            ChartKey::NextSeries => (c, (s + 1).min(last_s)),
+            ChartKey::PreviousSeries => (c, s.saturating_sub(1)),
+            ChartKey::First => (0, s),
+            ChartKey::Last => (last_c, s),
+        };
+        Self { category, series }
+    }
+}
+
+/// Keyboard state shared by a chart's marks and its [`Explorer`].
+#[derive(Clone, Copy, PartialEq)]
+struct Nav {
+    enabled: bool,
+    cursor: Signal<ChartCursor>,
+    focused: Signal<bool>,
+}
+
+impl Nav {
+    fn current(&self) -> Option<ChartCursor> {
+        (self.enabled && (self.focused)()).then(|| (self.cursor)())
+    }
+
+    fn active(&self, series: usize, category: usize) -> bool {
+        self.current() == Some(ChartCursor { category, series })
+    }
+
+    fn active_category(&self) -> Option<usize> {
+        self.current().map(|c| c.category)
+    }
+}
+
+fn use_nav(enabled: bool) -> Nav {
+    Nav {
+        enabled,
+        cursor: use_signal(ChartCursor::default),
+        focused: use_signal(|| false),
+    }
+}
+
+/// With `keyboard: true`, the chart's focusable wrapper: one tab stop named like the chart,
+/// arrow keys move between marks, and the mark under the cursor is shown and announced in a
+/// status line (`readout`).
+#[component]
+fn Explorer(
+    nav: Nav,
+    label: String,
+    categories: usize,
+    series: usize,
+    /// What the mark under the cursor says, for each (series, category).
+    titles: Vec<Vec<String>>,
+    children: Element,
+) -> Element {
+    let strings = use_ui_strings();
+    let hint_id = use_hook(|| {
+        static NEXT: AtomicU64 = AtomicU64::new(1);
+        format!("dx-chart-hint-{}", NEXT.fetch_add(1, Ordering::Relaxed))
+    });
+    let Nav {
+        mut cursor,
+        mut focused,
+        ..
+    } = nav;
+    if !nav.enabled {
+        return children;
+    }
+    let readout = nav.current().and_then(|c| {
+        let point = titles.get(c.series)?.get(c.category)?;
+        Some(fill(
+            &strings.chart_point,
+            &[
+                ("point", point),
+                ("index", &(c.category + 1).to_string()),
+                ("count", &categories.to_string()),
+            ],
+        ))
+    });
+    rsx! {
+        div {
+            class: Styles::dx_chart_explore,
+            role: "group",
+            tabindex: "0",
+            "aria-label": "{label}",
+            "aria-describedby": "{hint_id}",
+            onfocus: move |_| focused.set(true),
+            onblur: move |_| focused.set(false),
+            onkeydown: move |e: KeyboardEvent| {
+                let m = e.modifiers();
+                if m.ctrl() || m.meta() || m.alt() {
+                    return;
+                }
+                if let Some(key) = ChartKey::from_key(&e.key()) {
+                    e.prevent_default();
+                    let next = cursor.peek().apply(key, categories, series);
+                    cursor.set(next);
+                }
+            },
+            {children}
+            p { id: "{hint_id}", class: "sr-only", "{strings.chart_keys_hint}" }
+            p { class: Styles::dx_chart_readout, role: "status", "data-slot": "chart-readout",
+                if let Some(readout) = readout {
+                    "{readout}"
+                }
+            }
+        }
+    }
+}
+
 /// Categories and series after merging the single-series (`data`) and multi-series
 /// (`categories` + `series`) props.
 struct Model {
@@ -280,6 +454,17 @@ impl Model {
         format!("{}: {values}", self.categories[category])
     }
 
+    /// [`mark_title`](Self::mark_title) for every mark, by series then category.
+    fn titles(&self) -> Vec<Vec<String>> {
+        (0..self.series.len())
+            .map(|s| {
+                (0..self.categories.len())
+                    .map(|c| self.mark_title(s, c))
+                    .collect()
+            })
+            .collect()
+    }
+
     fn names(&self) -> Vec<String> {
         self.series.iter().map(|s| s.name.clone()).collect()
     }
@@ -381,7 +566,7 @@ fn CategoryLabels(plot_height: f32, categories: Vec<String>) -> Element {
 /// One transparent column per category that shows every series' value on hover and
 /// highlights the column under the pointer.
 #[component]
-fn HoverColumns(plot_height: f32, titles: Vec<String>) -> Element {
+fn HoverColumns(plot_height: f32, titles: Vec<String>, active: Option<usize>) -> Element {
     let plot = Plot::new(plot_height, 1.0);
     let slot = Plot::slot(titles.len());
     rsx! {
@@ -394,6 +579,7 @@ fn HoverColumns(plot_height: f32, titles: Vec<String>) -> Element {
                 width: "{slot}",
                 height: "{plot.bottom - plot.top}",
                 fill: "transparent",
+                "data-active": (active == Some(i)).then_some("true"),
                 title { "{title}" }
             }
         }
@@ -499,8 +685,14 @@ pub fn BarChart(
     #[props(default)] stacked: bool,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element {
     let strings = use_ui_strings();
+    let nav = use_nav(keyboard);
     let model = Model::new(&data, &categories, &series, &strings.chart_value);
     let plot = Plot::new(height, model.axis_max(stacked));
     let count = model.categories.len();
@@ -529,28 +721,31 @@ pub fn BarChart(
         (s, marks.collect::<Vec<_>>())
     });
     let chart = rsx! {
-        svg {
-            class: Styles::dx_chart,
-            role: "img",
-            "aria-label": "{label}",
-            view_box: "0 0 {WIDTH} {height}",
-            title { "{label}" }
-            desc { "{summary}" }
-            Grid { plot_height: height, axis_max: plot.axis_max }
-            for (s, marks) in bars {
-                g { key: "{s}", "data-series": palette_index(s),
-                    for (c, x, y, bar_height, title) in marks {
-                        rect { key: "{c}", class: Styles::dx_chart_bar, x: "{x}", y: "{y}", width: "{bar_width}", height: "{bar_height}", rx: "3",
-                            // Shown on hover; the values are also in the chart's `<desc>`.
-                            title { "{title}" }
+        Explorer { nav, label: label.clone(), categories: model.categories.len(), series: model.series.len(), titles: model.titles(),
+            svg {
+                class: Styles::dx_chart,
+                role: "img",
+                "aria-label": "{label}",
+                view_box: "0 0 {WIDTH} {height}",
+                title { "{label}" }
+                desc { "{summary}" }
+                Grid { plot_height: height, axis_max: plot.axis_max }
+                for (s, marks) in bars {
+                    g { key: "{s}", "data-series": palette_index(s),
+                        for (c, x, y, bar_height, title) in marks {
+                            rect { key: "{c}", class: Styles::dx_chart_bar, x: "{x}", y: "{y}", width: "{bar_width}", height: "{bar_height}", rx: "3",
+                                "data-active": nav.active(s, c).then_some("true"),
+                                // Shown on hover; the values are also in the chart's `<desc>`.
+                                title { "{title}" }
+                            }
                         }
                     }
                 }
+                CategoryLabels { plot_height: height, categories: model.categories.clone() }
             }
-            CategoryLabels { plot_height: height, categories: model.categories.clone() }
         }
     };
-    if !legend && !table {
+    if !legend && !table && !keyboard {
         return chart;
     }
     rsx! {
@@ -600,8 +795,14 @@ pub fn LineChart(
     #[props(default = 200.0)] height: f32,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element {
     let strings = use_ui_strings();
+    let nav = use_nav(keyboard);
     let model = Model::new(&data, &categories, &series, &strings.chart_value);
     let plot = Plot::new(height, model.axis_max(false));
     let lines = series_points(&model, &plot, false);
@@ -611,42 +812,46 @@ pub fn LineChart(
         .map(|c| model.column_title(c))
         .collect();
     let chart = rsx! {
-        svg {
-            class: Styles::dx_chart,
-            role: "img",
-            "aria-label": "{label}",
-            view_box: "0 0 {WIDTH} {height}",
-            title { "{label}" }
-            desc { "{summary}" }
-            Grid { plot_height: height, axis_max: plot.axis_max }
-            HoverColumns { plot_height: height, titles }
-            for (s, points) in lines.iter().enumerate() {
-                g { key: "{s}", "data-series": palette_index(s),
-                    if points.len() > 1 {
-                        // The presentation attributes are a fallback for renderers that draw inline SVG
-                        // without the page's CSS (Blitz); where CSS applies, the class wins.
-                        polyline {
-                            class: Styles::dx_chart_line,
-                            points: "{polyline(points)}",
-                            fill: "none",
-                            stroke: "currentColor",
-                            stroke_width: "2",
-                            stroke_linecap: "round",
-                            stroke_linejoin: "round",
-                            stroke_dasharray: dash(s),
+        Explorer { nav, label: label.clone(), categories: model.categories.len(), series: model.series.len(), titles: model.titles(),
+            svg {
+                class: Styles::dx_chart,
+                role: "img",
+                "aria-label": "{label}",
+                view_box: "0 0 {WIDTH} {height}",
+                title { "{label}" }
+                desc { "{summary}" }
+                Grid { plot_height: height, axis_max: plot.axis_max }
+                HoverColumns { plot_height: height, titles, active: nav.active_category() }
+                for (s, points) in lines.iter().enumerate() {
+                    g { key: "{s}", "data-series": palette_index(s),
+                        if points.len() > 1 {
+                            // The presentation attributes are a fallback for renderers that draw inline SVG
+                            // without the page's CSS (Blitz); where CSS applies, the class wins.
+                            polyline {
+                                class: Styles::dx_chart_line,
+                                points: "{polyline(points)}",
+                                fill: "none",
+                                stroke: "currentColor",
+                                stroke_width: "2",
+                                stroke_linecap: "round",
+                                stroke_linejoin: "round",
+                                stroke_dasharray: dash(s),
+                            }
                         }
-                    }
-                    for (c, (x, y)) in points.iter().enumerate() {
-                        circle { key: "{c}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5",
-                            title { "{model.mark_title(s, c)}" }
+                        for (c, (x, y)) in points.iter().enumerate() {
+                            circle { key: "{c}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}",
+                                r: if nav.active(s, c) { "5.5" } else { "3.5" },
+                                "data-active": nav.active(s, c).then_some("true"),
+                                title { "{model.mark_title(s, c)}" }
+                            }
                         }
                     }
                 }
+                CategoryLabels { plot_height: height, categories: model.categories.clone() }
             }
-            CategoryLabels { plot_height: height, categories: model.categories.clone() }
         }
     };
-    if !legend && !table {
+    if !legend && !table && !keyboard {
         return chart;
     }
     rsx! {
@@ -687,8 +892,14 @@ pub fn AreaChart(
     #[props(default)] stacked: bool,
     #[props(default)] legend: Option<bool>,
     #[props(default)] table: bool,
+    /// One tab stop for the chart; the arrow keys then move between its marks (Left/Right
+    /// across categories, Up/Down across series, Home/End), and the one under the cursor is
+    /// highlighted and announced.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element {
     let strings = use_ui_strings();
+    let nav = use_nav(keyboard);
     let model = Model::new(&data, &categories, &series, &strings.chart_value);
     let plot = Plot::new(height, model.axis_max(stacked));
     let tops = series_points(&model, &plot, stacked);
@@ -712,41 +923,49 @@ pub fn AreaChart(
     let legend = legend.unwrap_or(model.series.len() > 1);
     let titles: Vec<String> = (0..count).map(|c| model.column_title(c)).collect();
     let chart = rsx! {
-        svg {
-            class: Styles::dx_chart,
-            role: "img",
-            "aria-label": "{label}",
-            view_box: "0 0 {WIDTH} {height}",
-            title { "{label}" }
-            desc { "{summary}" }
-            Grid { plot_height: height, axis_max: plot.axis_max }
-            HoverColumns { plot_height: height, titles }
-            for (s, (area, line)) in areas.iter().enumerate() {
-                g { key: "{s}", "data-series": palette_index(s),
-                    if count > 1 {
-                        path { class: Styles::dx_chart_area, d: "{area}", fill: "currentColor", fill_opacity: "0.2" }
-                        polyline {
-                            class: Styles::dx_chart_line,
-                            points: "{line}",
-                            fill: "none",
-                            stroke: "currentColor",
-                            stroke_width: "2",
-                            stroke_linecap: "round",
-                            stroke_linejoin: "round",
-                            stroke_dasharray: dash(s),
-                        }
-                    } else {
-                        // One category has no width to fill; show the point instead.
-                        for (x, y) in tops[s].iter() {
-                            circle { class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5" }
+        Explorer { nav, label: label.clone(), categories: model.categories.len(), series: model.series.len(), titles: model.titles(),
+            svg {
+                class: Styles::dx_chart,
+                role: "img",
+                "aria-label": "{label}",
+                view_box: "0 0 {WIDTH} {height}",
+                title { "{label}" }
+                desc { "{summary}" }
+                Grid { plot_height: height, axis_max: plot.axis_max }
+                HoverColumns { plot_height: height, titles, active: nav.active_category() }
+                for (s, (area, line)) in areas.iter().enumerate() {
+                    g { key: "{s}", "data-series": palette_index(s),
+                        if count > 1 {
+                            path { class: Styles::dx_chart_area, d: "{area}", fill: "currentColor", fill_opacity: "0.2" }
+                            polyline {
+                                class: Styles::dx_chart_line,
+                                points: "{line}",
+                                fill: "none",
+                                stroke: "currentColor",
+                                stroke_width: "2",
+                                stroke_linecap: "round",
+                                stroke_linejoin: "round",
+                                stroke_dasharray: dash(s),
+                            }
+                            // The keyboard cursor's point; areas have no dots otherwise.
+                            for (c, (x, y)) in tops[s].iter().enumerate() {
+                                if nav.active(s, c) {
+                                    circle { key: "{c}", class: Styles::dx_chart_dot, "data-active": "true", cx: "{x}", cy: "{y}", r: "5.5" }
+                                }
+                            }
+                        } else {
+                            // One category has no width to fill; show the point instead.
+                            for (x, y) in tops[s].iter() {
+                                circle { class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}", r: "3.5" }
+                            }
                         }
                     }
                 }
+                CategoryLabels { plot_height: height, categories: model.categories.clone() }
             }
-            CategoryLabels { plot_height: height, categories: model.categories.clone() }
         }
     };
-    if !legend && !table {
+    if !legend && !table && !keyboard {
         return chart;
     }
     rsx! {
@@ -823,8 +1042,12 @@ pub fn PieChart(
     #[props(default = true)] legend: bool,
     #[props(default)] table: bool,
     #[props(default = 200.0)] size: f32,
+    /// One tab stop; the arrow keys, Home and End then move between the slices.
+    #[props(default)]
+    keyboard: bool,
 ) -> Element {
     let strings = use_ui_strings();
+    let nav = use_nav(keyboard);
     let total: f32 = data.iter().map(|d| clean(d.value)).sum();
     let percents = shares(&data);
     let inner = if donut { DONUT_HOLE } else { 0.0 };
@@ -853,6 +1076,11 @@ pub fn PieChart(
         describe_shares(&data)
     };
     let names: Vec<String> = data.iter().map(|d| d.label.clone()).collect();
+    let slice_titles: Vec<String> = data
+        .iter()
+        .zip(&percents)
+        .map(|(d, p)| format!("{}: {} ({p}%)", d.label, d.value))
+        .collect();
     let rows: Vec<(String, Vec<String>)> = data
         .iter()
         .zip(&percents)
@@ -865,27 +1093,30 @@ pub fn PieChart(
     };
     rsx! {
         div { class: Styles::dx_chart_root, "data-slot": "chart", style: "--chart-size: {size}px",
-            svg {
-                class: Styles::dx_chart_pie,
-                role: "img",
-                "aria-label": "{label}",
-                view_box: "0 0 {PIE_SIZE} {PIE_SIZE}",
-                title { "{label}" }
-                desc { "{summary}" }
-                if slices.is_empty() {
-                    path { class: Styles::dx_chart_track, d: "{slice_path(PIE_RADIUS, inner, 0.0, TAU)}" }
-                }
-                for (i, path, title) in slices {
-                    path { key: "{i}", class: Styles::dx_chart_slice, "data-series": palette_index(i), d: "{path}", fill: "currentColor",
-                        title { "{title}" }
+            Explorer { nav, label: label.clone(), categories: data.len(), series: 1usize, titles: vec![slice_titles],
+                svg {
+                    class: Styles::dx_chart_pie,
+                    role: "img",
+                    "aria-label": "{label}",
+                    view_box: "0 0 {PIE_SIZE} {PIE_SIZE}",
+                    title { "{label}" }
+                    desc { "{summary}" }
+                    if slices.is_empty() {
+                        path { class: Styles::dx_chart_track, d: "{slice_path(PIE_RADIUS, inner, 0.0, TAU)}" }
                     }
-                }
-                if donut {
-                    if let Some(center) = center {
-                        text { class: Styles::dx_chart_center, x: "{PIE_CENTER}", y: "{center_y}", text_anchor: "middle", "{center}" }
+                    for (i, path, title) in slices {
+                        path { key: "{i}", class: Styles::dx_chart_slice, "data-series": palette_index(i), d: "{path}", fill: "currentColor",
+                            "data-active": nav.active(0, i).then_some("true"),
+                            title { "{title}" }
+                        }
                     }
-                    if let Some(caption) = center_caption {
-                        text { class: Styles::dx_chart_caption, x: "{PIE_CENTER}", y: "{PIE_CENTER + 22.0}", text_anchor: "middle", "{caption}" }
+                    if donut {
+                        if let Some(center) = center {
+                            text { class: Styles::dx_chart_center, x: "{PIE_CENTER}", y: "{center_y}", text_anchor: "middle", "{center}" }
+                        }
+                        if let Some(caption) = center_caption {
+                            text { class: Styles::dx_chart_caption, x: "{PIE_CENTER}", y: "{PIE_CENTER + 22.0}", text_anchor: "middle", "{caption}" }
+                        }
                     }
                 }
             }
@@ -898,6 +1129,167 @@ pub fn PieChart(
                 columns: vec![strings.chart_value.clone(), strings.chart_share.clone()],
                 rows,
             }
+        }
+    }
+}
+
+/// One radar axis: where its spoke ends, where its label goes, the label's anchor and text.
+type RadarAxis = ((f32, f32), (f32, f32), &'static str, String);
+
+const RADAR_SIZE: f32 = 300.0;
+const RADAR_CENTER: f32 = RADAR_SIZE / 2.0;
+const RADAR_RADIUS: f32 = 100.0;
+/// Rings drawn at a quarter, half, three quarters and all of the axis limit.
+const RADAR_RINGS: usize = 4;
+
+/// Where axis `index` of `count` meets the circle of `radius`: the first axis points up, the
+/// rest follow clockwise.
+pub(crate) fn radar_point(radius: f32, index: usize, count: usize) -> (f32, f32) {
+    let angle = TAU * index as f32 / count.max(1) as f32;
+    (
+        RADAR_CENTER + radius * angle.sin(),
+        RADAR_CENTER - radius * angle.cos(),
+    )
+}
+
+/// The `points` of a polygon through one value per axis, each as a fraction of the limit.
+fn radar_polygon(fractions: &[f32]) -> String {
+    let count = fractions.len();
+    fractions
+        .iter()
+        .enumerate()
+        .map(|(i, f)| {
+            let (x, y) = radar_point(RADAR_RADIUS * f.clamp(0.0, 1.0), i, count);
+            format!("{x:.1},{y:.1}")
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// A radar (spider) chart: one axis per category, all starting at the centre, and one closed
+/// shape per series through its values. Good for comparing a few profiles across the same
+/// measures. Give it `data` for one shape, or `categories` and `series` for several (each in
+/// its own colour and dash pattern). The axis limit is `max`, or a round number above the
+/// largest value. Same accessibility contract as [`LineChart`]; `size` caps the width in CSS
+/// pixels.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn RadarChart(
+    #[props(default)] data: Vec<ChartDatum>,
+    #[props(default)] categories: Vec<String>,
+    #[props(default)] series: Vec<ChartSeries>,
+    #[props(into)] label: String,
+    /// The value at the outer ring. Defaults to a round number above the largest value.
+    #[props(default)]
+    max: Option<f32>,
+    #[props(default)] legend: Option<bool>,
+    #[props(default)] table: bool,
+    #[props(default = 300.0)] size: f32,
+    /// One tab stop; Left/Right then move between the axes, Up/Down between the series.
+    #[props(default)]
+    keyboard: bool,
+) -> Element {
+    let strings = use_ui_strings();
+    let nav = use_nav(keyboard);
+    let model = Model::new(&data, &categories, &series, &strings.chart_value);
+    let axis_max = max
+        .filter(|m| m.is_finite() && *m > 0.0)
+        .unwrap_or_else(|| model.axis_max(false));
+    let count = model.categories.len();
+    let summary = model.summary(&strings.no_data);
+    let legend = legend.unwrap_or(model.series.len() > 1);
+    let rings: Vec<(String, f32, f32)> = (1..=RADAR_RINGS)
+        .map(|k| {
+            let fraction = k as f32 / RADAR_RINGS as f32;
+            let (_, y) = radar_point(RADAR_RADIUS * fraction, 0, 1);
+            (radar_polygon(&vec![fraction; count]), y, axis_max * fraction)
+        })
+        .collect();
+    let axes: Vec<RadarAxis> = model
+        .categories
+        .iter()
+        .enumerate()
+        .map(|(i, name)| {
+            let end = radar_point(RADAR_RADIUS, i, count);
+            let (x, y) = radar_point(RADAR_RADIUS + 14.0, i, count);
+            let angle = TAU * i as f32 / count.max(1) as f32;
+            let anchor = if angle.sin() > 0.1 {
+                "start"
+            } else if angle.sin() < -0.1 {
+                "end"
+            } else {
+                "middle"
+            };
+            // Labels above the centre sit on their point, those below hang from it.
+            let y = y + if angle.cos() < -0.1 { 8.0 } else { 3.0 };
+            (end, (x, y), anchor, name.clone())
+        })
+        .collect();
+    let shapes: Vec<(String, Vec<(f32, f32)>)> = (0..model.series.len())
+        .filter(|_| count > 0)
+        .map(|s| {
+            let fractions: Vec<f32> = (0..count)
+                .map(|c| model.value(s, c) / axis_max)
+                .collect();
+            let points = fractions
+                .iter()
+                .enumerate()
+                .map(|(c, f)| radar_point(RADAR_RADIUS * f.clamp(0.0, 1.0), c, count))
+                .collect();
+            (radar_polygon(&fractions), points)
+        })
+        .collect();
+    rsx! {
+        div { class: Styles::dx_chart_root, "data-slot": "chart", style: "--chart-size: {size}px",
+            Explorer { nav, label: label.clone(), categories: count, series: model.series.len(), titles: model.titles(),
+                svg {
+                    class: Styles::dx_chart_radar,
+                    role: "img",
+                    "aria-label": "{label}",
+                    view_box: "0 0 {RADAR_SIZE} {RADAR_SIZE}",
+                    title { "{label}" }
+                    desc { "{summary}" }
+                    if count > 0 {
+                        for (k, (ring, y, value)) in rings.iter().enumerate() {
+                            g { key: "{k}",
+                                polygon { class: Styles::dx_chart_grid, points: "{ring}", fill: "none" }
+                                text { class: Styles::dx_chart_tick, x: "{RADAR_CENTER + 4.0}", y: "{y - 3.0}", "{format_tick(*value)}" }
+                            }
+                        }
+                    }
+                    for (i, ((x2, y2), (lx, ly), anchor, name)) in axes.iter().enumerate() {
+                        g { key: "{i}",
+                            line { class: Styles::dx_chart_grid, x1: "{RADAR_CENTER}", y1: "{RADAR_CENTER}", x2: "{x2}", y2: "{y2}" }
+                            text { class: Styles::dx_chart_tick, x: "{lx}", y: "{ly}", text_anchor: "{anchor}", "{name}" }
+                        }
+                    }
+                    for (s, (shape, points)) in shapes.iter().enumerate() {
+                        g { key: "{s}", "data-series": palette_index(s),
+                            polygon {
+                                class: Styles::dx_chart_radar_area,
+                                points: "{shape}",
+                                fill: "currentColor",
+                                fill_opacity: "0.2",
+                                stroke: "currentColor",
+                                stroke_width: "2",
+                                stroke_linejoin: "round",
+                                stroke_dasharray: dash(s),
+                            }
+                            for (c, (x, y)) in points.iter().enumerate() {
+                                circle { key: "{c}", class: Styles::dx_chart_dot, cx: "{x}", cy: "{y}",
+                                    r: if nav.active(s, c) { "5.5" } else { "3" },
+                                    "data-active": nav.active(s, c).then_some("true"),
+                                    title { "{model.mark_title(s, c)}" }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Extras { caption: label.clone(), names: model.names(), marker: LegendMarker::Line, legend, table, columns: model.names(), rows: model.rows() }
         }
     }
 }
@@ -1084,6 +1476,17 @@ mod tests {
         assert_eq!(pie.matches('A').count(), 2, "{pie}");
         let ring = slice_path(96.0, 60.0, 0.0, TAU);
         assert_eq!(ring.matches('A').count(), 4, "{ring}");
+    }
+
+    #[test]
+    fn radar_axes_start_at_twelve_and_go_clockwise() {
+        let (x, y) = radar_point(100.0, 0, 4);
+        assert!((x - RADAR_CENTER).abs() < 0.01 && (y - (RADAR_CENTER - 100.0)).abs() < 0.01);
+        let (x, y) = radar_point(100.0, 1, 4);
+        assert!((x - (RADAR_CENTER + 100.0)).abs() < 0.01 && (y - RADAR_CENTER).abs() < 0.01);
+        assert_eq!(radar_polygon(&[0.0, 0.0, 0.0]).split(' ').count(), 3);
+        // Out-of-range fractions stay on the chart.
+        assert_eq!(radar_polygon(&[2.0]), radar_polygon(&[1.0]));
     }
 
     #[test]
