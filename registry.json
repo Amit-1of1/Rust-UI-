@@ -591,6 +591,19 @@
       ]
     },
     {
+      "name": "native_select",
+      "files": [
+        "native_select/component.rs",
+        "native_select/docs.md",
+        "native_select/mod.rs",
+        "native_select/style.css"
+      ],
+      "registryDependencies": [
+        "icons",
+        "input"
+      ]
+    },
+    {
       "name": "navbar",
       "files": [
         "navbar/component.rs",
@@ -662,6 +675,16 @@
         "radio_group/docs.md",
         "radio_group/mod.rs",
         "radio_group/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "resizable",
+      "files": [
+        "resizable/component.rs",
+        "resizable/docs.md",
+        "resizable/mod.rs",
+        "resizable/style.css"
       ],
       "registryDependencies": []
     },
