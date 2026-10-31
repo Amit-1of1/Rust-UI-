@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "rust-ui-primitives",
+      "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys. For split views such as folders | messages | preview.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "resizable"
+}

@@ -6,6 +6,7 @@ use dioxus_primitives::slider::*;
 use dioxus_primitives::use_controlled;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use palette::{encoding, FromColor, Hsv, IntoColor, RgbHue, Srgb};
+use crate::components::hooks::{use_focus_opener, use_return_focus, ReturnFocus};
 
 use crate::components::input::Input;
 
@@ -165,13 +166,14 @@ pub fn ColorPickerTrigger(props: ColorPickerTriggerProps) -> Element {
         let rgb: Color = Srgb::<f64>::from_color((ctx.color)()).into_format();
         format_color_hex(rgb)
     });
+    let opener = use_focus_opener();
 
     rsx! {
         popover::PopoverTrigger {
             disabled: if (ctx.disabled)() { true },
             aria_label: format!("Color picker {aria_hex}"),
             aria_expanded: (ctx.open)(),
-            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_color_picker_button }), props.attributes]),
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_color_picker_button }), opener, props.attributes]),
             ColorSwatch { color: ctx.color }
             if let Some(label) = props.label { span { {label} } }
             {props.children}
@@ -192,11 +194,13 @@ pub struct ColorPickerPopoverProps {
 
 #[component]
 pub fn ColorPickerPopover(props: ColorPickerPopoverProps) -> Element {
+    let (inside, return_focus) = use_return_focus();
     rsx! {
         popover::PopoverContent {
             class: Styles::dx_color_picker_popover.to_string(),
-            attributes: props.attributes,
+            attributes: merge_attributes(vec![return_focus, props.attributes]),
             {props.children}
+            ReturnFocus { inside: Some(inside) }
         }
     }
 }

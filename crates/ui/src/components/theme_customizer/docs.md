@@ -19,6 +19,19 @@ rsx! {
 
 `mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
 
+## Remember the theme between visits
+
+`PersistTheme {}` saves `use_theme()`'s choices in `localStorage` (key `"theme"`, or `storage_key`) and restores them on the next visit. Render it once next to `ThemeStyles {}`. It restores after the first render, so it is safe in fullstack apps. To avoid a light flash for a returning dark-mode user while the app loads, also put `THEME_INIT_SCRIPT` in the page `<head>`: in a fullstack app `document::Script { {THEME_INIT_SCRIPT} }` (the server renders it into the HTML), in a client-only app paste it into a `<script>` in your `index.html`. It is your app's script, opt in, and only sets known values.
+
+```rust
+rsx! {
+    ThemeStyles {}
+    PersistTheme {}
+    document::Script { {THEME_INIT_SCRIPT} }
+    Router::<Route> {}
+}
+```
+
 ## Native (no JavaScript)
 
 dioxus-native can't run the script that writes to `<html>`. Wrap the app in `ThemeScope { ... }` there: it applies the same choices to everything inside it, and doesn't change layout (`display: contents`). On the web and desktop it is harmless.

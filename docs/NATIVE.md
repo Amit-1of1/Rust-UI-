@@ -62,7 +62,7 @@ These were limits of Blitz 0.2 / dioxus-native 0.7.10. They are now fixed on our
 
 The primitives used `document::eval` for document-level listeners. Where it can't run, our fork of DioxusLabs/components does the same with element events ([FORKS.md](FORKS.md) has the list and tests):
 
-- **Escape** closes dialogs, alert dialogs, popovers and the context menu.
+- **Escape** closes dialogs, alert dialogs, popovers and the context menu, and focus goes back to the button that opened the overlay (docs/notes/focus-return.md).
 - **Clicking outside** closes dialogs, popovers and the context menu.
 - **Focus traps:** dialogs and popovers take focus when they open, and Tab doesn't leave a modal one.
 - **Dragging** works for the slider, the color area and the drag-and-drop list.

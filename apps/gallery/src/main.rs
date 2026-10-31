@@ -89,6 +89,8 @@ fn App() -> Element {
                 Section { title: "Skip link", blurb: "A hidden link to the main content, shown on keyboard focus.", ui::demos::skip_link::Demo {} }
                 Section { title: "Number field", blurb: "A number with - and + buttons and arrow keys.", ui::demos::number_field::Demo {} }
                 Section { title: "Card", blurb: "A grouped surface with header, content and footer.", ui::demos::card::Demo {} }
+                Section { title: "Native select", blurb: "The browser's own select, styled like an input: best on phones and in long forms.", ui::demos::native_select::Demo {} }
+                Section { title: "Resizable", blurb: "Panels with dividers you drag or move with the arrow keys.", ui::demos::resizable::Demo {} }
                 Section {
                     id: "blocks",
                     title: "Blocks",
