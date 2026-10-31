@@ -30,6 +30,11 @@ const GUIDES: &[(&str, &str, &str)] = &[
         "Theming",
         include_str!("../../../docs/THEMING.md"),
     ),
+    (
+        "hard-questions",
+        "Hard questions",
+        include_str!("../../../docs/HARD_QUESTIONS.md"),
+    ),
 ];
 
 fn main() {
