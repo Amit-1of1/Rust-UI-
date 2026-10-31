@@ -8,10 +8,7 @@ package="$("$aapt" dump badging "$apk" | sed -n "s/^package: name='\([^']*\)'.*/
 activity="$("$aapt" dump badging "$apk" | sed -n "s/^launchable-activity: name='\([^']*\)'.*/\1/p")"
 echo "package $package, activity $activity"
 
-# Let the freshly booted emulator settle first. One run crashed (SIGABRT on the render
-# thread) right after Android replaced the activity's window 1.5 s into the launch, which
-# matches a configuration change from the boot finishing (keyguard, display); the
-# webview app does not survive its activity being recreated.
+# Let the freshly booted emulator settle first (boot animation done, keyguard gone).
 for _ in $(seq 1 30); do
   [ "$(adb shell getprop init.svc.bootanim | tr -d '\r')" = stopped ] && break
   sleep 2

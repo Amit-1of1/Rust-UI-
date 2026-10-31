@@ -47,7 +47,7 @@ Only what was actually run is marked as working.
 | Desktop, native, macOS / Windows | Not run | Same crate and renderer; no machine here |
 | Phone layout on native | Works (headless and resized window) | Headless tests at 390x844, and the real window resized to 390x844 |
 | Android, native | Not working yet | `cargo check --target aarch64-linux-android` stops in `openssl-sys` (needs the Android NDK, which this container can't download). The app also needs an `android_main` entry point that hands the activity to `blitz_shell::set_android_app`; dx 0.7.10's Android template is built for the webview. Not attempted beyond the check |
-| Android, webview (gallery) | Starts, not clicked through | `.github/workflows/android.yml` builds the gallery APK with `dx build --platform android` (`--features mobile`), launches it on an x86_64 API 34 emulator and checks it is still running a minute later. One of the first runs crashed (SIGABRT on the render thread) 1.5 s in, just after Android replaced the activity's window; the webview app looks unable to survive its activity being recreated, which a rotation would also do. The smoke script now waits for the emulator to settle and logs configuration changes to confirm |
+| Android, webview (gallery) | Starts, not clicked through | `.github/workflows/android.yml` builds the gallery APK with `dx build --platform android` (`--features mobile`), launches it on an x86_64 API 34 emulator and checks it is still running a minute later. An early run crashed on a panic in the chat demo (a signal borrow held across an await), fixed in the kit |
 | iOS, native | Not run | Needs macOS and Xcode |
 | Desktop, webview (wry) | Not run | Builds with `--features desktop` are not checked here (no WebKitGTK in this container) |
 
