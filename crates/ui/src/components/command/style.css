@@ -18,6 +18,11 @@
   outline: none;
 }
 
+/* The input drops the browser outline; show keyboard focus on its rule instead. */
+.dx-command-input:focus-visible {
+  border-bottom-color: var(--focused-border-color);
+}
+
 .dx-command-input::placeholder {
   color: var(--secondary-color-5);
 }

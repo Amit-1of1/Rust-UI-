@@ -99,6 +99,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `rust-ui mcp` (MCP server over stdio) and its tool names, arguments and replies: new on 2026-10-15.
 - `rust-ui info [--json]` (its JSON fields), `rust-ui skill` and `skills/rust-ui/SKILL.md`: new on 2026-10-30; fields may be added.
 - `rust-ui contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
+- `rust-ui explain` and its `--json` shape: new on 2026-10-30; which errors it explains will grow.
 
 ### Internal
 

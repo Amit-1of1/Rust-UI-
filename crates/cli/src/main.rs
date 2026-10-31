@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 use clap::{Parser, Subcommand};
 use rust_ui_cli::update::{self, Lock};
 use rust_ui_cli::{
@@ -54,6 +56,26 @@ enum Command {
     },
     /// Scaffold a new component in this repo (files, demo, test, gallery section, registry).
     New { name: String },
+    /// Run `cargo check` and explain the errors that come from using kit components in plain
+    /// words: the missing or misspelt prop, its documentation, the enum variants that exist,
+    /// and the component to `add`. Arguments after `--` go to `cargo check`.
+    Explain {
+        /// Read `cargo check --message-format=json` output from this file (`-` for stdin)
+        /// instead of running cargo.
+        #[arg(long)]
+        from: Option<PathBuf>,
+        /// Your copied components, read instead of the registry's versions.
+        #[arg(long, default_value = "src/components")]
+        dest: PathBuf,
+        #[arg(long, default_value = "src/blocks")]
+        blocks_dest: PathBuf,
+        /// Print the hints as JSON (for editors and agents).
+        #[arg(long)]
+        json: bool,
+        /// Passed to `cargo check`, e.g. `-- -p my-app --features web`.
+        #[arg(last = true)]
+        cargo_args: Vec<String>,
+    },
     /// Fold the per-PR fragments in `changes/` into CHANGELOG.md and docs/MIGRATION.md
     /// (`--check` only validates them). Run on `main` before a release; changes/README.md.
     Changelog {
@@ -257,6 +279,49 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             rust_ui_cli::docsgen::write(root).map_err(err)?;
             rust_ui_cli::llms::write(root).map_err(err)?;
             println!("updated registry.json, component.json files, the docs index and llms.txt");
+        }
+        Command::Explain {
+            from,
+            dest,
+            blocks_dest,
+            json,
+            cargo_args,
+        } => {
+            use rust_ui_cli::explain::{render, Api};
+            let output = match from {
+                Some(p) if p.as_os_str() == "-" => {
+                    std::io::read_to_string(std::io::stdin()).map_err(err)?
+                }
+                Some(p) => {
+                    std::fs::read_to_string(&p).map_err(|e| format!("{}: {e}", p.display()))?
+                }
+                None => {
+                    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".into());
+                    let out = std::process::Command::new(cargo)
+                        .args(["check", "--message-format=json"])
+                        .args(&cargo_args)
+                        .stderr(std::process::Stdio::inherit())
+                        .output()
+                        .map_err(|e| format!("could not run cargo: {e}"))?;
+                    String::from_utf8_lossy(&out.stdout).into_owned()
+                }
+            };
+            let api = Api::load(root, &[dest, blocks_dest]);
+            let cwd = std::env::current_dir().map_err(err)?;
+            let report = api.explain(&output, &cwd);
+            if json {
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&report).map_err(|e| e.to_string())?
+                );
+            } else if report.hints.is_empty() && report.other.is_empty() {
+                println!("no errors");
+            } else {
+                print!("{}", render(&report));
+            }
+            if !report.hints.is_empty() || !report.other.is_empty() {
+                return Ok(ExitCode::FAILURE);
+            }
         }
         Command::Changelog { check } => {
             use rust_ui_cli::changelog::{fold, load, unnamed};
