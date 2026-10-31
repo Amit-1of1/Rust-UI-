@@ -75,12 +75,14 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
+- [NativeSelect](llms/native_select.md): The browser's own `<select>`, styled like `Input`
 - [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
 - [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
 - [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
 - [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
 - [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
 - [Radio group](llms/radio_group.md): The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set
+- [Resizable](llms/resizable.md): Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys
 - [Scroll area](llms/scroll_area.md): The ScrollArea component is used to create a scrollable container for its children
 - [Select](llms/select.md): The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups
 - [Separator](llms/separator.md): The Separator component is a simple horizontal or vertical line that can be used to visually separate content in your application

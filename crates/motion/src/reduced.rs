@@ -25,9 +25,26 @@ pub(crate) fn use_reduced_motion_signal() -> Signal<bool> {
 }
 
 fn watch() -> Signal<bool> {
-    let signal = Signal::new_in_scope(prefers_reduced_motion(), ScopeId::ROOT);
+    // In fullstack apps the server rendered with `false`, so hydrate with `false` too (the
+    // markup must match the HTML on the page) and read the OS setting right after.
+    #[allow(unused_mut)]
+    let mut hydrating = false;
+    fullstack! { hydrating = true; }
+    let initial = !hydrating && prefers_reduced_motion();
+    #[allow(unused_mut)]
+    let mut signal = Signal::new_in_scope(initial, ScopeId::ROOT);
     #[cfg(target_arch = "wasm32")]
-    web::listen(signal);
+    {
+        if hydrating {
+            dioxus::core::spawn_forever(async move {
+                let now = prefers_reduced_motion();
+                if *signal.peek() != now {
+                    signal.set(now);
+                }
+            });
+        }
+        web::listen(signal);
+    }
     signal
 }
 
