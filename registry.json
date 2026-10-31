@@ -375,6 +375,7 @@
       "name": "drawer",
       "files": [
         "drawer/component.rs",
+        "drawer/contract.toml",
         "drawer/docs.md",
         "drawer/mod.rs",
         "drawer/style.css"
@@ -738,6 +739,7 @@
       "name": "sheet",
       "files": [
         "sheet/component.rs",
+        "sheet/contract.toml",
         "sheet/docs.md",
         "sheet/mod.rs",
         "sheet/style.css"
@@ -951,6 +953,7 @@
       "name": "toggle_group",
       "files": [
         "toggle_group/component.rs",
+        "toggle_group/contract.toml",
         "toggle_group/docs.md",
         "toggle_group/mod.rs",
         "toggle_group/style.css"
@@ -988,6 +991,7 @@
       "name": "tooltip",
       "files": [
         "tooltip/component.rs",
+        "tooltip/contract.toml",
         "tooltip/docs.md",
         "tooltip/mod.rs",
         "tooltip/style.css"

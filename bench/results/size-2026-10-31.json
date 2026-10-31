@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-31T13:39:09.520Z",
+  "runs": 5,
+  "targets": {
+    "gallery": {
+      "firstRequests": 5,
+      "firstKB": 294.5,
+      "first4gMs": 2350,
+      "totalRequests": 10,
+      "totalKB": 1104.9,
+      "files": {
+        "": 1.1,
+        "assets/gallery-dxh3c9b58a26c54cb5.js": 12.3,
+        "assets/atoll-06ae00f845fc2028.css": 21.9,
+        "assets/gallery_bg-dxhdc5f48e451122231.wasm": 257.9,
+        "assets/gallery-dxh703dafa91fbc317.css": 1.2,
+        "assets/module_1_LazyMoreSections-dxhf6fa866ebc4cb538.wasm": 806.3,
+        "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23888'/><circle cx='32' cy='25' r='11' fill='%23fff'/><path d='M10 58c3-15 13-21 22-21s19 6 22 21z' fill='%23fff'/></svg>": 0,
+        "assets/demo-dxh7399e52386d83f6.css": 0.5,
+        "does-not-exist.png": 3,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "dashboard": {
+      "firstRequests": 5,
+      "firstKB": 346.6,
+      "first4gMs": 2480,
+      "totalRequests": 10,
+      "totalKB": 752,
+      "files": {
+        "": 0.8,
+        "assets/dashboard-dxh6654bb986798ec2.js": 11.4,
+        "assets/atoll-984f9366b89d0e07.css": 12.7,
+        "assets/dashboard_bg-dxh9081ad30378a435.wasm": 321,
+        "assets/dashboard-dxh87b9d0eb20ccb148.css": 0.8,
+        "assets/module_3_LazyCustomers-dxh3b40f588ada6708b.wasm": 141.1,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6,
+        "assets/module_1_LazyOrders-dxh2b533c1a1d76e5c.wasm": 158.2,
+        "assets/module_0_LazySettings-dxhd16dea2ff8799c59.wasm": 84.5,
+        "assets/module_2_LazyPalette-dxhb045794ba328570.wasm": 20.9
+      }
+    },
+    "trial": {
+      "firstRequests": 5,
+      "firstKB": 305.7,
+      "first4gMs": 2293,
+      "totalRequests": 7,
+      "totalKB": 391.1,
+      "files": {
+        "": 0.6,
+        "assets/trial-dxh3ee9a0ea89d4c227.js": 11.7,
+        "assets/atoll-51af1143849b88a3.css": 7.7,
+        "assets/trial_bg-dxh51519c5ebd97e1c8.wasm": 285,
+        "assets/trial-dxh7615ef6370b947f3.css": 0.6,
+        "assets/module_1_LazyNewTask-dxhb25a5a304661c7.wasm": 84.8,
+        "assets/focus-trap-dxh66a514c76c4bb4f.js": 0.6
+      }
+    },
+    "react": {
+      "firstRequests": 3,
+      "firstKB": 100.9,
+      "first4gMs": 965,
+      "totalRequests": 3,
+      "totalKB": 100.9,
+      "files": {
+        "": 0.4,
+        "assets/index-DXHCnhAJ.css": 2.3,
+        "assets/index-ChZip5rW.js": 98.2
+      }
+    },
+    "svelte": {
+      "firstRequests": 3,
+      "firstKB": 70.7,
+      "first4gMs": 826,
+      "totalRequests": 3,
+      "totalKB": 70.7,
+      "files": {
+        "": 0.4,
+        "assets/index-DWEUA5ip.js": 65.7,
+        "assets/index-Dh4PfTRh.css": 4.6
+      }
+    }
+  }
+}

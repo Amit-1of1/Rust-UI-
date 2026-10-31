@@ -42,6 +42,23 @@ SheetClose {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a button that opens it | Opens the sheet and moves focus into it. | yes |
+| Tab | Inside the sheet | Moves to the next control; focus stays in the sheet. | yes |
+| Escape | Inside the sheet | Closes the sheet and returns focus to the button that opened it. | yes |
+
+States:
+
+- `open`: The sheet is shown over the page.
+- `closed`: Only the buttons that open it are shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

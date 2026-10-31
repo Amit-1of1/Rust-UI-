@@ -22,6 +22,21 @@ ToggleGroup {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Toolbar (group of toggle buttons)](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) pattern. Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On a toggle | Turns it on or off (aria-pressed). | yes |
+| Enter | On a toggle | Turns it on or off (aria-pressed). | yes |
+| ArrowRight | On a toggle | Moves focus to the next toggle. | yes |
+| ArrowLeft | On a toggle | Moves focus to the previous toggle. | yes |
+| Home | On a toggle | Moves focus to the first toggle. | yes |
+| End | On a toggle | Moves focus to the last toggle. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
