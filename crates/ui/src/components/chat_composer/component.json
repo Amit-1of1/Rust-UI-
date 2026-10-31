@@ -1,0 +1,38 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "rust-ui-primitives",
+      "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "button"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "textarea"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
+  "description": "The message box of a chat. It grows with the text (CSS `field-sizing`, through [`Textarea`](textarea)'s `autosize`), sends with Enter, adds a line with Shift+Enter, and turns Send into Stop while a reply is `busy` (Escape stops too). Sending trims the text, ignores an empty message, empties the box and keeps focus in it. Extra controls (attach, a model picker) go in its children.",
+  "exclude": [
+    "docs.md",
+    "component.json",
+    "contract.toml"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "chat_composer"
+}

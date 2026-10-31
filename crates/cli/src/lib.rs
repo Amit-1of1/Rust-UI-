@@ -9,6 +9,7 @@
 //! them are stable is in docs/STABILITY.md.
 #![forbid(unsafe_code)]
 
+pub mod acr;
 pub mod changelog;
 pub mod contract;
 #[cfg(test)]
@@ -19,6 +20,7 @@ pub mod doctor;
 pub mod explain;
 pub mod info;
 pub mod llms;
+pub mod logo;
 pub mod manifest;
 pub mod mcp;
 pub mod postbuild;

@@ -6876,6 +6876,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "diffy",
+ "image",
  "serde",
  "serde_json",
  "tempfile",
@@ -6896,6 +6897,7 @@ name = "rust-ui-kit"
 version = "0.1.0"
 dependencies = [
  "dioxus",
+ "dioxus-sdk-time",
  "dioxus-ssr",
  "palette",
  "proptest",

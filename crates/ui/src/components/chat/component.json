@@ -1,0 +1,30 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "rust-ui-primitives",
+      "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
+  "description": "A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage` (one message, named by its author), `StreamingText` (a reply that arrives a piece at a time) and `TypingIndicator`. Pair it with [`ChatComposer`](chat_composer) for input and [`ToolCall`](tool_call) for an agent's tool calls.",
+  "exclude": [
+    "docs.md",
+    "component.json",
+    "contract.toml"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "chat"
+}

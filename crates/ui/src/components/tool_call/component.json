@@ -1,0 +1,38 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "rust-ui-primitives",
+      "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "chat"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "collapsible"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
+  "description": "What an agent did and is doing. `ToolCall` is one tool call: its name, a one-line summary and its status in words, with arguments and output folded away until opened (it is a [`Collapsible`](collapsible)). `actions` stay visible when closed: put Allow and Deny there for `ToolStatus::NeedsApproval`. `AgentSteps` and `AgentStep` show a plan as an ordered list.",
+  "exclude": [
+    "docs.md",
+    "component.json",
+    "contract.toml"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "tool_call"
+}

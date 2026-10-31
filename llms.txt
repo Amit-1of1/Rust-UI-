@@ -42,6 +42,8 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Card](llms/card.md): The card component is a flexible container for grouping related content and actions
 - [Carousel](llms/carousel.md): A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons
 - [Chart](llms/chart.md): Charts drawn as SVG in Rust, coloured from theme tokens
+- [Chat](llms/chat.md): A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage` (one message, named by its author), `StreamingText` (a reply that arrives a piece at a time) and `TypingIndicator`
+- [Chat composer](llms/chat_composer.md): The message box of a chat
 - [Checkbox](llms/checkbox.md): The Checkbox component is used to create an accessible checkbox input
 - [Chips](llms/chips.md): A row of on/off chips for filters and multi-choice tags
 - [Collapsible](llms/collapsible.md): The `Collapsible` component allows users to create expandable sections that can be toggled open or closed
@@ -101,6 +103,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Toast](llms/toast.md): The Toast component is used to display brief messages to the user, typically for notifications or alerts
 - [Toggle](llms/toggle.md): The Toggle component is used to create a toggle button that can be pressed or unpressed
 - [Toggle group](llms/toggle_group.md): The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set
+- [Tool call](llms/tool_call.md): What an agent did and is doing
 - [Toolbar](llms/toolbar.md): The toolbar component is a flexible and customizable component that can be used to create a variety of toolbars
 - [Tooltip](llms/tooltip.md): The Tooltip component is used to display additional information when a user hovers over an element
 - [UiStrings](llms/ui_strings.md): Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults
