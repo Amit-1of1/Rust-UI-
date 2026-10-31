@@ -1,0 +1,243 @@
+{
+  "product": "Atoll Pro",
+  "version": "1.0.0",
+  "note": "The public list of Atoll Pro items. The sources live only in the private Pro repository (docs/pro/README.md); this file and the screenshots are what the docs site and the pricing page may show.",
+  "items": [
+    {
+      "name": "header_01",
+      "kind": "block",
+      "title": "Header",
+      "description": "Sticky marketing header: page links, light/dark switch, sign in, a call to action, and a menu sheet on phones.",
+      "uses": [
+        "button",
+        "icons",
+        "sheet",
+        "theme_customizer"
+      ],
+      "screenshots": [
+        "screenshots/header_01-light.png"
+      ]
+    },
+    {
+      "name": "hero_01",
+      "kind": "block",
+      "title": "Hero, centred",
+      "description": "Announcement pill, a headline whose words rise in one by one, a pitch, two actions and reassurances. Holds the page's h1.",
+      "uses": [
+        "button",
+        "icons",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/hero_01-light.png",
+        "screenshots/hero_01-dark.png"
+      ]
+    },
+    {
+      "name": "hero_02",
+      "kind": "block",
+      "title": "Hero, split",
+      "description": "Headline and email sign-up beside a product preview that floats in while its numbers count up.",
+      "uses": [
+        "badge",
+        "button",
+        "card",
+        "form",
+        "icons",
+        "number_ticker",
+        "progress",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/hero_02-light.png"
+      ]
+    },
+    {
+      "name": "logo_cloud_01",
+      "kind": "block",
+      "title": "Logo cloud",
+      "description": "Customer wordmarks as a wrapped grid or a pausable marquee.",
+      "uses": [
+        "marquee"
+      ],
+      "screenshots": [
+        "screenshots/logo_cloud_01-light.png"
+      ]
+    },
+    {
+      "name": "features_01",
+      "kind": "block",
+      "title": "Feature grid",
+      "description": "Six icon cards that stagger in as the grid scrolls into view.",
+      "uses": [
+        "icons",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/features_01-light.png",
+        "screenshots/features_01-dark.png"
+      ]
+    },
+    {
+      "name": "features_02",
+      "kind": "block",
+      "title": "Feature rows",
+      "description": "Alternating text and picture rows; each picture slides in from its own side.",
+      "uses": [
+        "badge",
+        "icons",
+        "kbd",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/features_02-light.png"
+      ]
+    },
+    {
+      "name": "stats_01",
+      "kind": "block",
+      "title": "Stats",
+      "description": "A band of key figures that count up with a spring the first time they are seen.",
+      "uses": [
+        "number_ticker",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/stats_01-light.png"
+      ]
+    },
+    {
+      "name": "pricing_01",
+      "kind": "block",
+      "title": "Pricing tiers",
+      "description": "Three plans with a monthly/yearly switch: the highlight glides between options and prices spring to their new value.",
+      "uses": [
+        "badge",
+        "button",
+        "icons",
+        "number_ticker",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/pricing_01-light.png",
+        "screenshots/pricing_01-dark.png"
+      ]
+    },
+    {
+      "name": "pricing_02",
+      "kind": "block",
+      "title": "Plan comparison",
+      "description": "A full comparison table with grouped features, named check and dash marks, and per-plan actions.",
+      "uses": [
+        "button",
+        "icons",
+        "table"
+      ],
+      "screenshots": [
+        "screenshots/pricing_02-light.png"
+      ]
+    },
+    {
+      "name": "testimonials_01",
+      "kind": "block",
+      "title": "Testimonials",
+      "description": "A featured quote over a masonry grid of quotes with names, roles, avatars and ratings.",
+      "uses": [
+        "avatar",
+        "icons",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/testimonials_01-light.png"
+      ]
+    },
+    {
+      "name": "faq_01",
+      "kind": "block",
+      "title": "FAQ",
+      "description": "Questions in an accordion beside a heading and a contact link.",
+      "uses": [
+        "accordion",
+        "link"
+      ],
+      "screenshots": [
+        "screenshots/faq_01-light.png"
+      ]
+    },
+    {
+      "name": "cta_01",
+      "kind": "block",
+      "title": "Call to action",
+      "description": "A bold panel in the accent colour with two actions and a drifting light.",
+      "uses": [
+        "button",
+        "reveal"
+      ],
+      "screenshots": [
+        "screenshots/cta_01-light.png",
+        "screenshots/cta_01-dark.png"
+      ]
+    },
+    {
+      "name": "footer_01",
+      "kind": "block",
+      "title": "Footer",
+      "description": "Newsletter sign-up, four link columns, copyright and social links.",
+      "uses": [
+        "button",
+        "form",
+        "separator"
+      ],
+      "screenshots": [
+        "screenshots/footer_01-light.png"
+      ]
+    },
+    {
+      "name": "reveal",
+      "kind": "motion component",
+      "title": "Reveal",
+      "description": "Plays a spring entrance the first time content scrolls into view; stagger with a delay. Content stays readable without JavaScript and under reduced motion.",
+      "uses": [],
+      "screenshots": []
+    },
+    {
+      "name": "number_ticker",
+      "kind": "motion component",
+      "title": "Number ticker",
+      "description": "Counts up to a value with a spring, and springs to each new value; screen readers hear the final value once.",
+      "uses": [],
+      "screenshots": []
+    },
+    {
+      "name": "saas_starter",
+      "kind": "template",
+      "title": "SaaS starter",
+      "description": "A whole product: landing and pricing pages, sign in and sign up with an email code, and a signed-in app with overview, projects, team, billing and settings. Web and desktop.",
+      "uses": [
+        "header_01",
+        "hero_01",
+        "logo_cloud_01",
+        "features_01",
+        "features_02",
+        "stats_01",
+        "testimonials_01",
+        "faq_01",
+        "cta_01",
+        "footer_01",
+        "pricing_01",
+        "pricing_02",
+        "login_01",
+        "signup_01",
+        "dashboard_01",
+        "settings_01"
+      ],
+      "screenshots": [
+        "screenshots/starter-overview-light.png",
+        "screenshots/starter-overview-dark.png",
+        "screenshots/starter-projects-light.png",
+        "screenshots/starter-team-light.png",
+        "screenshots/starter-billing-light.png"
+      ]
+    }
+  ]
+}

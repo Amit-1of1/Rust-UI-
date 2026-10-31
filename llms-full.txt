@@ -12406,7 +12406,7 @@ rsx! {
 - `on_save_profile: Callback<Profile>`: called only with valid fields.
 - `email_prefs: EmailPrefs`, `on_email_prefs: Callback<EmailPrefs>`: called on every switch change.
 - `on_delete_account: Callback<()>`: called after the person confirms.
-- `embedded: bool`: set inside a layout that already has a `main`.
+- `embedded: bool`: set inside a layout that already has a `main` and an `h1` (the block then drops its own "Settings" `h1`).
 
 ## Accessibility
 
@@ -12449,11 +12449,7 @@ pub fn Settings01(
     /// Called once the person confirms "Delete account".
     #[props(default)]
     on_delete_account: Callback<()>,
-    /// Set when the page already has a `<main>`, as inside `DashboardShell`; otherwise this
-    /// block is the page's `main` landmark.
-    #[props(default)]
-    embedded: bool,
-) -> Element
+    /// Set when the page already has a `<main>` and an `h1`, as inside `DashboardShell`;
 ```
 
 ---

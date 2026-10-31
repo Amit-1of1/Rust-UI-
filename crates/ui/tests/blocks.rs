@@ -27,7 +27,9 @@ fn every_block_folder_is_listed() {
     let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/src/blocks");
     for entry in std::fs::read_dir(dir).unwrap() {
         let path = entry.unwrap().path();
-        if path.is_dir() {
+        // Pro blocks (a LICENSE-PRO.md in the folder) live only in the Pro repository, which
+        // tests them with its own list (docs/pro/README.md).
+        if path.is_dir() && !path.join("LICENSE-PRO.md").is_file() {
             let name = format!("block_{}", path.file_name().unwrap().to_string_lossy());
             assert!(
                 BLOCKS.iter().any(|(n, _)| *n == name),

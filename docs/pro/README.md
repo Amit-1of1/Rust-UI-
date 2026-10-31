@@ -6,6 +6,16 @@ Why this model, the prices and the risks are in the decision
 [2026-10-30-monetisation.md](../decisions/2026-10-30-monetisation.md) and the plan in the
 project files (`rust-ui/monetisation/PLAN.md`). Nothing is on sale yet.
 
+## Pro v1
+
+Built on 2026-10-31: 13 marketing blocks (header, two heroes, logo cloud, two feature
+sections, stats, two pricing sections, testimonials, FAQ, call to action, footer), two motion
+components (`reveal`, `number_ticker`) and a SaaS starter app. The public list with screenshots
+is [CATALOG.md](CATALOG.md) ([catalog.json](catalog.json) for tools and the docs site). The
+sources are kept **outside this repository**, in a folder laid out like it (the "Pro source
+folder"); `scripts/pro-repo.sh --overlay` puts them into the Pro repository. Its own
+`PRO.md` lists the items and the checks (`scripts/pro-e2e.sh`, `.github/workflows/pro.yml`).
+
 ## How it fits together
 
 | Piece | Where | Status |
@@ -42,12 +52,14 @@ A refund removes the invitation, and with it the access to new versions.
 
 ## Running the Pro repository
 
-1. `scripts/pro-repo.sh ../atoll-pro` (add `--demo` to watch a block become Pro and get
-   installed into a throwaway app).
+1. `scripts/pro-repo.sh ../atoll-pro --overlay <Pro source folder>` (add `--demo` instead of
+   `--overlay` to watch a block become Pro and get installed into a throwaway app).
 2. Create a private repository on GitHub, then
    `git -C ../atoll-pro remote add origin <its URL> && git -C ../atoll-pro push -u origin main`.
 3. Build Pro items there with `atoll new` or by adding block folders, as in this repo, then
-   copy `docs/pro/LICENSE-PRO.md` into each one and run `atoll registry`.
+   copy `docs/pro/LICENSE-PRO.md` into each one and run `atoll registry`. Copy new Pro
+   files back into the Pro source folder too, so `--overlay` can always rebuild the repository.
+   Add each new item to [catalog.json](catalog.json) with a screenshot.
 4. To pick up free-kit changes: `git -C ../atoll-pro pull upstream main`, then
    `atoll registry` and `scripts/check.sh`.
 

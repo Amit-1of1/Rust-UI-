@@ -311,6 +311,51 @@ fn the_public_registry_has_no_pro_items() {
     assert_eq!(pro_notice(&reg.items), None);
 }
 
+#[test]
+fn the_public_repo_has_no_pro_sources() {
+    // Templates and Pro-only tests are not registry items, so the registry check above would
+    // miss them: no tracked folder outside docs/pro may carry the Pro licence.
+    let root = repo_root();
+    if root.join(".atoll-pro").exists() {
+        return;
+    }
+    let out = std::process::Command::new("git")
+        .args(["ls-files", "--", "*LICENSE-PRO.md"])
+        .current_dir(&root)
+        .output()
+        .expect("git runs");
+    let files = String::from_utf8(out.stdout).unwrap();
+    let leaked: Vec<&str> = files
+        .lines()
+        .filter(|f| *f != "docs/pro/LICENSE-PRO.md")
+        .collect();
+    assert!(
+        leaked.is_empty(),
+        "Pro sources in the public repo: {leaked:?}"
+    );
+}
+
+#[test]
+fn the_pro_catalog_lists_screenshots_that_exist() {
+    // docs/pro/catalog.json is the public face of Pro: names, descriptions, screenshots.
+    let root = repo_root();
+    let text = std::fs::read_to_string(root.join("docs/pro/catalog.json")).unwrap();
+    let catalog: serde_json::Value = serde_json::from_str(&text).unwrap();
+    let items = catalog["items"].as_array().unwrap();
+    assert!(items.len() >= 10, "Pro v1 has at least ten items");
+    for item in items {
+        let name = item["name"].as_str().unwrap();
+        assert!(is_item_name(name), "`{name}` is not an item name");
+        for shot in item["screenshots"].as_array().unwrap() {
+            let shot = shot.as_str().unwrap();
+            assert!(
+                root.join("docs/pro").join(shot).is_file(),
+                "{name}: {shot} is missing"
+            );
+        }
+    }
+}
+
 fn load_str(json: &str) -> Registry {
     serde_json::from_str(json).unwrap()
 }
