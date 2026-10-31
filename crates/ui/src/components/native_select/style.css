@@ -1,0 +1,71 @@
+/* A native <select> dressed like the kit's Input. Theme tokens only; no animation. */
+.dx-native-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  min-width: 10rem;
+  align-items: center;
+}
+
+.dx-native-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: calc(8px * var(--density, 1)) 12px;
+  padding-inline-end: 2.25rem;
+  border: none;
+  border-radius: var(--radius, 0.5rem);
+  appearance: none;
+  background-color: var(--light, var(--primary-color)) var(--dark, color-mix(in oklab, #FFFFFF26 30%, transparent));
+  box-shadow: inset 0 0 0 1px var(--light, var(--primary-color-6)) var(--dark, var(--primary-color-7));
+  color: var(--secondary-color-4);
+  cursor: pointer;
+  font: inherit;
+  transition: background-color 100ms ease-out;
+}
+
+.dx-native-select:hover:not(:disabled),
+.dx-native-select:focus-visible {
+  background: var(--light, var(--primary-color-4)) var(--dark, color-mix(in oklab, #FFFFFF26 50%, transparent));
+  color: var(--secondary-color-1);
+}
+
+.dx-native-select:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--focused-border-color), 0 0 0 2px var(--focused-border-color);
+  outline: none;
+}
+
+.dx-native-select:disabled {
+  color: var(--secondary-color-5);
+  cursor: not-allowed;
+}
+
+.dx-native-select[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 1px var(--primary-error-color, var(--error-text-color));
+}
+
+/* The open list is drawn by the browser; give it the page's colours in dark mode. */
+.dx-native-select option,
+.dx-native-select optgroup {
+  background-color: var(--primary-color-2);
+  color: var(--secondary-color-4);
+}
+
+.dx-native-select[multiple] {
+  padding-inline-end: 12px;
+}
+
+.dx-native-select-icon {
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  color: var(--secondary-color-5);
+  pointer-events: none;
+}
+
+.dx-native-select-wrapper:has(.dx-native-select[multiple]) .dx-native-select-icon {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .dx-native-select {
+    border: 1px solid ButtonText;
+  }
+}

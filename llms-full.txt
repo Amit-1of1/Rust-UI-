@@ -75,12 +75,14 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
+- [NativeSelect](llms/native_select.md): The browser's own `<select>`, styled like `Input`
 - [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
 - [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
 - [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
 - [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
 - [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
 - [Radio group](llms/radio_group.md): The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set
+- [Resizable](llms/resizable.md): Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys
 - [Scroll area](llms/scroll_area.md): The ScrollArea component is used to create a scrollable container for its children
 - [Select](llms/select.md): The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups
 - [Separator](llms/separator.md): The Separator component is a simple horizontal or vertical line that can be used to visually separate content in your application
@@ -281,7 +283,7 @@ pub fn Demo() -> Element {
 
 # Alert dialog
 
-- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).
@@ -319,20 +321,18 @@ rsx! {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the alert dialog and moves focus into it. | yes |
 | Tab | Inside the alert dialog | Moves between its buttons; focus stays inside. | yes |
-| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | not yet |
+| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The alert dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -1014,7 +1014,7 @@ pub fn Demo() -> Element {
 
 # Button
 
-- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The button element is used to trigger actions or events in a user interface.
@@ -2920,7 +2920,7 @@ pub fn Demo() -> Element {
 
 # Color picker
 
-- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `input`).
+- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
 - Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Color picker used when the user needs to make a customized color selection.
@@ -3342,21 +3342,21 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): not yet.
+Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the palette with focus in the search input. | not yet |
 | Control + k | Anywhere on the page, with hotkey set (web only) | Opens the palette. | not yet |
 | z | In the search input | Typing filters the commands. | not yet |
-| Escape | In the palette | Closes it and returns focus to the button that opened it. | not yet |
+| Escape | In the palette | Closes it and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The palette is shown and the search input has focus.
 - `closed`: Only the trigger is shown.
 
-Native: The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only.
+Native: The search input does not get focus when the palette opens, typing does not filter, and Ctrl+K is web only.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -4177,7 +4177,7 @@ pub fn Demo() -> Element {
 
 # Dialog
 
-- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
@@ -4206,7 +4206,7 @@ Dialog {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -4214,14 +4214,12 @@ Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/d
 | Space | On the button that opens it | Opens the dialog and moves focus into it. | yes |
 | Tab | Inside the dialog | Moves to the next control; from the last one it wraps to the first, so focus stays in the dialog. | yes |
 | Shift + Tab | Inside the dialog | Moves to the previous control, wrapping from the first to the last. | yes |
-| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | not yet |
+| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -4627,7 +4625,7 @@ fn task_item(t: TaskView) -> Element {
 
 # Drawer
 
-- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::drawer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A panel that slides up from the bottom and can be dragged down to dismiss.
@@ -5748,6 +5746,46 @@ pub const COPIED_FOR_MS: i32;
 /// localhost). On desktop and native it does nothing and `copied` stays false, so keep the
 /// text itself selectable.
 pub fn use_copy_clipboard() -> (Callback<String>, ReadSignal<bool>)
+
+/// Attributes that make an element an opener for [`ReturnFocus`]. Spread them on a
+/// focusable element (`button { ..use_focus_opener(), }`), or merge them into a primitive's
+/// `attributes`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_focus_opener() -> Vec<Attribute>
+
+/// Whether focus is inside an overlay's panel; see [`use_return_focus`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct FocusInside(Signal<bool>);
+
+/// For an overlay that stays mounted while its panel opens and closes: the state to pass
+/// to [`ReturnFocus`], and the attributes to spread on the panel (they track whether focus
+/// is inside it).
+///
+/// Dioxus runs one listener per event name on an element, so only spread these on a panel
+/// whose primitive has no `onfocusin`/`onfocusout` of its own (the popover content). The
+/// dialog primitives trap focus with exactly those two listeners; a modal dialog passes
+/// `inside: None` to [`ReturnFocus`] instead, since its focus is always inside while open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_return_focus() -> (FocusInside, Vec<Attribute>)
+
+/// Render inside an overlay's panel (it renders nothing): takes the opener when the panel
+/// opens, and returns focus to it when the panel closes with focus inside. `inside: None`
+/// means "always": for a modal panel, which keeps focus inside while it is open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ReturnFocus(inside: Option<FocusInside>) -> Element
 
 /// Is this key event Ctrl+`key` (or Cmd+`key` on macOS), with no Alt or Shift?
 pub fn is_hotkey(key: &str, pressed: &str, ctrl: bool, meta: bool, alt: bool, shift: bool) -> bool
@@ -7238,6 +7276,134 @@ pub fn Demo() -> Element {
 
 ---
 
+# NativeSelect
+
+- Copy into your app: `rust-ui add native_select` or `dx components add native_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `input`).
+- Import: `use crate::components::native_select::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+The browser's own `<select>`, styled like `Input`. Choose it over `Select` on phones (the OS picker), in long forms, for long option lists, and in server-rendered pages, where it works before the app has loaded. Use `Select` when the open list needs custom styling.
+
+```rust
+NativeSelect { id: "plan", value: plan(), onchange: move |e: FormEvent| plan.set(e.value()),
+    NativeSelectOption { value: "starter", "Starter" }
+    NativeSelectOption { value: "team", "Team" }
+    NativeSelectGroup { label: "Legacy",
+        NativeSelectOption { value: "pro-2024", disabled: true, "Pro (2024)" }
+    }
+}
+```
+
+Every `select` attribute (`name`, `value`, `required`, `disabled`, `multiple`, `aria-*`) goes to the `<select>`, and `class` is added to the kit's. Label it with a `Label { html_for }` or `aria_label`. `aria-invalid="true"` draws the error border.
+
+## Accessibility
+
+- Role and name: a native `select` (combobox or listbox), named by its label; options and `optgroup` labels are read by screen readers as usual. The chevron is `aria-hidden`.
+- Keyboard: the browser's own (arrow keys, type to jump, Enter or Space to open).
+- Reduced motion: no animation.
+
+## Source
+
+Original to this repo; shadcn/ui's `native-select` was the reference (not copied).
+
+## Stability
+
+Experimental. New on 2026-10-31.
+
+## API
+
+```rust
+/// The browser's own `<select>`, styled like [`Input`](crate::components::input::Input).
+///
+/// Use it where the platform picker is the better choice: phones (the OS wheel or sheet),
+/// long forms, very long option lists, and server-rendered pages, where it works before the
+/// app has loaded. Use `Select` when the list itself needs custom styling.
+///
+/// ```rust,ignore
+/// NativeSelect { aria_label: "Country", onchange: move |e: FormEvent| country.set(e.value()),
+///     NativeSelectOption { value: "", "Choose a country" }
+///     NativeSelectGroup { label: "Europe",
+///         NativeSelectOption { value: "fr", "France" }
+///     }
+/// }
+/// ```
+///
+/// Any `select` attribute (`name`, `value`, `required`, `disabled`, `multiple`, `id`,
+/// `aria-*`) goes to the `<select>`; `class` is added to the kit's.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelect(
+    onchange: Option<EventHandler<FormEvent>>,
+    oninput: Option<EventHandler<FormEvent>>,
+    onfocus: Option<EventHandler<FocusEvent>>,
+    onblur: Option<EventHandler<FocusEvent>>,
+    onmounted: Option<EventHandler<MountedEvent>>,
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=select)]
+    attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One `<option>` of a [`NativeSelect`]. Takes `value`, `selected` and `disabled`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelectOption(
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=option)]
+    attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// A labelled group of options (`<optgroup>`), read by screen readers with its options.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelectGroup(
+    #[props(into)] label: String,
+    #[props(default)] disabled: bool,
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::label::Label;
+use crate::components::native_select::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut plan = use_signal(|| "team".to_string());
+    rsx! {
+        div { style: "display: grid; gap: 0.5rem; max-width: 16rem;",
+            Label { html_for: "native-select-plan", "Plan" }
+            NativeSelect {
+                id: "native-select-plan",
+                value: plan(),
+                onchange: move |e: FormEvent| plan.set(e.value()),
+                NativeSelectOption { value: "starter", "Starter" }
+                NativeSelectOption { value: "team", "Team" }
+                NativeSelectOption { value: "business", "Business" }
+                NativeSelectGroup { label: "Legacy",
+                    NativeSelectOption { value: "pro-2024", disabled: true, "Pro (2024)" }
+                }
+            }
+            p { style: "margin: 0; font-size: 0.875rem;", "Selected plan: {plan}" }
+        }
+    }
+}
+```
+
+---
+
 # Navbar
 
 - Copy into your app: `rust-ui add navbar` or `dx components add navbar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
@@ -7635,7 +7801,7 @@ pub fn Demo() -> Element {
 
 # Popover
 
-- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.
@@ -7660,14 +7826,12 @@ PopoverRoot {
 
 ## Keyboard and accessibility
 
-Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): partly.
+Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the trigger | Opens the popover. | yes |
-| Escape | In the open popover | Closes it and returns focus to the trigger. | not yet |
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+| Escape | In the open popover | Closes it and returns focus to the trigger. | yes |
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -7831,6 +7995,177 @@ pub fn Demo() -> Element {
             RadioItem { value: "option1".to_string(), index: 0usize, "Blue" }
             RadioItem { value: "option2".to_string(), index: 1usize, "Red" }
             RadioItem { value: "option3".to_string(), index: 2usize, disabled: true, "Green" }
+        }
+    }
+}
+```
+
+---
+
+# Resizable
+
+- Copy into your app: `rust-ui add resizable` or `dx components add resizable --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::resizable::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys. For split views such as folders | messages | preview.
+
+```rust
+div { style: "height: 20rem;",
+    ResizablePanelGroup { on_layout: move |sizes: Vec<f32>| save(sizes),
+        ResizablePanel { id: "folders", default_size: 25.0, min_size: 15.0, max_size: 50.0, Folders {} }
+        ResizableHandle { aria_label: "Resize folders", with_handle: true }
+        ResizablePanel { default_size: 75.0, min_size: 30.0,
+            ResizablePanelGroup { direction: ResizableDirection::Vertical,
+                ResizablePanel { default_size: 60.0, Messages {} }
+                ResizableHandle { aria_label: "Resize preview" }
+                ResizablePanel { default_size: 40.0, Preview {} }
+            }
+        }
+    }
+}
+```
+
+Sizes are percentages of the group and should add up to 100; `min_size` and `max_size` limit each panel. The group fills its parent, so give the parent a height for a horizontal group. `on_layout` reports every panel's size after a change (store it to restore the layout with `default_size`). `resize_pair` is the pure rule a divider follows.
+
+## Accessibility
+
+- Role and name: each `ResizableHandle` is a focusable `role="separator"` (the WAI-ARIA window splitter pattern) with `aria-valuenow` (the size of the panel before it, in percent), `aria-valuemin`, `aria-valuemax`, `aria-orientation` and the `aria_label` you give it ("Resize" by default). Give the panel before it an `id` and the handle points at it with `aria-controls`.
+- Keyboard: Tab reaches each divider. Left and Right arrows (Up and Down in a vertical group) move it by 5%, with Shift by 10%; Home and End move it to the panel's minimum and maximum.
+- Pointer: drag the divider (a 9 px hit area around the 1 px line). The drag ends when the pointer leaves the group.
+- Right to left: not mirrored yet. In a `dir="rtl"` row the first panel is on the right, and the arrow keys and dragging still change its size as in a left-to-right row, so they feel reversed. Use a vertical group, or `dir="ltr"` on the group, until this is fixed.
+- Reduced motion: only the divider's colour changes; that transition is off under `prefers-reduced-motion`.
+
+## Source
+
+Original to this repo. The API follows shadcn/ui's `Resizable` (built on react-resizable-panels), which was not copied.
+
+## Stability
+
+Experimental. New on 2026-10-31.
+
+## API
+
+```rust
+/// How far one arrow-key press moves a divider, in percent of the group.
+pub const RESIZE_STEP: f32;
+
+/// Moves the divider between two neighbouring panels by `delta` percent, keeping both
+/// inside their `(min, max)` limits and their total unchanged. Returns the new sizes.
+///
+/// ```
+/// use ui::components::resizable::resize_pair;
+/// assert_eq!(resize_pair((30.0, 70.0), 10.0, (10.0, 80.0), (10.0, 90.0)), (40.0, 60.0));
+/// assert_eq!(resize_pair((30.0, 70.0), 90.0, (10.0, 80.0), (10.0, 90.0)), (80.0, 20.0));
+/// ```
+pub fn resize_pair(sizes: (f32, f32), delta: f32, a: (f32, f32), b: (f32, f32)) -> (f32, f32)
+
+pub enum ResizableDirection {
+    /// Panels side by side, dividers dragged left and right.
+    #[default]
+    Horizontal,
+    /// Panels stacked, dividers dragged up and down.
+    Vertical,
+}
+
+/// A row (or column) of [`ResizablePanel`]s with a [`ResizableHandle`] between each pair.
+///
+/// ```rust,ignore
+/// ResizablePanelGroup {
+///     ResizablePanel { default_size: 25.0, min_size: 15.0, "Folders" }
+///     ResizableHandle { aria_label: "Resize folders" }
+///     ResizablePanel { default_size: 75.0, "Messages" }
+/// }
+/// ```
+///
+/// Sizes are percentages of the group and should add up to 100. Give the group a size (a
+/// height for horizontal groups, as with any flex row).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizablePanelGroup(
+    #[props(default)] direction: ResizableDirection,
+    /// Called with every panel's size (percent) after a divider moves.
+    #[props(default)]
+    on_layout: Callback<Vec<f32>>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One panel of a [`ResizablePanelGroup`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizablePanel(
+    /// Starting size in percent of the group.
+    #[props(default = 50.0)]
+    default_size: f32,
+    #[props(default = 0.0)] min_size: f32,
+    #[props(default = 100.0)] max_size: f32,
+    /// The panel's element id. The handle after it points at it with `aria-controls`, as
+    /// the window splitter pattern asks; without an id there is no `aria-controls`.
+    #[props(into)]
+    id: Option<String>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// The divider between two panels: drag it, or focus it and use the arrow keys (Home and End
+/// jump to the limits). It is a focusable `role="separator"` whose value is the size of the
+/// panel before it, as the WAI-ARIA window splitter pattern describes.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizableHandle(
+    /// Read by screen readers, e.g. "Resize sidebar". Defaults to "Resize".
+    #[props(into, default = "Resize".to_string())]
+    aria_label: String,
+    /// Show a grip in the middle of the divider.
+    #[props(default)]
+    with_handle: bool,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::resizable::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut layout = use_signal(|| vec![30.0_f32, 70.0]);
+    let pane = "padding: 1rem; font-size: 0.875rem;";
+    rsx! {
+        div { style: "display: grid; gap: 0.5rem; max-width: 36rem;",
+            div { style: "height: 14rem; border: 1px solid var(--primary-color-6); border-radius: var(--radius);",
+                ResizablePanelGroup { on_layout: move |sizes| layout.set(sizes),
+                    ResizablePanel { id: "resizable-folders", default_size: 30.0, min_size: 15.0, max_size: 60.0,
+                        div { style: pane, "Folders" }
+                    }
+                    ResizableHandle { aria_label: "Resize folders", with_handle: true }
+                    ResizablePanel { default_size: 70.0, min_size: 30.0,
+                        ResizablePanelGroup { direction: ResizableDirection::Vertical,
+                            ResizablePanel { id: "resizable-messages", default_size: 60.0, min_size: 20.0,
+                                div { style: pane, "Messages" }
+                            }
+                            ResizableHandle { aria_label: "Resize preview" }
+                            ResizablePanel { default_size: 40.0, min_size: 20.0,
+                                div { style: pane, "Preview" }
+                            }
+                        }
+                    }
+                }
+            }
+            p { style: "margin: 0; font-size: 0.875rem;",
+                "Folders take {layout()[0].round()}%"
+            }
         }
     }
 }
@@ -8148,7 +8483,7 @@ pub fn Demo() -> Element {
 
 # Sheet
 
-- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The sheet component is a panel that slides in from the edge of the screen. It can be used to display additional content, forms, or navigation menus without leaving the current page.
@@ -10438,6 +10773,16 @@ Original to this repo.
 /// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` is the default.
 pub const ACCENTS: [&str; 6];
 
+/// Whether [`use_theme`]'s setters also write `<html>` (on by default).
+/// `ThemeStyles { scoped: true }` turns it off, so an existing app's own `data-theme` on
+/// `<html>` is left alone; an app that copied the components and loads `theme.scoped.css`
+/// itself calls `set_writes_html(false)` once at startup instead.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn set_writes_html(on: bool)
+
 /// Light or dark, or whatever the operating system prefers.
 ///
 /// # Stability
@@ -10470,11 +10815,16 @@ pub struct Theme {
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_theme() -> Theme
 
-/// Applies [`ThemeCustomizer`]'s choices to its children.
+/// Applies [`ThemeCustomizer`]'s choices to its children, and marks where the kit's scoped
+/// theme applies (`data-rui-scope`).
 ///
 /// On the web and in desktop webviews the customizer sets them on `<html>` and this wrapper
 /// is not needed. Renderers without JavaScript (dioxus-native) can't reach `<html>`, so wrap
 /// the app in `ThemeScope` there. It is a `display: contents` box: it doesn't change layout.
+///
+/// With `ThemeStyles { scoped: true }` (an existing app with its own CSS) the kit's tokens
+/// and rules apply only inside a `ThemeScope`; wrap each part of the app that uses the kit,
+/// or the whole app. Several scopes share one [`use_theme`] state.
 ///
 /// # Stability
 ///

@@ -4,6 +4,7 @@ use dioxus_primitives::alert_dialog::{
     AlertDialogDescriptionProps,
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
+use crate::components::hooks::ReturnFocus;
 
 #[css_module("/src/components/alert_dialog/style.css")]
 struct Styles;
@@ -84,6 +85,9 @@ pub fn AlertDialog(props: AlertDialogProps) -> Element {
                     AlertDialogDescription { {description} }
                 }
                 {props.children}
+                // Always modal: focus is inside while open (the primitive's trap owns the
+                // panel's focus listeners).
+                ReturnFocus { inside: None }
             }
         }
 

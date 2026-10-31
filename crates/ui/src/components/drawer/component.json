@@ -11,7 +11,12 @@
       "name": "rust-ui-motion"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "A panel that slides up from the bottom and can be dragged down to dismiss.",
   "exclude": [
     "docs.md",

@@ -10,6 +10,7 @@
 #![forbid(unsafe_code)]
 
 pub mod acr;
+pub mod app;
 pub mod changelog;
 pub mod contract;
 #[cfg(test)]
@@ -25,6 +26,7 @@ pub mod manifest;
 pub mod mcp;
 pub mod postbuild;
 pub mod scaffold;
+pub mod scope;
 pub mod theme;
 pub mod update;
 
