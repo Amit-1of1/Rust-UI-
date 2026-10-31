@@ -1,11 +1,11 @@
 # Command
 
-- Copy into your app: `rust-ui add command` or `dx components add command --git https://github.com/Amit-1of1/Rust-UI-` (also copies `dialog`, `hooks`, `ui_strings`).
-- Import: `use crate::components::command::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add command` or `dx components add command --git https://github.com/Amit-1of1/Rust-UI-` (also copies `dialog`, `hooks`, `ui_strings`).
+- Import: `use crate::components::command::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A command palette: a search box over a filtered list, inside a dialog. `filter_items` and `step_active` are pure helpers.
 
-Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey` from the `hooks` item, which `rust-ui add command` installs with it. That works on the web only, so keep a visible button too.
+Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey` from the `hooks` item, which `atoll add command` installs with it. That works on the web only, so keep a visible button too.
 
 ## Accessibility
 

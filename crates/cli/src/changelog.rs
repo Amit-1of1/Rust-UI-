@@ -1,4 +1,4 @@
-//! `rust-ui changelog`: fold the per-PR fragments in `changes/` into CHANGELOG.md and
+//! `atoll changelog`: fold the per-PR fragments in `changes/` into CHANGELOG.md and
 //! docs/MIGRATION.md.
 //!
 //! Every branch used to add its lines to the top of the same sections of CHANGELOG.md and

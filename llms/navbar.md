@@ -1,7 +1,7 @@
 # Navbar
 
-- Copy into your app: `rust-ui add navbar` or `dx components add navbar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::navbar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add navbar` or `dx components add navbar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::navbar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Navbar component can be used to display a navigation bar with collapsible sections.
 

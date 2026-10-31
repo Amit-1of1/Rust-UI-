@@ -1,7 +1,7 @@
 # Virtual list
 
-- Copy into your app: `rust-ui add virtual_list` or `dx components add virtual_list --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::virtual_list::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add virtual_list` or `dx components add virtual_list --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::virtual_list::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The VirtualList component virtualizes large lists by rendering only visible rows plus a buffer. It is useful for long, dynamic-height datasets where rendering every row at once would be expensive.
 

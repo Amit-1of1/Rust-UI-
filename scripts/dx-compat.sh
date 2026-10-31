@@ -13,7 +13,7 @@ export NO_DOWNLOADS=1
 mkdir "$WORK/registry"
 cp --parents $(git ls-files; git ls-files -o --exclude-standard) "$WORK/registry/"
 URL="file://$WORK/registry"
-(cd "$WORK/registry" && RUST_UI_REGISTRY_GIT="$URL" cargo run -q --manifest-path "$ROOT/Cargo.toml" -p rust-ui-cli -- --source . registry >/dev/null \
+(cd "$WORK/registry" && ATOLL_REGISTRY_GIT="$URL" cargo run -q --manifest-path "$ROOT/Cargo.toml" -p atoll-cli -- --source . registry >/dev/null \
   && git init -q && git add -A && git -c user.email=ci@example.com -c user.name=ci commit -q -m registry)
 
 dx components clean >/dev/null 2>&1 || true
@@ -22,7 +22,7 @@ cargo init -q --name dx_compat_probe .
 cargo add -q dioxus --features web
 dx components add --all --git "$URL"
 # The drawer depends on the motion crate from the registry's git URL; use the local copy.
-printf '\n[patch."%s"]\nrust-ui-motion = { path = "%s/crates/motion" }\n' "$URL" "$ROOT" >> Cargo.toml
+printf '\n[patch."%s"]\natoll-motion = { path = "%s/crates/motion" }\n' "$URL" "$ROOT" >> Cargo.toml
 printf '#![allow(dead_code, unused)]\nmod components;\nfn main() {}\n' > src/main.rs
 cargo check -q
 echo "dx components add --all: ok"

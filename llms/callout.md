@@ -1,7 +1,7 @@
 # Callout
 
-- Copy into your app: `rust-ui add callout` or `dx components add callout --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::callout::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add callout` or `dx components add callout --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::callout::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 An inline note (info, success, warning) for docs and forms. Static: use `Alert` for messages that must interrupt.
 

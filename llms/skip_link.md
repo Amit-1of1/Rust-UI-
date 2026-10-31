@@ -1,7 +1,7 @@
 # SkipLink
 
-- Copy into your app: `rust-ui add skip_link` or `dx components add skip_link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::skip_link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add skip_link` or `dx components add skip_link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::skip_link::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation. `MainContent` is the page's `<main>` landmark it points at.
 

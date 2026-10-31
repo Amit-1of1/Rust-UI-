@@ -1,6 +1,6 @@
-# rust-ui-motion
+# atoll-motion
 
-Motion helpers for [Dioxus](https://dioxuslabs.com) 0.7, used by the Rust UI kit:
+Motion helpers for [Dioxus](https://dioxuslabs.com) 0.7, used by the Atoll kit:
 
 * `SpringPreset` and `Transition`: named spring feels that collapse to an instant change when the OS asks for reduced motion.
 * `use_reduced_motion`, `use_spring`, `Pop` with `AnimatePresence`, `FlipList`/`FlipItem` and `SwipeDismiss`.

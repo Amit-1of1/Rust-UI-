@@ -1,7 +1,7 @@
-# Rust UI Pro licence (draft)
+# Atoll Pro licence (draft)
 
 > **Draft, not yet in force, and not legal advice.** Have a lawyer review it before the first
-> sale. "Rust UI" is a working name; replace it, `[Owner]` and `[contact]` before launch.
+> sale. "Atoll" is a working name; replace it, `[Owner]` and `[contact]` before launch.
 
 This licence covers the **Pro items**: every component, block, template and motion component
 whose folder contains this file, in the private Pro repository. The rest of the kit is not

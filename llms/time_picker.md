@@ -1,7 +1,7 @@
 # TimePicker
 
-- Copy into your app: `rust-ui add time_picker` or `dx components add time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `form`, `icons`, `ui_strings`).
-- Import: `use crate::components::time_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add time_picker` or `dx components add time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `form`, `icons`, `ui_strings`).
+- Import: `use crate::components::time_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button. Type digits and focus moves on by itself, or use the arrow keys. Written in Rust on plain inputs, with no JavaScript, so it also runs on the desktop webview and native.
 

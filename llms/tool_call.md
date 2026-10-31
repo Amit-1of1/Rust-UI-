@@ -1,7 +1,7 @@
 # Tool call
 
-- Copy into your app: `rust-ui add tool_call` or `dx components add tool_call --git https://github.com/Amit-1of1/Rust-UI-` (also copies `chat`, `collapsible`, `icons`, `ui_strings`).
-- Import: `use crate::components::tool_call::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tool_call` or `dx components add tool_call --git https://github.com/Amit-1of1/Rust-UI-` (also copies `chat`, `collapsible`, `icons`, `ui_strings`).
+- Import: `use crate::components::tool_call::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 What an agent did and is doing. `ToolCall` is one tool call: its name, a one-line summary and
 its status in words, with arguments and output folded away until opened (it is a

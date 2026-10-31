@@ -1,7 +1,7 @@
 # Collapsible
 
-- Copy into your app: `rust-ui add collapsible` or `dx components add collapsible --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::collapsible::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add collapsible` or `dx components add collapsible --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::collapsible::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The `Collapsible` component allows users to create expandable sections that can be toggled open or closed. This is useful for displaying content in a compact manner, such as FAQs, menus, or any content that benefits from being hidden until needed.
 

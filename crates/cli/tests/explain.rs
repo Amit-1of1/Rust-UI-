@@ -1,7 +1,7 @@
-//! `rust-ui explain` on real compiler output: `fixtures/explain/cargo.jsonl` is what
+//! `atoll explain` on real compiler output: `fixtures/explain/cargo.jsonl` is what
 //! `cargo check --message-format=json` printed for `fixtures/explain/src/main.rs`.
 
-use rust_ui_cli::explain::{render, Api, Hint};
+use atoll_cli::explain::{render, Api, Hint};
 use std::path::{Path, PathBuf};
 
 fn kit() -> PathBuf {
@@ -83,7 +83,7 @@ fn a_string_for_an_enum_is_found_on_its_own_line() {
 fn missing_modules_say_whether_to_add_them() {
     says(
         &hint("src/components/mod.rs:1:1"),
-        "Copy it: `rust-ui add button`",
+        "Copy it: `atoll add button`",
     );
     says(
         &hint("src/main.rs:7:"),

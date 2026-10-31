@@ -1,4 +1,4 @@
-//! Hooks shared by components and apps. `rust-ui add hooks` copies this folder; components
+//! Hooks shared by components and apps. `atoll add hooks` copies this folder; components
 //! that import from it pull it in automatically.
 
 mod clipboard;

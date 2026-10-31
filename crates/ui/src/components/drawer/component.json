@@ -3,12 +3,12 @@
     {
       "features": [],
       "git": "https://github.com/Amit-1of1/dioxus-components",
-      "name": "rust-ui-primitives",
-      "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+      "name": "atoll-primitives",
+      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
-      "name": "rust-ui-motion"
+      "name": "atoll-motion"
     }
   ],
   "componentDependencies": [

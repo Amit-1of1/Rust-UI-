@@ -1,7 +1,7 @@
 # Scroll area
 
-- Copy into your app: `rust-ui add scroll_area` or `dx components add scroll_area --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::scroll_area::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add scroll_area` or `dx components add scroll_area --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::scroll_area::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The ScrollArea component is used to create a scrollable container for its children. It can be used to enable scrolling for content that overflows the available space.
 

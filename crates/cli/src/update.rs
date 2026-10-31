@@ -1,9 +1,9 @@
-//! `rust-ui update`: bring copied components up to the registry's current version without
+//! `atoll update`: bring copied components up to the registry's current version without
 //! losing local edits.
 //!
-//! `rust-ui add` records what it copied in `rust-ui-lock.json` (which registry commit each
+//! `atoll add` records what it copied in `atoll-lock.json` (which registry commit each
 //! item came from and a hash of each file) and keeps a pristine copy of each file under
-//! `.rust-ui/base/`. `update` then does a three-way merge per file: the recorded copy is the
+//! `.atoll/base/`. `update` then does a three-way merge per file: the recorded copy is the
 //! common ancestor, the project's file is "yours" and the registry's current file is the other
 //! side. Untouched files are replaced, edits that don't overlap the registry's changes are
 //! merged, and overlapping ones get conflict markers, as `git merge` does.
@@ -15,14 +15,16 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-/// Default lockfile name, in the project root (the directory `rust-ui` runs in).
-pub const LOCK_FILE: &str = "rust-ui-lock.json";
+/// Default lockfile name, in the project root (the directory `atoll` runs in).
+pub const LOCK_FILE: &str = "atoll-lock.json";
 /// Pristine copies of the installed files, next to the lockfile.
-pub const BASE_DIR: &str = ".rust-ui/base";
+pub const BASE_DIR: &str = ".atoll/base";
+/// The lockfile's name before the kit was renamed to Atoll.
+const OLD_LOCK_FILE: &str = "rust-ui-lock.json";
 /// The first line of a conflict this command writes.
 pub const CONFLICT_START: &str = "<<<<<<< yours";
 
-/// What `rust-ui add` and `rust-ui update` installed, keyed by item name.
+/// What `atoll add` and `atoll update` installed, keyed by item name.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Lock {
@@ -61,10 +63,22 @@ impl Lock {
                     .map_err(|e| format!("{}: {e}", path.display()))?;
                 Ok(lock)
             }
-            Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(Lock {
-                version: 1,
-                ..Lock::default()
-            }),
+            Err(e) if e.kind() == io::ErrorKind::NotFound => {
+                // The kit was called Rust UI until 2026-10-31 (docs/MIGRATION.md).
+                let dir = path.parent().unwrap_or(Path::new(""));
+                if path.file_name().is_some_and(|n| n == LOCK_FILE)
+                    && dir.join(OLD_LOCK_FILE).is_file()
+                {
+                    return Err(format!(
+                        "found {old} from before the rename to Atoll: run `git mv {old} {LOCK_FILE}` and `git mv .rust-ui .atoll`, then try again",
+                        old = OLD_LOCK_FILE
+                    ));
+                }
+                Ok(Lock {
+                    version: 1,
+                    ..Lock::default()
+                })
+            }
             Err(e) => Err(format!("{}: {e}", path.display())),
         }
     }
@@ -164,7 +178,7 @@ fn stored(lock_path: &Path, dir: &Path) -> String {
     rel.to_string_lossy().into_owned()
 }
 
-/// After `rust-ui add`: record every file of `items` whose copy in the project matches the
+/// After `atoll add`: record every file of `items` whose copy in the project matches the
 /// registry (just written, or already the same). A file kept because you had edited it is
 /// left as the lock had it. Returns how many files were recorded.
 pub fn record(
@@ -261,7 +275,7 @@ impl Action {
             Action::KeptEdits => "your edits; the registry did not change it",
             Action::Unresolved => "still has conflict markers from the last update",
             Action::NoBase => {
-                "differs from the registry and no installed copy is recorded; compare with `rust-ui diff`, or take the registry's with `rust-ui add --force`"
+                "differs from the registry and no installed copy is recorded; compare with `atoll diff`, or take the registry's with `atoll add --force`"
             }
             Action::DeletedLocally => "you deleted it; not restored",
             Action::RemovedUpstream => "no longer in the registry; delete it if nothing uses it",
@@ -391,7 +405,7 @@ pub fn plan(
         for n in names {
             if !lock.items.contains_key(n) {
                 return Err(format!(
-                    "`{n}` is not in {} (it wasn't installed with `rust-ui add`); run `rust-ui add {n}` first",
+                    "`{n}` is not in {} (it wasn't installed with `atoll add`); run `atoll add {n}` first",
                     lock_path.display()
                 ));
             }

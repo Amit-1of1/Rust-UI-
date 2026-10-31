@@ -3,7 +3,7 @@
 A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link. Built from `card`, `form`, `alert` and `link`.
 
 ```sh
-rust-ui add login_01   # copies src/blocks/login_01 and the components it uses
+atoll add login_01   # copies src/blocks/login_01 and the components it uses
 ```
 
 ```rust

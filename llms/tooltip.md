@@ -1,7 +1,7 @@
 # Tooltip
 
-- Copy into your app: `rust-ui add tooltip` or `dx components add tooltip --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::tooltip::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tooltip` or `dx components add tooltip --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::tooltip::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Tooltip component is used to display additional information when a user hovers over an element.
 

@@ -1,4 +1,4 @@
-//! `rust-ui explain`: run `cargo check` and say, in plain words, how to fix the errors that
+//! `atoll explain`: run `cargo check` and say, in plain words, how to fix the errors that
 //! come from using the kit's components.
 //!
 //! `rsx!` turns every component call into a props builder, so a mistake in one line of markup
@@ -780,10 +780,10 @@ impl Api {
             }
             if self.items.iter().any(|i| i == module) {
                 let fix = if d.code == "E0583" {
-                    format!("Copy it: `rust-ui add {module}`.")
+                    format!("Copy it: `atoll add {module}`.")
                 } else {
                     format!(
-                        "Copy it: `rust-ui add {module}`, then add `pub mod {module};` to your components `mod.rs`."
+                        "Copy it: `atoll add {module}`, then add `pub mod {module};` to your components `mod.rs`."
                     )
                 };
                 return Some(hint(
@@ -795,10 +795,10 @@ impl Api {
             let mut fix = Vec::new();
             if let Some(near) = nearest(module, names.iter().copied()) {
                 fix.push(format!(
-                    "Did you mean `{near}`? `rust-ui add {near}` copies it."
+                    "Did you mean `{near}`? `atoll add {near}` copies it."
                 ));
             }
-            fix.push("`rust-ui list` shows every component and block.".into());
+            fix.push("`atoll list` shows every component and block.".into());
             return Some(hint(format!("there is no kit component `{module}`"), fix));
         }
         None

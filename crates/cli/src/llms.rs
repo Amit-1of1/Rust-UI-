@@ -3,7 +3,7 @@
 //! component's `docs.md`, the Rust signatures of its public items and its demo, so it is
 //! generated from the same sources as the registry and a test fails when it is stale.
 //! Blocks (whole screens) get pages too, from their `docs.md` and signatures; their docs carry
-//! the example. `rust-ui docs <name>` prints the same page.
+//! the example. `atoll docs <name>` prints the same page.
 
 use crate::contract::Contract;
 use crate::docsgen::title;
@@ -24,12 +24,12 @@ const GUIDES: &[(&str, &str, &str)] = &[
     (
         "Installing components",
         "docs/INSTALL.md",
-        "copy the source with `rust-ui` or `dx`, or depend on the crate from git",
+        "copy the source with `atoll` or `dx`, or depend on the crate from git",
     ),
     (
         "MCP server",
         "docs/MCP.md",
-        "`rust-ui mcp` lets MCP clients list, search, read and add components",
+        "`atoll mcp` lets MCP clients list, search, read and add components",
     ),
     (
         "Theming",
@@ -182,9 +182,9 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
     // `dx components add` reads component.json files, which blocks don't have.
     out.push_str(&match item.kind {
         Kind::Component => format!(
-            "- Copy into your app: `rust-ui add {name}` or `dx components add {name} --git https://github.com/Amit-1of1/Rust-UI-`"
+            "- Copy into your app: `atoll add {name}` or `dx components add {name} --git https://github.com/Amit-1of1/Rust-UI-`"
         ),
-        Kind::Block => format!("- Copy into your app: `rust-ui add {name}`"),
+        Kind::Block => format!("- Copy into your app: `atoll add {name}`"),
     });
     if !item.registry_dependencies.is_empty() {
         out.push_str(&format!(
@@ -198,7 +198,9 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
     }
     let lib = read(&root.join("crates/ui/src/lib.rs"));
     let from_crate = if item.kind == Kind::Block {
-        format!("`use ui::blocks::{name}::*;` with the `rust-ui-kit` crate's `blocks` feature (internal)")
+        format!(
+            "`use ui::blocks::{name}::*;` with the `atoll-ui` crate's `blocks` feature (internal)"
+        )
     } else if lib.contains(&format!("pub use components::{name};")) {
         format!("`use ui::{name}::{{...}};` (by path, no glob)")
     } else if !not_in_prelude(root).iter().any(|n| n == name) {
@@ -217,7 +219,7 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
         if item.kind == Kind::Block {
             ""
         } else {
-            " with the `rust-ui-kit` crate"
+            " with the `atoll-ui` crate"
         },
     ));
     let text = body(&docs);
@@ -276,7 +278,7 @@ pub fn page(root: &Path, reg: &Registry, name: &str) -> io::Result<Option<String
 /// `llms.txt`: the intro, the guides and one line per component, then one per block.
 pub fn index(root: &Path, reg: &Registry) -> io::Result<String> {
     let mut out = fs::read_to_string(root.join(INTRO))?.trim_end().to_string();
-    out.push_str("\n\nPaths are relative to the repository root. `rust-ui docs <name>` prints a component page.\n\n## Docs\n\n");
+    out.push_str("\n\nPaths are relative to the repository root. `atoll docs <name>` prints a component page.\n\n## Docs\n\n");
     for (name, path, what) in GUIDES {
         out.push_str(&format!("- [{name}]({path}): {what}\n"));
     }

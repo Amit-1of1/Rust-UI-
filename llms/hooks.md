@@ -1,11 +1,11 @@
 # Hooks
 
-- Copy into your app: `rust-ui add hooks` or `dx components add hooks --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::hooks::*;` after copying, or `use ui::hooks::{...};` (by path, no glob) with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add hooks` or `dx components add hooks --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::hooks::*;` after copying, or `use ui::hooks::{...};` (by path, no glob) with the `atoll-ui` crate.
 
 Hooks shared by the components and by apps.
 
-The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `rust-ui add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
+The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `atoll add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
 
 | Hook | What it does |
 |---|---|
@@ -38,7 +38,7 @@ pub const COPIED_FOR_MS: i32;
 ///
 /// ```rust,ignore
 /// let (copy, copied) = use_copy_clipboard();
-/// rsx! { Button { onclick: move |_| copy.call("cargo add rust-ui".into()),
+/// rsx! { Button { onclick: move |_| copy.call("cargo add atoll".into()),
 ///     if copied() { "Copied" } else { "Copy" } } }
 /// ```
 ///
@@ -196,7 +196,7 @@ use crate::components::hooks::{use_copy_clipboard, use_media_query, MOBILE_QUERY
 use crate::components::kbd::{Kbd, KbdGroup};
 use dioxus::prelude::*;
 
-const INSTALL: &str = "rust-ui add hooks";
+const INSTALL: &str = "atoll add hooks";
 
 #[component]
 pub fn Demo() -> Element {

@@ -2,21 +2,21 @@
 //!
 //! Each component's `#[css_module]` adds its own `<link rel="stylesheet">` the first time it
 //! renders, so an app pays one request per component it shows. After a release build,
-//! `rust-ui postbuild <public dir>` concatenates those files into one, links it from
-//! `index.html` and lists the files it holds in a `data-rust-ui-bundle` attribute.
+//! `atoll postbuild <public dir>` concatenates those files into one, links it from
+//! `index.html` and lists the files it holds in a `data-atoll-bundle` attribute.
 //! [`install`] (called by [`crate::ThemeStyles`]) reads that list and wraps the app's
 //! [`Document`] so the per-component links for bundled files are never created.
 //!
 //! Without the bundle (`dx serve`, desktop, tests) nothing changes.
 //!
 //! Internal: not part of the public API (docs/STABILITY.md). Use [`crate::ThemeStyles`] and
-//! `rust-ui postbuild`.
+//! `atoll postbuild`.
 
 use dioxus::document::{Document, Eval, LinkProps, MetaProps, ScriptProps, StyleProps};
 use std::rc::Rc;
 
 /// Attribute on the bundle's `<link>`: the file names it holds, separated by spaces.
-pub const BUNDLE_ATTR: &str = "data-rust-ui-bundle";
+pub const BUNDLE_ATTR: &str = "data-atoll-bundle";
 
 /// Stop components from linking stylesheets that the bundle already holds.
 /// Does nothing when the page has no bundle.

@@ -1,7 +1,7 @@
 # Alert
 
-- Copy into your app: `rust-ui add alert` or `dx components add alert --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::alert::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add alert` or `dx components add alert --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::alert::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A message that interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.
 

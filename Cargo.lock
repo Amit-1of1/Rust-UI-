@@ -604,6 +604,89 @@ dependencies = [
 ]
 
 [[package]]
+name = "atoll-attributes"
+version = "0.1.0"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee#cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+dependencies = [
+ "dioxus-rsx",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "atoll-cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "diffy",
+ "image",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "toml",
+ "toml_edit 0.20.2",
+]
+
+[[package]]
+name = "atoll-form-derive"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
+name = "atoll-motion"
+version = "0.1.0"
+dependencies = [
+ "dioxus",
+ "dioxus-motion",
+ "dioxus-ssr",
+ "web-sys",
+]
+
+[[package]]
+name = "atoll-primitives"
+version = "0.1.0"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee#cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+dependencies = [
+ "atoll-attributes",
+ "dioxus",
+ "dioxus-sdk-time",
+ "lazy-js-bundle",
+ "num-integer",
+ "palette",
+ "serde",
+ "time",
+ "tracing",
+]
+
+[[package]]
+name = "atoll-ui"
+version = "0.1.0"
+dependencies = [
+ "atoll-form-derive",
+ "atoll-motion",
+ "atoll-primitives",
+ "atoll-ui",
+ "dioxus",
+ "dioxus-sdk-time",
+ "dioxus-ssr",
+ "palette",
+ "proptest",
+ "serde",
+ "strum",
+ "time",
+ "toml",
+ "tracing",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -984,8 +1067,8 @@ dependencies = [
 name = "booking"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
- "rust-ui-kit",
  "time",
  "web-sys",
 ]
@@ -1815,8 +1898,8 @@ dependencies = [
 name = "dashboard"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
- "rust-ui-kit",
  "time",
  "web-sys",
 ]
@@ -2617,9 +2700,9 @@ dependencies = [
 name = "docs"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
  "pulldown-cmark",
- "rust-ui-kit",
  "web-sys",
 ]
 
@@ -3156,8 +3239,8 @@ dependencies = [
 name = "gallery"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
- "rust-ui-kit",
  "web-sys",
 ]
 
@@ -5034,6 +5117,7 @@ version = "0.1.0"
 dependencies = [
  "anyrender",
  "anyrender_vello_cpu",
+ "atoll-ui",
  "blitz-dom",
  "blitz-paint",
  "blitz-traits",
@@ -5042,7 +5126,6 @@ dependencies = [
  "image",
  "keyboard-types",
  "manganis-core",
- "rust-ui-kit",
  "serde",
  "showcase",
  "tokio",
@@ -6860,89 +6943,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c20b6793b5c2fa6553b250154b78d6d0db37e72700ae35fad9387a46f487c97"
 
 [[package]]
-name = "rust-ui-attributes"
-version = "0.1.0"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b#fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
-dependencies = [
- "dioxus-rsx",
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
-name = "rust-ui-cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "diffy",
- "image",
- "serde",
- "serde_json",
- "tempfile",
- "toml",
- "toml_edit 0.20.2",
-]
-
-[[package]]
-name = "rust-ui-form-derive"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
-name = "rust-ui-kit"
-version = "0.1.0"
-dependencies = [
- "dioxus",
- "dioxus-sdk-time",
- "dioxus-ssr",
- "palette",
- "proptest",
- "rust-ui-form-derive",
- "rust-ui-kit",
- "rust-ui-motion",
- "rust-ui-primitives",
- "serde",
- "strum",
- "time",
- "toml",
- "tracing",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
-]
-
-[[package]]
-name = "rust-ui-motion"
-version = "0.1.0"
-dependencies = [
- "dioxus",
- "dioxus-motion",
- "dioxus-ssr",
- "web-sys",
-]
-
-[[package]]
-name = "rust-ui-primitives"
-version = "0.1.0"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b#fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
-dependencies = [
- "dioxus",
- "dioxus-sdk-time",
- "lazy-js-bundle",
- "num-integer",
- "palette",
- "rust-ui-attributes",
- "serde",
- "time",
- "tracing",
-]
-
-[[package]]
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7361,8 +7361,8 @@ checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 name = "showcase"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
- "rust-ui-kit",
  "web-sys",
 ]
 
@@ -7442,8 +7442,8 @@ checksum = "33f4fe9184a62d842c9ef383018f3306d8ba224fd9d836f56d7288308847c256"
 name = "site"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
- "rust-ui-kit",
  "web-sys",
 ]
 
@@ -8528,9 +8528,9 @@ dependencies = [
 name = "trial"
 version = "0.1.0"
 dependencies = [
+ "atoll-ui",
  "dioxus",
  "log",
- "rust-ui-kit",
  "tracing",
  "web-sys",
 ]

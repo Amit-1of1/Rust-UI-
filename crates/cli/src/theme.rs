@@ -1,4 +1,4 @@
-//! `rust-ui theme --brand <hex>` (or `--from-image <logo>`, see `logo.rs`): turn one brand colour into an accent preset that is
+//! `atoll theme --brand <hex>` (or `--from-image <logo>`, see `logo.rs`): turn one brand colour into an accent preset that is
 //! readable in both modes. The hue and saturation stay; only lightness moves, until the
 //! label text on the fill reaches WCAG AA (4.5:1). The preset test in `crates/ui` holds
 //! the same bar for every shipped preset.

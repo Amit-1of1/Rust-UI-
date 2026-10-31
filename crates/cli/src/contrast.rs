@@ -19,7 +19,7 @@
 //! text (24px, or 18.66px bold) 3:1, and a focus indicator 3:1 against the surface it is drawn
 //! on (WCAG 1.4.11).
 //!
-//! `cargo test -p rust-ui-cli --test contrast` runs it on the kit; `rust-ui contrast --theme
+//! `cargo test -p atoll-cli --test contrast` runs it on the kit; `atoll contrast --theme
 //! my-theme.css` runs it on a theme of your own.
 
 use std::collections::{BTreeMap, HashMap};

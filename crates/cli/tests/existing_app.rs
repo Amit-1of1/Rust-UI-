@@ -1,4 +1,4 @@
-//! `rust-ui init` and `rust-ui add` inside an app that already exists: the commands wire
+//! `atoll init` and `atoll add` inside an app that already exists: the commands wire
 //! the copied code in (mod lines, crate root, Cargo.toml) without touching anything else,
 //! and running them twice changes nothing.
 
@@ -57,8 +57,8 @@ fn existing_app() -> tempfile::TempDir {
     dir
 }
 
-fn rust_ui(app: &Path, args: &[&str]) -> String {
-    let out = Command::new(env!("CARGO_BIN_EXE_rust-ui"))
+fn atoll(app: &Path, args: &[&str]) -> String {
+    let out = Command::new(env!("CARGO_BIN_EXE_atoll"))
         .args(args)
         .arg("--source")
         .arg(repo_root())
@@ -67,7 +67,7 @@ fn rust_ui(app: &Path, args: &[&str]) -> String {
         .unwrap();
     let text =
         String::from_utf8_lossy(&out.stdout).into_owned() + &String::from_utf8_lossy(&out.stderr);
-    assert!(out.status.success(), "rust-ui {args:?} failed:\n{text}");
+    assert!(out.status.success(), "atoll {args:?} failed:\n{text}");
     text
 }
 
@@ -92,7 +92,7 @@ fn snapshot(dir: &Path) -> Vec<(PathBuf, String)> {
 #[test]
 fn init_reports_clashes_and_writes_the_scoped_theme() {
     let app = existing_app();
-    let out = rust_ui(app.path(), &["init", "--scoped", "--reset"]);
+    let out = atoll(app.path(), &["init", "--scoped", "--reset"]);
     assert!(out.contains("dioxus 0.7.10: supported"), "{out}");
     for clash in ["--radius", "--primary-color", "data-theme"] {
         assert!(out.contains(clash), "clash {clash} not reported:\n{out}");
@@ -111,7 +111,7 @@ fn init_reports_clashes_and_writes_the_scoped_theme() {
         .unwrap()
         .contains("hotpink"));
 
-    let plain = rust_ui(app.path(), &["init"]);
+    let plain = atoll(app.path(), &["init"]);
     assert!(plain.contains("--scoped"), "suggests --scoped:\n{plain}");
 }
 
@@ -121,14 +121,14 @@ fn init_warns_about_another_dioxus_line() {
     let manifest = app.path().join("Cargo.toml");
     let text = fs::read_to_string(&manifest).unwrap();
     fs::write(&manifest, text.replace("0.7.10", "0.6.3")).unwrap();
-    let out = rust_ui(app.path(), &["init"]);
+    let out = atoll(app.path(), &["init"]);
     assert!(out.contains("warn: this app is on dioxus 0.6.3"), "{out}");
 }
 
 #[test]
 fn add_wires_components_into_the_app() {
     let app = existing_app();
-    let out = rust_ui(app.path(), &["add", "command"]);
+    let out = atoll(app.path(), &["add", "command"]);
 
     // Modules declared, in the components folder and the crate root.
     let mod_rs = fs::read_to_string(app.path().join("src/components/mod.rs")).unwrap();
@@ -163,14 +163,14 @@ fn add_wires_components_into_the_app() {
 
     // A second run changes nothing.
     let before = snapshot(app.path());
-    rust_ui(app.path(), &["add", "command"]);
+    atoll(app.path(), &["add", "command"]);
     assert_eq!(before, snapshot(app.path()));
 }
 
 #[test]
 fn add_reports_a_different_pin_instead_of_changing_it() {
     let app = existing_app();
-    rust_ui(app.path(), &["add", "dialog"]);
+    atoll(app.path(), &["add", "dialog"]);
     let manifest = app.path().join("Cargo.toml");
     let text = fs::read_to_string(&manifest).unwrap();
     // Point the app's copy of every git dependency at another commit.
@@ -189,7 +189,7 @@ fn add_reports_a_different_pin_instead_of_changing_it() {
         }
     }
     fs::write(&manifest, &changed).unwrap();
-    let out = rust_ui(app.path(), &["add", "dialog"]);
+    let out = atoll(app.path(), &["add", "dialog"]);
     assert!(out.contains("kept your"), "{out}");
     assert_eq!(fs::read_to_string(&manifest).unwrap(), changed);
 }
@@ -197,7 +197,7 @@ fn add_reports_a_different_pin_instead_of_changing_it() {
 #[test]
 fn no_wire_only_copies() {
     let app = existing_app();
-    let out = rust_ui(app.path(), &["add", "badge", "--no-wire"]);
+    let out = atoll(app.path(), &["add", "badge", "--no-wire"]);
     assert!(out.contains("Add to src/components/mod.rs"), "{out}");
     assert_eq!(
         fs::read_to_string(app.path().join("Cargo.toml")).unwrap(),

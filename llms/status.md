@@ -1,7 +1,7 @@
 # Status
 
-- Copy into your app: `rust-ui add status` or `dx components add status --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::status::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add status` or `dx components add status --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::status::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A coloured dot plus required text label (idle, online, degraded, down). Optional `pulse`.
 

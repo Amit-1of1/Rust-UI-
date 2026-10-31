@@ -12,16 +12,16 @@ before you move on.
 
 | Question | What to check | If the answer is no |
 |---|---|---|
-| Is the app on Dioxus `0.7.x`? | `rust-ui init` prints `dioxus 0.7.x: supported`, or warns | Upgrade Dioxus first, on its own branch. The kit pins the 0.7 line on purpose (GUARDRAILS). |
+| Is the app on Dioxus `0.7.x`? | `atoll init` prints `dioxus 0.7.x: supported`, or warns | Upgrade Dioxus first, on its own branch. The kit pins the 0.7 line on purpose (GUARDRAILS). |
 | Can your build fetch git dependencies? | `cargo fetch` with a `git = ...` dependency | Copy the source (path 1 below): the copied files are yours, and only the primitives crate stays a dependency. Where it comes from and the plan for crates.io are in [PUBLISHING.md](PUBLISHING.md). |
 | Web or desktop webview? | your `dioxus` features | Native (Blitz) works but is a preview, and needs the renderer patches in `[patch.crates-io]`: see [FORKS.md](FORKS.md) and [NATIVE.md](NATIVE.md). Web and desktop need none of them. |
-| Can you live with 0.x? | [VERSIONING.md](VERSIONING.md) | Copy the source: an update is then a three-way merge you run when you choose (`rust-ui update`), never a surprise. |
+| Can you live with 0.x? | [VERSIONING.md](VERSIONING.md) | Copy the source: an update is then a three-way merge you run when you choose (`atoll update`), never a surprise. |
 
 ## 2. Pick a path
 
 - **Copy the source** (recommended for an existing app). The component files land in your
   tree, so you can restyle them to match your design, and nothing changes until you run
-  `rust-ui update`. This is also the path with the fewest dependencies.
+  `atoll update`. This is also the path with the fewest dependencies.
 - **Depend on the crate.** One git dependency, updated by bumping `rev`. Best when you want
   the kit exactly as it is.
 
@@ -30,14 +30,14 @@ before you move on.
 From the app's root (where its `Cargo.toml` is):
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- rust-ui-cli
-export RUST_UI_SOURCE=https://github.com/Amit-1of1/Rust-UI-
+cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli
+export ATOLL_SOURCE=https://github.com/Amit-1of1/Rust-UI-
 
-rust-ui init --scoped          # the theme, confined to ThemeScope; checks your Dioxus version and CSS
-rust-ui add dialog select      # the components and everything they need
+atoll init --scoped          # the theme, confined to ThemeScope; checks your Dioxus version and CSS
+atoll add dialog select      # the components and everything they need
 ```
 
-`rust-ui init` copies `assets/theme.css` and then looks at the app:
+`atoll init` copies `assets/theme.css` and then looks at the app:
 
 - it checks the `dioxus` version in `Cargo.toml`;
 - it lists every place your CSS defines something the kit's theme also defines
@@ -45,7 +45,7 @@ rust-ui add dialog select      # the components and everything they need
 - it notices Tailwind and says what that means (below);
 - it prints the two lines that load the theme.
 
-`rust-ui add` copies the files and wires them in, so the app builds straight away:
+`atoll add` copies the files and wires them in, so the app builds straight away:
 
 - `pub mod dialog;` (and each dependency's line) in `src/components/mod.rs`, created if missing;
 - `mod components;` in `src/main.rs` (or `lib.rs`), after the header comments, if it isn't there;
@@ -56,13 +56,13 @@ rust-ui add dialog select      # the components and everything they need
 
 Every step is idempotent: running `add` again changes nothing. `--no-wire` only copies the
 files and prints the lines instead, for a layout the CLI doesn't know (a workspace with the
-UI in its own crate, say). `rust-ui-lock.json` and `.rust-ui/base/` record what was copied;
-commit them, so `rust-ui update` can merge the kit's later fixes with your edits.
+UI in its own crate, say). `atoll-lock.json` and `.atoll/base/` record what was copied;
+commit them, so `atoll update` can merge the kit's later fixes with your edits.
 
 Then load the theme once and wrap the screens that use the kit:
 
 ```rust
-use components::theme_customizer::{set_writes_html, ThemeScope}; // `rust-ui add theme_customizer`
+use components::theme_customizer::{set_writes_html, ThemeScope}; // `atoll add theme_customizer`
 
 #[component]
 fn App() -> Element {
@@ -80,7 +80,7 @@ fn App() -> Element {
 
 ```toml
 [dependencies]
-ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "rust-ui-kit" }
+ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "atoll-ui" }
 ```
 
 ```rust
@@ -109,7 +109,7 @@ a few page-wide rules (reduced motion, forced colours, `.sr-only`).
 | `use_theme().set_mode(Dark)` | writes `<html data-theme>` | writes the scopes only, so your own `data-theme` keeps its meaning |
 | Your `<html data-theme="dark">` | switches the kit | still switches the kit, so one dark mode drives both |
 
-`theme.scoped.css` is generated from `theme.css` by `rust-ui registry` (a test fails when it
+`theme.scoped.css` is generated from `theme.css` by `atoll registry` (a test fails when it
 is stale), so the two never drift. `ThemeScope` is `display: contents`: it adds no box and
 doesn't change your layout. Use as many scopes as you like; they share one theme state.
 
@@ -121,7 +121,7 @@ own reset (Tailwind's preflight, normalize.css) should leave it off.
 define the kit's tokens. Use the scoped theme if your Tailwind config also defines
 `--radius` or `--primary-color`, which shadcn-style setups often do.
 
-**Release builds:** if you run `rust-ui postbuild` (one CSS file instead of one per
+**Release builds:** if you run `atoll postbuild` (one CSS file instead of one per
 component), pass `--scoped` when the app uses the scoped theme, so the bundle holds that
 one.
 
@@ -133,15 +133,15 @@ point them at your app, not only at the gallery.
 - **Accessibility mistakes don't compile.** A `Dialog` without a `title`, an `IconButton`
   without a `label` or an avatar image without `alt` is a compile error, so a migrated screen
   can't lose its accessible names.
-- **Your colours are proved readable.** `rust-ui contrast --theme assets/brand.css` checks
+- **Your colours are proved readable.** `atoll contrast --theme assets/brand.css` checks
   every text colour, icon and focus ring the components draw against the background it sits
   on, in light and dark, under your overrides. Run it in CI after you restyle anything.
-  `rust-ui theme --brand '#7c3aed'` makes an accent preset that passes from one colour.
+  `atoll theme --brand '#7c3aed'` makes an accent preset that passes from one colour.
 - **Keyboard behaviour is a contract.** Each component's `contract.toml` lists its keys, and
   the kit's tests press every one on the web and on native ([CONTRACTS.md](CONTRACTS.md)).
-  `rust-ui contract dialog` prints the table for your QA notes.
-- **Coding agents get the real API.** `rust-ui mcp` lets Claude Code, Cursor or VS Code list,
-  read and add components in your app ([MCP.md](MCP.md)); `rust-ui docs dialog` prints the
+  `atoll contract dialog` prints the table for your QA notes.
+- **Coding agents get the real API.** `atoll mcp` lets Claude Code, Cursor or VS Code list,
+  read and add components in your app ([MCP.md](MCP.md)); `atoll docs dialog` prints the
   page an agent should read before writing UI code. Agents then use the kit's components
   instead of inventing markup.
 - **Motion respects the user.** Every animation honours `prefers-reduced-motion`, and the
@@ -154,11 +154,11 @@ point them at your app, not only at the gallery.
 
 1. Pick a leaf screen with few dependencies (settings, a form) and wrap it in `ThemeScope`.
 2. Replace its controls with kit components; keep your layout CSS.
-3. Run `rust-ui contrast` with your theme, your tests, and a keyboard pass (Tab, Shift+Tab,
+3. Run `atoll contrast` with your theme, your tests, and a keyboard pass (Tab, Shift+Tab,
    Enter, Space, Escape, arrows).
 4. Ship it, then widen the scope (or move `ThemeScope` up) for the next screen.
 
-Blocks (`rust-ui add login_01`, `settings_01`, `dashboard_01`) are whole screens to start
+Blocks (`atoll add login_01`, `settings_01`, `dashboard_01`) are whole screens to start
 from; they go to `src/blocks/` and are your code from then on.
 
 ## Known limits

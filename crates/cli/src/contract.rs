@@ -134,7 +134,7 @@ impl Step {
     }
 }
 
-/// A contract with every row's test parsed, as the test runners take it (`rust-ui contract
+/// A contract with every row's test parsed, as the test runners take it (`atoll contract
 /// --json`).
 #[derive(Debug, Clone, Serialize)]
 pub struct Runnable {

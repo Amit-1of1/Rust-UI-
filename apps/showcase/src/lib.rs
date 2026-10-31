@@ -1,4 +1,4 @@
-//! Rust UI Showcase: one codebase for the web, the desktop and phones.
+//! Atoll Showcase: one codebase for the web, the desktop and phones.
 //!
 //! The same components, state and CSS run on every Dioxus renderer: the browser
 //! (WebAssembly), native (Blitz draws the page itself with wgpu, no webview and no
@@ -114,7 +114,7 @@ fn Shell() -> Element {
             header { class: "sc-header",
                 div { class: "sc-brand",
                     span { class: "sc-logo", "aria-hidden": "true", "R" }
-                    span { class: "sc-brand-name", "Rust UI" }
+                    span { class: "sc-brand-name", "Atoll" }
                 }
                 div { class: "sc-header-tools",
                     Badge { variant: BadgeVariant::Secondary, class: "sc-renderer", {renderer()} }
