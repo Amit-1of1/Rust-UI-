@@ -17,10 +17,14 @@ cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli   # installs
 | `get_component` | One item's page: install and import lines, docs, prop signatures and an example. `include_source: true` adds every file. | `atoll docs <name>` |
 | `add_component` | Copies `names` and everything they depend on into `dest` (default `src/components`) and blocks into `blocks_dest` (default `src/blocks`). Keeps files you edited unless `force`. Replies with the `pub mod` lines to add. | `atoll add` |
 | `init_theme` | Copies the theme stylesheet to `dest` (default `assets/theme.css`). | `atoll init` |
+| `explain_errors` | Runs `cargo check` in the project (extra `cargo_args` allowed), or reads `cargo_output`, and explains errors from kit components in plain words: the missing or misspelt prop and its docs, the enum variants that exist, the component to add. | `atoll explain` |
+| `get_contract` | A component's keyboard contract: what each key does, the WAI-ARIA pattern, native support. Every row is a test the kit runs. Without `name`, the components that have one. | `atoll contract <name>` |
+| `generate_theme` | An accent preset from one `brand` hex colour, readable (WCAG AA) in light and dark, with the contrast it reaches. | `atoll theme --brand` |
+| `list_templates` | The example apps a new app can start from, with the command for each. | `atoll create --template` |
 
 The pages are also resources, for clients that let you attach them: `atoll://llms.txt` (the index) and `atoll://docs/<name>`.
 
-`add_component` and `init_theme` write only inside the project: paths are relative to it, and absolute paths or `..` are refused. The project is the folder the client starts the server in, or `--project <dir>`.
+`add_component` and `init_theme` write only inside the project, and `explain_errors` runs `cargo check` only there: paths are relative to it, and absolute paths or `..` are refused. The project is the folder the client starts the server in, or `--project <dir>`.
 
 ## Where components come from
 

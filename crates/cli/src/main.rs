@@ -56,6 +56,10 @@ enum Command {
         /// Use a local checkout of the kit's repository (for testing the kit itself).
         #[arg(long)]
         path: Option<PathBuf>,
+        /// Start from one of the kit's example apps instead of the one-screen starter. Its
+        /// files come from `--path`, the `--source` checkout, or a clone of the repository.
+        #[arg(long, value_parser = template_names())]
+        template: Option<String>,
     },
     /// Copy the theme stylesheet into a project, new or existing: checks the Dioxus version,
     /// reports CSS in the app that clashes with the kit's, and prints how to load the theme.
@@ -321,6 +325,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             rev,
             tag,
             path,
+            template,
         } => {
             let name = match name {
                 Some(n) => n,
@@ -342,7 +347,15 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 ),
                 (None, None) => atoll_cli::create::KitSource::Registry,
             };
-            for f in atoll_cli::create::create(&dir, &name, &source)? {
+            let written = match template {
+                Some(t) => {
+                    let t = atoll_cli::template::find(&t)?;
+                    let kit = template_source(&source, root, t, &cache)?;
+                    atoll_cli::template::create(&dir, &name, &source, t, &kit)?
+                }
+                None => atoll_cli::create::create(&dir, &name, &source)?,
+            };
+            for f in written {
                 println!("wrote {}", f.display());
             }
             println!("\nNext:\n  cd {}\n  dx serve        # http://localhost:8080\n\nAdd components with `atoll add <name>` to own their source, or use them from `ui::prelude` as they are.", dir.display());
@@ -760,6 +773,51 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
         }
     }
     Ok(ExitCode::SUCCESS)
+}
+
+/// `--template` choices, with each template's one-line summary for `--help`.
+fn template_names() -> clap::builder::PossibleValuesParser {
+    clap::builder::PossibleValuesParser::new(
+        atoll_cli::template::TEMPLATES
+            .iter()
+            .map(|t| clap::builder::PossibleValue::new(t.name).help(t.summary)),
+    )
+}
+
+/// The kit checkout a template's files are copied from: `--path`, else the `--source`
+/// checkout when it has the example, else a clone of `--git` or of the kit's repository.
+fn template_source(
+    kit: &atoll_cli::create::KitSource,
+    root: &Path,
+    template: &atoll_cli::template::Template,
+    cache: &Path,
+) -> Result<PathBuf, String> {
+    use atoll_cli::create::{KitSource, REPO};
+    let has_it = |p: &Path| {
+        p.join("apps")
+            .join(template.app)
+            .join("Cargo.toml")
+            .exists()
+    };
+    if let KitSource::Path(p) = kit {
+        return Ok(p.clone());
+    }
+    if has_it(root) {
+        return Ok(root.to_path_buf());
+    }
+    let url = match kit {
+        KitSource::Git { url, .. } => url.clone(),
+        _ => REPO.to_string(),
+    };
+    let dir = materialize(&url, cache)?;
+    if has_it(&dir) {
+        Ok(dir)
+    } else {
+        Err(format!(
+            "{url} has no apps/{}; pass --path <kit checkout>",
+            template.app
+        ))
+    }
 }
 
 fn main() -> ExitCode {

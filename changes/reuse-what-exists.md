@@ -1,0 +1,5 @@
+### Added
+
+- **cli:** `atoll create <dir> --template dashboard|booking|marketing|showcase` starts an app from one of the kit's example apps (admin dashboard, routed booking app, marketing site, web + desktop + mobile showcase) instead of the one-screen starter, with its own `Cargo.toml`. `scripts/template-check.sh` builds every template outside the repo, and the release-readiness workflow runs it. (#PR)
+- **cli:** four MCP tools: `explain_errors` (the `atoll explain` report, running `cargo check` in the project), `get_contract` (a component's keyboard contract), `generate_theme` (the `atoll theme --brand` preset with its contrast) and `list_templates`. The agent skill now points at `atoll explain`, contracts, templates and brand themes. (#PR)
+- **docs site:** a Theme builder page (`#theme-builder`): pick a brand colour and see the kit in it, in light and dark, with the contrast each mode reaches and the CSS to copy; it runs the CLI's own `theme.rs`. An Example apps page (`#examples`) lists the templates, and the Pages workflow publishes the four apps under `examples/`. (#PR)

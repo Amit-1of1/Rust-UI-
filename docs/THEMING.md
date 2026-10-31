@@ -20,6 +20,8 @@ Set `data-accent` on `<html>` to `blue`, `green`, `violet`, `rose` or `orange`. 
 
 ## Your own brand colour
 
+Try it in the browser first: the [Theme builder](#theme-builder) page runs the same generator live, shows the kit in your colour in light and dark mode with the contrast it reaches, and copies the CSS.
+
 ```sh
 cargo run -p atoll-cli -- theme --brand '#7c3aed' --name brand >> assets/theme.css
 ```
