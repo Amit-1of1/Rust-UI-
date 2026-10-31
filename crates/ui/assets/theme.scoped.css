@@ -1,0 +1,354 @@
+/* Generated from theme.css by `rust-ui registry`; do not edit.
+ * The same rules, applied only inside an element with data-rui-scope (ThemeScope
+ * renders one), so they never reach the rest of an existing app. */
+/* Theme tokens for the kit's components. Load this file once, near the root of the app.
+ *
+ * Light and dark: every colour token is a `light-dark(light, dark)` pair, so the colour scheme
+ * picks the value. It follows the OS by default; data-theme="light" or "dark" on <html> forces
+ * one. `color-scheme` also gives native scrollbars, form controls and the page canvas the same
+ * scheme. Browsers without light-dark() (before Chrome 123, Safari 17.5, Firefox 120) and the
+ * native renderer (Blitz: parses light-dark() but always picks light) use the
+ * generated fallback block further down. */
+[data-rui-scope] {
+  color-scheme: light dark;
+}
+
+/* data-theme also works on any element, which then switches its own subtree: light-dark()
+   resolves against the element that uses the token. The native renderer has no <html> to
+   put it on, and a preview pane may want the other theme. */
+[data-rui-scope][data-theme="light"],
+[data-rui-scope] [data-theme="light"],
+[data-theme="light"] [data-rui-scope] {
+  color-scheme: light;
+}
+
+[data-rui-scope][data-theme="dark"],
+[data-rui-scope] [data-theme="dark"],
+[data-theme="dark"] [data-rui-scope] {
+  color-scheme: dark;
+}
+
+[data-rui-scope] {
+  /* Primary colors */
+  --primary-color: light-dark(#fff, #000);
+  --primary-color-1: light-dark(#fbfbfb, #0e0e0e);
+  --primary-color-2: light-dark(#fff, #0a0a0a);
+  --primary-color-3: light-dark(#f8f8f8, #141313);
+  --primary-color-4: light-dark(#f8f8f8, #1a1a1a);
+  --primary-color-5: light-dark(#f5f5f5, #262626);
+  --primary-color-6: light-dark(#e5e5e5, #232323);
+  --primary-color-7: light-dark(#b0b0b0, #3e3e3e);
+
+  /* Secondary colors */
+  --secondary-color: light-dark(#000, #fff);
+  --secondary-color-1: light-dark(#000, #fafafa);
+  --secondary-color-2: light-dark(#0d0d0d, #e6e6e6);
+  --secondary-color-3: light-dark(#2b2b2b, #dcdcdc);
+  --secondary-color-4: light-dark(#111, #d4d4d4);
+  --secondary-color-5: light-dark(#6b6b6b, #a1a1a1);
+  --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
+
+  /* Highlight colors */
+  --focused-border-color: #2b7fff;
+
+  /* Accent: fills for primary actions and checked/active states. Neutral by default;
+     set data-accent="blue|green|violet|rose|orange" on <html> (or any ancestor) to recolor.
+     Override --accent-color / --accent-contrast yourself for a brand color. */
+  --accent-color: var(--secondary-color-2);
+  --accent-contrast: var(--primary-color);
+
+  /* Corner radius shared by controls; set on <html> to square or round everything. */
+  --radius: 0.5rem;
+
+  /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
+     mode, where a light scrim barely separates the panel from the page. */
+  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
+  --primary-success-color: light-dark(#ecfdf5, #02271c);
+  --secondary-success-color: light-dark(#10b981, #b6fae3);
+  --primary-warning-color: light-dark(#fffbeb, #342203);
+  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
+  --primary-error-color: light-dark(#dc2626, #a22e2e);
+  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
+  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
+  --error-text-color: light-dark(#b91c1c, #f87171);
+  /* Success and warning as text on their tinted fills (toasts); the --secondary-* ones are
+     fills and fail as text in light mode (2.4:1 and 2.1:1). */
+  --success-text-color: light-dark(#047857, #b6fae3);
+  --warning-text-color: light-dark(#b45309, #feeac7);
+  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
+  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
+  --secondary-info-color: var(--secondary-color-3);
+  /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
+     accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
+     (tests/theme.rs). */
+  --chart-2: light-dark(#0f766e, #2dd4bf);
+  --chart-3: light-dark(#c2410c, #fb923c);
+  --chart-4: light-dark(#7c3aed, #a78bfa);
+  --chart-5: light-dark(#be185d, #f472b6);
+}
+
+/* Accent presets, light-dark(light, dark). Light fills carry white text (>=4.5:1); dark fills
+   carry near-black text (tests/theme.rs checks both). */
+[data-rui-scope][data-accent="blue"],
+[data-rui-scope] [data-accent="blue"],
+[data-accent="blue"] [data-rui-scope] {
+  --accent-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+}
+[data-rui-scope][data-accent="green"],
+[data-rui-scope] [data-accent="green"],
+[data-accent="green"] [data-rui-scope] {
+  --accent-color: light-dark(#15803d, #4ade80);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#15803d, #4ade80);
+}
+[data-rui-scope][data-accent="violet"],
+[data-rui-scope] [data-accent="violet"],
+[data-accent="violet"] [data-rui-scope] {
+  --accent-color: light-dark(#6d28d9, #a78bfa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+}
+[data-rui-scope][data-accent="rose"],
+[data-rui-scope] [data-accent="rose"],
+[data-accent="rose"] [data-rui-scope] {
+  --accent-color: light-dark(#be123c, #fb7185);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#be123c, #fb7185);
+}
+[data-rui-scope][data-accent="orange"],
+[data-rui-scope] [data-accent="orange"],
+[data-accent="orange"] [data-rui-scope] {
+  --accent-color: light-dark(#c2410c, #fb923c);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#c2410c, #fb923c);
+}
+
+/* Space toggles: --dark and --light are "initial" or empty depending on the scheme, so
+ * `var(--dark, a) var(--light, b)` picks a or b. Kept for values light-dark() cannot hold
+ * (shadows, gradients) and for component CSS not yet moved to light-dark(). Prefer
+ * light-dark() for colours. */
+[data-rui-scope][data-theme="dark"],
+[data-rui-scope] [data-theme="dark"],
+[data-theme="dark"] [data-rui-scope] {
+  --dark: initial;
+  --light: ;
+}
+
+[data-rui-scope][data-theme="light"],
+[data-rui-scope] [data-theme="light"],
+[data-theme="light"] [data-rui-scope] {
+  --dark: ;
+  --light: initial;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-rui-scope] {
+    --dark: initial;
+    --light: ;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  [data-rui-scope] {
+    --dark: ;
+    --light: initial;
+  }
+}
+
+/* theme fallback: begin (generated, do not edit) */
+/* For browsers without light-dark(): the same tokens as space toggles.
+ * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */
+@supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
+  [data-rui-scope][data-rui-scope],
+[data-rui-scope][data-theme][data-theme],
+[data-rui-scope] [data-theme][data-theme],
+[data-theme][data-theme] [data-rui-scope] {
+    --primary-color: var(--dark, #000) var(--light, #fff);
+    --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);
+    --primary-color-2: var(--dark, #0a0a0a) var(--light, #fff);
+    --primary-color-3: var(--dark, #141313) var(--light, #f8f8f8);
+    --primary-color-4: var(--dark, #1a1a1a) var(--light, #f8f8f8);
+    --primary-color-5: var(--dark, #262626) var(--light, #f5f5f5);
+    --primary-color-6: var(--dark, #232323) var(--light, #e5e5e5);
+    --primary-color-7: var(--dark, #3e3e3e) var(--light, #b0b0b0);
+    --secondary-color: var(--dark, #fff) var(--light, #000);
+    --secondary-color-1: var(--dark, #fafafa) var(--light, #000);
+    --secondary-color-2: var(--dark, #e6e6e6) var(--light, #0d0d0d);
+    --secondary-color-3: var(--dark, #dcdcdc) var(--light, #2b2b2b);
+    --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
+    --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
+    --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
+    --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
+    --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
+    --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
+    --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
+    --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
+    --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
+    --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
+    --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
+    --success-text-color: var(--dark, #b6fae3) var(--light, #047857);
+    --warning-text-color: var(--dark, #feeac7) var(--light, #b45309);
+    --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
+    --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
+    --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
+    --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
+    --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
+    --chart-5: var(--dark, #f472b6) var(--light, #be185d);
+  }
+  [data-rui-scope][data-accent="blue"][data-accent="blue"],
+[data-rui-scope] [data-accent="blue"][data-accent="blue"],
+[data-accent="blue"][data-accent="blue"] [data-rui-scope] {
+    --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+  }
+  [data-rui-scope][data-accent="green"][data-accent="green"],
+[data-rui-scope] [data-accent="green"][data-accent="green"],
+[data-accent="green"][data-accent="green"] [data-rui-scope] {
+    --accent-color: var(--dark, #4ade80) var(--light, #15803d);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
+  }
+  [data-rui-scope][data-accent="violet"][data-accent="violet"],
+[data-rui-scope] [data-accent="violet"][data-accent="violet"],
+[data-accent="violet"][data-accent="violet"] [data-rui-scope] {
+    --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+  }
+  [data-rui-scope][data-accent="rose"][data-accent="rose"],
+[data-rui-scope] [data-accent="rose"][data-accent="rose"],
+[data-accent="rose"][data-accent="rose"] [data-rui-scope] {
+    --accent-color: var(--dark, #fb7185) var(--light, #be123c);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
+  }
+  [data-rui-scope][data-accent="orange"][data-accent="orange"],
+[data-rui-scope] [data-accent="orange"][data-accent="orange"],
+[data-accent="orange"][data-accent="orange"] [data-rui-scope] {
+    --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
+    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
+    --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
+  }
+}
+/* theme fallback: end */
+
+/* motion tokens: begin (generated, do not edit) */
+/* Each spring preset traced as a CSS easing, so CSS animations feel like the Rust
+ * springs. Use: animation: name var(--spring-snappy-duration) var(--spring-snappy);
+ * Regenerate: UPDATE_MOTION_CSS=1 cargo test -p rust-ui-kit --test motion_css */
+[data-rui-scope] {
+  --spring-gentle: linear(0, 0.006 1.5%, 0.024 3.2%, 0.051 4.9%, 0.093 6.9%, 0.176 10.2%, 0.384 17.7%, 0.477 21.2%, 0.565 24.9%, 0.643 28.5%, 0.709 32.1%, 0.765 35.6%, 0.814 39.2%, 0.854 42.9%, 0.894 47.5%, 0.926 52.4%, 0.952 57.7%, 0.971 63.8%, 0.985 70.5%, 0.993 78.3%, 0.999 88.2%, 1);
+  --spring-gentle-duration: 655ms;
+  --spring-snappy: linear(0, 0.006 1.1%, 0.024 2.4%, 0.057 3.9%, 0.1 5.4%, 0.143 6.7%, 0.197 8.1%, 0.428 14%, 0.537 17%, 0.635 20%, 0.72 22.9%, 0.791 25.9%, 0.85 28.8%, 0.899 32%, 0.938 35.3%, 0.967 38.8%, 0.988 42.5%, 1.002 46.6%, 1.01 51.4%, 1.012 59.3%, 1.003 81.7%, 1);
+  --spring-snappy-duration: 541ms;
+  --spring-bouncy: linear(0, 0.002 0.3%, 0.011 0.7%, 0.025 1.1%, 0.045 1.5%, 0.069 1.9%, 0.098 2.4%, 0.131 2.8%, 0.177 3.3%, 0.25 4%, 0.342 4.8%, 0.44 5.6%, 0.718 7.9%, 0.861 9.1%, 0.927 9.7%, 0.988 10.3%, 1.045 10.9%, 1.097 11.6%, 1.143 12.2%, 1.183 12.8%, 1.213 13.3%, 1.242 13.9%, 1.263 14.4%, 1.282 15%, 1.295 15.6%, 1.304 16.3%, 1.308 17%, 1.305 17.8%, 1.294 18.6%, 1.278 19.4%, 1.254 20.3%, 1.225 21.3%, 1.054 25.9%, 1.017 27%, 0.984 28.1%, 0.952 29.4%, 0.93 30.7%, 0.915 31.9%, 0.907 33.2%, 0.906 34.8%, 0.914 36.5%, 0.931 38.3%, 0.982 42.8%, 1.004 45.1%, 1.02 47.5%, 1.028 50.1%, 1.026 53.7%, 0.999 62.1%, 0.991 66.8%, 0.992 70.7%, 1.002 83.2%, 1);
+  --spring-bouncy-duration: 978ms;
+}
+/* motion tokens: end */
+
+/* Exits are short and plain on purpose: things should leave faster than they arrive. */
+[data-rui-scope] {
+  --motion-exit-duration: 150ms;
+  --motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Density: one multiplier for control heights and their vertical padding (buttons, inputs,
+ * select/combobox/menu rows, tabs, table cells). Set data-density on <html> or on any
+ * container to change just that part of the page. */
+[data-rui-scope] {
+  --density: 1;
+}
+
+[data-rui-scope][data-density="compact"],
+[data-rui-scope] [data-density="compact"],
+[data-density="compact"] [data-rui-scope] {
+  --density: 0.8;
+}
+
+[data-rui-scope][data-density="comfortable"],
+[data-rui-scope] [data-density="comfortable"],
+[data-density="comfortable"] [data-rui-scope] {
+  --density: 1.2;
+}
+
+/* Icons (components/icons). `IconSize::Sm` etc. read these sizes; the default is lg (24px, like
+   Lucide). Icons without their own `stroke_width` draw with --icon-stroke-width. `:where()` keeps these
+   at zero specificity, so a component's or app's own icon CSS wins. */
+[data-rui-scope] {
+  --icon-size-xs: 0.75rem;
+  --icon-size-sm: 1rem;
+  --icon-size-md: 1.25rem;
+  --icon-size-lg: 1.5rem;
+  --icon-size-xl: 2rem;
+  --icon-stroke-width: 2;
+}
+
+:where([data-rui-scope] svg[data-icon][data-size="xs"]) { width: var(--icon-size-xs); height: var(--icon-size-xs); }
+:where([data-rui-scope] svg[data-icon][data-size="sm"]) { width: var(--icon-size-sm); height: var(--icon-size-sm); }
+:where([data-rui-scope] svg[data-icon][data-size="md"]) { width: var(--icon-size-md); height: var(--icon-size-md); }
+:where([data-rui-scope] svg[data-icon][data-size="lg"]) { width: var(--icon-size-lg); height: var(--icon-size-lg); }
+:where([data-rui-scope] svg[data-icon][data-size="xl"]) { width: var(--icon-size-xl); height: var(--icon-size-xl); }
+:where([data-rui-scope] svg[data-icon][data-stroke="theme"]) { stroke-width: var(--icon-stroke-width); }
+
+/* Arrows, chevrons, undo and the like point along the reading direction. `scale` (not
+   `transform`) so a component's own rotation still applies. */
+[data-rui-scope] svg[data-mirror-rtl]:dir(rtl) { scale: -1 1; }
+@supports not selector(:dir(rtl)) {
+  [data-rui-scope][dir="rtl"] svg[data-mirror-rtl],
+[data-rui-scope] [dir="rtl"] svg[data-mirror-rtl],
+[dir="rtl"] [data-rui-scope] svg[data-mirror-rtl] { scale: -1 1; }
+}
+
+/* Visually hidden, still read by screen readers: `span { class: "sr-only", "Close" }` for an
+   icon-only button. A plain global class (not a CSS module), so app code can use it too. */
+[data-rui-scope] .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Respect the OS "reduce motion" setting for every component (docs/GUARDRAILS.md). */
+@media (prefers-reduced-motion: reduce) {
+  [data-rui-scope] *,
+[data-rui-scope] *::before,
+[data-rui-scope] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Forced colors (Windows High Contrast): the browser drops box-shadow and repaints
+ * backgrounds, and most controls here draw their edge and focus ring with box-shadow.
+ * Give every control a system-colour outline instead; outlines don't move layout.
+ * `html:root` lifts these above the components' own `.class:focus-visible` rules.
+ * Checked by tests/e2e/forced_colors.mjs. */
+@media (forced-colors: active) {
+  [data-rui-scope][data-rui-scope] :is(
+      input:not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"]),
+      textarea,
+      select,
+      [role="checkbox"],
+      [role="switch"],
+      [role="slider"],
+      [role="combobox"],
+      [role="tab"][aria-selected="true"],
+      button[aria-haspopup]
+    ) {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+  }
+  [data-rui-scope][data-rui-scope] :is(input, textarea, select, button, [role], [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+}

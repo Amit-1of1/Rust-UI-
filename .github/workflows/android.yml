@@ -1,0 +1,100 @@
+name: Android
+
+# The kit on Android, in the system webview (dioxus `mobile`): the same path as desktop, with
+# JavaScript, so every component behaves as on the web. Native (Blitz) on Android is not wired
+# up yet (apps/showcase/README.md).
+#
+# - `check` type-checks the gallery for both Android ABIs. It needs no NDK, so it is cheap and
+#   runs on every PR.
+# - `emulator` builds a debug APK with dx, boots an x86_64 emulator, installs and launches the
+#   gallery, and fails if the app crashes or panics. It is slow, so it runs on a schedule, by
+#   hand, and on PRs that change this file or the gallery's Android setup.
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, x86_64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: android
+      - run: cargo check -p gallery --no-default-features --features mobile --target aarch64-linux-android
+      - run: cargo check -p gallery --no-default-features --features mobile --target x86_64-linux-android
+
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.filter.outputs.android }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "android=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
+              | grep -qE '^(\.github/workflows/android\.yml|apps/gallery/(Cargo|Dioxus)\.toml)$'; then
+            echo "android=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "android=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  emulator:
+    needs: changes
+    if: needs.changes.outputs.android == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: android-emulator
+      - name: Install dx
+        run: cargo install dioxus-cli --version 0.7.10 --locked
+      - name: Build the APK
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME"
+          export NDK_HOME="$ANDROID_NDK_LATEST_HOME"
+          cd apps/gallery
+          dx build --platform android --target x86_64-linux-android
+          find "$GITHUB_WORKSPACE/target/dx" -name '*.apk' | tee /tmp/apks
+          test -s /tmp/apks
+      - name: Run it on an emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: bash .github/android-smoke.sh "$(head -1 /tmp/apks)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-emulator
+          path: |
+            gallery.png
+            logcat.txt
+            app-log.txt
+          if-no-files-found: ignore
