@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 use rust_ui_cli::update::{self, Lock};
 use rust_ui_cli::{
-    add_to, build, compare, load, materialize, mod_lines_of, resolve, to_json, FileState, Kind,
-    THEME_FILE,
+    add_to, build, compare, load, materialize, mod_lines_of, pro_notice, resolve, to_json,
+    FileState, Kind, Tier, THEME_FILE,
 };
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -26,7 +26,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
-    /// List every component and block in the registry.
+    /// List every component and block in the registry (Pro items are marked).
     List,
     /// Regenerate registry.json from the component folders (`--check` only verifies it).
     Registry {
@@ -111,6 +111,25 @@ enum Command {
     /// Print a component's page for coding agents (docs, props, example), or the index
     /// (`llms.txt`) without a name.
     Docs { name: Option<String> },
+    /// Describe the app for a coding agent: Dioxus version, theme, installed items and which
+    /// of them you edited, skill and MCP setup. Reads only the app; `--json` for agents.
+    Info {
+        /// The app to inspect.
+        #[arg(long, default_value = ".")]
+        project: PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Install the agent skill (`skills/rust-ui/SKILL.md`) into the app, or print it.
+    Skill {
+        /// Where to write it; Claude Code reads `.claude/skills/`, other agents may use
+        /// `.agents/skills/rust-ui/SKILL.md`.
+        #[arg(long, default_value = rust_ui_cli::info::SKILL_DEST)]
+        dest: PathBuf,
+        /// Print it instead of writing it.
+        #[arg(long)]
+        print: bool,
+    },
     /// Print the keyboard and accessibility contracts (`contract.toml`): the docs table, or
     /// with `--json` every row's test steps, which the keyboard test runners read.
     Contract {
@@ -169,9 +188,17 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
     match cli.command {
         Command::List => {
             for item in load(root)?.items {
-                match item.kind {
-                    Kind::Component => println!("{}", item.name),
-                    Kind::Block => println!("{} (block)", item.name),
+                let mut tags = Vec::new();
+                if item.kind == Kind::Block {
+                    tags.push("block");
+                }
+                if item.tier == Tier::Pro {
+                    tags.push("pro");
+                }
+                if tags.is_empty() {
+                    println!("{}", item.name);
+                } else {
+                    println!("{} ({})", item.name, tags.join(", "));
                 }
             }
         }
@@ -231,6 +258,9 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 if !lines.is_empty() {
                     println!("\nAdd to {}/mod.rs:\n{lines}", dir.display());
                 }
+            }
+            if let Some(notice) = pro_notice(&items) {
+                println!("\n{notice}");
             }
         }
         Command::New { name } => {
@@ -366,6 +396,36 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 css.held.len(),
                 css.unused.len()
             );
+        }
+        Command::Info { project, json } => {
+            let info = rust_ui_cli::info::gather(&project, &cli.lock)?;
+            if json {
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&info).map_err(|e| e.to_string())?
+                );
+            } else {
+                print!("{}", rust_ui_cli::info::render(&info));
+            }
+        }
+        Command::Skill { dest, print } => {
+            let skill =
+                std::fs::read_to_string(root.join(rust_ui_cli::info::SKILL_FILE)).map_err(|e| {
+                    format!(
+                        "{} in {}: {e}; pass --source <the kit's git URL or checkout>",
+                        rust_ui_cli::info::SKILL_FILE,
+                        root.display()
+                    )
+                })?;
+            if print {
+                print!("{skill}");
+            } else {
+                if let Some(parent) = dest.parent() {
+                    std::fs::create_dir_all(parent).map_err(err)?;
+                }
+                std::fs::write(&dest, skill).map_err(err)?;
+                println!("wrote {}", dest.display());
+            }
         }
         Command::Docs { name } => {
             use rust_ui_cli::llms::{index, page};
