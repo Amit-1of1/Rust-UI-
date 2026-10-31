@@ -1,0 +1,180 @@
+{
+  "engine": "chromium",
+  "byCost": {
+    "composite": 124,
+    "paint": 373,
+    "layout": 6
+  },
+  "perComponent": {
+    "accordion": {
+      "layouts": 13,
+      "animations": 6,
+      "frames": 65,
+      "p95": 16.700000000000045,
+      "max": 50
+    },
+    "alert_dialog": {
+      "layouts": 10,
+      "animations": 39,
+      "frames": 84,
+      "p95": 16.800000000000068,
+      "max": 50
+    },
+    "chart": {
+      "layouts": 260,
+      "animations": 0,
+      "frames": 171,
+      "p95": 33.299999999999955,
+      "max": 33.40000000000009
+    },
+    "chat": {
+      "layouts": 18,
+      "animations": 11,
+      "frames": 51,
+      "p95": 16.800000000000182,
+      "max": 33.299999999999955
+    },
+    "chat_composer": {
+      "layouts": 46,
+      "animations": 38,
+      "frames": 50,
+      "p95": 16.800000000000068,
+      "max": 16.800000000000068
+    },
+    "checkbox": {
+      "layouts": 4,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "collapsible": {
+      "layouts": 7,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "combobox": {
+      "layouts": 117,
+      "animations": 6,
+      "frames": 99,
+      "p95": 33.299999999999955,
+      "max": 99.90000000000009
+    },
+    "command": {
+      "layouts": 17,
+      "animations": 54,
+      "frames": 116,
+      "p95": 33.39999999999998,
+      "max": 133.30000000000007
+    },
+    "dialog": {
+      "layouts": 16,
+      "animations": 216,
+      "frames": 170,
+      "p95": 16.799999999999955,
+      "max": 66.70000000000005
+    },
+    "dropdown_menu": {
+      "layouts": 188,
+      "animations": 8,
+      "frames": 166,
+      "p95": 16.799999999999955,
+      "max": 49.90000000000009
+    },
+    "menubar": {
+      "layouts": 113,
+      "animations": 16,
+      "frames": 123,
+      "p95": 16.800000000000068,
+      "max": 50
+    },
+    "multi_select": {
+      "layouts": 10,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "number_field": {
+      "layouts": 30,
+      "animations": 7,
+      "frames": 62,
+      "p95": 16.800000000000068,
+      "max": 33.39999999999998
+    },
+    "popover": {
+      "layouts": 55,
+      "animations": 18,
+      "frames": 49,
+      "p95": 16.799999999999955,
+      "max": 33.39999999999998
+    },
+    "radio_group": {
+      "layouts": 9,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "select": {
+      "layouts": 223,
+      "animations": 22,
+      "frames": 193,
+      "p95": 33.30000000000007,
+      "max": 100
+    },
+    "slider": {
+      "layouts": 12,
+      "animations": 4,
+      "frames": 32,
+      "p95": 16.799999999999955,
+      "max": 33.30000000000007
+    },
+    "switch": {
+      "layouts": 3,
+      "animations": 3,
+      "frames": 10,
+      "p95": 16.700000000000045,
+      "max": 16.700000000000045
+    },
+    "tabs": {
+      "layouts": 16,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "time_picker": {
+      "layouts": 32,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "toggle": {
+      "layouts": 4,
+      "animations": 8,
+      "frames": 17,
+      "p95": 50,
+      "max": 50
+    },
+    "tool_call": {
+      "layouts": 7,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "toolbar": {
+      "layouts": 6,
+      "animations": 0,
+      "frames": 0,
+      "p95": 0,
+      "max": 0
+    }
+  },
+  "trace": 722,
+  "reducedRuns": 921
+}

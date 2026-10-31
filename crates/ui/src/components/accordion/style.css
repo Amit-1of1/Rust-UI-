@@ -49,6 +49,7 @@
 }
 
 @keyframes dx-accordion-slide-down {
+  /* atoll-motion: layout height grid-template-rows (the panel grows to its content height; there is no transform for that) */
 	from {
     height: var(--collapsible-content-width);
 	}
@@ -59,6 +60,7 @@
 }
 
 @keyframes dx-accordion-slide-up {
+  /* atoll-motion: layout height grid-template-rows (the panel grows to its content height; there is no transform for that) */
 	from {
     height: 0;
 	}
