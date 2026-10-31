@@ -3,7 +3,7 @@
 Copy-paste CLI for the [Atoll kit](https://github.com/Amit-1of1/Rust-UI-): it copies components (and the components they depend on) into your Dioxus project, shadcn style.
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli   # installs `atoll`
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli   # installs `atoll`
 atoll --source https://github.com/Amit-1of1/Rust-UI- list
 atoll --source https://github.com/Amit-1of1/Rust-UI- init --dest assets/theme.css
 atoll --source https://github.com/Amit-1of1/Rust-UI- add command --dest src/components

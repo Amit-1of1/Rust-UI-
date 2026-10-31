@@ -18,6 +18,8 @@ dx components add button dialog --git https://github.com/Amit-1of1/Rust-UI-
 dx components add --all --git https://github.com/Amit-1of1/Rust-UI-
 ```
 
+This route needs the repository's default branch on GitHub to be `main` (docs/RELEASE.md, owner step 3): `dx` resolves each component's dependencies (such as `icons`) from the default branch whatever `--rev` you pass, and on 2026-10-31 that was still an old branch, so `dx components add badge --git ... --rev <commit>` stopped with "Component 'icons' not found". Until then use `atoll add` (below), which reads `main`.
+
 `dx` reads the `component.json` next to each component (generated, never edit by hand) and copies the files into `src/components`, adds the crates they need to your `Cargo.toml` (`atoll-primitives` at the pinned revision, plus icons, time, palette and so on) and copies `theme.css` into `assets/`. Demos are not copied: they live in `crates/ui/src/demos`, outside the component folders. Add `mod components;` to `main.rs` and load the theme with `document::Stylesheet`.
 
 Components name each other with this repository's URL, so `dialog` pulls in `button` from the same place.
@@ -27,7 +29,7 @@ Components name each other with this repository's URL, so `dialog` pulls in `but
 ### With our own CLI
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli   # installs `atoll`
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli   # installs `atoll`
 export ATOLL_SOURCE=https://github.com/Amit-1of1/Rust-UI-
 atoll init                 # theme.css into assets/
 atoll add button dialog    # components into src/components

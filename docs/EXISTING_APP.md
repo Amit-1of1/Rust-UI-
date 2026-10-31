@@ -30,7 +30,7 @@ before you move on.
 From the app's root (where its `Cargo.toml` is):
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli
 export ATOLL_SOURCE=https://github.com/Amit-1of1/Rust-UI-
 
 atoll init --scoped          # the theme, confined to ThemeScope; checks your Dioxus version and CSS
