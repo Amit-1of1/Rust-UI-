@@ -3,4 +3,5 @@
 # fixes (docs/FORKS.md) are not ported to 0.8 yet, and stock 0.8's splitter panics on our apps
 # ("assertion failed: !self.dead.contains(&id)"), so scripts/release-web.sh does not split here.
 set -euo pipefail
-cargo install dioxus-cli --version 0.8.0-alpha.3 --locked "$@"
+# --force: CI restores a cached ~/.cargo/bin that may hold the 0.7 dx.
+cargo install dioxus-cli --version 0.8.0-alpha.3 --locked --force "$@"
