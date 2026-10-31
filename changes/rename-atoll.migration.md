@@ -1,4 +1,4 @@
-### Renamed to Atoll (PR #PR)
+### Renamed to Atoll (PR #68)
 
 **Who:** every app that used the kit under its old name.
 
