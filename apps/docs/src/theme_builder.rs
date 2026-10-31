@@ -47,7 +47,9 @@ pub fn ThemeBuilderPage() -> Element {
     let mut color = use_signal(|| Rgb(0xfa, 0xcc, 0x15));
     // What the user typed, kept separately so a half-typed hex isn't overwritten.
     let mut typed = use_signal(|| color().hex());
-    let mut dark = use_signal(|| false);
+    // The page's own light/dark mode: light-dark() tokens resolve on <html>, so the preview
+    // follows the whole page rather than a data-theme on its own box.
+    let theme = use_theme();
     let (copy, copied) = use_copy_clipboard();
 
     let brand = color();
@@ -143,15 +145,14 @@ pub fn ThemeBuilderPage() -> Element {
                 h2 { id: "tb-preview", "3. The kit in your colour" }
                 div { class: "tb-row",
                     Switch {
-                        checked: dark(),
-                        aria_label: "Preview in dark mode",
-                        on_checked_change: move |v| dark.set(v),
+                        checked: theme.is_dark(),
+                        aria_label: "Dark mode",
+                        on_checked_change: move |v| theme.set_mode(if v { ThemeMode::Dark } else { ThemeMode::Light }),
                     }
-                    span { "Dark mode preview" }
+                    span { "Dark mode (the whole page)" }
                 }
                 div {
                     class: "tb-preview",
-                    "data-theme": if dark() { "dark" } else { "light" },
                     "data-accent": NAME,
                     div { class: "tb-row",
                         Button { variant: ButtonVariant::Primary, "Start free trial" }
