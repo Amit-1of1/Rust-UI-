@@ -44,7 +44,7 @@ use ui::prelude::*;
 fn App() -> Element {
     let mut open = use_signal(|| false);
     rsx! {
-        ThemeStyles {}   // the theme and every component's styles; render it once, at the root
+        ThemeStyles { reset: true }   // theme, component styles and base page styles; once, at the root
         Button { onclick: move |_| open.set(true), "Say hello" }
         Dialog {
             open: open(),
@@ -84,7 +84,7 @@ Real apps built only from the kit, in the repository's `apps/` folder (run any w
 | `can't find crate for core` / wasm target missing | `rustup target add wasm32-unknown-unknown` |
 | `dx` says the Dioxus versions differ | Install `dioxus-cli` 0.7.10 (the version in step 1); the app is on Dioxus 0.7. |
 | `no matching package named atoll-ui found` | The release isn't on crates.io yet: recreate with `atoll create my-app --git`, or change the `ui` line in `Cargo.toml` to `ui = { package = "atoll-ui", git = "https://github.com/Amit-1of1/Rust-UI-" }`. |
-| Components render unstyled | `ThemeStyles {}` must be rendered once at the root, and the app built with `dx`, not plain `cargo run` (the stylesheets are `dx` assets). |
+| Components render unstyled | `ThemeStyles { reset: true }` must be rendered once at the root, and the app built with `dx`, not plain `cargo run` (the stylesheets are `dx` assets). |
 | `atoll create` refuses the folder | It already has a `Cargo.toml`; use `atoll init` and `atoll add` there instead. |
 
 `scripts/getting-started-check.sh` in the repository runs this guide against the current checkout (create, then build for the web and check the desktop build) and fails if a step breaks.

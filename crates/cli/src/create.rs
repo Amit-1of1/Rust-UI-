@@ -147,8 +147,9 @@ fn App() -> Element {
     let mut name = use_signal(String::new);
     let mut open = use_signal(|| false);
     rsx! {
-        // Loads the kit's theme and component styles. Render it once, at the root.
-        ThemeStyles {}
+        // Loads the kit's theme and component styles; `reset` adds the page font, colours and
+        // box sizing a new app wants. Render it once, at the root.
+        ThemeStyles { reset: true }
         main { style: "min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;",
             Card { style: "width: 100%; max-width: 26rem;",
                 CardHeader {
