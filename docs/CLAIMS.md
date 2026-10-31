@@ -63,7 +63,7 @@ guarded by CI. **Fixed** was false or unproven; the code or the wording changed 
 | Fastest on 6 of 9 DOM operations (bench/README) | Fixed | Now 4 of 9 (replace 1,000, select, swap, create 10,000). README updated. | `node bench/run.mjs` |
 | 532 lines vs about 1,400 | Fixed | 594 now (the split added `lazy` wrappers); React 1,400, Svelte 1,348. | `wc -l apps/trial/src/*.rs apps/trial/assets/*.css` |
 | Release rebuild after a one-line change: 45 s | Measured | 46 s, twice (`dx build --release`, Taskboard). | change one string in apps/trial, `time dx build --release` |
-| Size budgets in CI | Open | No CI job fails when the download grows. The "Build mind-blowing deep-engineering features" work adds `bench/budgets.json` and `scripts/budgets.mjs`; until it merges, the numbers above are only re-measured by hand. | |
+| Size budgets in CI | Open (PR #77) | No CI job fails when the download grows yet. PR #77 adds `tests/e2e/budgets.mjs` and `bench/budgets.json`: CI fails on more than 10% growth of the first screen, the main wasm or the total download, or 2x startup, from a baseline that matches the numbers above. Move this row to CI when it merges. | `node tests/e2e/budgets.mjs` |
 
 ## Tooling
 
@@ -95,6 +95,17 @@ Checked on 2026-10-31 (web search; numbers are what each project states).
 | Other Dioxus kits are "larger in count" | Fixed (copy) | dioxus-shadcn: 83 components (2026-10-05). dioxus-element-plug: "107+" components. So two kits have more, and Atoll has 80. The crib sheet now says so instead of implying all are bigger. |
 | No other Dioxus kit has an agent skill | False, removed | dioxus-element-plug ships a `SKILL.md` and `AGENTS.md`. What we found no other Dioxus kit doing: an MCP server, tested keyboard contracts, a contrast proof, motion. |
 | Rust/UI has a Dioxus edition | Measured | dioxus.rust-ui.com changelog (components added 2026-08-08). |
+
+## Claims arriving in open PRs
+
+Not claimable until the PR merges; then move each row to its section and mark it CI.
+
+| Claim | PR | Evidence | Reproduce |
+|---|---|---|---|
+| Keyboard state machines exhaustively model-checked: 1,182,416 states, 33.5M transitions, 263 configurations (found and fixed 2 time picker range bugs) | #73 | `crates/ui/tests/model_check.rs` | `cargo test -p atoll-ui --test model_check` |
+| No unexplained layout animation: 173 composite, 74 paint, 24 explained layout | #75 | `crates/cli/tests/motion.rs::no_unexplained_layout_animation_in_the_kit` | `cargo test -p atoll-cli --test motion` |
+| 70 of 70 composite-only overlay animations run on the compositor (Chromium trace); under reduced motion, 0 runs over 1 ms | #75 | `tests/e2e/frames.mjs`, `bench/results/frames-2026-10-31-chromium.json` (Chromium only) | `node tests/e2e/frames.mjs` |
+| CI fails on >10% download growth or 2x startup | #77 | `tests/e2e/budgets.mjs`, `bench/budgets.json` | `node tests/e2e/budgets.mjs` |
 
 ## Not claimed, on purpose
 
