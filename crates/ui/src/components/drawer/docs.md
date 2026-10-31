@@ -17,7 +17,7 @@ It is built on the dialog primitive plus the motion layer's vertical `SwipeDismi
 ## Accessibility
 
 - Role and name: a modal `dialog` named by its `title` (a required prop: leaving it out is a compile error; `hide_title` hides it visually) and described by `description` or a `DrawerDescription` child; the handle is decorative (`aria-hidden`).
-- Keyboard: focus is trapped inside; Escape closes; the Close button always works, so dragging is never required.
+- Dragging is never required: the Close button always works, and the keyboard table below covers the rest.
 - Reduced motion: the slide-in is removed and the drag release becomes a near-instant tween.
 
 ## Source

@@ -20,12 +20,29 @@ It is built on the dialog primitive plus the motion layer's vertical `SwipeDismi
 ## Accessibility
 
 - Role and name: a modal `dialog` named by its `title` (a required prop: leaving it out is a compile error; `hide_title` hides it visually) and described by `description` or a `DrawerDescription` child; the handle is decorative (`aria-hidden`).
-- Keyboard: focus is trapped inside; Escape closes; the Close button always works, so dragging is never required.
+- Dragging is never required: the Close button always works, and the keyboard table below covers the rest.
 - Reduced motion: the slide-in is removed and the drag release becomes a near-instant tween.
 
 ## Source
 
 Original to this repo, on `dioxus-primitives` dialog and `crates/motion`. Rust/UI's `drawer.rs` was only used to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the drawer and moves focus into it. | yes |
+| Tab | Inside the drawer | Moves to the next control; focus stays in the drawer. | yes |
+| Escape | Inside the drawer | Closes the drawer and returns focus to the button that opened it. | yes |
+
+States:
+
+- `open`: The drawer is shown over the page.
+- `closed`: Only the button that opens it is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

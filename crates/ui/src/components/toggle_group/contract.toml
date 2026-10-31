@@ -1,0 +1,78 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Toolbar (group of toggle buttons)"
+apg = "toolbar"
+roles = ["group"]
+
+[parts]
+group = "[role=group]"
+item = "[role=group] button"
+
+[[keys]]
+key = "Space"
+when = "On a toggle"
+does = "Turns it on or off (aria-pressed)."
+native = true
+test = """
+focus item@1
+press Space
+attr item@1 aria-pressed=true
+press Space
+attr item@1 aria-pressed=false
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a toggle"
+does = "Turns it on or off (aria-pressed)."
+native = true
+test = """
+focus item@2
+press Enter
+attr item@2 aria-pressed=true
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On a toggle"
+does = "Moves focus to the next toggle."
+native = true
+test = """
+focus item@1
+press ArrowRight
+focused item@2
+focus-in group
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a toggle"
+does = "Moves focus to the previous toggle."
+native = true
+test = """
+focus item@2
+press ArrowLeft
+focused item@1
+"""
+
+[[keys]]
+key = "Home"
+when = "On a toggle"
+does = "Moves focus to the first toggle."
+native = true
+test = """
+focus item@3
+press Home
+focused item@1
+"""
+
+[[keys]]
+key = "End"
+when = "On a toggle"
+does = "Moves focus to the last toggle."
+native = true
+test = """
+focus item@1
+press End
+focused item@3
+"""

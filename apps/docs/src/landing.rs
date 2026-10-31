@@ -2,8 +2,9 @@
 //! launch offers (Founding licence, design partners). Built from kit components only, like
 //! every page here, so the landing page is itself a demo of the kit.
 //!
-//! Every claim on this page must be true of `main`; the numbers come from `bench/README.md`
-//! and the generated component list.
+//! Every claim on this page must be true of `main` and has a row in `docs/CLAIMS.md`. The
+//! numbers come from `bench/README.md` and the generated component list;
+//! `crates/cli/tests/claims.rs` checks both.
 
 use crate::generated::{demo, ENTRIES};
 use crate::pricing::{FOUNDING_ENDS, PRODUCT};
@@ -16,11 +17,15 @@ pub const REPO_URL: &str = "https://github.com/Amit-1of1/Rust-UI-";
 /// Where a design partner applies: a prefilled issue, so no account set-up is needed.
 const PARTNER_URL: &str = "https://github.com/Amit-1of1/Rust-UI-/issues/new?title=Design%20partner%3A%20%3Cyour%20app%3E&body=App%20and%20link%3A%0AWhat%20you%20want%20to%20build%20first%3A%0ADioxus%20version%20and%20platforms%3A%0A";
 
+/// Registry items that are support code (hooks, the icon set, translated strings), not
+/// components. `crates/cli/tests/claims.rs` keeps this list in step with the registry.
+const UTILITIES: &[&str] = &["hooks", "icons", "ui_strings"];
+
 /// The reasons to pick this kit, each one checkable in the repository.
 const FEATURES: &[(&str, &str)] = &[
     (
         "Keyboard-tested, not just keyboard-friendly",
-        "Every component ships a keyboard contract (what Tab, Escape and the arrows do) and CI runs it, with axe checks in Chromium, Firefox and WebKit. A dialog without a title or an icon button without a label doesn't compile.",
+        "Every demo is scanned with axe and walked with Tab alone in Chromium, Firefox and WebKit on every change. The menus, dialogs, pickers and other widgets ship a keyboard contract (what Tab, Escape and the arrows do) whose every row runs as a test. A dialog without a title or an icon button without a label doesn't compile.",
     ),
     (
         "Motion that respects people",
@@ -48,7 +53,7 @@ const FEATURES: &[(&str, &str)] = &[
 const TRADE_OFFS: &[(&str, &str)] = &[
     (
         "Download size",
-        "Wasm is bigger than JavaScript: the benchmark app's first screen is 287 KB (brotli, split wasm) against 103 KB for the same app in React. Startup after download is a tie.",
+        "Wasm is bigger than JavaScript: the benchmark app's first screen is 306 KB (brotli, split wasm) against 101 KB for the same app in React, so about 1.3 s more on slow 4G. Startup after download is a tie.",
     ),
     (
         "Native renderer",
@@ -62,14 +67,18 @@ const TRADE_OFFS: &[(&str, &str)] = &[
 
 #[component]
 pub fn LandingPage() -> Element {
-    let count = ENTRIES.len();
+    let count = ENTRIES
+        .iter()
+        .filter(|e| !UTILITIES.contains(&e.name))
+        .count();
+    let contracts = ENTRIES.iter().filter(|e| !e.contract.is_empty()).count();
     rsx! {
         document::Title { "{PRODUCT}: accessible, animated components for Dioxus" }
         section { class: "landing-hero", "aria-labelledby": "page-title",
             Badge { "For Dioxus 0.7 · web and desktop" }
             h1 { id: "page-title", tabindex: "-1", {PRODUCT} }
             p { class: "docs-lede landing-tagline",
-                "Accessible, animated components for Rust apps. Copy them into your app with one command; every one of them is keyboard-tested in three browsers."
+                "Accessible, animated components for Rust apps. Copy them into your app with one command; every one of them is checked with axe and the keyboard in three browsers."
             }
             div { class: "landing-actions",
                 a { href: "#start", ..button_look(ButtonVariant::Primary, ButtonSize::Default), "Get started" }
@@ -83,6 +92,7 @@ pub fn LandingPage() -> Element {
 
         ul { class: "landing-stats", "aria-label": "At a glance",
             li { strong { "{count}" } span { "components, plus page blocks" } }
+            li { strong { "{contracts}" } span { "keyboard contracts, every key tested" } }
             li { strong { "3" } span { "browsers checked with axe in CI" } }
             li { strong { "0" } span { "Tailwind build steps" } }
             li { strong { "Free" } span { "kit, MIT or Apache-2.0" } }
