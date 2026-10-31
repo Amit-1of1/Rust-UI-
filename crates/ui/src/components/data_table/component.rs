@@ -71,38 +71,46 @@ pub fn table_view(
     page: usize,
     page_size: usize,
 ) -> TableView {
+    // Lower-cased once per term and per cell, not once per comparison: this runs on every
+    // render, and a selection click re-renders the whole table.
     let terms: Vec<String> = query.split_whitespace().map(str::to_lowercase).collect();
-    let mut indices: Vec<usize> = (0..rows.len())
-        .filter(|&i| {
-            let cells: Vec<String> = rows[i].iter().map(|c| c.to_lowercase()).collect();
-            terms.iter().all(|t| cells.iter().any(|c| c.contains(t)))
-        })
-        .collect();
+    let mut indices: Vec<usize> = if terms.is_empty() {
+        (0..rows.len()).collect()
+    } else {
+        (0..rows.len())
+            .filter(|&i| {
+                let cells: Vec<String> = rows[i].iter().map(|c| c.to_lowercase()).collect();
+                terms.iter().all(|t| cells.iter().any(|c| c.contains(t)))
+            })
+            .collect()
+    };
 
     if let Some((col, direction)) = sort {
         if direction != SortDirection::None && col < columns.len() {
-            let numeric = columns[col].numeric;
             let cell = |i: usize| rows[i].get(col).map(String::as_str).unwrap_or("");
-            indices.sort_by(|&a, &b| {
-                let ord = if numeric {
-                    match (number(cell(a)), number(cell(b))) {
-                        (Some(x), Some(y)) => x.total_cmp(&y),
-                        (Some(_), None) => std::cmp::Ordering::Less,
-                        (None, Some(_)) => std::cmp::Ordering::Greater,
-                        (None, None) => std::cmp::Ordering::Equal,
-                    }
-                } else {
-                    cell(a).to_lowercase().cmp(&cell(b).to_lowercase())
-                };
+            let descending = direction == SortDirection::Descending;
+            if columns[col].numeric {
                 // Unparsable numbers stay last in both directions.
-                if numeric && (number(cell(a)).is_none() || number(cell(b)).is_none()) {
-                    ord
-                } else if direction == SortDirection::Descending {
-                    ord.reverse()
+                let mut keyed: Vec<(Option<f64>, usize)> =
+                    indices.iter().map(|&i| (number(cell(i)), i)).collect();
+                keyed.sort_by(|(x, _), (y, _)| match (x, y) {
+                    (Some(x), Some(y)) if descending => y.total_cmp(x),
+                    (Some(x), Some(y)) => x.total_cmp(y),
+                    (Some(_), None) => std::cmp::Ordering::Less,
+                    (None, Some(_)) => std::cmp::Ordering::Greater,
+                    (None, None) => std::cmp::Ordering::Equal,
+                });
+                indices = keyed.into_iter().map(|(_, i)| i).collect();
+            } else {
+                let mut keyed: Vec<(String, usize)> =
+                    indices.iter().map(|&i| (cell(i).to_lowercase(), i)).collect();
+                if descending {
+                    keyed.sort_by(|(a, _), (b, _)| b.cmp(a));
                 } else {
-                    ord
+                    keyed.sort_by(|(a, _), (b, _)| a.cmp(b));
                 }
-            });
+                indices = keyed.into_iter().map(|(_, i)| i).collect();
+            }
         }
     }
 
@@ -178,7 +186,15 @@ pub fn DataTable(
         }
     }));
 
-    let view = table_view(&columns, &rows, &query(), sort(), page(), page_size);
+    // Filtering and sorting only rerun when the rows, the query, the sort or the page
+    // change, not on a selection click or a parent's unrelated re-render.
+    let view = use_memo(use_reactive(
+        (&columns, &rows, &page_size),
+        move |(columns, rows, page_size)| {
+            table_view(&columns, &rows, &query(), sort(), page(), page_size)
+        },
+    ));
+    let view = view();
     let page_rows = view.rows.clone();
     let all_on_page =
         !page_rows.is_empty() && page_rows.iter().all(|i| selected.read().contains(i));

@@ -23,7 +23,7 @@ fi
 step() { printf '\n== %s\n' "$*"; }
 
 step "clone"
-git clone -q --no-hardlinks "$here" "$dir"
+git clone -q --no-hardlinks -- "$here" "$dir"
 upstream=$(git -C "$here" remote get-url origin 2>/dev/null || echo "$here")
 git -C "$dir" remote remove origin
 git -C "$dir" remote add upstream "$upstream"
