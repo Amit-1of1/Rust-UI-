@@ -9,7 +9,7 @@ rust-version.workspace = true
 
 [dependencies]
 dioxus = { workspace = true, features = ["native"] }
-ui = { workspace = true, features = ["native", "demos"] }
+ui = { workspace = true, features = ["native", "demos", "contract-check"] }
 
 [dev-dependencies]
 # tests/showcase.rs drives the showcase app headless, at desktop and phone sizes.

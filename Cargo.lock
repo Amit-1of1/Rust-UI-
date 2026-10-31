@@ -1953,17 +1953,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dioxus-attributes"
-version = "0.1.0"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=5b21f56542274835bb4a0bac85b84212d2cff862#5b21f56542274835bb4a0bac85b84212d2cff862"
-dependencies = [
- "dioxus-rsx",
- "proc-macro2",
- "quote",
- "syn 2.0.119",
-]
-
-[[package]]
 name = "dioxus-cli-config"
 version = "0.7.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2395,22 +2384,6 @@ dependencies = [
  "futures-util",
  "keyboard-types",
  "rustc-hash 2.1.3",
-]
-
-[[package]]
-name = "dioxus-primitives"
-version = "0.0.1"
-source = "git+https://github.com/Amit-1of1/dioxus-components?rev=5b21f56542274835bb4a0bac85b84212d2cff862#5b21f56542274835bb4a0bac85b84212d2cff862"
-dependencies = [
- "dioxus",
- "dioxus-attributes",
- "dioxus-sdk-time",
- "lazy-js-bundle",
- "num-integer",
- "palette",
- "serde",
- "time",
- "tracing",
 ]
 
 [[package]]
@@ -6887,6 +6860,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c20b6793b5c2fa6553b250154b78d6d0db37e72700ae35fad9387a46f487c97"
 
 [[package]]
+name = "rust-ui-attributes"
+version = "0.1.0"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b#fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+dependencies = [
+ "dioxus-rsx",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "rust-ui-cli"
 version = "0.1.0"
 dependencies = [
@@ -6914,7 +6898,6 @@ name = "rust-ui-kit"
 version = "0.1.0"
 dependencies = [
  "dioxus",
- "dioxus-primitives",
  "dioxus-sdk-time",
  "dioxus-ssr",
  "palette",
@@ -6922,6 +6905,7 @@ dependencies = [
  "rust-ui-form-derive",
  "rust-ui-kit",
  "rust-ui-motion",
+ "rust-ui-primitives",
  "serde",
  "strum",
  "time",
@@ -6940,6 +6924,22 @@ dependencies = [
  "dioxus-motion",
  "dioxus-ssr",
  "web-sys",
+]
+
+[[package]]
+name = "rust-ui-primitives"
+version = "0.1.0"
+source = "git+https://github.com/Amit-1of1/dioxus-components?rev=fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b#fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
+dependencies = [
+ "dioxus",
+ "dioxus-sdk-time",
+ "lazy-js-bundle",
+ "num-integer",
+ "palette",
+ "rust-ui-attributes",
+ "serde",
+ "time",
+ "tracing",
 ]
 
 [[package]]
