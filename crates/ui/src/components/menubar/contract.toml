@@ -71,12 +71,23 @@ state file-open
 [[keys]]
 key = "Escape"
 when = "In an open menu"
-does = "Closes the menu and returns focus to its menubar item."
+does = "Closes the menu."
 native = true
 test = """
 focus top@1
 press ArrowDown
 press Escape
 state file-closed
+"""
+
+[[keys]]
+key = "Escape"
+when = "After the menu closes"
+does = "Focus goes back to the menubar item that opened it."
+native = false
+test = """
+focus top@1
+press ArrowDown
+press Escape
 focused top@1
 """

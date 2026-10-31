@@ -4218,7 +4218,7 @@ DropdownMenu {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -4226,7 +4226,7 @@ Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu
 | Space | On the trigger | Opens the menu, as Enter does. | yes |
 | ArrowDown | In the open menu | Moves focus to the first item, then to the next one. | yes |
 | ArrowUp | In the open menu | Moves focus to the previous item, wrapping from the first to the last. | yes |
-| Enter | On an item | Chooses the item, closes the menu and returns focus to the trigger. | yes |
+| Enter | On an item | Chooses the item, closes the menu and returns focus to the trigger. | not yet |
 | Escape | In the open menu | Closes the menu and returns focus to the trigger. | yes |
 
 States:
@@ -6400,7 +6400,7 @@ Menubar {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -6408,7 +6408,8 @@ Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar
 | ArrowLeft | On a menu bar item | Moves focus to the previous menu bar item. | yes |
 | ArrowDown | On a menu bar item | Opens its menu and moves focus to the first item. | yes |
 | Enter | On a menu bar item | Opens or closes its menu. | yes |
-| Escape | In an open menu | Closes the menu and returns focus to its menubar item. | yes |
+| Escape | In an open menu | Closes the menu. | yes |
+| Escape | After the menu closes | Focus goes back to the menubar item that opened it. | not yet |
 
 States:
 
@@ -7326,15 +7327,17 @@ Select::<String> { aria_label: "Fruit", /* options */ }
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the trigger | Opens the list. | yes |
 | Space | On the trigger | Opens the list. | yes |
 | ArrowDown | In the open list | Moves focus to the first option, then to the next one, skipping disabled ones. | yes |
-| Enter | On an option | Picks the option, closes the list, shows the value on the trigger and returns focus to it. | yes |
-| Escape | In the open list | Closes the list without changing the value and returns focus to the trigger. | yes |
+| Enter | On an option | Picks the option, closes the list and shows the value on the trigger. | yes |
+| Enter | After picking an option | Focus goes back to the trigger. | not yet |
+| Escape | In the open list | Closes the list without changing the value. | yes |
+| Escape | After the list closes | Focus goes back to the trigger. | not yet |
 
 States:
 
