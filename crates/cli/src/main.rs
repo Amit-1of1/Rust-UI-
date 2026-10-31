@@ -133,6 +133,16 @@ enum Command {
         #[arg(long)]
         theme: Vec<PathBuf>,
     },
+    /// Audit what every animation and transition costs the browser (composite, paint or
+    /// layout). Layout animations fail unless an `atoll-motion: layout` comment explains them.
+    Motion {
+        /// Stylesheets to audit instead of the kit's own (repeatable).
+        #[arg(long)]
+        css: Vec<PathBuf>,
+        /// List every animated property, not only the layout ones.
+        #[arg(long)]
+        all: bool,
+    },
     /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
     /// the colours of a logo.
     Theme {
@@ -487,6 +497,32 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 failures.len()
             );
             if !failures.is_empty() {
+                return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Motion { css, all } => {
+            use atoll_cli::motion::{run as motion, Cost};
+            let report = motion(root, &css)?;
+            for f in &report.findings {
+                if all || f.cost == Cost::Layout {
+                    let tag = match (f.cost, &f.allowed) {
+                        (Cost::Layout, None) => "fail",
+                        (Cost::Layout, Some(_)) => "allowed",
+                        _ => "ok",
+                    };
+                    println!("{tag} {f}");
+                }
+            }
+            let errors = report.errors().len();
+            println!(
+                "{} stylesheets: {} composite, {} paint, {} layout ({} explained, {errors} not)",
+                report.files,
+                report.count(Cost::Composite),
+                report.count(Cost::Paint),
+                report.count(Cost::Layout),
+                report.count(Cost::Layout) - errors,
+            );
+            if errors > 0 {
                 return Ok(ExitCode::FAILURE);
             }
         }

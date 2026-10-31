@@ -39,6 +39,7 @@
 }
 
 .dx-sidebar-hide-on-collapse {
+  /* atoll-motion: layout max-height padding (demo content folds away, giving its space back) */
   transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, visibility 0ms 0ms;
 }
 
@@ -48,6 +49,7 @@
   padding: 0;
   opacity: 0;
   pointer-events: none;
+  /* atoll-motion: layout max-height padding (demo content folds away, giving its space back) */
   transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, visibility 0ms 200ms;
   visibility: hidden;
 }

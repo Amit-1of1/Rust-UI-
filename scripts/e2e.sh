@@ -106,6 +106,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
   step "[$engine] component contracts (docs pages)"; e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node contracts.mjs
+  step "[$engine] motion cost of every contract row";  e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node frames.mjs
   step "[$engine] keyboard-only walkthrough";        e2e env GALLERY_URL=$G node walkthrough.mjs
   step "[$engine] accessibility tree (roles, names, states)"; e2e env GALLERY_URL=$G node a11y_tree.mjs
   step "[$engine] density presets (gallery)";        e2e env GALLERY_URL=$G node density.mjs
