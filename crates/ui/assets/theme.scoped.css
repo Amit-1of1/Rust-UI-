@@ -1,4 +1,4 @@
-/* Generated from theme.css by `rust-ui registry`; do not edit.
+/* Generated from theme.css by `atoll registry`; do not edit.
  * The same rules, applied only inside an element with data-rui-scope (ThemeScope
  * renders one), so they never reach the rest of an existing app. */
 /* Theme tokens for the kit's components. Load this file once, near the root of the app.
@@ -159,7 +159,7 @@
 
 /* theme fallback: begin (generated, do not edit) */
 /* For browsers without light-dark(): the same tokens as space toggles.
- * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */
+ * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 @supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
   [data-rui-scope][data-rui-scope],
 [data-rui-scope][data-theme][data-theme],
@@ -238,7 +238,7 @@
 /* motion tokens: begin (generated, do not edit) */
 /* Each spring preset traced as a CSS easing, so CSS animations feel like the Rust
  * springs. Use: animation: name var(--spring-snappy-duration) var(--spring-snappy);
- * Regenerate: UPDATE_MOTION_CSS=1 cargo test -p rust-ui-kit --test motion_css */
+ * Regenerate: UPDATE_MOTION_CSS=1 cargo test -p atoll-ui --test motion_css */
 [data-rui-scope] {
   --spring-gentle: linear(0, 0.006 1.5%, 0.024 3.2%, 0.051 4.9%, 0.093 6.9%, 0.176 10.2%, 0.384 17.7%, 0.477 21.2%, 0.565 24.9%, 0.643 28.5%, 0.709 32.1%, 0.765 35.6%, 0.814 39.2%, 0.854 42.9%, 0.894 47.5%, 0.926 52.4%, 0.952 57.7%, 0.971 63.8%, 0.985 70.5%, 0.993 78.3%, 0.999 88.2%, 1);
   --spring-gentle-duration: 655ms;

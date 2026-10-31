@@ -16,7 +16,7 @@ cd "$(dirname "$0")/.."
 
 # Library crates with a public Rust API. form-derive is a proc macro (semver-checks can't read
 # those); the CLI's library is internal (docs/STABILITY.md).
-CRATES=(rust-ui-kit rust-ui-motion)
+CRATES=(atoll-ui atoll-motion)
 
 mode=ref
 base=origin/main
@@ -41,8 +41,8 @@ log=$(mktemp)
 trap 'rm -f "$log"' EXIT
 if [ "$mode" = release ]; then
   version=$(sed -nE 's/^version = "([^"]+)"/\1/p' crates/ui/Cargo.toml | head -1)
-  if ! curl -fsS -A "rust-ui semver.sh" "https://crates.io/api/v1/crates/rust-ui-kit" >/dev/null 2>&1; then
-    echo "rust-ui-kit is not on crates.io yet; comparing with the last tag instead"
+  if ! curl -fsS -A "atoll semver.sh" "https://crates.io/api/v1/crates/atoll-ui" >/dev/null 2>&1; then
+    echo "atoll-ui is not on crates.io yet; comparing with the last tag instead"
     tag=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)
     [ -n "$tag" ] || { echo "no v* tag either: nothing to compare with (first release)"; exit 0; }
     args+=(--baseline-rev "$tag")

@@ -1,12 +1,12 @@
-/* Generated from reset.css by `rust-ui registry`; do not edit.
+/* Generated from reset.css by `atoll registry`; do not edit.
  * The same rules, applied only inside an element with data-rui-scope (ThemeScope
  * renders one), so they never reach the rest of an existing app. */
-/* Optional base styles: `ThemeStyles { reset: true }` or `rust-ui init --reset`.
+/* Optional base styles: `ThemeStyles { reset: true }` or `atoll init --reset`.
  *
- * The page colours and font the kit's contrast proof (`rust-ui contrast`) assumes: text in
+ * The page colours and font the kit's contrast proof (`atoll contrast`) assumes: text in
  * --secondary-color-4 on --primary-color. Without this file the components still work, on
  * whatever background and font the app already has; check that pairing with
- * `rust-ui contrast --theme your.css` when it differs. Kept small on purpose: it is not a
+ * `atoll contrast --theme your.css` when it differs. Kept small on purpose: it is not a
  * full reset, and an app with its own reset should leave it off. */
 [data-rui-scope] *,
 [data-rui-scope] *::before,

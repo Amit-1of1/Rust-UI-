@@ -1,7 +1,7 @@
 # ButtonGroup
 
-- Copy into your app: `rust-ui add button_group` or `dx components add button_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::button_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add button_group` or `dx components add button_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::button_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Joins buttons or inputs into a segmented control, horizontal or vertical.
 

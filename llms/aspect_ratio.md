@@ -1,7 +1,7 @@
 # Aspect ratio
 
-- Copy into your app: `rust-ui add aspect_ratio` or `dx components add aspect_ratio --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::aspect_ratio::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add aspect_ratio` or `dx components add aspect_ratio --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::aspect_ratio::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The AspectRatio component is used to maintain a specific aspect ratio for its children. This is particularly useful for responsive designs where you want to ensure that an element retains its proportions regardless of the screen size.
 

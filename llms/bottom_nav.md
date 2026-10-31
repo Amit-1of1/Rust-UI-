@@ -1,7 +1,7 @@
 # BottomNav
 
-- Copy into your app: `rust-ui add bottom_nav` or `dx components add bottom_nav --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::bottom_nav::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add bottom_nav` or `dx components add bottom_nav --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::bottom_nav::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A mobile-style tab bar of links or buttons.
 

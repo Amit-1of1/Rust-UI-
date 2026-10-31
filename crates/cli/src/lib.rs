@@ -1,10 +1,10 @@
-//! Registry logic for the `rust-ui` CLI.
+//! Registry logic for the `atoll` CLI.
 //!
 //! The registry is shaped like shadcn's: one item per component with its files and
 //! the other registry items it needs. It is generated from the component folders,
 //! so it can't drift from the source.
 //!
-//! Internal: this library is the `rust-ui` binary's implementation, public for the repo's
+//! Internal: this library is the `atoll` binary's implementation, public for the repo's
 //! tests, and may change in any release. The commands are the supported interface; which of
 //! them are stable is in docs/STABILITY.md.
 #![forbid(unsafe_code)]
@@ -16,6 +16,7 @@ pub mod contract;
 #[cfg(test)]
 mod contract_tests;
 pub mod contrast;
+pub mod create;
 pub mod docsgen;
 pub mod doctor;
 pub mod explain;
@@ -36,11 +37,11 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-/// This CLI's version, as `rust-ui --version` prints it.
+/// This CLI's version, as `atoll --version` prints it.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub const COMPONENTS_DIR: &str = "crates/ui/src/components";
-/// Whole screens built from components (`login_01`, ...). `rust-ui add` copies them to
+/// Whole screens built from components (`login_01`, ...). `atoll add` copies them to
 /// `src/blocks/` and their components to `src/components/`.
 pub const BLOCKS_DIR: &str = "crates/ui/src/blocks";
 pub const DEMOS_DIR: &str = "crates/ui/src/demos";
@@ -200,7 +201,7 @@ pub fn build(root: &Path) -> io::Result<Registry> {
         items.push(scan(&blocks, &name, Kind::Block, &names)?);
     }
     Ok(Registry {
-        name: "rust-ui".into(),
+        name: "atoll".into(),
         theme: THEME_FILE.into(),
         cargo_dependencies: ["dioxus", "dioxus-primitives"].map(String::from).to_vec(),
         items,
@@ -284,10 +285,11 @@ pub fn resolve(reg: &Registry, wanted: &[String]) -> Result<Vec<Item>, String> {
         if out.iter().any(|i| i.name == name) {
             continue;
         }
-        let item =
-            reg.items.iter().find(|i| i.name == name).ok_or_else(|| {
-                format!("unknown component or block `{name}` (try `rust-ui list`)")
-            })?;
+        let item = reg
+            .items
+            .iter()
+            .find(|i| i.name == name)
+            .ok_or_else(|| format!("unknown component or block `{name}` (try `atoll list`)"))?;
         stack.extend(item.registry_dependencies.iter().rev().cloned());
         out.push(item.clone());
     }

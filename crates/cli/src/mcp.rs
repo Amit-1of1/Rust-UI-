@@ -1,10 +1,10 @@
-//! `rust-ui mcp`: a [Model Context Protocol](https://modelcontextprotocol.io) server over stdio,
+//! `atoll mcp`: a [Model Context Protocol](https://modelcontextprotocol.io) server over stdio,
 //! so coding agents can list, search, read and add registry items without a shell.
 //!
 //! One JSON-RPC 2.0 message per line on stdin, one reply per line on stdout (the MCP stdio
 //! transport); nothing else is written to stdout. The tools are thin wrappers over the same
-//! functions as `rust-ui list`, `docs`, `add` and `init`, so the answers match the CLI.
-//! The pages are also served as resources (`rust-ui://llms.txt`, `rust-ui://docs/<name>`).
+//! functions as `atoll list`, `docs`, `add` and `init`, so the answers match the CLI.
+//! The pages are also served as resources (`atoll://llms.txt`, `atoll://docs/<name>`).
 
 use crate::docsgen::title;
 use crate::llms::{index, page};
@@ -27,16 +27,16 @@ const INVALID_REQUEST: i64 = -32600;
 const METHOD_NOT_FOUND: i64 = -32601;
 const INVALID_PARAMS: i64 = -32602;
 
-const INDEX_URI: &str = "rust-ui://llms.txt";
-const DOCS_URI: &str = "rust-ui://docs/";
+const INDEX_URI: &str = "atoll://llms.txt";
+const DOCS_URI: &str = "atoll://docs/";
 
 pub struct Server {
-    /// The Rust UI checkout components are read from (`--source`).
+    /// The Atoll checkout components are read from (`--source`).
     root: PathBuf,
     /// The app `add_component` and `init_theme` write into (`--project`).
     project: PathBuf,
-    /// The `--source` as given, recorded in the project's `rust-ui-lock.json` so
-    /// `rust-ui update` can find it again (the checkout path when not set).
+    /// The `--source` as given, recorded in the project's `atoll-lock.json` so
+    /// `atoll update` can find it again (the checkout path when not set).
     source: Option<String>,
 }
 
@@ -109,7 +109,7 @@ impl Server {
                 Ok(json!({
                     "protocolVersion": version,
                     "capabilities": { "tools": {}, "resources": {} },
-                    "serverInfo": { "name": "rust-ui", "title": "Rust UI registry", "version": VERSION },
+                    "serverInfo": { "name": "atoll", "title": "Atoll registry", "version": VERSION },
                     "instructions": INSTRUCTIONS,
                 }))
             }
@@ -406,7 +406,7 @@ impl Server {
         let mut list = vec![json!({
             "uri": INDEX_URI,
             "name": "llms.txt",
-            "title": "Rust UI index",
+            "title": "Atoll index",
             "description": "What the kit is, the rules for using it, and one line per component",
             "mimeType": "text/markdown",
         })];
@@ -438,7 +438,7 @@ impl Server {
     }
 }
 
-const INSTRUCTIONS: &str = "Rust UI is a shadcn-style component kit for Dioxus 0.7. Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add.";
+const INSTRUCTIONS: &str = "Atoll is a shadcn-style component kit for Dioxus 0.7. Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add.";
 
 fn tools() -> Vec<Value> {
     let read_only = json!({ "readOnlyHint": true, "openWorldHint": false });
@@ -446,7 +446,7 @@ fn tools() -> Vec<Value> {
         json!({
             "name": "list_components",
             "title": "List components",
-            "description": "Every component and block in the Rust UI registry, with a one-line description and the components each one depends on.",
+            "description": "Every component and block in the Atoll registry, with a one-line description and the components each one depends on.",
             "inputSchema": { "type": "object", "properties": {
                 "kind": { "type": "string", "enum": ["component", "block", "all"], "description": "Only components or only blocks (whole screens). Default: all." }
             } },
@@ -465,7 +465,7 @@ fn tools() -> Vec<Value> {
         json!({
             "name": "get_component",
             "title": "Read a component's docs",
-            "description": "The page for one component or block: how to install and import it, its docs, the Rust signatures of its props and a working example. Same text as `rust-ui docs <name>`.",
+            "description": "The page for one component or block: how to install and import it, its docs, the Rust signatures of its props and a working example. Same text as `atoll docs <name>`.",
             "inputSchema": { "type": "object", "properties": {
                 "name": { "type": "string", "description": "Registry name, e.g. `dialog` or `login_01`." },
                 "include_source": { "type": "boolean", "description": "Also return every file of the item in full. Default: false." }
@@ -475,7 +475,7 @@ fn tools() -> Vec<Value> {
         json!({
             "name": "add_component",
             "title": "Add components to the project",
-            "description": "Copy components or blocks, and every component they depend on, into the project (like `rust-ui add`). Files the user has edited are kept unless `force` is set.",
+            "description": "Copy components or blocks, and every component they depend on, into the project (like `atoll add`). Files the user has edited are kept unless `force` is set.",
             "inputSchema": { "type": "object", "properties": {
                 "names": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "Registry names to add." },
                 "dest": { "type": "string", "description": "Components folder, relative to the project. Default: src/components." },
@@ -487,7 +487,7 @@ fn tools() -> Vec<Value> {
         json!({
             "name": "init_theme",
             "title": "Add the theme stylesheet",
-            "description": "Copy the kit's theme CSS (colours, light and dark mode, spacing, motion tokens) into the project, like `rust-ui init`. Every component needs it.",
+            "description": "Copy the kit's theme CSS (colours, light and dark mode, spacing, motion tokens) into the project, like `atoll init`. Every component needs it.",
             "inputSchema": { "type": "object", "properties": {
                 "dest": { "type": "string", "description": "Destination, relative to the project. Default: assets/theme.css." },
                 "force": { "type": "boolean", "description": "Overwrite a theme file that differs. Default: false." }

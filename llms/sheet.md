@@ -1,7 +1,7 @@
 # Sheet
 
-- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The sheet component is a panel that slides in from the edge of the screen. It can be used to display additional content, forms, or navigation menus without leaving the current page.
 

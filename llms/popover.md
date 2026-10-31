@@ -1,7 +1,7 @@
 # Popover
 
-- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.
 

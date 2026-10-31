@@ -1,12 +1,12 @@
-# Rust UI
+# Atoll
 
-> Accessible, animated, shadcn-style components for Dioxus 0.7 (web and the desktop webview; native Blitz is a preview). Use them as source copied into your app (`rust-ui add <name>` or `dx components add`) or as the `rust-ui-kit` crate from git.
+> Accessible, animated, shadcn-style components for Dioxus 0.7 (web and the desktop webview; native Blitz is a preview). Use them as source copied into your app (`atoll add <name>` or `dx components add`) or as the `atoll-ui` crate from git.
 
 Rules for writing app code with this kit:
 
-- Copied components are your code: edit them freely. Update them with `rust-ui update` (three-way merge against `rust-ui-lock.json`; `--dry-run` shows the diff), not by re-running `rust-ui add --force`, which overwrites your edits. Resolve any `<<<<<<< yours` conflict markers it leaves.
+- Copied components are your code: edit them freely. Update them with `atoll update` (three-way merge against `atoll-lock.json`; `--dry-run` shows the diff), not by re-running `atoll add --force`, which overwrites your edits. Resolve any `<<<<<<< yours` conflict markers it leaves.
 - Dioxus is pinned to `0.7.x`. Write Dioxus 0.7 code (`#[component]`, `rsx!`, signals); don't use 0.6 or 0.8 APIs.
-- Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `rust-ui init`. Without it components are unstyled.
+- Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `atoll init`. Without it components are unstyled.
 - Import components from `ui::prelude::*` with the crate, or `crate::components::<name>::*` after copying. Icons come from `ui::icons` by path (`ui::icons::Check`), hooks from `ui::hooks`, animation from `ui::motion`.
 - Restyle with `class` (it adds to the kit's class) and the theme's CSS custom properties (`--primary-color`, `--accent-color`, `--radius`, ...). Don't hard-code colours, and don't change a component's markup: ARIA roles, focus and keys come from `dioxus-primitives`.
 - Light and dark mode: `data-theme="light"` or `"dark"` on `<html>`; accent presets: `data-accent="blue|green|violet|rose|orange"`.
@@ -14,12 +14,12 @@ Rules for writing app code with this kit:
 - Don't add JavaScript (`document::eval`) to get behaviour the kit already has. Ctrl+K and other shortcuts go through `ui::hooks::use_hotkey`.
 - Each component page below has its props (the Rust signatures) and a working example. Prefer the example's patterns over guessing prop names.
 
-Paths are relative to the repository root. `rust-ui docs <name>` prints a component page.
+Paths are relative to the repository root. `atoll docs <name>` prints a component page.
 
 ## Docs
 
-- [Installing components](docs/INSTALL.md): copy the source with `rust-ui` or `dx`, or depend on the crate from git
-- [MCP server](docs/MCP.md): `rust-ui mcp` lets MCP clients list, search, read and add components
+- [Installing components](docs/INSTALL.md): copy the source with `atoll` or `dx`, or depend on the crate from git
+- [MCP server](docs/MCP.md): `atoll mcp` lets MCP clients list, search, read and add components
 - [Theming](docs/THEMING.md): light and dark mode, accent presets, a brand colour, radius
 - [Icons](docs/ICONS.md): the Lucide set and when an icon needs a label
 - [Stability](docs/STABILITY.md): which items are stable, experimental or internal
@@ -120,8 +120,8 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 
 # Accordion
 
-- Copy into your app: `rust-ui add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The accordion component is used to display collapsible content panels for presenting information in a limited amount of space. It allows users to expand and collapse sections to view more or less content.
 
@@ -213,8 +213,8 @@ pub fn Demo() -> Element {
 
 # Alert
 
-- Copy into your app: `rust-ui add alert` or `dx components add alert --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::alert::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add alert` or `dx components add alert --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::alert::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A message that interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.
 
@@ -281,8 +281,8 @@ pub fn Demo() -> Element {
 
 # Alert dialog
 
-- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).
 
@@ -455,8 +455,8 @@ pub fn Demo() -> Element {
 
 # Aspect ratio
 
-- Copy into your app: `rust-ui add aspect_ratio` or `dx components add aspect_ratio --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::aspect_ratio::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add aspect_ratio` or `dx components add aspect_ratio --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::aspect_ratio::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The AspectRatio component is used to maintain a specific aspect ratio for its children. This is particularly useful for responsive designs where you want to ensure that an element retains its proportions regardless of the screen size.
 
@@ -510,8 +510,8 @@ pub fn Demo() -> Element {
 
 # Avatar
 
-- Copy into your app: `rust-ui add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Avatar components display a user's profile picture or fallback initials. Use the composable `Avatar`, `AvatarImage`, and `AvatarFallback` primitives when you need full control, or `ImageAvatar` for the common image-with-fallback case.
 
@@ -792,8 +792,8 @@ pub fn Demo() -> Element {
 
 # Badge
 
-- Copy into your app: `rust-ui add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::badge::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::badge::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Badge is a component designed to display small, distinct labels that help highlight important content or status indicators. Perfect for use cases like notifications, status labels, or categorization.
 
@@ -860,8 +860,8 @@ pub fn Demo() -> Element {
 
 # BottomNav
 
-- Copy into your app: `rust-ui add bottom_nav` or `dx components add bottom_nav --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::bottom_nav::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add bottom_nav` or `dx components add bottom_nav --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::bottom_nav::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A mobile-style tab bar of links or buttons.
 
@@ -939,8 +939,8 @@ pub fn Demo() -> Element {
 
 # Breadcrumb
 
-- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
-- Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
+- Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A trail of links to the current page.
 
@@ -1012,8 +1012,8 @@ pub fn Demo() -> Element {
 
 # Button
 
-- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The button element is used to trigger actions or events in a user interface.
 
@@ -1191,8 +1191,8 @@ pub fn Demo() -> Element {
 
 # ButtonGroup
 
-- Copy into your app: `rust-ui add button_group` or `dx components add button_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::button_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add button_group` or `dx components add button_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::button_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Joins buttons or inputs into a segmented control, horizontal or vertical.
 
@@ -1260,8 +1260,8 @@ pub fn Demo() -> Element {
 
 # Calendar
 
-- Copy into your app: `rust-ui add calendar` or `dx components add calendar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::calendar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add calendar` or `dx components add calendar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::calendar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Calendar component is used to display a calendar interface, allowing users to select dates. It provides a grid layout of days for a specific month and year.
 
@@ -1450,8 +1450,8 @@ pub fn Demo() -> Element {
 
 # Callout
 
-- Copy into your app: `rust-ui add callout` or `dx components add callout --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::callout::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add callout` or `dx components add callout --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::callout::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 An inline note (info, success, warning) for docs and forms. Static: use `Alert` for messages that must interrupt.
 
@@ -1512,8 +1512,8 @@ pub fn Demo() -> Element {
 
 # Card
 
-- Copy into your app: `rust-ui add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.
 
@@ -1652,8 +1652,8 @@ pub fn Demo() -> Element {
 
 # Carousel
 
-- Copy into your app: `rust-ui add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::carousel::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::carousel::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons. Nothing auto-plays, so there is no motion to pause.
 
@@ -1727,8 +1727,8 @@ pub fn Demo() -> Element {
 
 # Chart
 
-- Copy into your app: `rust-ui add chart` or `dx components add chart --git https://github.com/Amit-1of1/Rust-UI-` (also copies `table`, `ui_strings`).
-- Import: `use crate::components::chart::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chart` or `dx components add chart --git https://github.com/Amit-1of1/Rust-UI-` (also copies `table`, `ui_strings`).
+- Import: `use crate::components::chart::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Charts drawn as SVG in Rust, coloured from theme tokens. No JavaScript chart library.
 
@@ -2154,8 +2154,8 @@ pub fn Demo() -> Element {
 
 # Chat
 
-- Copy into your app: `rust-ui add chat` or `dx components add chat --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
-- Import: `use crate::components::chat::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chat` or `dx components add chat --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Import: `use crate::components::chat::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage`
 (one message, named by its author), `StreamingText` (a reply that arrives a piece at a time)
@@ -2513,8 +2513,8 @@ pub fn Demo() -> Element {
 
 # Chat composer
 
-- Copy into your app: `rust-ui add chat_composer` or `dx components add chat_composer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `textarea`, `ui_strings`).
-- Import: `use crate::components::chat_composer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chat_composer` or `dx components add chat_composer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `textarea`, `ui_strings`).
+- Import: `use crate::components::chat_composer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The message box of a chat. It grows with the text (CSS `field-sizing`, through
 [`Textarea`](textarea)'s `autosize`), sends with Enter, adds a line with Shift+Enter, and
@@ -2687,8 +2687,8 @@ pub fn Demo() -> Element {
 
 # Checkbox
 
-- Copy into your app: `rust-ui add checkbox` or `dx components add checkbox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::checkbox::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add checkbox` or `dx components add checkbox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::checkbox::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Checkbox component is used to create an accessible checkbox input.
 
@@ -2746,8 +2746,8 @@ pub fn Demo() -> Element {
 
 # Chips
 
-- Copy into your app: `rust-ui add chips` or `dx components add chips --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::chips::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chips` or `dx components add chips --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::chips::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A row of on/off chips for filters and multi-choice tags. Each chip is a native checkbox inside its label; a check mark appears when it is on.
 
@@ -2836,8 +2836,8 @@ pub fn Demo() -> Element {
 
 # Collapsible
 
-- Copy into your app: `rust-ui add collapsible` or `dx components add collapsible --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::collapsible::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add collapsible` or `dx components add collapsible --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::collapsible::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The `Collapsible` component allows users to create expandable sections that can be toggled open or closed. This is useful for displaying content in a compact manner, such as FAQs, menus, or any content that benefits from being hidden until needed.
 
@@ -2918,8 +2918,8 @@ pub fn Demo() -> Element {
 
 # Color picker
 
-- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
-- Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
+- Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Color picker used when the user needs to make a customized color selection.
 
@@ -3164,8 +3164,8 @@ pub fn Demo() -> Element {
 
 # Combobox
 
-- Copy into your app: `rust-ui add combobox` or `dx components add combobox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::combobox::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add combobox` or `dx components add combobox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::combobox::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Combobox component is an autocomplete input with a filterable popup list.
 
@@ -3326,12 +3326,12 @@ pub fn Demo() -> Element {
 
 # Command
 
-- Copy into your app: `rust-ui add command` or `dx components add command --git https://github.com/Amit-1of1/Rust-UI-` (also copies `dialog`, `hooks`, `ui_strings`).
-- Import: `use crate::components::command::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add command` or `dx components add command --git https://github.com/Amit-1of1/Rust-UI-` (also copies `dialog`, `hooks`, `ui_strings`).
+- Import: `use crate::components::command::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A command palette: a search box over a filtered list, inside a dialog. `filter_items` and `step_active` are pure helpers.
 
-Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey` from the `hooks` item, which `rust-ui add command` installs with it. That works on the web only, so keep a visible button too.
+Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey` from the `hooks` item, which `atoll add command` installs with it. That works on the web only, so keep a visible button too.
 
 ## Accessibility
 
@@ -3459,8 +3459,8 @@ pub fn Demo() -> Element {
 
 # Context menu
 
-- Copy into your app: `rust-ui add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::context_menu::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::context_menu::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element. It can contain various menu items that the user can interact with.
 
@@ -3567,8 +3567,8 @@ pub fn Demo() -> Element {
 
 # DataTable
 
-- Copy into your app: `rust-ui add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `table`, `ui_strings`).
-- Import: `use crate::components::data_table::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `table`, `ui_strings`).
+- Import: `use crate::components::data_table::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A table with sorting, a filter box, pagination and optional row selection, built on `Table`.
 
@@ -3740,8 +3740,8 @@ pub fn Demo() -> Element {
 
 # Date picker
 
-- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
-- Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
+- Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.
 
@@ -3973,8 +3973,8 @@ pub fn Demo() -> Element {
 
 # DateTimePicker
 
-- Copy into your app: `rust-ui add date_time_picker` or `dx components add date_time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `date_picker`, `form`, `time_picker`, `ui_strings`).
-- Import: `use crate::components::date_time_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add date_time_picker` or `dx components add date_time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `date_picker`, `form`, `time_picker`, `ui_strings`).
+- Import: `use crate::components::date_time_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled.
 
@@ -4128,8 +4128,8 @@ pub fn Demo() -> Element {
 
 # Dialog
 
-- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
 
@@ -4278,8 +4278,8 @@ pub fn Demo() -> Element {
 
 # Drag and drop list
 
-- Copy into your app: `rust-ui add drag_and_drop_list` or `dx components add drag_and_drop_list --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
-- Import: `use crate::components::drag_and_drop_list::*;` after copying, or `use ui::components::drag_and_drop_list::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add drag_and_drop_list` or `dx components add drag_and_drop_list --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Import: `use crate::components::drag_and_drop_list::*;` after copying, or `use ui::components::drag_and_drop_list::*;` with the `atoll-ui` crate.
 
 Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input.
 
@@ -4576,8 +4576,8 @@ fn task_item(t: TaskView) -> Element {
 
 # Drawer
 
-- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::drawer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::drawer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A panel that slides up from the bottom and can be dragged down to dismiss.
 
@@ -4716,8 +4716,8 @@ pub fn Demo() -> Element {
 
 # Dropdown menu
 
-- Copy into your app: `rust-ui add dropdown_menu` or `dx components add dropdown_menu --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::dropdown_menu::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add dropdown_menu` or `dx components add dropdown_menu --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::dropdown_menu::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The DropdownMenu component is used to create a dropdown menu that can be triggered by a button click. It allows users to select an option from a list of items.
 
@@ -4828,8 +4828,8 @@ pub fn Demo() -> Element {
 
 # Dropzone
 
-- Copy into your app: `rust-ui add dropzone` or `dx components add dropzone --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::dropzone::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add dropzone` or `dx components add dropzone --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::dropzone::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A file picker you can also drop files onto.
 
@@ -4911,8 +4911,8 @@ pub fn Demo() -> Element {
 
 # Empty
 
-- Copy into your app: `rust-ui add empty` or `dx components add empty --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::empty::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add empty` or `dx components add empty --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::empty::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Placeholder for a list, table or page with nothing in it, with optional icon, text and actions. Compose `Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, `EmptyContent`.
 
@@ -5011,8 +5011,8 @@ pub fn Demo() -> Element {
 
 # Field
 
-- Copy into your app: `rust-ui add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::field::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::field::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Wires a label, description and error to a control with matching ids. `use_field_ids()` returns the ids; for most forms use `TextField` from `form`.
 
@@ -5176,8 +5176,8 @@ mod tests {
 
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
-- Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
+- Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
 
@@ -5290,7 +5290,7 @@ Attributes, all inside `#[form(...)]`:
 
 Rules run in that order and the first failure shows. On an optional field the rules only check what was typed. Required fields get `aria-required`, and the errors use the same `aria-invalid` / `aria-describedby` / `role="alert"` wiring as the hand-written fields. Unknown attributes, and ones that don't fit the type (`email` on a number, `required` on an `Option`), are compile errors.
 
-The generated code names the kit as `::ui`. If you copied the form component into your app (`rust-ui add form`), add the `rust-ui-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
+The generated code names the kit as `::ui`. If you copied the form component into your app (`atoll add form`), add the `atoll-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
 
 ## Accessibility
 
@@ -5636,12 +5636,12 @@ pub fn Demo() -> Element {
 
 # Hooks
 
-- Copy into your app: `rust-ui add hooks` or `dx components add hooks --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::hooks::*;` after copying, or `use ui::hooks::{...};` (by path, no glob) with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add hooks` or `dx components add hooks --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::hooks::*;` after copying, or `use ui::hooks::{...};` (by path, no glob) with the `atoll-ui` crate.
 
 Hooks shared by the components and by apps.
 
-The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `rust-ui add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
+The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `atoll add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
 
 | Hook | What it does |
 |---|---|
@@ -5674,7 +5674,7 @@ pub const COPIED_FOR_MS: i32;
 ///
 /// ```rust,ignore
 /// let (copy, copied) = use_copy_clipboard();
-/// rsx! { Button { onclick: move |_| copy.call("cargo add rust-ui".into()),
+/// rsx! { Button { onclick: move |_| copy.call("cargo add atoll".into()),
 ///     if copied() { "Copied" } else { "Copy" } } }
 /// ```
 ///
@@ -5815,7 +5815,7 @@ use crate::components::hooks::{use_copy_clipboard, use_media_query, MOBILE_QUERY
 use crate::components::kbd::{Kbd, KbdGroup};
 use dioxus::prelude::*;
 
-const INSTALL: &str = "rust-ui add hooks";
+const INSTALL: &str = "atoll add hooks";
 
 #[component]
 pub fn Demo() -> Element {
@@ -5856,8 +5856,8 @@ pub fn Demo() -> Element {
 
 # Hover card
 
-- Copy into your app: `rust-ui add hover_card` or `dx components add hover_card --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::hover_card::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add hover_card` or `dx components add hover_card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::hover_card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The HoverCard component can be used to display additional information when a user hovers over an element. It is useful for showing tooltips, additional details, or any other content that should be revealed on hover.
 
@@ -5927,8 +5927,8 @@ pub fn Demo() -> Element {
 
 # Icons
 
-- Copy into your app: `rust-ui add icons` or `dx components add icons --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::icons::*;` after copying, or `use ui::icons::{...};` (by path, no glob) with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add icons` or `dx components add icons --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::icons::*;` after copying, or `use ui::icons::{...};` (by path, no glob) with the `atoll-ui` crate.
 
 The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.
 
@@ -6181,8 +6181,8 @@ fn IconCell(label: &'static str, children: Element) -> Element {
 
 # Input
 
-- Copy into your app: `rust-ui add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.
 
@@ -6260,8 +6260,8 @@ pub fn Demo() -> Element {
 
 # InputGroup
 
-- Copy into your app: `rust-ui add input_group` or `dx components add input_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::input_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add input_group` or `dx components add input_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::input_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 An input with text, icons or buttons attached inside one bordered box.
 
@@ -6347,8 +6347,8 @@ pub fn Demo() -> Element {
 
 # InputOtp
 
-- Copy into your app: `rust-ui add input_otp` or `dx components add input_otp --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::input_otp::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add input_otp` or `dx components add input_otp --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::input_otp::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A one-time-code input: one box per character.
 
@@ -6468,8 +6468,8 @@ pub fn Demo() -> Element {
 
 # Item
 
-- Copy into your app: `rust-ui add item` or `dx components add item --git https://github.com/Amit-1of1/Rust-UI-` (also copies `separator`).
-- Import: `use crate::components::item::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add item` or `dx components add item --git https://github.com/Amit-1of1/Rust-UI-` (also copies `separator`).
+- Import: `use crate::components::item::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A versatile component for displaying content with media, title, description, and actions.
 
@@ -6695,8 +6695,8 @@ fn ChevronRightIcon() -> Element {
 
 # Kbd
 
-- Copy into your app: `rust-ui add kbd` or `dx components add kbd --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::kbd::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add kbd` or `dx components add kbd --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::kbd::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A keyboard key cap, for showing shortcuts.
 
@@ -6749,8 +6749,8 @@ pub fn Demo() -> Element {
 
 # Label
 
-- Copy into your app: `rust-ui add label` or `dx components add label --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::label::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add label` or `dx components add label --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::label::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Label component is used to provide a label for form elements, enhancing accessibility and usability. It is typically used in conjunction with form controls like inputs, selects, and textareas.
 
@@ -6794,8 +6794,8 @@ pub fn Demo() -> Element {
 
 # Link
 
-- Copy into your app: `rust-ui add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::link::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring. `external: true` opens it in a new tab safely and says so; `current: true` marks the page you are on.
 
@@ -6877,8 +6877,8 @@ pub fn Demo() -> Element {
 
 # Marquee
 
-- Copy into your app: `rust-ui add marquee` or `dx components add marquee --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::marquee::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add marquee` or `dx components add marquee --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::marquee::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A looping auto-scrolling strip (logos, quotes).
 
@@ -6935,8 +6935,8 @@ pub fn Demo() -> Element {
 
 # Menubar
 
-- Copy into your app: `rust-ui add menubar` or `dx components add menubar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::menubar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add menubar` or `dx components add menubar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::menubar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Menubar component can be used to display a menu bar with collapsible menus.
 
@@ -7089,8 +7089,8 @@ pub fn Demo() -> Element {
 
 # MultiSelect
 
-- Copy into your app: `rust-ui add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::multi_select::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::multi_select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Pick several options from a list.
 
@@ -7199,8 +7199,8 @@ pub fn Demo() -> Element {
 
 # Navbar
 
-- Copy into your app: `rust-ui add navbar` or `dx components add navbar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::navbar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add navbar` or `dx components add navbar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::navbar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Navbar component can be used to display a navigation bar with collapsible sections.
 
@@ -7257,8 +7257,8 @@ pub fn NavbarItem(props: NavbarItemProps) -> Element
 
 # NumberField
 
-- Copy into your app: `rust-ui add number_field` or `dx components add number_field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `field`, `form`, `icons`, `ui_strings`).
-- Import: `use crate::components::number_field::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add number_field` or `dx components add number_field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `field`, `form`, `icons`, `ui_strings`).
+- Import: `use crate::components::number_field::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights). `NumberField` is the same control bound to a `use_form` field, with a label, a description and the field's error.
 
@@ -7403,8 +7403,8 @@ pub fn Demo() -> Element {
 
 # Pagination
 
-- Copy into your app: `rust-ui add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
 
@@ -7594,8 +7594,8 @@ pub fn Demo() -> Element {
 
 # Popover
 
-- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.
 
@@ -7668,8 +7668,8 @@ pub fn Demo() -> Element {
 
 # Progress
 
-- Copy into your app: `rust-ui add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::progress::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::progress::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Progress component is used to display the progress of a task or operation. It can be used to indicate loading states, file uploads, or any other process that takes time to complete.
 
@@ -7725,8 +7725,8 @@ pub fn Demo() -> Element {
 
 # Radio group
 
-- Copy into your app: `rust-ui add radio_group` or `dx components add radio_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::radio_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add radio_group` or `dx components add radio_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::radio_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set.
 
@@ -7797,8 +7797,8 @@ pub fn Demo() -> Element {
 
 # Scroll area
 
-- Copy into your app: `rust-ui add scroll_area` or `dx components add scroll_area --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::scroll_area::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add scroll_area` or `dx components add scroll_area --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::scroll_area::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The ScrollArea component is used to create a scrollable container for its children. It can be used to enable scrolling for content that overflows the available space.
 
@@ -7854,8 +7854,8 @@ pub fn Demo() -> Element {
 
 # Select
 
-- Copy into your app: `rust-ui add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::select::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups.
 
@@ -8058,8 +8058,8 @@ pub fn Demo() -> Element {
 
 # Separator
 
-- Copy into your app: `rust-ui add separator` or `dx components add separator --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::separator::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add separator` or `dx components add separator --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::separator::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Separator component is a simple horizontal or vertical line that can be used to visually separate content in your application.
 
@@ -8092,7 +8092,7 @@ use dioxus::prelude::*;
 pub fn Demo() -> Element {
     rsx! {
         div { style: "max-width: 20rem;",
-            strong { "Rust UI kit" }
+            strong { "Atoll kit" }
             p { style: "margin: 0.25rem 0; font-size: 0.875rem;", "A personal component library." }
             Separator { horizontal: true, decorative: true, style: "margin: 1rem 0;" }
             div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; font-size: 0.875rem;", "Docs" Separator { horizontal: false, decorative: true, style: "height: 1rem;" } "Source" }
@@ -8105,8 +8105,8 @@ pub fn Demo() -> Element {
 
 # Sheet
 
-- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The sheet component is a panel that slides in from the edge of the screen. It can be used to display additional content, forms, or navigation menus without leaving the current page.
 
@@ -8299,8 +8299,8 @@ pub fn Demo() -> Element {
 
 # Shimmer
 
-- Copy into your app: `rust-ui add shimmer` or `dx components add shimmer --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::shimmer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add shimmer` or `dx components add shimmer --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::shimmer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Wraps loading content and sweeps a highlight across it.
 
@@ -8361,8 +8361,8 @@ pub fn Demo() -> Element {
 
 # Sidebar
 
-- Copy into your app: `rust-ui add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
-- Import: `use crate::components::sidebar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
+- Import: `use crate::components::sidebar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application.
 
@@ -9198,8 +9198,8 @@ fn ChevronIcon() -> Element {
 
 # Skeleton
 
-- Copy into your app: `rust-ui add skeleton` or `dx components add skeleton --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::skeleton::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add skeleton` or `dx components add skeleton --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::skeleton::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Skeleton component is used to display a placeholder preview of content before the data gets loaded. This helps improve perceived performance and provides users with a visual indication that content is being loaded.
 
@@ -9267,8 +9267,8 @@ fn SkeletonCardDemo() -> Element {
 
 # SkipLink
 
-- Copy into your app: `rust-ui add skip_link` or `dx components add skip_link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::skip_link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add skip_link` or `dx components add skip_link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::skip_link::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation. `MainContent` is the page's `<main>` landmark it points at.
 
@@ -9363,8 +9363,8 @@ pub fn Demo() -> Element {
 
 # Slider
 
-- Copy into your app: `rust-ui add slider` or `dx components add slider --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::slider::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add slider` or `dx components add slider --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::slider::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The slider component allows users to select a value from a range by sliding a handle along a track.
 
@@ -9453,8 +9453,8 @@ pub fn Demo() -> Element {
 
 # Spinner
 
-- Copy into your app: `rust-ui add spinner` or `dx components add spinner --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::spinner::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add spinner` or `dx components add spinner --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::spinner::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A loading indicator.
 
@@ -9499,8 +9499,8 @@ pub fn Demo() -> Element {
 
 # Status
 
-- Copy into your app: `rust-ui add status` or `dx components add status --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::status::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add status` or `dx components add status --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::status::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A coloured dot plus required text label (idle, online, degraded, down). Optional `pulse`.
 
@@ -9561,8 +9561,8 @@ pub fn Demo() -> Element {
 
 # Stepper
 
-- Copy into your app: `rust-ui add stepper` or `dx components add stepper --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::stepper::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add stepper` or `dx components add stepper --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::stepper::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A multi-step progress indicator with Back/Next control via `use_stepper()`.
 
@@ -9679,8 +9679,8 @@ fn StepperControls() -> Element {
 
 # Switch
 
-- Copy into your app: `rust-ui add switch` or `dx components add switch --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::switch::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add switch` or `dx components add switch --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::switch::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Switch component allows users to toggle between two states, such as on and off.
 
@@ -9745,8 +9745,8 @@ pub fn Demo() -> Element {
 
 # Table
 
-- Copy into your app: `rust-ui add table` or `dx components add table --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::table::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add table` or `dx components add table --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::table::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A styled table. Give a `TableHead` an `on_sort` to make it a sort button; see `DataTable` for filtering, paging and selection.
 
@@ -9952,8 +9952,8 @@ fn money(cents: u32) -> String {
 
 # Tabs
 
-- Copy into your app: `rust-ui add tabs` or `dx components add tabs --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::tabs::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tabs` or `dx components add tabs --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::tabs::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content.
 
@@ -10108,8 +10108,8 @@ pub fn Demo() -> Element {
 
 # Tag group
 
-- Copy into your app: `rust-ui add tag_group` or `dx components add tag_group --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::tag_group::*;` after copying, or `use ui::components::tag_group::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tag_group` or `dx components add tag_group --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::tag_group::*;` after copying, or `use ui::components::tag_group::*;` with the `atoll-ui` crate.
 
 A Tag Group is a focusable group of tags (labels, categories, filters and similar items) with keyboard navigation, optional selection and removal.
 
@@ -10214,8 +10214,8 @@ pub fn Demo() -> Element {
 
 # Textarea
 
-- Copy into your app: `rust-ui add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The textarea element is used to allow users to enter multi-line text input in a user interface.
 
@@ -10330,8 +10330,8 @@ pub fn Demo() -> Element {
 
 # ThemeCustomizer
 
-- Copy into your app: `rust-ui add theme_customizer` or `dx components add theme_customizer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::theme_customizer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add theme_customizer` or `dx components add theme_customizer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::theme_customizer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.
 
@@ -10471,8 +10471,8 @@ pub fn Demo() -> Element {
 
 # TimePicker
 
-- Copy into your app: `rust-ui add time_picker` or `dx components add time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `form`, `icons`, `ui_strings`).
-- Import: `use crate::components::time_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add time_picker` or `dx components add time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `form`, `icons`, `ui_strings`).
+- Import: `use crate::components::time_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button. Type digits and focus moves on by itself, or use the arrow keys. Written in Rust on plain inputs, with no JavaScript, so it also runs on the desktop webview and native.
 
@@ -10766,8 +10766,8 @@ pub fn Demo() -> Element {
 
 # Toast
 
-- Copy into your app: `rust-ui add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toast::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toast::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toast component is used to display brief messages to the user, typically for notifications or alerts. The toast messages can be focused with the keyboard with the `f6` key.
 
@@ -10877,8 +10877,8 @@ fn Buttons() -> Element {
 
 # Toggle
 
-- Copy into your app: `rust-ui add toggle` or `dx components add toggle --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toggle::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toggle` or `dx components add toggle --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toggle::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toggle component is used to create a toggle button that can be pressed or unpressed. It is useful for creating a binary option, such as enabling or disabling a feature.
 
@@ -10930,8 +10930,8 @@ pub fn Demo() -> Element {
 
 # Toggle group
 
-- Copy into your app: `rust-ui add toggle_group` or `dx components add toggle_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toggle_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toggle_group` or `dx components add toggle_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toggle_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set. It is useful for creating a set of options.
 
@@ -10991,8 +10991,8 @@ pub fn Demo() -> Element {
 
 # Tool call
 
-- Copy into your app: `rust-ui add tool_call` or `dx components add tool_call --git https://github.com/Amit-1of1/Rust-UI-` (also copies `chat`, `collapsible`, `icons`, `ui_strings`).
-- Import: `use crate::components::tool_call::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tool_call` or `dx components add tool_call --git https://github.com/Amit-1of1/Rust-UI-` (also copies `chat`, `collapsible`, `icons`, `ui_strings`).
+- Import: `use crate::components::tool_call::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 What an agent did and is doing. `ToolCall` is one tool call: its name, a one-line summary and
 its status in words, with arguments and output folded away until opened (it is a
@@ -11193,8 +11193,8 @@ pub fn Demo() -> Element {
 
 # Toolbar
 
-- Copy into your app: `rust-ui add toolbar` or `dx components add toolbar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toolbar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toolbar` or `dx components add toolbar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toolbar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The toolbar component is a flexible and customizable component that can be used to create a variety of toolbars. It can be used to create a simple toolbar with a title, or a more complex toolbar with multiple buttons and actions.
 
@@ -11356,8 +11356,8 @@ pub fn Demo() -> Element {
 
 # Tooltip
 
-- Copy into your app: `rust-ui add tooltip` or `dx components add tooltip --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::tooltip::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tooltip` or `dx components add tooltip --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::tooltip::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Tooltip component is used to display additional information when a user hovers over an element.
 
@@ -11418,8 +11418,8 @@ pub fn Demo() -> Element {
 
 # UiStrings
 
-- Copy into your app: `rust-ui add ui_strings` or `dx components add ui_strings --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::ui_strings::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add ui_strings` or `dx components add ui_strings --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::ui_strings::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults. Wrap the app in `UiStringsProvider` to translate them, and pass a signal to switch language at runtime. Text you pass as props (labels, placeholders) always wins.
 
@@ -11663,8 +11663,8 @@ pub fn Demo() -> Element {
 
 # Virtual list
 
-- Copy into your app: `rust-ui add virtual_list` or `dx components add virtual_list --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::virtual_list::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add virtual_list` or `dx components add virtual_list --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::virtual_list::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The VirtualList component virtualizes large lists by rendering only visible rows plus a buffer. It is useful for long, dynamic-height datasets where rendering every row at once would be expensive.
 
@@ -11776,13 +11776,13 @@ pub fn Demo() -> Element {
 
 # Dashboard 01
 
-- Copy into your app: `rust-ui add dashboard_01` (also copies `badge`, `button`, `card`, `chart`, `dropdown_menu`, `empty`, `icons`, `separator`, `sidebar`, `switch`, `table`, `theme_customizer`).
-- Import: `use crate::blocks::dashboard_01::*;` after copying, or `use ui::blocks::dashboard_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add dashboard_01` (also copies `badge`, `button`, `card`, `chart`, `dropdown_menu`, `empty`, `icons`, `separator`, `sidebar`, `switch`, `table`, `theme_customizer`).
+- Import: `use crate::blocks::dashboard_01::*;` after copying, or `use ui::blocks::dashboard_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table. Built from `sidebar`, `card`, `chart`, `table`, `badge`, `dropdown_menu`, `switch`, `empty` and `theme_customizer` (for `use_theme`).
 
 ```sh
-rust-ui add dashboard_01
+atoll add dashboard_01
 ```
 
 Use the whole screen, or only the shell around your own pages:
@@ -11862,13 +11862,13 @@ pub fn Dashboard01() -> Element
 
 # Login 01
 
-- Copy into your app: `rust-ui add login_01` (also copies `alert`, `button`, `card`, `form`, `link`).
-- Import: `use crate::blocks::login_01::*;` after copying, or `use ui::blocks::login_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add login_01` (also copies `alert`, `button`, `card`, `form`, `link`).
+- Import: `use crate::blocks::login_01::*;` after copying, or `use ui::blocks::login_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link. Built from `card`, `form`, `alert` and `link`.
 
 ```sh
-rust-ui add login_01   # copies src/blocks/login_01 and the components it uses
+atoll add login_01   # copies src/blocks/login_01 and the components it uses
 ```
 
 ```rust
@@ -11933,13 +11933,13 @@ pub fn Login01(
 
 # Settings 01
 
-- Copy into your app: `rust-ui add settings_01` (also copies `alert_dialog`, `button`, `card`, `form`, `label`, `switch`, `tabs`, `theme_customizer`).
-- Import: `use crate::blocks::settings_01::*;` after copying, or `use ui::blocks::settings_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add settings_01` (also copies `alert_dialog`, `button`, `card`, `form`, `label`, `switch`, `tabs`, `theme_customizer`).
+- Import: `use crate::blocks::settings_01::*;` after copying, or `use ui::blocks::settings_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation). Built from `tabs`, `card`, `form`, `switch`, `label`, `theme_customizer` and `alert_dialog`.
 
 ```sh
-rust-ui add settings_01
+atoll add settings_01
 ```
 
 It stands alone (its root is the page's `main`), or fits inside `DashboardShell` from `dashboard_01` with `embedded: true`, which makes the root a plain `div` because the shell already has a `main`:
@@ -12015,13 +12015,13 @@ pub fn Settings01(
 
 # Sign-up 01
 
-- Copy into your app: `rust-ui add signup_01` (also copies `alert`, `button`, `card`, `form`, `input_otp`, `link`).
-- Import: `use crate::blocks::signup_01::*;` after copying, or `use ui::blocks::signup_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add signup_01` (also copies `alert`, `button`, `card`, `form`, `input_otp`, `link`).
+- Import: `use crate::blocks::signup_01::*;` after copying, or `use ui::blocks::signup_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code. Built from `card`, `form`, `input_otp`, `alert` and `link`.
 
 ```sh
-rust-ui add signup_01
+atoll add signup_01
 ```
 
 ```rust

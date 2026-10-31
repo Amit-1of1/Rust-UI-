@@ -11,7 +11,7 @@
 //! CHANGELOG.md.
 #![forbid(unsafe_code)]
 
-/// Whole screens to copy (`rust-ui add login_01`): sign-in, sign-up, dashboard, settings
+/// Whole screens to copy (`atoll add login_01`): sign-in, sign-up, dashboard, settings
 /// (feature `blocks`).
 ///
 /// Internal: not part of the public API (docs/STABILITY.md).
@@ -47,7 +47,7 @@ pub const THEME_CSS: Asset = asset!("/assets/theme.css");
 
 /// [`THEME_CSS`] confined to [`ThemeScope`](components::theme_customizer::ThemeScope): the same tokens and rules, applied only inside
 /// an element with `data-rui-scope`, for apps that already have their own styles. Generated
-/// from `theme.css` by `rust-ui registry`.
+/// from `theme.css` by `atoll registry`.
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub const THEME_SCOPED_CSS: Asset = asset!("/assets/theme.scoped.css");

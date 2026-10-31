@@ -8,7 +8,7 @@
 //   node scripts/gen-lucide-icons.mjs --from <dir|tgz>   # an unpacked or packed lucide-static
 //
 // Needs `npm` (for the download), `tar` and `rustfmt` on PATH. No npm dependencies.
-// After an upgrade: run the kit's tests (`cargo test -p rust-ui-kit --test icons`), check that no
+// After an upgrade: run the kit's tests (`cargo test -p atoll-ui --test icons`), check that no
 // name the kit or the apps import disappeared, and update the version in THIRD_PARTY.md.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";

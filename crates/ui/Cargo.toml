@@ -1,5 +1,5 @@
 [package]
-name = "rust-ui-kit"
+name = "atoll-ui"
 version = "0.1.0"
 description = "Personal shadcn-inspired component kit for Dioxus"
 edition.workspace = true
@@ -41,7 +41,7 @@ toml = { version = "0.8", optional = true }
 
 [dev-dependencies]
 # The integration tests walk every demo.
-rust-ui-kit = { path = ".", features = ["demos", "contract-check"] }
+atoll-ui = { path = ".", features = ["demos", "contract-check"] }
 dioxus-ssr = "0.7.0"
 proptest = { version = "1", default-features = false, features = ["std"] }
 
@@ -50,7 +50,7 @@ proptest = { version = "1", default-features = false, features = ["std"] }
 # demo CSS; the gallery, the docs site, apps/native and the kit's own tests turn it on.
 # Internal (docs/STABILITY.md).
 demos = ["blocks"]
-# Whole-screen blocks (`ui::blocks`): copy them with `rust-ui add`, or turn this on to use them
+# Whole-screen blocks (`ui::blocks`): copy them with `atoll add`, or turn this on to use them
 # in place. Internal (docs/STABILITY.md).
 blocks = []
 # build.rs checks every contract.toml against the CLI's rules (crates/cli/src/contract.rs). Only

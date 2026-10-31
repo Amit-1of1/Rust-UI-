@@ -1,7 +1,7 @@
 # Table
 
-- Copy into your app: `rust-ui add table` or `dx components add table --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::table::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add table` or `dx components add table --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::table::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A styled table. Give a `TableHead` an `on_sort` to make it a sort button; see `DataTable` for filtering, paging and selection.
 

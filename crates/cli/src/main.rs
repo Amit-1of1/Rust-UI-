@@ -1,26 +1,26 @@
 #![forbid(unsafe_code)]
 
-use clap::{Parser, Subcommand};
-use rust_ui_cli::update::{self, Lock};
-use rust_ui_cli::{
+use atoll_cli::update::{self, Lock};
+use atoll_cli::{
     add_to, build, compare, load, materialize, mod_lines_of, pro_notice, resolve, to_json,
     FileState, Kind, Tier, THEME_FILE,
 };
+use clap::{Parser, Subcommand};
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-/// Copy-paste components for the Rust UI kit.
+/// Copy-paste components for the Atoll kit.
 #[derive(Parser)]
-#[command(name = "rust-ui", version)]
+#[command(name = "atoll", version)]
 struct Cli {
-    /// Where to copy from: a local checkout of the Rust UI repo, or a git URL
+    /// Where to copy from: a local checkout of the Atoll repo, or a git URL
     /// (cloned into the cache directory on first use).
     /// `update` defaults to the source recorded in the lockfile, everything else to `.`.
-    #[arg(long, global = true, env = "RUST_UI_SOURCE")]
+    #[arg(long, global = true, env = "ATOLL_SOURCE")]
     source: Option<String>,
     /// The lockfile `add` writes and `update` reads; the pristine copies `update` merges
-    /// against go in `.rust-ui/base/` beside it.
-    #[arg(long, global = true, default_value = rust_ui_cli::update::LOCK_FILE)]
+    /// against go in `.atoll/base/` beside it.
+    #[arg(long, global = true, default_value = atoll_cli::update::LOCK_FILE)]
     lock: PathBuf,
     #[command(subcommand)]
     command: Command,
@@ -34,6 +34,28 @@ enum Command {
     Registry {
         #[arg(long)]
         check: bool,
+    },
+    /// Create a new Dioxus app that uses the kit: Cargo.toml, Dioxus.toml and a starter
+    /// screen. Then `cd <dir> && dx serve`. Gets the kit from crates.io unless `--git` or
+    /// `--path` is given (docs/GETTING_STARTED.md).
+    Create {
+        /// The folder to create (its last part is the package name unless `--name` is given).
+        dir: PathBuf,
+        /// The Cargo package name.
+        #[arg(long)]
+        name: Option<String>,
+        /// Get the kit from git instead of crates.io (default URL: this repository).
+        #[arg(long, num_args = 0..=1, default_missing_value = atoll_cli::create::REPO, conflicts_with = "path")]
+        git: Option<String>,
+        /// With `--git`: pin this commit.
+        #[arg(long, requires = "git", conflicts_with = "tag")]
+        rev: Option<String>,
+        /// With `--git`: pin this tag, such as `v0.1.0`.
+        #[arg(long, requires = "git")]
+        tag: Option<String>,
+        /// Use a local checkout of the kit's repository (for testing the kit itself).
+        #[arg(long)]
+        path: Option<PathBuf>,
     },
     /// Copy the theme stylesheet into a project, new or existing: checks the Dioxus version,
     /// reports CSS in the app that clashes with the kit's, and prints how to load the theme.
@@ -150,11 +172,11 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
-    /// Install the agent skill (`skills/rust-ui/SKILL.md`) into the app, or print it.
+    /// Install the agent skill (`skills/atoll/SKILL.md`) into the app, or print it.
     Skill {
         /// Where to write it; Claude Code reads `.claude/skills/`, other agents may use
-        /// `.agents/skills/rust-ui/SKILL.md`.
-        #[arg(long, default_value = rust_ui_cli::info::SKILL_DEST)]
+        /// `.agents/skills/atoll/SKILL.md`.
+        #[arg(long, default_value = atoll_cli::info::SKILL_DEST)]
         dest: PathBuf,
         /// Print it instead of writing it.
         #[arg(long)]
@@ -221,7 +243,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
         .map(PathBuf::from)
         .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".cache")))
         .unwrap_or_else(std::env::temp_dir)
-        .join("rust-ui");
+        .join("atoll");
     let source_arg = match (&cli.source, &cli.command) {
         (Some(s), _) => s.clone(),
         (None, Command::Update { .. }) => {
@@ -253,34 +275,67 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let json = to_json(&build(root).map_err(err)?);
             let path = root.join("registry.json");
             if check {
-                let stale = rust_ui_cli::manifest::stale_manifests(root).map_err(err)?;
-                let llms = rust_ui_cli::llms::stale(root).map_err(err)?;
-                let scoped = rust_ui_cli::scope::stale(root).map_err(err)?;
+                let stale = atoll_cli::manifest::stale_manifests(root).map_err(err)?;
+                let llms = atoll_cli::llms::stale(root).map_err(err)?;
+                let scoped = atoll_cli::scope::stale(root).map_err(err)?;
                 if std::fs::read_to_string(&path).ok().as_deref() != Some(json.as_str())
                     || !stale.is_empty()
                     || !llms.is_empty()
                     || !scoped.is_empty()
                 {
                     eprintln!(
-                        "registry.json, a component.json, the llms.txt files or a *.scoped.css theme are out of date; run `rust-ui registry`"
+                        "registry.json, a component.json, the llms.txt files or a *.scoped.css theme are out of date; run `atoll registry`"
                     );
                     return Ok(ExitCode::FAILURE);
                 }
             } else {
                 std::fs::write(&path, json).map_err(err)?;
                 println!("wrote {}", path.display());
-                let n = rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
+                let n = atoll_cli::manifest::write_manifests(root).map_err(err)?;
                 println!("wrote {n} component.json files");
                 println!(
                     "wrote {}",
-                    rust_ui_cli::docsgen::write(root).map_err(err)?.display()
+                    atoll_cli::docsgen::write(root).map_err(err)?.display()
                 );
-                let n = rust_ui_cli::llms::write(root).map_err(err)?;
+                let n = atoll_cli::llms::write(root).map_err(err)?;
                 println!("wrote {n} llms.txt files");
-                for p in rust_ui_cli::scope::write(root).map_err(err)? {
+                for p in atoll_cli::scope::write(root).map_err(err)? {
                     println!("wrote {}", p.display());
                 }
             }
+        }
+        Command::Create {
+            dir,
+            name,
+            git,
+            rev,
+            tag,
+            path,
+        } => {
+            let name = match name {
+                Some(n) => n,
+                None => dir
+                    .file_name()
+                    .and_then(|n| n.to_str())
+                    .map(str::to_string)
+                    .ok_or_else(|| {
+                        format!(
+                            "can't take a package name from {}; pass --name",
+                            dir.display()
+                        )
+                    })?,
+            };
+            let source = match (git, path) {
+                (Some(url), _) => atoll_cli::create::KitSource::Git { url, rev, tag },
+                (None, Some(p)) => atoll_cli::create::KitSource::Path(
+                    std::fs::canonicalize(&p).map_err(|e| format!("{}: {e}", p.display()))?,
+                ),
+                (None, None) => atoll_cli::create::KitSource::Registry,
+            };
+            for f in atoll_cli::create::create(&dir, &name, &source)? {
+                println!("wrote {}", f.display());
+            }
+            println!("\nNext:\n  cd {}\n  dx serve        # http://localhost:8080\n\nAdd components with `atoll add <name>` to own their source, or use them from `ui::prelude` as they are.", dir.display());
         }
         Command::Init {
             dest,
@@ -321,7 +376,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::New { name } => {
-            let files = rust_ui_cli::scaffold::scaffold(root, &name)?;
+            let files = atoll_cli::scaffold::scaffold(root, &name)?;
             for f in &files {
                 println!("wrote {}", f.display());
             }
@@ -330,9 +385,9 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 to_json(&build(root).map_err(err)?),
             )
             .map_err(err)?;
-            rust_ui_cli::manifest::write_manifests(root).map_err(err)?;
-            rust_ui_cli::docsgen::write(root).map_err(err)?;
-            rust_ui_cli::llms::write(root).map_err(err)?;
+            atoll_cli::manifest::write_manifests(root).map_err(err)?;
+            atoll_cli::docsgen::write(root).map_err(err)?;
+            atoll_cli::llms::write(root).map_err(err)?;
             println!("updated registry.json, component.json files, the docs index and llms.txt");
         }
         Command::Explain {
@@ -342,7 +397,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             json,
             cargo_args,
         } => {
-            use rust_ui_cli::explain::{render, Api};
+            use atoll_cli::explain::{render, Api};
             let output = match from {
                 Some(p) if p.as_os_str() == "-" => {
                     std::io::read_to_string(std::io::stdin()).map_err(err)?
@@ -379,7 +434,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Changelog { check } => {
-            use rust_ui_cli::changelog::{fold, load, unnamed};
+            use atoll_cli::changelog::{fold, load, unnamed};
             if check {
                 let fragments = load(root)?;
                 for p in unnamed(&fragments) {
@@ -398,7 +453,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Doctor { strict } => {
-            use rust_ui_cli::doctor::{run as doctor, Level};
+            use atoll_cli::doctor::{run as doctor, Level};
             let findings = doctor(root)?;
             let (mut errors, mut warnings) = (0, 0);
             for f in &findings {
@@ -420,7 +475,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Contrast { theme } => {
-            use rust_ui_cli::contrast::{run as contrast, summary};
+            use atoll_cli::contrast::{run as contrast, summary};
             let report = contrast(root, &theme)?;
             let failures = summary(&report);
             for f in &failures {
@@ -440,15 +495,15 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             from_image,
             name,
         } => {
-            use rust_ui_cli::theme::{css, preset, Rgb};
+            use atoll_cli::theme::{css, preset, Rgb};
             if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
                 return Err(format!("`{name}` must be letters, digits or `-`"));
             }
             match (brand, from_image) {
                 (Some(brand), _) => print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?)),
                 (None, Some(logo)) => {
-                    let palette = rust_ui_cli::logo::read(&logo)?;
-                    print!("{}", rust_ui_cli::logo::summary(&palette));
+                    let palette = atoll_cli::logo::read(&logo)?;
+                    print!("{}", atoll_cli::logo::summary(&palette));
                     print!("{}", css(&name, &preset(palette.brand)?));
                     if let Some(second) = palette.second {
                         println!(
@@ -462,7 +517,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Postbuild { public, scoped } => {
-            use rust_ui_cli::postbuild::{bundle_css_with, strip_wasm};
+            use atoll_cli::postbuild::{bundle_css_with, strip_wasm};
             let saved = strip_wasm(&public)?;
             println!("wasm: {} KB of names and debug info removed", saved / 1024);
             let css = bundle_css_with(&public, scoped)?;
@@ -474,22 +529,22 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             );
         }
         Command::Info { project, json } => {
-            let info = rust_ui_cli::info::gather(&project, &cli.lock)?;
+            let info = atoll_cli::info::gather(&project, &cli.lock)?;
             if json {
                 println!(
                     "{}",
                     serde_json::to_string_pretty(&info).map_err(|e| e.to_string())?
                 );
             } else {
-                print!("{}", rust_ui_cli::info::render(&info));
+                print!("{}", atoll_cli::info::render(&info));
             }
         }
         Command::Skill { dest, print } => {
             let skill =
-                std::fs::read_to_string(root.join(rust_ui_cli::info::SKILL_FILE)).map_err(|e| {
+                std::fs::read_to_string(root.join(atoll_cli::info::SKILL_FILE)).map_err(|e| {
                     format!(
                         "{} in {}: {e}; pass --source <the kit's git URL or checkout>",
-                        rust_ui_cli::info::SKILL_FILE,
+                        atoll_cli::info::SKILL_FILE,
                         root.display()
                     )
                 })?;
@@ -504,7 +559,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             }
         }
         Command::Docs { name } => {
-            use rust_ui_cli::llms::{index, page};
+            use atoll_cli::llms::{index, page};
             let reg = build(root).map_err(err)?;
             match name {
                 None => print!("{}", index(root, &reg).map_err(err)?),
@@ -512,15 +567,15 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                     Some(text) => print!("{text}"),
                     None => {
                         return Err(format!(
-                            "unknown component or block `{name}`; `rust-ui list` shows them all"
+                            "unknown component or block `{name}`; `atoll list` shows them all"
                         ))
                     }
                 },
             }
         }
         Command::Contract { name, json } => {
-            use rust_ui_cli::contract::Contract;
-            let all = Contract::load_all(&root.join(rust_ui_cli::COMPONENTS_DIR))?;
+            use atoll_cli::contract::Contract;
+            let all = Contract::load_all(&root.join(atoll_cli::COMPONENTS_DIR))?;
             let picked: Vec<&Contract> = all
                 .iter()
                 .filter(|c| name.as_deref().is_none_or(|n| n == c.name))
@@ -549,7 +604,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             out,
             date,
         } => {
-            use rust_ui_cli::acr::{components_of, load_criteria, markdown, report};
+            use atoll_cli::acr::{components_of, load_criteria, markdown, report};
             let reg = load(root)?;
             let wanted: Vec<String> = if !names.is_empty() {
                 names
@@ -567,7 +622,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             };
             let components = components_of(&reg, &wanted)?;
             let criteria = load_criteria(root)?;
-            let date = date.unwrap_or_else(rust_ui_cli::acr::today);
+            let date = date.unwrap_or_else(atoll_cli::acr::today);
             let text = markdown(&report(root, &criteria, &components, &product)?, &date);
             match out {
                 Some(path) => {
@@ -591,7 +646,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             let lock = Lock::load(&cli.lock)?;
             if lock.items.is_empty() {
                 return Err(format!(
-                    "{} lists nothing to update; install with `rust-ui add` first",
+                    "{} lists nothing to update; install with `atoll add` first",
                     cli.lock.display()
                 ));
             }
@@ -636,7 +691,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
         }
         Command::Mcp { project } => {
             let stdin = std::io::stdin();
-            rust_ui_cli::mcp::Server::new(root, project)
+            atoll_cli::mcp::Server::new(root, project)
                 .with_source(source_arg.as_str())
                 .serve(stdin.lock(), std::io::stdout().lock())
                 .map_err(err)?;
@@ -681,10 +736,10 @@ fn main() -> ExitCode {
     }
 }
 
-/// `rust-ui init`: copy the theme (scoped or not, plus the reset if asked), then check the
+/// `atoll init`: copy the theme (scoped or not, plus the reset if asked), then check the
 /// app it lands in.
 fn init(root: &Path, app: &Path, dest: &Path, scoped: bool, reset: bool) -> Result<(), String> {
-    use rust_ui_cli::{app as wiring, scope};
+    use atoll_cli::{app as wiring, scope};
     let err = |e: std::io::Error| e.to_string();
     let write = |to: &Path, from: &str| -> Result<(), String> {
         let css = std::fs::read_to_string(root.join(from)).map_err(err)?;
@@ -785,16 +840,16 @@ fn init(root: &Path, app: &Path, dest: &Path, scoped: bool, reset: bool) -> Resu
     Ok(())
 }
 
-/// After `rust-ui add`: declare the copied modules and add the crates they need, so the app
+/// After `atoll add`: declare the copied modules and add the crates they need, so the app
 /// builds without hand edits.
 fn wire(
     root: &Path,
     app: &Path,
-    items: &[rust_ui_cli::Item],
+    items: &[atoll_cli::Item],
     dest: &Path,
     blocks_dest: &Path,
 ) -> Result<(), String> {
-    use rust_ui_cli::app::{self as wiring, DepChange};
+    use atoll_cli::app::{self as wiring, DepChange};
     let err = |e: std::io::Error| e.to_string();
     for (kind, dir) in [(Kind::Component, dest), (Kind::Block, blocks_dest)] {
         let names: Vec<String> = items

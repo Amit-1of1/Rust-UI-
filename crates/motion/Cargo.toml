@@ -1,7 +1,7 @@
 [package]
-name = "rust-ui-motion"
+name = "atoll-motion"
 version = "0.1.0"
-description = "Motion helpers for the Rust UI kit: spring presets, reduced-motion handling and presence animations"
+description = "Motion helpers for the Atoll kit: spring presets, reduced-motion handling and presence animations"
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true

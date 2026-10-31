@@ -48,12 +48,12 @@ is_generated() {
 regenerate_and_commit() {
   local snapshots="$1"
   echo "== regenerating registry.json, component.json files, llms pages and the docs index"
-  cargo run -q -p rust-ui-cli -- registry >/dev/null
+  cargo run -q -p atoll-cli -- registry >/dev/null
   echo "== refreshing Cargo.lock"
   cargo metadata -q --format-version 1 >/dev/null
   if [ "$snapshots" = 1 ]; then
     echo "== regenerating markup snapshots (review their diff before pushing)"
-    UPDATE_SNAPSHOTS=1 cargo test -q -p rust-ui-kit --test snapshots >/dev/null
+    UPDATE_SNAPSHOTS=1 cargo test -q -p atoll-ui --test snapshots >/dev/null
   fi
   git add -A registry.json Cargo.lock apps/docs/src/generated.rs component.json \
     crates/ui/src/components crates/ui/tests/snapshots llms.txt llms-full.txt llms \

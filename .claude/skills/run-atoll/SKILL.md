@@ -1,15 +1,15 @@
 ---
-name: run-rust-ui
-description: Build, run, drive and screenshot the Rust UI kit's apps (gallery, docs, site, dashboard, booking, showcase) in headless Chromium, or render components headlessly on native Blitz. Use when asked to run, start, open, click through, screenshot or visually check a component, block or app in this repo, or to confirm a UI change works in the real app and not just in tests.
+name: run-atoll
+description: Build, run, drive and screenshot the Atoll kit's apps (gallery, docs, site, dashboard, booking, showcase) in headless Chromium, or render components headlessly on native Blitz. Use when asked to run, start, open, click through, screenshot or visually check a component, block or app in this repo, or to confirm a UI change works in the real app and not just in tests.
 ---
 
-# Run the Rust UI kit
+# Run the Atoll kit
 
 The kit is a Dioxus 0.7 component library; you see it through its apps (`apps/gallery` shows
 every component). The agent path is `driver.mjs` in this folder: it serves an app's
 `dx build` output, opens it in headless Chromium (Playwright from `tests/e2e`) and runs steps
 such as `click:`, `fill:`, `theme:dark`, `aria:` and `ss:`. Screenshots land in
-`target/run-rust-ui/`. Paths below are relative to the repo root.
+`target/run-atoll/`. Paths below are relative to the repo root.
 
 ## Prerequisites (fresh cloud container, about 12 minutes once)
 
@@ -29,11 +29,11 @@ export NO_DOWNLOADS=1                                   # every shell that runs 
 
 ```bash
 # Steps as arguments (builds the gallery first if target/dx/gallery/debug is missing)
-node .claude/skills/run-rust-ui/driver.mjs 'goto:#dialog' 'click:role=button[name="Open dialog"]' \
+node .claude/skills/run-atoll/driver.mjs 'goto:#dialog' 'click:role=button[name="Open dialog"]' \
   'ss:dialog-open' 'press:Escape' 'theme:dark' 'accent:violet' 'ss:gallery-dark'
 
 # Or one step per line on stdin
-node .claude/skills/run-rust-ui/driver.mjs <<'EOF'
+node .claude/skills/run-atoll/driver.mjs <<'EOF'
 goto:#dialog
 click:role=button[name="Open dialog"]
 aria:role=dialog
@@ -45,16 +45,16 @@ ss:gallery-phone
 EOF
 
 # A block page, typing into a field
-node .claude/skills/run-rust-ui/driver.mjs 'goto:#block/login_01' "wait:[data-block='login_01'] h1" \
+node .claude/skills/run-atoll/driver.mjs 'goto:#block/login_01' "wait:[data-block='login_01'] h1" \
   'fill:role=textbox[name="Email"]=me@example.com' 'ss:block-login'
 
 # Another app; --build rebuilds after you change code (dx build, ~1-2 min incremental)
-NO_DOWNLOADS=1 node .claude/skills/run-rust-ui/driver.mjs --app booking --build 'ss:booking-home' 'aria:nav'
-node .claude/skills/run-rust-ui/driver.mjs --app booking 'goto:/trips' 'ss:booking-trips' \
+NO_DOWNLOADS=1 node .claude/skills/run-atoll/driver.mjs --app booking --build 'ss:booking-home' 'aria:nav'
+node .claude/skills/run-atoll/driver.mjs --app booking 'goto:/trips' 'ss:booking-trips' \
   'click:role=link[name="Explore"]' 'eval:location.pathname'
 ```
 
-Then look at the PNG with the Read tool. `node .claude/skills/run-rust-ui/driver.mjs --help`
+Then look at the PNG with the Read tool. `node .claude/skills/run-atoll/driver.mjs --help`
 lists every step. The ones you will use most:
 
 | Step | Does |
@@ -77,7 +77,7 @@ waits for its own ready selector (listed at the top of `driver.mjs`) before the 
 ## Direct invocation (no browser): most component PRs
 
 ```bash
-cargo test -q -p rust-ui-kit --test render            # SSR render of every component, ~2 min cold
+cargo test -q -p atoll-ui --test render            # SSR render of every component, ~2 min cold
 NATIVE_SHOTS=1 cargo test -q -p native --test showcase   # headless Blitz, ~4 min cold
 ```
 

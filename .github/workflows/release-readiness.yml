@@ -1,11 +1,13 @@
 name: Release readiness
 
-# Two checks that keep the kit adoptable by apps outside this repo (docs/PUBLISHING.md):
+# Checks that keep the kit adoptable by apps outside this repo (docs/PUBLISHING.md):
 # - consumer: package the crates and build an outside app from the packages, on stock Dioxus
 #   from crates.io with no [patch], and fail on any git source but the unpublished primitives
 #   fork (scripts/consumer-check.sh).
 # - semver: on pull requests, fail an undocumented break of the public API
 #   (scripts/semver.sh, docs/VERSIONING.md).
+# - getting-started: docs/GETTING_STARTED.md works from a fresh app
+#   (scripts/getting-started-check.sh).
 on:
   push:
     branches: [main]
@@ -23,6 +25,20 @@ jobs:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@v2
       - run: scripts/consumer-check.sh
+
+  # docs/GETTING_STARTED.md, run as a new user would: `atoll create`, then build the app.
+  getting-started:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev
+      - run: scripts/getting-started-check.sh
 
   semver:
     if: github.event_name == 'pull_request'

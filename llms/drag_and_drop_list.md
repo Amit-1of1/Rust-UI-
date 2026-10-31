@@ -1,7 +1,7 @@
 # Drag and drop list
 
-- Copy into your app: `rust-ui add drag_and_drop_list` or `dx components add drag_and_drop_list --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
-- Import: `use crate::components::drag_and_drop_list::*;` after copying, or `use ui::components::drag_and_drop_list::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add drag_and_drop_list` or `dx components add drag_and_drop_list --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Import: `use crate::components::drag_and_drop_list::*;` after copying, or `use ui::components::drag_and_drop_list::*;` with the `atoll-ui` crate.
 
 Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input.
 

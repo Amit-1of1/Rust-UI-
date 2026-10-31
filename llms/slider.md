@@ -1,7 +1,7 @@
 # Slider
 
-- Copy into your app: `rust-ui add slider` or `dx components add slider --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::slider::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add slider` or `dx components add slider --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::slider::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The slider component allows users to select a value from a range by sliding a handle along a track.
 

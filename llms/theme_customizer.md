@@ -1,7 +1,7 @@
 # ThemeCustomizer
 
-- Copy into your app: `rust-ui add theme_customizer` or `dx components add theme_customizer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::theme_customizer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add theme_customizer` or `dx components add theme_customizer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::theme_customizer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.
 

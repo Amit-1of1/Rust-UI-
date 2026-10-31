@@ -1,6 +1,6 @@
 // Drive one of the kit's web apps in headless Chromium: serve its dx build, open it, run steps.
 //
-//   node .claude/skills/run-rust-ui/driver.mjs [--app gallery] [--build] [--release] [--dark]
+//   node .claude/skills/run-atoll/driver.mjs [--app gallery] [--build] [--release] [--dark]
 //        [--reduced-motion] [--port N] [step ...]
 //
 // --app      gallery (default), site, docs, dashboard, booking, showcase, trial
@@ -28,7 +28,7 @@
 //   eval:<js expression>      print the result of a JS expression in the page
 //   count:<selector>          print how many elements match
 //   settle                    wait for finite animations/transitions to end (ss does this itself)
-//   ss:<name>[:full]          screenshot to target/run-rust-ui/<name>.png (:full = whole page)
+//   ss:<name>[:full]          screenshot to target/run-atoll/<name>.png (:full = whole page)
 //   ss:<name>@<selector>      screenshot of one element
 //   quit                      stop (end of input also stops)
 //
@@ -145,7 +145,7 @@ const settle = () =>
   );
 
 const ready = () => page.waitForSelector(APPS[app]);
-const shots = path.join(ROOT, "target/run-rust-ui");
+const shots = path.join(ROOT, "target/run-atoll");
 await mkdir(shots, { recursive: true });
 
 const t0 = Date.now();

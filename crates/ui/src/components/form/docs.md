@@ -111,7 +111,7 @@ Attributes, all inside `#[form(...)]`:
 
 Rules run in that order and the first failure shows. On an optional field the rules only check what was typed. Required fields get `aria-required`, and the errors use the same `aria-invalid` / `aria-describedby` / `role="alert"` wiring as the hand-written fields. Unknown attributes, and ones that don't fit the type (`email` on a number, `required` on an `Option`), are compile errors.
 
-The generated code names the kit as `::ui`. If you copied the form component into your app (`rust-ui add form`), add the `rust-ui-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
+The generated code names the kit as `::ui`. If you copied the form component into your app (`atoll add form`), add the `atoll-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
 
 ## Accessibility
 

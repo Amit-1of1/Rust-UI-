@@ -14,7 +14,7 @@ await page.waitForSelector(".docs-main");
 await page.waitForTimeout(1000);
 
 // Home page.
-assert.equal(await page.getByRole("heading", { level: 1 }).innerText(), "Rust UI");
+assert.equal(await page.getByRole("heading", { level: 1 }).innerText(), "Atoll");
 
 // Clicking a nav link opens that page, marks it current and focuses its heading.
 const nav = page.getByRole("navigation", { name: "Documentation" });
@@ -31,6 +31,12 @@ await page.getByRole("button", { name: /open dialog/i }).click();
 await page.getByRole("dialog").waitFor();
 await page.keyboard.press("Escape");
 await page.getByRole("dialog").waitFor({ state: "detached" });
+
+// The getting-started guide is a page of its own.
+await page.goto(base + "#start");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Getting started");
+await page.getByText("atoll create my-app", { exact: false }).first().waitFor();
+await page.goBack();
 
 // A deep link and the browser's Back button.
 await page.goto(base + "#theming");

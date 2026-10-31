@@ -1,6 +1,6 @@
-//! `rust-ui changelog`: fragments in `changes/` fold into CHANGELOG.md and docs/MIGRATION.md.
+//! `atoll changelog`: fragments in `changes/` fold into CHANGELOG.md and docs/MIGRATION.md.
 
-use rust_ui_cli::changelog::{fold, load, parse, CHANGELOG, MIGRATION};
+use atoll_cli::changelog::{fold, load, parse, CHANGELOG, MIGRATION};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -9,7 +9,7 @@ fn repo_root() -> PathBuf {
 }
 
 fn scratch(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("rust-ui-changelog-{tag}-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("atoll-changelog-{tag}-{}", std::process::id()));
     let _ = fs::remove_dir_all(&dir);
     fs::create_dir_all(dir.join("changes")).unwrap();
     fs::create_dir_all(dir.join("docs")).unwrap();

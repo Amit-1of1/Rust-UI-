@@ -4,7 +4,7 @@
 //! restyling" honest.
 //!
 //! After an intended change, refresh them with
-//! `UPDATE_SNAPSHOTS=1 cargo test -p rust-ui-kit --test snapshots` and review the diff.
+//! `UPDATE_SNAPSHOTS=1 cargo test -p atoll-ui --test snapshots` and review the diff.
 
 use common::{render, BLOCKS, DEMOS};
 

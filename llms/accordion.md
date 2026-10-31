@@ -1,7 +1,7 @@
 # Accordion
 
-- Copy into your app: `rust-ui add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The accordion component is used to display collapsible content panels for presenting information in a limited amount of space. It allows users to expand and collapse sections to view more or less content.
 

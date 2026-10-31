@@ -1,7 +1,7 @@
 # Select
 
-- Copy into your app: `rust-ui add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::select::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups.
 

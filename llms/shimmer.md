@@ -1,7 +1,7 @@
 # Shimmer
 
-- Copy into your app: `rust-ui add shimmer` or `dx components add shimmer --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::shimmer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add shimmer` or `dx components add shimmer --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::shimmer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Wraps loading content and sweeps a highlight across it.
 

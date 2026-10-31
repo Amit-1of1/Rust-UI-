@@ -10,7 +10,7 @@ pub const COPIED_FOR_MS: i32 = 2000;
 ///
 /// ```rust,ignore
 /// let (copy, copied) = use_copy_clipboard();
-/// rsx! { Button { onclick: move |_| copy.call("cargo add rust-ui".into()),
+/// rsx! { Button { onclick: move |_| copy.call("cargo add atoll".into()),
 ///     if copied() { "Copied" } else { "Copy" } } }
 /// ```
 ///

@@ -1,7 +1,7 @@
 # Breadcrumb
 
-- Copy into your app: `rust-ui add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
-- Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
+- Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A trail of links to the current page.
 

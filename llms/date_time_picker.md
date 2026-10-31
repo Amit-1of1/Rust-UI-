@@ -1,7 +1,7 @@
 # DateTimePicker
 
-- Copy into your app: `rust-ui add date_time_picker` or `dx components add date_time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `date_picker`, `form`, `time_picker`, `ui_strings`).
-- Import: `use crate::components::date_time_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add date_time_picker` or `dx components add date_time_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `date_picker`, `form`, `time_picker`, `ui_strings`).
+- Import: `use crate::components::date_time_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled.
 

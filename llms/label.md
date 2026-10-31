@@ -1,7 +1,7 @@
 # Label
 
-- Copy into your app: `rust-ui add label` or `dx components add label --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::label::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add label` or `dx components add label --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::label::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Label component is used to provide a label for form elements, enhancing accessibility and usability. It is typically used in conjunction with form controls like inputs, selects, and textareas.
 

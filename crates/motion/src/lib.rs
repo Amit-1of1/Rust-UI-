@@ -1,4 +1,4 @@
-//! Motion for the Rust UI kit.
+//! Motion for the Atoll kit.
 //!
 //! This is the only place app and component code should touch the animation engine
 //! (`dioxus-motion`, a one-maintainer crate). Swapping the engine later means changing

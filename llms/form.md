@@ -1,7 +1,7 @@
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
-- Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
+- Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
 
@@ -114,7 +114,7 @@ Attributes, all inside `#[form(...)]`:
 
 Rules run in that order and the first failure shows. On an optional field the rules only check what was typed. Required fields get `aria-required`, and the errors use the same `aria-invalid` / `aria-describedby` / `role="alert"` wiring as the hand-written fields. Unknown attributes, and ones that don't fit the type (`email` on a number, `required` on an `Option`), are compile errors.
 
-The generated code names the kit as `::ui`. If you copied the form component into your app (`rust-ui add form`), add the `rust-ui-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
+The generated code names the kit as `::ui`. If you copied the form component into your app (`atoll add form`), add the `atoll-form-derive` crate and point it at your copy: `#[form(path = "crate::components::form")]` on the struct.
 
 ## Accessibility
 

@@ -1,5 +1,5 @@
-use rust_ui_cli::info::{gather, render, SKILL_FILE};
-use rust_ui_cli::*;
+use atoll_cli::info::{gather, render, SKILL_FILE};
+use atoll_cli::*;
 use std::path::{Path, PathBuf};
 
 fn repo_root() -> PathBuf {
@@ -13,7 +13,7 @@ fn empty_app_reports_what_is_missing() {
     assert!(info.dioxus.is_none() && info.theme.is_none() && info.lockfile.is_none());
     assert!(info.installed.is_empty() && !info.mcp && info.skill.is_none());
     let text = render(&info);
-    assert!(text.contains("rust-ui init"), "{text}");
+    assert!(text.contains("atoll init"), "{text}");
     assert!(text.contains("nothing yet"), "{text}");
 }
 
@@ -31,7 +31,7 @@ fn reports_dioxus_theme_items_edits_and_conflicts() {
     std::fs::copy(root.join(THEME_FILE), p.join("assets/theme.css")).unwrap();
     std::fs::write(
         p.join(".mcp.json"),
-        r#"{"mcpServers":{"rust-ui":{"command":"rust-ui","args":["mcp"]}}}"#,
+        r#"{"mcpServers":{"atoll":{"command":"atoll","args":["mcp"]}}}"#,
     )
     .unwrap();
 
@@ -75,7 +75,7 @@ fn reports_dioxus_theme_items_edits_and_conflicts() {
 fn skill_file_has_frontmatter_and_names_real_items() {
     let text = std::fs::read_to_string(repo_root().join(SKILL_FILE)).unwrap();
     assert!(
-        text.starts_with("---\nname: rust-ui\ndescription: "),
+        text.starts_with("---\nname: atoll\ndescription: "),
         "frontmatter"
     );
     // Every snake_case item named in backticks in the skill must exist in the registry, so the

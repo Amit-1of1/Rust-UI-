@@ -2,4 +2,4 @@
 name = "gallery"
 
 [web.app]
-title = "Rust UI kit gallery"
+title = "Atoll kit gallery"

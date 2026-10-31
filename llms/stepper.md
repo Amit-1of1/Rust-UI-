@@ -1,7 +1,7 @@
 # Stepper
 
-- Copy into your app: `rust-ui add stepper` or `dx components add stepper --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::stepper::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add stepper` or `dx components add stepper --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::stepper::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A multi-step progress indicator with Back/Next control via `use_stepper()`.
 

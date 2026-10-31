@@ -1,7 +1,7 @@
 # Link
 
-- Copy into your app: `rust-ui add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::link::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add link` or `dx components add link --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::link::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring. `external: true` opens it in a new tab safely and says so; `current: true` marks the page you are on.
 
