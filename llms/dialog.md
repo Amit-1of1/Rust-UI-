@@ -1,6 +1,6 @@
 # Dialog
 
-- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
@@ -29,7 +29,7 @@ Dialog {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -37,14 +37,12 @@ Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/d
 | Space | On the button that opens it | Opens the dialog and moves focus into it. | yes |
 | Tab | Inside the dialog | Moves to the next control; from the last one it wraps to the first, so focus stays in the dialog. | yes |
 | Shift + Tab | Inside the dialog | Moves to the previous control, wrapping from the first to the last. | yes |
-| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | not yet |
+| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 

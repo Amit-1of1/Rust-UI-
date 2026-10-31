@@ -96,7 +96,11 @@ impl Follow {
             return;
         }
         if !shrank {
-            if let (Some(top), Ok(now)) = (*self.top.peek(), el.get_scroll_offset().await) {
+            // Copy the offset out first: a guard held across the await below would make a
+            // concurrent follow's `top.set` panic (already borrowed). Seen on Android, where
+            // the webview's round trips are slow enough for two follows to overlap.
+            let last = *self.top.peek();
+            if let (Some(top), Ok(now)) = (last, el.get_scroll_offset().await) {
                 if now.y + SLACK < top {
                     self.pinned.set(false);
                     if grew {
