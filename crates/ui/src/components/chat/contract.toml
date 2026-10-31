@@ -1,0 +1,23 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The log itself is scrolled with the browser's own keys once focused (Tab reaches it); the
+# rows here cover sending from the demo's composer into it.
+pattern = "Log"
+roles = ["log"]
+
+[parts]
+log = "[role=log]"
+input = "textarea"
+
+[[keys]]
+key = "Enter"
+when = "In the message box"
+does = "Sends the message; it appears at the end of the conversation and focus stays in the box."
+native = true
+test = """
+focus input
+type Hello there
+press Enter
+text log Hello there
+focused input
+"""

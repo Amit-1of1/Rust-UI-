@@ -1,0 +1,52 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Escape (stop a running reply) needs `busy`, which this demo never is; the chat demo and
+# tests/e2e/chat.mjs cover it.
+pattern = "Text box with a send button"
+roles = []
+
+[parts]
+input = "textarea"
+send = "[data-slot=chat-composer-send]"
+sent = "[data-slot=sent]"
+
+[[keys]]
+key = "Enter"
+when = "In the message box"
+does = "Sends the message, empties the box and keeps focus in it. Does nothing while the box is empty."
+native = true
+test = """
+focus input
+press Enter
+text sent Nothing sent yet
+type Ship it
+press Enter
+text sent Ship it
+focused input
+"""
+
+[[keys]]
+key = "Shift+Enter"
+when = "In the message box"
+does = "Starts a new line instead of sending."
+native = true
+test = """
+focus input
+type First line
+press Shift+Enter
+text sent Nothing sent yet
+focused input
+"""
+
+[[keys]]
+key = "Space"
+when = "On the send button"
+does = "Sends the message."
+native = true
+test = """
+focus input
+type From the button
+focus send
+press Space
+text sent From the button
+"""
