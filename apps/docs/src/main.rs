@@ -4,6 +4,7 @@
 
 #[rustfmt::skip] // generated, one entry per line
 mod generated;
+mod pricing;
 
 use dioxus::prelude::*;
 use generated::{demo, Entry, ENTRIES};
@@ -89,6 +90,7 @@ fn App() -> Element {
                         for (slug , title , _) in GUIDES {
                             li { key: "{slug}", NavLink { slug, title: *title, current: page() } }
                         }
+                        li { NavLink { slug: "pricing", title: "Pricing", current: page() } }
                     }
                     h2 { class: "docs-nav-heading", "Components" }
                     ul {
@@ -124,6 +126,9 @@ fn NavLink(slug: &'static str, title: &'static str, current: String) -> Element 
 
 #[component]
 fn Page(slug: String) -> Element {
+    if slug == "pricing" {
+        return rsx! { pricing::PricingPage {} };
+    }
     if let Some((_, title, source)) = GUIDES.iter().find(|(s, _, _)| *s == slug) {
         return rsx! {
             document::Title { "{title} - Rust UI" }
@@ -141,7 +146,9 @@ fn Page(slug: String) -> Element {
                 a { href: "#install", "installing components" }
                 " and "
                 a { href: "#theming", "theming" }
-                "."
+                ". The kit is free; "
+                a { href: "#pricing", "Pro" }
+                " adds premium blocks and templates."
             }
             p { "{ENTRIES.len()} components. Every page has a live demo where one exists." }
         };

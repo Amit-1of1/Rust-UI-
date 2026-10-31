@@ -63,12 +63,34 @@ impl Kind {
     }
 }
 
+/// The file that makes an item Pro: it sits in the item's folder, so it is copied along with
+/// the item and the licence stays next to the code (docs/pro/README.md).
+pub const PRO_LICENSE_FILE: &str = "LICENSE-PRO.md";
+
+/// Whether an item is free (MIT OR Apache-2.0, like the kit) or Pro (sold under a commercial
+/// licence from a private registry). Only Pro items say so in `registry.json`.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Tier {
+    #[default]
+    Free,
+    Pro,
+}
+
+impl Tier {
+    pub fn is_free(&self) -> bool {
+        *self == Tier::Free
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Item {
     pub name: String,
     #[serde(default, skip_serializing_if = "Kind::is_component")]
     pub kind: Kind,
+    #[serde(default, skip_serializing_if = "Tier::is_free")]
+    pub tier: Tier,
     /// Paths relative to the kind's folder (`COMPONENTS_DIR` or `BLOCKS_DIR`).
     pub files: Vec<String>,
     /// Other registry items this one imports from (always components).
@@ -123,6 +145,7 @@ fn folders(dir: &Path) -> io::Result<Vec<String>> {
 fn scan(dir: &Path, name: &str, kind: Kind, components: &[String]) -> io::Result<Item> {
     let mut files = Vec::new();
     let mut deps = BTreeSet::new();
+    let mut tier = Tier::Free;
     let mut entries: Vec<_> = fs::read_dir(dir.join(name))?
         .filter_map(Result::ok)
         .filter(|e| e.path().is_file())
@@ -133,6 +156,9 @@ fn scan(dir: &Path, name: &str, kind: Kind, components: &[String]) -> io::Result
         if file.ends_with(".rs") {
             deps.extend(imports_in(&fs::read_to_string(e.path())?));
         }
+        if file == PRO_LICENSE_FILE {
+            tier = Tier::Pro;
+        }
         if file != "component.json" {
             files.push(format!("{name}/{file}"));
         }
@@ -142,6 +168,7 @@ fn scan(dir: &Path, name: &str, kind: Kind, components: &[String]) -> io::Result
     Ok(Item {
         name: name.to_string(),
         kind,
+        tier,
         files,
         registry_dependencies: deps.into_iter().collect(),
     })
@@ -220,6 +247,30 @@ pub fn compare(source: &Path, dest: &Path) -> io::Result<FileState> {
     } else {
         FileState::Changed
     })
+}
+
+/// The Pro items among `items`, for the licence reminder `add` prints.
+pub fn pro_items(items: &[Item]) -> Vec<&Item> {
+    items.iter().filter(|i| i.tier == Tier::Pro).collect()
+}
+
+/// What `add` prints after copying Pro items: which ones, and where their licence is.
+pub fn pro_notice(items: &[Item]) -> Option<String> {
+    let pro = pro_items(items);
+    if pro.is_empty() {
+        return None;
+    }
+    let names = pro
+        .iter()
+        .map(|i| i.name.as_str())
+        .collect::<Vec<_>>()
+        .join(", ");
+    Some(format!(
+        "Pro: {names} {} under the commercial licence in each folder's {PRO_LICENSE_FILE} \
+         (one licence per developer; keep the file with the code). The rest of the kit is \
+         MIT OR Apache-2.0.",
+        if pro.len() == 1 { "is" } else { "are" }
+    ))
 }
 
 /// Copy items into `dest`, and blocks into a `blocks` folder beside it (`src/components` ->
