@@ -14,7 +14,7 @@ await page.waitForSelector(".docs-main");
 await page.waitForTimeout(1000);
 
 // Home page.
-assert.equal(await page.getByRole("heading", { level: 1 }).innerText(), "Rust UI");
+assert.equal(await page.getByRole("heading", { level: 1 }).innerText(), "Atoll");
 
 // Clicking a nav link opens that page, marks it current and focuses its heading.
 const nav = page.getByRole("navigation", { name: "Documentation" });

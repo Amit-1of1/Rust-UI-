@@ -4,6 +4,7 @@
 
 #[rustfmt::skip] // generated, one entry per line
 mod generated;
+mod landing;
 mod pricing;
 
 use dioxus::prelude::*;
@@ -11,6 +12,7 @@ use generated::{demo, Entry, ENTRIES};
 use ui::prelude::*;
 
 const DOCS_CSS: Asset = asset!("/assets/docs.css");
+const LANDING_CSS: Asset = asset!("/assets/landing.css");
 
 const GUIDES: &[(&str, &str, &str)] = &[
     (
@@ -69,6 +71,7 @@ fn App() -> Element {
     rsx! {
         ThemeStyles {}
         document::Stylesheet { href: DOCS_CSS }
+        document::Stylesheet { href: LANDING_CSS }
         a { class: "docs-skip", href: "#page-title", "Skip to content" }
         Fragment {
             header { class: "docs-header",
@@ -137,21 +140,7 @@ fn Page(slug: String) -> Element {
         };
     }
     let Some(entry) = ENTRIES.iter().find(|e| e.name == slug) else {
-        return rsx! {
-            document::Title { "Rust UI docs" }
-            h1 { id: "page-title", tabindex: "-1", "Rust UI" }
-            p { class: "docs-lede",
-                "Components built on Dioxus with accessibility, a motion layer and plain-CSS theming. "
-                "Pick a component on the left, or start with "
-                a { href: "#install", "installing components" }
-                " and "
-                a { href: "#theming", "theming" }
-                ". The kit is free; "
-                a { href: "#pricing", "Pro" }
-                " adds premium blocks and templates."
-            }
-            p { "{ENTRIES.len()} components. Every page has a live demo where one exists." }
-        };
+        return rsx! { landing::LandingPage {} };
     };
     rsx! {
         document::Title { "{entry.title} - Rust UI" }
