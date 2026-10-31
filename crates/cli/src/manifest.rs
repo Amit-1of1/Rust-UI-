@@ -18,21 +18,49 @@ fn registry_git() -> String {
     std::env::var("RUST_UI_REGISTRY_GIT").unwrap_or_else(|_| REGISTRY_GIT.to_string())
 }
 
-/// The pinned `dioxus-primitives` repository and revision, read from the workspace manifest.
-fn primitives_source(root: &Path) -> io::Result<(String, String)> {
+/// Where the kit's primitives come from, read from the workspace manifest's `dioxus-primitives`
+/// line. The fork at a pinned commit while `rust-ui-primitives` is not on crates.io; the registry
+/// once that line has no `git` (docs/PUBLISHING.md), and then `rust-ui-motion` too.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Primitives {
+    Git {
+        package: String,
+        url: String,
+        rev: String,
+    },
+    Registry {
+        package: String,
+        version: String,
+    },
+}
+
+fn primitives_source(root: &Path) -> io::Result<Primitives> {
     let text = fs::read_to_string(root.join("Cargo.toml"))?;
-    let line = text
+    parse_primitives(&text)
+}
+
+fn parse_primitives(manifest: &str) -> io::Result<Primitives> {
+    let line = manifest
         .lines()
         .find(|l| l.trim_start().starts_with("dioxus-primitives"))
         .ok_or_else(|| io::Error::other("dioxus-primitives not found in Cargo.toml"))?;
     let field = |name: &str| {
-        line.split(&format!("{name} = \""))
+        line.split(&format!(" {name} = \""))
             .nth(1)
             .and_then(|r| r.split('"').next())
             .map(str::to_string)
-            .ok_or_else(|| io::Error::other(format!("dioxus-primitives {name} not found")))
     };
-    Ok((field("git")?, field("rev")?))
+    let package = field("package").unwrap_or_else(|| "dioxus-primitives".into());
+    match (field("git"), field("rev"), field("version")) {
+        (Some(url), Some(rev), _) => Ok(Primitives::Git { package, url, rev }),
+        (Some(_), None, _) => Err(io::Error::other(
+            "dioxus-primitives is a git dependency without a rev (docs/GUARDRAILS.md)",
+        )),
+        (None, _, Some(version)) => Ok(Primitives::Registry { package, version }),
+        (None, _, None) => Err(io::Error::other(
+            "dioxus-primitives has neither git and rev nor version",
+        )),
+    }
 }
 
 /// First paragraph after the title in `docs.md`, on one line.
@@ -45,7 +73,7 @@ pub fn description(docs: &str) -> String {
 }
 
 /// Crates a component's source uses, as `dx` cargo dependencies.
-fn cargo_dependencies(source: &str, primitives: &(String, String), registry: &str) -> Vec<Value> {
+fn cargo_dependencies(source: &str, primitives: &Primitives, registry: &str) -> Vec<Value> {
     // `krate::` as a crate root, not as a path segment like `components::time::`.
     let uses = |krate: &str| {
         let pat = format!("{krate}::");
@@ -64,7 +92,16 @@ fn cargo_dependencies(source: &str, primitives: &(String, String), registry: &st
         } else {
             &[]
         };
-        deps.push(json!({"name": "dioxus-primitives", "git": primitives.0, "rev": primitives.1, "features": features}));
+        // The package name, not the kit's `dioxus-primitives` key: `dx components add` runs
+        // `cargo add <name>`, and the library is `dioxus_primitives` either way.
+        deps.push(match primitives {
+            Primitives::Git { package, url, rev } => {
+                json!({"name": package, "git": url, "rev": rev, "features": features})
+            }
+            Primitives::Registry { package, version } => {
+                json!({"name": package, "version": version, "features": features})
+            }
+        });
     }
     if uses("time") {
         deps.push(json!({"name": "time", "version": "0.3.44", "features": ["std", "macros"]}));
@@ -90,7 +127,14 @@ fn cargo_dependencies(source: &str, primitives: &(String, String), registry: &st
         deps.push(json!({"name": "wasm-bindgen-futures", "version": "0.4"}));
     }
     if uses("motion") {
-        deps.push(json!({"name": "rust-ui-motion", "git": registry}));
+        // Published together with the primitives (docs/PUBLISHING.md); the kit's crates share
+        // one version (docs/VERSIONING.md).
+        deps.push(match primitives {
+            Primitives::Git { .. } => json!({"name": "rust-ui-motion", "git": registry}),
+            Primitives::Registry { .. } => {
+                json!({"name": "rust-ui-motion", "version": env!("CARGO_PKG_VERSION")})
+            }
+        });
     }
     deps
 }
@@ -224,21 +268,63 @@ mod tests {
         assert_eq!(description("# Only a title\n"), "");
     }
 
+    fn git_primitives() -> Primitives {
+        Primitives::Git {
+            package: "rust-ui-primitives".into(),
+            url: "u".into(),
+            rev: "abc".into(),
+        }
+    }
+
+    #[test]
+    fn primitives_come_from_git_until_published() {
+        let line =
+            |rest: &str| format!("[workspace.dependencies]\ndioxus-primitives = {{ {rest} }}\n");
+        assert_eq!(
+            parse_primitives(&line(
+                r#"package = "rust-ui-primitives", version = "0.1.0", git = "https://x", rev = "abc""#
+            ))
+            .unwrap(),
+            Primitives::Git {
+                package: "rust-ui-primitives".into(),
+                url: "https://x".into(),
+                rev: "abc".into()
+            }
+        );
+        // Upstream's name when no `package` is given.
+        assert!(matches!(
+            parse_primitives(&line(r#"git = "https://x", rev = "abc""#)).unwrap(),
+            Primitives::Git { package, .. } if package == "dioxus-primitives"
+        ));
+        let published = parse_primitives(&line(
+            r#"package = "rust-ui-primitives", version = "0.1.0""#,
+        ))
+        .unwrap();
+        assert_eq!(
+            published,
+            Primitives::Registry {
+                package: "rust-ui-primitives".into(),
+                version: "0.1.0".into()
+            }
+        );
+        // Published: no git anywhere in a component's dependencies.
+        let deps = cargo_dependencies("use dioxus_primitives::x;\nuse motion::z;", &published, "g");
+        assert!(deps.iter().all(|d| d.get("git").is_none()), "{deps:?}");
+        assert!(parse_primitives(&line(r#"git = "https://x", branch = "main""#)).is_err());
+    }
+
     #[test]
     fn dependencies_follow_the_imports() {
         let src = "use dioxus_primitives::x;\nuse motion::z;";
-        let names: Vec<_> = cargo_dependencies(src, &("u".into(), "abc".into()), "g")
+        let names: Vec<_> = cargo_dependencies(src, &git_primitives(), "g")
             .iter()
             .map(|d| d["name"].as_str().unwrap().to_string())
             .collect();
-        assert_eq!(names, ["dioxus-primitives", "rust-ui-motion"]);
-        assert!(
-            cargo_dependencies("use dioxus::prelude::*;", &("u".into(), "abc".into()), "g")
-                .is_empty()
-        );
+        assert_eq!(names, ["rust-ui-primitives", "rust-ui-motion"]);
+        assert!(cargo_dependencies("use dioxus::prelude::*;", &git_primitives(), "g").is_empty());
         assert!(cargo_dependencies(
             "use crate::components::time::Clock;",
-            &("u".into(), "abc".into()),
+            &git_primitives(),
             "g"
         )
         .is_empty());

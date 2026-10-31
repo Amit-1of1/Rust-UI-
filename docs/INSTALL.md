@@ -1,6 +1,6 @@
 # Installing components
 
-There are two ways to use the kit in a Dioxus 0.7 app. Neither goes through crates.io yet: the kit depends on `dioxus-primitives`, which is only published as a git repository, and crates.io refuses crates with git dependencies ([why, and the plan](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/PUBLISHING.md)).
+There are two ways to use the kit in a Dioxus 0.7 app. Neither goes through crates.io yet. The kit and its primitives (`rust-ui-primitives`, our fork of DioxusLabs' `dioxus-primitives`) are ready to publish, and nothing has been published so far ([plan](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/PUBLISHING.md)). Either way your app stays on stock Dioxus from crates.io: the kit patches no Dioxus crate for web or desktop.
 
 - **Copy the source** (the shadcn way): the component files land in your own `src/components`, yours to restyle and change. Use `dx` 0.7.10 or the `rust-ui` CLI.
 - **Depend on the crate**: `rust-ui-kit` as a normal git dependency, updated by bumping one commit. Best when you want the kit as it is.
@@ -16,7 +16,7 @@ dx components add button dialog --git https://github.com/Amit-1of1/Rust-UI-
 dx components add --all --git https://github.com/Amit-1of1/Rust-UI-
 ```
 
-`dx` reads the `component.json` next to each component (generated, never edit by hand) and copies the files into `src/components`, adds the crates they need to your `Cargo.toml` (`dioxus-primitives` at the pinned revision, plus icons, time, palette and so on) and copies `theme.css` into `assets/`. Demos are not copied: they live in `crates/ui/src/demos`, outside the component folders. Add `mod components;` to `main.rs` and load the theme with `document::Stylesheet`.
+`dx` reads the `component.json` next to each component (generated, never edit by hand) and copies the files into `src/components`, adds the crates they need to your `Cargo.toml` (`rust-ui-primitives` at the pinned revision, plus icons, time, palette and so on) and copies `theme.css` into `assets/`. Demos are not copied: they live in `crates/ui/src/demos`, outside the component folders. Add `mod components;` to `main.rs` and load the theme with `document::Stylesheet`.
 
 Components name each other with this repository's URL, so `dialog` pulls in `button` from the same place.
 
@@ -70,7 +70,7 @@ web = ["dioxus/web", "ui/web"]
 desktop = ["dioxus/desktop", "ui/desktop"]
 ```
 
-`package = "rust-ui-kit"` with the key `ui` keeps the import short. `dioxus-primitives` and `rust-ui-motion` come along at the revisions this repo pins, so nothing else goes in your `Cargo.toml`. Stay on Dioxus `0.7.x`, the line the kit is built and tested against.
+`package = "rust-ui-kit"` with the key `ui` keeps the import short. `rust-ui-primitives` and `rust-ui-motion` come along at the revisions this repo pins, so nothing else goes in your `Cargo.toml`. Stay on Dioxus `0.7.x`, the line the kit is built and tested against.
 
 Then load the theme once and use the prelude:
 
