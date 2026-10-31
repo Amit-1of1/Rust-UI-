@@ -338,6 +338,27 @@ fn the_public_repo_has_no_pro_sources() {
     );
 }
 
+#[test]
+fn the_pro_catalog_lists_screenshots_that_exist() {
+    // docs/pro/catalog.json is the public face of Pro: names, descriptions, screenshots.
+    let root = repo_root();
+    let text = std::fs::read_to_string(root.join("docs/pro/catalog.json")).unwrap();
+    let catalog: serde_json::Value = serde_json::from_str(&text).unwrap();
+    let items = catalog["items"].as_array().unwrap();
+    assert!(items.len() >= 10, "Pro v1 has at least ten items");
+    for item in items {
+        let name = item["name"].as_str().unwrap();
+        assert!(is_item_name(name), "`{name}` is not an item name");
+        for shot in item["screenshots"].as_array().unwrap() {
+            let shot = shot.as_str().unwrap();
+            assert!(
+                root.join("docs/pro").join(shot).is_file(),
+                "{name}: {shot} is missing"
+            );
+        }
+    }
+}
+
 fn load_str(json: &str) -> Registry {
     serde_json::from_str(json).unwrap()
 }

@@ -69,6 +69,8 @@ if [ -n "$overlay" ]; then
   if [ ${#missing[@]} -gt 0 ]; then
     printf 'Pro folders without LICENSE-PRO.md:\n  %s\n' "${missing[@]}" >&2; exit 1
   fi
+  # New apps join the workspace: record them in Cargo.lock so --locked builds work.
+  (cd "$dir" && cargo metadata -q --format-version 1 >/dev/null)
   (cd "$dir" && cargo run -q --manifest-path "$here/Cargo.toml" -p rust-ui-cli -- registry >/dev/null)
   git -C "$dir" add -A
   git -C "$dir" -c user.name="rust-ui pro-repo.sh" -c user.email=pro-repo@localhost \
