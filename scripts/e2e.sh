@@ -72,6 +72,12 @@ G=http://localhost:8765/ S=http://localhost:8767/ D=http://localhost:8769/ A=htt
 B=http://localhost:8773/
 W=http://localhost:8775/
 
+# Size and startup budgets of the release builds (bench/budgets.json). Sizes don't depend on the
+# engine, and the startup measurement needs Chromium's CPU throttling, so it runs in that job.
+if [ "$PROFILE" = release ] && [[ ",$BROWSERS," == *",chromium,"* ]]; then
+  step "size and startup budgets (bench/budgets.json)"; e2e node budgets.mjs
+fi
+
 for engine in ${BROWSERS//,/ }; do
   export BROWSER="$engine"
   printf '\n######## %s\n' "$engine"
@@ -106,6 +112,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] anchor positioning (gallery)";     e2e env GALLERY_URL=$G node anchor.mjs
   step "[$engine] keyboard per APG pattern";         e2e env GALLERY_URL=$G node keyboard.mjs
   step "[$engine] component contracts (docs pages)"; e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node contracts.mjs
+  step "[$engine] motion cost of every contract row";  e2e env GALLERY_URL=$D CONTRACTS_JSON="$CONTRACTS" node frames.mjs
   step "[$engine] keyboard-only walkthrough";        e2e env GALLERY_URL=$G node walkthrough.mjs
   step "[$engine] accessibility tree (roles, names, states)"; e2e env GALLERY_URL=$G node a11y_tree.mjs
   step "[$engine] density presets (gallery)";        e2e env GALLERY_URL=$G node density.mjs

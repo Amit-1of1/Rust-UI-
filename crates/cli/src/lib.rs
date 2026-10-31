@@ -25,6 +25,7 @@ pub mod llms;
 pub mod logo;
 pub mod manifest;
 pub mod mcp;
+pub mod motion;
 pub mod postbuild;
 pub mod scaffold;
 pub mod scope;
