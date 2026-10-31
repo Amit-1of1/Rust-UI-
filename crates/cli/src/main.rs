@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 use clap::{Parser, Subcommand};
 use rust_ui_cli::update::{self, Lock};
 use rust_ui_cli::{

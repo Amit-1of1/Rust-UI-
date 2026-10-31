@@ -8,6 +8,7 @@
 //! # Stability
 //!
 //! Experimental: may change in any release (docs/STABILITY.md).
+#![forbid(unsafe_code)]
 
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};

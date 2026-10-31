@@ -54,13 +54,41 @@ impl Lock {
     /// Read a lockfile; a missing one is empty.
     pub fn load(path: &Path) -> Result<Lock, String> {
         match fs::read_to_string(path) {
-            Ok(text) => serde_json::from_str(&text).map_err(|e| format!("{}: {e}", path.display())),
+            Ok(text) => {
+                let lock: Lock =
+                    serde_json::from_str(&text).map_err(|e| format!("{}: {e}", path.display()))?;
+                lock.validate()
+                    .map_err(|e| format!("{}: {e}", path.display()))?;
+                Ok(lock)
+            }
             Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(Lock {
                 version: 1,
                 ..Lock::default()
             }),
             Err(e) => Err(format!("{}: {e}", path.display())),
         }
+    }
+
+    /// Refuse names and paths that would leave the project: `update` writes and deletes the
+    /// files a lockfile lists, and a lockfile is just a file in the repo.
+    pub fn validate(&self) -> Result<(), String> {
+        for (name, item) in &self.items {
+            if !crate::is_item_name(name) {
+                return Err(format!("`{name}` is not a valid item name"));
+            }
+            if !crate::is_inside(Path::new(&item.dir)) {
+                return Err(format!(
+                    "`{name}`: `{}` must be a folder inside the project",
+                    item.dir
+                ));
+            }
+            if let Some(file) = item.files.keys().find(|f| !crate::is_item_file(name, f)) {
+                return Err(format!(
+                    "`{name}` lists `{file}`; files must be `{name}/<file name>`"
+                ));
+            }
+        }
+        Ok(())
     }
 
     pub fn save(&self, path: &Path) -> io::Result<()> {

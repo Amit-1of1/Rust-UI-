@@ -30,6 +30,7 @@
 //! and their types, and the other items re-exported from `dioxus-motion` (they change when the
 //! engine does).
 //! Internal: [`css`]. Details in docs/STABILITY.md.
+#![forbid(unsafe_code)]
 
 pub mod css;
 mod drag;
@@ -108,7 +109,7 @@ pub fn Pop(
 #[derive(Clone, Copy)]
 pub struct Spring {
     motion: MotionHandle<f32>,
-    reduced: bool,
+    reduced: Signal<bool>,
     preset: SpringPreset,
 }
 
@@ -136,7 +137,7 @@ impl Spring {
 
     /// Animate toward `target`.
     pub fn to(&mut self, target: f32) {
-        let config = Transition::new(self.preset).resolve(self.reduced);
+        let config = Transition::new(self.preset).resolve(*self.reduced.peek());
         if let Err(error) = self.motion.animate_to(target, config) {
             // A bad target (NaN, infinity) leaves the spring where it was.
             eprintln!("motion: ignoring invalid spring target {target}: {error}");
@@ -150,7 +151,7 @@ impl Spring {
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_spring(initial: f32, preset: SpringPreset) -> Spring {
-    let reduced = use_reduced_motion();
+    let reduced = reduced::use_reduced_motion_signal();
     // `use_motion` only fails for a non-finite initial value; fall back to zero.
     let initial = if initial.is_finite() { initial } else { 0.0 };
     let motion = use_motion(initial).unwrap_or_else(|_| unreachable!("finite initial value"));
