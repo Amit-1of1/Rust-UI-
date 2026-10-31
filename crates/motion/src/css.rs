@@ -101,7 +101,7 @@ pub fn stylesheet() -> String {
         "{BEGIN_MARKER}\n\
          /* Each spring preset traced as a CSS easing, so CSS animations feel like the Rust\n \
          * springs. Use: animation: name var(--spring-snappy-duration) var(--spring-snappy);\n \
-         * Regenerate: UPDATE_MOTION_CSS=1 cargo test -p rust-ui-kit --test motion_css */\n\
+         * Regenerate: UPDATE_MOTION_CSS=1 cargo test -p atoll-ui --test motion_css */\n\
          :root {{\n",
     );
     for (name, preset) in [

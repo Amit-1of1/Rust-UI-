@@ -1,7 +1,7 @@
 # Toggle group
 
-- Copy into your app: `rust-ui add toggle_group` or `dx components add toggle_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toggle_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toggle_group` or `dx components add toggle_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toggle_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set. It is useful for creating a set of options.
 

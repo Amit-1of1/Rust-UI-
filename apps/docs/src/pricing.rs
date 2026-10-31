@@ -48,7 +48,7 @@ const PLANS: &[Plan] = &[
         features: &[
             "Every component and block in these docs",
             "Light and dark themes, accent presets, motion",
-            "The CLI and MCP server",
+            "The atoll CLI and MCP server",
             "MIT OR Apache-2.0",
         ],
         checkout: None,
@@ -107,7 +107,7 @@ const COMPARE: &[(&str, &str, &str)] = &[
     ),
     (
         "Install",
-        "rust-ui add, dx components add",
+        "atoll add, dx components add",
         "The same, from the Pro repository",
     ),
     ("Licence", "MIT OR Apache-2.0", "Commercial, per developer"),
@@ -120,7 +120,7 @@ const FAQ: &[(&str, &str)] = &[
     ),
     (
         "How do I get Pro after paying?",
-        "Your GitHub account is invited to the private Pro repository. Install from it with the same commands: rust-ui add --source <Pro repository URL> <name>.",
+        "Your GitHub account is invited to the private Pro repository. Install from it with the same commands: atoll add --source <Pro repository URL> <name>.",
     ),
     (
         "Can I use Pro in client work?",

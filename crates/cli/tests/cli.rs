@@ -1,4 +1,4 @@
-use rust_ui_cli::*;
+use atoll_cli::*;
 use std::path::{Path, PathBuf};
 
 fn repo_root() -> PathBuf {
@@ -9,10 +9,7 @@ fn repo_root() -> PathBuf {
 fn committed_registry_is_up_to_date() {
     let built = to_json(&build(&repo_root()).unwrap());
     let committed = std::fs::read_to_string(repo_root().join("registry.json")).unwrap();
-    assert_eq!(
-        built, committed,
-        "run `cargo run -p rust-ui-cli -- registry`"
-    );
+    assert_eq!(built, committed, "run `cargo run -p atoll-cli -- registry`");
 }
 
 #[test]
@@ -140,7 +137,7 @@ fn clones_a_remote_once_and_reuses_it() {
 const ANCHORS: [&str; 1] = ["apps/gallery/src/main.rs"];
 
 fn scratch(tag: &str) -> PathBuf {
-    let dir = std::env::temp_dir().join(format!("rust-ui-scaffold-{tag}-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("atoll-scaffold-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     for rel in ANCHORS {
         let to = dir.join(rel);
@@ -184,7 +181,7 @@ fn committed_component_manifests_are_up_to_date() {
     let stale = manifest::stale_manifests(&repo_root()).unwrap();
     assert!(
         stale.is_empty(),
-        "run `cargo run -p rust-ui-cli -- registry`: {stale:?}"
+        "run `cargo run -p atoll-cli -- registry`: {stale:?}"
     );
 }
 
@@ -193,7 +190,7 @@ fn committed_llms_files_are_up_to_date() {
     let stale = llms::stale(&repo_root()).unwrap();
     assert!(
         stale.is_empty(),
-        "run `cargo run -p rust-ui-cli -- registry`: {stale:?}"
+        "run `cargo run -p atoll-cli -- registry`: {stale:?}"
     );
 }
 
@@ -203,7 +200,7 @@ fn every_component_has_an_agent_page_with_its_example() {
     let reg = load(&root).unwrap();
     for item in &reg.items {
         let text = llms::page(&root, &reg, &item.name).unwrap().unwrap();
-        assert!(text.contains(&format!("rust-ui add {}", item.name)));
+        assert!(text.contains(&format!("atoll add {}", item.name)));
         if root
             .join(DEMOS_DIR)
             .join(format!("{}.rs", item.name))
@@ -305,8 +302,8 @@ fn pro_items_are_marked_by_their_licence_file() {
 #[test]
 fn the_public_registry_has_no_pro_items() {
     // Pro items live in the private Pro repository only (docs/pro/README.md), which marks
-    // itself with a `.rust-ui-pro` file at its root.
-    if repo_root().join(".rust-ui-pro").exists() {
+    // itself with a `.atoll-pro` file at its root.
+    if repo_root().join(".atoll-pro").exists() {
         return;
     }
     let reg = load(&repo_root()).unwrap();

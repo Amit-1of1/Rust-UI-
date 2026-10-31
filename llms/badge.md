@@ -1,7 +1,7 @@
 # Badge
 
-- Copy into your app: `rust-ui add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::badge::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::badge::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Badge is a component designed to display small, distinct labels that help highlight important content or status indicators. Perfect for use cases like notifications, status labels, or categorization.
 

@@ -1,7 +1,7 @@
 [package]
 name = "site"
 version = "0.1.0"
-description = "A small marketing site built only from the Rust UI kit, as a real-world test of it"
+description = "A small marketing site built only from the Atoll kit, as a real-world test of it"
 publish = false
 edition.workspace = true
 license.workspace = true

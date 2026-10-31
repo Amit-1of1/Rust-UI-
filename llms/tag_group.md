@@ -1,7 +1,7 @@
 # Tag group
 
-- Copy into your app: `rust-ui add tag_group` or `dx components add tag_group --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::tag_group::*;` after copying, or `use ui::components::tag_group::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add tag_group` or `dx components add tag_group --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::tag_group::*;` after copying, or `use ui::components::tag_group::*;` with the `atoll-ui` crate.
 
 A Tag Group is a focusable group of tags (labels, categories, filters and similar items) with keyboard navigation, optional selection and removal.
 

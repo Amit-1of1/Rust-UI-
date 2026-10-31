@@ -1,7 +1,7 @@
-//! `rust-ui theme --from-image`: the brand colour found in a logo, and a readable preset from it.
+//! `atoll theme --from-image`: the brand colour found in a logo, and a readable preset from it.
 
-use rust_ui_cli::logo::{from_pixels, from_svg, read};
-use rust_ui_cli::theme::{contrast, preset, Rgb};
+use atoll_cli::logo::{from_pixels, from_svg, read};
+use atoll_cli::theme::{contrast, preset, Rgb};
 
 const WHITE: [u8; 4] = [255, 255, 255, 255];
 const CLEAR: [u8; 4] = [0, 0, 0, 0];

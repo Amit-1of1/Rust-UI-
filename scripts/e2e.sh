@@ -65,7 +65,7 @@ sleep 1
 CONTRACTS="$PWD/target/contracts.json"
 if [ "$BUILD" = 1 ] || [ ! -f "$CONTRACTS" ] \
   || [ -n "$(find crates/ui/src/components -name contract.toml -newer "$CONTRACTS")" ]; then
-  mkdir -p target && cargo run -q -p rust-ui-cli -- contract --json >"$CONTRACTS"
+  mkdir -p target && cargo run -q -p atoll-cli -- contract --json >"$CONTRACTS"
 fi
 
 G=http://localhost:8765/ S=http://localhost:8767/ D=http://localhost:8769/ A=http://localhost:8771/

@@ -2,7 +2,7 @@
 //! - every accent preset in `assets/theme.css` keeps its label text readable on the fill
 //!   (WCAG AA, 4.5:1) in both light and dark;
 //! - the fallback block for browsers without `light-dark()` matches the tokens. Regenerate it
-//!   with `UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme`.
+//!   with `UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme`.
 
 const THEME: &str = include_str!("../assets/theme.css");
 const THEME_PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/assets/theme.css");
@@ -132,7 +132,7 @@ fn doubled(selector: &str) -> String {
 /// switch theme on its own there too.
 fn fallback(tokens: &str) -> String {
     let mut out = format!(
-        "{FALLBACK_BEGIN}\n/* For browsers without light-dark(): the same tokens as space toggles.\n * Regenerate: UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme */\n@supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {{\n"
+        "{FALLBACK_BEGIN}\n/* For browsers without light-dark(): the same tokens as space toggles.\n * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */\n@supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {{\n"
     );
     let mut selector = None;
     let mut body = String::new();

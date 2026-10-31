@@ -1,7 +1,7 @@
 # Input
 
-- Copy into your app: `rust-ui add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.
 

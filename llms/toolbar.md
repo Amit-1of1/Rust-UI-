@@ -1,7 +1,7 @@
 # Toolbar
 
-- Copy into your app: `rust-ui add toolbar` or `dx components add toolbar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toolbar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toolbar` or `dx components add toolbar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toolbar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The toolbar component is a flexible and customizable component that can be used to create a variety of toolbars. It can be used to create a simple toolbar with a title, or a more complex toolbar with multiple buttons and actions.
 

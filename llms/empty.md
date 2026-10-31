@@ -1,7 +1,7 @@
 # Empty
 
-- Copy into your app: `rust-ui add empty` or `dx components add empty --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::empty::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add empty` or `dx components add empty --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::empty::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Placeholder for a list, table or page with nothing in it, with optional icon, text and actions. Compose `Empty`, `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, `EmptyContent`.
 

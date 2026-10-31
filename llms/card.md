@@ -1,7 +1,7 @@
 # Card
 
-- Copy into your app: `rust-ui add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.
 

@@ -1,28 +1,28 @@
 ---
-name: rust-ui
-description: Build Dioxus 0.7 UI with the Rust UI kit (shadcn-style, accessible, animated components copied into the app). Use when the app has rust-ui-lock.json, a src/components folder from `rust-ui add`, imports `ui::prelude`, or the user asks for Dioxus components, forms, dialogs, themes or motion.
+name: atoll
+description: Build Dioxus 0.7 UI with the Atoll kit (shadcn-style, accessible, animated components copied into the app). Use when the app has atoll-lock.json, a src/components folder from `atoll add`, imports `ui::prelude`, or the user asks for Dioxus components, forms, dialogs, themes or motion.
 ---
 
-# Rust UI kit
+# Atoll kit
 
-The kit's components are Rust source that `rust-ui add` copies into the app (or the `ui` crate, package `rust-ui-kit`, from git). They are the user's code once copied, so edit them freely, but keep their accessibility and motion behaviour intact.
+The kit's components are Rust source that `atoll add` copies into the app (or the `ui` crate, package `atoll-ui`, from git). They are the user's code once copied, so edit them freely, but keep their accessibility and motion behaviour intact.
 
 ## 1. Read the project first
 
 Run this before writing UI code, and again after adding or updating components:
 
 ```sh
-rust-ui info --json
+atoll info --json
 ```
 
-It reports the Dioxus requirement, the theme file and its accent presets, every installed component or block with the folder it lives in, which files the user edited, any unresolved update conflicts, and whether the MCP server is set up. Trust it over guessing paths. If `rust-ui` is not installed: `cargo install --git https://github.com/Amit-1of1/Rust-UI- rust-ui-cli`.
+It reports the Dioxus requirement, the theme file and its accent presets, every installed component or block with the folder it lives in, which files the user edited, any unresolved update conflicts, and whether the MCP server is set up. Trust it over guessing paths. If `atoll` is not installed: `cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli`.
 
-If `theme` is missing, run `rust-ui --source <kit> init` and load it once near the root (`document::Stylesheet { href: asset!("/assets/theme.css") }`), or `ui::ThemeStyles {}` with the crate. Without it components render unstyled.
+If `theme` is missing, run `atoll --source <kit> init` and load it once near the root (`document::Stylesheet { href: asset!("/assets/theme.css") }`), or `ui::ThemeStyles {}` with the crate. Without it components render unstyled.
 
 ## 2. Find the right component before writing your own
 
-- With the MCP server (`rust-ui mcp`, see the kit's docs/MCP.md): `search_components`, then `get_component` for props and an example.
-- Without it: `rust-ui --source <kit> list` and `rust-ui --source <kit> docs <name>`. `rust-ui docs` alone prints the index with the kit-wide rules.
+- With the MCP server (`atoll mcp`, see the kit's docs/MCP.md): `search_components`, then `get_component` for props and an example.
+- Without it: `atoll --source <kit> list` and `atoll --source <kit> docs <name>`. `atoll docs` alone prints the index with the kit-wide rules.
 
 Read the component's page before using it: prop names come from its Rust signatures, and the example shows the intended composition. Common choices:
 
@@ -40,7 +40,7 @@ Read the component's page before using it: prop names come from its Rust signatu
 ## 3. Add, then wire it up
 
 ```sh
-rust-ui --source <kit> add dialog button
+atoll --source <kit> add dialog button
 ```
 
 It copies the items and the components they depend on into `src/components` (blocks into `src/blocks`) and prints the `pub mod` lines to add to `src/components/mod.rs`. Import with `use crate::components::dialog::*;`. Through MCP, `add_component` does the same.
@@ -59,11 +59,11 @@ It copies the items and the components they depend on into `src/components` (blo
 Never re-run `add --force` on files `info` lists as edited: it overwrites the user's changes. Instead:
 
 ```sh
-rust-ui update --dry-run   # shows the diff
-rust-ui update             # three-way merge that keeps the user's edits
+atoll update --dry-run   # shows the diff
+atoll update             # three-way merge that keeps the user's edits
 ```
 
-Then run `rust-ui info --json` and resolve every file under `conflicts` (it holds `<<<<<<< yours` markers) before building.
+Then run `atoll info --json` and resolve every file under `conflicts` (it holds `<<<<<<< yours` markers) before building.
 
 ## 6. Check your work
 

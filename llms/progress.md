@@ -1,7 +1,7 @@
 # Progress
 
-- Copy into your app: `rust-ui add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::progress::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::progress::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Progress component is used to display the progress of a task or operation. It can be used to indicate loading states, file uploads, or any other process that takes time to complete.
 

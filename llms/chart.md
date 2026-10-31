@@ -1,7 +1,7 @@
 # Chart
 
-- Copy into your app: `rust-ui add chart` or `dx components add chart --git https://github.com/Amit-1of1/Rust-UI-` (also copies `table`, `ui_strings`).
-- Import: `use crate::components::chart::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chart` or `dx components add chart --git https://github.com/Amit-1of1/Rust-UI-` (also copies `table`, `ui_strings`).
+- Import: `use crate::components::chart::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Charts drawn as SVG in Rust, coloured from theme tokens. No JavaScript chart library.
 

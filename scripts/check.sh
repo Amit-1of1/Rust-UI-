@@ -9,7 +9,7 @@
 # The browser steps need `dx`, `npm ci` in tests/e2e and the engines under PLAYWRIGHT_BROWSERS_PATH.
 # On a work branch it first fails if the branch is behind origin/main (run scripts/sync-main.sh)
 # or edits CHANGELOG.md / docs/MIGRATION.md directly (use changes/). SKIP_SYNC_CHECK=1 skips the
-# first, FOLDING_CHANGELOG=1 the second (only for the PR that runs `rust-ui changelog`).
+# first, FOLDING_CHANGELOG=1 the second (only for the PR that runs `atoll changelog`).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -61,9 +61,9 @@ step "tests";   cargo test --workspace --exclude native
 # which then calls into JavaScript off wasm and panics in the native drawer test.
 step "native (headless Blitz)"; cargo test -p native
 step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard -p booking -p showcase --target wasm32-unknown-unknown
-step "registry, component.json, llms.txt"; cargo run -q -p rust-ui-cli -- registry --check
-step "changelog fragments"; cargo run -q -p rust-ui-cli -- changelog --check
-step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
+step "registry, component.json, llms.txt"; cargo run -q -p atoll-cli -- registry --check
+step "changelog fragments"; cargo run -q -p atoll-cli -- changelog --check
+step "doctor (errors fail, warnings are listed)"; cargo run -q -p atoll-cli -- doctor | tail -3
 if command -v cargo-deny >/dev/null; then
   step "dependencies: advisories, licences, sources (deny.toml)"; cargo deny check -s
 else

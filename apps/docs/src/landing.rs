@@ -72,7 +72,7 @@ pub fn LandingPage() -> Element {
                 "Accessible, animated components for Rust apps. Copy them into your app with one command; every one of them is keyboard-tested in three browsers."
             }
             div { class: "landing-actions",
-                a { href: "#install", ..button_look(ButtonVariant::Primary, ButtonSize::Default), "Get started" }
+                a { href: "#start", ..button_look(ButtonVariant::Primary, ButtonSize::Default), "Get started" }
                 a { href: "#pricing", ..button_look(ButtonVariant::Outline, ButtonSize::Default), "Pricing" }
                 a { href: REPO_URL, ..button_look(ButtonVariant::Ghost, ButtonSize::Default), "Source on GitHub" }
             }

@@ -1,4 +1,4 @@
-//! "Orbit": a small marketing site made only from the Rust UI kit. It exists to test the kit
+//! "Orbit": a small marketing site made only from the Atoll kit. It exists to test the kit
 //! in a real page (navigation, forms, overlays, charts, motion), not to be a product.
 
 use dioxus::prelude::*;
@@ -370,7 +370,7 @@ fn Palette(open: bool, on_open_change: EventHandler<bool>) -> Element {
 fn Footer() -> Element {
     rsx! {
         footer { class: "site-footer",
-            span { "Orbit is a pretend product. This page is a test of the Rust UI kit." }
+            span { "Orbit is a pretend product. This page is a test of the Atoll kit." }
             Breadcrumb {
                     BreadcrumbItem { BreadcrumbLink { href: "#top", "Home" } }
                     BreadcrumbSeparator {}

@@ -1,7 +1,7 @@
 # NativeSelect
 
-- Copy into your app: `rust-ui add native_select` or `dx components add native_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `input`).
-- Import: `use crate::components::native_select::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add native_select` or `dx components add native_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `input`).
+- Import: `use crate::components::native_select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The browser's own `<select>`, styled like `Input`. Choose it over `Select` on phones (the OS picker), in long forms, for long option lists, and in server-rendered pages, where it works before the app has loaded. Use `Select` when the open list needs custom styling.
 

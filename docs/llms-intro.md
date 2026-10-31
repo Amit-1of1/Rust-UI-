@@ -1,12 +1,12 @@
-# Rust UI
+# Atoll
 
-> Accessible, animated, shadcn-style components for Dioxus 0.7 (web and the desktop webview; native Blitz is a preview). Use them as source copied into your app (`rust-ui add <name>` or `dx components add`) or as the `rust-ui-kit` crate from git.
+> Accessible, animated, shadcn-style components for Dioxus 0.7 (web and the desktop webview; native Blitz is a preview). Use them as source copied into your app (`atoll add <name>` or `dx components add`) or as the `atoll-ui` crate from git.
 
 Rules for writing app code with this kit:
 
-- Copied components are your code: edit them freely. Update them with `rust-ui update` (three-way merge against `rust-ui-lock.json`; `--dry-run` shows the diff), not by re-running `rust-ui add --force`, which overwrites your edits. Resolve any `<<<<<<< yours` conflict markers it leaves.
+- Copied components are your code: edit them freely. Update them with `atoll update` (three-way merge against `atoll-lock.json`; `--dry-run` shows the diff), not by re-running `atoll add --force`, which overwrites your edits. Resolve any `<<<<<<< yours` conflict markers it leaves.
 - Dioxus is pinned to `0.7.x`. Write Dioxus 0.7 code (`#[component]`, `rsx!`, signals); don't use 0.6 or 0.8 APIs.
-- Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `rust-ui init`. Without it components are unstyled.
+- Load the theme once near the root: `ui::ThemeStyles {}` with the crate, or `document::Stylesheet { href: asset!("/assets/theme.css") }` after `atoll init`. Without it components are unstyled.
 - Import components from `ui::prelude::*` with the crate, or `crate::components::<name>::*` after copying. Icons come from `ui::icons` by path (`ui::icons::Check`), hooks from `ui::hooks`, animation from `ui::motion`.
 - Restyle with `class` (it adds to the kit's class) and the theme's CSS custom properties (`--primary-color`, `--accent-color`, `--radius`, ...). Don't hard-code colours, and don't change a component's markup: ARIA roles, focus and keys come from `dioxus-primitives`.
 - Light and dark mode: `data-theme="light"` or `"dark"` on `<html>`; accent presets: `data-accent="blue|green|violet|rose|orange"`.

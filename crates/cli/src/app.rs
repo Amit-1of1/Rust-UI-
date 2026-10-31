@@ -1,5 +1,5 @@
-//! Wiring copied components into an app that already exists: `rust-ui init` and
-//! `rust-ui add` call these so the app builds without hand edits.
+//! Wiring copied components into an app that already exists: `atoll init` and
+//! `atoll add` call these so the app builds without hand edits.
 //!
 //! - [`ensure_mod_lines`] and [`ensure_root_mod`]: the `pub mod` lines in
 //!   `src/components/mod.rs` and the `mod components;` line in `main.rs`/`lib.rs`.
@@ -351,14 +351,7 @@ pub fn defined_tokens(css: &str) -> Vec<String> {
 }
 
 /// Folders never scanned for the app's own CSS.
-const SKIP_DIRS: [&str; 6] = [
-    "target",
-    "node_modules",
-    ".git",
-    "dist",
-    ".rust-ui",
-    "vendor",
-];
+const SKIP_DIRS: [&str; 6] = ["target", "node_modules", ".git", "dist", ".atoll", "vendor"];
 
 /// The app's CSS files under `app` (at most 6 levels deep), except `skip` (the kit's own
 /// copies) and build output.

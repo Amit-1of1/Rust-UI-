@@ -1,6 +1,6 @@
-//! Documentation site for the Rust UI kit: one page per component (live demo plus its
+//! Documentation site for the Atoll kit: one page per component (live demo plus its
 //! `docs.md`) and the install and theming guides. The page list and the demos come from
-//! `generated.rs`, which `rust-ui registry` writes, so a component can't be left out.
+//! `generated.rs`, which `atoll registry` writes, so a component can't be left out.
 
 #[rustfmt::skip] // generated, one entry per line
 mod generated;
@@ -15,6 +15,11 @@ const DOCS_CSS: Asset = asset!("/assets/docs.css");
 const LANDING_CSS: Asset = asset!("/assets/landing.css");
 
 const GUIDES: &[(&str, &str, &str)] = &[
+    (
+        "start",
+        "Getting started",
+        include_str!("../../../docs/GETTING_STARTED.md"),
+    ),
     (
         "install",
         "Installing components",
@@ -75,7 +80,7 @@ fn App() -> Element {
         a { class: "docs-skip", href: "#page-title", "Skip to content" }
         Fragment {
             header { class: "docs-header",
-                a { class: "docs-brand", href: "#", "Rust UI" }
+                a { class: "docs-brand", href: "#", "Atoll" }
                 span { class: "docs-tagline", "Accessible, animated components for Dioxus" }
             }
             div { class: "docs-layout",
@@ -134,7 +139,7 @@ fn Page(slug: String) -> Element {
     }
     if let Some((_, title, source)) = GUIDES.iter().find(|(s, _, _)| *s == slug) {
         return rsx! {
-            document::Title { "{title} - Rust UI" }
+            document::Title { "{title} - Atoll" }
             h1 { id: "page-title", tabindex: "-1", "{title}" }
             div { class: "docs-prose", dangerous_inner_html: markdown(source) }
         };
@@ -143,7 +148,7 @@ fn Page(slug: String) -> Element {
         return rsx! { landing::LandingPage {} };
     };
     rsx! {
-        document::Title { "{entry.title} - Rust UI" }
+        document::Title { "{entry.title} - Atoll" }
         h1 { id: "page-title", tabindex: "-1", "{entry.title}" }
         if entry.has_demo {
             section { "aria-labelledby": "preview-heading",

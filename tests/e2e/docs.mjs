@@ -32,6 +32,12 @@ await page.getByRole("dialog").waitFor();
 await page.keyboard.press("Escape");
 await page.getByRole("dialog").waitFor({ state: "detached" });
 
+// The getting-started guide is a page of its own.
+await page.goto(base + "#start");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Getting started");
+await page.getByText("atoll create my-app", { exact: false }).first().waitFor();
+await page.goBack();
+
 // A deep link and the browser's Back button.
 await page.goto(base + "#theming");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theming");

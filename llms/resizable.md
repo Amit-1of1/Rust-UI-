@@ -1,7 +1,7 @@
 # Resizable
 
-- Copy into your app: `rust-ui add resizable` or `dx components add resizable --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::resizable::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add resizable` or `dx components add resizable --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::resizable::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys. For split views such as folders | messages | preview.
 

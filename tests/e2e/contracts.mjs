@@ -4,7 +4,7 @@
 // tests don't press. The same rows run on native in apps/native/tests/contracts.rs.
 // Format: docs/CONTRACTS.md.
 //   GALLERY_URL=<docs site> node contracts.mjs [component]
-// The steps come from `rust-ui contract --json` (run through cargo), or CONTRACTS_JSON=<file>.
+// The steps come from `atoll contract --json` (run through cargo), or CONTRACTS_JSON=<file>.
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { launch } from "./engine.mjs";
@@ -13,7 +13,7 @@ const url = process.env.GALLERY_URL ?? "http://localhost:8769/";
 const only = process.argv[2];
 const json = process.env.CONTRACTS_JSON
   ? readFileSync(process.env.CONTRACTS_JSON, "utf8")
-  : execFileSync("cargo", ["run", "-q", "-p", "rust-ui-cli", "--", "contract", "--json"], {
+  : execFileSync("cargo", ["run", "-q", "-p", "atoll-cli", "--", "contract", "--json"], {
       cwd: new URL("../..", import.meta.url).pathname,
       encoding: "utf8",
     });

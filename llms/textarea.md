@@ -1,7 +1,7 @@
 # Textarea
 
-- Copy into your app: `rust-ui add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The textarea element is used to allow users to enter multi-line text input in a user interface.
 

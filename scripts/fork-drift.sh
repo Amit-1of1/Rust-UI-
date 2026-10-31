@@ -35,7 +35,7 @@ dioxus-cli|0.7.10|DioxusLabs/dioxus|57d6794ad60b949e5bd8aa282f6f8c3dc97a365e|Ami
 dioxus-primitives|git|DioxusLabs/components|9a758255ea26e2b20c8cecf4c1c946feb9e71da7|Amit-1of1/dioxus-components|primitives
 "
 
-UA="rust-ui fork-drift.sh ($(git config remote.origin.url 2>/dev/null || echo local))"
+UA="atoll fork-drift.sh ($(git config remote.origin.url 2>/dev/null || echo local))"
 api() { curl -fsS -A "$UA" "https://crates.io/api/v1/crates/$1"; }
 
 # The commit each fork is pinned to, from the files that pin it.

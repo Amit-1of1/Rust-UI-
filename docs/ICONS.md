@@ -36,7 +36,7 @@ Rust/UI's set loses on the accessibility point alone (a title on every decorativ
 ### Why a wrapper item
 
 - **One place to swap.** GUARDRAILS asks us to wrap outside dependencies. If `dioxus-icons` stalls, changing `components/icons/component.rs` is the whole migration.
-- **The registry knows about it.** `rust-ui add select` now brings the `icons` item along (it is a registry dependency, detected from the import), so copied components compile without editing imports.
+- **The registry knows about it.** `atoll add select` now brings the `icons` item along (it is a registry dependency, detected from the import), so copied components compile without editing imports.
 - **No glob in the prelude.** Lucide has icons named `Link`, `Badge`, `Calendar`, `Component` and more, so `ui::prelude::*` does not include icons. Import them by path.
 
 ### Rules then

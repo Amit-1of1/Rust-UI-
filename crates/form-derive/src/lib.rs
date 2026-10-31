@@ -1,4 +1,4 @@
-//! `#[derive(Form)]` for the Rust UI kit: one struct gives the form's fields, their validation
+//! `#[derive(Form)]` for the Atoll kit: one struct gives the form's fields, their validation
 //! and their accessible error messages, on top of the kit's `use_form`.
 //!
 //! Use it through the kit (`use ui::prelude::*;`), not directly: the generated code names the
