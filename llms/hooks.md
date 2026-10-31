@@ -60,6 +60,21 @@ pub fn is_hotkey(key: &str, pressed: &str, ctrl: bool, meta: bool, alt: bool, sh
 /// same thing.
 pub fn use_hotkey(key: &'static str, mut on_press: impl FnMut() + 'static)
 
+/// A page-unique id such as `dx-field-3`, made once per component instance.
+///
+/// Ids are numbered per app, in render order, so a server-rendered page and the browser's
+/// first render give each component the same id. A process-wide counter (what the kit used
+/// before) keeps counting across server requests, so the server's `id`, `for` and
+/// `aria-describedby` stop matching the ones the browser computes, and label clicks,
+/// error announcements and focus-on-error break after hydration. With the `fullstack`
+/// feature the server's id is also sent to the client, as `dioxus-primitives` does.
+pub fn use_unique_id(prefix: &'static str) -> String
+
+/// The next id from the same per-app counter as [`use_unique_id`], for code that is not a
+/// hook: fields added from an event handler (`FormState::add_field`). Each call gives a new
+/// id, so don't call it in a component body; use [`use_unique_id`] there.
+pub fn next_unique_id(prefix: &str) -> String
+
 /// Phone-sized viewports, matching the kit's CSS breakpoint: `use_media_query(MOBILE_QUERY)`.
 pub const MOBILE_QUERY: &str;
 
@@ -71,7 +86,9 @@ pub const MOBILE_QUERY: &str;
 ///
 /// Web only: a Rust (web-sys) listener on the `MediaQueryList`, removed when the component
 /// unmounts. On desktop and native, and during server rendering, it is always `false`, so
-/// make `false` the layout that works everywhere.
+/// make `false` the layout that works everywhere. In fullstack apps the browser also starts
+/// from `false`, matching the server's HTML, and switches to the real value right after
+/// hydration.
 pub fn use_media_query(query: &'static str) -> ReadSignal<bool>
 
 /// The `href` to render for `href`: inside a router with a base path (for example a site
