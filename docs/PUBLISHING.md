@@ -1,54 +1,70 @@
 # Publishing
 
-Nothing here has been published. This page is the plan and the checklist; running `cargo publish` or turning on GitHub Pages is a decision for the repo owner.
+Nothing here has been published. This page is the plan and the checklist. Running `cargo publish` or turning on GitHub Pages is the repo owner's decision.
 
 ## Where each crate stands
 
-| Crate | crates.io | Why |
+`scripts/publish.sh` (a dry run unless given `--publish`) packages every crate below, builds an app outside this workspace from the packages, and lists what a real run would publish. It passed on 2026-10-30. The release workflow's `consumer` job runs the same build on every PR (`scripts/consumer-check.sh`).
+
+| Crate | Where it comes from | crates.io |
 |---|---|---|
-| `rust-ui-motion` | Ready (`cargo package` builds it) | Depends only on crates.io crates (`dioxus`, `dioxus-motion =0.4.0`). |
-| `rust-ui-cli` | Ready (`cargo package` builds it) | Plain Rust; it copies components from a checkout or git URL at run time. |
-| `rust-ui-kit` | Blocked, `publish = false` | Depends on `dioxus-primitives` from git, and crates.io refuses git dependencies. |
-| apps (`gallery`, `docs`, `site`, `trial`, `native`) | Never | `publish = false`. |
+| `rust-ui-attributes` | Our fork of DioxusLabs/components (`dioxus-attributes`, renamed) | Ready: packages and verifies |
+| `rust-ui-primitives` | Our fork of DioxusLabs/components (`dioxus-primitives`, renamed; library still `dioxus_primitives`) | Ready: packages and verifies |
+| `rust-ui-form-derive` | This repo | Ready |
+| `rust-ui-motion` | This repo | Ready |
+| `rust-ui-kit` | This repo | Ready once the two fork crates are published; `publish = false` until then, so nobody publishes it by accident |
+| `rust-ui-cli` | This repo | Ready |
+| apps (`gallery`, `docs`, `site`, `trial`, `native`, ...) | This repo | Never (`publish = false`) |
 
-Two things to settle before the first `cargo publish`, because a published name and version can never be taken back:
+Three things to settle before the first `cargo publish`, because a published name and version can never be taken back:
 
-- **Names.** `rust-ui` on crates.io belongs to an unrelated project, and `ui-cli` is the CLI of [rust-ui/ui](https://github.com/rust-ui/ui), which some of our components are adapted from. `rust-ui-kit`, `rust-ui-motion` and `rust-ui-cli` are free (checked 2026-10-13), but readers may take them for that project's crates. If that matters, rename before publishing.
-- **The repo is private.** Publishing puts the crate's source on crates.io for anyone, and every crate's `repository` link points here. The CLI is also only useful to people who can clone this repo, since it copies components from it. Publish once the repo is public, or accept that the links 404 for others.
+- **Names.** `rust-ui` on crates.io belongs to an unrelated project, and Rust/UI (rust-ui.com) now has a Dioxus edition. Every `rust-ui-*` name above was still free on 2026-10-30, but a rename should happen before publishing, not after. Renaming is mechanical: the package names in each `Cargo.toml`, `package =` in the root `[workspace.dependencies]`, the fork's two manifests, and `CRATES` in `scripts/semver.sh` and `scripts/consumer-check.sh`.
+- **The repo is private.** Publishing puts the source on crates.io for anyone, and every crate's `repository` link points here and at the fork.
+- **Who maintains the fork crates.** Publishing `rust-ui-primitives` means we release it when we change the fork. See [the decision](decisions/2026-10-30-publish-primitives-fork.md).
 
-## dioxus-primitives: the decision
+## dioxus-primitives
 
-Checked 2026-10-13:
+Checked again on 2026-10-30: crates.io still has `dioxus-primitives` only as an empty `0.0.0` placeholder held by DioxusLabs. Upstream (`DioxusLabs/components`) declares `0.0.1`, has no releases, and its `main` is still `9a75825`, the commit our fork is based on. It depends on `dioxus-attributes` by path, and that crate isn't published either.
 
-- crates.io has `dioxus-primitives` only as an empty `0.0.0` placeholder held by DioxusLabs (April 2025).
-- Upstream (`DioxusLabs/components`) declares `0.0.1`, has no tags or releases, and depends on `dioxus-attributes`, a path crate that is not on crates.io either. So upstream needs two releases before we can depend on a version.
-- Upstream's latest commit is still the one we pin (`9a75825`, 2026-09-07); four commits landed since June.
+On 2026-10-13 we chose to wait. Since 2026-10-14 we carry a fork anyway (docs/FORKS.md), so the main cost of publishing it, owning the code, is already paid. On 2026-10-30 the fork was made publishable under our own names ([decision](decisions/2026-10-30-publish-primitives-fork.md)):
 
-| Option | Cost | Verdict |
-|---|---|---|
-| Wait for an upstream release | Nothing now; the kit stays git-installed until DioxusLabs publishes. No date announced. | **Chosen**, together with the next row. |
-| Keep git install and document it | Users add one git line, or copy components with `dx components add` / `rust-ui add`, which is how shadcn-style kits are meant to be used anyway. | **Chosen.** Done in [INSTALL.md](INSTALL.md). |
-| Fork as `rust-ui-primitives` + `rust-ui-attributes` and publish those | Allowed by the MIT/Apache licence with credit, but we would own about 22,600 lines of focus, keyboard and ARIA code and have to port upstream fixes by hand. `dx components add` users would still get upstream's `dioxus-primitives`, so the two routes would ship different types. It also breaks the GUARDRAILS premise that behaviour comes from dioxus-primitives. | Not now. Revisit only if crates.io becomes a hard requirement and upstream has still not released. |
+- Fork branch `claude/project-thread-6c30v9` (commit `fd533b7`, to be fast-forwarded into `rust-ui/primitives-9a75825`) renames the packages to `rust-ui-primitives` and `rust-ui-attributes`. It keeps the library names, so every `use dioxus_primitives::...` compiles unchanged. It changes no code.
+- The kit depends on it as `dioxus-primitives = { package = "rust-ui-primitives", version = "0.1.0", git = ..., rev = ... }`. Cargo builds from `git`. A packaged kit keeps only `version`, so the published kit depends on `rust-ui-primitives` from crates.io.
+- `component.json` names `rust-ui-primitives`, so `dx components add` and `rust-ui add` install the same crate as the kit. Copied components and the kit no longer ship different types.
 
-**Switch-over when upstream publishes** (both `dioxus-primitives` and `dioxus-attributes` on crates.io):
+**Asking upstream first is still the best outcome.** A draft issue asking DioxusLabs to publish both crates is with the owner (not filed). If they publish, switch back: depend on `dioxus-primitives = "<version>"`, and keep the fork only as a `[patch]` for the fixes that native needs.
 
-1. In the root `Cargo.toml`, replace the git line with `dioxus-primitives = "=<version>"` matching the commit we test against.
-2. In `crates/cli/src/manifest.rs`, emit `{"name": "dioxus-primitives", "version": ...}` instead of the `git`/`rev` pair, so `component.json` files ask for the version, then run `cargo run -p rust-ui-cli -- registry`.
-3. Remove `publish = false` from `crates/ui/Cargo.toml`, run the checks below, and publish `rust-ui-kit` after `rust-ui-motion`.
+### After the fork crates are published
+
+1. In the root `Cargo.toml`, delete `git` and `rev` from the `dioxus-primitives` line, keeping `package` and `version`.
+2. Run `cargo run -p rust-ui-cli -- registry`. `crates/cli/src/manifest.rs` sees a registry source and writes `{"name": "rust-ui-primitives", "version": ...}` (and `rust-ui-motion` by version) into every `component.json`, so copying a component needs no git at all.
+3. `scripts/consumer-check.sh` now fails if any git source is left in an outside app's dependency tree.
 
 ## Release checklist (for the owner)
 
 ```sh
 scripts/check.sh --a11y
-cargo package -p rust-ui-motion -p rust-ui-cli        # builds each crate from its packaged files
-cargo publish --dry-run -p rust-ui-motion
-cargo publish --dry-run -p rust-ui-cli
-# then, once names and visibility are settled:
-cargo publish -p rust-ui-motion
-cargo publish -p rust-ui-cli
+scripts/semver.sh --release   # against the last release: is the version bump big enough?
+scripts/publish.sh            # dry run: packages everything, builds an outside app from the packages
 ```
 
-Publish `rust-ui-motion` before `rust-ui-kit`, because the kit depends on it. Bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`) together, as [VERSIONING.md](VERSIONING.md) describes: the minor version when the CHANGELOG has a "Breaking" entry, otherwise the patch. In the same commit, rename the CHANGELOG's "Unreleased" heading to the version and date, then tag it `v<version>`.
+Then, once names and visibility are settled:
+
+1. In the release PR: bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`, `form-derive`) together, as [VERSIONING.md](VERSIONING.md) describes. Fold the changelog (`cargo run -p rust-ui-cli -- changelog`). For the first release only, remove `publish = false` from `crates/ui/Cargo.toml`.
+2. Merge it, tag the merge commit `v<version>`, and push the tag.
+3. `CARGO_REGISTRY_TOKEN=... scripts/publish.sh --publish`. It publishes in dependency order: `rust-ui-attributes`, `rust-ui-primitives` (from the fork commit pinned in `Cargo.toml`), `rust-ui-form-derive`, `rust-ui-motion`, `rust-ui-kit`, `rust-ui-cli`. It skips any crate already published at that version, so a run that stops half way can be restarted.
+4. Do the three steps under "After the fork crates are published" in a follow-up PR.
+
+The fork crates have their own version (`0.1.0`). Bump it in the fork when a fork fix changes them, and publish it before the kit release that needs it.
+
+## Apps outside this repo: what they get
+
+What `scripts/consumer-check.sh` proves on every PR, for an app that depends on the kit:
+
+- **Stock Dioxus from crates.io.** The kit asks for `dioxus = "0.7.10"`, and nothing replaces it. Our `[patch.crates-io]` section (Blitz and `dioxus-native-dom`) only applies inside this workspace, so it never reaches an outside app.
+- **No git dependency except the primitives fork**, and none at all once `rust-ui-primitives` is published.
+- **Native (Blitz) is the exception.** An app that uses the `native` feature and wants the renderer fixes copies the `[patch.crates-io]` section from this repo's `Cargo.toml` ([FORKS.md](FORKS.md#using-the-fixes-in-an-app-outside-this-repo)). Without it, native works with upstream's known gaps.
+- **Split wasm builds** (`dx build --wasm-split`) need our `dx` (`scripts/install-dx.sh`) until the splitter fix is upstream. `dx serve` and ordinary builds work with stock `dx` 0.7.10.
 
 ## Docs site on GitHub Pages
 

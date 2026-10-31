@@ -1,0 +1,39 @@
+name: Release readiness
+
+# Two checks that keep the kit adoptable by apps outside this repo (docs/PUBLISHING.md):
+# - consumer: package the crates and build an outside app from the packages, on stock Dioxus
+#   from crates.io with no [patch], and fail on any git source but the unpublished primitives
+#   fork (scripts/consumer-check.sh).
+# - semver: on pull requests, fail an undocumented break of the public API
+#   (scripts/semver.sh, docs/VERSIONING.md).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The sync-prs workflow starts it on PR branches it pushed to.
+  workflow_dispatch:
+
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - run: scripts/consumer-check.sh
+
+  semver:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-semver-checks
+      - run: scripts/semver.sh "origin/${{ github.base_ref }}"

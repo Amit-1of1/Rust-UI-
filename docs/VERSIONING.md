@@ -16,7 +16,17 @@ Cargo treats `0.1.x` and `0.2.x` as incompatible, so an app on `0.1` never picks
 
 - The three crates share one version number and move together, because the kit depends on the motion crate and the CLI copies the kit's source. Bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`) in the same commit.
 - A release is a git tag `v<version>` on `main`. Nothing has been tagged or published yet: every crate is `0.1.0`, and the [CHANGELOG](../CHANGELOG.md) collects everything under "Unreleased". The first tag (`v0.1.0`) closes that section. Publishing to crates.io is a separate decision ([PUBLISHING.md](PUBLISHING.md)).
-- `1.0` waits until the kit itself is on crates.io (blocked on `dioxus-primitives`, see PUBLISHING.md) and the stable API has gone a few releases without a breaking change.
+- `1.0` waits until the kit itself is on crates.io (ready once `rust-ui-primitives` is published, see PUBLISHING.md), the stable API has gone three minor releases without a breaking change, and the kit has moved to the Dioxus release it will live on. A Dioxus minor (0.7 to 0.8) is breaking for every app, so it always gets a kit minor of its own and nothing else breaking rides with it.
+
+### Support while `0.x`
+
+What an app that adopts the kit can count on before 1.0:
+
+- **Breaking releases are batched and rare.** Breaks collect on `main` behind deprecations and ship together in one minor release, not more than one every six weeks (a security fix is the exception). Everything between is patch releases, which Cargo picks up by itself and which never break a stable item.
+- **The previous minor gets fixes.** For three months after `0.N+1.0`, security fixes and fixes for crashes or broken keyboard and screen-reader behaviour are backported as `0.N.x` patch releases, from a `release/0.N` branch cut at the `v0.N.0` tag.
+- **Every break comes with steps.** A MIGRATION.md section with before and after. Where a change can be scripted (a rename), `rust-ui update` applies it to copied components.
+- **Rust version (MSRV).** `rust-version` in the workspace (now 1.88) only goes up in a minor release, and never to a Rust release less than six months old.
+- **Dioxus.** Each kit minor supports exactly one Dioxus minor (`0.7.x` now). The kit follows Dioxus patch releases within it.
 
 ### Apps installing from git
 
@@ -58,6 +68,15 @@ Not breaking, even for stable items:
 - Bug fixes that make behaviour match the docs, WAI-ARIA or the primitive. Call them out in the CHANGELOG under "Fixed" when apps may notice.
 - Bumping a pinned dependency (`dioxus-primitives` rev, a fork rev, `dioxus` within `0.7.x`) when no kit API changes. A bump that changes a re-exported type (`use_toast`, `ToastOptions`, `ContentSide`, the `dioxus-motion` items) is breaking for those items.
 - Anything marked **experimental** or **internal** in [STABILITY.md](STABILITY.md). Experimental changes still get a CHANGELOG line, and a MIGRATION section when the fix isn't obvious.
+
+## Checked by CI
+
+Rules only help if a machine enforces them. `scripts/semver.sh` runs [cargo-semver-checks](https://github.com/obi1kenobi/cargo-semver-checks) on every PR (the `semver` job in `.github/workflows/release-readiness.yml`). It compares the public API of `rust-ui-kit` and `rust-ui-motion` (with the `web` feature) against the PR's base and fails when:
+
+- the API breaks the way a patch release must not (a removed or renamed item, a changed signature, a new required field, a removed enum variant, and so on), **and**
+- the branch doesn't say so: no `changes/<topic>.migration.md` and no `### Breaking` entry in its fragment.
+
+It can't tell stable from experimental items, so an experimental break needs the one-line entry too. That's cheap, and apps using experimental items still learn about it. It doesn't see behaviour, markup or CSS changes. Those stay with review and the browser checks. Before a release, `scripts/semver.sh --release` compares against the last published version (or the last tag, until one exists) and says whether the version bump is big enough.
 
 ## Deprecation
 
