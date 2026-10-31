@@ -7,6 +7,8 @@
 //! - `demos.rs`: `pub mod <name>;` for every `src/demos/<name>.rs`, and `ALL`, the list the
 //!   tests, gallery checks and snapshots walk.
 //! - `component_tests.rs`: `mod <name>;` for every `tests/components/<name>.rs`.
+//! - `blocks.rs`: `pub mod <name>;` for every folder in `src/blocks` with a `mod.rs`, so a
+//!   block (free here, or Pro in the Pro repository) is added by adding its folder.
 //!
 //! Adding a component is now "add files": nothing else needs a new line.
 //!
@@ -27,8 +29,15 @@ fn main() {
     let components_dir = root.join("src/components");
     let demos_dir = root.join("src/demos");
     let tests_dir = root.join("tests/components");
+    let blocks_dir = root.join("src/blocks");
     let exclude_file = root.join("not_in_prelude.txt");
-    for dir in [&components_dir, &demos_dir, &tests_dir, &exclude_file] {
+    for dir in [
+        &components_dir,
+        &demos_dir,
+        &tests_dir,
+        &blocks_dir,
+        &exclude_file,
+    ] {
         println!("cargo::rerun-if-changed={}", dir.display());
     }
     let excluded = fs::read_to_string(&exclude_file).expect("not_in_prelude.txt");
@@ -42,6 +51,7 @@ fn main() {
     let components: Vec<String> = names(&components_dir, |p| {
         p.is_dir() && p.join("mod.rs").is_file()
     });
+    let blocks: Vec<String> = names(&blocks_dir, |p| p.is_dir() && p.join("mod.rs").is_file());
     let demos: Vec<String> = names(&demos_dir, |p| is_rs(p) && !p.ends_with("mod.rs"))
         .into_iter()
         .map(|n| n.trim_end_matches(".rs").to_string())
@@ -109,7 +119,17 @@ fn main() {
         ));
     }
 
+    let mut block_mods = String::new();
+    for name in &blocks {
+        let path = blocks_dir.join(name).join("mod.rs");
+        block_mods.push_str(&format!(
+            "#[path = {:?}]\npub mod {name};\n",
+            path.display().to_string()
+        ));
+    }
+
     write(&out.join("components.rs"), &mods);
+    write(&out.join("blocks.rs"), &block_mods);
     write(&out.join("prelude.rs"), &prelude);
     write(&out.join("demos.rs"), &demo_mods);
     write(&out.join("component_tests.rs"), &test_mods);

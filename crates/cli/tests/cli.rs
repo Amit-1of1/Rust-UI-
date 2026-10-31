@@ -314,6 +314,30 @@ fn the_public_registry_has_no_pro_items() {
     assert_eq!(pro_notice(&reg.items), None);
 }
 
+#[test]
+fn the_public_repo_has_no_pro_sources() {
+    // Templates and Pro-only tests are not registry items, so the registry check above would
+    // miss them: no tracked folder outside docs/pro may carry the Pro licence.
+    let root = repo_root();
+    if root.join(".rust-ui-pro").exists() {
+        return;
+    }
+    let out = std::process::Command::new("git")
+        .args(["ls-files", "--", "*LICENSE-PRO.md"])
+        .current_dir(&root)
+        .output()
+        .expect("git runs");
+    let files = String::from_utf8(out.stdout).unwrap();
+    let leaked: Vec<&str> = files
+        .lines()
+        .filter(|f| *f != "docs/pro/LICENSE-PRO.md")
+        .collect();
+    assert!(
+        leaked.is_empty(),
+        "Pro sources in the public repo: {leaked:?}"
+    );
+}
+
 fn load_str(json: &str) -> Registry {
     serde_json::from_str(json).unwrap()
 }
