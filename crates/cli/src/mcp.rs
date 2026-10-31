@@ -9,7 +9,9 @@
 use crate::docsgen::title;
 use crate::llms::{index, page};
 use crate::manifest::description;
-use crate::{add_to, compare, load, mod_lines_of, resolve, FileState, Item, Kind, Registry};
+use crate::{
+    add_to, compare, load, mod_lines_of, pro_notice, resolve, FileState, Item, Kind, Registry, Tier,
+};
 use crate::{THEME_FILE, VERSION};
 use serde_json::{json, Value};
 use std::fs;
@@ -288,6 +290,9 @@ impl Server {
                         ));
                     }
                 }
+                if let Some(notice) = pro_notice(&items) {
+                    out.push_str(&format!("\n{notice}\n"));
+                }
                 out.push_str(&format!(
                     "\nThe app needs `{}` in Cargo.toml and the theme stylesheet (`init_theme`).\n",
                     reg.cargo_dependencies.join("`, `")
@@ -348,6 +353,7 @@ impl Server {
         json!({
             "name": item.name,
             "kind": match item.kind { Kind::Component => "component", Kind::Block => "block" },
+            "tier": match item.tier { Tier::Free => "free", Tier::Pro => "pro" },
             "title": title(&docs, &item.name),
             "description": description(&docs),
             "dependencies": item.registry_dependencies,

@@ -43,15 +43,17 @@ Select::<String> { aria_label: "Fruit", /* options */ }
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the trigger | Opens the list. | yes |
 | Space | On the trigger | Opens the list. | yes |
 | ArrowDown | In the open list | Moves focus to the first option, then to the next one, skipping disabled ones. | yes |
-| Enter | On an option | Picks the option, closes the list, shows the value on the trigger and returns focus to it. | yes |
-| Escape | In the open list | Closes the list without changing the value and returns focus to the trigger. | yes |
+| Enter | On an option | Picks the option, closes the list and shows the value on the trigger. | yes |
+| Enter | After picking an option | Focus goes back to the trigger. | not yet |
+| Escape | In the open list | Closes the list without changing the value. | yes |
+| Escape | After the list closes | Focus goes back to the trigger. | not yet |
 
 States:
 

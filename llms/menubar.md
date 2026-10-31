@@ -37,7 +37,7 @@ Menubar {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) pattern. Roles: `menubar`, `menu`, `menuitem`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -45,7 +45,8 @@ Follows the WAI-ARIA [Menu Bar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar
 | ArrowLeft | On a menu bar item | Moves focus to the previous menu bar item. | yes |
 | ArrowDown | On a menu bar item | Opens its menu and moves focus to the first item. | yes |
 | Enter | On a menu bar item | Opens or closes its menu. | yes |
-| Escape | In an open menu | Closes the menu and returns focus to its menubar item. | yes |
+| Escape | In an open menu | Closes the menu. | yes |
+| Escape | After the menu closes | Focus goes back to the menubar item that opened it. | not yet |
 
 States:
 
