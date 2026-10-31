@@ -16,7 +16,7 @@ use crate::{THEME_FILE, VERSION};
 use serde_json::{json, Value};
 use std::fs;
 use std::io::{self, BufRead, Write};
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 
 /// Protocol revisions this server speaks, newest first. A client asking for another one gets
 /// the newest, as the spec says.
@@ -328,9 +328,7 @@ impl Server {
     /// refused so a tool call can't write outside the app it was started for.
     fn inside(&self, path: &str) -> Result<PathBuf, String> {
         let p = Path::new(path);
-        if p.components()
-            .any(|c| !matches!(c, Component::Normal(_) | Component::CurDir))
-        {
+        if !crate::is_inside(p) {
             return Err(format!(
                 "`{path}` must be a relative path inside the project (no `..`, not absolute)"
             ));

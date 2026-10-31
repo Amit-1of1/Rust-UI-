@@ -9,6 +9,7 @@
 //! experimental or internal is listed in docs/STABILITY.md; experimental and internal items
 //! also say so in their docs. Breaking changes follow docs/VERSIONING.md and are listed in
 //! CHANGELOG.md.
+#![forbid(unsafe_code)]
 
 /// Whole screens to copy (`rust-ui add login_01`): sign-in, sign-up, dashboard, settings
 /// (feature `blocks`).
