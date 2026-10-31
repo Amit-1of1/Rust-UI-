@@ -56,6 +56,26 @@ enum Command {
     },
     /// Scaffold a new component in this repo (files, demo, test, gallery section, registry).
     New { name: String },
+    /// Run `cargo check` and explain the errors that come from using kit components in plain
+    /// words: the missing or misspelt prop, its documentation, the enum variants that exist,
+    /// and the component to `add`. Arguments after `--` go to `cargo check`.
+    Explain {
+        /// Read `cargo check --message-format=json` output from this file (`-` for stdin)
+        /// instead of running cargo.
+        #[arg(long)]
+        from: Option<PathBuf>,
+        /// Your copied components, read instead of the registry's versions.
+        #[arg(long, default_value = "src/components")]
+        dest: PathBuf,
+        #[arg(long, default_value = "src/blocks")]
+        blocks_dest: PathBuf,
+        /// Print the hints as JSON (for editors and agents).
+        #[arg(long)]
+        json: bool,
+        /// Passed to `cargo check`, e.g. `-- -p my-app --features web`.
+        #[arg(last = true)]
+        cargo_args: Vec<String>,
+    },
     /// Fold the per-PR fragments in `changes/` into CHANGELOG.md and docs/MIGRATION.md
     /// (`--check` only validates them). Run on `main` before a release; changes/README.md.
     Changelog {
@@ -75,11 +95,20 @@ enum Command {
         #[arg(long)]
         theme: Vec<PathBuf>,
     },
-    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
+    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
+    /// the colours of a logo.
     Theme {
         /// Brand colour as hex, e.g. `#7c3aed`.
+        #[arg(
+            long,
+            required_unless_present = "from_image",
+            conflicts_with = "from_image"
+        )]
+        brand: Option<String>,
+        /// A logo (PNG, JPEG or SVG): its most visible saturated colour becomes the brand
+        /// colour, and a clearly different second colour is printed as an alternative preset.
         #[arg(long)]
-        brand: String,
+        from_image: Option<PathBuf>,
         /// Preset name used in `data-accent="..."`.
         #[arg(long, default_value = "brand")]
         name: String,
@@ -119,6 +148,23 @@ enum Command {
         name: Option<String>,
         #[arg(long)]
         json: bool,
+    },
+    /// Write a draft Accessibility Conformance Report (VPAT 2.5 layout, WCAG 2.2 A and AA) for
+    /// the kit components your app uses, from the kit's tests and keyboard contracts.
+    /// docs/ACR.md explains what it covers.
+    Acr {
+        /// Components or blocks to report on (with what they use). Default: the items in the
+        /// lockfile, or every component when there is none.
+        names: Vec<String>,
+        /// The product name in the title.
+        #[arg(long, default_value = "Your app")]
+        product: String,
+        /// Write the Markdown here instead of printing it.
+        #[arg(long)]
+        out: Option<PathBuf>,
+        /// The report date (YYYY-MM-DD); today by default.
+        #[arg(long)]
+        date: Option<String>,
     },
     /// Update copied components and blocks to the registry's current version, keeping your
     /// edits: a three-way merge against the version `add` recorded in the lockfile.
@@ -260,6 +306,49 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             rust_ui_cli::llms::write(root).map_err(err)?;
             println!("updated registry.json, component.json files, the docs index and llms.txt");
         }
+        Command::Explain {
+            from,
+            dest,
+            blocks_dest,
+            json,
+            cargo_args,
+        } => {
+            use rust_ui_cli::explain::{render, Api};
+            let output = match from {
+                Some(p) if p.as_os_str() == "-" => {
+                    std::io::read_to_string(std::io::stdin()).map_err(err)?
+                }
+                Some(p) => {
+                    std::fs::read_to_string(&p).map_err(|e| format!("{}: {e}", p.display()))?
+                }
+                None => {
+                    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".into());
+                    let out = std::process::Command::new(cargo)
+                        .args(["check", "--message-format=json"])
+                        .args(&cargo_args)
+                        .stderr(std::process::Stdio::inherit())
+                        .output()
+                        .map_err(|e| format!("could not run cargo: {e}"))?;
+                    String::from_utf8_lossy(&out.stdout).into_owned()
+                }
+            };
+            let api = Api::load(root, &[dest, blocks_dest]);
+            let cwd = std::env::current_dir().map_err(err)?;
+            let report = api.explain(&output, &cwd);
+            if json {
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&report).map_err(|e| e.to_string())?
+                );
+            } else if report.hints.is_empty() && report.other.is_empty() {
+                println!("no errors");
+            } else {
+                print!("{}", render(&report));
+            }
+            if !report.hints.is_empty() || !report.other.is_empty() {
+                return Ok(ExitCode::FAILURE);
+            }
+        }
         Command::Changelog { check } => {
             use rust_ui_cli::changelog::{fold, load, unnamed};
             if check {
@@ -317,12 +406,31 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 return Ok(ExitCode::FAILURE);
             }
         }
-        Command::Theme { brand, name } => {
+        Command::Theme {
+            brand,
+            from_image,
+            name,
+        } => {
             use rust_ui_cli::theme::{css, preset, Rgb};
             if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
                 return Err(format!("`{name}` must be letters, digits or `-`"));
             }
-            print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
+            match (brand, from_image) {
+                (Some(brand), _) => print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?)),
+                (None, Some(logo)) => {
+                    let palette = rust_ui_cli::logo::read(&logo)?;
+                    print!("{}", rust_ui_cli::logo::summary(&palette));
+                    print!("{}", css(&name, &preset(palette.brand)?));
+                    if let Some(second) = palette.second {
+                        println!(
+                            "\n/* Alternative: the logo's second colour ({}). */",
+                            second.hex()
+                        );
+                        print!("{}", css(&format!("{name}-2"), &preset(second)?));
+                    }
+                }
+                (None, None) => return Err("give --brand or --from-image".into()),
+            }
         }
         Command::Postbuild { public } => {
             use rust_ui_cli::postbuild::{bundle_css, strip_wasm};
@@ -404,6 +512,44 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 for c in picked {
                     println!("# {}\n\n{}", c.name, c.markdown());
                 }
+            }
+        }
+        Command::Acr {
+            names,
+            product,
+            out,
+            date,
+        } => {
+            use rust_ui_cli::acr::{components_of, load_criteria, markdown, report};
+            let reg = load(root)?;
+            let wanted: Vec<String> = if !names.is_empty() {
+                names
+            } else {
+                let lock = Lock::load(&cli.lock)?;
+                if lock.items.is_empty() {
+                    reg.items
+                        .iter()
+                        .filter(|i| i.kind == Kind::Component)
+                        .map(|i| i.name.clone())
+                        .collect()
+                } else {
+                    lock.items.keys().cloned().collect()
+                }
+            };
+            let components = components_of(&reg, &wanted)?;
+            let criteria = load_criteria(root)?;
+            let date = date.unwrap_or_else(rust_ui_cli::acr::today);
+            let text = markdown(&report(root, &criteria, &components, &product)?, &date);
+            match out {
+                Some(path) => {
+                    std::fs::write(&path, text).map_err(err)?;
+                    println!(
+                        "wrote {} ({} components); read it and fill in the rows marked review",
+                        path.display(),
+                        components.len()
+                    );
+                }
+                None => print!("{text}"),
             }
         }
         Command::Update {

@@ -1,0 +1,499 @@
+# What the kit's components do for each WCAG 2.2 Level A and AA success criterion, and the
+# checks that show it. `rust-ui acr` turns this into a draft Accessibility Conformance Report
+# (VPAT 2.5 layout) for the components an app uses; docs/ACR.md explains it.
+#
+# kit      supports | partial | does-not-support | not-applicable | not-evaluated
+#          (what the kit's components do; not-evaluated means no check exists yet)
+# remarks  what the kit does, in the report's words
+# app      what the app itself still has to do for the criterion (optional)
+# evidence files, or `file::test_fn`, that back the remark; crates/cli/tests/acr.rs fails if
+#          one disappears
+# components  the only components the criterion is about: Not Applicable when none is used
+# computed "keyboard" or "focus": the conformance and remarks also list, per component the
+#          app uses, the keyboard contract and its recorded gaps (contract.toml)
+
+[[criterion]]
+id = "1.1.1"
+name = "Non-text Content"
+level = "A"
+kit = "supports"
+remarks = "Image slots that need a text alternative make it a required prop: `AvatarImage` and `ImageAvatar` do not compile without `alt`, and `IconButton` does not compile without `label`. Decorative icons are `aria-hidden`. Charts carry a `<title>` and a `<desc>` text summary."
+app = "Write meaningful `alt`, `label` and chart titles; review images and icons outside kit components."
+evidence = ["crates/ui/src/components/avatar/component.rs", "crates/ui/src/components/button/component.rs", "crates/ui/tests/aria.rs::every_demo_passes_the_aria_check"]
+
+[[criterion]]
+id = "1.2.1"
+name = "Audio-only and Video-only (Prerecorded)"
+level = "A"
+kit = "not-applicable"
+remarks = "The kit has no audio or video components."
+app = "Provide alternatives for any media the app plays."
+evidence = []
+
+[[criterion]]
+id = "1.2.2"
+name = "Captions (Prerecorded)"
+level = "A"
+kit = "not-applicable"
+remarks = "The kit has no audio or video components."
+app = "Caption any prerecorded video the app plays."
+evidence = []
+
+[[criterion]]
+id = "1.2.3"
+name = "Audio Description or Media Alternative (Prerecorded)"
+level = "A"
+kit = "not-applicable"
+remarks = "The kit has no audio or video components."
+app = "Provide audio description or a transcript for prerecorded video."
+evidence = []
+
+[[criterion]]
+id = "1.3.1"
+name = "Info and Relationships"
+level = "A"
+kit = "supports"
+remarks = "Components expose their structure through native elements and WAI-ARIA roles; labels, descriptions and errors are linked with `aria-labelledby` / `aria-describedby`. Every demo's server-rendered HTML is checked in `cargo test` for idrefs that point nowhere, duplicate ids, unknown roles and attributes, and roles missing required state; the browser checks compare each component's accessibility tree with a reviewed snapshot."
+app = "Use headings, landmarks and lists in the app's own markup."
+evidence = ["crates/ui/tests/aria.rs::every_demo_passes_the_aria_check", "tests/e2e/a11y_tree.mjs", "tests/e2e/axe.mjs"]
+
+[[criterion]]
+id = "1.3.2"
+name = "Meaningful Sequence"
+level = "A"
+kit = "supports"
+remarks = "Overlay content is rendered in reading order next to its trigger; the kit uses logical CSS properties and is also checked with `dir=rtl`."
+app = "Keep the app's DOM order the same as its visual order."
+evidence = ["tests/e2e/axe.mjs", "crates/cli/src/doctor.rs"]
+
+[[criterion]]
+id = "1.3.3"
+name = "Sensory Characteristics"
+level = "A"
+kit = "supports"
+remarks = "Kit strings (`UiStrings`) never refer to shape, colour or position alone."
+app = "Instructions written in the app must not rely on shape, size, position or sound."
+evidence = ["crates/ui/src/components/ui_strings/component.rs"]
+
+[[criterion]]
+id = "1.2.4"
+name = "Captions (Live)"
+level = "AA"
+kit = "not-applicable"
+remarks = "The kit has no audio or video components."
+app = "Caption live audio the app streams."
+evidence = []
+
+[[criterion]]
+id = "1.2.5"
+name = "Audio Description (Prerecorded)"
+level = "AA"
+kit = "not-applicable"
+remarks = "The kit has no audio or video components."
+app = "Provide audio description for prerecorded video."
+evidence = []
+
+[[criterion]]
+id = "1.3.4"
+name = "Orientation"
+level = "AA"
+kit = "supports"
+remarks = "No component locks orientation; layouts are fluid."
+app = "Do not lock the app to one orientation."
+evidence = []
+
+[[criterion]]
+id = "1.3.5"
+name = "Identify Input Purpose"
+level = "AA"
+kit = "partial"
+remarks = "`TextField` passes `autocomplete` through, but it is optional; the kit cannot know a field's purpose."
+app = "Set `autocomplete` on fields that collect the user's own data (name, email, address)."
+evidence = ["crates/ui/src/components/form/component.rs"]
+components = ["form"]
+
+[[criterion]]
+id = "1.4.1"
+name = "Use of Color"
+level = "A"
+kit = "supports"
+remarks = "State is never shown by colour alone: `Status` keeps a text label, form errors have text, checked and selected states have a mark or an ARIA state. In forced-colors mode every control keeps a visible edge."
+evidence = ["tests/e2e/forced_colors.mjs"]
+
+[[criterion]]
+id = "1.4.2"
+name = "Audio Control"
+level = "A"
+kit = "not-applicable"
+remarks = "The kit plays no audio."
+evidence = []
+
+[[criterion]]
+id = "1.4.3"
+name = "Contrast (Minimum)"
+level = "AA"
+kit = "supports"
+remarks = "Proven from the stylesheets, not sampled: every text colour each component draws, including hover, pressed, selected and focus states, is checked against the background it is drawn on, in light and dark and under every accent preset (4.5:1, or 3:1 for large text). axe also scans every demo in light, dark and each accent."
+app = "Run `rust-ui contrast --theme <your theme.css>` on any theme you generate or edit, and check colours in your own CSS."
+evidence = ["crates/cli/tests/contrast.rs::every_pair_meets_wcag_aa_in_both_modes_and_every_accent", "crates/cli/tests/contrast.rs::the_proof_covers_every_component_mode_and_accent", "tests/e2e/axe.mjs"]
+
+[[criterion]]
+id = "1.4.4"
+name = "Resize Text"
+level = "AA"
+kit = "not-evaluated"
+remarks = "Not measured yet: no automated check zooms text to 200% and looks for clipped content."
+app = "Test the app at 200% text size."
+evidence = []
+
+[[criterion]]
+id = "1.4.5"
+name = "Images of Text"
+level = "AA"
+kit = "supports"
+remarks = "Components render text as text; icons are SVG."
+evidence = []
+
+[[criterion]]
+id = "1.4.10"
+name = "Reflow"
+level = "AA"
+kit = "not-evaluated"
+remarks = "Not measured yet at 320 CSS pixels wide."
+app = "Test the app's layouts at 320 CSS pixels."
+evidence = []
+
+[[criterion]]
+id = "1.4.11"
+name = "Non-text Contrast"
+level = "AA"
+kit = "partial"
+remarks = "Focus rings are proven at 3:1 against what is around them and icons at 3:1, from the stylesheets in both modes and every accent; chart series colours are tested at 3:1; forced-colors mode keeps every control's edge. Input and control borders at rest are not yet part of the proof."
+evidence = ["crates/cli/tests/contrast.rs::every_pair_meets_wcag_aa_in_both_modes_and_every_accent", "crates/ui/tests/theme.rs::chart_colours_meet_non_text_contrast_in_both_modes", "tests/e2e/forced_colors.mjs"]
+
+[[criterion]]
+id = "1.4.12"
+name = "Text Spacing"
+level = "AA"
+kit = "not-evaluated"
+remarks = "Not measured yet with the criterion's spacing overrides."
+evidence = []
+
+[[criterion]]
+id = "1.4.13"
+name = "Content on Hover or Focus"
+level = "AA"
+kit = "partial"
+remarks = "Tooltip and hover card open on focus as well as hover and stay open while hovered. Escape-to-dismiss is part of the keyboard contract only for components that have one (listed under 2.1.1)."
+evidence = ["tests/e2e/keyboard.mjs"]
+components = ["tooltip", "hover_card", "popover"]
+
+[[criterion]]
+id = "2.1.1"
+name = "Keyboard"
+level = "A"
+kit = "supports"
+computed = "keyboard"
+remarks = "Each interactive component has a keyboard contract (contract.toml) following its WAI-ARIA pattern; every documented key is pressed by a test in Chromium, Firefox and WebKit."
+evidence = ["tests/e2e/contracts.mjs", "tests/e2e/keyboard.mjs", "docs/CONTRACTS.md"]
+
+[[criterion]]
+id = "2.1.2"
+name = "No Keyboard Trap"
+level = "A"
+kit = "supports"
+remarks = "Modal dialogs keep focus inside on purpose, and Escape closes them; the contracts test that Tab and Shift+Tab stay inside and Escape leaves."
+evidence = ["crates/ui/src/components/dialog/contract.toml", "tests/e2e/contracts.mjs"]
+
+[[criterion]]
+id = "2.1.4"
+name = "Character Key Shortcuts"
+level = "A"
+kit = "supports"
+remarks = "The only global shortcut is Ctrl+K for the command palette (`use_hotkey`), which uses a modifier."
+app = "Any single-key shortcut the app adds must be possible to turn off or remap."
+evidence = ["tests/e2e/hotkey.mjs"]
+components = ["command"]
+
+[[criterion]]
+id = "2.2.1"
+name = "Timing Adjustable"
+level = "A"
+kit = "partial"
+remarks = "Toasts close on their own after a timeout; keep important messages out of auto-closing toasts or give them a longer duration."
+app = "Session timeouts and any other time limits are the app's."
+evidence = ["crates/ui/src/components/toast/component.rs"]
+components = ["toast"]
+
+[[criterion]]
+id = "2.2.2"
+name = "Pause, Stop, Hide"
+level = "A"
+kit = "supports"
+remarks = "`Marquee` pauses on hover and focus and stops under reduced motion; the carousel does not auto-advance; spinners and shimmer are static under reduced motion."
+evidence = ["crates/ui/src/components/marquee/style.css", "tests/e2e/motion.mjs"]
+components = ["marquee", "carousel", "spinner", "shimmer"]
+
+[[criterion]]
+id = "2.3.1"
+name = "Three Flashes or Below Threshold"
+level = "A"
+kit = "supports"
+remarks = "No component flashes."
+evidence = []
+
+[[criterion]]
+id = "2.4.1"
+name = "Bypass Blocks"
+level = "A"
+kit = "supports"
+remarks = "`SkipLink` and `MainContent` give a skip-to-content link and a `main` landmark."
+app = "Render `SkipLink` and `MainContent` on every page."
+evidence = ["crates/ui/src/components/skip_link/component.rs"]
+components = ["skip_link"]
+
+[[criterion]]
+id = "2.4.2"
+name = "Page Titled"
+level = "A"
+kit = "not-applicable"
+remarks = "Page titles belong to the app."
+app = "Give every page and route a `document::Title`."
+evidence = []
+
+[[criterion]]
+id = "2.4.3"
+name = "Focus Order"
+level = "A"
+kit = "supports"
+computed = "focus"
+remarks = "Overlays move focus in when they open and back to their trigger when they close; with the `router` feature, `MainContent` takes focus after navigation. The contracts assert where focus lands."
+evidence = ["tests/e2e/contracts.mjs", "crates/ui/src/components/skip_link/component.rs"]
+
+[[criterion]]
+id = "2.4.4"
+name = "Link Purpose (In Context)"
+level = "A"
+kit = "not-applicable"
+remarks = "Link text is written by the app."
+app = "Write link text that says where it goes."
+evidence = []
+
+[[criterion]]
+id = "2.4.5"
+name = "Multiple Ways"
+level = "AA"
+kit = "not-applicable"
+remarks = "Site navigation belongs to the app; the kit provides navbar, sidebar, breadcrumb and command palette components for it."
+app = "Offer more than one way to reach each page."
+evidence = []
+
+[[criterion]]
+id = "2.4.6"
+name = "Headings and Labels"
+level = "AA"
+kit = "supports"
+remarks = "Dialogs, sheets, drawers and alert dialogs require a `title` prop; icon buttons require a `label`."
+app = "Write descriptive headings and labels."
+evidence = ["crates/ui/src/components/dialog/component.rs", "crates/ui/src/components/button/component.rs"]
+
+[[criterion]]
+id = "2.4.7"
+name = "Focus Visible"
+level = "AA"
+kit = "supports"
+remarks = "Every focusable control shows a focus ring, also in forced-colors mode, where it is checked to be an outline."
+evidence = ["tests/e2e/forced_colors.mjs"]
+
+[[criterion]]
+id = "2.4.11"
+name = "Focus Not Obscured (Minimum)"
+level = "AA"
+kit = "not-evaluated"
+remarks = "Not measured yet (sticky headers and toasts over focused controls)."
+app = "Check that sticky headers and footers do not cover focused controls."
+evidence = []
+
+[[criterion]]
+id = "2.5.1"
+name = "Pointer Gestures"
+level = "A"
+kit = "supports"
+remarks = "Swipe-to-dismiss, drag and pinch zoom all have single-pointer or keyboard alternatives (buttons, Delete/Escape, keyboard zoom)."
+evidence = ["tests/e2e/motion.mjs", "tests/e2e/drawer.mjs"]
+components = ["drawer", "drag_and_drop_list", "slider", "toast"]
+
+[[criterion]]
+id = "2.5.2"
+name = "Pointer Cancellation"
+level = "A"
+kit = "supports"
+remarks = "Buttons and controls act on click (up event), not on pointer down."
+evidence = []
+
+[[criterion]]
+id = "2.5.3"
+name = "Label in Name"
+level = "A"
+kit = "supports"
+remarks = "Controls are named by their visible text; `aria-label` is used only where nothing is visible (icon buttons)."
+app = "When a control has visible text and an `aria-label`, start the label with the visible text."
+evidence = ["crates/ui/tests/aria.rs::every_demo_passes_the_aria_check"]
+
+[[criterion]]
+id = "2.5.4"
+name = "Motion Actuation"
+level = "A"
+kit = "not-applicable"
+remarks = "No component reacts to device motion."
+evidence = []
+
+[[criterion]]
+id = "2.5.7"
+name = "Dragging Movements"
+level = "AA"
+kit = "supports"
+remarks = "The drag-and-drop list, slider and swipe-to-dismiss can also be operated with the keyboard and single clicks."
+evidence = ["tests/e2e/keyboard.mjs", "tests/e2e/drawer.mjs"]
+components = ["drawer", "drag_and_drop_list", "slider", "toast"]
+
+[[criterion]]
+id = "2.5.8"
+name = "Target Size (Minimum)"
+level = "AA"
+kit = "not-evaluated"
+remarks = "Not measured yet. The `Xs` button and icon-button sizes and compact density can go below 24 by 24 CSS pixels."
+app = "Avoid `Xs` sizes and compact density for touch targets, or keep 24px spacing around them."
+evidence = []
+
+[[criterion]]
+id = "3.1.1"
+name = "Language of Page"
+level = "A"
+kit = "not-applicable"
+remarks = "The page language belongs to the app's `index.html`."
+app = "Set `<html lang>`."
+evidence = []
+
+[[criterion]]
+id = "3.1.2"
+name = "Language of Parts"
+level = "AA"
+kit = "not-applicable"
+remarks = "Content language is the app's."
+evidence = []
+
+[[criterion]]
+id = "3.2.1"
+name = "On Focus"
+level = "A"
+kit = "supports"
+remarks = "Focus never opens, submits or navigates; tabs use manual activation."
+evidence = ["tests/e2e/contracts.mjs"]
+
+[[criterion]]
+id = "3.2.2"
+name = "On Input"
+level = "A"
+kit = "supports"
+remarks = "Changing a field never submits a form or moves to another page."
+app = "Don't navigate from a select or radio change."
+evidence = []
+
+[[criterion]]
+id = "3.2.3"
+name = "Consistent Navigation"
+level = "AA"
+kit = "not-applicable"
+remarks = "Navigation order across pages is the app's."
+evidence = []
+
+[[criterion]]
+id = "3.2.4"
+name = "Consistent Identification"
+level = "AA"
+kit = "supports"
+remarks = "Kit strings come from one `UiStrings` table, so the same control has the same name everywhere."
+evidence = ["crates/ui/tests/strings.rs::provider_translates_kit_strings"]
+
+[[criterion]]
+id = "3.2.6"
+name = "Consistent Help"
+level = "A"
+kit = "not-applicable"
+remarks = "Help links are the app's."
+evidence = []
+
+[[criterion]]
+id = "3.3.1"
+name = "Error Identification"
+level = "A"
+kit = "supports"
+remarks = "`use_form` fields mark errors with `aria-invalid`, show them as text linked by `aria-describedby`, and move focus to the first invalid field on submit."
+evidence = ["tests/e2e/form.mjs", "tests/e2e/form_fields.mjs"]
+components = ["form"]
+
+[[criterion]]
+id = "3.3.2"
+name = "Labels or Instructions"
+level = "A"
+kit = "supports"
+remarks = "Form fields take a visible label and an optional description; the ARIA check fails a control with no accessible name."
+app = "Write the labels and any format instructions."
+evidence = ["crates/ui/tests/aria.rs::every_demo_passes_the_aria_check"]
+
+[[criterion]]
+id = "3.3.3"
+name = "Error Suggestion"
+level = "AA"
+kit = "partial"
+remarks = "Validators return the message the app writes; the kit shows it next to the field."
+app = "Write error messages that say how to fix the input."
+evidence = ["crates/ui/src/components/form/component.rs"]
+components = ["form"]
+
+[[criterion]]
+id = "3.3.4"
+name = "Error Prevention (Legal, Financial, Data)"
+level = "AA"
+kit = "not-applicable"
+remarks = "Review and confirm steps belong to the app; `AlertDialog` is available for confirmations."
+app = "Let users review, confirm or undo legal, financial and data submissions."
+evidence = []
+
+[[criterion]]
+id = "3.3.7"
+name = "Redundant Entry"
+level = "A"
+kit = "not-applicable"
+remarks = "Multi-step flows are the app's."
+evidence = []
+
+[[criterion]]
+id = "3.3.8"
+name = "Accessible Authentication (Minimum)"
+level = "AA"
+kit = "supports"
+remarks = "`InputOtp` accepts paste, and text fields never block paste or password managers."
+app = "Don't add cognitive tests to sign-in."
+evidence = ["tests/e2e/otp.mjs"]
+components = ["input_otp", "form", "input"]
+
+[[criterion]]
+id = "4.1.2"
+name = "Name, Role, Value"
+level = "A"
+kit = "supports"
+computed = "keyboard"
+remarks = "Roles and states come from dioxus-primitives and native elements; names are required props where the kit can't infer them. The ARIA check runs on every demo in `cargo test` and axe in the browsers; the contracts assert each documented state."
+evidence = ["crates/ui/tests/aria.rs::every_demo_passes_the_aria_check", "tests/e2e/axe.mjs", "tests/e2e/a11y_tree.mjs"]
+
+[[criterion]]
+id = "4.1.3"
+name = "Status Messages"
+level = "AA"
+kit = "partial"
+remarks = "Toast content has `role=status` (or `alert` for errors), so screen readers announce it without moving focus. Other status text (loading, result counts) is not announced unless the app adds a live region."
+app = "Announce search result counts and other status changes that don't move focus."
+evidence = ["crates/ui/src/components/toast/component.rs"]
+components = ["toast"]
