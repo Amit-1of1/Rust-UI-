@@ -1,5 +1,7 @@
 # Installing components
 
+Adding the kit to an app that already runs, with its own CSS? Start with [EXISTING_APP.md](EXISTING_APP.md): the scoped theme, what `rust-ui init` and `rust-ui add` change in your app, and how to adopt one screen at a time.
+
 There are two ways to use the kit in a Dioxus 0.7 app. Neither goes through crates.io yet. The kit and its primitives (`rust-ui-primitives`, our fork of DioxusLabs' `dioxus-primitives`) are ready to publish, and nothing has been published so far ([plan](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/PUBLISHING.md)). Either way your app stays on stock Dioxus from crates.io: the kit patches no Dioxus crate for web or desktop.
 
 - **Copy the source** (the shadcn way): the component files land in your own `src/components`, yours to restyle and change. Use `dx` 0.7.10 or the `rust-ui` CLI.
@@ -35,7 +37,7 @@ rust-ui update --dry-run     # what updating to the registry's current version w
 rust-ui update               # update every installed component, keeping your edits
 ```
 
-It copies the same files and resolves component dependencies from `registry.json`. Blocks (`rust-ui list` marks them) are whole screens: add `mod blocks;` next to `mod components;` and use them like your own code. `dx components add` installs components only. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
+It copies the same files and resolves component dependencies from `registry.json`, then wires them in: the `pub mod` lines in `src/components/mod.rs`, `mod components;` in `src/main.rs` (or `lib.rs`), and the crates each component's `component.json` lists, added to your `Cargo.toml` (a crate you already have is never rewritten). `--no-wire` only copies and prints the lines instead. Blocks (`rust-ui list` marks them) are whole screens: add `mod blocks;` next to `mod components;` and use them like your own code. `dx components add` installs components only. `--source` (or `RUST_UI_SOURCE`) is a local checkout or a git URL; without it the CLI looks in the current directory. Inside this repository, `cargo run -p rust-ui-cli -- <command>` does the same without installing.
 
 #### Updating copied components
 

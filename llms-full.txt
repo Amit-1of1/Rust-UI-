@@ -281,7 +281,7 @@ pub fn Demo() -> Element {
 
 # Alert dialog
 
-- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).
@@ -319,20 +319,18 @@ rsx! {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the alert dialog and moves focus into it. | yes |
 | Tab | Inside the alert dialog | Moves between its buttons; focus stays inside. | yes |
-| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | not yet |
+| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The alert dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -1014,7 +1012,7 @@ pub fn Demo() -> Element {
 
 # Button
 
-- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The button element is used to trigger actions or events in a user interface.
@@ -2920,7 +2918,7 @@ pub fn Demo() -> Element {
 
 # Color picker
 
-- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `input`).
+- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
 - Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Color picker used when the user needs to make a customized color selection.
@@ -3342,21 +3340,21 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): not yet.
+Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the palette with focus in the search input. | not yet |
 | Control + k | Anywhere on the page, with hotkey set (web only) | Opens the palette. | not yet |
 | z | In the search input | Typing filters the commands. | not yet |
-| Escape | In the palette | Closes it and returns focus to the button that opened it. | not yet |
+| Escape | In the palette | Closes it and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The palette is shown and the search input has focus.
 - `closed`: Only the trigger is shown.
 
-Native: The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only.
+Native: The search input does not get focus when the palette opens, typing does not filter, and Ctrl+K is web only.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -4130,7 +4128,7 @@ pub fn Demo() -> Element {
 
 # Dialog
 
-- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
@@ -4159,7 +4157,7 @@ Dialog {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -4167,14 +4165,12 @@ Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/d
 | Space | On the button that opens it | Opens the dialog and moves focus into it. | yes |
 | Tab | Inside the dialog | Moves to the next control; from the last one it wraps to the first, so focus stays in the dialog. | yes |
 | Shift + Tab | Inside the dialog | Moves to the previous control, wrapping from the first to the last. | yes |
-| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | not yet |
+| Escape | Inside the dialog | Closes the dialog and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -4580,7 +4576,7 @@ fn task_item(t: TaskView) -> Element {
 
 # Drawer
 
-- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::drawer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A panel that slides up from the bottom and can be dragged down to dismiss.
@@ -5688,6 +5684,46 @@ pub const COPIED_FOR_MS: i32;
 /// localhost). On desktop and native it does nothing and `copied` stays false, so keep the
 /// text itself selectable.
 pub fn use_copy_clipboard() -> (Callback<String>, ReadSignal<bool>)
+
+/// Attributes that make an element an opener for [`ReturnFocus`]. Spread them on a
+/// focusable element (`button { ..use_focus_opener(), }`), or merge them into a primitive's
+/// `attributes`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_focus_opener() -> Vec<Attribute>
+
+/// Whether focus is inside an overlay's panel; see [`use_return_focus`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct FocusInside(Signal<bool>);
+
+/// For an overlay that stays mounted while its panel opens and closes: the state to pass
+/// to [`ReturnFocus`], and the attributes to spread on the panel (they track whether focus
+/// is inside it).
+///
+/// Dioxus runs one listener per event name on an element, so only spread these on a panel
+/// whose primitive has no `onfocusin`/`onfocusout` of its own (the popover content). The
+/// dialog primitives trap focus with exactly those two listeners; a modal dialog passes
+/// `inside: None` to [`ReturnFocus`] instead, since its focus is always inside while open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_return_focus() -> (FocusInside, Vec<Attribute>)
+
+/// Render inside an overlay's panel (it renders nothing): takes the opener when the panel
+/// opens, and returns focus to it when the panel closes with focus inside. `inside: None`
+/// means "always": for a modal panel, which keeps focus inside while it is open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ReturnFocus(inside: Option<FocusInside>) -> Element
 
 /// Is this key event Ctrl+`key` (or Cmd+`key` on macOS), with no Alt or Shift?
 pub fn is_hotkey(key: &str, pressed: &str, ctrl: bool, meta: bool, alt: bool, shift: bool) -> bool
@@ -7558,7 +7594,7 @@ pub fn Demo() -> Element {
 
 # Popover
 
-- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add popover` or `dx components add popover --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::popover::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The Popover primitive provides an interactive modal that is positioned relative to the target element. It can be used to display additional options, or actions related to the trigger.
@@ -7583,14 +7619,12 @@ PopoverRoot {
 
 ## Keyboard and accessibility
 
-Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): partly.
+Pattern: Disclosure (non-modal dialog). Roles: `dialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the trigger | Opens the popover. | yes |
-| Escape | In the open popover | Closes it and returns focus to the trigger. | not yet |
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
+| Escape | In the open popover | Closes it and returns focus to the trigger. | yes |
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
@@ -8071,7 +8105,7 @@ pub fn Demo() -> Element {
 
 # Sheet
 
-- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Copy into your app: `rust-ui add sheet` or `dx components add sheet --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::sheet::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The sheet component is a panel that slides in from the edge of the screen. It can be used to display additional content, forms, or navigation menus without leaving the current page.
@@ -10348,6 +10382,16 @@ Original to this repo.
 /// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` is the default.
 pub const ACCENTS: [&str; 6];
 
+/// Whether [`use_theme`]'s setters also write `<html>` (on by default).
+/// `ThemeStyles { scoped: true }` turns it off, so an existing app's own `data-theme` on
+/// `<html>` is left alone; an app that copied the components and loads `theme.scoped.css`
+/// itself calls `set_writes_html(false)` once at startup instead.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn set_writes_html(on: bool)
+
 /// Light or dark, or whatever the operating system prefers.
 ///
 /// # Stability
@@ -10380,11 +10424,16 @@ pub struct Theme {
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_theme() -> Theme
 
-/// Applies [`ThemeCustomizer`]'s choices to its children.
+/// Applies [`ThemeCustomizer`]'s choices to its children, and marks where the kit's scoped
+/// theme applies (`data-rui-scope`).
 ///
 /// On the web and in desktop webviews the customizer sets them on `<html>` and this wrapper
 /// is not needed. Renderers without JavaScript (dioxus-native) can't reach `<html>`, so wrap
 /// the app in `ThemeScope` there. It is a `display: contents` box: it doesn't change layout.
+///
+/// With `ThemeStyles { scoped: true }` (an existing app with its own CSS) the kit's tokens
+/// and rules apply only inside a `ThemeScope`; wrap each part of the app that uses the kit,
+/// or the whole app. Several scopes share one [`use_theme`] state.
 ///
 /// # Stability
 ///

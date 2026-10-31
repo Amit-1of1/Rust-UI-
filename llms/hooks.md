@@ -49,6 +49,46 @@ pub const COPIED_FOR_MS: i32;
 /// text itself selectable.
 pub fn use_copy_clipboard() -> (Callback<String>, ReadSignal<bool>)
 
+/// Attributes that make an element an opener for [`ReturnFocus`]. Spread them on a
+/// focusable element (`button { ..use_focus_opener(), }`), or merge them into a primitive's
+/// `attributes`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_focus_opener() -> Vec<Attribute>
+
+/// Whether focus is inside an overlay's panel; see [`use_return_focus`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct FocusInside(Signal<bool>);
+
+/// For an overlay that stays mounted while its panel opens and closes: the state to pass
+/// to [`ReturnFocus`], and the attributes to spread on the panel (they track whether focus
+/// is inside it).
+///
+/// Dioxus runs one listener per event name on an element, so only spread these on a panel
+/// whose primitive has no `onfocusin`/`onfocusout` of its own (the popover content). The
+/// dialog primitives trap focus with exactly those two listeners; a modal dialog passes
+/// `inside: None` to [`ReturnFocus`] instead, since its focus is always inside while open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_return_focus() -> (FocusInside, Vec<Attribute>)
+
+/// Render inside an overlay's panel (it renders nothing): takes the opener when the panel
+/// opens, and returns focus to it when the panel closes with focus inside. `inside: None`
+/// means "always": for a modal panel, which keeps focus inside while it is open.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ReturnFocus(inside: Option<FocusInside>) -> Element
+
 /// Is this key event Ctrl+`key` (or Cmd+`key` on macOS), with no Alt or Shift?
 pub fn is_hotkey(key: &str, pressed: &str, ctrl: bool, meta: bool, alt: bool, shift: bool) -> bool
 

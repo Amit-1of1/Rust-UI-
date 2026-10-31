@@ -40,6 +40,7 @@ is_generated() {
     registry.json|Cargo.lock|apps/docs/src/generated.rs|llms.txt|llms-full.txt|llms/*) return 0 ;;
     crates/ui/src/components/*/component.json|component.json) return 0 ;;
     crates/ui/tests/snapshots/*) return 0 ;;
+    crates/ui/assets/*.scoped.css) return 0 ;;
   esac
   return 1
 }
@@ -55,7 +56,8 @@ regenerate_and_commit() {
     UPDATE_SNAPSHOTS=1 cargo test -q -p rust-ui-kit --test snapshots >/dev/null
   fi
   git add -A registry.json Cargo.lock apps/docs/src/generated.rs component.json \
-    crates/ui/src/components crates/ui/tests/snapshots llms.txt llms-full.txt llms
+    crates/ui/src/components crates/ui/tests/snapshots llms.txt llms-full.txt llms \
+    crates/ui/assets/theme.scoped.css crates/ui/assets/reset.scoped.css
   if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
     git commit -q --no-edit
   elif ! git diff --cached --quiet; then

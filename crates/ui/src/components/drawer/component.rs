@@ -3,6 +3,7 @@ use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 use motion::SwipeDismiss;
+use crate::components::hooks::ReturnFocus;
 
 #[css_module("/src/components/drawer/style.css")]
 struct Styles;
@@ -105,6 +106,12 @@ pub fn Drawer(props: DrawerProps) -> Element {
                         dialog::DialogDescription { attributes: attributes!(p { class: description_class }), {description} }
                     }
                     {props.children}
+                }
+                // Modal panels keep focus inside while open (the primitive's trap), so
+                // closing always returns it. Not on the panel's own listeners: those are
+                // the trap's.
+                if (props.is_modal)() {
+                    ReturnFocus { inside: None }
                 }
             }
         }

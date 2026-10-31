@@ -73,39 +73,9 @@ const BASE_KEYS: &[&str] = &[
 ];
 
 /// (demo, invariant, shortest sequence that breaks it, why). Each must still reproduce.
+/// The overlays are gone from this list: they return focus to their opener through element
+/// handles (`hooks::ReturnFocus`), which also works without a script.
 const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
-    (
-        "alert_dialog",
-        Invariant::FocusLost,
-        &["Enter", "Escape"],
-        RETURN,
-    ),
-    (
-        "color_picker",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    (
-        "command",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    (
-        "date_picker",
-        Invariant::FocusLost,
-        &["Enter", "Escape"],
-        RETURN,
-    ),
-    (
-        "date_time_picker",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
-    ("dialog", Invariant::FocusLost, &["Space", "Escape"], RETURN),
-    ("drawer", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
     (
         "dropdown_menu",
         Invariant::FocusLost,
@@ -118,14 +88,7 @@ const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
         &["ArrowDown", "Escape"],
         MENU,
     ),
-    (
-        "popover",
-        Invariant::FocusLost,
-        &["Space", "Escape"],
-        RETURN,
-    ),
     ("select", Invariant::FocusLost, &["Enter", "Escape"], MENU),
-    ("sheet", Invariant::FocusLost, &["Enter", "Escape"], RETURN),
     (
         "sidebar",
         Invariant::FocusLost,
@@ -134,19 +97,12 @@ const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
     ),
 ];
 
-/// The dialog and popover primitives return focus to whatever had it before they opened
-/// with a script on the web. Native has no script and Dioxus has no "focused element" API,
-/// and these overlays have no trigger component of ours to hold on to, so focus stays on the
-/// removed panel. The contracts record the same gap (`native = false` Escape rows).
 /// The kit returns focus to the trigger on the web (web-sys, see `refocus_within` in each
 /// component). On native that needs the trigger's `MountedData`, i.e. an `onmounted` on it,
 /// which would replace the primitive's own (`merge_attributes` keeps one listener per name).
 /// Fixable in the primitives fork: the primitive already holds the trigger's element.
 const MENU: &str =
     "closing a menu or list from the keyboard leaves focus on the removed item on native";
-
-const RETURN: &str =
-    "Escape leaves focus on the removed overlay on native (no focus return without a script)";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Invariant {

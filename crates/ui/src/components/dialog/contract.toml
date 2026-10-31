@@ -5,7 +5,6 @@ pattern = "Dialog (Modal)"
 apg = "dialog-modal"
 roles = ["dialog"]
 
-native_note = "Closing works, but focus is left on the removed content instead of going back to the trigger."
 
 [parts]
 trigger = "button"
@@ -75,7 +74,7 @@ focus-in dialog
 key = "Escape"
 when = "Inside the dialog"
 does = "Closes the dialog and returns focus to the button that opened it."
-native = false
+native = true
 test = """
 focus trigger
 press Enter
