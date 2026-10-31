@@ -12,21 +12,21 @@ pub use time::Time;
 struct Styles;
 
 /// 24-hour ("14:05") or 12-hour ("2:05 PM") entry.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 pub enum HourCycle {
     #[default]
     H24,
     H12,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Period {
     Am,
     Pm,
 }
 
 /// One editable part of a [`TimePicker`].
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum TimeSegment {
     Hour,
     Minute,
@@ -68,7 +68,7 @@ pub enum TimeOutcome {
 /// The segments of a [`TimePicker`] and which one has focus. Each part may be empty while
 /// the user types. Pure, so the keyboard behaviour is tested without a browser
 /// (`crates/ui/tests/time_picker.rs`).
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct TimeState {
     pub hour: Option<u8>,
     pub minute: Option<u8>,
@@ -387,11 +387,54 @@ impl TimeState {
             self.typed.clear();
         }
         self.set(segment, new_value);
+        if !matches!(key, TimeKey::Backspace | TimeKey::Delete) {
+            self.keep_in_range(segment);
+        }
         TimeOutcome::Changed
     }
 
+    /// After an arrow key on `segment`, pull the segments below it to the nearest allowed time
+    /// when the step left a complete time outside the range: Down on the hour of 9:55 in a
+    /// 9:00 to 17:30 range gives 17:30, not 17:55. Found by the exhaustive model check
+    /// (`crates/ui/tests/model_check.rs`).
+    fn keep_in_range(&mut self, segment: TimeSegment) {
+        let Some(now) = self.time() else { return };
+        if !self.limited() || self.in_range(now) {
+            return;
+        }
+        let (h, m, s) = now.as_hms();
+        let current = seconds_of_day(now) as i64;
+        let minutes: Vec<u8> = match segment {
+            TimeSegment::Hour | TimeSegment::Period => {
+                (0..60).step_by(self.minute_step as usize).collect()
+            }
+            TimeSegment::Minute => vec![m],
+            TimeSegment::Second => return,
+        };
+        let seconds: Vec<u8> = if self.seconds { (0..60).collect() } else { vec![s] };
+        let best = minutes
+            .iter()
+            .flat_map(|&m| seconds.iter().map(move |&s| (m, s)))
+            .filter_map(|(m, s)| Time::from_hms(h, m, s).ok())
+            .filter(|&t| self.in_range(t))
+            .min_by_key(|&t| (seconds_of_day(t) as i64 - current).abs());
+        // The range boundaries themselves may sit off the minute grid (a 9:07 minimum).
+        let edge = [self.min, self.max]
+            .into_iter()
+            .flatten()
+            .filter(|t| t.hour() == h && (segment != TimeSegment::Minute || t.minute() == m))
+            .min_by_key(|&t| (seconds_of_day(t) as i64 - current).abs());
+        if let Some(t) = best.or(edge) {
+            self.minute = Some(t.minute());
+            if self.seconds {
+                self.second = Some(t.second());
+            }
+        }
+    }
+
     /// Step with `next` from `current` until a value can still reach an allowed time (see
-    /// `can_reach`). When none can, the first step is taken anyway, as without a range.
+    /// `can_reach`). When none can, the current value stays if it is allowed; otherwise the
+    /// first step is taken anyway, as without a range.
     fn first_reachable(
         &self,
         segment: TimeSegment,
@@ -407,7 +450,13 @@ impl TimeState {
             }
             value = next(Some(value));
         }
-        first
+        // No step lands on an allowed value. Keep the current one when it is allowed (PM in a
+        // 9:00 to 17:30 range at 2:06 PM: AM would leave the range); otherwise the range is
+        // unreachable from here and the key steps as it would without one.
+        match current {
+            Some(v) if self.can_reach(segment, v) => v,
+            _ => first,
+        }
     }
 
     fn move_to(&mut self, index: Option<usize>) -> TimeOutcome {

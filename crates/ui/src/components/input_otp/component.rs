@@ -52,7 +52,7 @@ pub enum OtpOutcome {
 
 /// The code inside an [`InputOtp`] and which box has focus. Pure, so the keyboard
 /// behaviour is tested without a browser (`crates/ui/tests/keyboard_state.rs`).
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct OtpState {
     pub chars: Vec<Option<char>>,
     pub focus: usize,
