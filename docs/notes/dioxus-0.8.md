@@ -56,3 +56,13 @@ dx 0.8 downloads esbuild 0.27.3 itself; behind a proxy with its own CA put the b
 
 `atoll create` writes `dioxus = "=0.8.0-alpha.3"` on this branch, and `atoll init` and `doctor`
 treat 0.8 as the supported line.
+
+## Release builds are not split on this branch
+
+`scripts/install-dx.sh` installs stock dx 0.8.0-alpha.3 here, and `scripts/release-web.sh` builds
+the gallery and dashboard as one wasm file each. The wasm splitter does not work on 0.8 yet:
+stock dx 0.8.0-alpha.3 panics while splitting (`assertion failed: !self.dead.contains(&id)` in
+walrus), and a split made by the 0.7 fork's dx breaks the pages (axe finds content outside the
+landmarks, and the sidebar covers the page). Unsplit, the dashboard passes its browser checks.
+So the size budgets (`bench/budgets.json`, the split numbers from `main`) fail for those two apps
+until the fork's splitter fixes are ported to dx 0.8. Measured 2026-10-31: the gallery's main wasm is 1005.5 KB brotli unsplit, against 257.8 KB split on `main`.

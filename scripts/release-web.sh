@@ -20,7 +20,10 @@ dir="apps/$app"
 out="target/dx/$app/release/web/public"
 
 split=()
-if grep -q '^wasm-split *=' "$dir/Cargo.toml"; then
+# Dioxus 0.8 branch: no split by default. dx 0.8.0-alpha.3's splitter panics on these apps, and a
+# split made by the 0.7 fork's dx renders 0.8 pages wrongly (content outside <main>, a sidebar
+# over the page). ATOLL_WASM_SPLIT=1 tries it anyway. See docs/notes/dioxus-0.8.md.
+if [ "${ATOLL_WASM_SPLIT:-0}" = 1 ] && grep -q '^wasm-split *=' "$dir/Cargo.toml"; then
   split=(--wasm-split --features wasm-split "--rustc-args=-C link-arg=-O0")
 fi
 

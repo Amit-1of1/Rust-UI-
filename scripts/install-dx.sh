@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-# Install `dx` 0.7.10 from the Amit-1of1/dioxus fork: upstream 0.7.10 plus two fixes to the wasm
-# splitter (docs/FORKS.md). Stock dx 0.7.10 pulls some lazy components back into the main
-# wasm file and panics on others, so split release builds (scripts/release-web.sh) need this.
-# Day-to-day `dx serve` and debug builds work with either.
+# Dioxus 0.8 branch: install stock `dx` 0.8.0-alpha.3, matching the `dioxus` pin. The 0.7 fork's
+# fixes (docs/FORKS.md) are not ported to 0.8 yet, and stock 0.8's splitter panics on our apps
+# ("assertion failed: !self.dead.contains(&id)"), so scripts/release-web.sh does not split here.
 set -euo pipefail
-# Amit-1of1/dioxus, branch claude/project-thread-xwtlc7
-REV=73a027cf834ec97d50e670a27227debccaba6d1e
-cargo install --git https://github.com/Amit-1of1/dioxus --rev "$REV" dioxus-cli --locked "$@"
+cargo install dioxus-cli --version 0.8.0-alpha.3 --locked "$@"
