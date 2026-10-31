@@ -107,6 +107,24 @@ Two changes got it here (see "Tuning" below).
 | Lines written (app + CSS) | **532** | 1,400 | 1,348 |
 | Release rebuild after a one-line change | 45 s | ~1 s | ~3.5 s |
 
+### Build times (edit, compile, see it)
+
+Measured 2026-10-31 on the same 4-core cloud VM, Rust 1.97, dx 0.7.10, with the gallery (it pulls in every component, so it is the slowest case for an app). Commands: [`build-times.sh`](build-times.sh) for the cargo rows, [`hot-reload.mjs`](hot-reload.mjs) for the `dx serve` rows (time from saving the file until the change shows in headless Chromium).
+
+| Step | Time |
+|---|---|
+| Cold build, dev profile, wasm (dependencies already downloaded) | 125 s |
+| Rebuild with no change | 0.5 s |
+| Rebuild after editing one kit component, dev | 19 s |
+| Rebuild after editing the app, dev | 19 s |
+| Cold build, release (`opt-level = "z"`, fat LTO, one codegen unit) | 160 s |
+| Rebuild after editing the app, release | 53 s |
+| `dx serve`: change text or markup inside `rsx!` | **0.8 s** (hot reload, no compile) |
+| `dx serve`: change a component's CSS | **0.8 s** (hot reload, no compile) |
+| `dx serve`: change Rust code outside `rsx!` literals | 62 s (full rebuild, then reload) |
+
+So markup and styling iterate as fast as a JS dev server, and Rust logic changes cost about 20 s with `cargo build` (about a minute through `dx serve` on this machine, which also runs wasm-bindgen and asset processing). `dx serve --hot-patch` (Dioxus' Subsecond patching of Rust code) failed on the gallery with "Failed to emit module: failed to parse import section", so it is not counted here. A JS framework rebuilds a one-line change in about 1 to 3.5 s ("The real app" above).
+
 ### Memory
 
 | | Rust | React | Svelte |

@@ -38,6 +38,12 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 await page.getByText("atoll create my-app", { exact: false }).first().waitFor();
 await page.goBack();
 
+// So is the page for skeptics.
+await page.goto(base + "#hard-questions");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Hard questions");
+await page.getByRole("heading", { name: "Am I locking my app to Dioxus?" }).waitFor();
+await page.goBack();
+
 // A deep link and the browser's Back button.
 await page.goto(base + "#theming");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theming");
