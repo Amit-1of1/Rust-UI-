@@ -23,6 +23,9 @@ anyrender_vello_cpu = "0.8.1"
 image = { version = "0.25.6", default-features = false, features = ["png"] }
 blitz-dom = { version = "0.2.4", default-features = false }
 keyboard-types = { version = "0.7", default-features = false }
+# tests/layout.rs reads computed styles (visibility, display) and layout overflow.
+style = { package = "stylo", version = "0.8" }
+taffy = { version = "0.9", default-features = false }
 # tests/contracts.rs reads the component contracts (crates/cli/src/contract.rs).
 serde = { version = "1", features = ["derive"] }
 toml = "0.8"
