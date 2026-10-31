@@ -294,13 +294,14 @@
 :where([data-rui-scope] svg[data-icon][data-stroke="theme"]) { stroke-width: var(--icon-stroke-width); }
 
 /* Arrows, chevrons, undo and the like point along the reading direction. `scale` (not
-   `transform`) so a component's own rotation still applies. */
-[data-rui-scope] svg[data-mirror-rtl]:dir(rtl) { scale: -1 1; }
-@supports not selector(:dir(rtl)) {
-  [data-rui-scope][dir="rtl"] svg[data-mirror-rtl],
+   `transform`) so a component's own rotation still applies.
+   The `dir` attribute selector is the one that works everywhere: the CSS minifier rewrites
+   `:dir(rtl)` into a list of `:lang()` values, which misses a page that sets `dir` without an
+   RTL `lang`. */
+[data-rui-scope][dir="rtl"] svg[data-mirror-rtl],
 [data-rui-scope] [dir="rtl"] svg[data-mirror-rtl],
 [dir="rtl"] [data-rui-scope] svg[data-mirror-rtl] { scale: -1 1; }
-}
+[data-rui-scope] svg[data-mirror-rtl]:dir(rtl) { scale: -1 1; }
 
 /* Visually hidden, still read by screen readers: `span { class: "sr-only", "Close" }` for an
    icon-only button. A plain global class (not a CSS module), so app code can use it too. */
