@@ -64,6 +64,11 @@ step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard -p booking -
 step "registry, component.json, llms.txt"; cargo run -q -p rust-ui-cli -- registry --check
 step "changelog fragments"; cargo run -q -p rust-ui-cli -- changelog --check
 step "doctor (errors fail, warnings are listed)"; cargo run -q -p rust-ui-cli -- doctor | tail -3
+if command -v cargo-deny >/dev/null; then
+  step "dependencies: advisories, licences, sources (deny.toml)"; cargo deny check -s
+else
+  step "dependencies: skipped (cargo install cargo-deny --locked; CI runs it)"
+fi
 
 if [ "$A11Y" = 1 ]; then
   scripts/e2e.sh --browsers "$BROWSERS"

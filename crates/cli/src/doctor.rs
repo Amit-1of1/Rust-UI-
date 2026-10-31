@@ -335,7 +335,7 @@ pub fn run(root: &Path) -> Result<Vec<Finding>, String> {
 
 /// Markup in a demo's snapshot that means the component has keyboard behaviour worth a
 /// contract.
-const INTERACTIVE: &[&str] = &[
+pub(crate) const INTERACTIVE: &[&str] = &[
     "role=\"tablist\"",
     "role=\"radiogroup\"",
     "role=\"slider\"",

@@ -1,4 +1,4 @@
-//! `rust-ui theme --brand <hex>`: turn one brand colour into an accent preset that is
+//! `rust-ui theme --brand <hex>` (or `--from-image <logo>`, see `logo.rs`): turn one brand colour into an accent preset that is
 //! readable in both modes. The hue and saturation stay; only lightness moves, until the
 //! label text on the fill reaches WCAG AA (4.5:1). The preset test in `crates/ui` holds
 //! the same bar for every shipped preset.
@@ -7,7 +7,7 @@ const DARK_TEXT: &str = "#0a0a0a";
 const LIGHT_TEXT: &str = "#ffffff";
 const AA: f64 = 4.5;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Rgb(pub u8, pub u8, pub u8);
 
 impl Rgb {
@@ -41,7 +41,7 @@ impl Rgb {
     }
 
     /// (hue 0..360, saturation 0..1, lightness 0..1)
-    fn hsl(self) -> (f64, f64, f64) {
+    pub fn hsl(self) -> (f64, f64, f64) {
         let (r, g, b) = (
             f64::from(self.0) / 255.0,
             f64::from(self.1) / 255.0,
@@ -64,7 +64,7 @@ impl Rgb {
         (h * 60.0, s, l)
     }
 
-    fn from_hsl(h: f64, s: f64, l: f64) -> Rgb {
+    pub fn from_hsl(h: f64, s: f64, l: f64) -> Rgb {
         let c = (1.0 - (2.0 * l - 1.0).abs()) * s;
         let x = c * (1.0 - ((h / 60.0) % 2.0 - 1.0).abs());
         let m = l - c / 2.0;
