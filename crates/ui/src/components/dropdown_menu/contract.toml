@@ -82,7 +82,7 @@ focused item@4
 key = "Enter"
 when = "On an item"
 does = "Chooses the item, closes the menu and returns focus to the trigger."
-native = true
+native = false
 test = """
 focus trigger
 press Enter
