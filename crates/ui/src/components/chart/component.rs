@@ -202,7 +202,7 @@ impl ChartKey {
 /// # Stability
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
 pub struct ChartCursor {
     pub category: usize,
     pub series: usize,

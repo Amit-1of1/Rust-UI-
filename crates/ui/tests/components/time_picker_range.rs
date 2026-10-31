@@ -158,3 +158,27 @@ fn time_field_passes_the_range_to_its_picker() {
     let html = render(app);
     assert!(html.contains("aria-invalid=\"true\""), "18:30 shows invalid: {html}");
 }
+
+// Found by the exhaustive model check (tests/model_check.rs): both were one arrow key from an
+// allowed time to one outside the range.
+
+#[test]
+fn an_hour_step_pulls_the_minutes_back_into_the_range() {
+    let mut s = TimeState::new(HourCycle::H24, false, 5).with_range(Some(hm(9, 0)), Some(hm(17, 30)));
+    s.set_time(Some(hm(9, 55)));
+    s.apply(TimeKey::Focus(0));
+    s.apply(TimeKey::Down);
+    assert_eq!(s.time(), Some(hm(17, 30)), "9:55 Down wraps to 17:30, not 17:55");
+    assert!(!s.out_of_range());
+}
+
+#[test]
+fn am_pm_stays_put_when_the_other_half_has_no_allowed_time() {
+    let mut s = TimeState::new(HourCycle::H12, false, 15).with_range(Some(hm(9, 0)), Some(hm(17, 30)));
+    s.set_time(Some(hm(14, 6)));
+    s.apply(TimeKey::Focus(2));
+    for key in [TimeKey::Up, TimeKey::Down, TimeKey::PageUp, TimeKey::PageDown] {
+        s.apply(key);
+        assert_eq!(s.time(), Some(hm(14, 6)), "{key:?}: 2:06 AM is outside 9:00 to 17:30");
+    }
+}
