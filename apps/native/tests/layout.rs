@@ -40,6 +40,7 @@ const INLINE_BOX: &str = "Blitz ignores the width and height of an inline-flex o
 const SIDEBAR_ACTION: &str = "the menu action's ::after hit area is 36x36 in browsers; Blitz builds no box for it and paints positioned elements in DOM order, so the menu button sits on top of it";
 const CALENDAR_TABLE: &str = "Blitz's table layout makes the calendar wider than browsers do (Chromium fits it at 320px) and lays out the hidden month and year options";
 const FLEX_BUTTON: &str = "Blitz sizes a flex button to its full content, ignoring the `min-width: 0` of the ellipsised summary inside it; Chromium keeps the tool call trigger inside a 320px page";
+const NATIVE_SELECT: &str = "Blitz lays out a <select>'s options as one line of inline text, so the field is as wide as all of them; browsers draw one box the width of the longest option (Chromium keeps the demo inside 320px)";
 const DATE_RANGE: &str = "Real: the date range field (and the DateRangeField around it) needs about 315px and can't wrap between its two dates without changing the primitive's markup";
 const BLITZ_TEXT: &str = "Blitz-only: it falls back to a wider serif font (Inter isn't bundled) and doesn't break these long strings the way Chromium does; Chromium shows no overflow";
 
@@ -64,6 +65,7 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: input_group: ", INPUT_WIDTH),
     ("long-text: label: ", INPUT_WIDTH),
     ("long-text: marquee: ", BLITZ_TEXT),
+    ("long-text: native_select: ", NATIVE_SELECT),
     ("long-text: number_field: ", INPUT_WIDTH),
     ("long-text: sidebar: ", BLITZ_TEXT),
     ("long-text: table: ", BLITZ_TEXT),
