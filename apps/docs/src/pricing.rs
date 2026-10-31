@@ -7,9 +7,15 @@
 use dioxus::prelude::*;
 use ui::prelude::*;
 
-/// The product's name on this page. A working name: change it here when the final one is
-/// picked (docs/pro/README.md, "Before launch").
+/// The product's name on the docs site's pricing and home pages.
 pub const PRODUCT: &str = "Atoll";
+
+/// The last day of the Founding offer (also capped at the first 100 licences).
+pub const FOUNDING_ENDS: &str = "31 January 2027";
+
+/// The date Pro v1 (marketing blocks and the SaaS starter) is promised by. Founding buyers get
+/// a full refund on request if it slips. Keep in step with the Pro repository's plan.
+pub const PRO_V1_DATE: &str = "30 November 2026";
 
 /// The checkout page (Polar) for each Pro tier. Empty until the owner creates the products;
 /// an empty URL keeps that tier's button disabled.
@@ -22,6 +28,8 @@ struct Plan {
     id: &'static str,
     name: &'static str,
     price: &'static str,
+    /// The regular price after the Founding offer. Empty for Free.
+    later: &'static str,
     per: &'static str,
     blurb: &'static str,
     features: &'static [&'static str],
@@ -34,6 +42,7 @@ const PLANS: &[Plan] = &[
         id: "free",
         name: "Free",
         price: "$0",
+        later: "",
         per: "forever",
         blurb: "The whole kit, open source.",
         features: &[
@@ -47,10 +56,11 @@ const PLANS: &[Plan] = &[
     },
     Plan {
         id: "personal",
-        name: "Pro Personal",
-        price: "$129",
+        name: "Founding Personal",
+        price: "$79",
+        later: "$129",
         per: "one time, for one developer",
-        blurb: "Everything in Pro, with lifetime updates.",
+        blurb: "Every Pro item that ever ships, with lifetime updates.",
         features: &[
             "Marketing and app blocks",
             "A SaaS starter app (web and desktop)",
@@ -62,12 +72,13 @@ const PLANS: &[Plan] = &[
     },
     Plan {
         id: "team",
-        name: "Pro Team",
-        price: "$399",
+        name: "Founding Team",
+        price: "$249",
+        later: "$399",
         per: "one time, up to 10 developers",
         blurb: "Pro for a whole team or agency.",
         features: &[
-            "Everything in Pro Personal",
+            "Everything in Founding Personal",
             "Up to 10 developers on one licence",
             "Access managed through GitHub",
             "Priority answers in Pro discussions",
@@ -119,6 +130,14 @@ const FAQ: &[(&str, &str)] = &[
         "What happens when I ask for a refund?",
         "Within 30 days, as long as you haven't cloned the Pro repository, you get your money back and the invitation is removed.",
     ),
+    (
+        "What is the Founding licence?",
+        "The launch price for Pro: lower than the regular price, paid once, for every Pro item now and later. It ends on the date at the top of this page or after the first 100 licences, whichever comes first.",
+    ),
+    (
+        "Pro is still being built. What if it's late?",
+        "Founding licences come with a promise: if Pro v1 (the marketing blocks and the SaaS starter) isn't in the Pro repository by the date at the top of this page, ask and you get a full refund, cloned or not.",
+    ),
 ];
 
 #[component]
@@ -131,6 +150,9 @@ pub fn PricingPage() -> Element {
         h1 { id: "page-title", tabindex: "-1", "Pricing" }
         p { class: "docs-lede",
             "The kit is free and open source. Pro adds premium blocks, a starter app and motion components, for a one-time price."
+        }
+        p { class: "pricing-founding",
+            "Founding prices until {FOUNDING_ENDS} or the first 100 licences. Pro v1 ships by {PRO_V1_DATE}, or Founding buyers get a full refund."
         }
         if !selling {
             Callout { variant: CalloutVariant::Info, title: "Pro is not on sale yet",
@@ -201,6 +223,10 @@ fn PlanCard(plan_id: &'static str) -> Element {
             CardContent {
                 p { class: "pricing-price",
                     span { class: "pricing-amount", {plan.price} }
+                    if !plan.later.is_empty() {
+                        " "
+                        span { class: "pricing-later", "then {plan.later}" }
+                    }
                     " "
                     span { class: "pricing-per", {plan.per} }
                 }
