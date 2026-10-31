@@ -4,7 +4,7 @@ pattern = "Dialog (Modal) with a Combobox"
 apg = "combobox"
 roles = ["dialog", "combobox", "listbox"]
 
-native_note = "The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only."
+native_note = "The search input does not get focus when the palette opens, typing does not filter, and Ctrl+K is web only."
 
 [parts]
 trigger = "button"
@@ -64,7 +64,7 @@ hidden option@3
 key = "Escape"
 when = "In the palette"
 does = "Closes it and returns focus to the button that opened it."
-native = false
+native = true
 test = """
 focus trigger
 press Enter
