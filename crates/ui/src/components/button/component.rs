@@ -2,6 +2,8 @@ use dioxus::prelude::*;
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 
+use crate::components::hooks::use_focus_opener;
+
 #[css_module("/src/components/button/style.css")]
 struct Styles;
 
@@ -83,7 +85,9 @@ pub fn Button(
         "data-style": variant.class(),
         "data-size": size.class(),
     });
-    let merged = merge_attributes(vec![base, attributes]);
+    // Remembered as the opener while focused, so a dialog it opens can return focus to it.
+    let opener = use_focus_opener();
+    let merged = merge_attributes(vec![base, opener, attributes]);
 
     rsx! {
         button {
@@ -192,7 +196,9 @@ pub fn IconButton(
         "data-size": size.class(),
         aria_label: label,
     });
-    let merged = merge_attributes(vec![base, attributes]);
+    // Remembered as the opener while focused, so a dialog it opens can return focus to it.
+    let opener = use_focus_opener();
+    let merged = merge_attributes(vec![base, opener, attributes]);
 
     rsx! {
         button {

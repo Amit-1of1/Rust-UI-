@@ -4,6 +4,7 @@ use dioxus::prelude::*;
 use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
+use crate::components::hooks::ReturnFocus;
 
 #[css_module("/src/components/sheet/style.css")]
 struct Styles;
@@ -132,6 +133,12 @@ pub fn Sheet(props: SheetProps) -> Element {
                     }
                 }
                 {props.children}
+                // Modal panels keep focus inside while open (the primitive's trap), so
+                // closing always returns it. Not on the panel's own listeners: those are
+                // the trap's.
+                if (props.is_modal)() {
+                    ReturnFocus { inside: None }
+                }
             }
         }
 
