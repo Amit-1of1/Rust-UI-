@@ -44,6 +44,37 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 await page.getByRole("heading", { name: "Am I locking my app to Dioxus?" }).waitFor();
 await page.goBack();
 
+// The theme builder: a typed brand colour recolours the preview, and the proof table says
+// both modes pass AA. #4f46e5 is already readable with white, so light mode keeps it as is.
+await page.goto(base + "#theme-builder");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theme builder");
+await page.getByLabel("Hex").fill("#4f46e5");
+const cta = page.getByRole("button", { name: "Start free trial" });
+await page.waitForFunction(
+  (el) => getComputedStyle(el).backgroundColor === "rgb(79, 70, 229)",
+  await cta.elementHandle(),
+  { timeout: 3000 },
+);
+assert.equal(await page.getByText("Passes AA").count(), 2);
+// A pale brand gets a darker fill in light mode, still with the same hue.
+await page.getByRole("button", { name: "Sunflower" }).click();
+assert.equal(await page.getByRole("button", { name: "Sunflower" }).getAttribute("aria-pressed"), "true");
+assert.equal(await page.getByLabel("Hex").inputValue(), "#facc15");
+assert.ok((await page.getByText("lightness moved from #facc15").count()) >= 1);
+assert.equal(await page.getByText("Passes AA").count(), 2);
+// The CSS to copy is the preset `atoll theme --brand` prints.
+assert.match(await page.locator("pre code").last().innerText(), /\[data-accent="brand"\]/);
+await page.goBack();
+
+// The example apps page offers every template.
+await page.goto(base + "#examples");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Example apps");
+for (const t of ["dashboard", "booking", "marketing", "showcase"]) {
+  await page.getByText(`atoll create my-app --git --template ${t}`, { exact: true }).waitFor();
+}
+assert.equal(await page.getByRole("link", { name: /^Open the live app/ }).count(), 4);
+await page.goBack();
+
 // A deep link and the browser's Back button.
 await page.goto(base + "#theming");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theming");

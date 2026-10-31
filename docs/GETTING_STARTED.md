@@ -77,6 +77,8 @@ Real apps built only from the kit, in the repository's `apps/` folder (run any w
 - `apps/showcase`: one app on the web, in a desktop window and in a phone layout.
 - `apps/gallery`: every component and block on one page.
 
+Start your own app from any of the first four: `atoll create my-app --git --template dashboard` (or `booking`, `marketing`, `showcase`) copies the whole app with its own `Cargo.toml`, ready for `dx serve`. What each one shows, and live versions: [Example apps](#examples).
+
 ## If something goes wrong
 
 | You see | Do this |

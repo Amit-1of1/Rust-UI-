@@ -42,7 +42,8 @@ pub fn validate_package_name(name: &str) -> Result<(), String> {
     }
 }
 
-fn kit_dep(source: &KitSource) -> String {
+/// The `ui = ...` dependency line for `source`.
+pub fn kit_dep(source: &KitSource) -> String {
     let version = env!("CARGO_PKG_VERSION");
     match source {
         KitSource::Registry => {

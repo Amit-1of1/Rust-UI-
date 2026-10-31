@@ -4,8 +4,10 @@
 
 #[rustfmt::skip] // generated, one entry per line
 mod generated;
+mod examples;
 mod landing;
 mod pricing;
+mod theme_builder;
 
 use dioxus::prelude::*;
 use generated::{demo, Entry, ENTRIES};
@@ -13,6 +15,7 @@ use ui::prelude::*;
 
 const DOCS_CSS: Asset = asset!("/assets/docs.css");
 const LANDING_CSS: Asset = asset!("/assets/landing.css");
+const TOOLS_CSS: Asset = asset!("/assets/tools.css");
 
 const GUIDES: &[(&str, &str, &str)] = &[
     (
@@ -82,6 +85,7 @@ fn App() -> Element {
         ThemeStyles {}
         document::Stylesheet { href: DOCS_CSS }
         document::Stylesheet { href: LANDING_CSS }
+        document::Stylesheet { href: TOOLS_CSS }
         a { class: "docs-skip", href: "#page-title", "Skip to content" }
         Fragment {
             header { class: "docs-header",
@@ -103,6 +107,8 @@ fn App() -> Element {
                         for (slug , title , _) in GUIDES {
                             li { key: "{slug}", NavLink { slug, title: *title, current: page() } }
                         }
+                        li { NavLink { slug: "theme-builder", title: "Theme builder", current: page() } }
+                        li { NavLink { slug: "examples", title: "Example apps", current: page() } }
                         li { NavLink { slug: "pricing", title: "Pricing", current: page() } }
                     }
                     h2 { class: "docs-nav-heading", "Components" }
@@ -139,8 +145,11 @@ fn NavLink(slug: &'static str, title: &'static str, current: String) -> Element 
 
 #[component]
 fn Page(slug: String) -> Element {
-    if slug == "pricing" {
-        return rsx! { pricing::PricingPage {} };
+    match slug.as_str() {
+        "pricing" => return rsx! { pricing::PricingPage {} },
+        "theme-builder" => return rsx! { theme_builder::ThemeBuilderPage {} },
+        "examples" => return rsx! { examples::ExamplesPage {} },
+        _ => {}
     }
     if let Some((_, title, source)) = GUIDES.iter().find(|(s, _, _)| *s == slug) {
         return rsx! {

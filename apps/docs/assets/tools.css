@@ -1,0 +1,53 @@
+/* The theme builder and example apps pages. Theme tokens only; the swatch colours are the
+   user's own brand colours, set inline. */
+.tb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin: 0.75rem 0; }
+.tb-wide > * { flex: 1 1 16rem; max-width: 24rem; }
+.tb-field { display: grid; gap: 0.25rem; min-width: 12rem; }
+.tb-help { margin: 0; color: var(--secondary-color-5); font-size: 0.8125rem; }
+.tb-swatches { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tb-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius);
+  background: var(--primary-color-2);
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.tb-swatch[aria-pressed="true"] { border-color: var(--secondary-color-4); }
+.tb-swatch:focus-visible { outline: 2px solid var(--focused-border-color); outline-offset: 2px; }
+.tb-chip {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-inline-end: 0.375rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 999px;
+  vertical-align: -0.1875rem;
+}
+.tb-preview {
+  margin-top: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.75rem;
+  background: var(--primary-color);
+  color: var(--secondary-color-4);
+}
+.tb-code {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.5rem;
+  background: var(--primary-color-2);
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.examples-list { display: grid; gap: 1rem; margin: 1.25rem 0; }
+.examples-title { margin: 0; font-size: 1.125rem; }
+.examples-uses { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--secondary-color-5); }
+.examples-list .landing-actions { margin-top: 0.75rem; }
