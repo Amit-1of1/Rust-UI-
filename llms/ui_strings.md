@@ -10,6 +10,12 @@ let strings = use_signal(|| UiStrings { next: "Suivant".into(), ..UiStrings::def
 rsx! { UiStringsProvider { strings, App {} } }
 ```
 
+Built-in translations: `UiStrings::locale("fr")` returns French, and likewise `de`, `es`, `pt`, `ar`, `he`, `ja` and `zh` (`None` for other codes; `LOCALES` lists them). Start from one and override words: `UiStrings { next: "Weiter".into(), ..UiStrings::german() }`. `text_direction(tag)` gives `"rtl"` or `"ltr"` for `<html dir>`; see `docs/RTL.md` in the kit repository. The translations were drafted by an AI model and are checked for placeholders, not yet by native speakers.
+
+```rust
+let strings = use_signal(|| UiStrings::locale("ar").unwrap_or_default());
+```
+
 Templates use `{name}` placeholders (`"Select {row}"`, `"Showing {first}–{last} of {total} rows"`), filled with `fill`.
 
 Not covered: calendar weekday names (use the calendar's `day_name` prop), month names (dioxus-primitives), and the field validators' messages (pass your own validator).
@@ -179,6 +185,14 @@ pub fn use_ui_strings() -> UiStrings
 /// assert_eq!(ui::components::ui_strings::fill("Select {row}", &[("row", "Ada")]), "Select Ada");
 /// ```
 pub fn fill(template: &str, values: &[(&str, &str)]) -> String
+
+/// Language codes with a built-in translation, besides English (`en`).
+pub const LOCALES: [&str; 8];
+
+/// `"rtl"` for right-to-left languages (Arabic, Hebrew, Persian, Urdu, ...), `"ltr"`
+/// otherwise. Takes a BCP 47 tag (`"ar"`, `"he-IL"`, `"pt-BR"`); only the language part
+/// counts. Set it as `dir` on `<html>` together with `lang` (docs/RTL.md).
+pub fn text_direction(lang: &str) -> &'static str
 ```
 
 ## Example

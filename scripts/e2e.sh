@@ -90,6 +90,7 @@ for engine in ${BROWSERS//,/ }; do
   done
   step "[$engine] axe gallery (rtl)"
   e2e env DIR=rtl GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs light
+  step "[$engine] right-to-left layout (gallery)";   e2e env GALLERY_URL=$G node rtl.mjs
 
   step "[$engine] docs navigation behaviour";        e2e env GALLERY_URL=$D node docs.mjs
   step "[$engine] form behaviour (site)";            e2e env GALLERY_URL=$S node form.mjs

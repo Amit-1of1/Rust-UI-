@@ -999,6 +999,7 @@
       "files": [
         "ui_strings/component.rs",
         "ui_strings/docs.md",
+        "ui_strings/locales.rs",
         "ui_strings/mod.rs"
       ],
       "registryDependencies": []
