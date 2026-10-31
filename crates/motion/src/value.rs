@@ -7,7 +7,8 @@
 
 use crate::gesture::now_ms;
 use crate::physics::{Animation, Glide, GlideConfig, SpringConfig, SpringState};
-use crate::{use_reduced_motion, SpringPreset};
+use crate::reduced::use_reduced_motion_signal;
+use crate::SpringPreset;
 use dioxus::core::{current_scope_id, Runtime, ScopeId};
 use dioxus::prelude::*;
 use dioxus_motion::{MotionTime, TimeProvider};
@@ -34,7 +35,8 @@ pub struct MotionValue {
     animation: CopyValue<Option<Animation>>,
     looping: CopyValue<bool>,
     scope: ScopeId,
-    reduced: bool,
+    // Checked when an animation starts, so a change to the OS setting applies at once.
+    reduced: Signal<bool>,
 }
 
 impl PartialEq for MotionValue {
@@ -49,7 +51,7 @@ impl PartialEq for MotionValue {
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_motion_value(initial: f64) -> MotionValue {
-    let reduced = use_reduced_motion();
+    let reduced = use_reduced_motion_signal();
     let initial = if initial.is_finite() { initial } else { 0.0 };
     let value = use_signal(|| initial);
     let animating = use_signal(|| false);
@@ -150,7 +152,7 @@ impl MotionValue {
         if !end.is_finite() {
             return;
         }
-        if self.reduced || animation.is_done() {
+        if *self.reduced.peek() || animation.is_done() {
             self.set(end);
             return;
         }
