@@ -30,6 +30,7 @@
 //! and their types, and the other items re-exported from `dioxus-motion` (they change when the
 //! engine does).
 //! Internal: [`css`]. Details in docs/STABILITY.md.
+#![forbid(unsafe_code)]
 
 pub mod css;
 mod drag;
