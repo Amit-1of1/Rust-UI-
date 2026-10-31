@@ -91,19 +91,19 @@
 }
 
 [data-side="left"] .dx-sidebar-container {
-  left: 0;
+  inset-inline-start: 0;
 }
 
 [data-side="left"][data-collapsible="offcanvas"] .dx-sidebar-container {
-  left: calc(var(--dx-sidebar-width) * -1);
+  inset-inline-start: calc(var(--dx-sidebar-width) * -1);
 }
 
 [data-side="right"] .dx-sidebar-container {
-  right: 0;
+  inset-inline-end: 0;
 }
 
 [data-side="right"][data-collapsible="offcanvas"] .dx-sidebar-container {
-  right: calc(var(--dx-sidebar-width) * -1);
+  inset-inline-end: calc(var(--dx-sidebar-width) * -1);
 }
 
 [data-collapsible="icon"] .dx-sidebar-container {
@@ -116,11 +116,11 @@
 }
 
 [data-variant="sidebar"][data-side="left"] .dx-sidebar-container {
-  border-right: 1px solid var(--dx-sidebar-border);
+  border-inline-end: 1px solid var(--dx-sidebar-border);
 }
 
 [data-variant="sidebar"][data-side="right"] .dx-sidebar-container {
-  border-left: 1px solid var(--dx-sidebar-border);
+  border-inline-start: 1px solid var(--dx-sidebar-border);
 }
 
 [data-variant="floating"] .dx-sidebar-container,
@@ -200,7 +200,7 @@
   border: none;
   background: transparent;
   cursor: ew-resize;
-  transform: translateX(-50%);
+  transform: translateX(calc(-50% * var(--dx-flip, 1)));
   transition: all 200ms ease-out;
 }
 
@@ -224,12 +224,12 @@
 }
 
 [data-side="left"] .dx-sidebar-rail {
-  right: -1rem;
+  inset-inline-end: -1rem;
   cursor: w-resize;
 }
 
 [data-side="right"] .dx-sidebar-rail {
-  left: 0;
+  inset-inline-start: 0;
   cursor: e-resize;
 }
 
@@ -246,7 +246,7 @@
 }
 
 [data-collapsible="offcanvas"] .dx-sidebar-rail::after {
-  left: 100%;
+  inset-inline-start: 100%;
 }
 
 [data-collapsible="offcanvas"] .dx-sidebar-rail:hover {
@@ -254,11 +254,11 @@
 }
 
 [data-side="left"][data-collapsible="offcanvas"] .dx-sidebar-rail {
-  right: -0.5rem;
+  inset-inline-end: -0.5rem;
 }
 
 [data-side="right"][data-collapsible="offcanvas"] .dx-sidebar-rail {
-  left: -0.5rem;
+  inset-inline-start: -0.5rem;
 }
 
 .dx-sidebar-inset {
@@ -282,12 +282,12 @@
 }
 
 [data-variant="inset"][data-side="right"]~.dx-sidebar-inset {
-  margin-right: 0;
-  margin-left: 0.5rem;
+  margin-inline-end: 0;
+  margin-inline-start: 0.5rem;
 }
 
 [data-variant="inset"][data-side="right"][data-state="collapsed"]~.dx-sidebar-inset {
-  margin-right: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 
 .dx-sidebar-header {
@@ -465,29 +465,29 @@
 @media (width >= 768px) {
   .dx-sidebar-desktop[data-side="left"] :is(.dx-sidebar-header, .dx-sidebar-menu-item:has(.dx-sidebar-menu-action)) .dx-sidebar-dropdown-menu-content {
     top: 0;
-    left: 100%;
+    inset-inline-start: 100%;
     margin-top: 0;
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
   }
 
   .dx-sidebar-desktop[data-side="left"] .dx-sidebar-footer .dx-sidebar-dropdown-menu-content {
     top: auto;
     bottom: 0;
-    left: 100%;
+    inset-inline-start: 100%;
     margin-bottom: 0;
-    margin-left: 0.5rem;
+    margin-inline-start: 0.5rem;
   }
 
   .dx-sidebar-desktop[data-side="right"] :is(.dx-sidebar-header, .dx-sidebar-menu-item:has(.dx-sidebar-menu-action)) .dx-sidebar-dropdown-menu-content {
     top: 0;
-    right: 100%;
-    left: auto;
+    inset-inline-end: 100%;
+    inset-inline-start: auto;
     margin-top: 0;
-    margin-right: 0.5rem;
+    margin-inline-end: 0.5rem;
   }
 
   .dx-sidebar-desktop[data-side="right"] .dx-sidebar-footer .dx-sidebar-dropdown-menu-content {
-    margin-right: 0.5rem;
+    margin-inline-end: 0.5rem;
     margin-bottom: 0;
     inset: auto 100% 0 auto;
   }
@@ -860,4 +860,10 @@
 [data-collapsible="icon"] .dx-sidebar-menu-sub-button {
   opacity: 0;
   pointer-events: none;
+}
+
+/* Right-to-left pages: move the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-sidebar-rail {
+  --dx-flip: -1;
 }

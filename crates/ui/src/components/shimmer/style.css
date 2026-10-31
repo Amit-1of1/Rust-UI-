@@ -16,12 +16,12 @@
   );
   content: "";
   pointer-events: none;
-  transform: translateX(-100%);
+  transform: translateX(calc(-100% * var(--dx-flip, 1)));
 }
 
 @keyframes dx-shimmer-sweep {
   to {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--dx-flip, 1)));
   }
 }
 
@@ -31,4 +31,10 @@
     background: color-mix(in oklab, var(--secondary-color) 8%, transparent);
     transform: none;
   }
+}
+
+/* Right-to-left pages: slide and offset the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-shimmer {
+  --dx-flip: -1;
 }
