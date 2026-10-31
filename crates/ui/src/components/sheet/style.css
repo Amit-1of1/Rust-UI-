@@ -62,15 +62,15 @@
 }
 
 .dx-sheet[data-side="right"] {
-  right: 0;
-  border-left: 1px solid var(--primary-color-6);
-  transform: translateX(100%);
+  inset-inline-end: 0;
+  border-inline-start: 1px solid var(--primary-color-6);
+  transform: translateX(calc(100% * var(--dx-flip, 1)));
 }
 
 .dx-sheet[data-side="left"] {
-  left: 0;
-  border-right: 1px solid var(--primary-color-6);
-  transform: translateX(-100%);
+  inset-inline-start: 0;
+  border-inline-end: 1px solid var(--primary-color-6);
+  transform: translateX(calc(-100% * var(--dx-flip, 1)));
 }
 
 .dx-sheet[data-side="top"],
@@ -125,7 +125,7 @@
 
 @keyframes dx-slide-in-right {
   from {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--dx-flip, 1)));
   }
 
   to {
@@ -139,13 +139,13 @@
   }
 
   to {
-    transform: translateX(100%);
+    transform: translateX(calc(100% * var(--dx-flip, 1)));
   }
 }
 
 @keyframes dx-slide-in-left {
   from {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--dx-flip, 1)));
   }
 
   to {
@@ -159,7 +159,7 @@
   }
 
   to {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--dx-flip, 1)));
   }
 }
 
@@ -251,4 +251,10 @@
 
 .dx-sheet-close:hover {
   color: var(--secondary-color-4);
+}
+
+/* Right-to-left pages: slide and offset the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-sheet {
+  --dx-flip: -1;
 }
