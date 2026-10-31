@@ -14,8 +14,8 @@
 //! | anything else (`.sr-only`, `*`) | `[data-rui-scope] .sr-only` |
 //!
 //! Declarations, comments and at-rule preludes are copied unchanged; `@media`, `@supports`,
-//! `@layer` and `@container` blocks are rewritten recursively. `rust-ui registry` writes the
-//! kit's `theme.scoped.css` and `reset.scoped.css` with it, and `rust-ui init --scoped`
+//! `@layer` and `@container` blocks are rewritten recursively. `atoll registry` writes the
+//! kit's `theme.scoped.css` and `reset.scoped.css` with it, and `atoll init --scoped`
 //! applies it to the theme it copies.
 
 use std::fs;
@@ -46,7 +46,7 @@ pub fn scope_css(css: &str) -> String {
 /// The generated file's text: a header naming the source, then the scoped CSS.
 pub fn scoped_file(source_name: &str, css: &str) -> String {
     format!(
-        "/* Generated from {source_name} by `rust-ui registry`; do not edit.\n \
+        "/* Generated from {source_name} by `atoll registry`; do not edit.\n \
          * The same rules, applied only inside an element with data-rui-scope (ThemeScope\n \
          * renders one), so they never reach the rest of an existing app. */\n{}",
         scope_css(css)

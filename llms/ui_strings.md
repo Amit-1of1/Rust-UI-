@@ -1,7 +1,7 @@
 # UiStrings
 
-- Copy into your app: `rust-ui add ui_strings` or `dx components add ui_strings --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::ui_strings::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add ui_strings` or `dx components add ui_strings --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::ui_strings::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults. Wrap the app in `UiStringsProvider` to translate them, and pass a signal to switch language at runtime. Text you pass as props (labels, placeholders) always wins.
 

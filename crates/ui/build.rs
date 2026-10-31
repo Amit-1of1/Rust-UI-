@@ -13,7 +13,7 @@
 //! Adding a component is now "add files": nothing else needs a new line.
 //!
 //! It also checks every `contract.toml` (docs/CONTRACTS.md) with the same rules as
-//! `rust-ui doctor`, so a contract that documents a key its test never presses, or a role no
+//! `atoll doctor`, so a contract that documents a key its test never presses, or a role no
 //! test looks at, fails the build instead of reaching the docs. That check reads the CLI's
 //! source, which a packaged crate doesn't have, so it is the internal `contract-check` feature:
 //! on for the kit's tests and the apps in this repo, off for apps that depend on the kit.

@@ -11,16 +11,16 @@ use std::path::{Path, PathBuf};
 
 /// Where this registry lives. `dx` resolves a plain string in `componentDependencies` against
 /// its own built-in registry, so our siblings must be named with this URL. The motion crate
-/// (needed by drawer) lives here too. Override with `RUST_UI_REGISTRY_GIT` to test a fork.
+/// (needed by drawer) lives here too. Override with `ATOLL_REGISTRY_GIT` to test a fork.
 const REGISTRY_GIT: &str = "https://github.com/Amit-1of1/Rust-UI-";
 
 fn registry_git() -> String {
-    std::env::var("RUST_UI_REGISTRY_GIT").unwrap_or_else(|_| REGISTRY_GIT.to_string())
+    std::env::var("ATOLL_REGISTRY_GIT").unwrap_or_else(|_| REGISTRY_GIT.to_string())
 }
 
 /// Where the kit's primitives come from, read from the workspace manifest's `dioxus-primitives`
-/// line. The fork at a pinned commit while `rust-ui-primitives` is not on crates.io; the registry
-/// once that line has no `git` (docs/PUBLISHING.md), and then `rust-ui-motion` too.
+/// line. The fork at a pinned commit while `atoll-primitives` is not on crates.io; the registry
+/// once that line has no `git` (docs/PUBLISHING.md), and then `atoll-motion` too.
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Primitives {
     Git {
@@ -130,9 +130,9 @@ fn cargo_dependencies(source: &str, primitives: &Primitives, registry: &str) -> 
         // Published together with the primitives (docs/PUBLISHING.md); the kit's crates share
         // one version (docs/VERSIONING.md).
         deps.push(match primitives {
-            Primitives::Git { .. } => json!({"name": "rust-ui-motion", "git": registry}),
+            Primitives::Git { .. } => json!({"name": "atoll-motion", "git": registry}),
             Primitives::Registry { .. } => {
-                json!({"name": "rust-ui-motion", "version": env!("CARGO_PKG_VERSION")})
+                json!({"name": "atoll-motion", "version": env!("CARGO_PKG_VERSION")})
             }
         });
     }
@@ -195,7 +195,7 @@ pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
     let reg = build(root)?;
     let mut out = Vec::new();
     let mut members = Vec::new();
-    // Blocks are installed with `rust-ui add`; `dx components add` only knows components.
+    // Blocks are installed with `atoll add`; `dx components add` only knows components.
     for item in reg.items.iter().filter(|i| i.kind.is_component()) {
         let dir = Path::new(COMPONENTS_DIR).join(&item.name);
         let mut source = String::new();
@@ -225,7 +225,7 @@ pub fn build_manifests(root: &Path) -> io::Result<Vec<(PathBuf, String)>> {
         members.push(dir.to_string_lossy().into_owned());
     }
     let root_manifest = json!({
-        "name": "rust-ui",
+        "name": "atoll",
         "description": "Accessible, animated components for Dioxus",
         "members": members,
     });
@@ -270,7 +270,7 @@ mod tests {
 
     fn git_primitives() -> Primitives {
         Primitives::Git {
-            package: "rust-ui-primitives".into(),
+            package: "atoll-primitives".into(),
             url: "u".into(),
             rev: "abc".into(),
         }
@@ -282,11 +282,11 @@ mod tests {
             |rest: &str| format!("[workspace.dependencies]\ndioxus-primitives = {{ {rest} }}\n");
         assert_eq!(
             parse_primitives(&line(
-                r#"package = "rust-ui-primitives", version = "0.1.0", git = "https://x", rev = "abc""#
+                r#"package = "atoll-primitives", version = "0.1.0", git = "https://x", rev = "abc""#
             ))
             .unwrap(),
             Primitives::Git {
-                package: "rust-ui-primitives".into(),
+                package: "atoll-primitives".into(),
                 url: "https://x".into(),
                 rev: "abc".into()
             }
@@ -296,14 +296,12 @@ mod tests {
             parse_primitives(&line(r#"git = "https://x", rev = "abc""#)).unwrap(),
             Primitives::Git { package, .. } if package == "dioxus-primitives"
         ));
-        let published = parse_primitives(&line(
-            r#"package = "rust-ui-primitives", version = "0.1.0""#,
-        ))
-        .unwrap();
+        let published =
+            parse_primitives(&line(r#"package = "atoll-primitives", version = "0.1.0""#)).unwrap();
         assert_eq!(
             published,
             Primitives::Registry {
-                package: "rust-ui-primitives".into(),
+                package: "atoll-primitives".into(),
                 version: "0.1.0".into()
             }
         );
@@ -320,7 +318,7 @@ mod tests {
             .iter()
             .map(|d| d["name"].as_str().unwrap().to_string())
             .collect();
-        assert_eq!(names, ["rust-ui-primitives", "rust-ui-motion"]);
+        assert_eq!(names, ["atoll-primitives", "atoll-motion"]);
         assert!(cargo_dependencies("use dioxus::prelude::*;", &git_primitives(), "g").is_empty());
         assert!(cargo_dependencies(
             "use crate::components::time::Clock;",

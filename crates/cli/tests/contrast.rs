@@ -1,9 +1,9 @@
-//! The contrast proof (`rust_ui_cli::contrast`) on the kit: every text colour each component
+//! The contrast proof (`atoll_cli::contrast`) on the kit: every text colour each component
 //! stylesheet draws, on the background it sits on, in light and dark, under every accent
-//! preset, meets WCAG 2 AA. Focus rings and icons need 3:1. Run `cargo run -p rust-ui-cli --
+//! preset, meets WCAG 2 AA. Focus rings and icons need 3:1. Run `cargo run -p atoll-cli --
 //! contrast` for the same report, or add `--theme your-theme.css` to prove your own theme.
 
-use rust_ui_cli::contrast::{self, check, Kind, Mode, Nesting, Theme};
+use atoll_cli::contrast::{self, check, Kind, Mode, Nesting, Theme};
 use std::path::{Path, PathBuf};
 
 fn repo() -> PathBuf {
@@ -113,14 +113,14 @@ fn the_proof_catches_regressions() {
     }
 }
 
-/// `rust-ui contrast --theme brand.css` checks a preset of your own like the shipped ones.
+/// `atoll contrast --theme brand.css` checks a preset of your own like the shipped ones.
 #[test]
 fn a_users_preset_is_proven_too() {
     let dir = tempfile::tempdir().unwrap();
     let good = dir.path().join("good.css");
     let preset =
-        rust_ui_cli::theme::preset(rust_ui_cli::theme::Rgb::parse("#0ea5e9").unwrap()).unwrap();
-    std::fs::write(&good, rust_ui_cli::theme::css("sky", &preset)).unwrap();
+        atoll_cli::theme::preset(atoll_cli::theme::Rgb::parse("#0ea5e9").unwrap()).unwrap();
+    std::fs::write(&good, atoll_cli::theme::css("sky", &preset)).unwrap();
     let report = contrast::run(&repo(), &[good]).unwrap();
     assert!(report.pairs.iter().any(|p| p.accent == "sky"));
     assert_eq!(
@@ -142,7 +142,7 @@ fn a_users_preset_is_proven_too() {
 
 #[test]
 fn the_command_reports_and_fails() {
-    let out = std::process::Command::new(env!("CARGO_BIN_EXE_rust-ui"))
+    let out = std::process::Command::new(env!("CARGO_BIN_EXE_atoll"))
         .args(["--source"])
         .arg(repo())
         .arg("contrast")

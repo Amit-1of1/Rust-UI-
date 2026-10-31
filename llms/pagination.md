@@ -1,7 +1,7 @@
 # Pagination
 
-- Copy into your app: `rust-ui add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
-- Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
 

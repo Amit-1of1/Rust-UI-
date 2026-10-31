@@ -1,4 +1,4 @@
-# Accessibility Conformance Report: `rust-ui acr`
+# Accessibility Conformance Report: `atoll acr`
 
 Software sold to public bodies, universities and most large companies is asked for an
 Accessibility Conformance Report (ACR): the VPAT® template filled in, one row per WCAG success
@@ -8,11 +8,11 @@ it by hand after an audit, months after the code.
 For the parts of an app built from this kit, most of the answers are already proven by the
 repo's own checks: the ARIA check over every demo in `cargo test`, axe in light, dark, RTL and
 every accent, the keyboard contracts run in three browsers, the compile-time rules for titles,
-labels and `alt`. `rust-ui acr` turns those into a draft ACR for the components your app uses.
+labels and `alt`. `atoll acr` turns those into a draft ACR for the components your app uses.
 
 ```sh
-rust-ui acr --product "Taskboard" --out acr.md      # components in rust-ui-lock.json
-rust-ui acr dialog select data_table --out acr.md    # or name them (blocks work too)
+atoll acr --product "Taskboard" --out acr.md      # components in atoll-lock.json
+atoll acr dialog select data_table --out acr.md    # or name them (blocks work too)
 ```
 
 ## What is in it

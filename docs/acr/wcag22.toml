@@ -1,5 +1,5 @@
 # What the kit's components do for each WCAG 2.2 Level A and AA success criterion, and the
-# checks that show it. `rust-ui acr` turns this into a draft Accessibility Conformance Report
+# checks that show it. `atoll acr` turns this into a draft Accessibility Conformance Report
 # (VPAT 2.5 layout) for the components an app uses; docs/ACR.md explains it.
 #
 # kit      supports | partial | does-not-support | not-applicable | not-evaluated
@@ -134,7 +134,7 @@ name = "Contrast (Minimum)"
 level = "AA"
 kit = "supports"
 remarks = "Proven from the stylesheets, not sampled: every text colour each component draws, including hover, pressed, selected and focus states, is checked against the background it is drawn on, in light and dark and under every accent preset (4.5:1, or 3:1 for large text). axe also scans every demo in light, dark and each accent."
-app = "Run `rust-ui contrast --theme <your theme.css>` on any theme you generate or edit, and check colours in your own CSS."
+app = "Run `atoll contrast --theme <your theme.css>` on any theme you generate or edit, and check colours in your own CSS."
 evidence = ["crates/cli/tests/contrast.rs::every_pair_meets_wcag_aa_in_both_modes_and_every_accent", "crates/cli/tests/contrast.rs::the_proof_covers_every_component_mode_and_accent", "tests/e2e/axe.mjs"]
 
 [[criterion]]

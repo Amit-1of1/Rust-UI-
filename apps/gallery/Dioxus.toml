@@ -4,4 +4,4 @@ name = "gallery"
 android_manifest = "android/AndroidManifest.xml"
 
 [web.app]
-title = "Rust UI kit gallery"
+title = "Atoll kit gallery"

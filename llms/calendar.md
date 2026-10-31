@@ -1,7 +1,7 @@
 # Calendar
 
-- Copy into your app: `rust-ui add calendar` or `dx components add calendar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::calendar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add calendar` or `dx components add calendar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::calendar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Calendar component is used to display a calendar interface, allowing users to select dates. It provides a grid layout of days for a specific month and year.
 

@@ -1,4 +1,4 @@
-//! `rust-ui postbuild`: shrink a `dx build --release` web build in place.
+//! `atoll postbuild`: shrink a `dx build --release` web build in place.
 //!
 //! - [`strip_wasm`] drops the `name` and debug sections from every `.wasm`. `dx build
 //!   --wasm-split` keeps them (the splitter needs them) and never removes them afterwards, which
@@ -9,7 +9,7 @@
 //! time the component renders, so an app makes one request per component it shows. This
 //! concatenates the theme and the component stylesheets the app actually uses into one
 //! hashed file, links it from `index.html`, and lists the files it replaces in the link's
-//! `data-rust-ui-bundle` attribute; `ui::css_bundle` reads that list at startup and skips
+//! `data-atoll-bundle` attribute; `ui::css_bundle` reads that list at startup and skips
 //! those links.
 //!
 //! A stylesheet counts as used when one of its hashed class names (`name-<8 hex>`) appears
@@ -22,7 +22,7 @@ use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 
 /// The attribute `ui::css_bundle` looks for. Keep the two in sync.
-pub const BUNDLE_ATTR: &str = "data-rust-ui-bundle";
+pub const BUNDLE_ATTR: &str = "data-atoll-bundle";
 
 #[derive(Debug, PartialEq)]
 pub struct CssReport {
@@ -93,7 +93,7 @@ pub fn bundle_css_with(public: &Path, scoped: bool) -> Result<CssReport, String>
 
     let mut hasher = DefaultHasher::new();
     out.hash(&mut hasher);
-    let file = format!("rust-ui-{:016x}.css", hasher.finish());
+    let file = format!("atoll-{:016x}.css", hasher.finish());
     fs::write(assets.join(&file), &out).map_err(|e| e.to_string())?;
 
     // Link it the way dx links its own script, so a base path carries over.
@@ -281,7 +281,7 @@ mod tests {
         assert!(!out.contains(".mine"));
         let index = fs::read_to_string(dir.path().join("index.html")).unwrap();
         assert!(index.contains(&format!(
-            "href=\"/./assets/{}\" data-rust-ui-bundle=\"theme-dxh1.css style-dxh2.css\"",
+            "href=\"/./assets/{}\" data-atoll-bundle=\"theme-dxh1.css style-dxh2.css\"",
             report.file
         )));
         assert!(bundle_css(dir.path()).is_err(), "bundling twice is refused");

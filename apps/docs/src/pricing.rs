@@ -9,7 +9,7 @@ use ui::prelude::*;
 
 /// The product's name on this page. A working name: change it here when the final one is
 /// picked (docs/pro/README.md, "Before launch").
-pub const PRODUCT: &str = "Rust UI";
+pub const PRODUCT: &str = "Atoll";
 
 /// The checkout page (Polar) for each Pro tier. Empty until the owner creates the products;
 /// an empty URL keeps that tier's button disabled.
@@ -39,7 +39,7 @@ const PLANS: &[Plan] = &[
         features: &[
             "Every component and block in these docs",
             "Light and dark themes, accent presets, motion",
-            "The rust-ui CLI and MCP server",
+            "The atoll CLI and MCP server",
             "MIT OR Apache-2.0",
         ],
         checkout: None,
@@ -96,7 +96,7 @@ const COMPARE: &[(&str, &str, &str)] = &[
     ),
     (
         "Install",
-        "rust-ui add, dx components add",
+        "atoll add, dx components add",
         "The same, from the Pro repository",
     ),
     ("Licence", "MIT OR Apache-2.0", "Commercial, per developer"),
@@ -109,7 +109,7 @@ const FAQ: &[(&str, &str)] = &[
     ),
     (
         "How do I get Pro after paying?",
-        "Your GitHub account is invited to the private Pro repository. Install from it with the same commands: rust-ui add --source <Pro repository URL> <name>.",
+        "Your GitHub account is invited to the private Pro repository. Install from it with the same commands: atoll add --source <Pro repository URL> <name>.",
     ),
     (
         "Can I use Pro in client work?",

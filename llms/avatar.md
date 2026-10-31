@@ -1,7 +1,7 @@
 # Avatar
 
-- Copy into your app: `rust-ui add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Avatar components display a user's profile picture or fallback initials. Use the composable `Avatar`, `AvatarImage`, and `AvatarFallback` primitives when you need full control, or `ImageAvatar` for the common image-with-fallback case.
 

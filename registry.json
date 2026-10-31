@@ -1,5 +1,5 @@
 {
-  "name": "rust-ui",
+  "name": "atoll",
   "theme": "crates/ui/assets/theme.css",
   "cargoDependencies": [
     "dioxus",

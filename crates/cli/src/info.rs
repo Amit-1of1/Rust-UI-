@@ -1,7 +1,7 @@
-//! `rust-ui info`: what a coding agent needs to know about the app it is working in, read
+//! `atoll info`: what a coding agent needs to know about the app it is working in, read
 //! from the app itself (no network): the Dioxus version, the theme, which kit items are
 //! installed from where, which of them you edited, and whether the skill and MCP server are
-//! set up. The agent skill (`skills/rust-ui/SKILL.md`) runs `rust-ui info --json` first.
+//! set up. The agent skill (`skills/atoll/SKILL.md`) runs `atoll info --json` first.
 
 use crate::update::{hash, Lock};
 use crate::Kind;
@@ -9,11 +9,11 @@ use serde::Serialize;
 use std::fs;
 use std::path::Path;
 
-/// Where `rust-ui init` puts the theme by default.
+/// Where `atoll init` puts the theme by default.
 pub const THEME_DEST: &str = "assets/theme.css";
-/// The skill in this repo, and where `rust-ui skill` installs it in an app.
-pub const SKILL_FILE: &str = "skills/rust-ui/SKILL.md";
-pub const SKILL_DEST: &str = ".claude/skills/rust-ui/SKILL.md";
+/// The skill in this repo, and where `atoll skill` installs it in an app.
+pub const SKILL_FILE: &str = "skills/atoll/SKILL.md";
+pub const SKILL_DEST: &str = ".claude/skills/atoll/SKILL.md";
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,7 +21,7 @@ pub struct Info {
     pub cli_version: &'static str,
     /// The `dioxus` requirement in the app's Cargo.toml (`0.7`, or `git <url>`), if any.
     pub dioxus: Option<String>,
-    /// The app depends on the `rust-ui-kit` crate instead of (or as well as) copied source.
+    /// The app depends on the `atoll-ui` crate instead of (or as well as) copied source.
     pub kit_crate: bool,
     pub theme: Option<Theme>,
     /// The `--source` the lockfile recorded.
@@ -30,7 +30,7 @@ pub struct Info {
     pub installed: Vec<Installed>,
     /// Path of the installed skill, if any.
     pub skill: Option<String>,
-    /// `.mcp.json` (or `.cursor/mcp.json`, `.vscode/mcp.json`) runs `rust-ui ... mcp`.
+    /// `.mcp.json` (or `.cursor/mcp.json`, `.vscode/mcp.json`) runs `atoll ... mcp`.
     pub mcp: bool,
 }
 
@@ -53,7 +53,7 @@ pub struct Installed {
     pub edited: Vec<String>,
     /// Recorded files that are gone from the app.
     pub missing: Vec<String>,
-    /// Files still holding `<<<<<<< yours` markers from `rust-ui update`.
+    /// Files still holding `<<<<<<< yours` markers from `atoll update`.
     pub conflicts: Vec<String>,
 }
 
@@ -73,7 +73,7 @@ pub fn gather(project: &Path, lock: &Path) -> Result<Info, String> {
         .and_then(|t| t.get("dependencies"))
         .and_then(|d| d.as_table());
     let dioxus = deps.and_then(|d| d.get("dioxus")).map(requirement);
-    let kit_crate = deps.is_some_and(|d| d.contains_key("rust-ui-kit") || d.contains_key("ui"));
+    let kit_crate = deps.is_some_and(|d| d.contains_key("atoll-ui") || d.contains_key("ui"));
 
     let theme = fs::read_to_string(project.join(THEME_DEST))
         .ok()
@@ -112,7 +112,7 @@ pub fn gather(project: &Path, lock: &Path) -> Result<Info, String> {
     let mcp = [".mcp.json", ".cursor/mcp.json", ".vscode/mcp.json"]
         .iter()
         .filter_map(|f| fs::read_to_string(project.join(f)).ok())
-        .any(|s| s.contains("rust-ui") && s.contains("\"mcp\""));
+        .any(|s| s.contains("atoll") && s.contains("\"mcp\""));
 
     Ok(Info {
         cli_version: crate::VERSION,
@@ -157,7 +157,7 @@ fn accents(css: &str) -> Vec<String> {
 
 /// The human-readable report.
 pub fn render(info: &Info) -> String {
-    let mut s = format!("rust-ui {}\n", info.cli_version);
+    let mut s = format!("atoll {}\n", info.cli_version);
     let or_none = |v: &Option<String>| v.clone().unwrap_or_else(|| "not found".into());
     s += &format!("dioxus:    {}\n", or_none(&info.dioxus));
     s += &format!(
@@ -165,7 +165,7 @@ pub fn render(info: &Info) -> String {
         match &info.theme {
             Some(t) if t.accents.is_empty() => t.path.clone(),
             Some(t) => format!("{} (accents: {})", t.path, t.accents.join(", ")),
-            None => format!("not found (run `rust-ui init` to copy it to {THEME_DEST})"),
+            None => format!("not found (run `atoll init` to copy it to {THEME_DEST})"),
         }
     );
     s += &format!("source:    {}\n", or_none(&info.source));
@@ -179,7 +179,7 @@ pub fn render(info: &Info) -> String {
         }
     );
     if info.installed.is_empty() {
-        s += "installed: nothing yet (`rust-ui add <name>`)\n";
+        s += "installed: nothing yet (`atoll add <name>`)\n";
     } else {
         s += &format!("installed: {} item(s)\n", info.installed.len());
         for item in &info.installed {

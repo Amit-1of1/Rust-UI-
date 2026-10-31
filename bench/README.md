@@ -4,7 +4,7 @@ One small app, Taskboard, built three ways to the same spec ([SPEC.md](SPEC.md))
 
 | | Code | Stack |
 |---|---|---|
-| Rust | [`apps/trial`](../apps/trial) | Dioxus 0.7.10, this kit (`rust-ui-kit`), wasm |
+| Rust | [`apps/trial`](../apps/trial) | Dioxus 0.7.10, this kit (`atoll-ui`), wasm |
 | React | [`bench/react`](react) | React 19.3, Radix primitives (what shadcn/ui uses), cmdk, Vite 8 |
 | Svelte | [`bench/svelte`](svelte) | Svelte 5.57, Bits UI (what shadcn-svelte uses), svelte-sonner, Vite 8 |
 
@@ -31,7 +31,7 @@ The wasm file is most of the Rust download. Once the bytes have arrived, startup
 
 The table above is the plain `dx build --release`. [`scripts/release-web.sh trial`](../scripts/release-web.sh) adds two steps:
 
-- **One CSS file.** `rust-ui postbuild` puts the theme and the stylesheets of the components the app uses into one file linked from `index.html`, and `ui::ThemeStyles` stops components from linking their own. A stylesheet counts as used when its hashed class names appear in the wasm.
+- **One CSS file.** `atoll postbuild` puts the theme and the stylesheets of the components the app uses into one file linked from `index.html`, and `ui::ThemeStyles` stops components from linking their own. A stylesheet counts as used when its hashed class names appear in the wasm.
 - **Split wasm.** `dx build --wasm-split` with the Stats and Settings tabs, the New task dialog, the command menu and the bench page as `#[component(lazy)]`. Each gets its own wasm file. The dialog downloads in the background as soon as the board is up, and the rest on first open.
 
 | Rust only | Before | One CSS file | Both |
@@ -156,7 +156,7 @@ Worse:
 The first two are done (see [Shrinking the Rust download](#shrinking-the-rust-download)). The rest are untried. Each one needs the user's go-ahead, and the last one breaks a rule in GUARDRAILS.
 
 1. ~~**Split the wasm by screen.**~~ Done with `#[component(lazy)]` and `dx build --wasm-split`.
-2. ~~**One CSS file for the components an app uses.**~~ Done as `rust-ui postbuild`.
+2. ~~**One CSS file for the components an app uses.**~~ Done as `atoll postbuild`.
 3. **A keyed list primitive.** Something like `use_keyed_list`, where each row's data lives in a signal owned by that row and keyed by id rather than position, so updates touch only the changed rows and moves touch none. This is the Stores idea, keyed properly.
 4. **A size budget in the gate.** Fail `scripts/check.sh` when the trial's brotli wasm grows past a set limit, and use `twiggy` to show what grew. The biggest items today are Dioxus's own runtime, keyboard-name tables and JSON code used by `document::eval`.
 5. **Compile templates to direct DOM calls** (how Svelte and Solid get their speed). This would bypass Dioxus's virtual DOM, which counts as building a renderer, so GUARDRAILS rules it out unless that decision changes.

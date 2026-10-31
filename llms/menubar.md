@@ -1,7 +1,7 @@
 # Menubar
 
-- Copy into your app: `rust-ui add menubar` or `dx components add menubar --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::menubar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add menubar` or `dx components add menubar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::menubar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Menubar component can be used to display a menu bar with collapsible menus.
 

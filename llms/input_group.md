@@ -1,7 +1,7 @@
 # InputGroup
 
-- Copy into your app: `rust-ui add input_group` or `dx components add input_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::input_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add input_group` or `dx components add input_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::input_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 An input with text, icons or buttons attached inside one bordered box.
 

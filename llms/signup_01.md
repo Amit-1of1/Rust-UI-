@@ -1,12 +1,12 @@
 # Sign-up 01
 
-- Copy into your app: `rust-ui add signup_01` (also copies `alert`, `button`, `card`, `form`, `input_otp`, `link`).
-- Import: `use crate::blocks::signup_01::*;` after copying, or `use ui::blocks::signup_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add signup_01` (also copies `alert`, `button`, `card`, `form`, `input_otp`, `link`).
+- Import: `use crate::blocks::signup_01::*;` after copying, or `use ui::blocks::signup_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code. Built from `card`, `form`, `input_otp`, `alert` and `link`.
 
 ```sh
-rust-ui add signup_01
+atoll add signup_01
 ```
 
 ```rust

@@ -7,7 +7,7 @@
 #
 # What it proves (docs/PUBLISHING.md): the packaged crates build; an app needs no `[patch]` of
 # Dioxus or Blitz, and gets stock `dioxus` from crates.io; the only git source left is our
-# primitives fork, until `rust-ui-primitives` is published. Then it checks that none is left.
+# primitives fork, until `atoll-primitives` is published. Then it checks that none is left.
 # Read-only for the repo: it packages into target/package and works in a temp directory.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -23,12 +23,12 @@ patch_args=()
 if [ -n "$prim_git" ]; then
   # Unpublished: let packaging resolve the renamed fork crates from git. crates.io never sees
   # this; it is the same source the workspace builds from.
-  for c in rust-ui-primitives rust-ui-attributes; do
+  for c in atoll-primitives atoll-attributes; do
     patch_args+=(--config "patch.crates-io.$c.git=\"$prim_git\"" --config "patch.crates-io.$c.rev=\"$prim_rev\"")
   done
 fi
 
-crates=(rust-ui-form-derive rust-ui-motion rust-ui-kit)
+crates=(atoll-form-derive atoll-motion atoll-ui)
 step "package ${crates[*]}"
 # --no-verify: the next step builds the packaged sources for real, outside the workspace.
 pkg_args=()
@@ -58,7 +58,7 @@ publish = false
 
 [dependencies]
 dioxus = "0.7"
-ui = { package = "rust-ui-kit", version = "$version" }
+ui = { package = "atoll-ui", version = "$version" }
 
 [features]
 default = ["web"]
@@ -69,8 +69,8 @@ web = ["dioxus/web", "ui/web"]
 TOML
   for c in "${crates[@]}"; do echo "$c = { path = \"../$c-$version\" }"; done
   if [ -n "$prim_git" ]; then
-    echo "rust-ui-primitives = { git = \"$prim_git\", rev = \"$prim_rev\" }"
-    echo "rust-ui-attributes = { git = \"$prim_git\", rev = \"$prim_rev\" }"
+    echo "atoll-primitives = { git = \"$prim_git\", rev = \"$prim_rev\" }"
+    echo "atoll-attributes = { git = \"$prim_git\", rev = \"$prim_rev\" }"
   fi
 } >"$app/Cargo.toml"
 
@@ -95,7 +95,7 @@ if grep -qE '^dioxus v.*\(' <<<"$tree"; then
 fi
 if [ -n "$git_sources" ]; then
   echo "git sources:"; sed 's/^/  /' <<<"$git_sources"
-  unexpected=$(grep -vE '^rust-ui-(primitives|attributes) ' <<<"$git_sources" || true)
+  unexpected=$(grep -vE '^atoll-(primitives|attributes) ' <<<"$git_sources" || true)
   if [ -n "$unexpected" ]; then
     echo "unexpected git dependencies (only the unpublished primitives fork may be one):" >&2
     echo "$unexpected" >&2; exit 1

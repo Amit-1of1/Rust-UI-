@@ -8,7 +8,7 @@
 #    runs at -O0 for those: at -O2 wasm-ld tail-merges identical constants, and the splitter
 #    then zeroes bytes the main module still reads (rsx node paths), which scrambles the first
 #    render.
-# 2. `rust-ui postbuild`: drop wasm debug names, bundle the CSS into one file.
+# 2. `atoll postbuild`: drop wasm debug names, bundle the CSS into one file.
 # Needs `dx` and wasm-opt on PATH (offline: NO_DOWNLOADS=1, see docs/GUARDRAILS.md).
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -28,7 +28,7 @@ fi
 rm -rf "$out"
 (cd "$dir" && dx build --release --platform web "${split[@]}" "$@")
 
-cargo run -q -p rust-ui-cli -- postbuild "$out"
+cargo run -q -p atoll-cli -- postbuild "$out"
 
 # Stock dx 0.7.10 leaves some lazy parts as near-empty files (their code stays in the main
 # file). Fail loudly instead of shipping a split that saves nothing.

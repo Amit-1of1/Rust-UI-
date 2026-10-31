@@ -24,11 +24,11 @@ always conflicted; two branches that each add a file never do.
 3. When the PR is open, put its number in the entries (`(#39)`). Only your own file changes,
    so this commit can't conflict either.
 
-`rust-ui changelog --check` (run by `scripts/check.sh`) validates the fragments.
+`atoll changelog --check` (run by `scripts/check.sh`) validates the fragments.
 
 ## Releasing
 
-On `main`, before tagging: `cargo run -p rust-ui-cli -- changelog`. It adds every fragment's
+On `main`, before tagging: `cargo run -p atoll-cli -- changelog`. It adds every fragment's
 entries to the top of the matching "Unreleased" sections (newest PR first), adds the
 migration notes to the top of MIGRATION.md's "Unreleased", and deletes the fragments. Commit
 that as its own PR. It refuses to run while a fragment has no PR number.

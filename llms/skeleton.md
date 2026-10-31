@@ -1,7 +1,7 @@
 # Skeleton
 
-- Copy into your app: `rust-ui add skeleton` or `dx components add skeleton --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::skeleton::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add skeleton` or `dx components add skeleton --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::skeleton::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Skeleton component is used to display a placeholder preview of content before the data gets loaded. This helps improve perceived performance and provides users with a visual indication that content is being loaded.
 

@@ -1,7 +1,7 @@
 # Sidebar
 
-- Copy into your app: `rust-ui add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
-- Import: `use crate::components::sidebar::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
+- Import: `use crate::components::sidebar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application.
 
