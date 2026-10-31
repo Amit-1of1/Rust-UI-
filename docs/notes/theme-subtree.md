@@ -1,4 +1,4 @@
-# `data-theme` on a subtree does not switch light-dark() tokens in Chromium (found 2026-10-31)
+# `data-theme` on a subtree did not switch light-dark() tokens in Chromium (found 2026-10-31, fixed in PR #79)
 
 `theme.css` says `data-theme="dark"` on any element switches its own subtree. On the web that
 is not what happens in current Chromium: the colour tokens (`--primary-color: light-dark(#fff,
@@ -15,6 +15,4 @@ the native renderer, which takes the generated fallback block, where root tokens
 re-declared on `[data-theme]`. What doesn't: `ThemeScope` or a hand-written `data-theme` used
 to show one dark panel inside a light web page.
 
-Possible fix (not done here, it touches every app's theme): re-declare the root tokens on
-`[data-theme]` in the `light-dark()` path too, as the fallback does, and decide whether a
-nested `data-theme` should keep an ancestor's `data-accent` (the fallback currently resets it).
+Fixed in PR #79: `theme.css` has a generated "subtree themes" block that re-declares the colour tokens on `[data-theme]` (and presets on `[data-theme]` inside a `[data-accent]`) at zero specificity, checked in the browser by `tests/e2e/theme_subtree.mjs`. With it, the theme builder could go back to a preview-only dark box.
