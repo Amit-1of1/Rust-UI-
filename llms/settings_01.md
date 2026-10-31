@@ -1,12 +1,12 @@
 # Settings 01
 
-- Copy into your app: `rust-ui add settings_01` (also copies `alert_dialog`, `button`, `card`, `form`, `label`, `switch`, `tabs`, `theme_customizer`).
-- Import: `use crate::blocks::settings_01::*;` after copying, or `use ui::blocks::settings_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add settings_01` (also copies `alert_dialog`, `button`, `card`, `form`, `label`, `switch`, `tabs`, `theme_customizer`).
+- Import: `use crate::blocks::settings_01::*;` after copying, or `use ui::blocks::settings_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A settings page in four tabs: Profile (name, email, bio), Notifications (email switches), Appearance (the theme customizer) and Account (delete, behind a confirmation). Built from `tabs`, `card`, `form`, `switch`, `label`, `theme_customizer` and `alert_dialog`.
 
 ```sh
-rust-ui add settings_01
+atoll add settings_01
 ```
 
 It stands alone (its root is the page's `main`), or fits inside `DashboardShell` from `dashboard_01` with `embedded: true`, which makes the root a plain `div` because the shell already has a `main`:

@@ -1,6 +1,6 @@
 # Migration notes
 
-Upgrade steps for each breaking change in the [CHANGELOG](../CHANGELOG.md), newest first. Nothing has been released yet, so these are grouped by the pull request that made the change. If you copied components (`rust-ui add`), run `rust-ui diff` to see which of your files the change touches, then re-copy with `rust-ui add --force <name>` or apply the change by hand.
+Upgrade steps for each breaking change in the [CHANGELOG](../CHANGELOG.md), newest first. Nothing has been released yet, so these are grouped by the pull request that made the change. If you copied components (`atoll add`), run `atoll diff` to see which of your files the change touches, then re-copy with `atoll add --force <name>` or apply the change by hand.
 
 What counts as breaking, and how deprecations work, is in [VERSIONING.md](VERSIONING.md).
 
@@ -23,7 +23,7 @@ Notes for changes merged since the last fold are in `changes/*.migration.md` ([c
 - Tests: find a toast by its text or `getByRole("status")` / `getByRole("alert")`; `getByRole("alertdialog")` now only matches real alert dialogs.
 - Avatars: pass `label: "Ada Lovelace"` where the avatar is the only place the name appears; leave it out where the name is shown beside it.
 - `Select`: nothing, unless you built its props by hand; use `ui::prelude::SelectProps`.
-- Copy users: `rust-ui add --force toast avatar select`, and bump `dioxus-primitives` to the fork commit in `Cargo.toml`.
+- Copy users: `atoll add --force toast avatar select`, and bump `dioxus-primitives` to the fork commit in `Cargo.toml`.
 
 ### Icons are generated in the kit (PR #35)
 
@@ -43,7 +43,7 @@ Notes for changes merged since the last fold are in `changes/*.migration.md` ([c
 - If an icon carries meaning on its own, give it `label: "..."` instead of relying on surrounding text. Remove `"aria-hidden": "true"` where you like; it is the default now (passing it is still fine).
 - If your app imported `dioxus_icons` directly, import from `ui::icons` instead, or keep your own `dioxus-icons` dependency.
 - If an icon should not mirror in right-to-left text, pass `mirror_rtl: false`.
-- Copy users: `rust-ui add --force icons`, then drop `dioxus-icons` from your `Cargo.toml` if nothing else uses it.
+- Copy users: `atoll add --force icons`, then drop `dioxus-icons` from your `Cargo.toml` if nothing else uses it.
 
 ### `class` adds to the kit's class (PR #30)
 
@@ -97,7 +97,7 @@ Notes for changes merged since the last fold are in `changes/*.migration.md` ([c
 **After:** it exists only with the `demos` feature.
 
 ```toml
-ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "rust-ui-kit", features = ["web", "demos"] }
+ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "atoll-ui", features = ["web", "demos"] }
 ```
 
 `ui::demos` is internal ([STABILITY.md](STABILITY.md)); copy the demo into your app instead if you depend on it.
@@ -158,8 +158,8 @@ On a failed submit the form focuses the first invalid field. `TextField`, `Selec
 
 ### Dark mode through `light-dark()` (PR #21, not breaking)
 
-Colour tokens in `theme.css` are now `light-dark(light, dark)` pairs, and `data-theme` only sets `color-scheme`. Overrides written the old way (`var(--dark, X) var(--light, Y)`) keep working, because `--dark`/`--light` are still defined. For a new custom accent, regenerate it with `rust-ui theme --brand <hex>`, which now prints `light-dark()` pairs ([THEMING.md](THEMING.md)).
+Colour tokens in `theme.css` are now `light-dark(light, dark)` pairs, and `data-theme` only sets `color-scheme`. Overrides written the old way (`var(--dark, X) var(--light, Y)`) keep working, because `--dark`/`--light` are still defined. For a new custom accent, regenerate it with `atoll theme --brand <hex>`, which now prints `light-dark()` pairs ([THEMING.md](THEMING.md)).
 
 ### Hooks and icons are registry items (PR #21, copy users only)
 
-`ui::hooks` and `ui::icons` keep their paths for crate users. If you copied components, components now import `components::hooks` and `components::icons`: `rust-ui add <name>` brings them along; with an older copy, run `rust-ui add hooks icons` and fix the `use` lines `rust-ui diff` reports.
+`ui::hooks` and `ui::icons` keep their paths for crate users. If you copied components, components now import `components::hooks` and `components::icons`: `atoll add <name>` brings them along; with an older copy, run `atoll add hooks icons` and fix the `use` lines `atoll diff` reports.

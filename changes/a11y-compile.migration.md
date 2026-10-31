@@ -22,4 +22,4 @@ ImageAvatar { src: "/ada.png", alt: "Ada Lovelace", "AL" }
 - A title that was visually hidden (`class: "sr-only"`) becomes `hide_title: true`. A title with markup other than text has to become text; put the rest in the content.
 - Replace `Button { size: ButtonSize::Icon, aria_label: "Close", .. }` with `IconButton { label: "Close", .. }`, and `ButtonSize::IconXs` / `IconSm` / `IconLg` with `IconButtonSize::Xs` / `Sm` / `Lg`.
 - Add `alt` to every `AvatarImage` and `ImageAvatar`: the person's name, or `""` when the name is shown beside the avatar.
-- Copy users: `rust-ui add --force dialog sheet drawer alert_dialog button avatar`, and also `command`, `sidebar` and `number_field` if you copied them (they use the new props).
+- Copy users: `atoll add --force dialog sheet drawer alert_dialog button avatar`, and also `command`, `sidebar` and `number_field` if you copied them (they use the new props).

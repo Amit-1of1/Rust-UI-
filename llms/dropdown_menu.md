@@ -1,7 +1,7 @@
 # Dropdown menu
 
-- Copy into your app: `rust-ui add dropdown_menu` or `dx components add dropdown_menu --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::dropdown_menu::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add dropdown_menu` or `dx components add dropdown_menu --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::dropdown_menu::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The DropdownMenu component is used to create a dropdown menu that can be triggered by a button click. It allows users to select an option from a list of items.
 

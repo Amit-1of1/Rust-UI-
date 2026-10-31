@@ -23,7 +23,7 @@ folder"); `scripts/pro-repo.sh --overlay` puts them into the Pro repository. Its
 | Free kit | this repository (public once the owner makes it so) | done |
 | Pro items | a **private** copy of this repository that merges `main` and adds Pro items | `scripts/pro-repo.sh` builds it locally |
 | Marking an item Pro | a `LICENSE-PRO.md` in the item's folder (copy [LICENSE-PRO.md](LICENSE-PRO.md)) | done: the registry writes `"tier": "pro"` |
-| Telling the buyer | `rust-ui list` shows `(pro)`; `rust-ui add` and the MCP server's `add_component` print the licence reminder | done |
+| Telling the buyer | `atoll list` shows `(pro)`; `atoll add` and the MCP server's `add_component` print the licence reminder | done |
 | Pricing page | docs site, `#pricing` (`apps/docs/src/pricing.rs`) | done; buttons off until a checkout URL is set |
 | Checkout and access | Polar product with the "GitHub repository access" benefit on the Pro repo | owner's account |
 
@@ -31,10 +31,10 @@ The buyer's side:
 
 ```sh
 # after paying, their GitHub account is invited to the Pro repository
-export RUST_UI_SOURCE=https://github.com/Amit-1of1/rust-ui-pro
-rust-ui list                      # free and Pro items, Pro ones marked (pro)
-rust-ui add pricing_02            # copies the block, its components and its LICENSE-PRO.md
-dx components add pricing_02 --git https://github.com/Amit-1of1/rust-ui-pro   # also works
+export ATOLL_SOURCE=https://github.com/Amit-1of1/atoll-pro
+atoll list                      # free and Pro items, Pro ones marked (pro)
+atoll add pricing_02            # copies the block, its components and its LICENSE-PRO.md
+dx components add pricing_02 --git https://github.com/Amit-1of1/atoll-pro   # also works
 ```
 
 Both clone with the buyer's own git credentials, so no licence server or API key is needed.
@@ -47,7 +47,7 @@ A refund removes the invitation, and with it the access to new versions.
   checks, a `THIRD_PARTY.md` row for anything copied.
 - They live **only** in the Pro repository. `crates/cli/tests/cli.rs`
   (`the_public_registry_has_no_pro_items`) fails if one lands here; the Pro repository skips
-  that test through its `.rust-ui-pro` marker.
+  that test through its `.atoll-pro` marker.
 - Each has `LICENSE-PRO.md` in its folder, so the licence travels with the copied code.
 
 ## Running the Pro repository
@@ -55,13 +55,13 @@ A refund removes the invitation, and with it the access to new versions.
 1. `scripts/pro-repo.sh ../atoll-pro --overlay <Pro source folder>` (add `--demo` instead of
    `--overlay` to watch a block become Pro and get installed into a throwaway app).
 2. Create a private repository on GitHub, then
-   `git -C ../rust-ui-pro remote add origin <its URL> && git -C ../rust-ui-pro push -u origin main`.
-3. Build Pro items there with `rust-ui new` or by adding block folders, as in this repo, then
-   copy `docs/pro/LICENSE-PRO.md` into each one and run `rust-ui registry`. Copy new Pro
+   `git -C ../atoll-pro remote add origin <its URL> && git -C ../atoll-pro push -u origin main`.
+3. Build Pro items there with `atoll new` or by adding block folders, as in this repo, then
+   copy `docs/pro/LICENSE-PRO.md` into each one and run `atoll registry`. Copy new Pro
    files back into the Pro source folder too, so `--overlay` can always rebuild the repository.
    Add each new item to [catalog.json](catalog.json) with a screenshot.
-4. To pick up free-kit changes: `git -C ../rust-ui-pro pull upstream main`, then
-   `rust-ui registry` and `scripts/check.sh`.
+4. To pick up free-kit changes: `git -C ../atoll-pro pull upstream main`, then
+   `atoll registry` and `scripts/check.sh`.
 
 ## Before launch (needs the owner's accounts)
 

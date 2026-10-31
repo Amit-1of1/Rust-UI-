@@ -1,5 +1,5 @@
 // Deliberately broken app: `cargo.jsonl` is real `cargo check --message-format=json` output
-// for this file (rustc 1.97, dioxus 0.7.10), trimmed to the fields `rust-ui explain` reads.
+// for this file (rustc 1.97, dioxus 0.7.10), trimmed to the fields `atoll explain` reads.
 // tests/explain.rs checks what explain says about each error. Not compiled.
 use dioxus::prelude::*;
 use ui::components::button::{Button, ButtonSize, ButtonVariant};

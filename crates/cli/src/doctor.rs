@@ -1,4 +1,4 @@
-//! `rust-ui doctor`: static checks that keep components consistent with the guardrails.
+//! `atoll doctor`: static checks that keep components consistent with the guardrails.
 //!
 //! Errors fail the command; warnings are reported but do not. Everything here reads
 //! files only, so it is fast enough to run in the gate.

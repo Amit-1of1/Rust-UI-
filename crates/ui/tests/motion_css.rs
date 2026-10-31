@@ -1,6 +1,6 @@
 //! The spring easings in theme.css are generated from the Rust presets
 //! (`motion::css`); this fails if they drift. Regenerate with
-//! `UPDATE_MOTION_CSS=1 cargo test -p rust-ui-kit --test motion_css`.
+//! `UPDATE_MOTION_CSS=1 cargo test -p atoll-ui --test motion_css`.
 
 use motion::css::{stylesheet, BEGIN_MARKER, END_MARKER};
 

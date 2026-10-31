@@ -1,7 +1,7 @@
 # Button
 
-- Copy into your app: `rust-ui add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
-- Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add button` or `dx components add button --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Import: `use crate::components::button::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The button element is used to trigger actions or events in a user interface.
 

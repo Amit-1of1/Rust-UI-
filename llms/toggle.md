@@ -1,7 +1,7 @@
 # Toggle
 
-- Copy into your app: `rust-ui add toggle` or `dx components add toggle --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::toggle::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add toggle` or `dx components add toggle --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::toggle::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toggle component is used to create a toggle button that can be pressed or unpressed. It is useful for creating a binary option, such as enabling or disabling a feature.
 

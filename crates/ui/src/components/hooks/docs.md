@@ -2,7 +2,7 @@
 
 Hooks shared by the components and by apps.
 
-The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `rust-ui add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
+The sidebar keeps its own `use_is_mobile` (from upstream, through `document::eval`, so it also works in the desktop webview); `use_media_query(MOBILE_QUERY)` is the web-sys equivalent. `atoll add hooks` copies them; a component that uses one (the command palette uses `use_hotkey`) brings this item along when you add it.
 
 | Hook | What it does |
 |---|---|

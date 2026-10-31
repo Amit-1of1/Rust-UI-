@@ -2,8 +2,8 @@
 //! untrusted input: nothing they say may make `add`, `update` or the MCP server touch files
 //! outside the item folders.
 
-use rust_ui_cli::update::Lock;
-use rust_ui_cli::*;
+use atoll_cli::update::Lock;
+use atoll_cli::*;
 use std::fs;
 use std::path::Path;
 
@@ -85,7 +85,7 @@ fn add_does_not_copy_links_or_write_through_them() {
 #[test]
 fn lockfiles_that_point_outside_the_project_are_refused() {
     let tmp = tempfile::tempdir().unwrap();
-    let path = tmp.path().join("rust-ui-lock.json");
+    let path = tmp.path().join("atoll-lock.json");
     for (dir, file) in [
         ("../elsewhere", "badge/mod.rs"),
         ("/tmp", "badge/mod.rs"),

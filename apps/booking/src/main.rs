@@ -165,7 +165,7 @@ fn Shell() -> Element {
         // so keyboard and screen reader users start at the new page.
         MainContent { class: "tr-main", Outlet::<Route> {} }
         footer { class: "tr-footer",
-            p { "Trailhead Stays is a demo app for the Rust UI kit. Nothing here is real." }
+            p { "Trailhead Stays is a demo app for the Atoll kit. Nothing here is real." }
         }
         CommandDialog {
             open: palette(),

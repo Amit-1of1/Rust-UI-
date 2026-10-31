@@ -1,4 +1,4 @@
-//! `rust-ui new <name>`: create a component with everything CLAUDE.md requires
+//! `atoll new <name>`: create a component with everything CLAUDE.md requires
 //! (folder, gallery demo, a render test), so only the real component code is left to write.
 //!
 //! It only adds files. The module lists, the prelude, the demo list and the test list are

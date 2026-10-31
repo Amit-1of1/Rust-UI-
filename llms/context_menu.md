@@ -1,7 +1,7 @@
 # Context menu
 
-- Copy into your app: `rust-ui add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::context_menu::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::context_menu::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element. It can contain various menu items that the user can interact with.
 

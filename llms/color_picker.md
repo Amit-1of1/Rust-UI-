@@ -1,7 +1,7 @@
 # Color picker
 
-- Copy into your app: `rust-ui add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
-- Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add color_picker` or `dx components add color_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `input`).
+- Import: `use crate::components::color_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Color picker used when the user needs to make a customized color selection.
 

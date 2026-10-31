@@ -7,8 +7,8 @@
 #   scripts/publish.sh --publish       publish for real; needs CARGO_REGISTRY_TOKEN, a clean tree
 #                                      and HEAD tagged v<version>. Owner only (docs/PUBLISHING.md)
 #
-# Order: rust-ui-attributes, rust-ui-primitives (from the fork commit pinned in Cargo.toml),
-# rust-ui-form-derive, rust-ui-motion, rust-ui-kit, rust-ui-cli. A crate already on crates.io
+# Order: atoll-attributes, atoll-primitives (from the fork commit pinned in Cargo.toml),
+# atoll-form-derive, atoll-motion, atoll-ui, atoll-cli. A crate already on crates.io
 # at this version is skipped, so a run that stopped half way can be started again.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -24,7 +24,7 @@ esac
 
 step() { printf '\n== %s\n' "$*"; }
 on_crates_io() { # name version
-  curl -fsS -A "rust-ui publish.sh ($(git config remote.origin.url))" \
+  curl -fsS -A "atoll publish.sh ($(git config remote.origin.url))" \
     "https://crates.io/api/v1/crates/$1/$2" >/dev/null 2>&1
 }
 
@@ -37,7 +37,7 @@ prim_pkg=$(field package); prim_ver=$(field version); prim_git=$(field git); pri
 step "versions"
 echo "kit crates: $version"
 echo "primitives: $prim_pkg $prim_ver${prim_git:+ (built from $prim_git @ ${prim_rev:0:7})}"
-for c in rust-ui-form-derive rust-ui-motion rust-ui-kit rust-ui-cli; do
+for c in atoll-form-derive atoll-motion atoll-ui atoll-cli; do
   v=$(sed -nE 's/^version = "([^"]+)"/\1/p' "$(cargo metadata -q --no-deps --format-version 1 |
     python3 -c "import sys,json;print(next(p['manifest_path'] for p in json.load(sys.stdin)['packages'] if p['name']=='$c'))")" | head -1)
   [ "$v" = "$version" ] || { echo "$c is $v, not $version: the crates share one version (docs/VERSIONING.md)" >&2; exit 1; }
@@ -64,7 +64,7 @@ if [ -n "$prim_git" ]; then
   fi
   git -C "$fork" fetch -q origin "$prim_rev" 2>/dev/null || git -C "$fork" fetch -q origin
   git -C "$fork" -c advice.detachedHead=false checkout -q "$prim_rev"
-  for c in rust-ui-attributes rust-ui-primitives; do
+  for c in atoll-attributes atoll-primitives; do
     if on_crates_io "$c" "$prim_ver"; then echo "$c $prim_ver is on crates.io; skipped"; continue; fi
     if [ "$PUBLISH" = 1 ]; then
       (cd "$fork" && cargo publish -p "$c")
@@ -73,8 +73,8 @@ if [ -n "$prim_git" ]; then
   if [ "$PUBLISH" = 0 ]; then
     # Packages both and builds each from its tarball, the attributes crate standing in for
     # crates.io while it is unpublished.
-    (cd "$fork" && cargo package -q -p rust-ui-attributes -p rust-ui-primitives)
-    echo "packaged and verified: rust-ui-attributes, rust-ui-primitives"
+    (cd "$fork" && cargo package -q -p atoll-attributes -p atoll-primitives)
+    echo "packaged and verified: atoll-attributes, atoll-primitives"
   fi
 elif ! on_crates_io "$prim_pkg" "$prim_ver"; then
   echo "$prim_pkg $prim_ver is not on crates.io, and Cargo.toml has no git source for it" >&2; exit 1
@@ -84,10 +84,10 @@ fi
 step "kit crates"
 if [ "$PUBLISH" = 0 ]; then
   scripts/consumer-check.sh
-  cargo package -q -p rust-ui-cli --allow-dirty
-  echo "packaged and verified: rust-ui-cli"
+  cargo package -q -p atoll-cli --allow-dirty
+  echo "packaged and verified: atoll-cli"
 else
-  for c in rust-ui-form-derive rust-ui-motion rust-ui-kit rust-ui-cli; do
+  for c in atoll-form-derive atoll-motion atoll-ui atoll-cli; do
     if on_crates_io "$c" "$version"; then echo "$c $version is on crates.io; skipped"; continue; fi
     cargo publish -p "$c"
   done
@@ -97,15 +97,15 @@ step "next"
 if [ "$PUBLISH" = 0 ]; then
   cat <<TXT
 Dry run passed. --publish would publish, in order:
-  rust-ui-attributes $prim_ver, rust-ui-primitives $prim_ver   (fork @ ${prim_rev:0:7})
-  rust-ui-form-derive, rust-ui-motion, rust-ui-kit, rust-ui-cli $version
-Before that (docs/PUBLISHING.md): settle the crate names, make the repo public, remove
+  atoll-attributes $prim_ver, atoll-primitives $prim_ver   (fork @ ${prim_rev:0:7})
+  atoll-form-derive, atoll-motion, atoll-ui, atoll-cli $version
+Before that (docs/PUBLISHING.md): make the repo public, remove
 publish = false from crates/ui/Cargo.toml, tag v$version.
 TXT
 else
   cat <<TXT
 Published. Now, in a PR: delete git and rev from the dioxus-primitives line in Cargo.toml and
-run \`cargo run -p rust-ui-cli -- registry\`, so component.json asks for crates.io versions.
+run \`cargo run -p atoll-cli -- registry\`, so component.json asks for crates.io versions.
 scripts/consumer-check.sh then fails if any git source is left.
 TXT
 fi

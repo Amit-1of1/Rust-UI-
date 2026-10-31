@@ -1,7 +1,7 @@
 [package]
-name = "rust-ui-form-derive"
+name = "atoll-form-derive"
 version = "0.1.0"
-description = "`#[derive(Form)]` for the Rust UI kit: fields, validation and accessible errors from a struct"
+description = "`#[derive(Form)]` for the Atoll kit: fields, validation and accessible errors from a struct"
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true

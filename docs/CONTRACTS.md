@@ -4,11 +4,11 @@ A component's `contract.toml` (next to its `component.rs`) says which WAI-ARIA p
 
 | Reads it | What it does with it |
 |---|---|
-| `rust-ui registry` | the "Keyboard and accessibility" section of the docs site page (`apps/docs/src/generated.rs`), of `llms/<name>.md` and `llms-full.txt`, and of the MCP `get_component` answer |
+| `atoll registry` | the "Keyboard and accessibility" section of the docs site page (`apps/docs/src/generated.rs`), of `llms/<name>.md` and `llms-full.txt`, and of the MCP `get_component` answer |
 | `tests/e2e/contracts.mjs` | runs every row in the browser on the component's docs page (Chromium, Firefox and WebKit in CI), through `scripts/e2e.sh` |
 | `apps/native/tests/contracts.rs` | runs every row on headless Blitz in `cargo test -p native`: a row marked `native = true` must pass there and a row marked `native = false` must still fail, so the docs' Native column is right both ways |
-| `crates/ui/build.rs` and `rust-ui doctor` | refuse an unsound contract (below); doctor also warns about keyboard-operable demos that have no contract yet |
-| `rust-ui contract [name] [--json]` | prints the table, or the parsed steps the runners use |
+| `crates/ui/build.rs` and `atoll doctor` | refuse an unsound contract (below); doctor also warns about keyboard-operable demos that have no contract yet |
+| `atoll contract [name] [--json]` | prints the table, or the parsed steps the runners use |
 
 ## Format
 
@@ -76,6 +76,6 @@ In the browser an assertion waits up to 1.5 s (overlays animate); on native the 
 1. Write `contract.toml` from the APG pattern's "Keyboard Interaction" section, one row per key the component supports.
 2. `cargo test -p native --test contracts` (with `CONTRACT=<name>` it prints each row's outcome) and set `native` to what Blitz does.
 3. `scripts/e2e.sh` (or `node tests/e2e/contracts.mjs <name>` against a running docs site) must pass every row.
-4. `cargo run -p rust-ui-cli -- registry` regenerates the docs and llms pages.
+4. `cargo run -p atoll-cli -- registry` regenerates the docs and llms pages.
 
 A row the component doesn't meet on the web is a bug to fix, not a row to leave out quietly; if it can't be fixed now, leave the key out of the contract and note the gap in the component's `docs.md`.

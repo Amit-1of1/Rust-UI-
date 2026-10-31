@@ -1,6 +1,6 @@
 # Versioning and breaking changes
 
-How `rust-ui-kit`, `rust-ui-motion` and `rust-ui-cli` change between versions, so apps built on them know what to expect. What each part of the API promises is in [STABILITY.md](STABILITY.md); what changed is in [CHANGELOG.md](../CHANGELOG.md), with upgrade steps in [MIGRATION.md](MIGRATION.md).
+How `atoll-ui`, `atoll-motion` and `atoll-cli` change between versions, so apps built on them know what to expect. What each part of the API promises is in [STABILITY.md](STABILITY.md); what changed is in [CHANGELOG.md](../CHANGELOG.md), with upgrade steps in [MIGRATION.md](MIGRATION.md).
 
 ## Version numbers
 
@@ -16,7 +16,7 @@ Cargo treats `0.1.x` and `0.2.x` as incompatible, so an app on `0.1` never picks
 
 - The three crates share one version number and move together, because the kit depends on the motion crate and the CLI copies the kit's source. Bump `version` in each crate's `Cargo.toml` and in the root `[workspace.dependencies]` (`ui`, `motion`) in the same commit.
 - A release is a git tag `v<version>` on `main`. Nothing has been tagged or published yet: every crate is `0.1.0`, and the [CHANGELOG](../CHANGELOG.md) collects everything under "Unreleased". The first tag (`v0.1.0`) closes that section. Publishing to crates.io is a separate decision ([PUBLISHING.md](PUBLISHING.md)).
-- `1.0` waits until the kit itself is on crates.io (ready once `rust-ui-primitives` is published, see PUBLISHING.md), the stable API has gone three minor releases without a breaking change, and the kit has moved to the Dioxus release it will live on. A Dioxus minor (0.7 to 0.8) is breaking for every app, so it always gets a kit minor of its own and nothing else breaking rides with it.
+- `1.0` waits until the kit itself is on crates.io (ready once `atoll-primitives` is published, see PUBLISHING.md), the stable API has gone three minor releases without a breaking change, and the kit has moved to the Dioxus release it will live on. A Dioxus minor (0.7 to 0.8) is breaking for every app, so it always gets a kit minor of its own and nothing else breaking rides with it.
 
 ### Support while `0.x`
 
@@ -24,7 +24,7 @@ What an app that adopts the kit can count on before 1.0:
 
 - **Breaking releases are batched and rare.** Breaks collect on `main` behind deprecations and ship together in one minor release, not more than one every six weeks (a security fix is the exception). Everything between is patch releases, which Cargo picks up by itself and which never break a stable item.
 - **The previous minor gets fixes.** For three months after `0.N+1.0`, security fixes and fixes for crashes or broken keyboard and screen-reader behaviour are backported as `0.N.x` patch releases, from a `release/0.N` branch cut at the `v0.N.0` tag.
-- **Every break comes with steps.** A MIGRATION.md section with before and after. Where a change can be scripted (a rename), `rust-ui update` applies it to copied components.
+- **Every break comes with steps.** A MIGRATION.md section with before and after. Where a change can be scripted (a rename), `atoll update` applies it to copied components.
 - **Rust version (MSRV).** `rust-version` in the workspace (now 1.88) only goes up in a minor release, and never to a Rust release less than six months old.
 - **Dioxus.** Each kit minor supports exactly one Dioxus minor (`0.7.x` now). The kit follows Dioxus patch releases within it.
 
@@ -33,7 +33,7 @@ What an app that adopts the kit can count on before 1.0:
 The kit is installed from git or copied, not from crates.io, so a version number alone doesn't protect you. Pin what you depend on:
 
 - **Crate dependency:** pin a tag (`tag = "v0.1.0"`) once tags exist, or a `rev`, never a branch ([INSTALL.md](INSTALL.md)). Read the CHANGELOG between your old and new revision before bumping.
-- **Copied components** (`rust-ui add`, `dx components add`): the copy is yours and never changes by itself. `rust-ui diff` shows what changed upstream; the CHANGELOG says which changes are breaking.
+- **Copied components** (`atoll add`, `dx components add`): the copy is yours and never changes by itself. `atoll diff` shows what changed upstream; the CHANGELOG says which changes are breaking.
 
 ## What counts as breaking
 
@@ -58,7 +58,7 @@ For **stable** items, each of these is breaking and needs a minor bump (while `0
 - Changing how a token must be written by apps that override it (as the move to `light-dark()` pairs did; that one kept the old form working).
 
 **CLI**
-- Removing or renaming a `rust-ui` command or flag, or changing its exit code meaning.
+- Removing or renaming a `atoll` command or flag, or changing its exit code meaning.
 - Changing the `registry.json` or `component.json` format in a way older CLIs or `dx components` can't read.
 - Renaming a registry item (a component folder name).
 
@@ -71,7 +71,7 @@ Not breaking, even for stable items:
 
 ## Checked by CI
 
-Rules only help if a machine enforces them. `scripts/semver.sh` runs [cargo-semver-checks](https://github.com/obi1kenobi/cargo-semver-checks) on every PR (the `semver` job in `.github/workflows/release-readiness.yml`). It compares the public API of `rust-ui-kit` and `rust-ui-motion` (with the `web` feature) against the PR's base and fails when:
+Rules only help if a machine enforces them. `scripts/semver.sh` runs [cargo-semver-checks](https://github.com/obi1kenobi/cargo-semver-checks) on every PR (the `semver` job in `.github/workflows/release-readiness.yml`). It compares the public API of `atoll-ui` and `atoll-motion` (with the `web` feature) against the PR's base and fails when:
 
 - the API breaks the way a patch release must not (a removed or renamed item, a changed signature, a new required field, a removed enum variant, and so on), **and**
 - the branch doesn't say so: no `changes/<topic>.migration.md` and no `### Breaking` entry in its fragment.

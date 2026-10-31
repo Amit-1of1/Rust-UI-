@@ -1,7 +1,7 @@
 # Radio group
 
-- Copy into your app: `rust-ui add radio_group` or `dx components add radio_group --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::radio_group::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add radio_group` or `dx components add radio_group --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::radio_group::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set.
 

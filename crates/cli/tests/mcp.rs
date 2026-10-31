@@ -1,4 +1,4 @@
-//! `rust-ui mcp` spoken to over stdio, the way an MCP client does: start the binary, write
+//! `atoll mcp` spoken to over stdio, the way an MCP client does: start the binary, write
 //! one JSON-RPC message per line, read one reply per line.
 
 use serde_json::{json, Value};
@@ -20,7 +20,7 @@ struct Client {
 impl Client {
     /// A server reading this repo and writing into `project`, already initialized.
     fn start(project: &Path) -> Self {
-        let mut child = Command::new(env!("CARGO_BIN_EXE_rust-ui"))
+        let mut child = Command::new(env!("CARGO_BIN_EXE_atoll"))
             .arg("--source")
             .arg(repo_root())
             .arg("mcp")
@@ -28,7 +28,7 @@ impl Client {
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()
-            .expect("start rust-ui mcp");
+            .expect("start atoll mcp");
         let stdin = child.stdin.take().unwrap();
         let stdout = BufReader::new(child.stdout.take().unwrap());
         let mut client = Client {
@@ -46,7 +46,7 @@ impl Client {
             }),
         );
         assert_eq!(init["result"]["protocolVersion"], "2025-06-18");
-        assert_eq!(init["result"]["serverInfo"]["name"], "rust-ui");
+        assert_eq!(init["result"]["serverInfo"]["name"], "atoll");
         assert!(init["result"]["capabilities"]["tools"].is_object());
         client.send(&json!({ "jsonrpc": "2.0", "method": "notifications/initialized" }));
         client
@@ -134,7 +134,7 @@ fn lists_the_tools_with_schemas() {
 fn list_matches_the_registry() {
     let tmp = tempfile::tempdir().unwrap();
     let mut c = Client::start(tmp.path());
-    let reg = rust_ui_cli::load(&repo_root()).unwrap();
+    let reg = atoll_cli::load(&repo_root()).unwrap();
     let all = c.call_json("list_components", json!({}));
     assert_eq!(all.len(), reg.items.len());
     let dialog = all.iter().find(|r| r["name"] == "dialog").unwrap();
@@ -173,8 +173,8 @@ fn get_component_is_the_docs_page() {
     let tmp = tempfile::tempdir().unwrap();
     let mut c = Client::start(tmp.path());
     let root = repo_root();
-    let reg = rust_ui_cli::load(&root).unwrap();
-    let expected = rust_ui_cli::llms::page(&root, &reg, "dialog")
+    let reg = atoll_cli::load(&root).unwrap();
+    let expected = atoll_cli::llms::page(&root, &reg, "dialog")
         .unwrap()
         .unwrap();
     let (text, is_error) = c.call("get_component", json!({ "name": "dialog" }));
@@ -215,11 +215,11 @@ fn add_component_copies_into_the_project() {
         std::fs::read(&copied).unwrap(),
         std::fs::read(original).unwrap()
     );
-    // Recorded for `rust-ui update`, with the folder relative to the project.
-    let lock = rust_ui_cli::update::Lock::load(&tmp.path().join("rust-ui-lock.json")).unwrap();
+    // Recorded for `atoll update`, with the folder relative to the project.
+    let lock = atoll_cli::update::Lock::load(&tmp.path().join("atoll-lock.json")).unwrap();
     assert_eq!(lock.items["badge"].dir, "src/components");
     assert!(lock.items["badge"].files.contains_key("badge/component.rs"));
-    // Edits are kept unless forced, like `rust-ui add`.
+    // Edits are kept unless forced, like `atoll add`.
     std::fs::write(&copied, "// mine").unwrap();
     let (text, _) = c.call("add_component", json!({ "names": ["badge"] }));
     assert!(text.contains("Kept badge/component.rs"), "{text}");
@@ -259,7 +259,7 @@ fn init_theme_copies_the_stylesheet() {
     let theme = tmp.path().join("assets/theme.css");
     assert_eq!(
         std::fs::read(&theme).unwrap(),
-        std::fs::read(repo_root().join(rust_ui_cli::THEME_FILE)).unwrap()
+        std::fs::read(repo_root().join(atoll_cli::THEME_FILE)).unwrap()
     );
     let (text, _) = c.call("init_theme", json!({}));
     assert!(text.contains("already up to date"), "{text}");
@@ -274,17 +274,15 @@ fn resources_serve_the_llms_pages() {
     let mut c = Client::start(tmp.path());
     let reply = c.request("resources/list", json!({}));
     let resources = reply["result"]["resources"].as_array().unwrap();
-    assert_eq!(resources[0]["uri"], "rust-ui://llms.txt");
-    assert!(resources
-        .iter()
-        .any(|r| r["uri"] == "rust-ui://docs/dialog"));
-    let reply = c.request("resources/read", json!({ "uri": "rust-ui://llms.txt" }));
+    assert_eq!(resources[0]["uri"], "atoll://llms.txt");
+    assert!(resources.iter().any(|r| r["uri"] == "atoll://docs/dialog"));
+    let reply = c.request("resources/read", json!({ "uri": "atoll://llms.txt" }));
     let text = reply["result"]["contents"][0]["text"].as_str().unwrap();
     assert_eq!(
         text,
         std::fs::read_to_string(repo_root().join("llms.txt")).unwrap()
     );
-    let reply = c.request("resources/read", json!({ "uri": "rust-ui://docs/nope" }));
+    let reply = c.request("resources/read", json!({ "uri": "atoll://docs/nope" }));
     assert!(reply["error"].is_object(), "{reply}");
 }
 
@@ -307,7 +305,7 @@ fn protocol_errors_and_notifications() {
 
 #[test]
 fn unknown_protocol_version_gets_the_newest() {
-    let server = rust_ui_cli::mcp::Server::new(repo_root(), ".");
+    let server = atoll_cli::mcp::Server::new(repo_root(), ".");
     let reply = server
         .handle_line(r#"{"jsonrpc":"2.0","id":"a","method":"initialize","params":{"protocolVersion":"1999-01-01"}}"#)
         .unwrap();
@@ -315,7 +313,7 @@ fn unknown_protocol_version_gets_the_newest() {
     assert_eq!(reply["id"], "a");
     assert_eq!(
         reply["result"]["protocolVersion"],
-        rust_ui_cli::mcp::PROTOCOL_VERSIONS[0]
+        atoll_cli::mcp::PROTOCOL_VERSIONS[0]
     );
     let old = server
         .handle_line(r#"{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}"#)
