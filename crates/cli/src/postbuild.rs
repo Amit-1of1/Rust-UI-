@@ -36,6 +36,16 @@ pub struct CssReport {
 
 /// Bundle the stylesheets of the dx web build in `public` (the folder with `index.html`).
 pub fn bundle_css(public: &Path) -> Result<CssReport, String> {
+    bundle_css_with(public, false)
+}
+
+/// [`bundle_css`] for an app that renders `ThemeStyles { scoped: true }`: the scoped theme
+/// (`theme.scoped-….css`) goes into the bundle instead of the page-wide one, which such an
+/// app never links. Both are in every build (one `ThemeStyles` serves both modes), so the
+/// choice can't be read from the wasm. The reset stylesheets are never bundled; the page
+/// links them itself when it asks for them.
+pub fn bundle_css_with(public: &Path, scoped: bool) -> Result<CssReport, String> {
+    let theme = if scoped { "theme.scoped-" } else { "theme-" };
     let assets = public.join("assets");
     let index_path = public.join("index.html");
     let index =
@@ -53,8 +63,7 @@ pub fn bundle_css(public: &Path) -> Result<CssReport, String> {
         let name = file_name(&path);
         if name.ends_with(".wasm") {
             wasm.extend(fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?);
-        } else if name.ends_with(".css")
-            && (name.starts_with("style-") || name.starts_with("theme-"))
+        } else if name.ends_with(".css") && (name.starts_with("style-") || name.starts_with(theme))
         {
             css.push(path);
         }
@@ -63,12 +72,7 @@ pub fn bundle_css(public: &Path) -> Result<CssReport, String> {
         return Err(format!("no .wasm file in {}", assets.display()));
     }
     // The theme first, so components can override its element rules; then components by name.
-    css.sort_by_key(|p| {
-        (
-            !file_name(p).starts_with("theme-"),
-            file_name(p).to_string(),
-        )
-    });
+    css.sort_by_key(|p| (!file_name(p).starts_with(theme), file_name(p).to_string()));
 
     let mut out = String::new();
     let mut held = Vec::new();
@@ -281,6 +285,28 @@ mod tests {
             report.file
         )));
         assert!(bundle_css(dir.path()).is_err(), "bundling twice is refused");
+    }
+
+    #[test]
+    fn scoped_bundles_the_scoped_theme_only() {
+        let dir = tempfile::tempdir().unwrap();
+        let assets = dir.path().join("assets");
+        fs::create_dir(&assets).unwrap();
+        fs::write(dir.path().join("index.html"), "<html><head></head></html>").unwrap();
+        fs::write(assets.join("app_bg.wasm"), "x card-0000000a y").unwrap();
+        fs::write(assets.join("theme-dxh1.css"), ":root{--a:1}").unwrap();
+        fs::write(
+            assets.join("theme.scoped-dxh5.css"),
+            "[data-rui-scope]{--a:1}",
+        )
+        .unwrap();
+        fs::write(assets.join("reset-dxh6.css"), "html{}").unwrap();
+        fs::write(assets.join("style-dxh2.css"), ".card-0000000a{}").unwrap();
+
+        let report = bundle_css_with(dir.path(), true).unwrap();
+        assert_eq!(report.held, ["theme.scoped-dxh5.css", "style-dxh2.css"]);
+        let out = fs::read_to_string(assets.join(&report.file)).unwrap();
+        assert!(!out.contains(":root"), "the page-wide theme stays out");
     }
 
     fn custom(name: &str, body: &[u8]) -> Vec<u8> {

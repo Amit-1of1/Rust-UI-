@@ -45,14 +45,63 @@ use dioxus::prelude::*;
 /// Theme tokens (colors, light/dark) shared by every component.
 pub const THEME_CSS: Asset = asset!("/assets/theme.css");
 
+/// [`THEME_CSS`] confined to [`ThemeScope`](components::theme_customizer::ThemeScope): the same tokens and rules, applied only inside
+/// an element with `data-rui-scope`, for apps that already have their own styles. Generated
+/// from `theme.css` by `rust-ui registry`.
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub const THEME_SCOPED_CSS: Asset = asset!("/assets/theme.scoped.css");
+
+/// Optional base styles (box sizing, page background, text colour and font), the page the
+/// contrast proof assumes. [`ThemeStyles`]`{ reset: true }` loads it.
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub const RESET_CSS: Asset = asset!("/assets/reset.css");
+
+/// [`RESET_CSS`] confined to [`ThemeScope`](components::theme_customizer::ThemeScope), like [`THEME_SCOPED_CSS`].
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub const RESET_SCOPED_CSS: Asset = asset!("/assets/reset.scoped.css");
+
 /// Loads the theme stylesheet. Render once near the root of the app.
 ///
 /// It also switches to the single bundled stylesheet when the page has one (see [`css_bundle`]).
+///
+/// In an app that already has its own CSS, pass `scoped: true` and wrap the part of the app
+/// that uses the kit in [`ThemeScope`](components::theme_customizer::ThemeScope): the kit's tokens (`--primary-color`, `--radius`, ...)
+/// and page-wide rules (reduced motion, forced colours, `.sr-only`) then apply only inside
+/// it, and [`use_theme`](components::theme_customizer::use_theme) stops writing `data-theme` and friends on `<html>`. `reset: true`
+/// adds the small base stylesheet [`RESET_CSS`] (scoped too when `scoped` is set).
+/// docs/EXISTING_APP.md walks through it.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     ThemeStyles { scoped: true }
+///     ThemeScope { Button { "Only this part uses the kit" } }
+/// }
+/// # }
+/// ```
 #[component]
-pub fn ThemeStyles() -> Element {
+pub fn ThemeStyles(
+    /// Confine the theme to [`ThemeScope`](components::theme_customizer::ThemeScope) (experimental).
+    #[props(default)]
+    scoped: bool,
+    /// Also load the base styles, [`RESET_CSS`] (experimental).
+    #[props(default)]
+    reset: bool,
+) -> Element {
     use_hook(css_bundle::install);
+    use_hook(|| components::theme_customizer::set_writes_html(!scoped));
+    let theme = if scoped { THEME_SCOPED_CSS } else { THEME_CSS };
+    let reset_css = if scoped { RESET_SCOPED_CSS } else { RESET_CSS };
     rsx! {
-        document::Stylesheet { href: THEME_CSS }
+        document::Stylesheet { href: theme }
+        if reset {
+            document::Stylesheet { href: reset_css }
+        }
     }
 }
 

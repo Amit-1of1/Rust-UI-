@@ -41,6 +41,38 @@ impl DataColumn {
     }
 }
 
+/// What a [`DataTable`] in server mode asks for: the filter text, the sort and the page.
+/// Hand it to your server function; [`table_view`] applies the same rules to rows in memory.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Clone, PartialEq, Debug, Default)]
+pub struct TableQuery {
+    /// What was typed in the filter box.
+    pub query: String,
+    /// The sorted column and direction, if any.
+    pub sort: Option<(usize, SortDirection)>,
+    /// Zero-based page.
+    pub page: usize,
+    pub page_size: usize,
+}
+
+impl TableQuery {
+    /// The first page, unfiltered and unsorted: what the table starts with.
+    pub fn new(page_size: usize) -> Self {
+        Self {
+            page_size,
+            ..Self::default()
+        }
+    }
+
+    /// Rows to skip: `page * page_size` (SQL `OFFSET`).
+    pub fn offset(&self) -> usize {
+        self.page * self.page_size
+    }
+}
+
 /// What the table shows for a given query, sort and page. Pure, so it is easy to test.
 #[derive(Clone, PartialEq, Debug)]
 pub struct TableView {
@@ -138,6 +170,22 @@ pub fn table_view(
     }
 }
 
+/// The view of a server-paged table: `rows_on_page` rows (the page the server sent) out of
+/// `total` matching rows.
+fn server_view(rows_on_page: usize, total: usize, page: usize, page_size: usize) -> TableView {
+    let pages = if page_size == 0 {
+        1
+    } else {
+        total.div_ceil(page_size).max(1)
+    };
+    TableView {
+        rows: (0..rows_on_page).collect(),
+        matched: total,
+        pages,
+        page: page.min(pages - 1),
+    }
+}
+
 /// A table with sorting, a filter box, pagination and optional row selection. Cells are text
 /// unless `render_cell` is given; `toolbar` adds controls beside the filter box. For a different
 /// layout compose `Table` yourself and reuse [`table_view`].
@@ -167,7 +215,21 @@ pub fn DataTable(
     /// Extra controls (outside filters, actions) shown in the toolbar beside the filter box.
     #[props(default)]
     toolbar: Option<Element>,
+    /// Server mode: the number of rows that match on the server. `rows` is then only the
+    /// current page, already filtered and sorted there; the table does no filtering, sorting
+    /// or paging itself and reports every change through `on_query_change`.
+    #[props(default)]
+    total_rows: Option<usize>,
+    /// Server mode: called when the filter text, the sort or the page changes (not on the
+    /// first render, which shows `TableQuery::new(page_size)`). Fetch that page and pass it
+    /// back as `rows` and `total_rows`.
+    #[props(default)]
+    on_query_change: Callback<TableQuery>,
+    /// A page is being fetched: the table is marked busy and the status says so.
+    #[props(default)]
+    loading: bool,
 ) -> Element {
+    let server = total_rows.is_some();
     let mut query = use_signal(String::new);
     let mut sort = use_signal(|| None::<(usize, SortDirection)>);
     let mut page = use_signal(|| 0_usize);
@@ -177,7 +239,8 @@ pub fn DataTable(
     // filter, an insert or a delete). Drop it then, and go back to the first page.
     use_effect(use_reactive!(|rows| {
         let _ = rows;
-        if *page.peek() != 0 {
+        // In server mode new rows are the page that was asked for: keep it.
+        if !server && *page.peek() != 0 {
             page.set(0);
         }
         if !selected.peek().is_empty() {
@@ -189,11 +252,27 @@ pub fn DataTable(
     // Filtering and sorting only rerun when the rows, the query, the sort or the page
     // change, not on a selection click or a parent's unrelated re-render.
     let view = use_memo(use_reactive(
-        (&columns, &rows, &page_size),
-        move |(columns, rows, page_size)| {
-            table_view(&columns, &rows, &query(), sort(), page(), page_size)
+        (&columns, &rows, &page_size, &total_rows),
+        move |(columns, rows, page_size, total_rows)| match total_rows {
+            Some(total) => server_view(rows.len(), total, page(), page_size),
+            None => table_view(&columns, &rows, &query(), sort(), page(), page_size),
         },
     ));
+    // Server mode: report changes (skipping the first run, which is the initial query).
+    let mut reported = use_signal(|| false);
+    use_effect(move || {
+        let next = TableQuery {
+            query: query(),
+            sort: sort(),
+            page: page(),
+            page_size,
+        };
+        if !*reported.peek() {
+            reported.set(true);
+        } else if server {
+            on_query_change.call(next);
+        }
+    });
     let view = view();
     let page_rows = view.rows.clone();
     let all_on_page =
@@ -215,7 +294,9 @@ pub fn DataTable(
     };
     let t = use_ui_strings();
     let total = view.matched.to_string();
-    let status = if view.matched == 0 {
+    let status = if loading {
+        t.loading.clone()
+    } else if view.matched == 0 {
         t.no_rows.clone()
     } else if page_size == 0 {
         fill(&t.row_count, &[("count", &total)])
@@ -262,7 +343,7 @@ pub fn DataTable(
                     {toolbar}
                 }
             }
-            Table {
+            Table { "aria-busy": loading.then_some("true"),
                 TableCaption { "{caption}" }
                 TableHeader {
                     TableRow {

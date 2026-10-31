@@ -1,6 +1,6 @@
 # Alert dialog
 
-- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).
@@ -38,20 +38,18 @@ rsx! {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): partly.
+Follows the WAI-ARIA [Alert and Message Dialogs](https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/) pattern. Roles: `alertdialog`. Works on native (Blitz): yes.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the alert dialog and moves focus into it. | yes |
 | Tab | Inside the alert dialog | Moves between its buttons; focus stays inside. | yes |
-| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | not yet |
+| Escape | Inside the alert dialog | Closes it as Cancel would and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The alert dialog is shown over the page.
 - `closed`: Only the trigger is shown.
-
-Native: Closing works, but focus is left on the removed content instead of going back to the trigger.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
