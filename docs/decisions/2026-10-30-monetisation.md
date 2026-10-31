@@ -1,0 +1,9 @@
+# 2026-10-30: free kit plus a paid Pro pack
+
+**Decision.** The kit stays free and open source (MIT OR Apache-2.0). Paid extras (premium blocks, app templates, Pro motion components) are sold as a one-time "Pro" licence and delivered from a private copy of this repository, through the registry and CLI we already have. Nothing is sold yet: the owner's account steps are in [pro/README.md](../pro/README.md).
+
+**Why.** The owner asked how the kit could be monetised and for it to be made possible (project thread "How to monetise the UI kit", 2026-10-30). Free core plus a one-time paid pack is what every UI kit that earns money does (Tailwind Plus, Motion+, the shadcn block shops), and delivering it from a private git repository needs no server: `rust-ui add --source <git URL>` and `dx components add --git` already clone private repositories with the buyer's credentials. The market research and the numbers are in the project files (`rust-ui/monetisation/PLAN.md`).
+
+**What it changes in GUARDRAILS.md.** "Don't chase competing with shadcn/Motion; the bar is pleasant for my own apps" now has an exception for Pro items: they are built to be sold, so they get the polish a buyer expects. Every other rule is unchanged and applies to Pro items too: kit components only in blocks, keyboard access, reduced motion, theme tokens, the axe and aria checks, a `THIRD_PARTY.md` row for anything copied. Pro items that reuse copied code keep its licence notice next to them.
+
+**Licences checked.** Copied code (DioxusLabs/components MIT OR Apache-2.0, Rust/UI MIT, Lucide ISC) allows paid use with the notices kept. All 822 crates in `Cargo.lock` are permissive except 15 MPL-2.0 crates (stylo, cssparser, selectors and friends) used only by the native renderer and not modified by our forks; MPL is file-level copyleft, so it doesn't reach our code.
