@@ -42,6 +42,8 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Card](llms/card.md): The card component is a flexible container for grouping related content and actions
 - [Carousel](llms/carousel.md): A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons
 - [Chart](llms/chart.md): Charts drawn as SVG in Rust, coloured from theme tokens
+- [Chat](llms/chat.md): A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage` (one message, named by its author), `StreamingText` (a reply that arrives a piece at a time) and `TypingIndicator`
+- [Chat composer](llms/chat_composer.md): The message box of a chat
 - [Checkbox](llms/checkbox.md): The Checkbox component is used to create an accessible checkbox input
 - [Chips](llms/chips.md): A row of on/off chips for filters and multi-choice tags
 - [Collapsible](llms/collapsible.md): The `Collapsible` component allows users to create expandable sections that can be toggled open or closed
@@ -101,6 +103,7 @@ Paths are relative to the repository root. `rust-ui docs <name>` prints a compon
 - [Toast](llms/toast.md): The Toast component is used to display brief messages to the user, typically for notifications or alerts
 - [Toggle](llms/toggle.md): The Toggle component is used to create a toggle button that can be pressed or unpressed
 - [Toggle group](llms/toggle_group.md): The Toggle Group component is used to create a group of toggle buttons that allows the user to select one or more options from a set
+- [Tool call](llms/tool_call.md): What an agent did and is doing
 - [Toolbar](llms/toolbar.md): The toolbar component is a flexible and customizable component that can be used to create a variety of toolbars
 - [Tooltip](llms/tooltip.md): The Tooltip component is used to display additional information when a user hovers over an element
 - [UiStrings](llms/ui_strings.md): Every word the kit shows or announces on its own ("Next", "Clear", "No results found.", "Go to next page", screen-reader names) lives in one `UiStrings` struct with English defaults
@@ -2140,6 +2143,539 @@ pub fn Demo() -> Element {
                     size: ButtonSize::Sm,
                     onclick: move |_| goal.set(if goal() >= 100.0 { 12.0 } else { (goal() + 22.0).min(100.0) }),
                     "Add progress"
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+# Chat
+
+- Copy into your app: `rust-ui add chat` or `dx components add chat --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Import: `use crate::components::chat::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage`
+(one message, named by its author), `StreamingText` (a reply that arrives a piece at a time)
+and `TypingIndicator`. Pair it with [`ChatComposer`](chat_composer) for input and
+[`ToolCall`](tool_call) for an agent's tool calls.
+
+```rust
+ChatLog { label: "Conversation with Ada", style: "height: 24rem",
+    ChatMessage { author: "You", from: ChatRole::User, hide_author: true, "Hi!" }
+    ChatMessage { author: "Ada",
+        StreamingText { text: reply(), streaming: streaming() }
+    }
+    if typing() { TypingIndicator { author: "Ada" } }
+}
+```
+
+## Scrolling
+
+The log follows new content while the reader is at the end, and stops the moment they
+scroll up; a "Jump to latest" button then appears (it says "New messages below" once
+something arrives) and takes them back, keeping focus in the log. Following is measured, not
+event-driven: it re-checks after each render of the log and whenever its content changes
+size (a `ResizeObserver` on the web), so streamed text that grows inside a child component is
+followed too. On the native renderer, which sends no scroll events, a scroll offset that moved
+up since the last follow counts as the reader scrolling away.
+
+## Accessibility
+
+- Role and name: the log is `role="log"` with a required `label` (a compile error without one).
+  Each message is an `article` named by its required `author`, so screen reader users can
+  move between messages and hear who wrote each. `hide_author` hides the name visually only.
+- Live regions: the log is deliberately `aria-live="off"`. A streamed reply changes many times
+  a second and would be read in fragments. Instead the log owns a polite announcer:
+  `StreamingText` announces "Author: whole reply" once when `streaming` turns off, and
+  `TypingIndicator` announces "Author is typing" when it appears. Call
+  `use_chat_announcer()` inside the log to announce anything else. Turn `announce` off on
+  text the reader sent themselves.
+- `StreamingText` sets `aria-busy` while streaming; its caret is decorative.
+- The log is focusable (`tabindex="0"`) so it can be scrolled from the keyboard.
+- Reduced motion: the caret stops blinking, the typing dots stop bouncing (and stay visible),
+  and messages and the jump button appear without rising.
+
+## Source
+
+Original to this repo. The "announce whole messages, not the stream" approach follows
+WAI-ARIA's `aria-busy` guidance and common screen reader behaviour with chat logs.
+
+## Stability
+
+Experimental: new on 2026-10-30, and the props may change once a real agent app uses them (docs/STABILITY.md).
+
+## Keyboard and accessibility
+
+Pattern: Log. Roles: `log`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | In the message box | Sends the message; it appears at the end of the conversation and focus stays in the box. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
+## API
+
+```rust
+/// Says things to screen readers on behalf of a [`ChatLog`].
+///
+/// The log itself is not a live region: a streamed reply changes dozens of times a second, and
+/// screen readers would read every fragment. The log announces whole messages through this
+/// instead: [`StreamingText`] says the finished reply, [`TypingIndicator`] says who is typing.
+/// Call [`announce`](Self::announce) for anything else worth hearing (a failed tool call, a new
+/// message from someone else).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct ChatAnnouncer {
+    /// Two polite regions, used in turn, so saying the same text twice is still heard.
+    slots: Signal<[String; 2]>,
+}
+
+/// The announcer of the enclosing [`ChatLog`], if there is one.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn use_chat_announcer() -> Option<ChatAnnouncer>
+
+/// A scrolling conversation. It follows new messages while the reader is at the end, stops
+/// when they scroll up, and then shows a "Jump to latest" button (which says "New messages
+/// below" once something arrives). Size it with `style` or a class; it fills its parent's
+/// height by default.
+///
+/// `label` is required: the log is a named region (`role="log"`), and a page with an unnamed
+/// one gives screen reader users no way to tell conversations apart.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     ChatLog { label: "Conversation with Ada",
+///         ChatMessage { author: "Ada", from: ChatRole::Assistant, "Hello!" }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// Leaving `label` out is a compile error:
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ChatLog { ChatMessage { author: "Ada", "Hello!" } } }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ChatLog(
+    /// The conversation's accessible name ("Conversation with Ada").
+    #[props(into)]
+    label: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// Who wrote a [`ChatMessage`]. Sets its alignment and look.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ChatRole {
+    /// The person using the app: right-aligned bubble.
+    User,
+    /// The assistant or another participant: full-width text.
+    #[default]
+    Assistant,
+    /// Notices from the app ("Conversation started"): centred and muted.
+    System,
+}
+
+/// One message in a [`ChatLog`]: an `article` named by its author, so screen reader users can
+/// move from message to message and hear who wrote each.
+///
+/// `author` is required for the same reason; `hide_author` hides it visually (for the
+/// user's own messages, say) while it is still read.
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ChatMessage { from: ChatRole::User, "Hi" } }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ChatMessage(
+    /// Who wrote it ("You", "Assistant", "Ada").
+    #[props(into)]
+    author: String,
+    #[props(default)] from: ChatRole,
+    /// Hide the author's name visually; screen readers still read it.
+    #[props(default)]
+    hide_author: bool,
+    /// When it was sent, as the app wants it shown ("10:42").
+    #[props(into)]
+    time: Option<String>,
+    /// Shown beside the message, decorative (the author's name is the label).
+    avatar: Option<Element>,
+    /// Buttons under the message (copy, retry). Give each a name.
+    actions: Option<Element>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// Text that arrives a piece at a time (a model's reply). Shows a caret while `streaming`,
+/// keeps line breaks, and when streaming ends announces the whole text once, with its
+/// author, through the [`ChatLog`]'s announcer. Screen readers never hear the fragments.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn StreamingText(
+    /// Everything received so far.
+    #[props(into)]
+    text: String,
+    /// More text is still coming.
+    #[props(default)]
+    streaming: bool,
+    /// Announce the finished text (default). Turn off for text the reader has just sent.
+    #[props(default = true)]
+    announce: bool,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+
+/// Three pulsing dots for "someone is writing". The dots are decorative; the text
+/// ("Assistant is typing") is read, and announced once when it appears inside a [`ChatLog`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn TypingIndicator(
+    /// Who is typing. Fills [`UiStrings::typing`](crate::components::ui_strings::UiStrings).
+    #[props(into)]
+    author: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::chat::*;
+use crate::components::chat_composer::*;
+use crate::components::tool_call::*;
+use dioxus::prelude::*;
+use dioxus_sdk_time::sleep;
+use std::time::Duration;
+
+#[derive(Clone, PartialEq)]
+enum Item {
+    System(String),
+    User(String),
+    Tool {
+        name: &'static str,
+        summary: String,
+        status: ToolStatus,
+    },
+    Reply {
+        text: String,
+        streaming: bool,
+    },
+}
+
+const ANSWER: &str = "Keep the log pinned to the end while the reader is there, and let go as soon as they scroll up. ChatLog measures instead of listening for scroll events, so this works on the native renderer too. Screen readers hear each reply once, when it is complete, not every fragment as it streams in.";
+
+fn reply_to(question: &str) -> String {
+    format!("You asked: “{question}”. {ANSWER}")
+}
+
+/// A pretend agent: the reply streams in word by word after a tool call. Nothing leaves the
+/// page.
+#[component]
+pub fn Demo() -> Element {
+    let mut items = use_signal(|| {
+        vec![
+            Item::System("Conversation started".into()),
+            Item::User("How do I keep a chat scrolled to the newest message?".into()),
+            Item::Tool {
+                name: "search_docs",
+                summary: "“scroll to latest”, 3 results".into(),
+                status: ToolStatus::Succeeded,
+            },
+            Item::Reply {
+                text: ANSWER.into(),
+                streaming: false,
+            },
+        ]
+    });
+    let mut busy = use_signal(|| false);
+    let mut typing = use_signal(|| false);
+    let mut stop = use_signal(|| false);
+
+    let ask = move |question: String| {
+        items.write().push(Item::User(question.clone()));
+        busy.set(true);
+        stop.set(false);
+        typing.set(true);
+        spawn(async move {
+            sleep(Duration::from_millis(500)).await;
+            items.write().push(Item::Tool {
+                name: "search_docs",
+                summary: format!("“{question}”"),
+                status: ToolStatus::Running,
+            });
+            sleep(Duration::from_millis(700)).await;
+            if let Some(Item::Tool { status, summary, .. }) = items.write().last_mut() {
+                *status = ToolStatus::Succeeded;
+                summary.push_str(", 3 results");
+            }
+            typing.set(false);
+            items.write().push(Item::Reply {
+                text: String::new(),
+                streaming: true,
+            });
+            for word in reply_to(&question).split_inclusive(' ') {
+                if stop() {
+                    break;
+                }
+                sleep(Duration::from_millis(45)).await;
+                if let Some(Item::Reply { text, .. }) = items.write().last_mut() {
+                    text.push_str(word);
+                }
+            }
+            if let Some(Item::Reply { streaming, .. }) = items.write().last_mut() {
+                *streaming = false;
+            }
+            busy.set(false);
+        });
+    };
+
+    rsx! {
+        div {
+            display: "flex",
+            flex_direction: "column",
+            gap: "0.75rem",
+            height: "28rem",
+            max_width: "40rem",
+            ChatLog { label: "Conversation with the docs assistant",
+                for (i, item) in items().into_iter().enumerate() {
+                    match item {
+                        Item::System(text) => rsx! {
+                            ChatMessage { key: "{i}", author: "System", from: ChatRole::System, hide_author: true, "{text}" }
+                        },
+                        Item::User(text) => rsx! {
+                            ChatMessage { key: "{i}", author: "You", from: ChatRole::User, hide_author: true, "{text}" }
+                        },
+                        Item::Tool { name, summary, status } => rsx! {
+                            ToolCall { key: "{i}", name, summary, status,
+                                pre { "{{ \"query\": \"scroll to latest\", \"limit\": 3 }}" }
+                            }
+                        },
+                        Item::Reply { text, streaming } => rsx! {
+                            ChatMessage { key: "{i}", author: "Assistant",
+                                StreamingText { text, streaming }
+                            }
+                        },
+                    }
+                }
+                if typing() {
+                    TypingIndicator { author: "Assistant" }
+                }
+            }
+            ChatComposer {
+                label: "Message the docs assistant",
+                placeholder: "Ask about the kit…",
+                busy: busy(),
+                onsend: ask,
+                onstop: move |_| stop.set(true),
+            }
+        }
+    }
+}
+```
+
+---
+
+# Chat composer
+
+- Copy into your app: `rust-ui add chat_composer` or `dx components add chat_composer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `textarea`, `ui_strings`).
+- Import: `use crate::components::chat_composer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+The message box of a chat. It grows with the text (CSS `field-sizing`, through
+[`Textarea`](textarea)'s `autosize`), sends with Enter, adds a line with Shift+Enter, and
+turns Send into Stop while a reply is `busy` (Escape stops too). Sending trims the text,
+ignores an empty message, empties the box and keeps focus in it. Extra controls (attach, a
+model picker) go in its children.
+
+```rust
+ChatComposer {
+    label: "Message",
+    busy: streaming(),
+    onsend: move |text: String| ask(text),
+    onstop: move |_| cancel(),
+}
+```
+
+Pass `value: Signal<String>` to hold the draft yourself.
+
+## Accessibility
+
+- Role and name: a text box named by the required `label` (a compile error without one);
+  how to send is read after it (`aria-describedby`), and `aria-keyshortcuts="Enter"`.
+- IME: Enter that confirms a composition (Japanese, Chinese, Korean input) picks the
+  characters and never sends. `composer_key` holds the rule and is unit-tested.
+- The send button stays focusable while there is nothing to send (`aria-disabled`, not
+  `disabled`), so its name is still found.
+- Escape stops a running reply only while `busy`; it is left out of the contract because this
+  demo is never busy, and is checked in the browser by `tests/e2e/chat.mjs`.
+- Reduced motion: the focus ring appears without a transition.
+
+## Source
+
+Original to this repo.
+
+## Stability
+
+Experimental: new on 2026-10-30, and the props may change once a real agent app uses them (docs/STABILITY.md).
+
+## Keyboard and accessibility
+
+Pattern: Text box with a send button. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | In the message box | Sends the message, empties the box and keeps focus in it. Does nothing while the box is empty. | yes |
+| Shift + Enter | In the message box | Starts a new line instead of sending. | yes |
+| Space | On the send button | Sends the message. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
+## API
+
+```rust
+/// What a key press in the composer does. Kept apart from the component so the rules are
+/// tested on their own (`tests/components/chat_composer.rs`).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ComposerKey {
+    /// Send the message (and keep the newline out of the box).
+    Send,
+    /// Stop the reply that is streaming.
+    Stop,
+    /// Let the text box handle it (type, add a line, move the caret).
+    Default,
+}
+
+/// Enter sends, Shift+Enter adds a line, Escape stops a running reply. Enter that confirms an
+/// IME composition (Japanese, Chinese, Korean input) never sends: it picks the characters.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub fn composer_key(key: &Key, shift: bool, composing: bool, busy: bool) -> ComposerKey
+
+/// The message box of a chat: grows with the text, sends on Enter (Shift+Enter for a new
+/// line), and turns its send button into Stop while a reply is `busy`. Sending trims the text,
+/// ignores an empty message, clears the box and keeps focus in it.
+///
+/// `label` is required: it is the text box's only accessible name (the placeholder is not
+/// one). How to send is read after it.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ChatComposer { label: "Message", onsend: move |text: String| println!("{text}") } }
+/// # }
+/// ```
+///
+/// Leaving `label` out is a compile error:
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { ChatComposer { onsend: move |_: String| {} } }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ChatComposer(
+    /// The text box's accessible name ("Message", "Ask the agent").
+    #[props(into)]
+    label: String,
+    /// Called with the trimmed text when the reader sends.
+    onsend: EventHandler<String>,
+    #[props(into)] placeholder: Option<String>,
+    /// A reply is streaming: sending waits, and Stop (with `onstop`) replaces Send.
+    #[props(default)]
+    busy: bool,
+    /// Called by the Stop button and by Escape while `busy`.
+    onstop: Option<EventHandler<()>>,
+    #[props(default)] disabled: bool,
+    /// Hold the draft yourself (to keep it across routes, or fill it from a suggestion).
+    /// Without it the composer keeps its own.
+    value: Option<Signal<String>>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    /// Extra controls left of the send button (attach, model picker). Name each one.
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::button::{ButtonVariant, IconButton, IconButtonSize};
+use crate::components::chat_composer::*;
+use crate::components::icons::Paperclip;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut sent = use_signal(Vec::<String>::new);
+    rsx! {
+        div { display: "flex", flex_direction: "column", gap: "0.75rem", max_width: "32rem",
+            ChatComposer {
+                label: "Message",
+                placeholder: "Write a message…",
+                onsend: move |text| sent.write().push(text),
+                IconButton {
+                    label: "Attach a file",
+                    variant: ButtonVariant::Ghost,
+                    size: IconButtonSize::Sm,
+                    r#type: "button",
+                    Paperclip { size: "1rem" }
+                }
+            }
+            if sent().is_empty() {
+                p { "data-slot": "sent", style: "margin: 0; color: var(--secondary-color-5); font-size: 0.875rem;",
+                    "Nothing sent yet."
+                }
+            } else {
+                ul { "data-slot": "sent", style: "margin: 0; padding-inline-start: 1.25rem; font-size: 0.875rem;",
+                    for (i, text) in sent().into_iter().enumerate() {
+                        li { key: "{i}", style: "white-space: pre-wrap;", "{text}" }
+                    }
                 }
             }
         }
@@ -10453,6 +10989,208 @@ pub fn Demo() -> Element {
 
 ---
 
+# Tool call
+
+- Copy into your app: `rust-ui add tool_call` or `dx components add tool_call --git https://github.com/Amit-1of1/Rust-UI-` (also copies `chat`, `collapsible`, `icons`, `ui_strings`).
+- Import: `use crate::components::tool_call::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+
+What an agent did and is doing. `ToolCall` is one tool call: its name, a one-line summary and
+its status in words, with arguments and output folded away until opened (it is a
+[`Collapsible`](collapsible)). `actions` stay visible when closed: put Allow and Deny there
+for `ToolStatus::NeedsApproval`. `AgentSteps` and `AgentStep` show a plan as an ordered list.
+
+```rust
+ToolCall { name: "read_file", summary: "src/date.rs", status: ToolStatus::Succeeded,
+    pre { "{output}" }
+}
+AgentSteps { label: "Plan",
+    AgentStep { status: ToolStatus::Succeeded, "Read the failing test" }
+    AgentStep { status: ToolStatus::Running, "Patch the parser" }
+}
+```
+
+## Accessibility
+
+- Role and name: the header is a disclosure button (`aria-expanded`) whose name includes the
+  tool, the summary and the status, so the status is never colour or icon alone. Glyphs are
+  decorative.
+- Inside a [`ChatLog`](chat), a call that turns `Failed` or `NeedsApproval` is announced
+  ("deploy_preview: Needs approval") through the log's announcer; quieter changes are not.
+- `AgentSteps` is an `ol` with a required `label`; the running step has
+  `aria-current="step"`, and each step's status is read after its text.
+- Reduced motion: the running glyph turns slowly instead of spinning (like `Spinner`).
+
+## Source
+
+Original to this repo. The idea of a status glyph, tool steps and an approval card comes from
+the agent components in deeplethe/solid-glass (MIT); no code was copied.
+
+## Stability
+
+Experimental: new on 2026-10-30, and the props may change once a real agent app uses them (docs/STABILITY.md).
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure (Show/Hide)](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a tool call's header | Shows or hides its details. | yes |
+| Space | On a tool call's header | Shows or hides its details. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
+## API
+
+```rust
+/// Where a tool call or agent step is.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ToolStatus {
+    #[default]
+    Queued,
+    Running,
+    Succeeded,
+    Failed,
+    /// Waits for the reader to allow it (put the Allow and Deny buttons in `actions`).
+    NeedsApproval,
+}
+
+/// One tool call an agent made: its name, a one-line summary and its status in words, with
+/// the input and output folded away until opened. The status is never colour alone, and a call
+/// that fails or needs approval is announced through the [`ChatLog`](crate::components::chat::ChatLog)
+/// it sits in.
+///
+/// Opens and closes like [`Collapsible`] (Enter or Space on the header). `actions` stay visible
+/// when it is closed: put Allow and Deny there for [`ToolStatus::NeedsApproval`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ToolCall(
+    /// The tool's name, shown in code type ("search_docs").
+    #[props(into)]
+    name: String,
+    #[props(default)] status: ToolStatus,
+    /// One line about this call ("3 results", "src/main.rs").
+    #[props(into)]
+    summary: Option<String>,
+    /// Start open.
+    #[props(default)]
+    open: bool,
+    /// Buttons under the header, shown even when closed.
+    actions: Option<Element>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    /// Details: arguments, output, logs.
+    children: Element,
+) -> Element
+
+/// An agent's plan or progress as an ordered list. The running step is marked
+/// `aria-current="step"`, and each step's status is read after its text.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     AgentSteps { label: "Plan",
+///         AgentStep { status: ToolStatus::Succeeded, "Read the issue" }
+///         AgentStep { status: ToolStatus::Running, "Write the fix" }
+///         AgentStep { "Run the tests" }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AgentSteps(
+    /// The list's accessible name ("Plan", "Progress").
+    #[props(into)]
+    label: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One step of [`AgentSteps`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AgentStep(
+    #[props(default)] status: ToolStatus,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::button::{Button, ButtonSize, ButtonVariant};
+use crate::components::tool_call::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut approval = use_signal(|| ToolStatus::NeedsApproval);
+    let deploy_step = match approval() {
+        ToolStatus::NeedsApproval => ToolStatus::Queued,
+        other => other,
+    };
+    rsx! {
+        div { display: "flex", flex_direction: "column", gap: "1rem", max_width: "36rem",
+            AgentSteps { label: "Plan",
+                AgentStep { status: ToolStatus::Succeeded, "Read the failing test" }
+                AgentStep { status: ToolStatus::Running, "Patch the date parser" }
+                AgentStep { status: deploy_step, "Deploy the preview" }
+            }
+            ToolCall {
+                name: "read_file",
+                summary: "src/date.rs",
+                status: ToolStatus::Succeeded,
+                pre { "fn parse(s: &str) -> Option<Date> {{ … }}" }
+            }
+            ToolCall {
+                name: "run_tests",
+                summary: "cargo test date",
+                status: ToolStatus::Running,
+                pre { "running 12 tests…" }
+            }
+            ToolCall {
+                name: "deploy_preview",
+                summary: "preview-142",
+                status: approval(),
+                actions: (approval() == ToolStatus::NeedsApproval).then(|| {
+                    rsx! {
+                        Button {
+                            size: ButtonSize::Sm,
+                            onclick: move |_| approval.set(ToolStatus::Running),
+                            "Allow"
+                        }
+                        Button {
+                            size: ButtonSize::Sm,
+                            variant: ButtonVariant::Outline,
+                            onclick: move |_| approval.set(ToolStatus::Failed),
+                            "Deny"
+                        }
+                    }
+                }),
+                pre { "{{ \"branch\": \"fix/date-parser\" }}" }
+            }
+        }
+    }
+}
+```
+
+---
+
 # Toolbar
 
 - Copy into your app: `rust-ui add toolbar` or `dx components add toolbar --git https://github.com/Amit-1of1/Rust-UI-`.
@@ -10817,6 +11555,27 @@ pub struct UiStrings {
     pub opens_in_new_tab: String,
     // Skip link
     pub skip_to_content: String,
+    // Chat
+    /// The chat log's button when the reader has scrolled up.
+    pub jump_to_latest: String,
+    /// The same button once a message arrived below.
+    pub new_messages: String,
+    /// Typing indicator. `{author}` is who is typing.
+    pub typing: String,
+    /// Announced when a streamed reply ends. `{author}` and `{text}` are filled in.
+    pub message_from: String,
+    /// Read after the composer's name: how to send.
+    pub composer_hint: String,
+    pub send: String,
+    pub stop: String,
+    // Tool calls
+    pub tool_queued: String,
+    pub tool_running: String,
+    pub tool_succeeded: String,
+    pub tool_failed: String,
+    pub tool_needs_approval: String,
+    /// Announced when a tool call fails or needs approval. `{name}` and `{status}`.
+    pub tool_status: String,
     // Number field
     /// The - button's name. `{label}` is the field's name.
     pub decrease: String,

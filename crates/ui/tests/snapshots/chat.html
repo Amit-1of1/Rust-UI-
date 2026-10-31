@@ -1,0 +1,88 @@
+<div style="display:flex;flex-direction:column;gap:0.75rem;height:28rem;max-width:40rem;">
+<div data-slot="chat" class="dx-chat-css">
+<div class="dx-chat-log-css" role="log" aria-label="Conversation with the docs assistant" aria-live="off" tabindex="0">
+<div class="dx-chat-log-content-css">
+<article data-slot="chat-message" data-from="system" aria-labelledby="dx-chat-author-n0" class="dx-chat-message-css">
+<div class="dx-chat-message-body-css">
+<div class="dx-chat-message-meta-css" data-hidden="true">
+<span id="dx-chat-author-n0" class="sr-only">System
+</span>
+</div>
+<div class="dx-chat-message-content-css">Conversation started
+</div>
+</div>
+</article>
+<article data-slot="chat-message" data-from="user" aria-labelledby="dx-chat-author-n1" class="dx-chat-message-css">
+<div class="dx-chat-message-body-css">
+<div class="dx-chat-message-meta-css" data-hidden="true">
+<span id="dx-chat-author-n1" class="sr-only">You
+</span>
+</div>
+<div class="dx-chat-message-content-css">How do I keep a chat scrolled to the newest message?
+</div>
+</div>
+</article>
+<div class="dx-tool-call-css" data-disabled=false data-open=false data-slot="tool-call" data-status="succeeded">
+<button aria-controls="dxc-n0" aria-expanded=false class="dx-collapsible-trigger-css dx-tool-call-trigger-css" data-disabled=false data-open=false type="button">
+<span class="dx-tool-glyph-css" data-status="succeeded" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle-check" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<path d="m16 9-5.5 5.5L8 12">
+</path>
+</svg>
+</span>
+<span class="dx-tool-call-name-css">search_docs
+</span>
+<span class="dx-tool-call-summary-css">“scroll to latest”, 3 results
+</span>
+<span class="dx-tool-call-status-css">Done
+</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevrons-up-down" aria-hidden="true" stroke="var(--secondary-color-n0)">
+<path d="m7 15 5 5 5-5">
+</path>
+<path d="m7 9 5-5 5 5">
+</path>
+</svg>
+</button>
+<div id="dxc-n0" data-open=false data-disabled=false class="dx-collapsible-content-css dx-tool-call-body-css">
+</div>
+</div>
+<article data-slot="chat-message" data-from="assistant" aria-labelledby="dx-chat-author-n2" class="dx-chat-message-css">
+<div class="dx-chat-message-body-css">
+<div class="dx-chat-message-meta-css">
+<span id="dx-chat-author-n2" class="dx-chat-message-author-css">Assistant
+</span>
+</div>
+<div class="dx-chat-message-content-css">
+<div data-slot="streaming-text" class="dx-streaming-text-css">Keep the log pinned to the end while the reader is there, and let go as soon as they scroll up. ChatLog measures instead of listening for scroll events, so this works on the native renderer too. Screen readers hear each reply once, when it is complete, not every fragment as it streams in.
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<div class="sr-only" data-slot="chat-announcer" aria-live="polite" aria-atomic="true">
+</div>
+<div class="sr-only" data-slot="chat-announcer" aria-live="polite" aria-atomic="true">
+</div>
+</div>
+<div data-slot="chat-composer" class="dx-chat-composer-css">
+<textarea data-slot="textarea" data-style="ghost" data-autosize="true" aria-describedby="dx-chat-composer-n0-hint" aria-keyshortcuts="Enter" aria-label="Message the docs assistant" class="dx-textarea-css dx-chat-composer-input-css" placeholder="Ask about the kit…" rows="1" value="">
+</textarea>
+<span id="dx-chat-composer-n0-hint" class="sr-only">Enter sends, Shift+Enter adds a line.
+</span>
+<div class="dx-chat-composer-bar-css">
+<div class="dx-chat-composer-tools-css">
+</div>
+<button aria-disabled="true" aria-label="Send" class="dx-button-css" data-size="icon-sm" data-slot="chat-composer-send" data-style="primary" type="button">
+<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="arrow-up" aria-hidden="true">
+<path d="m5 12 7-7 7 7">
+</path>
+<path d="M12 19V5">
+</path>
+</svg>
+</button>
+</div>
+</div>
+</div>

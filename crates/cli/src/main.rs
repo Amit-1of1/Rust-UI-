@@ -111,11 +111,20 @@ enum Command {
         #[arg(long)]
         theme: Vec<PathBuf>,
     },
-    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
+    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
+    /// the colours of a logo.
     Theme {
         /// Brand colour as hex, e.g. `#7c3aed`.
+        #[arg(
+            long,
+            required_unless_present = "from_image",
+            conflicts_with = "from_image"
+        )]
+        brand: Option<String>,
+        /// A logo (PNG, JPEG or SVG): its most visible saturated colour becomes the brand
+        /// colour, and a clearly different second colour is printed as an alternative preset.
         #[arg(long)]
-        brand: String,
+        from_image: Option<PathBuf>,
         /// Preset name used in `data-accent="..."`.
         #[arg(long, default_value = "brand")]
         name: String,
@@ -158,6 +167,23 @@ enum Command {
         name: Option<String>,
         #[arg(long)]
         json: bool,
+    },
+    /// Write a draft Accessibility Conformance Report (VPAT 2.5 layout, WCAG 2.2 A and AA) for
+    /// the kit components your app uses, from the kit's tests and keyboard contracts.
+    /// docs/ACR.md explains what it covers.
+    Acr {
+        /// Components or blocks to report on (with what they use). Default: the items in the
+        /// lockfile, or every component when there is none.
+        names: Vec<String>,
+        /// The product name in the title.
+        #[arg(long, default_value = "Your app")]
+        product: String,
+        /// Write the Markdown here instead of printing it.
+        #[arg(long)]
+        out: Option<PathBuf>,
+        /// The report date (YYYY-MM-DD); today by default.
+        #[arg(long)]
+        date: Option<String>,
     },
     /// Update copied components and blocks to the registry's current version, keeping your
     /// edits: a three-way merge against the version `add` recorded in the lockfile.
@@ -409,12 +435,31 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 return Ok(ExitCode::FAILURE);
             }
         }
-        Command::Theme { brand, name } => {
+        Command::Theme {
+            brand,
+            from_image,
+            name,
+        } => {
             use rust_ui_cli::theme::{css, preset, Rgb};
             if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
                 return Err(format!("`{name}` must be letters, digits or `-`"));
             }
-            print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
+            match (brand, from_image) {
+                (Some(brand), _) => print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?)),
+                (None, Some(logo)) => {
+                    let palette = rust_ui_cli::logo::read(&logo)?;
+                    print!("{}", rust_ui_cli::logo::summary(&palette));
+                    print!("{}", css(&name, &preset(palette.brand)?));
+                    if let Some(second) = palette.second {
+                        println!(
+                            "\n/* Alternative: the logo's second colour ({}). */",
+                            second.hex()
+                        );
+                        print!("{}", css(&format!("{name}-2"), &preset(second)?));
+                    }
+                }
+                (None, None) => return Err("give --brand or --from-image".into()),
+            }
         }
         Command::Postbuild { public, scoped } => {
             use rust_ui_cli::postbuild::{bundle_css_with, strip_wasm};
@@ -496,6 +541,44 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 for c in picked {
                     println!("# {}\n\n{}", c.name, c.markdown());
                 }
+            }
+        }
+        Command::Acr {
+            names,
+            product,
+            out,
+            date,
+        } => {
+            use rust_ui_cli::acr::{components_of, load_criteria, markdown, report};
+            let reg = load(root)?;
+            let wanted: Vec<String> = if !names.is_empty() {
+                names
+            } else {
+                let lock = Lock::load(&cli.lock)?;
+                if lock.items.is_empty() {
+                    reg.items
+                        .iter()
+                        .filter(|i| i.kind == Kind::Component)
+                        .map(|i| i.name.clone())
+                        .collect()
+                } else {
+                    lock.items.keys().cloned().collect()
+                }
+            };
+            let components = components_of(&reg, &wanted)?;
+            let criteria = load_criteria(root)?;
+            let date = date.unwrap_or_else(rust_ui_cli::acr::today);
+            let text = markdown(&report(root, &criteria, &components, &product)?, &date);
+            match out {
+                Some(path) => {
+                    std::fs::write(&path, text).map_err(err)?;
+                    println!(
+                        "wrote {} ({} components); read it and fill in the rows marked review",
+                        path.display(),
+                        components.len()
+                    );
+                }
+                None => print!("{text}"),
             }
         }
         Command::Update {
