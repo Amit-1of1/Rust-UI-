@@ -27,6 +27,7 @@ Every finding was compared with Chromium, using the demo's server-rendered marku
 - **Inline-flex and absolute boxes inside a flex item ignore their own width and height**: pagination links shrink to their digits; the external link's screen-reader-only text gets a full-size box (and shows). Fix in the blitz-dom fork (`layout/inline.rs`, pass `SizingMode::InherentSize` to inline boxes).
 - **Tab lands on `tabindex="-1"` elements** (the primitives' hidden checkbox inputs). The focus check skips them. Fix in the blitz-dom fork (`focus_step`).
 - **No `::after` box on the sidebar's menu action, and positioned elements without a `z-index` are painted and hit in DOM order**, so the menu button covers the action.
+- **A flex button keeps its full content width**: the tool call trigger ignores its ellipsised summary's `min-width: 0`.
 - **Calendar**: Blitz's table layout makes it wider than Chromium does.
 - **Fonts**: Inter isn't bundled, so Blitz falls back to a wider serif, and breaks long strings differently.
 - **No `position: sticky`** (laid out as `relative`) and **no `scroll-padding`** (the showcase test reads its value from `showcase.css`), and Taffy has **no right-to-left flex or grid order**: the RTL run checks logical properties and overflow, not mirrored order.

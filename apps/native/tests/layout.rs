@@ -39,6 +39,7 @@ const INLINE_BOX: &str = "Blitz ignores the width and height of an inline-flex o
 /// Blitz has no `::after` hit area and no painting order for positioned elements.
 const SIDEBAR_ACTION: &str = "the menu action's ::after hit area is 36x36 in browsers; Blitz builds no box for it and paints positioned elements in DOM order, so the menu button sits on top of it";
 const CALENDAR_TABLE: &str = "Blitz's table layout makes the calendar wider than browsers do (Chromium fits it at 320px) and lays out the hidden month and year options";
+const FLEX_BUTTON: &str = "Blitz sizes a flex button to its full content, ignoring the `min-width: 0` of the ellipsised summary inside it; Chromium keeps the tool call trigger inside a 320px page";
 const DATE_RANGE: &str = "Real: the date range field (and the DateRangeField around it) needs about 315px and can't wrap between its two dates without changing the primitive's markup";
 const BLITZ_TEXT: &str = "Blitz-only: it falls back to a wider serif font (Inter isn't bundled) and doesn't break these long strings the way Chromium does; Chromium shows no overflow";
 
@@ -50,6 +51,8 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: calendar: ", CALENDAR_TABLE),
     ("long-text: card: ", INPUT_WIDTH),
     ("long-text: chart: ", BLITZ_TEXT),
+    ("long-text: chat: ", INPUT_WIDTH),
+    ("long-text: chat_composer: ", INPUT_WIDTH),
     ("long-text: chips: ", INPUT_WIDTH),
     ("long-text: combobox: ", INPUT_WIDTH),
     ("long-text: data_table: ", BLITZ_TEXT),
@@ -66,6 +69,7 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: table: ", BLITZ_TEXT),
     ("long-text: theme_customizer: ", INPUT_WIDTH),
     ("long-text: time_picker: ", INPUT_WIDTH),
+    ("long-text: tool_call: ", FLEX_BUTTON),
     ("reflow: calendar: ", CALENDAR_TABLE),
     ("reflow: card: ", INPUT_WIDTH),
     ("reflow: date_picker: ", DATE_RANGE),
