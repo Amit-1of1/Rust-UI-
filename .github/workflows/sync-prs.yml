@@ -5,7 +5,7 @@ name: Sync open PRs with main
 # merge, so GitHub stops showing conflicts that are only mechanical. A PR that still conflicts
 # gets one comment naming the files, which wakes the session that owns it. docs/PROTOCOL.md.
 #
-# Pushes made with GITHUB_TOKEN don't start pull_request runs, so this dispatches CI and the
+# Pushes made with GITHUB_TOKEN don't start pull_request runs, so this dispatches CI, release readiness and the
 # browser checks on each branch it pushed. It can't push a merge that changes a workflow file
 # (GITHUB_TOKEN has no `workflows` permission); those PRs get a comment instead.
 on:
@@ -26,11 +26,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: Merge main into each open PR
         env:
           GH_TOKEN: ${{ github.token }}
@@ -59,6 +59,7 @@ jobs:
               if git push -q origin "HEAD:$branch"; then
                 gh workflow run ci.yml --repo "$REPO" --ref "$branch" || true
                 gh workflow run e2e.yml --repo "$REPO" --ref "$branch" || true
+                gh workflow run release-readiness.yml --repo "$REPO" --ref "$branch" || true
               else
                 comment "$pr" "Main moved and the merge is clean, but this workflow could not push it (the branch moved meanwhile, or main changed a workflow file). The session that owns this PR: run \`scripts/sync-main.sh\`, \`scripts/check.sh\`, then push."
               fi

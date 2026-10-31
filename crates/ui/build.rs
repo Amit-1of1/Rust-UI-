@@ -12,8 +12,11 @@
 //!
 //! It also checks every `contract.toml` (docs/CONTRACTS.md) with the same rules as
 //! `rust-ui doctor`, so a contract that documents a key its test never presses, or a role no
-//! test looks at, fails the build instead of reaching the docs.
+//! test looks at, fails the build instead of reaching the docs. That check reads the CLI's
+//! source, which a packaged crate doesn't have, so it is the internal `contract-check` feature:
+//! on for the kit's tests and the apps in this repo, off for apps that depend on the kit.
 
+#[cfg(feature = "contract-check")]
 #[path = "../cli/src/contract.rs"]
 #[allow(dead_code)]
 mod contract;
@@ -51,23 +54,8 @@ fn main() {
         .map(|n| n.trim_end_matches(".rs").to_string())
         .collect();
 
-    let mut broken = Vec::new();
-    for name in &components {
-        match contract::Contract::load(&components_dir, name) {
-            Ok(Some(c)) => broken.extend(
-                c.problems()
-                    .into_iter()
-                    .map(|p| format!("{name}/{}: {p}", contract::FILE)),
-            ),
-            Ok(None) => {}
-            Err(e) => broken.push(e),
-        }
-    }
-    assert!(
-        broken.is_empty(),
-        "component contracts are not sound (docs/CONTRACTS.md):\n  {}",
-        broken.join("\n  ")
-    );
+    #[cfg(feature = "contract-check")]
+    check_contracts(&components_dir, &components);
 
     let mut mods = String::new();
     let mut prelude = String::new();
@@ -139,4 +127,25 @@ fn write(path: &Path, body: &str) {
     if fs::read_to_string(path).ok().as_deref() != Some(body) {
         fs::write(path, body).expect("write generated module list");
     }
+}
+
+#[cfg(feature = "contract-check")]
+fn check_contracts(components_dir: &Path, components: &[String]) {
+    let mut broken = Vec::new();
+    for name in components {
+        match contract::Contract::load(components_dir, name) {
+            Ok(Some(c)) => broken.extend(
+                c.problems()
+                    .into_iter()
+                    .map(|p| format!("{name}/{}: {p}", contract::FILE)),
+            ),
+            Ok(None) => {}
+            Err(e) => broken.push(e),
+        }
+    }
+    assert!(
+        broken.is_empty(),
+        "component contracts are not sound (docs/CONTRACTS.md):\n  {}",
+        broken.join("\n  ")
+    );
 }
