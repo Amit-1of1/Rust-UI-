@@ -1,6 +1,6 @@
 # Carousel
 
-- Copy into your app: `rust-ui add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `rust-ui add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::carousel::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons. Nothing auto-plays, so there is no motion to pause.

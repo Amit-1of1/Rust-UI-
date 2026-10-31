@@ -158,6 +158,7 @@
         "carousel/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "ui_strings"
       ]
     },
@@ -414,7 +415,9 @@
         "field/mod.rs",
         "field/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "form",
@@ -430,6 +433,7 @@
         "date_picker",
         "date_time_picker",
         "field",
+        "hooks",
         "input",
         "select",
         "textarea",
@@ -443,6 +447,7 @@
         "hooks/clipboard.rs",
         "hooks/docs.md",
         "hooks/hotkey.rs",
+        "hooks/id.rs",
         "hooks/media.rs",
         "hooks/mod.rs",
         "hooks/router.rs",
@@ -581,7 +586,21 @@
         "multi_select/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "ui_strings"
+      ]
+    },
+    {
+      "name": "native_select",
+      "files": [
+        "native_select/component.rs",
+        "native_select/docs.md",
+        "native_select/mod.rs",
+        "native_select/style.css"
+      ],
+      "registryDependencies": [
+        "icons",
+        "input"
       ]
     },
     {
@@ -660,6 +679,16 @@
       "registryDependencies": []
     },
     {
+      "name": "resizable",
+      "files": [
+        "resizable/component.rs",
+        "resizable/docs.md",
+        "resizable/mod.rs",
+        "resizable/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "scroll_area",
       "files": [
         "scroll_area/component.rs",
@@ -679,6 +708,7 @@
         "select/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "icons"
       ]
     },
@@ -829,7 +859,9 @@
         "tabs/mod.rs",
         "tabs/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "tag_group",
@@ -859,6 +891,7 @@
         "theme_customizer/component.rs",
         "theme_customizer/docs.md",
         "theme_customizer/mod.rs",
+        "theme_customizer/persist.rs",
         "theme_customizer/style.css"
       ],
       "registryDependencies": [

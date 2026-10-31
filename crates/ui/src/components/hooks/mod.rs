@@ -3,12 +3,14 @@
 
 mod clipboard;
 mod hotkey;
+mod id;
 mod media;
 mod router;
 mod selection;
 
 pub use clipboard::*;
 pub use hotkey::*;
+pub use id::*;
 pub use media::*;
 pub use router::*;
 pub use selection::*;

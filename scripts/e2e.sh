@@ -97,6 +97,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] otp + carousel (gallery)";         e2e env GALLERY_URL=$G node otp.mjs
   step "[$engine] multi-select + dropzone (gallery)"; e2e env GALLERY_URL=$G node pickers.mjs
   step "[$engine] drawer (gallery)";                 e2e env GALLERY_URL=$G node drawer.mjs
+  step "[$engine] resizable panels (gallery)";      e2e env GALLERY_URL=$G node resizable.mjs
   step "[$engine] table (gallery)";                  e2e env GALLERY_URL=$G node table.mjs
   step "[$engine] select + combobox form fields";    e2e env GALLERY_URL=$G node form_fields.mjs
   step "[$engine] time + date-time pickers (gallery)"; e2e env GALLERY_URL=$G node time_picker.mjs

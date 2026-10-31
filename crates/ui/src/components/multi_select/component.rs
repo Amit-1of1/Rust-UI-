@@ -1,7 +1,7 @@
 use crate::components::ui_strings::{fill, use_ui_strings};
+use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
 use std::collections::BTreeSet;
-use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/multi_select/style.css")]
 struct Styles;
@@ -63,10 +63,7 @@ pub fn MultiSelect(
     #[props(default)]
     on_change: Callback<Vec<String>>,
 ) -> Element {
-    let base = use_hook(|| {
-        static NEXT: AtomicU64 = AtomicU64::new(1);
-        format!("dx-multi-{}", NEXT.fetch_add(1, Ordering::Relaxed))
-    });
+    let base = use_unique_id("dx-multi");
     let t = use_ui_strings();
     let placeholder = placeholder.unwrap_or_else(|| t.select_placeholder.clone());
     let mut open = use_signal(|| false);

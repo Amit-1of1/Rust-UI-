@@ -1,6 +1,6 @@
 # Form
 
-- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
+- Copy into your app: `rust-ui add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `hooks`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
@@ -66,6 +66,19 @@ rsx! {
 A failed submit focuses the range picker's group, which is read with its label and error.
 
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
+
+Fields that come and go while the form is open (invoice line items, extra email addresses) can't be hooks. Create them with `form.add_field(initial, rules)` from an event handler, keep them in your own signal, and drop them with `form.remove_field(field)`; the form validates them with the others and focuses the first invalid one on submit:
+
+```rust
+let mut lines = use_signal(Vec::<FormField>::new);
+rsx! {
+    for (i, line) in lines().into_iter().enumerate() {
+        TextField { key: "{line.ids().control}", field: line, label: format!("Item {}", i + 1) }
+        Button { r#type: "button", onclick: move |_| { form.remove_field(line); lines.write().retain(|l| *l != line); }, "Remove" }
+    }
+    Button { r#type: "button", onclick: move |_| lines.push(form.add_field("", vec![required()])), "Add item" }
+}
+```
 
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 

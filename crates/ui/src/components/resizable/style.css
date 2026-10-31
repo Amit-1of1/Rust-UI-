@@ -1,0 +1,99 @@
+/* Theme tokens only. The only motion is the handle's colour change; reduced motion turns it
+   off. */
+.dx-resizable-group {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.dx-resizable-group[data-direction="vertical"] {
+  flex-direction: column;
+}
+
+.dx-resizable-group[data-dragging="true"] {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.dx-resizable-group[data-direction="vertical"][data-dragging="true"] {
+  cursor: row-resize;
+}
+
+.dx-resizable-panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dx-resizable-handle {
+  position: relative;
+  display: flex;
+  flex: 0 0 1px;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-color-6);
+  cursor: col-resize;
+  outline: none;
+  touch-action: none;
+  transition: background-color 150ms;
+}
+
+/* A wider invisible hit area than the 1px line. */
+.dx-resizable-handle::after {
+  position: absolute;
+  inset-block: 0;
+  inset-inline: -4px;
+  content: "";
+}
+
+.dx-resizable-group[data-direction="vertical"] > .dx-resizable-handle {
+  cursor: row-resize;
+}
+
+.dx-resizable-group[data-direction="vertical"] > .dx-resizable-handle::after {
+  inset-block: -4px;
+  inset-inline: 0;
+}
+
+.dx-resizable-handle:hover,
+.dx-resizable-handle[data-dragging="true"] {
+  background: var(--secondary-color-5);
+}
+
+.dx-resizable-handle:focus-visible {
+  background: var(--focused-border-color);
+  box-shadow: 0 0 0 2px var(--focused-border-color);
+}
+
+.dx-resizable-grip {
+  z-index: 1;
+  width: 0.75rem;
+  height: 1rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: 0.25rem;
+  background: var(--primary-color-3)
+    radial-gradient(circle, var(--secondary-color-5) 1px, transparent 1.5px) center / 4px 4px;
+}
+
+.dx-resizable-group[data-direction="vertical"] .dx-resizable-grip {
+  width: 1rem;
+  height: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-resizable-handle {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .dx-resizable-handle {
+    background: CanvasText;
+  }
+
+  .dx-resizable-handle:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}
