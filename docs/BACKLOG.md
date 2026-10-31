@@ -2,14 +2,14 @@
 
 **Status (2026-10-13):** `chips` and `link` (`TextLink`) are built, the icon set is decided (`docs/ICONS.md`) and the shared hooks are a registry item (`hooks`). Batch 1 is complete.
 
-**Earlier (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select`, `dropzone` and `drawer` (with a vertical, one-way `SwipeDismiss`) are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Component batches are done; next is the essentials list below and the research ideas (`rust-ui doctor`, then `rust-ui theme --brand`).
+**Earlier (2026-10-10):** Batch 1, `form`, `data_table`, `input_otp`, `input_group`, `carousel`, `multi_select`, `dropzone` and `drawer` (with a vertical, one-way `SwipeDismiss`) are built (PR #12). `date range` already existed (`DateRangePicker` in `date_picker`) and `navigation_menu` is covered by our `navbar`, so both are dropped. Component batches are done; next is the essentials list below and the research ideas (`atoll doctor`, then `atoll theme --brand`).
 
 Written 2026-10-10 after checking two upstream repos by cloning them (not by reading the web UI):
 
 - `DioxusLabs/components` at `main` (9a75825, the commit we pin): **nothing newer than what we copied**, except a `form` component we skipped.
 - `rust-ui/ui` (rust-ui.com), commit 43ddc65, MIT, Copyright (c) 2026 Max Wells. 87 files under `app_crates/registry/src/ui`, plus `crates/autoform`, `crates/icons`, and ~35 hooks under `registry/src/hooks`.
 
-**How borrowing works here.** Rust/UI styles with Tailwind classes; we use plain CSS and theme tokens. So we copy the *structure and behaviour* (props, state, markup, aria) and rewrite the styling as `style.css` with our tokens. Every borrowed file gets a `THIRD_PARTY.md` row (source, commit, MIT). Interactive pieces must sit on `dioxus-primitives` or native elements and pass the axe gate in light, dark and every accent. Create each with `rust-ui new <name>`.
+**How borrowing works here.** Rust/UI styles with Tailwind classes; we use plain CSS and theme tokens. So we copy the *structure and behaviour* (props, state, markup, aria) and rewrite the styling as `style.css` with our tokens. Every borrowed file gets a `THIRD_PARTY.md` row (source, commit, MIT). Interactive pieces must sit on `dioxus-primitives` or native elements and pass the axe gate in light, dark and every accent. Create each with `atoll new <name>`.
 
 We have 52 components. Missing ones, in build order:
 
@@ -52,7 +52,7 @@ Skip for now: `input_phone` (546 lines, large data tables), `workflow`, `bubble`
 3. **Theming guide** (accent, radius, dark mode, brand colour). Tokens exist; the guide does not.
 4. **Docs site**: a page per component from each `docs.md`, with the live demo.
 5. **RTL/direction**: Rust/UI has `direction_provider`; add logical CSS properties and an RTL axe pass.
-6. **Publish path**: `rust-ui add` from a git URL works; crates.io is blocked by the git-pinned primitives.
+6. **Publish path**: `atoll add` from a git URL works; crates.io is blocked by the git-pinned primitives.
 7. **CI**: workflows exist but GitHub never starts a runner (check Settings > Actions and billing).
 8. **Real-app trial**: use the kit in one real project to find gaps before adding more.
 9. **Optional**: schema-driven forms like Rust/UI `autoform` (it targets Leptos, so it would be a rewrite, not a copy).

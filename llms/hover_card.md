@@ -1,7 +1,7 @@
 # Hover card
 
-- Copy into your app: `rust-ui add hover_card` or `dx components add hover_card --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::hover_card::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add hover_card` or `dx components add hover_card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::hover_card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The HoverCard component can be used to display additional information when a user hovers over an element. It is useful for showing tooltips, additional details, or any other content that should be revealed on hover.
 

@@ -44,7 +44,7 @@ jobs:
             scripts/release-web.sh $app
           done
       # The component contracts' test steps, for tests/e2e/contracts.mjs (no Rust in the e2e job).
-      - run: cargo run -q -p rust-ui-cli -- contract --json > target/contracts.json
+      - run: cargo run -q -p atoll-cli -- contract --json > target/contracts.json
       - run: tar -cf web.tar target/dx/*/release/web/public target/contracts.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

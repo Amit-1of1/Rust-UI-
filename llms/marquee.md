@@ -1,7 +1,7 @@
 # Marquee
 
-- Copy into your app: `rust-ui add marquee` or `dx components add marquee --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
-- Import: `use crate::components::marquee::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add marquee` or `dx components add marquee --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Import: `use crate::components::marquee::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A looping auto-scrolling strip (logos, quotes).
 

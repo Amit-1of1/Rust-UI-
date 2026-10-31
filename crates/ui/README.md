@@ -1,6 +1,6 @@
-# rust-ui-kit
+# atoll-ui
 
-A shadcn-inspired component kit for [Dioxus](https://dioxuslabs.com) 0.7: styled components on top of [`dioxus-primitives`](https://github.com/DioxusLabs/components), light and dark themes, and spring motion from `rust-ui-motion`.
+A shadcn-inspired component kit for [Dioxus](https://dioxuslabs.com) 0.7: styled components on top of [`dioxus-primitives`](https://github.com/DioxusLabs/components), light and dark themes, and spring motion from `atoll-motion`.
 
 ```rust
 use ui::prelude::*;

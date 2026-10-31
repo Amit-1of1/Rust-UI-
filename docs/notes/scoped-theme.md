@@ -1,8 +1,8 @@
 # Scoped theme
 
 `crates/ui/assets/theme.scoped.css` and `reset.scoped.css` are generated from `theme.css` and
-`reset.css` by `rust-ui registry` (`crates/cli/src/scope.rs`); never edit them, and change
-`theme.css` as usual. `rust-ui registry --check` (in `scripts/check.sh`) fails when they are
+`reset.css` by `atoll registry` (`crates/cli/src/scope.rs`); never edit them, and change
+`theme.css` as usual. `atoll registry --check` (in `scripts/check.sh`) fails when they are
 stale, and `scripts/sync-main.sh` treats them as generated.
 
 The rewrite, per selector: `:root`/`html` become `[data-rui-scope]`; a first compound made only

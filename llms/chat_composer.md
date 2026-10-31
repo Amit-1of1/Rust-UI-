@@ -1,7 +1,7 @@
 # Chat composer
 
-- Copy into your app: `rust-ui add chat_composer` or `dx components add chat_composer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `textarea`, `ui_strings`).
-- Import: `use crate::components::chat_composer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chat_composer` or `dx components add chat_composer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `textarea`, `ui_strings`).
+- Import: `use crate::components::chat_composer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The message box of a chat. It grows with the text (CSS `field-sizing`, through
 [`Textarea`](textarea)'s `autosize`), sends with Enter, adds a line with Shift+Enter, and

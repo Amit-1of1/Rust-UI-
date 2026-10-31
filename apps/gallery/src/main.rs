@@ -77,7 +77,7 @@ fn App() -> Element {
         document::Stylesheet { href: GALLERY_CSS }
         Fragment {
             header { class: "gallery-header",
-                h1 { "Rust UI kit" }
+                h1 { "Atoll kit" }
                 Badge { variant: BadgeVariant::Secondary, "week 6" }
             }
             section { class: "gallery-main", "aria-label": "Component gallery",
@@ -94,7 +94,7 @@ fn App() -> Element {
                 Section {
                     id: "blocks",
                     title: "Blocks",
-                    blurb: "Whole screens built from the kit. Copy one with `rust-ui add login_01`; each opens on its own page.",
+                    blurb: "Whole screens built from the kit. Copy one with `atoll add login_01`; each opens on its own page.",
                     BlockLinks { open: move |name| block.set(Some(name)) }
                 }
                 // With `wasm-split` (release builds, scripts/release-web.sh) everything below

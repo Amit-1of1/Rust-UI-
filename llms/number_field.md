@@ -1,7 +1,7 @@
 # NumberField
 
-- Copy into your app: `rust-ui add number_field` or `dx components add number_field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `field`, `form`, `icons`, `ui_strings`).
-- Import: `use crate::components::number_field::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add number_field` or `dx components add number_field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `field`, `form`, `icons`, `ui_strings`).
+- Import: `use crate::components::number_field::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights). `NumberField` is the same control bound to a `use_form` field, with a label, a description and the field's error.
 

@@ -1,7 +1,7 @@
 # DataTable
 
-- Copy into your app: `rust-ui add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `table`, `ui_strings`).
-- Import: `use crate::components::data_table::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `table`, `ui_strings`).
+- Import: `use crate::components::data_table::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A table with sorting, a filter box, pagination and optional row selection, built on `Table`.
 

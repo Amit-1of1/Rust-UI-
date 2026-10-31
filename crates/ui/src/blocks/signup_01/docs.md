@@ -3,7 +3,7 @@
 A two-step sign-up card: name, email, password typed twice and a terms checkbox, then a 6-digit email code. Built from `card`, `form`, `input_otp`, `alert` and `link`.
 
 ```sh
-rust-ui add signup_01
+atoll add signup_01
 ```
 
 ```rust

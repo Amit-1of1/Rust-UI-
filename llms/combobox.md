@@ -1,7 +1,7 @@
 # Combobox
 
-- Copy into your app: `rust-ui add combobox` or `dx components add combobox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::combobox::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add combobox` or `dx components add combobox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::combobox::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Combobox component is an autocomplete input with a filterable popup list.
 

@@ -1,7 +1,7 @@
 # Item
 
-- Copy into your app: `rust-ui add item` or `dx components add item --git https://github.com/Amit-1of1/Rust-UI-` (also copies `separator`).
-- Import: `use crate::components::item::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add item` or `dx components add item --git https://github.com/Amit-1of1/Rust-UI-` (also copies `separator`).
+- Import: `use crate::components::item::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A versatile component for displaying content with media, title, description, and actions.
 

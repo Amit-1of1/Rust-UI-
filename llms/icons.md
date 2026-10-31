@@ -1,7 +1,7 @@
 # Icons
 
-- Copy into your app: `rust-ui add icons` or `dx components add icons --git https://github.com/Amit-1of1/Rust-UI-`.
-- Import: `use crate::components::icons::*;` after copying, or `use ui::icons::{...};` (by path, no glob) with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add icons` or `dx components add icons --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::icons::*;` after copying, or `use ui::icons::{...};` (by path, no glob) with the `atoll-ui` crate.
 
 The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.
 

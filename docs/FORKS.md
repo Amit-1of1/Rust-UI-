@@ -3,7 +3,7 @@
 Six crates carry small fixes on top of the exact versions we depend on. The fixes live on branches of forks under `Amit-1of1`, pinned to a commit in the workspace `Cargo.toml`.
 
 - The five renderer crates (Blitz and `dioxus-native-dom`) are swapped in with `[patch.crates-io]`. Only builds that pull them in (the `native` feature, `apps/native`) are affected; the web and desktop builds never compile them.
-- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. The fork's packages are named `rust-ui-primitives` and `rust-ui-attributes` so they can be published (the library names are unchanged; [PUBLISHING.md](PUBLISHING.md#dioxus-primitives)), and the kit's line says `package = "rust-ui-primitives"`. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with these exceptions, plain bug fixes that apply everywhere: the date range input freeze, the date pickers' naming and segment advance, and the toast roles below.
+- `dioxus-primitives` is a git dependency anyway, so its line simply points at the fork. The fork's packages are named `atoll-primitives` and `atoll-attributes` so they can be published (the library names are unchanged; [PUBLISHING.md](PUBLISHING.md#dioxus-primitives)), and the kit's line says `package = "atoll-primitives"`. Its fixes switch on only where `document::eval` can't run scripts (dioxus-native), so the web and desktop behave as upstream, with these exceptions, plain bug fixes that apply everywhere: the date range input freeze, the date pickers' naming and segment advance, and the toast roles below.
 
 | Crate | Release | Upstream commit of that release | Fork branch | Pinned commit |
 |---|---|---|---|---|
@@ -13,11 +13,11 @@ Six crates carry small fixes on top of the exact versions we depend on. The fixe
 | `blitz-paint` | 0.2.1 | [DioxusLabs/blitz `a1af09c`](https://github.com/DioxusLabs/blitz/tree/a1af09c0ce99e488f093743c450e9d3678d7c202/packages/blitz-paint) | [Amit-1of1/blitz `rust-ui/blitz-paint-0.2.1`](https://github.com/Amit-1of1/blitz/tree/rust-ui/blitz-paint-0.2.1) | `d69d92a` |
 | `dioxus-native-dom` | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/native-dom) | [Amit-1of1/dioxus `rust-ui/dioxus-native-dom-0.7.10`](https://github.com/Amit-1of1/dioxus/tree/rust-ui/dioxus-native-dom-0.7.10) | `8f3d575` |
 | `dioxus-cli` (`dx`, its wasm splitter) | 0.7.10 | [DioxusLabs/dioxus `57d6794`](https://github.com/DioxusLabs/dioxus/tree/57d6794ad60b949e5bd8aa282f6f8c3dc97a365e/packages/wasm-split/wasm-split-cli) | [Amit-1of1/dioxus `claude/project-thread-xwtlc7`](https://github.com/Amit-1of1/dioxus/tree/claude/project-thread-xwtlc7) | `73a027c` |
-| `dioxus-primitives` (published by us as `rust-ui-primitives`, with `dioxus-attributes` as `rust-ui-attributes`) | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) (`fd533b7` is on `claude/project-thread-6c30v9` until that branch is fast-forwarded) | `fd533b7` |
+| `dioxus-primitives` (published by us as `atoll-primitives`, with `dioxus-attributes` as `atoll-attributes`) | git only | [DioxusLabs/components `9a75825`](https://github.com/DioxusLabs/components/tree/9a758255ea26e2b20c8cecf4c1c946feb9e71da7/primitives) | [Amit-1of1/dioxus-components `rust-ui/primitives-9a75825`](https://github.com/Amit-1of1/dioxus-components/tree/rust-ui/primitives-9a75825) (`cda2513` is on `claude/project-thread-aqqle7` until that branch is fast-forwarded) | `cda2513` |
 
 `dx` is a tool, not a dependency: `scripts/install-dx.sh` installs it from the pinned commit (`dx --version` prints `0.7.10 (73a027c)`). Only split release builds (`scripts/release-web.sh`, the Pages workflow) need it; `dx serve` and debug builds work with stock 0.7.10. Its branch is the whole upstream workspace with one commit on top, so it needs no manifest swap.
 
-The `component.json` manifests that `rust-ui-cli registry` generates name the same fork and commit, so `dx components add` installs the fixed primitives too.
+The `component.json` manifests that `atoll-cli registry` generates name the same fork and commit, so `dx components add` installs the fixed primitives too.
 
 Each renderer branch is three kinds of commit on top of the upstream commit (the primitives branch only needs the second):
 
@@ -86,19 +86,19 @@ Each row has a test in `apps/native/tests/engine.rs` (renderer level) or `apps/n
 ## Changing a fix
 
 1. Clone the fork, check out the branch, make the change (keep the `PATCH(rust-ui)` marker), commit and push the branch.
-2. Put the new commit in the `rev` of the matching line in `Cargo.toml` (`[patch.crates-io]`, or `dioxus-primitives`) and in the table above. To try a change before pushing, point the crates at your checkouts for one command with `--config 'patch.crates-io.blitz-dom.path="../blitz/packages/blitz-dom"'` (and the same for the others). For primitives, also run `cargo run -p rust-ui-cli -- registry` so the manifests follow.
+2. Put the new commit in the `rev` of the matching line in `Cargo.toml` (`[patch.crates-io]`, or `dioxus-primitives`) and in the table above. To try a change before pushing, point the crates at your checkouts for one command with `--config 'patch.crates-io.blitz-dom.path="../blitz/packages/blitz-dom"'` (and the same for the others). For primitives, also run `cargo run -p atoll-cli -- registry` so the manifests follow.
 3. Run `cargo test -p native` (both `engine` and `interactions`) and `scripts/native-smoke.sh --build`.
 
 ## Moving to a new upstream release
 
-1. In the fork, fetch upstream and create `rust-ui/<crate>-<version>` from the commit in the new release's `.cargo_vcs_info.json` (crates.io tarball, or `~/.cargo/registry/src/*/<crate>-<version>`).
+1. In the fork, fetch upstream and create `atoll/<crate>-<version>` from the commit in the new release's `.cargo_vcs_info.json` (crates.io tarball, or `~/.cargo/registry/src/*/<crate>-<version>`).
 2. Copy the release's `Cargo.toml` over `packages/<crate>/Cargo.toml` and commit it.
 3. Cherry-pick the fix commits from the previous branch and resolve conflicts.
 4. Point `Cargo.toml` at the new commit and run the tests above. Keep the old branch so older commits of this repo still build.
 
 ## Using the fixes in an app outside this repo
 
-`[patch]` only applies to the workspace that declares it, so the renderer forks never reach an app that depends on the kit. On the web and desktop that is what you want: those builds never compile the patched crates, and `scripts/consumer-check.sh` (CI, every PR) builds an outside app on stock Dioxus from crates.io to prove it. The primitives fork is the only fork such an app gets, as the ordinary dependency `rust-ui-primitives`.
+`[patch]` only applies to the workspace that declares it, so the renderer forks never reach an app that depends on the kit. On the web and desktop that is what you want: those builds never compile the patched crates, and `scripts/consumer-check.sh` (CI, every PR) builds an outside app on stock Dioxus from crates.io to prove it. The primitives fork is the only fork such an app gets, as the ordinary dependency `atoll-primitives`.
 
 An app that uses the `native` feature and wants the renderer fixes copies the `[patch.crates-io]` section from this repository's `Cargo.toml`. Without it, native runs with upstream's gaps (the left column of the table above).
 

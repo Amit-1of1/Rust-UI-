@@ -1,12 +1,12 @@
 # Login 01
 
-- Copy into your app: `rust-ui add login_01` (also copies `alert`, `button`, `card`, `form`, `link`).
-- Import: `use crate::blocks::login_01::*;` after copying, or `use ui::blocks::login_01::*;` with the `rust-ui-kit` crate's `blocks` feature (internal).
+- Copy into your app: `atoll add login_01` (also copies `alert`, `button`, `card`, `form`, `link`).
+- Import: `use crate::blocks::login_01::*;` after copying, or `use ui::blocks::login_01::*;` with the `atoll-ui` crate's `blocks` feature (internal).
 
 A centred sign-in card: email, password, "remember me", a forgot-password link and a sign-up link. Built from `card`, `form`, `alert` and `link`.
 
 ```sh
-rust-ui add login_01   # copies src/blocks/login_01 and the components it uses
+atoll add login_01   # copies src/blocks/login_01 and the components it uses
 ```
 
 ```rust

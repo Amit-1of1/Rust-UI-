@@ -1,6 +1,6 @@
 # API stability
 
-Which parts of `rust-ui-kit` (`ui`), `rust-ui-motion` (`motion`) and `rust-ui-cli` (`rust-ui`) you can build on, as of 2026-10-14. The rules for changing each level are in [VERSIONING.md](VERSIONING.md).
+Which parts of `atoll-ui` (`ui`), `atoll-motion` (`motion`) and `atoll-cli` (`atoll`) you can build on, as of 2026-10-14. The rules for changing each level are in [VERSIONING.md](VERSIONING.md).
 
 | Level | Promise |
 |---|---|
@@ -15,7 +15,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - Items listed as experimental or internal below say so in their rustdoc (first paragraph or a `# Stability` section), and experimental components say so in a "Stability" section of their `docs.md` (shown on the docs site).
 - Anything not listed below as experimental or internal, and reachable from `ui::prelude`, `ui::hooks`, `ui::icons`, `ui::motion` or the crate roots, is stable.
 
-## `rust-ui-kit` (`ui`)
+## `atoll-ui` (`ui`)
 
 ### Stable
 
@@ -26,21 +26,21 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - **`UiStrings`**, `UiStringsProvider`, `use_ui_strings`, `fill`. New fields can be added in any release; build `UiStrings` with `..UiStrings::default()`.
 - **Common behaviour**: `class` on a styled component adds to the kit's class; every other attribute you pass lands on the component's root element, except where a component's docs say it moves to the focusable control (`Select`, `Combobox`).
 - **Theme contract** (`crates/ui/assets/theme.css`, [THEMING.md](THEMING.md)): the colour, radius, density, overlay and spring tokens (`--primary-color`, `--accent-color`, `--accent-contrast`, `--radius`, `--density`, `--overlay-color`, `--error-text-color`, `--spring-gentle|snappy|bouncy` and their `-duration`s, ...), the `data-theme` (`light`, `dark`), `data-accent` (the names in `ACCENTS`) and `data-density` (the names in `DENSITIES`) attributes, and the `.sr-only` class.
-- **Registry item names** (the component folder names) and the `component.json` format, since `dx components add` and `rust-ui add` depend on them.
+- **Registry item names** (the component folder names) and the `component.json` format, since `dx components add` and `atoll add` depend on them.
 - **Features**: `web`, `desktop`.
 
 ### Experimental
 
 | Item | Why |
 |---|---|
-| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `DateRangeField`, `FieldOption`, `Validator` and the rules, and `#[derive(Form)]` (crate `rust-ui-form-derive`) | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. The derive is new on 2026-10-15 and its attributes may change with use. |
+| `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `DateRangeField`, `FieldOption`, `Validator` and the rules, and `#[derive(Form)]` (crate `atoll-form-derive`) | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. The derive is new on 2026-10-15 and its attributes may change with use. |
 | `time_picker` and `date_time_picker` (`TimePicker`, `TimeState`, `HourCycle`, `DateTimePicker` and the ISO helpers) | New on 2026-10-15; min/max times and a time list popover may change the props. |
 | `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
 | `chart`: `BarChart`, `LineChart`, `AreaChart`, `PieChart`, `RadarChart`, `RadialChart`, `ChartLegend`, `ChartSeries`, `LegendMarker`, `ChartCursor`, `ChartKey` | Kit-written SVG; multi-series, the legend, pie and radial charts are new (charts v2), radar charts and `keyboard` on 2026-10-30, and their props may still change with use. The `--chart-*` tokens are part of the theme contract once the props settle. |
 | `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
-| Scoped theme and base styles: `ThemeStyles`'s `scoped` and `reset` props, `THEME_SCOPED_CSS`, `RESET_CSS`, `RESET_SCOPED_CSS`, `set_writes_html`, the `data-rui-scope` attribute `ThemeScope` renders, `reset.css`, and `rust-ui init --scoped/--reset`, `rust-ui postbuild --scoped` | New on 2026-10-30 for adding the kit to existing apps ([EXISTING_APP.md](EXISTING_APP.md)); the scope selector and what the reset covers may change with use. |
+| Scoped theme and base styles: `ThemeStyles`'s `scoped` and `reset` props, `THEME_SCOPED_CSS`, `RESET_CSS`, `RESET_SCOPED_CSS`, `set_writes_html`, the `data-rui-scope` attribute `ThemeScope` renders, `reset.css`, and `atoll init --scoped/--reset`, `atoll postbuild --scoped` | New on 2026-10-30 for adding the kit to existing apps ([EXISTING_APP.md](EXISTING_APP.md)); the scope selector and what the reset covers may change with use. |
 | `hooks::use_focus_opener`, `use_return_focus`, `ReturnFocus`, `FocusInside` | New on 2026-10-30: overlays return focus to their opener without a script (native). Built into the kit's overlays; the hook shape may change before your own overlays rely on it. |
-| `rust-ui add` editing `mod.rs`, the crate root and `Cargo.toml` (`--no-wire` to opt out) | New on 2026-10-30; which files it edits and how it reports a differing pin may change. |
+| `atoll add` editing `mod.rs`, the crate root and `Cargo.toml` (`--no-wire` to opt out) | New on 2026-10-30; which files it edits and how it reports a differing pin may change. |
 | `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
 | `icons`: `Icon`, `IconData`, `IconNode`, the `icons::lucide` constants (`lucide::CHECK`, `ALL`), the `label` and `mirror_rtl` props and the named `IconSize` steps | New on 2026-10-14 with the generated Lucide set; the data shape may change when Lucide adds new SVG elements. |
 | `ui_strings`: `UiStrings::locale` and the per-language constructors, `LOCALES`, `text_direction` | New on 2026-10-31 (docs/RTL.md); the wording of the drafted translations will change after native-speaker review. |
@@ -57,11 +57,11 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 
 - `ui::demos` (feature `demos`): the gallery and docs demos. The feature exists for this repo's apps and tests.
 - Feature `contract-check`: makes the kit's build script check every `contract.toml`. It only builds inside this repository, because it reads the CLI's source.
-- `ui::blocks` (feature `blocks`, on with `demos`): whole screens meant to be copied with `rust-ui add` and then changed. Their props may change in any release; a copy you own doesn't change under you.
-- `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `rust-ui postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
+- `ui::blocks` (feature `blocks`, on with `demos`): whole screens meant to be copied with `atoll add` and then changed. Their props may change in any release; a copy you own doesn't change under you.
+- `ui::css_bundle`: the bundle hook used by `ThemeStyles` and `atoll postbuild`. Use `ThemeStyles` and the `postbuild` command instead of calling it.
 - `ui::components::<name>` module paths. Import from `ui::prelude` (or `ui::hooks`, `ui::icons`); the module layout follows the registry and may move. `drag_and_drop_list` and `tag_group` are the exception: both export `RemoveButton`, so import them by module path.
 
-## `rust-ui-motion` (`motion`, also `ui::motion`)
+## `atoll-motion` (`motion`, also `ui::motion`)
 
 ### Stable
 
@@ -86,32 +86,32 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 
 - `motion::css` (`CssSpring`, `stylesheet`, `BEGIN_MARKER`, `END_MARKER`): generates the spring tokens in `theme.css`. The tokens are stable; the generator is not.
 
-## `rust-ui-cli` (`rust-ui`)
+## `atoll-cli` (`atoll`)
 
 ### Stable
 
-- The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `RUST_UI_SOURCE`.
+- The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `ATOLL_SOURCE`.
 - The `registry.json` format these commands read. Items with `"kind": "block"` (added 2026-10-15) keep their files under `crates/ui/src/blocks`; a CLI from before then can't install them, but reads everything else as before.
 - Items with `"tier": "pro"` (added 2026-10-30) are Pro items from a private registry ([pro/README.md](pro/README.md)); older CLIs ignore the field and install them like any other item. The public registry has none.
 
 ### Experimental
 
-- `rust-ui add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
-- `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned.
-- `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
-- `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
-- `rust-ui acr` and `docs/acr/wcag22.toml`: new on 2026-10-30; rows change as checks are added.
-- `rust-ui update [names] [--dry-run]`, the `rust-ui-lock.json` format, the `.rust-ui/base/` folder and the global `--lock`: new on 2026-10-15. `add` writes the lockfile since then.
-- `rust-ui docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
-- `rust-ui mcp` (MCP server over stdio) and its tool names, arguments and replies: new on 2026-10-15.
-- `rust-ui info [--json]` (its JSON fields), `rust-ui skill` and `skills/rust-ui/SKILL.md`: new on 2026-10-30; fields may be added.
-- `rust-ui contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
-- `rust-ui explain` and its `--json` shape: new on 2026-10-30; which errors it explains will grow.
+- `atoll add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
+- `atoll theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned.
+- `atoll postbuild <public>`: new on 2026-10-13; the bundle layout may change.
+- `atoll doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
+- `atoll acr` and `docs/acr/wcag22.toml`: new on 2026-10-30; rows change as checks are added.
+- `atoll update [names] [--dry-run]`, the `atoll-lock.json` format, the `.atoll/base/` folder and the global `--lock`: new on 2026-10-15. `add` writes the lockfile since then.
+- `atoll docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
+- `atoll mcp` (MCP server over stdio) and its tool names, arguments and replies: new on 2026-10-15.
+- `atoll info [--json]` (its JSON fields), `atoll skill` and `skills/atoll/SKILL.md`: new on 2026-10-30; fields may be added.
+- `atoll contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
+- `atoll explain` and its `--json` shape: new on 2026-10-30; which errors it explains will grow.
 
 ### Internal
 
-- `rust-ui new` and `rust-ui registry`: tools for working inside this repository.
-- The library crate `rust_ui_cli` (every module and function). It is the binary's implementation, public for the repo's tests. Use the commands instead.
+- `atoll new` and `atoll registry`: tools for working inside this repository.
+- The library crate `atoll_cli` (every module and function). It is the binary's implementation, public for the repo's tests. Use the commands instead.
 
 ## Marking experimental items
 

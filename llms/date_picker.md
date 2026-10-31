@@ -1,7 +1,7 @@
 # Date picker
 
-- Copy into your app: `rust-ui add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
-- Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add date_picker` or `dx components add date_picker --git https://github.com/Amit-1of1/Rust-UI-` (also copies `calendar`, `form`, `icons`, `popover`, `ui_strings`).
+- Import: `use crate::components::date_picker::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value.
 

@@ -1,7 +1,7 @@
-//! `rust-ui acr`: the criteria table covers WCAG 2.2 A and AA exactly, cites only checks that
+//! `atoll acr`: the criteria table covers WCAG 2.2 A and AA exactly, cites only checks that
 //! exist, and the keyboard rows follow the contracts of the components an app uses.
 
-use rust_ui_cli::acr::{components_of, load_criteria, markdown, missing_evidence, report, Status};
+use atoll_cli::acr::{components_of, load_criteria, markdown, missing_evidence, report, Status};
 use std::path::{Path, PathBuf};
 
 fn root() -> PathBuf {
@@ -91,7 +91,7 @@ fn every_cited_check_exists() {
 
 #[test]
 fn claims_have_evidence_and_scoped_rows_name_real_components() {
-    let reg = rust_ui_cli::load(&root()).expect("registry");
+    let reg = atoll_cli::load(&root()).expect("registry");
     for c in load_criteria(&root()).expect("criteria") {
         if c.kit == Status::Supports || c.kit == Status::Partial {
             // A few criteria are met by what the kit leaves out (no flashing, no audio, no
@@ -118,7 +118,7 @@ fn claims_have_evidence_and_scoped_rows_name_real_components() {
 fn keyboard_rows_follow_the_used_components_contracts() {
     let root = root();
     let criteria = load_criteria(&root).expect("criteria");
-    let reg = rust_ui_cli::load(&root).expect("registry");
+    let reg = atoll_cli::load(&root).expect("registry");
     let used = components_of(&reg, &["dialog".into(), "toolbar".into()]).expect("resolve");
     let r = report(&root, &criteria, &used, "Test app").expect("report");
     let row = |id: &str| r.rows.iter().find(|x| x.id == id).expect("row").clone();
@@ -148,7 +148,7 @@ fn keyboard_rows_follow_the_used_components_contracts() {
 fn markdown_has_both_tables_and_the_draft_warning() {
     let root = root();
     let criteria = load_criteria(&root).expect("criteria");
-    let reg = rust_ui_cli::load(&root).expect("registry");
+    let reg = atoll_cli::load(&root).expect("registry");
     let all: Vec<String> = reg.items.iter().map(|i| i.name.clone()).collect();
     let used = components_of(&reg, &all).expect("resolve");
     let text = markdown(

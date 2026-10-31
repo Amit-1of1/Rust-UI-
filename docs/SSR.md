@@ -10,7 +10,7 @@ trial app ("Ledgerly", 2026-10-31) from a fresh project with only the public doc
 ```toml
 [dependencies]
 dioxus = { version = "0.7.10", features = ["router", "fullstack"] }
-ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "rust-ui-kit", features = ["router"] }
+ui = { git = "https://github.com/Amit-1of1/Rust-UI-", rev = "<commit>", package = "atoll-ui", features = ["router"] }
 
 [features]
 default = ["web"]

@@ -3,7 +3,7 @@ use crate::components::hooks::{use_copy_clipboard, use_media_query, MOBILE_QUERY
 use crate::components::kbd::{Kbd, KbdGroup};
 use dioxus::prelude::*;
 
-const INSTALL: &str = "rust-ui add hooks";
+const INSTALL: &str = "atoll add hooks";
 
 #[component]
 pub fn Demo() -> Element {

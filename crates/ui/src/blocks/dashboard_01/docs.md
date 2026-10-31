@@ -3,7 +3,7 @@
 An app shell plus an overview page: a sidebar that collapses to icons, a header with a dark-mode switch and an account menu, key figures, a line and a bar chart, and a recent-orders table. Built from `sidebar`, `card`, `chart`, `table`, `badge`, `dropdown_menu`, `switch`, `empty` and `theme_customizer` (for `use_theme`).
 
 ```sh
-rust-ui add dashboard_01
+atoll add dashboard_01
 ```
 
 Use the whole screen, or only the shell around your own pages:

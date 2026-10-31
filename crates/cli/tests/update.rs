@@ -1,7 +1,7 @@
-//! `rust-ui update`: lockfile recording and the three-way merge, against a throwaway registry.
+//! `atoll update`: lockfile recording and the three-way merge, against a throwaway registry.
 
-use rust_ui_cli::update::{self, Action, Lock, CONFLICT_START};
-use rust_ui_cli::{add, build, load, resolve, to_json, COMPONENTS_DIR};
+use atoll_cli::update::{self, Action, Lock, CONFLICT_START};
+use atoll_cli::{add, build, load, resolve, to_json, COMPONENTS_DIR};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -49,14 +49,14 @@ impl Setup {
     }
 
     fn lock(&self) -> PathBuf {
-        self.project.join("rust-ui-lock.json")
+        self.project.join("atoll-lock.json")
     }
 
     fn local(&self, file: &str) -> PathBuf {
         self.dest().join(file)
     }
 
-    /// `rust-ui add <names>`.
+    /// `atoll add <names>`.
     fn add(&self, names: &[&str]) {
         let reg = load(&self.root).unwrap();
         let names: Vec<String> = names.iter().map(|s| s.to_string()).collect();
@@ -87,7 +87,7 @@ impl Setup {
         .unwrap()
     }
 
-    /// `rust-ui update`.
+    /// `atoll update`.
     fn update(&self) -> update::Plan {
         let plan = self.plan(&[]);
         update::apply(&plan, &self.lock(), "test-source").unwrap();
@@ -349,7 +349,7 @@ fn only_named_items_are_updated_and_unknown_names_are_refused() {
         &s.project.join("src/blocks"),
     )
     .unwrap_err();
-    assert!(err.contains("rust-ui add card"), "{err}");
+    assert!(err.contains("atoll add card"), "{err}");
 }
 
 #[test]
@@ -363,4 +363,18 @@ fn merge_relabels_conflict_sides() {
         update::merge(b"a\nb\nc\n", b"A\nb\nc\n", b"a\nb\nC\n", "base", "new").unwrap(),
         b"A\nb\nC\n"
     );
+}
+
+#[test]
+fn a_lockfile_from_before_the_rename_gets_a_hint() {
+    let dir = tempfile::tempdir().unwrap();
+    fs::write(dir.path().join("rust-ui-lock.json"), "{}").unwrap();
+    let err = Lock::load(&dir.path().join(update::LOCK_FILE)).unwrap_err();
+    assert!(
+        err.contains("git mv rust-ui-lock.json atoll-lock.json"),
+        "{err}"
+    );
+    // No old lockfile: a missing lockfile is still just empty.
+    let empty = tempfile::tempdir().unwrap();
+    assert!(Lock::load(&empty.path().join(update::LOCK_FILE)).is_ok());
 }

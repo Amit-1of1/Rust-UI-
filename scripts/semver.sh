@@ -16,7 +16,7 @@ cd "$(dirname "$0")/.."
 
 # Library crates with a public Rust API. form-derive is a proc macro (semver-checks can't read
 # those); the CLI's library is internal (docs/STABILITY.md).
-CRATES=(rust-ui-kit rust-ui-motion)
+CRATES=(atoll-ui atoll-motion)
 
 mode=ref
 base=origin/main
@@ -41,8 +41,8 @@ log=$(mktemp)
 trap 'rm -f "$log"' EXIT
 if [ "$mode" = release ]; then
   version=$(sed -nE 's/^version = "([^"]+)"/\1/p' crates/ui/Cargo.toml | head -1)
-  if ! curl -fsS -A "rust-ui semver.sh" "https://crates.io/api/v1/crates/rust-ui-kit" >/dev/null 2>&1; then
-    echo "rust-ui-kit is not on crates.io yet; comparing with the last tag instead"
+  if ! curl -fsS -A "atoll semver.sh" "https://crates.io/api/v1/crates/atoll-ui" >/dev/null 2>&1; then
+    echo "atoll-ui is not on crates.io yet; comparing with the last tag instead"
     tag=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)
     [ -n "$tag" ] || { echo "no v* tag either: nothing to compare with (first release)"; exit 0; }
     args+=(--baseline-rev "$tag")
@@ -58,7 +58,23 @@ merge_base=$(git merge-base "$base" HEAD)
 echo "== cargo semver-checks against $base (${merge_base:0:7})"
 # The version is the same on both sides (it is bumped only in release commits), so check as if
 # this were a patch release: anything that would need the next 0.x minor fails.
-if cargo semver-checks "${args[@]}" --baseline-rev "$merge_base" --release-type patch 2>&1 | tee "$log"; then
+baseline=(--baseline-rev "$merge_base")
+# Crates renamed since the base (the kit was "Rust UI" until 2026-10-31): check out the base
+# and give its crates today's names, so the API is still compared across the rename.
+renames=(rust-ui-kit=atoll-ui rust-ui-motion=atoll-motion rust-ui-form-derive=atoll-form-derive)
+if ! git show "$merge_base:crates/ui/Cargo.toml" | grep -q "^name = \"${CRATES[0]}\""; then
+  tree="$(pwd)/target/semver-baseline"
+  rm -rf "$tree"
+  mkdir -p "$tree"
+  git archive "$merge_base" | tar -x -C "$tree"
+  for pair in "${renames[@]}"; do
+    old=${pair%%=*} new=${pair#*=}
+    grep -rlZ --include=Cargo.toml -e "\"$old\"" "$tree" | xargs -0 -r sed -i "s/\"$old\"/\"$new\"/g"
+  done
+  echo "(the base names the crates differently; comparing with it renamed: ${renames[*]})"
+  baseline=(--baseline-root "$tree")
+fi
+if cargo semver-checks "${args[@]}" "${baseline[@]}" --release-type patch 2>&1 | tee "$log"; then
   echo "no breaking API change"
   exit 0
 fi

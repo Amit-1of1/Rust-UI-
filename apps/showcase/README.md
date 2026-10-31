@@ -1,4 +1,4 @@
-# Rust UI Showcase
+# Atoll Showcase
 
 One crate, one set of pages, every Dioxus renderer. The pages (Home, Forms, Overlays,
 Settings), their state and their CSS are shared; the only per-target code is the launch call

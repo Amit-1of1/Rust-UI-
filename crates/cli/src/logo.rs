@@ -1,4 +1,4 @@
-//! `rust-ui theme --from-image <logo>`: find the brand colour in a logo (PNG, JPEG or SVG) and
+//! `atoll theme --from-image <logo>`: find the brand colour in a logo (PNG, JPEG or SVG) and
 //! hand it to the same contrast-fitting generator as `--brand`.
 //!
 //! The colours are counted, the logo's background (the colour of its border pixels, or a

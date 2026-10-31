@@ -1,7 +1,7 @@
 # Chips
 
-- Copy into your app: `rust-ui add chips` or `dx components add chips --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
-- Import: `use crate::components::chips::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chips` or `dx components add chips --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::chips::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A row of on/off chips for filters and multi-choice tags. Each chip is a native checkbox inside its label; a check mark appears when it is on.
 

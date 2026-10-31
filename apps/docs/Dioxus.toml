@@ -2,4 +2,4 @@
 name = "docs"
 
 [web.app]
-title = "Rust UI docs"
+title = "Atoll docs"

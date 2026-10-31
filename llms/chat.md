@@ -1,7 +1,7 @@
 # Chat
 
-- Copy into your app: `rust-ui add chat` or `dx components add chat --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
-- Import: `use crate::components::chat::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
+- Copy into your app: `atoll add chat` or `dx components add chat --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
+- Import: `use crate::components::chat::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A conversation view for chat and agent apps: `ChatLog` (the scrolling log), `ChatMessage`
 (one message, named by its author), `StreamingText` (a reply that arrives a piece at a time)
