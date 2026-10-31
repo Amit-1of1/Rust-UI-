@@ -30,14 +30,14 @@
   height: calc(1.15rem - 2px);
   border-radius: 9999px;
   background-color: var(--light, var(--primary-color)) var(--dark, var(--secondary-color-2));
-  transform: translateX(1px);
+  transform: translateX(calc(1px * var(--dx-flip, 1)));
   transition: transform 150ms;
   will-change: transform;
 }
 
 .dx-switch[data-state="checked"] .dx-switch-thumb {
   background-color: var(--light, var(--primary-color)) var(--dark, var(--primary-color-3));
-  transform: translateX(calc(2rem - 1px - (1.15rem - 2px)));
+  transform: translateX(calc((2rem - 1px - (1.15rem - 2px)) * var(--dx-flip, 1)));
 }
 
 /* Only apply disabled styles when data-disabled is "true" */
@@ -54,4 +54,10 @@
   .dx-switch[data-state="checked"] .dx-switch-thumb {
     background-color: Highlight;
   }
+}
+
+/* Right-to-left pages: move the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-switch {
+  --dx-flip: -1;
 }

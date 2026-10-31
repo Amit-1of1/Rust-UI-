@@ -32,7 +32,7 @@
   height: 2px;
   background-color: var(--primary-color-7);
   content: "";
-  transform: translateX(-0.25rem);
+  transform: translateX(calc(-0.25rem * var(--dx-flip, 1)));
 }
 
 .dx-stepper[data-orientation="vertical"] .dx-stepper-item:not(:last-child)::after {
@@ -134,4 +134,10 @@
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
+}
+
+/* Right-to-left pages: slide and offset the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-stepper {
+  --dx-flip: -1;
 }
