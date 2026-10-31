@@ -1,5 +1,7 @@
 [application]
 name = "gallery"
+# Lets the activity survive dark-mode, font-size and locale changes on Android (see the file).
+android_manifest = "android/AndroidManifest.xml"
 
 [web.app]
 title = "Rust UI kit gallery"
