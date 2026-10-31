@@ -1,0 +1,42 @@
+/* Home page (#) and the Founding notes on the pricing page. Theme tokens only. */
+.landing-hero { display: grid; gap: 1rem; justify-items: start; padding-block: 1rem 2rem; }
+.docs-main .landing-hero h1 { margin: 0; font-size: 2.75rem; letter-spacing: -0.02em; }
+.landing-tagline { max-width: 38rem; margin: 0; }
+.landing-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.landing-code {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--primary-color-2);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.landing-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: 1rem 0;
+  border-block: 1px solid var(--primary-color-6);
+  list-style: none;
+}
+.landing-stats li { display: grid; gap: 0.125rem; }
+.landing-stats strong { color: var(--secondary-color-4); font-size: 1.5rem; font-weight: 700; }
+.landing-stats span { color: var(--secondary-color-5); font-size: 0.875rem; }
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.landing-card-text { margin: 0; font-size: 0.9375rem; line-height: 1.55; }
+.landing-tradeoffs { display: grid; gap: 0.75rem; margin: 0; }
+.landing-tradeoffs dt { font-weight: 600; }
+.landing-tradeoffs dd { margin: 0.125rem 0 0; }
+
+.pricing-founding { color: var(--secondary-color-5); }
+.pricing-later { color: var(--secondary-color-5); font-size: 0.875rem; }
+.landing-actions a, .pricing-grid [data-plan] a { text-decoration: none; }
+.landing-code { border: 1px solid var(--primary-color-6); }
+.pricing-card-head { flex-wrap: wrap; align-items: flex-start; }
+.pricing-card-head > :not(:first-child) { flex-shrink: 0; white-space: nowrap; }

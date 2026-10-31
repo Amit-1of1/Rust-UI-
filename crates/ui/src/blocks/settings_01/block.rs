@@ -58,8 +58,8 @@ pub fn Settings01(
     /// Called once the person confirms "Delete account".
     #[props(default)]
     on_delete_account: Callback<()>,
-    /// Set when the page already has a `<main>`, as inside `DashboardShell`; otherwise this
-    /// block is the page's `main` landmark.
+    /// Set when the page already has a `<main>` and an `h1`, as inside `DashboardShell`;
+    /// otherwise this block is the page's `main` landmark with its own "Settings" `h1`.
     #[props(default)]
     embedded: bool,
 ) -> Element {
@@ -77,7 +77,10 @@ pub fn Settings01(
 
     let page = rsx! {
         header { class: Styles::dx_block_settings_header,
-            h1 { class: Styles::dx_block_settings_title, "Settings" }
+            // Embedded, the page around it (DashboardShell) already has the h1.
+            if !embedded {
+                h1 { class: Styles::dx_block_settings_title, "Settings" }
+            }
             p { class: Styles::dx_block_settings_muted, "Manage your profile, emails and appearance." }
         }
         Tabs { default_value: "profile".to_string(), horizontal: true,

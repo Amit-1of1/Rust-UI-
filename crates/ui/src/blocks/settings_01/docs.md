@@ -25,7 +25,7 @@ rsx! {
 - `on_save_profile: Callback<Profile>`: called only with valid fields.
 - `email_prefs: EmailPrefs`, `on_email_prefs: Callback<EmailPrefs>`: called on every switch change.
 - `on_delete_account: Callback<()>`: called after the person confirms.
-- `embedded: bool`: set inside a layout that already has a `main`.
+- `embedded: bool`: set inside a layout that already has a `main` and an `h1` (the block then drops its own "Settings" `h1`).
 
 ## Accessibility
 
