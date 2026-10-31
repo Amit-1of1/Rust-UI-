@@ -1,8 +1,8 @@
 use crate::components::ui_strings::{fill, use_ui_strings};
+use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
-use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/carousel/style.css")]
 struct Styles;
@@ -42,10 +42,7 @@ pub fn Carousel(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
-    let track = use_hook(|| {
-        static NEXT: AtomicU64 = AtomicU64::new(1);
-        format!("dx-carousel-{}", NEXT.fetch_add(1, Ordering::Relaxed))
-    });
+    let track = use_unique_id("dx-carousel");
     let t = use_ui_strings();
     let slides = fill(&t.slides, &[("label", &label)]);
     let mut track_el = use_signal(|| None::<Rc<MountedData>>);
