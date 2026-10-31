@@ -255,3 +255,65 @@ fn every_component_is_listed_in_the_root_manifest() {
         .count();
     assert_eq!(members, components);
 }
+
+#[test]
+fn pro_items_are_marked_by_their_licence_file() {
+    let tmp = tempfile::tempdir().unwrap();
+    let components = tmp.path().join(COMPONENTS_DIR);
+    let blocks = tmp.path().join(BLOCKS_DIR);
+    for (dir, name) in [(&components, "button"), (&blocks, "pricing_02")] {
+        std::fs::create_dir_all(dir.join(name)).unwrap();
+        std::fs::write(dir.join(name).join("mod.rs"), "").unwrap();
+    }
+    std::fs::write(
+        blocks.join("pricing_02/block.rs"),
+        "use crate::components::button::Button;",
+    )
+    .unwrap();
+    std::fs::write(blocks.join("pricing_02").join(PRO_LICENSE_FILE), "licence").unwrap();
+
+    let reg = build(tmp.path()).unwrap();
+    let tiers: Vec<_> = reg
+        .items
+        .iter()
+        .map(|i| (i.name.as_str(), i.tier))
+        .collect();
+    assert_eq!(tiers, [("button", Tier::Free), ("pricing_02", Tier::Pro)]);
+    // Only Pro items carry the field, so the free registry stays as it was.
+    let json = to_json(&reg);
+    assert_eq!(json.matches("\"tier\"").count(), 1, "{json}");
+    assert!(json.contains("\"tier\": \"pro\""));
+    assert_eq!(load_str(&json), reg);
+
+    // `add` copies the licence with the block and names it in its reminder.
+    let items = resolve(&reg, &["pricing_02".into()]).unwrap();
+    let out = tempfile::tempdir().unwrap();
+    add(tmp.path(), &items, &out.path().join("components"), false).unwrap();
+    assert!(out
+        .path()
+        .join("blocks/pricing_02")
+        .join(PRO_LICENSE_FILE)
+        .is_file());
+    let notice = pro_notice(&items).unwrap();
+    assert!(
+        notice.contains("pricing_02") && notice.contains(PRO_LICENSE_FILE),
+        "{notice}"
+    );
+    assert!(!notice.contains("button"), "{notice}");
+}
+
+#[test]
+fn the_public_registry_has_no_pro_items() {
+    // Pro items live in the private Pro repository only (docs/pro/README.md), which marks
+    // itself with a `.rust-ui-pro` file at its root.
+    if repo_root().join(".rust-ui-pro").exists() {
+        return;
+    }
+    let reg = load(&repo_root()).unwrap();
+    assert!(pro_items(&reg.items).is_empty());
+    assert_eq!(pro_notice(&reg.items), None);
+}
+
+fn load_str(json: &str) -> Registry {
+    serde_json::from_str(json).unwrap()
+}
