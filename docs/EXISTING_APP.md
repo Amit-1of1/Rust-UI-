@@ -165,5 +165,6 @@ from; they go to `src/blocks/` and are your code from then on.
 
 - The kit installs from git until the primitives are on crates.io ([PUBLISHING.md](PUBLISHING.md)).
 - Native (Blitz) is a preview: the renderer fixes live on forks ([FORKS.md](FORKS.md)), and
-  Android is not wired up yet (`apps/showcase/README.md`).
+  native Android is not wired up yet. The webview gallery starts on an Android emulator in
+  CI but may not survive its activity being recreated (`apps/showcase/README.md`).
 - 0.x: breaking changes are listed in `CHANGELOG.md` with a migration note for each.
