@@ -1,0 +1,134 @@
+{
+  "note": "Written by BUDGETS_UPDATE=1 node tests/e2e/budgets.mjs. Sizes are brotli KB; startup is ms to ready at 4x CPU slowdown.",
+  "tolerance": {
+    "size": 0.1,
+    "startup": 1
+  },
+  "apps": {
+    "gallery": {
+      "firstKB": 292.4,
+      "firstRequests": 4,
+      "mainWasmKB": 257.8,
+      "totalKB": 1314.9,
+      "startupMs4x": 2982,
+      "files": {
+        "assets/atoll.css": 21.6,
+        "assets/chunk_0_split.wasm": 0.2,
+        "assets/demo.css": 0.3,
+        "assets/focus-trap.js": 0.4,
+        "assets/gallery.css": 1,
+        "assets/gallery.js": 12.1,
+        "assets/gallery_bg.wasm": 257.8,
+        "assets/module_0_LazyBlockPage.wasm": 171.5,
+        "assets/module_1_LazyMoreSections.wasm": 806.5,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    },
+    "site": {
+      "firstKB": 398.9,
+      "firstRequests": 5,
+      "mainWasmKB": 380.3,
+      "totalKB": 441.1,
+      "startupMs4x": 749,
+      "files": {
+        "assets/atoll.css": 6.9,
+        "assets/focus-trap.js": 0.4,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/site.css": 0.8,
+        "assets/site.js": 10.5,
+        "assets/site_bg.wasm": 380.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    },
+    "docs": {
+      "firstKB": 1002,
+      "firstRequests": 6,
+      "mainWasmKB": 967.9,
+      "totalKB": 1045.9,
+      "startupMs4x": 687,
+      "files": {
+        "assets/atoll.css": 21,
+        "assets/demo.css": 0.3,
+        "assets/docs.css": 1,
+        "assets/docs.js": 11.2,
+        "assets/docs_bg.wasm": 967.9,
+        "assets/focus-trap.js": 0.4,
+        "assets/landing.css": 0.5,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    },
+    "dashboard": {
+      "firstKB": 344.6,
+      "firstRequests": 4,
+      "mainWasmKB": 320.3,
+      "totalKB": 791.3,
+      "startupMs4x": 733,
+      "files": {
+        "assets/atoll.css": 12.5,
+        "assets/chunk_0_split.wasm": 0.2,
+        "assets/dashboard.js": 11.1,
+        "assets/dashboard.css": 0.6,
+        "assets/dashboard_bg.wasm": 320.3,
+        "assets/focus-trap.js": 0.4,
+        "assets/module_0_LazySettings.wasm": 84.3,
+        "assets/module_1_LazyOrders.wasm": 158.1,
+        "assets/module_2_LazyPalette.wasm": 20.7,
+        "assets/module_3_LazyCustomers.wasm": 140.7,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    },
+    "booking": {
+      "firstKB": 570.7,
+      "firstRequests": 4,
+      "mainWasmKB": 547.8,
+      "totalKB": 613.4,
+      "startupMs4x": 1047,
+      "files": {
+        "assets/atoll.css": 10.9,
+        "assets/booking.css": 1.3,
+        "assets/booking.js": 10.8,
+        "assets/booking_bg.wasm": 547.8,
+        "assets/focus-trap.js": 0.4,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    },
+    "showcase": {
+      "firstKB": 416,
+      "firstRequests": 4,
+      "mainWasmKB": 395.3,
+      "totalKB": 458.7,
+      "startupMs4x": 508,
+      "files": {
+        "assets/atoll.css": 9.4,
+        "assets/focus-trap.js": 0.4,
+        "assets/reset.css": 0.2,
+        "assets/reset.scoped.css": 0.3,
+        "assets/showcase.js": 10.7,
+        "assets/showcase.css": 0.7,
+        "assets/showcase_bg.wasm": 395.3,
+        "assets/style.css": 1.1,
+        "assets/theme.css": 2.1,
+        "assets/theme.scoped.css": 2.2
+      }
+    }
+  }
+}

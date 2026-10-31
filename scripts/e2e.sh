@@ -72,6 +72,12 @@ G=http://localhost:8765/ S=http://localhost:8767/ D=http://localhost:8769/ A=htt
 B=http://localhost:8773/
 W=http://localhost:8775/
 
+# Size and startup budgets of the release builds (bench/budgets.json). Sizes don't depend on the
+# engine, and the startup measurement needs Chromium's CPU throttling, so it runs in that job.
+if [ "$PROFILE" = release ] && [[ ",$BROWSERS," == *",chromium,"* ]]; then
+  step "size and startup budgets (bench/budgets.json)"; e2e node budgets.mjs
+fi
+
 for engine in ${BROWSERS//,/ }; do
   export BROWSER="$engine"
   printf '\n######## %s\n' "$engine"
