@@ -20,7 +20,7 @@ edition = "2021"
 
 [dependencies]
 # my own comment, kept
-dioxus = { version = "0.7.10", features = ["router"] }
+dioxus = { version = "0.8.0-alpha.3", features = ["router"] }
 serde = "1"
 
 [features]
@@ -93,7 +93,7 @@ fn snapshot(dir: &Path) -> Vec<(PathBuf, String)> {
 fn init_reports_clashes_and_writes_the_scoped_theme() {
     let app = existing_app();
     let out = atoll(app.path(), &["init", "--scoped", "--reset"]);
-    assert!(out.contains("dioxus 0.7.10: supported"), "{out}");
+    assert!(out.contains("dioxus 0.8.0-alpha.3: supported"), "{out}");
     for clash in ["--radius", "--primary-color", "data-theme"] {
         assert!(out.contains(clash), "clash {clash} not reported:\n{out}");
     }
@@ -120,7 +120,7 @@ fn init_warns_about_another_dioxus_line() {
     let app = existing_app();
     let manifest = app.path().join("Cargo.toml");
     let text = fs::read_to_string(&manifest).unwrap();
-    fs::write(&manifest, text.replace("0.7.10", "0.6.3")).unwrap();
+    fs::write(&manifest, text.replace("0.8.0-alpha.3", "0.6.3")).unwrap();
     let out = atoll(app.path(), &["init"]);
     assert!(out.contains("warn: this app is on dioxus 0.6.3"), "{out}");
 }
@@ -158,7 +158,7 @@ fn add_wires_components_into_the_app() {
         }
     }
     assert!(manifest.contains("# my own comment, kept"));
-    assert!(manifest.contains("dioxus = { version = \"0.7.10\", features = [\"router\"] }"));
+    assert!(manifest.contains("dioxus = { version = \"0.8.0-alpha.3\", features = [\"router\"] }"));
     assert!(out.contains("added "), "{out}");
 
     // A second run changes nothing.

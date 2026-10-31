@@ -24,7 +24,7 @@ and the matching CLI: `cargo install dioxus-cli --version 0.8.0-alpha.3 --locked
 |---|---|
 | Dependencies | `dioxus`, `dioxus-sdk-time`, `dioxus-ssr` at `=0.8.0-alpha.3` (an exact pin: alphas break between releases) |
 | Primitives | `Amit-1of1/dioxus-components` branch `claude/project-thread-hgbr1g`: the 0.7 fork (`cda2513`, all the fixes in docs/FORKS.md) ported to 0.8, the same API changes as upstream's `0.8` branch |
-| Motion engine | dioxus-motion has no 0.8 release. Its 0.4.0 is ported (presence code for 0.8's flat templates) and lives in the same fork commit, swapped in with `[patch.crates-io]` until it has a fork of its own |
+| Motion engine | dioxus-motion has no 0.8 release. Its 0.4.0 is ported (presence code for 0.8's flat templates) and lives in the same fork commit, a git dependency of `crates/motion` (so apps need no patch) until it has a fork of its own. Publishing needs a 0.8 release of it, so the `consumer` and `semver` CI jobs fail on this branch |
 | Keys | keyboard-types 0.8: `Key::Escape` is `Key::Named(NamedKey::Escape)` (98 places in the kit, 125 in the primitives) |
 | Event attributes | No free `dioxus_elements::events::onfocus(...)` functions; build lists with `Vec::<Attribute>::new().onfocus(...)` (the focus-return hooks) |
 | Nodes | `VNode::key()` and `template()` are methods; no `DynamicNode::Placeholder` (an empty fragment instead) |
@@ -53,3 +53,6 @@ dx 0.8 downloads esbuild 0.27.3 itself; behind a proxy with its own CA put the b
 - On a new alpha: bump the three pins here and in the fork, rebuild the fork's port.
 - When 0.8 is stable: rebase the primitives port onto the fork's release branch, publish, merge
   this branch, and write the migration note (`render_toast` type, key matching in app code).
+
+`atoll create` writes `dioxus = "=0.8.0-alpha.3"` on this branch, and `atoll init` and `doctor`
+treat 0.8 as the supported line.

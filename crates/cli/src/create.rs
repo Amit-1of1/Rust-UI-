@@ -1,7 +1,7 @@
 //! `atoll create <dir>`: a new Dioxus app that already uses the kit, so the getting-started
 //! guide (docs/GETTING_STARTED.md) is three commands: install the CLI, create, `dx serve`.
 //!
-//! It writes a `Cargo.toml` (Dioxus 0.7 with `web` and `desktop` features, the kit as
+//! It writes a `Cargo.toml` (Dioxus 0.8 with `web` and `desktop` features, the kit as
 //! `ui`), `Dioxus.toml`, `src/main.rs` with a small screen built from kit components,
 //! and a `.gitignore`. It refuses to write into a folder that already has a `Cargo.toml`.
 //! `scripts/getting-started-check.sh` builds what it writes.
@@ -81,8 +81,8 @@ edition = "2021"
 publish = false
 
 [dependencies]
-# The kit supports one Dioxus minor at a time (0.7 now); stay on it.
-dioxus = "0.7.10"
+# The kit supports one Dioxus minor at a time (0.8 alpha on this branch); stay on it.
+dioxus = "=0.8.0-alpha.3"
 {kit}
 
 [features]

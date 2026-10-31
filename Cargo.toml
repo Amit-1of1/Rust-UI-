@@ -38,6 +38,4 @@ debug = 0
 [patch.crates-io]
 # The native renderer forks (Blitz 0.2, dioxus-native-dom 0.7.10) are for Dioxus 0.7; this branch
 # builds the web and desktop targets only (docs/notes/dioxus-0.8.md).
-# dioxus-motion has no Dioxus 0.8 release: 0.4.0 ported to 0.8, kept next to the primitives fork
-# (same repository and commit) until it has a fork of its own.
-dioxus-motion = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "753e824dd5bdf6698f4ded2de731af7e5619170b" }
+# dioxus-motion's 0.8 port is a git dependency of crates/motion (not a patch), so apps get it too.

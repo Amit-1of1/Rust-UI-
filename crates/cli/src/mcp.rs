@@ -438,7 +438,7 @@ impl Server {
     }
 }
 
-const INSTRUCTIONS: &str = "Atoll is a shadcn-style component kit for Dioxus 0.7. Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add.";
+const INSTRUCTIONS: &str = "Atoll is a shadcn-style component kit for Dioxus 0.8 (alpha). Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add.";
 
 fn tools() -> Vec<Value> {
     let read_only = json!({ "readOnlyHint": true, "openWorldHint": false });
