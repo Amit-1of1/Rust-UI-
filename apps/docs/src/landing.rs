@@ -85,7 +85,7 @@ pub fn LandingPage() -> Element {
             li { strong { "{count}" } span { "components, plus page blocks" } }
             li { strong { "3" } span { "browsers checked with axe in CI" } }
             li { strong { "0" } span { "Tailwind build steps" } }
-            li { strong { "MIT / Apache-2.0" } span { "free kit, forever" } }
+            li { strong { "Free" } span { "kit, MIT or Apache-2.0" } }
         }
 
         section { "aria-labelledby": "try-heading",
@@ -138,7 +138,9 @@ pub fn LandingPage() -> Element {
             p {
                 "Shipping a real Dioxus app? Five teams get Pro free for life in return for honest feedback after trying {PRODUCT} on one screen, and a short quote if they like it. Their top missing components get built first."
             }
-            a { href: PARTNER_URL, ..button_look(ButtonVariant::Outline, ButtonSize::Default), "Apply as a design partner" }
+            div { class: "landing-actions",
+                a { href: PARTNER_URL, ..button_look(ButtonVariant::Outline, ButtonSize::Default), "Apply as a design partner" }
+            }
         }
     }
 }

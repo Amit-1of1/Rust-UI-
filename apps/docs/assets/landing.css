@@ -36,3 +36,7 @@
 
 .pricing-founding { color: var(--secondary-color-5); }
 .pricing-later { color: var(--secondary-color-5); font-size: 0.875rem; }
+.landing-actions a, .pricing-grid [data-plan] a { text-decoration: none; }
+.landing-code { border: 1px solid var(--primary-color-6); }
+.pricing-card-head { flex-wrap: wrap; align-items: flex-start; }
+.pricing-card-head > :not(:first-child) { flex-shrink: 0; white-space: nowrap; }
