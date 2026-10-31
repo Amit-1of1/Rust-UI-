@@ -12,12 +12,14 @@ repository = "https://github.com/Amit-1of1/Rust-UI-"
 [workspace.dependencies]
 # Pinned to a minor version on purpose; see docs/GUARDRAILS.md.
 dioxus = "0.7.10"
-# Git-only upstream (DioxusLabs/components, 2026-09-07), used through our fork, pinned to a commit.
-# Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825: upstream DioxusLabs/components
-# 9a75825 plus the no-JavaScript fallbacks and fixes listed in docs/FORKS.md. The newest
-# commit (5b21f56) is on branch claude/project-thread-pet69c until rust-ui/primitives-9a75825
-# is fast-forwarded to it.
-dioxus-primitives = { git = "https://github.com/Amit-1of1/dioxus-components", rev = "5b21f56542274835bb4a0bac85b84212d2cff862" }
+# Upstream DioxusLabs/components primitives are unreleased (crates.io holds an empty 0.0.0
+# placeholder), so we use our fork, published under its own name: `rust-ui-primitives`, library
+# still `dioxus_primitives`. Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825:
+# upstream 9a75825 plus the fixes in docs/FORKS.md and the rename. The newest commit (fd533b7)
+# is on branch claude/project-thread-6c30v9 until rust-ui/primitives-9a75825 is fast-forwarded
+# to it. Cargo builds from `git`; `version` is what a packaged kit depends on. Once
+# `rust-ui-primitives` is on crates.io, delete `git` and `rev` (docs/PUBLISHING.md).
+dioxus-primitives = { package = "rust-ui-primitives", version = "0.1.0", git = "https://github.com/Amit-1of1/dioxus-components", rev = "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b" }
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "rust-ui-kit", version = "0.1.0" }
 motion = { path = "crates/motion", package = "rust-ui-motion", version = "0.1.0" }

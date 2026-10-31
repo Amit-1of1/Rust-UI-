@@ -34,13 +34,14 @@ wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 
 [build-dependencies]
-# build.rs checks every component's contract.toml (crates/cli/src/contract.rs).
-serde = { version = "1", features = ["derive"] }
-toml = "0.8"
+# build.rs checks every component's contract.toml (crates/cli/src/contract.rs), with the
+# `contract-check` feature.
+serde = { version = "1", features = ["derive"], optional = true }
+toml = { version = "0.8", optional = true }
 
 [dev-dependencies]
 # The integration tests walk every demo.
-rust-ui-kit = { path = ".", features = ["demos"] }
+rust-ui-kit = { path = ".", features = ["demos", "contract-check"] }
 dioxus-ssr = "0.7.0"
 proptest = { version = "1", default-features = false, features = ["std"] }
 
@@ -52,6 +53,10 @@ demos = ["blocks"]
 # Whole-screen blocks (`ui::blocks`): copy them with `rust-ui add`, or turn this on to use them
 # in place. Internal (docs/STABILITY.md).
 blocks = []
+# build.rs checks every contract.toml against the CLI's rules (crates/cli/src/contract.rs). Only
+# builds inside this repository, where that file exists: the kit's tests and the apps turn it
+# on. Internal (docs/STABILITY.md).
+contract-check = ["dep:serde", "dep:toml"]
 web = ["dioxus-primitives/web", "motion/web"]
 desktop = ["motion/desktop"]
 # dioxus-native (Blitz). Nothing in the kit needs it any more (docs/NATIVE.md); kept so

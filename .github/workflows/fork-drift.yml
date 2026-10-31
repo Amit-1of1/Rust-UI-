@@ -1,0 +1,35 @@
+name: Fork drift
+
+# Weekly: how far the forks in docs/FORKS.md have fallen behind upstream, and whether our fix
+# commits still replay onto upstream's newest compatible release and default branch
+# (scripts/fork-drift.sh --try-rebase). The report goes to the run summary and to one issue,
+# "Fork drift", updated in place, so a new upstream release or an upstreamed fix shows up
+# without anyone having to look. It pushes nothing; moving a fork stays a reviewed PR.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: scripts/fork-drift.sh --try-rebase
+      - name: File the report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          body="$(cat target/fork-drift/report.md)"
+          number=$(gh issue list -R "$REPO" --state open --search 'in:title "Fork drift"' --json number,title \
+            --jq '[.[] | select(.title == "Fork drift")][0].number // empty')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" -R "$REPO" --body "$body"
+          else
+            gh issue create -R "$REPO" --title "Fork drift" --body "$body"
+          fi
