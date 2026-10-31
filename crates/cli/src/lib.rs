@@ -20,6 +20,7 @@ pub mod doctor;
 pub mod explain;
 pub mod info;
 pub mod llms;
+pub mod logo;
 pub mod manifest;
 pub mod mcp;
 pub mod postbuild;

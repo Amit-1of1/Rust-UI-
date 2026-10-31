@@ -26,6 +26,14 @@ cargo run -p rust-ui-cli -- theme --brand '#7c3aed' --name brand >> assets/theme
 
 The block uses `light-dark()`. Inside this repo, rerun `UPDATE_THEME_CSS=1 cargo test -p rust-ui-kit --test theme` after appending, so the fallback block covers it too. Then set `data-accent="brand"`. The generator keeps your hue and saturation and moves only the lightness, until the label text on the fill reaches 4.5:1 (WCAG AA) in both dark and light mode. A colour that is already readable is kept as is. Check the result against a pasted preset with `cargo test -p rust-ui-kit --test theme`.
 
+### From your logo
+
+```sh
+cargo run -p rust-ui-cli -- theme --from-image logo.svg --name brand >> assets/theme.css
+```
+
+`--from-image` takes a PNG, JPEG or SVG and finds the brand colour in it, then fits it exactly like `--brand`. It counts the logo's colours (for SVG, every `fill`, `stroke` and `stop-color`), leaves out a white, black or grey backdrop (the colour of the image's border, or a full-size first `rect`), and picks the most visible saturated colour: how much of the logo it covers times how colourful it is, so a small orange mark wins over a large grey wordmark. The output starts with a comment listing the colours it found and which one it chose. When the logo has a second, clearly different hue (at least 40 degrees round the colour wheel and 3% of the logo), a second preset named `<name>-2` follows as an alternative; delete the one you don't want. A black-and-white logo gives a neutral accent from its main colour.
+
 ## Radius
 
 `--radius` (default `0.5rem`) rounds every component. The `ThemeCustomizer` component exposes accent, radius and mode as controls.

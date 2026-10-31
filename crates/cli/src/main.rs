@@ -95,11 +95,20 @@ enum Command {
         #[arg(long)]
         theme: Vec<PathBuf>,
     },
-    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour.
+    /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
+    /// the colours of a logo.
     Theme {
         /// Brand colour as hex, e.g. `#7c3aed`.
+        #[arg(
+            long,
+            required_unless_present = "from_image",
+            conflicts_with = "from_image"
+        )]
+        brand: Option<String>,
+        /// A logo (PNG, JPEG or SVG): its most visible saturated colour becomes the brand
+        /// colour, and a clearly different second colour is printed as an alternative preset.
         #[arg(long)]
-        brand: String,
+        from_image: Option<PathBuf>,
         /// Preset name used in `data-accent="..."`.
         #[arg(long, default_value = "brand")]
         name: String,
@@ -397,12 +406,31 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 return Ok(ExitCode::FAILURE);
             }
         }
-        Command::Theme { brand, name } => {
+        Command::Theme {
+            brand,
+            from_image,
+            name,
+        } => {
             use rust_ui_cli::theme::{css, preset, Rgb};
             if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
                 return Err(format!("`{name}` must be letters, digits or `-`"));
             }
-            print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?));
+            match (brand, from_image) {
+                (Some(brand), _) => print!("{}", css(&name, &preset(Rgb::parse(&brand)?)?)),
+                (None, Some(logo)) => {
+                    let palette = rust_ui_cli::logo::read(&logo)?;
+                    print!("{}", rust_ui_cli::logo::summary(&palette));
+                    print!("{}", css(&name, &preset(palette.brand)?));
+                    if let Some(second) = palette.second {
+                        println!(
+                            "\n/* Alternative: the logo's second colour ({}). */",
+                            second.hex()
+                        );
+                        print!("{}", css(&format!("{name}-2"), &preset(second)?));
+                    }
+                }
+                (None, None) => return Err("give --brand or --from-image".into()),
+            }
         }
         Command::Postbuild { public } => {
             use rust_ui_cli::postbuild::{bundle_css, strip_wasm};

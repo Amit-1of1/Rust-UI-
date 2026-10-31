@@ -90,7 +90,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Experimental
 
 - `rust-ui add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
-- `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13.
+- `rust-ui theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned.
 - `rust-ui postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `rust-ui doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
 - `rust-ui acr` and `docs/acr/wcag22.toml`: new on 2026-10-30; rows change as checks are added.
