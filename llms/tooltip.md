@@ -27,6 +27,23 @@ Tooltip {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `tooltip`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the trigger, with the tooltip shown (focus shows it) | Moves focus on and hides the tooltip. | not yet |
+| Escape | While the tooltip is shown | Hides the tooltip; focus stays on the trigger. | yes |
+
+States:
+
+- `shown`: The tooltip text is shown next to the trigger.
+
+Native: On native, Tab from the only focusable element in the demo leaves focus where it is, so the tooltip stays.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

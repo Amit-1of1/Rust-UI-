@@ -4645,12 +4645,29 @@ It is built on the dialog primitive plus the motion layer's vertical `SwipeDismi
 ## Accessibility
 
 - Role and name: a modal `dialog` named by its `title` (a required prop: leaving it out is a compile error; `hide_title` hides it visually) and described by `description` or a `DrawerDescription` child; the handle is decorative (`aria-hidden`).
-- Keyboard: focus is trapped inside; Escape closes; the Close button always works, so dragging is never required.
+- Dragging is never required: the Close button always works, and the keyboard table below covers the rest.
 - Reduced motion: the slide-in is removed and the drag release becomes a near-instant tween.
 
 ## Source
 
 Original to this repo, on `dioxus-primitives` dialog and `crates/motion`. Rust/UI's `drawer.rs` was only used to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the button that opens it | Opens the drawer and moves focus into it. | yes |
+| Tab | Inside the drawer | Moves to the next control; focus stays in the drawer. | yes |
+| Escape | Inside the drawer | Closes the drawer and returns focus to the button that opened it. | yes |
+
+States:
+
+- `open`: The drawer is shown over the page.
+- `closed`: Only the button that opens it is shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -8525,6 +8542,23 @@ SheetClose {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a button that opens it | Opens the sheet and moves focus into it. | yes |
+| Tab | Inside the sheet | Moves to the next control; focus stays in the sheet. | yes |
+| Escape | Inside the sheet | Closes the sheet and returns focus to the button that opened it. | yes |
+
+States:
+
+- `open`: The sheet is shown over the page.
+- `closed`: Only the buttons that open it are shown.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -11383,6 +11417,21 @@ ToggleGroup {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Toolbar (group of toggle buttons)](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/) pattern. Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Space | On a toggle | Turns it on or off (aria-pressed). | yes |
+| Enter | On a toggle | Turns it on or off (aria-pressed). | yes |
+| ArrowRight | On a toggle | Moves focus to the next toggle. | yes |
+| ArrowLeft | On a toggle | Moves focus to the previous toggle. | yes |
+| Home | On a toggle | Moves focus to the first toggle. | yes |
+| End | On a toggle | Moves focus to the last toggle. | yes |
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -11813,6 +11862,23 @@ Tooltip {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `tooltip`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the trigger, with the tooltip shown (focus shows it) | Moves focus on and hides the tooltip. | not yet |
+| Escape | While the tooltip is shown | Hides the tooltip; focus stays on the trigger. | yes |
+
+States:
+
+- `shown`: The tooltip text is shown next to the trigger.
+
+Native: On native, Tab from the only focusable element in the demo leaves focus where it is, so the tooltip stays.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

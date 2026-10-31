@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-31T13:40:45.749Z",
+  "machine": {
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "cores": 4,
+    "memGB": 15.7,
+    "chromium": "153.0.8010.12",
+    "node": "v22.23.4",
+    "note": "headless Chromium in a shared cloud VM; compare ratios between columns, not absolute numbers"
+  },
+  "runs": 7,
+  "targets": {
+    "dioxus": {
+      "load": {
+        "readyMs": 139.7,
+        "readyCpu4xMs": 488,
+        "requests": 7,
+        "raw": 1437636,
+        "gzip": 525647,
+        "brotli": 398934,
+        "gzipByKind": {
+          "html": 610,
+          "css": 9135,
+          "js": 14357,
+          "wasm": 501545
+        }
+      },
+      "ops": {
+        "create 1,000 rows": 96,
+        "replace 1,000 rows": 83.7,
+        "update every 10th row": 20.1,
+        "select a row": 3.5,
+        "swap two rows": 12.9,
+        "remove a row": 19.3,
+        "create 10,000 rows": 734.4,
+        "append 1,000 to 1,000": 128.2,
+        "clear 1,000 rows": 10.8
+      },
+      "app": {
+        "filter1000Ms": 15.5,
+        "sort1000Ms": 13.9,
+        "axeViolations": {
+          "tasks": [],
+          "stats": [],
+          "settings": [],
+          "dialog": []
+        },
+        "axeViolationCount": 0,
+        "keyboard": {
+          "dialogOpensWithEnter": true,
+          "focusMovesIntoDialog": true,
+          "emptyTitleShowsError": true,
+          "titleMarkedInvalid": true,
+          "tabStaysInDialog": true,
+          "escapeCloses": true,
+          "focusReturnsToButton": true,
+          "saveAddsRowAndToast": true,
+          "ctrlKOpensCommandMenu": true,
+          "commandRunsWithEnter": true,
+          "tabsMoveWithArrows": true
+        },
+        "keyboardPassed": 11,
+        "keyboardTotal": 11
+      },
+      "memory": {
+        "browserRssIdleMB": 400.7,
+        "browserRss10kRowsMB": 571,
+        "jsHeapIdleMB": 1.6,
+        "jsHeap10kRowsMB": 3.9
+      }
+    },
+    "react": {
+      "load": {
+        "readyMs": 147.1,
+        "readyCpu4xMs": 492.6,
+        "requests": 3,
+        "raw": 385613,
+        "gzip": 119918,
+        "brotli": 102624,
+        "gzipByKind": {
+          "html": 274,
+          "css": 2486,
+          "js": 117158
+        }
+      },
+      "ops": {
+        "create 1,000 rows": 76.8,
+        "replace 1,000 rows": 85,
+        "update every 10th row": 17.6,
+        "select a row": 5.8,
+        "swap two rows": 62.7,
+        "remove a row": 17.9,
+        "create 10,000 rows": 838.9,
+        "append 1,000 to 1,000": 109.1,
+        "clear 1,000 rows": 12.3
+      },
+      "app": {
+        "filter1000Ms": 14.4,
+        "sort1000Ms": 17.5,
+        "axeViolations": {
+          "tasks": [],
+          "stats": [],
+          "settings": [],
+          "dialog": []
+        },
+        "axeViolationCount": 0,
+        "keyboard": {
+          "dialogOpensWithEnter": true,
+          "focusMovesIntoDialog": true,
+          "emptyTitleShowsError": true,
+          "titleMarkedInvalid": true,
+          "tabStaysInDialog": true,
+          "escapeCloses": true,
+          "focusReturnsToButton": true,
+          "saveAddsRowAndToast": true,
+          "ctrlKOpensCommandMenu": true,
+          "commandRunsWithEnter": true,
+          "tabsMoveWithArrows": true
+        },
+        "keyboardPassed": 11,
+        "keyboardTotal": 11
+      },
+      "memory": {
+        "browserRssIdleMB": 395.1,
+        "browserRss10kRowsMB": 545.2,
+        "jsHeapIdleMB": 1.8,
+        "jsHeap10kRowsMB": 14.9
+      }
+    },
+    "svelte": {
+      "load": {
+        "readyMs": 131.7,
+        "readyCpu4xMs": 463.2,
+        "requests": 3,
+        "raw": 292858,
+        "gzip": 83472,
+        "brotli": 71756,
+        "gzipByKind": {
+          "html": 273,
+          "css": 5118,
+          "js": 78081
+        }
+      },
+      "ops": {
+        "create 1,000 rows": 105.3,
+        "replace 1,000 rows": 94.9,
+        "update every 10th row": 14.7,
+        "select a row": 5.1,
+        "swap two rows": 15.4,
+        "remove a row": 20.3,
+        "create 10,000 rows": 992.4,
+        "append 1,000 to 1,000": 144.3,
+        "clear 1,000 rows": 9.4
+      },
+      "app": {
+        "filter1000Ms": 15.9,
+        "sort1000Ms": 24.1,
+        "axeViolations": {
+          "tasks": [],
+          "stats": [],
+          "settings": [],
+          "dialog": []
+        },
+        "axeViolationCount": 0,
+        "keyboard": {
+          "dialogOpensWithEnter": true,
+          "focusMovesIntoDialog": true,
+          "emptyTitleShowsError": true,
+          "titleMarkedInvalid": true,
+          "tabStaysInDialog": true,
+          "escapeCloses": true,
+          "focusReturnsToButton": true,
+          "saveAddsRowAndToast": true,
+          "ctrlKOpensCommandMenu": true,
+          "commandRunsWithEnter": true,
+          "tabsMoveWithArrows": true
+        },
+        "keyboardPassed": 11,
+        "keyboardTotal": 11
+      },
+      "memory": {
+        "browserRssIdleMB": 393.7,
+        "browserRss10kRowsMB": 542.2,
+        "jsHeapIdleMB": 1.6,
+        "jsHeap10kRowsMB": 21.1
+      }
+    }
+  }
+}

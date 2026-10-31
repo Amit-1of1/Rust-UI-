@@ -13,7 +13,7 @@ cargo install atoll-cli --locked                       # the `atoll` command
 Until the first release is on crates.io, install the CLI from git instead:
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli --locked
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli --locked
 ```
 
 ## 2. Create an app
@@ -89,7 +89,7 @@ Real apps built only from the kit, in the repository's `apps/` folder (run any w
 |---|---|
 | `can't find crate for core` / wasm target missing | `rustup target add wasm32-unknown-unknown` |
 | `dx` says the Dioxus versions differ | Install `dioxus-cli` 0.7.10 (the version in step 1); the app is on Dioxus 0.7. |
-| `no matching package named atoll-ui found` | The release isn't on crates.io yet: recreate with `atoll create my-app --git`, or change the `ui` line in `Cargo.toml` to `ui = { package = "atoll-ui", git = "https://github.com/Amit-1of1/Rust-UI-" }`. |
+| `no matching package named atoll-ui found` | The release isn't on crates.io yet: recreate with `atoll create my-app --git`, or change the `ui` line in `Cargo.toml` to `ui = { package = "atoll-ui", git = "https://github.com/Amit-1of1/Rust-UI-", branch = "main" }`. |
 | Components render unstyled | `ThemeStyles { reset: true }` must be rendered once at the root, and the app built with `dx`, not plain `cargo run` (the stylesheets are `dx` assets). |
 | `atoll create` refuses the folder | It already has a `Cargo.toml`; use `atoll init` and `atoll add` there instead. |
 
