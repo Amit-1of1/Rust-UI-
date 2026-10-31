@@ -96,6 +96,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `rust-ui update [names] [--dry-run]`, the `rust-ui-lock.json` format, the `.rust-ui/base/` folder and the global `--lock`: new on 2026-10-15. `add` writes the lockfile since then.
 - `rust-ui docs [name]` and the generated `llms.txt`, `llms-full.txt` and `llms/<name>.md`: new on 2026-10-15; the page layout may change.
 - `rust-ui mcp` (MCP server over stdio) and its tool names, arguments and replies: new on 2026-10-15.
+- `rust-ui info [--json]` (its JSON fields), `rust-ui skill` and `skills/rust-ui/SKILL.md`: new on 2026-10-30; fields may be added.
 - `rust-ui contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
 
 ### Internal

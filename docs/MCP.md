@@ -96,6 +96,17 @@ Clients that don't start servers in your project need `--project` with an absolu
 
 If the client can't find `rust-ui`, give `command` the full path (`~/.cargo/bin/rust-ui`, expanded).
 
+## Agent skill and `rust-ui info`
+
+MCP gives the agent tools; the skill tells it how to use the kit well. `skills/rust-ui/SKILL.md` is an [Agent Skill](https://agentskills.io): when to use the kit, to read the project with `rust-ui info --json` first, which component fits which need, the accessibility and motion rules, and to update with `rust-ui update` instead of `add --force`. Install it into your app:
+
+```sh
+rust-ui --source https://github.com/Amit-1of1/Rust-UI- skill            # writes .claude/skills/rust-ui/SKILL.md
+rust-ui --source https://github.com/Amit-1of1/Rust-UI- skill --dest .agents/skills/rust-ui/SKILL.md
+```
+
+`rust-ui info` (`--json` for agents) reads only your app: the `dioxus` requirement in Cargo.toml, `assets/theme.css` and its accent presets, every item in `rust-ui-lock.json` with the files you edited, files still holding update conflict markers, and whether the skill and an MCP config are present. `crates/cli/tests/info.rs` covers it, and checks that every component the skill names exists in the registry.
+
 ## Trying it by hand
 
 The server reads one JSON-RPC message per line and answers on stdout:
