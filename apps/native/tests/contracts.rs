@@ -234,6 +234,13 @@ fn contracts_hold_on_native() {
     let only = std::env::var("CONTRACT").ok();
     let contracts = Contract::load_all(&dir).expect("contracts");
     assert!(!contracts.is_empty(), "no contract.toml found");
+    // Some demos start timers (the chat demo streams its reply), which need a Tokio runtime to
+    // register with, as in the windowed shell.
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_time()
+        .build()
+        .expect("runtime");
+    let _rt = rt.enter();
     let mut wrong = Vec::new();
     for c in contracts
         .iter()

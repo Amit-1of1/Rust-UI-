@@ -137,6 +137,27 @@ pub struct UiStrings {
     pub opens_in_new_tab: String,
     // Skip link
     pub skip_to_content: String,
+    // Chat
+    /// The chat log's button when the reader has scrolled up.
+    pub jump_to_latest: String,
+    /// The same button once a message arrived below.
+    pub new_messages: String,
+    /// Typing indicator. `{author}` is who is typing.
+    pub typing: String,
+    /// Announced when a streamed reply ends. `{author}` and `{text}` are filled in.
+    pub message_from: String,
+    /// Read after the composer's name: how to send.
+    pub composer_hint: String,
+    pub send: String,
+    pub stop: String,
+    // Tool calls
+    pub tool_queued: String,
+    pub tool_running: String,
+    pub tool_succeeded: String,
+    pub tool_failed: String,
+    pub tool_needs_approval: String,
+    /// Announced when a tool call fails or needs approval. `{name}` and `{status}`.
+    pub tool_status: String,
     // Number field
     /// The - button's name. `{label}` is the field's name.
     pub decrease: String,
