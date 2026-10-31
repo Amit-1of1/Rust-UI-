@@ -122,8 +122,10 @@ Measured 2026-10-31 on the same 4-core cloud VM, Rust 1.97, dx 0.7.10, with the 
 | `dx serve`: change text or markup inside `rsx!` | **0.8 s** (hot reload, no compile) |
 | `dx serve`: change a component's CSS | **0.8 s** (hot reload, no compile) |
 | `dx serve`: change Rust code outside `rsx!` literals | 62 s (full rebuild, then reload) |
+| `dx serve --hot-patch`: the same Rust change, gallery app crate | **4.2 s** (patched in, no reload; [`hot-patch.mjs`](hot-patch.mjs)) |
+| `dx serve --hot-patch`: a Rust change in an `atoll create` starter | **0.87 s** (15.6 s without `--hot-patch`) |
 
-So markup and styling iterate as fast as a JS dev server, and Rust logic changes cost about 20 s with `cargo build` (about a minute through `dx serve` on this machine, which also runs wasm-bindgen and asset processing). `dx serve --hot-patch` (Dioxus' Subsecond patching of Rust code) failed on the gallery with "Failed to emit module: failed to parse import section", so it is not counted here. A JS framework rebuilds a one-line change in about 1 to 3.5 s ("The real app" above).
+So markup and styling iterate as fast as a JS dev server, and Rust logic changes cost about 20 s with `cargo build` (about a minute through `dx serve` on this machine, which also runs wasm-bindgen and asset processing). `dx serve --hot-patch` (Dioxus' Subsecond patching of Rust code) failed on the gallery with "Failed to emit module: failed to parse import section" until the dx fork fixed it (2026-10-31, [docs/notes/hot-patch.md](../docs/notes/hot-patch.md)); with `dx` from `scripts/install-dx.sh` a Rust edit in the gallery's app crate shows in 4.2 s, and in a starter-sized crate in 0.87 s. In a later run with the same dx, plain `dx serve` took 42 s for the first Rust edit and about 15 s after that. A JS framework rebuilds a one-line change in about 1 to 3.5 s ("The real app" above).
 
 ### Memory
 

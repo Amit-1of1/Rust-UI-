@@ -30,7 +30,13 @@ dx serve            # http://localhost:8080
 atoll create my-app --git --tag v0.1.0
 ```
 
-The first `dx serve` compiles Dioxus and the kit, which takes a few minutes on a cold machine; after that a save reloads the page in a second or two.
+The first `dx serve` compiles Dioxus and the kit, which takes a few minutes on a cold machine. After that, a change to text, markup or CSS shows in under a second (hot reload), and a change to Rust code rebuilds and reloads the page (about 15 s on a 4-core machine). To get Rust changes in under a second too, without a reload, use hot-patching with the `dx` from this repository (the released 0.7.10 can't hot-patch apps built with current wasm-bindgen; [why](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/notes/hot-patch.md)):
+
+```sh
+# the line in scripts/install-dx.sh: dx 0.7.10 plus the hot-patch fixes
+cargo install --git https://github.com/Amit-1of1/dioxus --rev 5ab24501d5a3a6ebf66a04cf099ce5cbbf5b96a9 dioxus-cli --locked
+dx serve --hot-patch
+```
 
 ## 3. Build something
 

@@ -31,7 +31,7 @@ blitz-traits|0.2.0|DioxusLabs/blitz|0a77560e59440d3c6b5f14b673b9c722a08a3d4c|Ami
 blitz-net|0.2.1|DioxusLabs/blitz|0a77560e59440d3c6b5f14b673b9c722a08a3d4c|Amit-1of1/blitz|packages/blitz-net
 blitz-paint|0.2.1|DioxusLabs/blitz|a1af09c0ce99e488f093743c450e9d3678d7c202|Amit-1of1/blitz|packages/blitz-paint
 dioxus-native-dom|0.7.10|DioxusLabs/dioxus|57d6794ad60b949e5bd8aa282f6f8c3dc97a365e|Amit-1of1/dioxus|packages/native-dom
-dioxus-cli|0.7.10|DioxusLabs/dioxus|57d6794ad60b949e5bd8aa282f6f8c3dc97a365e|Amit-1of1/dioxus|packages/wasm-split
+dioxus-cli|0.7.10|DioxusLabs/dioxus|57d6794ad60b949e5bd8aa282f6f8c3dc97a365e|Amit-1of1/dioxus|packages
 dioxus-primitives|git|DioxusLabs/components|9a758255ea26e2b20c8cecf4c1c946feb9e71da7|Amit-1of1/dioxus-components|primitives
 "
 

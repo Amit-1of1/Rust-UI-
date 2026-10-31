@@ -57,9 +57,11 @@ Markup and CSS are fast; Rust logic is not. Measured 2026-10-31 on a 4-core clou
 | A component's CSS, under `dx serve` | 0.8 s (hot reload, no compile) |
 | Rust code, incremental `cargo build` (wasm, dev) | 19 s |
 | Rust code, through `dx serve` (rebuild, bind, reload) | 62 s |
+| Rust code, `dx serve --hot-patch`, `atoll create` starter app | 0.87 s (no rebuild, no reload) |
+| Rust code, `dx serve --hot-patch`, gallery app crate | 4.2 s |
 | First build of a fresh checkout (dev) | 125 s |
 
-A Vite app rebuilds a one-line change in 1 to 3.5 s, so for logic-heavy work Rust is slower by an order of magnitude. Keeping logic in small crates and doing layout and styling under `dx serve` keeps most edits on the fast path. Dioxus' `--hot-patch` mode, which patches Rust code without a rebuild, did not work with the gallery when we tried it.
+A Vite app rebuilds a one-line change in 1 to 3.5 s, so for logic-heavy work Rust is slower by an order of magnitude. Keeping logic in small crates and doing layout and styling under `dx serve` keeps most edits on the fast path. Dioxus' `--hot-patch` mode patches Rust code into the running page without a rebuild: under a second for a starter-sized crate, about 4 s for the gallery's big app crate (the time follows the size of the crate you edit). It needs `dx` from `scripts/install-dx.sh`, which carries the fixes that made it work with the kit ([notes/hot-patch.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/notes/hot-patch.md)).
 
 ## Is "accessible" a claim or a test?
 
