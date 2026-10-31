@@ -88,6 +88,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 
 - The commands `list`, `init`, `add` and `diff` with their flags (`--dest`, `--force`), and the global `--source` / `RUST_UI_SOURCE`.
 - The `registry.json` format these commands read. Items with `"kind": "block"` (added 2026-10-15) keep their files under `crates/ui/src/blocks`; a CLI from before then can't install them, but reads everything else as before.
+- Items with `"tier": "pro"` (added 2026-10-30) are Pro items from a private registry ([pro/README.md](pro/README.md)); older CLIs ignore the field and install them like any other item. The public registry has none.
 
 ### Experimental
 

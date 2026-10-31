@@ -73,9 +73,36 @@ const BASE_KEYS: &[&str] = &[
 ];
 
 /// (demo, invariant, shortest sequence that breaks it, why). Each must still reproduce.
-/// Empty since overlays return focus to their opener through element handles
-/// (`hooks::ReturnFocus`), which also works without a script.
-const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[];
+/// The overlays are gone from this list: they return focus to their opener through element
+/// handles (`hooks::ReturnFocus`), which also works without a script.
+const KNOWN: &[(&str, Invariant, &[&str], &str)] = &[
+    (
+        "dropdown_menu",
+        Invariant::FocusLost,
+        &["Enter", "ArrowDown", "Space"],
+        MENU,
+    ),
+    (
+        "menubar",
+        Invariant::FocusLost,
+        &["ArrowDown", "Escape"],
+        MENU,
+    ),
+    ("select", Invariant::FocusLost, &["Enter", "Escape"], MENU),
+    (
+        "sidebar",
+        Invariant::FocusLost,
+        &["Space", "ArrowUp", "Escape"],
+        MENU,
+    ),
+];
+
+/// The kit returns focus to the trigger on the web (web-sys, see `refocus_within` in each
+/// component). On native that needs the trigger's `MountedData`, i.e. an `onmounted` on it,
+/// which would replace the primitive's own (`merge_attributes` keeps one listener per name).
+/// Fixable in the primitives fork: the primitive already holds the trigger's element.
+const MENU: &str =
+    "closing a menu or list from the keyboard leaves focus on the removed item on native";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Invariant {

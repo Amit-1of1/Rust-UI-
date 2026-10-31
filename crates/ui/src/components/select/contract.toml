@@ -65,7 +65,7 @@ focused option@4
 [[keys]]
 key = "Enter"
 when = "On an option"
-does = "Picks the option, closes the list, shows the value on the trigger and returns focus to it."
+does = "Picks the option, closes the list and shows the value on the trigger."
 native = true
 test = """
 focus trigger
@@ -74,13 +74,25 @@ press ArrowDown*2
 press Enter
 state closed
 text trigger Banana
+"""
+
+[[keys]]
+key = "Enter"
+when = "After picking an option"
+does = "Focus goes back to the trigger."
+native = false
+test = """
+focus trigger
+press Enter
+press ArrowDown*2
+press Enter
 focused trigger
 """
 
 [[keys]]
 key = "Escape"
 when = "In the open list"
-does = "Closes the list without changing the value and returns focus to the trigger."
+does = "Closes the list without changing the value."
 native = true
 test = """
 focus trigger
@@ -88,5 +100,17 @@ press Enter
 press ArrowDown
 press Escape
 state closed
+"""
+
+[[keys]]
+key = "Escape"
+when = "After the list closes"
+does = "Focus goes back to the trigger."
+native = false
+test = """
+focus trigger
+press Enter
+press ArrowDown
+press Escape
 focused trigger
 """

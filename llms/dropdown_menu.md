@@ -34,7 +34,7 @@ DropdownMenu {
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): yes.
+Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
@@ -42,7 +42,7 @@ Follows the WAI-ARIA [Menu Button](https://www.w3.org/WAI/ARIA/apg/patterns/menu
 | Space | On the trigger | Opens the menu, as Enter does. | yes |
 | ArrowDown | In the open menu | Moves focus to the first item, then to the next one. | yes |
 | ArrowUp | In the open menu | Moves focus to the previous item, wrapping from the first to the last. | yes |
-| Enter | On an item | Chooses the item, closes the menu and returns focus to the trigger. | yes |
+| Enter | On an item | Chooses the item, closes the menu and returns focus to the trigger. | not yet |
 | Escape | In the open menu | Closes the menu and returns focus to the trigger. | yes |
 
 States:

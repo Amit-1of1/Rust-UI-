@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 use rust_ui_cli::update::{self, Lock};
 use rust_ui_cli::{
-    add_to, build, compare, load, materialize, mod_lines_of, resolve, to_json, FileState, Kind,
-    THEME_FILE,
+    add_to, build, compare, load, materialize, mod_lines_of, pro_notice, resolve, to_json,
+    FileState, Kind, Tier, THEME_FILE,
 };
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -26,7 +26,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
-    /// List every component and block in the registry.
+    /// List every component and block in the registry (Pro items are marked).
     List,
     /// Regenerate registry.json from the component folders (`--check` only verifies it).
     Registry {
@@ -168,9 +168,17 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
     match cli.command {
         Command::List => {
             for item in load(root)?.items {
-                match item.kind {
-                    Kind::Component => println!("{}", item.name),
-                    Kind::Block => println!("{} (block)", item.name),
+                let mut tags = Vec::new();
+                if item.kind == Kind::Block {
+                    tags.push("block");
+                }
+                if item.tier == Tier::Pro {
+                    tags.push("pro");
+                }
+                if tags.is_empty() {
+                    println!("{}", item.name);
+                } else {
+                    println!("{} ({})", item.name, tags.join(", "));
                 }
             }
         }
@@ -240,6 +248,9 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 }
             } else {
                 wire(root, &app, &items, &dest, &blocks_dest)?;
+            }
+            if let Some(notice) = pro_notice(&items) {
+                println!("\n{notice}");
             }
         }
         Command::New { name } => {
