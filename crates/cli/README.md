@@ -18,6 +18,8 @@ rust-ui update             # apply it, merging your edits (three-way, with confl
 
 `rust-ui mcp` is a Model Context Protocol server (stdio) for AI coding tools: they can list, search and read components and add them to the project. Client setup is in [docs/MCP.md](../../docs/MCP.md).
 
+`rust-ui info` (`--json` for agents) describes the app: Dioxus version, theme, installed items and which of them you edited. `rust-ui skill` installs the kit's agent skill into `.claude/skills/rust-ui/`; see [docs/MCP.md](../../docs/MCP.md#agent-skill-and-rust-ui-info).
+
 `rust-ui acr [names] --product <name> --out acr.md` writes a draft Accessibility Conformance Report (the VPAT 2.5 WCAG 2.2 layout) for the components your app uses (the lockfile's items by default), from the kit's tests and keyboard contracts, with every row the app must still check marked *review*. See [docs/ACR.md](../../docs/ACR.md).
 
 `--source` is a local checkout or a git URL (shallow-cloned into `~/.cache/rust-ui` and fast-forwarded on later runs; needs `git` on PATH). Set `RUST_UI_SOURCE` to avoid repeating it. `add` keeps files you have edited unless you pass `--force`, and prints the `pub mod` lines for your `components/mod.rs`. It also records what it copied in `rust-ui-lock.json` and `.rust-ui/base/` (commit both), which `update` merges against; see [docs/INSTALL.md](../../docs/INSTALL.md#updating-copied-components).
