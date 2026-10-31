@@ -64,6 +64,19 @@ A failed submit focuses the range picker's group, which is read with its label a
 
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
 
+Fields that come and go while the form is open (invoice line items, extra email addresses) can't be hooks. Create them with `form.add_field(initial, rules)` from an event handler, keep them in your own signal, and drop them with `form.remove_field(field)`; the form validates them with the others and focuses the first invalid one on submit:
+
+```rust
+let mut lines = use_signal(Vec::<FormField>::new);
+rsx! {
+    for (i, line) in lines().into_iter().enumerate() {
+        TextField { key: "{line.ids().control}", field: line, label: format!("Item {}", i + 1) }
+        Button { r#type: "button", onclick: move |_| { form.remove_field(line); lines.write().retain(|l| *l != line); }, "Remove" }
+    }
+    Button { r#type: "button", onclick: move |_| lines.push(form.add_field("", vec![required()])), "Add item" }
+}
+```
+
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
 ## Derive a form from a struct

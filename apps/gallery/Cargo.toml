@@ -18,6 +18,8 @@ web-sys = { version = "0.3", features = ["Window", "Location"] }
 default = ["web"]
 web = ["dioxus/web", "ui/web"]
 desktop = ["dioxus/desktop", "ui/desktop"]
+# Android and iOS in the system webview (what `dx build --platform android` builds).
+mobile = ["dioxus/mobile", "ui/desktop"]
 native = ["dioxus/native", "ui/native"]
 # Release builds split the wasm (scripts/release-web.sh turns this on): see src/main.rs for
 # what loads later.

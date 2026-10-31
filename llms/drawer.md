@@ -1,6 +1,6 @@
 # Drawer
 
-- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `rust-ui add drawer` or `dx components add drawer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::drawer::*;` after copying, or `use ui::prelude::*;` with the `rust-ui-kit` crate.
 
 A panel that slides up from the bottom and can be dragged down to dismiss.

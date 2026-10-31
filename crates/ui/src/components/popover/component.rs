@@ -3,6 +3,7 @@ use dioxus_primitives::popover::{
     self, PopoverContentProps, PopoverRootProps, PopoverTriggerProps,
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
+use crate::components::hooks::{use_focus_opener, use_return_focus, ReturnFocus};
 
 #[css_module("/src/components/popover/style.css")]
 struct Styles;
@@ -31,7 +32,8 @@ pub fn PopoverTrigger(props: PopoverTriggerProps) -> Element {
     let base = attributes!(button {
         class: Styles::dx_popover_trigger
     });
-    let merged = merge_attributes(vec![base, props.attributes]);
+    let opener = use_focus_opener();
+    let merged = merge_attributes(vec![base, opener, props.attributes]);
 
     rsx! {
         popover::PopoverTrigger { attributes: merged, {props.children} }
@@ -45,6 +47,8 @@ pub fn PopoverContent(props: PopoverContentProps) -> Element {
     } else {
         Styles::dx_popover_content.to_string()
     };
+    let (inside, return_focus) = use_return_focus();
+    let attributes = merge_attributes(vec![return_focus, props.attributes]);
 
     rsx! {
         popover::PopoverContent {
@@ -52,8 +56,9 @@ pub fn PopoverContent(props: PopoverContentProps) -> Element {
             id: props.id,
             side: props.side,
             align: props.align,
-            attributes: props.attributes,
+            attributes,
             {props.children}
+            ReturnFocus { inside: Some(inside) }
         }
     }
 }

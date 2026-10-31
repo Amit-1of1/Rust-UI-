@@ -257,6 +257,48 @@ impl FormState {
         })
     }
 
+    /// Add a field while the form is open: a new line item, another email address. Unlike
+    /// [`field`](Self::field) this is not a hook, so call it from an event handler (or once,
+    /// inside `use_hook`, for the rows a form starts with) and keep the returned fields in
+    /// your own signal. The form validates it with the others and focuses it on a failed
+    /// submit. Take it out again with [`remove_field`](Self::remove_field).
+    ///
+    /// ```rust,ignore
+    /// let mut lines = use_signal(Vec::<FormField>::new);
+    /// Button { onclick: move |_| lines.push(form.add_field("", vec![required()])), "Add line" }
+    /// for (i, line) in lines().into_iter().enumerate() {
+    ///     TextField { key: "{line.ids().control}", field: line, label: format!("Line {}", i + 1) }
+    /// }
+    /// ```
+    pub fn add_field(&self, initial: impl Into<String>, validators: Vec<Validator>) -> FormField {
+        let base = crate::components::hooks::next_unique_id("dx-field");
+        let ids = FieldIds {
+            control: base.clone(),
+            description: format!("{base}-description"),
+            error: format!("{base}-error"),
+        };
+        let initial = initial.into();
+        let field = FormField {
+            value: Signal::new(initial.clone()),
+            initial: Signal::new(initial),
+            error: Signal::new(None),
+            touched: Signal::new(false),
+            ids: Signal::new(ids),
+            validators: Signal::new(validators.into_iter().map(ValidatorBox).collect()),
+            element: Signal::new(None),
+        };
+        let mut fields = self.fields;
+        fields.write().push(field);
+        field
+    }
+
+    /// Stop validating a field added with [`add_field`](Self::add_field) (the line item was
+    /// deleted). Fields declared with [`field`](Self::field) can be removed too.
+    pub fn remove_field(&self, field: FormField) {
+        let mut fields = self.fields;
+        fields.write().retain(|f| *f != field);
+    }
+
     /// Validate every field. Returns `true` when all are valid.
     pub fn validate_all(&self) -> bool {
         let fields = self.fields.peek().clone();

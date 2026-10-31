@@ -1,7 +1,7 @@
+use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
 use dioxus_primitives::tabs::{self, TabContentProps, TabListProps, TabTriggerProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[css_module("/src/components/tabs/style.css")]
 struct Styles;
@@ -83,13 +83,8 @@ impl TabIds {
 
 #[component]
 pub fn Tabs(props: TabsProps) -> Element {
-    static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
-    use_context_provider(|| {
-        TabIds(format!(
-            "rui-tabs-{}",
-            NEXT_ID.fetch_add(1, Ordering::Relaxed)
-        ))
-    });
+    let id = use_unique_id("rui-tabs");
+    use_context_provider(|| TabIds(id));
 
     let base = attributes!(div {
         class: format!("{} {}", props.class, Styles::dx_tabs),

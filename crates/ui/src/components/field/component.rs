@@ -1,6 +1,6 @@
+use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
-use std::sync::atomic::{AtomicU64, Ordering};
 
 #[css_module("/src/components/field/style.css")]
 struct Styles;
@@ -27,14 +27,11 @@ impl FieldIds {
 
 /// Stable, unique ids for one field.
 pub fn use_field_ids() -> FieldIds {
-    static NEXT: AtomicU64 = AtomicU64::new(1);
-    use_hook(|| {
-        let n = NEXT.fetch_add(1, Ordering::Relaxed);
-        FieldIds {
-            control: format!("dx-field-{n}"),
-            description: format!("dx-field-{n}-description"),
-            error: format!("dx-field-{n}-error"),
-        }
+    let base = use_unique_id("dx-field");
+    use_hook(|| FieldIds {
+        control: base.clone(),
+        description: format!("{base}-description"),
+        error: format!("{base}-error"),
     })
 }
 

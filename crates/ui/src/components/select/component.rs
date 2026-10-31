@@ -1,9 +1,9 @@
 use crate::components::icons::{Check, ChevronDown};
 use dioxus::dioxus_core::AttributeValue;
+use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
 use dioxus_primitives::select::{self, SelectGroupLabelProps, SelectMultiProps, SelectOptionProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
 pub use dioxus_primitives::select::SelectGroup;
@@ -38,12 +38,8 @@ struct TriggerName {
 const TRIGGER_ATTRIBUTES: [&str; 3] = ["aria-describedby", "aria-invalid", "aria-required"];
 
 fn use_trigger_name(attributes: Vec<Attribute>) -> TriggerName {
-    static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
-    let id = use_hook(|| NEXT_ID.fetch_add(1, Ordering::Relaxed));
-    let (trigger_id, label_id) = (
-        format!("rui-select-{id}-trigger"),
-        format!("rui-select-{id}-label"),
-    );
+    let id = use_unique_id("rui-select");
+    let (trigger_id, label_id) = (format!("{id}-trigger"), format!("{id}-label"));
     let mut label = None;
     let mut by = None;
     let mut id = None;

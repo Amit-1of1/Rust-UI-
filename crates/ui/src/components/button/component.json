@@ -7,7 +7,12 @@
       "rev": "fd533b7a5edc2334ddb5c30bdfa669de3eb5ab1b"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "The button element is used to trigger actions or events in a user interface.",
   "exclude": [
     "docs.md",
