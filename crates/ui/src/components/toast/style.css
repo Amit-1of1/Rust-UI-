@@ -43,6 +43,7 @@
     calc(100% - var(--toast-index) * 5%),
     calc(100% - var(--toast-index) * 2%)
   );
+  /* atoll-motion: layout margin-top (the stack spreads out on hover and focus, and the container grows with it) */
   transition: transform 0.2s ease, margin-top 0.2s ease, opacity 0.2s ease;
 
   --toast-hidden: calc(min(max(0, var(--toast-index) - 2), 1));

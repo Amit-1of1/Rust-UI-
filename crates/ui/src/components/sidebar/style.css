@@ -51,6 +51,7 @@
   position: relative;
   width: var(--dx-sidebar-width);
   background: transparent;
+  /* atoll-motion: layout width (the gap is what makes room for the sidebar as it opens and collapses) */
   transition: width 200ms ease-out;
 }
 
@@ -81,6 +82,7 @@
   width: var(--dx-sidebar-width);
   height: 100svh;
   box-sizing: border-box;
+  /* atoll-motion: layout left right width (the sidebar itself changes width when it collapses to icons) */
   transition: left 200ms ease-out, right 200ms ease-out, width 200ms ease-out;
 }
 
@@ -201,7 +203,7 @@
   background: transparent;
   cursor: ew-resize;
   transform: translateX(calc(-50% * var(--dx-flip, 1)));
-  transition: all 200ms ease-out;
+  transition: transform 200ms ease-out;
 }
 
 @media (width >=640px) {
@@ -342,6 +344,7 @@
   font-weight: 500;
   opacity: 0.7;
   outline: none;
+  /* atoll-motion: layout margin (the label gives its space back when the sidebar collapses to icons) */
   transition: margin 200ms ease-out, opacity 200ms ease-out;
 }
 
@@ -510,6 +513,7 @@
   outline: none;
   text-align: start;
   text-decoration: none;
+  /* atoll-motion: layout width height padding (menu buttons shrink to icon size when the sidebar collapses) */
   transition: width 200ms ease-out, height 200ms ease-out, padding 200ms ease-out;
 }
 
@@ -771,6 +775,7 @@
   gap: 0.25rem;
   list-style: none;
   transform: translateX(1px);
+  /* atoll-motion: layout max-height padding margin (sub-menus fold away, giving their space back) */
   transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, margin 200ms ease-out, visibility 0ms 0ms;
 }
 
@@ -781,6 +786,7 @@
   margin: 0;
   opacity: 0;
   pointer-events: none;
+  /* atoll-motion: layout max-height padding margin (sub-menus fold away, giving their space back) */
   transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, margin 200ms ease-out, visibility 0ms 200ms;
   visibility: hidden;
 }

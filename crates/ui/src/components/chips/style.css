@@ -59,6 +59,7 @@
   display: inline-flex;
   overflow: hidden;
   width: 0;
+  /* atoll-motion: layout width (the chip grows to make room for its check mark) */
   transition: width 150ms var(--spring-snappy, ease-out);
 }
 
