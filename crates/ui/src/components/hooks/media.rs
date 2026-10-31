@@ -13,11 +13,27 @@ pub const MOBILE_QUERY: &str = "(max-width: 767px)";
 ///
 /// Web only: a Rust (web-sys) listener on the `MediaQueryList`, removed when the component
 /// unmounts. On desktop and native, and during server rendering, it is always `false`, so
-/// make `false` the layout that works everywhere.
+/// make `false` the layout that works everywhere. In fullstack apps the browser also starts
+/// from `false`, matching the server's HTML, and switches to the real value right after
+/// hydration.
 pub fn use_media_query(query: &'static str) -> ReadSignal<bool> {
     #[cfg(all(target_arch = "wasm32", feature = "web"))]
     {
-        let matches = use_signal(|| web::matches(query));
+        // A server-rendered page was rendered with `false`; hydrating with the browser's
+        // value would build different markup than the HTML on the page. So in fullstack
+        // apps start from `false` and read the real value once hydration is done.
+        #[allow(unused_mut)]
+        let mut hydrating = false;
+        fullstack! { hydrating = true; }
+        let mut matches = use_signal(|| !hydrating && web::matches(query));
+        if hydrating {
+            use_effect(move || {
+                let now = web::matches(query);
+                if *matches.peek() != now {
+                    matches.set(now);
+                }
+            });
+        }
         let listener = use_hook(move || web::listen(query, matches));
         use_drop(move || web::unlisten(&listener));
         matches.into()

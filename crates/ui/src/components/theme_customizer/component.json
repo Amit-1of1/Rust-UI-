@@ -1,5 +1,18 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget",
+        "Storage"
+      ],
+      "name": "web-sys",
+      "version": "0.3"
+    }
+  ],
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",

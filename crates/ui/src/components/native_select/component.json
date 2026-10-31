@@ -1,0 +1,29 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "atoll-primitives",
+      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "input"
+    }
+  ],
+  "description": "The browser's own `<select>`, styled like `Input`. Choose it over `Select` on phones (the OS picker), in long forms, for long option lists, and in server-rendered pages, where it works before the app has loaded. Use `Select` when the open list needs custom styling.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "native_select"
+}

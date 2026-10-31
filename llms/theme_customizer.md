@@ -22,6 +22,19 @@ rsx! {
 
 `mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
 
+## Remember the theme between visits
+
+`PersistTheme {}` saves `use_theme()`'s choices in `localStorage` (key `"theme"`, or `storage_key`) and restores them on the next visit. Render it once next to `ThemeStyles {}`. It restores after the first render, so it is safe in fullstack apps. To avoid a light flash for a returning dark-mode user while the app loads, also put `THEME_INIT_SCRIPT` in the page `<head>`: in a fullstack app `document::Script { {THEME_INIT_SCRIPT} }` (the server renders it into the HTML), in a client-only app paste it into a `<script>` in your `index.html`. It is your app's script, opt in, and only sets known values.
+
+```rust
+rsx! {
+    ThemeStyles {}
+    PersistTheme {}
+    document::Script { {THEME_INIT_SCRIPT} }
+    Router::<Route> {}
+}
+```
+
 ## Native (no JavaScript)
 
 dioxus-native can't run the script that writes to `<html>`. Wrap the app in `ThemeScope { ... }` there: it applies the same choices to everything inside it, and doesn't change layout (`display: contents`). On the web and desktop it is harmless.
@@ -120,6 +133,45 @@ pub const DENSITIES: [&str; 3];
 /// state is the shared [`use_theme`], so app controls (a header dark-mode switch) stay in step.
 #[component]
 pub fn ThemeCustomizer() -> Element
+
+/// Saves [`use_theme`]'s choices (mode, accent, density, radius) in the browser's
+/// `localStorage` under `storage_key` (default `"theme"`), and restores them on the next visit. Render it once, next to
+/// `ThemeStyles {}`:
+///
+/// ```rust,ignore
+/// rsx! { ThemeStyles {} PersistTheme {} Router::<Route> {} }
+/// ```
+///
+/// The saved value is restored right after the first render, so it is safe in a fullstack
+/// app (the server has no `localStorage`). Until then the page shows the default theme; to
+/// avoid that flash, also put [`THEME_INIT_SCRIPT`] in the page's `<head>`.
+///
+/// Web only (a Rust `web-sys` call, no JavaScript of the kit's); elsewhere it does nothing.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn PersistTheme(
+    /// The `localStorage` key. Change it when two apps share an origin.
+    #[props(into, default = "theme".to_string())]
+    storage_key: String,
+) -> Element
+
+/// `mode=dark;accent=blue;density=compact;radius=12` (radius only when it isn't the default).
+pub fn encode_theme(theme: &Theme) -> String
+
+/// Applies a value written by [`encode_theme`]. The stored text is user-controlled, so every part
+/// is checked against the known values and anything else is ignored.
+pub fn apply_saved_theme(theme: &Theme, saved: &str)
+
+/// A small script for the page's `<head>` that applies the saved theme before the first
+/// paint, so a returning dark-mode user never sees a white page while the app loads. It
+/// reads the `theme` key that [`PersistTheme`] writes and only sets known values.
+///
+/// This is the app's own script, opt in: put it in your `index.html`, or render it in a
+/// fullstack app with `document::Script { {THEME_INIT_SCRIPT} }`.
+pub const THEME_INIT_SCRIPT: &str;
 ```
 
 ## Example

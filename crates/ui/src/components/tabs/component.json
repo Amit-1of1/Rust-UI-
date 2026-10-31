@@ -7,7 +7,12 @@
       "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content.",
   "exclude": [
     "docs.md",

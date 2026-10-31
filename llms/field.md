@@ -1,6 +1,6 @@
 # Field
 
-- Copy into your app: `atoll add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::field::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Wires a label, description and error to a control with matching ids. `use_field_ids()` returns the ids; for most forms use `TextField` from `form`.

@@ -7,7 +7,12 @@
       "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "Wires a label, description and error to a control with matching ids. `use_field_ids()` returns the ids; for most forms use `TextField` from `form`.",
   "exclude": [
     "docs.md",

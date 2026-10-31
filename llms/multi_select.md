@@ -1,6 +1,6 @@
 # MultiSelect
 
-- Copy into your app: `atoll add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `atoll add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::multi_select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Pick several options from a list.

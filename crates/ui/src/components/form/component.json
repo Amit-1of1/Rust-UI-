@@ -30,6 +30,10 @@
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "input"
     },
     {

@@ -75,12 +75,14 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
+- [NativeSelect](llms/native_select.md): The browser's own `<select>`, styled like `Input`
 - [Navbar](llms/navbar.md): The Navbar component can be used to display a navigation bar with collapsible sections
 - [NumberField](llms/number_field.md): `NumberInput` is a number with - and + buttons, for counts and amounts (guests, quantity, nights)
 - [Pagination](llms/pagination.md): The pagination component provides navigational controls for paged content
 - [Popover](llms/popover.md): The Popover primitive provides an interactive modal that is positioned relative to the target element
 - [Progress](llms/progress.md): The Progress component is used to display the progress of a task or operation
 - [Radio group](llms/radio_group.md): The RadioGroup component is used to create a group of radio buttons that allows the user to select one option from a set
+- [Resizable](llms/resizable.md): Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys
 - [Scroll area](llms/scroll_area.md): The ScrollArea component is used to create a scrollable container for its children
 - [Select](llms/select.md): The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups
 - [Separator](llms/separator.md): The Separator component is a simple horizontal or vertical line that can be used to visually separate content in your application
@@ -1652,7 +1654,7 @@ pub fn Demo() -> Element {
 
 # Carousel
 
-- Copy into your app: `atoll add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `atoll add carousel` or `dx components add carousel --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::carousel::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A horizontally scrolling row of slides with scroll snapping and Previous/Next buttons. Nothing auto-plays, so there is no motion to pause.
@@ -3589,11 +3591,29 @@ Outside filters or actions (a date range, a status select, an "Export" button) g
 
 Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
+## Server mode (large tables)
+
+Past a few hundred rows, don't send every row to the browser: page on the server. Pass `total_rows: Some(total)` and only the current page as `rows`; the table then does no filtering, sorting or paging itself and calls `on_query_change` with a `TableQuery` (`query`, `sort`, `page`, `page_size`, `offset()`) whenever the filter, a sort header or the page changes. Fetch that page and hand it back. `loading: true` marks the table busy while you wait.
+
+```rust
+let mut q = use_signal(|| TableQuery::new(25));
+let page = use_server_future(move || fetch_customers(q()))?; // your server function
+let (rows, total) = /* the page's rows and the total match count */;
+rsx! {
+    DataTable { columns, rows, caption: "Customers", page_size: 25,
+        total_rows: Some(total),
+        on_query_change: move |next| q.set(next),
+    }
+}
+```
+
+On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page_size)` applies the same filter and sort rules to rows in memory; with a database, turn `TableQuery` into `WHERE`/`ORDER BY`/`LIMIT q.page_size OFFSET q.offset()`. Selection is per page in server mode (it clears when a new page arrives). In the fullstack trial this took a 20,000-customer page from a 4.4 MB HTML response to 44 KB.
+
 ## Accessibility
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".
 - Keyboard: everything is a native control (Tab, Space, Enter).
-- Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced.
+- Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced. While `loading` it reads "Loading" and the table has `aria-busy`.
 - Reduced motion: no animation.
 
 ## Source
@@ -3617,6 +3637,22 @@ pub struct DataColumn {
     pub sortable: bool,
     /// Right-aligned, and sorted as numbers (`$1,200`, `45%` and `3.5` all parse).
     pub numeric: bool,
+}
+
+/// What a [`DataTable`] in server mode asks for: the filter text, the sort and the page.
+/// Hand it to your server function; [`table_view`] applies the same rules to rows in memory.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct TableQuery {
+    /// What was typed in the filter box.
+    pub query: String,
+    /// The sorted column and direction, if any.
+    pub sort: Option<(usize, SortDirection)>,
+    /// Zero-based page.
+    pub page: usize,
+    pub page_size: usize,
 }
 
 /// What the table shows for a given query, sort and page. Pure, so it is easy to test.
@@ -3670,6 +3706,19 @@ pub fn DataTable(
     /// Extra controls (outside filters, actions) shown in the toolbar beside the filter box.
     #[props(default)]
     toolbar: Option<Element>,
+    /// Server mode: the number of rows that match on the server. `rows` is then only the
+    /// current page, already filtered and sorted there; the table does no filtering, sorting
+    /// or paging itself and reports every change through `on_query_change`.
+    #[props(default)]
+    total_rows: Option<usize>,
+    /// Server mode: called when the filter text, the sort or the page changes (not on the
+    /// first render, which shows `TableQuery::new(page_size)`). Fetch that page and pass it
+    /// back as `rows` and `total_rows`.
+    #[props(default)]
+    on_query_change: Callback<TableQuery>,
+    /// A page is being fetched: the table is marked busy and the status says so.
+    #[props(default)]
+    loading: bool,
 ) -> Element
 ```
 
@@ -5011,7 +5060,7 @@ pub fn Demo() -> Element {
 
 # Field
 
-- Copy into your app: `atoll add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add field` or `dx components add field --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::field::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Wires a label, description and error to a control with matching ids. `use_field_ids()` returns the ids; for most forms use `TextField` from `form`.
@@ -5176,7 +5225,7 @@ mod tests {
 
 # Form
 
-- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
+- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `hooks`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.
@@ -5242,6 +5291,19 @@ rsx! {
 A failed submit focuses the range picker's group, which is read with its label and error.
 
 `TextField` and `TextareaField` pass any other attribute to their control (`inputmode: "numeric"`, `maxlength`, `pattern`, `rows`); the field's own `id`, `value` and ARIA wiring win over them.
+
+Fields that come and go while the form is open (invoice line items, extra email addresses) can't be hooks. Create them with `form.add_field(initial, rules)` from an event handler, keep them in your own signal, and drop them with `form.remove_field(field)`; the form validates them with the others and focuses the first invalid one on submit:
+
+```rust
+let mut lines = use_signal(Vec::<FormField>::new);
+rsx! {
+    for (i, line) in lines().into_iter().enumerate() {
+        TextField { key: "{line.ids().control}", field: line, label: format!("Item {}", i + 1) }
+        Button { r#type: "button", onclick: move |_| { form.remove_field(line); lines.write().retain(|l| *l != line); }, "Remove" }
+    }
+    Button { r#type: "button", onclick: move |_| lines.push(form.add_field("", vec![required()])), "Add item" }
+}
+```
 
 Rules: `required()`, `email()`, `min_len(n)`, `max_len(n)`, `time_between(min, max, message)`, `days_between(min, max, message)`, or `custom(|v| ...)` returning `Err(message)`. The first failing rule shows. A field validates when it loses focus, then on every change until it is valid.
 
@@ -5736,6 +5798,21 @@ pub fn is_hotkey(key: &str, pressed: &str, ctrl: bool, meta: bool, alt: bool, sh
 /// same thing.
 pub fn use_hotkey(key: &'static str, mut on_press: impl FnMut() + 'static)
 
+/// A page-unique id such as `dx-field-3`, made once per component instance.
+///
+/// Ids are numbered per app, in render order, so a server-rendered page and the browser's
+/// first render give each component the same id. A process-wide counter (what the kit used
+/// before) keeps counting across server requests, so the server's `id`, `for` and
+/// `aria-describedby` stop matching the ones the browser computes, and label clicks,
+/// error announcements and focus-on-error break after hydration. With the `fullstack`
+/// feature the server's id is also sent to the client, as `dioxus-primitives` does.
+pub fn use_unique_id(prefix: &'static str) -> String
+
+/// The next id from the same per-app counter as [`use_unique_id`], for code that is not a
+/// hook: fields added from an event handler (`FormState::add_field`). Each call gives a new
+/// id, so don't call it in a component body; use [`use_unique_id`] there.
+pub fn next_unique_id(prefix: &str) -> String
+
 /// Phone-sized viewports, matching the kit's CSS breakpoint: `use_media_query(MOBILE_QUERY)`.
 pub const MOBILE_QUERY: &str;
 
@@ -5747,7 +5824,9 @@ pub const MOBILE_QUERY: &str;
 ///
 /// Web only: a Rust (web-sys) listener on the `MediaQueryList`, removed when the component
 /// unmounts. On desktop and native, and during server rendering, it is always `false`, so
-/// make `false` the layout that works everywhere.
+/// make `false` the layout that works everywhere. In fullstack apps the browser also starts
+/// from `false`, matching the server's HTML, and switches to the real value right after
+/// hydration.
 pub fn use_media_query(query: &'static str) -> ReadSignal<bool>
 
 /// The `href` to render for `href`: inside a router with a base path (for example a site
@@ -7089,7 +7168,7 @@ pub fn Demo() -> Element {
 
 # MultiSelect
 
-- Copy into your app: `atoll add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
+- Copy into your app: `atoll add multi_select` or `dx components add multi_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
 - Import: `use crate::components::multi_select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Pick several options from a list.
@@ -7190,6 +7269,134 @@ pub fn Demo() -> Element {
                 on_change: move |v| picked.set(v),
             }
             p { style: "margin: 0; font-size: 0.875rem;", "Selected: {picked().join(\", \")}" }
+        }
+    }
+}
+```
+
+---
+
+# NativeSelect
+
+- Copy into your app: `atoll add native_select` or `dx components add native_select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `input`).
+- Import: `use crate::components::native_select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
+
+The browser's own `<select>`, styled like `Input`. Choose it over `Select` on phones (the OS picker), in long forms, for long option lists, and in server-rendered pages, where it works before the app has loaded. Use `Select` when the open list needs custom styling.
+
+```rust
+NativeSelect { id: "plan", value: plan(), onchange: move |e: FormEvent| plan.set(e.value()),
+    NativeSelectOption { value: "starter", "Starter" }
+    NativeSelectOption { value: "team", "Team" }
+    NativeSelectGroup { label: "Legacy",
+        NativeSelectOption { value: "pro-2024", disabled: true, "Pro (2024)" }
+    }
+}
+```
+
+Every `select` attribute (`name`, `value`, `required`, `disabled`, `multiple`, `aria-*`) goes to the `<select>`, and `class` is added to the kit's. Label it with a `Label { html_for }` or `aria_label`. `aria-invalid="true"` draws the error border.
+
+## Accessibility
+
+- Role and name: a native `select` (combobox or listbox), named by its label; options and `optgroup` labels are read by screen readers as usual. The chevron is `aria-hidden`.
+- Keyboard: the browser's own (arrow keys, type to jump, Enter or Space to open).
+- Reduced motion: no animation.
+
+## Source
+
+Original to this repo; shadcn/ui's `native-select` was the reference (not copied).
+
+## Stability
+
+Experimental. New on 2026-10-31.
+
+## API
+
+```rust
+/// The browser's own `<select>`, styled like [`Input`](crate::components::input::Input).
+///
+/// Use it where the platform picker is the better choice: phones (the OS wheel or sheet),
+/// long forms, very long option lists, and server-rendered pages, where it works before the
+/// app has loaded. Use `Select` when the list itself needs custom styling.
+///
+/// ```rust,ignore
+/// NativeSelect { aria_label: "Country", onchange: move |e: FormEvent| country.set(e.value()),
+///     NativeSelectOption { value: "", "Choose a country" }
+///     NativeSelectGroup { label: "Europe",
+///         NativeSelectOption { value: "fr", "France" }
+///     }
+/// }
+/// ```
+///
+/// Any `select` attribute (`name`, `value`, `required`, `disabled`, `multiple`, `id`,
+/// `aria-*`) goes to the `<select>`; `class` is added to the kit's.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelect(
+    onchange: Option<EventHandler<FormEvent>>,
+    oninput: Option<EventHandler<FormEvent>>,
+    onfocus: Option<EventHandler<FocusEvent>>,
+    onblur: Option<EventHandler<FocusEvent>>,
+    onmounted: Option<EventHandler<MountedEvent>>,
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=select)]
+    attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One `<option>` of a [`NativeSelect`]. Takes `value`, `selected` and `disabled`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelectOption(
+    #[props(extends=GlobalAttributes)]
+    #[props(extends=option)]
+    attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// A labelled group of options (`<optgroup>`), read by screen readers with its options.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn NativeSelectGroup(
+    #[props(into)] label: String,
+    #[props(default)] disabled: bool,
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::label::Label;
+use crate::components::native_select::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut plan = use_signal(|| "team".to_string());
+    rsx! {
+        div { style: "display: grid; gap: 0.5rem; max-width: 16rem;",
+            Label { html_for: "native-select-plan", "Plan" }
+            NativeSelect {
+                id: "native-select-plan",
+                value: plan(),
+                onchange: move |e: FormEvent| plan.set(e.value()),
+                NativeSelectOption { value: "starter", "Starter" }
+                NativeSelectOption { value: "team", "Team" }
+                NativeSelectOption { value: "business", "Business" }
+                NativeSelectGroup { label: "Legacy",
+                    NativeSelectOption { value: "pro-2024", disabled: true, "Pro (2024)" }
+                }
+            }
+            p { style: "margin: 0; font-size: 0.875rem;", "Selected plan: {plan}" }
         }
     }
 }
@@ -7795,6 +8002,177 @@ pub fn Demo() -> Element {
 
 ---
 
+# Resizable
+
+- Copy into your app: `atoll add resizable` or `dx components add resizable --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::resizable::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
+
+Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys. For split views such as folders | messages | preview.
+
+```rust
+div { style: "height: 20rem;",
+    ResizablePanelGroup { on_layout: move |sizes: Vec<f32>| save(sizes),
+        ResizablePanel { id: "folders", default_size: 25.0, min_size: 15.0, max_size: 50.0, Folders {} }
+        ResizableHandle { aria_label: "Resize folders", with_handle: true }
+        ResizablePanel { default_size: 75.0, min_size: 30.0,
+            ResizablePanelGroup { direction: ResizableDirection::Vertical,
+                ResizablePanel { default_size: 60.0, Messages {} }
+                ResizableHandle { aria_label: "Resize preview" }
+                ResizablePanel { default_size: 40.0, Preview {} }
+            }
+        }
+    }
+}
+```
+
+Sizes are percentages of the group and should add up to 100; `min_size` and `max_size` limit each panel. The group fills its parent, so give the parent a height for a horizontal group. `on_layout` reports every panel's size after a change (store it to restore the layout with `default_size`). `resize_pair` is the pure rule a divider follows.
+
+## Accessibility
+
+- Role and name: each `ResizableHandle` is a focusable `role="separator"` (the WAI-ARIA window splitter pattern) with `aria-valuenow` (the size of the panel before it, in percent), `aria-valuemin`, `aria-valuemax`, `aria-orientation` and the `aria_label` you give it ("Resize" by default). Give the panel before it an `id` and the handle points at it with `aria-controls`.
+- Keyboard: Tab reaches each divider. Left and Right arrows (Up and Down in a vertical group) move it by 5%, with Shift by 10%; Home and End move it to the panel's minimum and maximum.
+- Pointer: drag the divider (a 9 px hit area around the 1 px line). The drag ends when the pointer leaves the group.
+- Right to left: not mirrored yet. In a `dir="rtl"` row the first panel is on the right, and the arrow keys and dragging still change its size as in a left-to-right row, so they feel reversed. Use a vertical group, or `dir="ltr"` on the group, until this is fixed.
+- Reduced motion: only the divider's colour changes; that transition is off under `prefers-reduced-motion`.
+
+## Source
+
+Original to this repo. The API follows shadcn/ui's `Resizable` (built on react-resizable-panels), which was not copied.
+
+## Stability
+
+Experimental. New on 2026-10-31.
+
+## API
+
+```rust
+/// How far one arrow-key press moves a divider, in percent of the group.
+pub const RESIZE_STEP: f32;
+
+/// Moves the divider between two neighbouring panels by `delta` percent, keeping both
+/// inside their `(min, max)` limits and their total unchanged. Returns the new sizes.
+///
+/// ```
+/// use ui::components::resizable::resize_pair;
+/// assert_eq!(resize_pair((30.0, 70.0), 10.0, (10.0, 80.0), (10.0, 90.0)), (40.0, 60.0));
+/// assert_eq!(resize_pair((30.0, 70.0), 90.0, (10.0, 80.0), (10.0, 90.0)), (80.0, 20.0));
+/// ```
+pub fn resize_pair(sizes: (f32, f32), delta: f32, a: (f32, f32), b: (f32, f32)) -> (f32, f32)
+
+pub enum ResizableDirection {
+    /// Panels side by side, dividers dragged left and right.
+    #[default]
+    Horizontal,
+    /// Panels stacked, dividers dragged up and down.
+    Vertical,
+}
+
+/// A row (or column) of [`ResizablePanel`]s with a [`ResizableHandle`] between each pair.
+///
+/// ```rust,ignore
+/// ResizablePanelGroup {
+///     ResizablePanel { default_size: 25.0, min_size: 15.0, "Folders" }
+///     ResizableHandle { aria_label: "Resize folders" }
+///     ResizablePanel { default_size: 75.0, "Messages" }
+/// }
+/// ```
+///
+/// Sizes are percentages of the group and should add up to 100. Give the group a size (a
+/// height for horizontal groups, as with any flex row).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizablePanelGroup(
+    #[props(default)] direction: ResizableDirection,
+    /// Called with every panel's size (percent) after a divider moves.
+    #[props(default)]
+    on_layout: Callback<Vec<f32>>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One panel of a [`ResizablePanelGroup`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizablePanel(
+    /// Starting size in percent of the group.
+    #[props(default = 50.0)]
+    default_size: f32,
+    #[props(default = 0.0)] min_size: f32,
+    #[props(default = 100.0)] max_size: f32,
+    /// The panel's element id. The handle after it points at it with `aria-controls`, as
+    /// the window splitter pattern asks; without an id there is no `aria-controls`.
+    #[props(into)]
+    id: Option<String>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// The divider between two panels: drag it, or focus it and use the arrow keys (Home and End
+/// jump to the limits). It is a focusable `role="separator"` whose value is the size of the
+/// panel before it, as the WAI-ARIA window splitter pattern describes.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ResizableHandle(
+    /// Read by screen readers, e.g. "Resize sidebar". Defaults to "Resize".
+    #[props(into, default = "Resize".to_string())]
+    aria_label: String,
+    /// Show a grip in the middle of the divider.
+    #[props(default)]
+    with_handle: bool,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::resizable::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    let mut layout = use_signal(|| vec![30.0_f32, 70.0]);
+    let pane = "padding: 1rem; font-size: 0.875rem;";
+    rsx! {
+        div { style: "display: grid; gap: 0.5rem; max-width: 36rem;",
+            div { style: "height: 14rem; border: 1px solid var(--primary-color-6); border-radius: var(--radius);",
+                ResizablePanelGroup { on_layout: move |sizes| layout.set(sizes),
+                    ResizablePanel { id: "resizable-folders", default_size: 30.0, min_size: 15.0, max_size: 60.0,
+                        div { style: pane, "Folders" }
+                    }
+                    ResizableHandle { aria_label: "Resize folders", with_handle: true }
+                    ResizablePanel { default_size: 70.0, min_size: 30.0,
+                        ResizablePanelGroup { direction: ResizableDirection::Vertical,
+                            ResizablePanel { id: "resizable-messages", default_size: 60.0, min_size: 20.0,
+                                div { style: pane, "Messages" }
+                            }
+                            ResizableHandle { aria_label: "Resize preview" }
+                            ResizablePanel { default_size: 40.0, min_size: 20.0,
+                                div { style: pane, "Preview" }
+                            }
+                        }
+                    }
+                }
+            }
+            p { style: "margin: 0; font-size: 0.875rem;",
+                "Folders take {layout()[0].round()}%"
+            }
+        }
+    }
+}
+```
+
+---
+
 # Scroll area
 
 - Copy into your app: `atoll add scroll_area` or `dx components add scroll_area --git https://github.com/Amit-1of1/Rust-UI-`.
@@ -7854,7 +8232,7 @@ pub fn Demo() -> Element {
 
 # Select
 
-- Copy into your app: `atoll add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Copy into your app: `atoll add select` or `dx components add select --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`).
 - Import: `use crate::components::select::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Select component is used to create a dropdown menu that allows users to select one or more options from the select groups.
@@ -9952,7 +10330,7 @@ fn money(cents: u32) -> String {
 
 # Tabs
 
-- Copy into your app: `atoll add tabs` or `dx components add tabs --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add tabs` or `dx components add tabs --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::tabs::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content.
@@ -10352,6 +10730,19 @@ rsx! {
 
 `mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
 
+## Remember the theme between visits
+
+`PersistTheme {}` saves `use_theme()`'s choices in `localStorage` (key `"theme"`, or `storage_key`) and restores them on the next visit. Render it once next to `ThemeStyles {}`. It restores after the first render, so it is safe in fullstack apps. To avoid a light flash for a returning dark-mode user while the app loads, also put `THEME_INIT_SCRIPT` in the page `<head>`: in a fullstack app `document::Script { {THEME_INIT_SCRIPT} }` (the server renders it into the HTML), in a client-only app paste it into a `<script>` in your `index.html`. It is your app's script, opt in, and only sets known values.
+
+```rust
+rsx! {
+    ThemeStyles {}
+    PersistTheme {}
+    document::Script { {THEME_INIT_SCRIPT} }
+    Router::<Route> {}
+}
+```
+
 ## Native (no JavaScript)
 
 dioxus-native can't run the script that writes to `<html>`. Wrap the app in `ThemeScope { ... }` there: it applies the same choices to everything inside it, and doesn't change layout (`display: contents`). On the web and desktop it is harmless.
@@ -10450,6 +10841,45 @@ pub const DENSITIES: [&str; 3];
 /// state is the shared [`use_theme`], so app controls (a header dark-mode switch) stay in step.
 #[component]
 pub fn ThemeCustomizer() -> Element
+
+/// Saves [`use_theme`]'s choices (mode, accent, density, radius) in the browser's
+/// `localStorage` under `storage_key` (default `"theme"`), and restores them on the next visit. Render it once, next to
+/// `ThemeStyles {}`:
+///
+/// ```rust,ignore
+/// rsx! { ThemeStyles {} PersistTheme {} Router::<Route> {} }
+/// ```
+///
+/// The saved value is restored right after the first render, so it is safe in a fullstack
+/// app (the server has no `localStorage`). Until then the page shows the default theme; to
+/// avoid that flash, also put [`THEME_INIT_SCRIPT`] in the page's `<head>`.
+///
+/// Web only (a Rust `web-sys` call, no JavaScript of the kit's); elsewhere it does nothing.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn PersistTheme(
+    /// The `localStorage` key. Change it when two apps share an origin.
+    #[props(into, default = "theme".to_string())]
+    storage_key: String,
+) -> Element
+
+/// `mode=dark;accent=blue;density=compact;radius=12` (radius only when it isn't the default).
+pub fn encode_theme(theme: &Theme) -> String
+
+/// Applies a value written by [`encode_theme`]. The stored text is user-controlled, so every part
+/// is checked against the known values and anything else is ignored.
+pub fn apply_saved_theme(theme: &Theme, saved: &str)
+
+/// A small script for the page's `<head>` that applies the saved theme before the first
+/// paint, so a returning dark-mode user never sees a white page while the app loads. It
+/// reads the `theme` key that [`PersistTheme`] writes and only sets known values.
+///
+/// This is the app's own script, opt in: put it in your `index.html`, or render it in a
+/// fullstack app with `document::Script { {THEME_INIT_SCRIPT} }`.
+pub const THEME_INIT_SCRIPT: &str;
 ```
 
 ## Example
