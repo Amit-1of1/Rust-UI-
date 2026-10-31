@@ -22,7 +22,7 @@ dioxus-motion = { version = "=0.4.0", default-features = false, features = ["dio
 web-sys = { version = "0.3", features = ["Window", "MediaQueryList", "Performance", "PointerEvent", "Element", "Event", "EventTarget", "DomRect"] }
 
 [dev-dependencies]
-dioxus-ssr = "0.7.0"
+dioxus-ssr = "=0.8.0-alpha.3"
 
 [features]
 web = ["dioxus-motion/web"]

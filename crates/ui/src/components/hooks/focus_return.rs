@@ -37,14 +37,15 @@ fn opener() -> Opener {
 pub fn use_focus_opener() -> Vec<Attribute> {
     let mut el = use_signal(|| None::<Rc<MountedData>>);
     let Opener(mut current) = use_hook(opener);
-    vec![
-        dioxus_elements::events::onmounted(move |e: MountedEvent| el.set(Some(e.data()))),
-        dioxus_elements::events::onfocus(move |_: FocusEvent| {
+    // Dioxus 0.8 builds event attributes with the `Vec<Attribute>` builder methods.
+    Vec::<Attribute>::new()
+        .onmounted(move |e: MountedEvent| el.set(Some(e.data())))
+        .onfocus(move |_: FocusEvent| {
             if let Some(el) = el.peek().clone() {
                 current.set(Some(el));
             }
-        }),
-        dioxus_elements::events::onblur(move |_: FocusEvent| {
+        })
+        .onblur(move |_: FocusEvent| {
             let mine = match (&*current.peek(), &*el.peek()) {
                 (Some(a), Some(b)) => Rc::ptr_eq(a, b),
                 _ => false,
@@ -52,8 +53,7 @@ pub fn use_focus_opener() -> Vec<Attribute> {
             if mine {
                 current.set(None);
             }
-        }),
-    ]
+        })
 }
 
 /// Whether focus is inside an overlay's panel; see [`use_return_focus`].
@@ -78,10 +78,9 @@ pub struct FocusInside(Signal<bool>);
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub fn use_return_focus() -> (FocusInside, Vec<Attribute>) {
     let mut inside = use_signal(|| false);
-    let attrs = vec![
-        dioxus_elements::events::onfocusin(move |_: FocusEvent| inside.set(true)),
-        dioxus_elements::events::onfocusout(move |_: FocusEvent| inside.set(false)),
-    ];
+    let attrs = Vec::<Attribute>::new()
+        .onfocusin(move |_: FocusEvent| inside.set(true))
+        .onfocusout(move |_: FocusEvent| inside.set(false));
     (FocusInside(inside), attrs)
 }
 

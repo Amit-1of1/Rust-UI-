@@ -18,7 +18,7 @@
 //! The counts each test prints (`--nocapture`) are the numbers quoted in
 //! docs/notes/model-checking.md. Run: `cargo test -p atoll-ui --test model_check -- --nocapture`.
 
-use dioxus::prelude::Key;
+use dioxus::prelude::{Key, NamedKey};
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fmt::Debug;
 use std::hash::Hash;
@@ -568,19 +568,25 @@ fn otp_every_state_every_key() {
 #[test]
 fn command_palette_every_row_every_key() {
     let keys = [
-        Key::ArrowDown,
-        Key::ArrowUp,
-        Key::Home,
-        Key::End,
-        Key::Tab,
-        Key::Enter,
-        Key::Escape,
+        Key::Named(NamedKey::ArrowDown),
+        Key::Named(NamedKey::ArrowUp),
+        Key::Named(NamedKey::Home),
+        Key::Named(NamedKey::End),
+        Key::Named(NamedKey::Tab),
+        Key::Named(NamedKey::Enter),
+        Key::Named(NamedKey::Escape),
     ];
     let (mut states, mut transitions, mut worst_overall) = (0, 0, 0);
     for len in 0..=64usize {
         let explored = explore(&format!("palette {len} rows"), 0usize, &keys, |&at, key| {
             let next = command_nav(key, at, len).unwrap_or(at);
-            let moves = matches!(key, Key::ArrowDown | Key::ArrowUp | Key::Home | Key::End);
+            let moves = matches!(
+                key,
+                Key::Named(NamedKey::ArrowDown)
+                    | Key::Named(NamedKey::ArrowUp)
+                    | Key::Named(NamedKey::Home)
+                    | Key::Named(NamedKey::End)
+            );
             if moves != command_nav(key, at, len).is_some() {
                 return Err(format!("{key:?} moved = {}", !moves));
             }
