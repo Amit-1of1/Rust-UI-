@@ -8,6 +8,14 @@ package="$("$aapt" dump badging "$apk" | sed -n "s/^package: name='\([^']*\)'.*/
 activity="$("$aapt" dump badging "$apk" | sed -n "s/^launchable-activity: name='\([^']*\)'.*/\1/p")"
 echo "package $package, activity $activity"
 
+# Let the freshly booted emulator settle first (boot animation done, keyguard gone).
+for _ in $(seq 1 30); do
+  [ "$(adb shell getprop init.svc.bootanim | tr -d '\r')" = stopped ] && break
+  sleep 2
+done
+adb shell wm dismiss-keyguard || true
+sleep 15
+
 adb install -r "$apk"
 adb logcat -c
 adb shell am start -W -n "$package/$activity"
@@ -25,7 +33,7 @@ for _ in $(seq 1 30); do
 done
 adb logcat -d > logcat.txt || true
 # What the app and the system said about it: its own process, crashes, kills.
-grep -nE "${pid:-^$}|$package|Fatal signal|DEBUG +:|AndroidRuntime|RustStdoutStderr|lmkd|lowmemorykiller|am_kill|Process .* has died|dioxus" logcat.txt \
+grep -nE "${pid:-^$}|$package|Fatal signal|DEBUG +:|AndroidRuntime|RustStdoutStderr|lmkd|lowmemorykiller|am_kill|Process .* has died|dioxus|[Cc]onfig changes|[Rr]elaunch|onConfigurationChanged" logcat.txt \
   | tail -150 > app-log.txt || true
 cat app-log.txt
 if grep -nE "panicked at|FATAL EXCEPTION|Fatal signal" logcat.txt; then
