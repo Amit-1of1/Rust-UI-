@@ -47,6 +47,24 @@ The Taskboard's first screen is 3.0x React's and 4.3x Svelte's (it was 2.9x and 
 
 Startup once the bytes have arrived is still a tie (within 6% at 4x CPU). Rust is fastest on 4 of the 9 DOM operations now (6 of 9 on 2026-10-13): React is faster at creating 1,000 rows, removing a row and appending, Svelte at partial updates and clearing. The Taskboard is 594 lines now (532 before the wasm split, which added `lazy` wrappers). The tables below are the earlier rounds, kept for history.
 
+### Build times (edit, compile, see it)
+
+Measured 2026-10-31 on the same 4-core cloud VM, Rust 1.97, dx 0.7.10, with the gallery (it pulls in every component, so it is the slowest case for an app). Commands: [`build-times.sh`](build-times.sh) for the cargo rows, [`hot-reload.mjs`](hot-reload.mjs) for the `dx serve` rows (time from saving the file until the change shows in headless Chromium).
+
+| Step | Time |
+|---|---|
+| Cold build, dev profile, wasm (dependencies already downloaded) | 125 s |
+| Rebuild with no change | 0.5 s |
+| Rebuild after editing one kit component, dev | 19 s |
+| Rebuild after editing the app, dev | 19 s |
+| Cold build, release (`opt-level = "z"`, fat LTO, one codegen unit) | 160 s |
+| Rebuild after editing the app, release | 53 s |
+| `dx serve`: change text or markup inside `rsx!` | **0.8 s** (hot reload, no compile) |
+| `dx serve`: change a component's CSS | **0.8 s** (hot reload, no compile) |
+| `dx serve`: change Rust code outside `rsx!` literals | 62 s (full rebuild, then reload) |
+
+So markup and styling iterate as fast as a JS dev server, and Rust logic changes cost about 20 s with `cargo build` (about a minute through `dx serve` on this machine, which also runs wasm-bindgen and asset processing). `dx serve --hot-patch` (Dioxus' Subsecond patching of Rust code) failed on the gallery with "Failed to emit module: failed to parse import section", so it is not counted here. A JS framework rebuilds a one-line change in about 1 to 3.5 s ("The real app" below).
+
 ### Earlier rounds (2026-10-13 and 2026-10-14)
 
 These are from `results/latest.json`: release builds served as static files, headless Chromium 141, a 4-core shared cloud VM, and the median of 7 runs after one warm-up. Absolute numbers are noisy on this machine, so compare the columns with each other.
@@ -143,24 +161,6 @@ Two changes got it here (see "Tuning" below).
 | Keyboard checks passed | 11 / 11 | 11 / 11 | 11 / 11 |
 | Lines written (app + CSS) | **532** | 1,400 | 1,348 |
 | Release rebuild after a one-line change | 45 s | ~1 s | ~3.5 s |
-
-#### Build times (edit, compile, see it)
-
-Measured 2026-10-31 on the same 4-core cloud VM, Rust 1.97, dx 0.7.10, with the gallery (it pulls in every component, so it is the slowest case for an app). Commands: [`build-times.sh`](build-times.sh) for the cargo rows, [`hot-reload.mjs`](hot-reload.mjs) for the `dx serve` rows (time from saving the file until the change shows in headless Chromium).
-
-| Step | Time |
-|---|---|
-| Cold build, dev profile, wasm (dependencies already downloaded) | 125 s |
-| Rebuild with no change | 0.5 s |
-| Rebuild after editing one kit component, dev | 19 s |
-| Rebuild after editing the app, dev | 19 s |
-| Cold build, release (`opt-level = "z"`, fat LTO, one codegen unit) | 160 s |
-| Rebuild after editing the app, release | 53 s |
-| `dx serve`: change text or markup inside `rsx!` | **0.8 s** (hot reload, no compile) |
-| `dx serve`: change a component's CSS | **0.8 s** (hot reload, no compile) |
-| `dx serve`: change Rust code outside `rsx!` literals | 62 s (full rebuild, then reload) |
-
-So markup and styling iterate as fast as a JS dev server, and Rust logic changes cost about 20 s with `cargo build` (about a minute through `dx serve` on this machine, which also runs wasm-bindgen and asset processing). `dx serve --hot-patch` (Dioxus' Subsecond patching of Rust code) failed on the gallery with "Failed to emit module: failed to parse import section", so it is not counted here. A JS framework rebuilds a one-line change in about 1 to 3.5 s ("The real app" above).
 
 #### Memory
 

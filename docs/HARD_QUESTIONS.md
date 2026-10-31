@@ -34,14 +34,15 @@ To fix bugs we hit without waiting for upstream releases. [FORKS.md](https://git
 
 ## How big is the download compared with React?
 
-Bigger. Measured 2026-10-13/14 with brotli, release builds ([bench/README.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/bench/README.md)):
+Bigger. Re-measured 2026-10-31 with brotli, release builds, split wasm ([bench/README.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/bench/README.md), "Re-measured"):
 
-| App | First screen | Slow 4G (1.6 Mbps), styled first screen |
+| App | First screen | Slow 4G (1.6 Mbps, 150 ms RTT), styled first screen |
 |---|---|---|
-| Atoll, gallery (every component), split wasm | 238 KB | 1.9 s |
-| Atoll, dashboard app, split wasm | 316 KB | 2.3 s |
-| Same small app in React 19 + Radix | 103 KB | ~0.5 s download |
-| Same small app in Svelte 5 + Bits UI | 72 KB | ~0.4 s download |
+| Atoll, gallery (every component; 1,105 KB in all, the rest loads after) | 295 KB | 2.35 s |
+| Atoll, dashboard app | 347 KB | 2.48 s |
+| Taskboard benchmark app, Atoll | 306 KB | 2.29 s |
+| Same app in React 19 + Radix | 101 KB | 0.97 s |
+| Same app in Svelte 5 + Bits UI | 71 KB | 0.83 s |
 
 Once the bytes arrive, startup is a tie (about 450 to 500 ms with the CPU slowed 4x for all three). So the cost is the network, once; it is cached after that.
 
@@ -63,7 +64,7 @@ A Vite app rebuilds a one-line change in 1 to 3.5 s, so for logic-heavy work Rus
 
 ## Is "accessible" a claim or a test?
 
-A test, with a stated limit. On Chromium, Firefox and WebKit, every component in the gallery is checked with axe (light, dark, RTL and every accent preset) and in forced-colors mode (Chromium and Firefox; WebKit cannot emulate it), and its text contrast is proved for every accent preset. The main components are also compared against snapshots of the browser's accessibility tree, and the ones with a keyboard contract (WAI-ARIA APG patterns) are driven key by key against it and by a keyboard fuzzer.
+A test, with a stated limit. On Chromium, Firefox and WebKit, every component in the gallery is checked with axe (light, dark and RTL; every accent preset on Chromium) and in forced-colors mode (Chromium and Firefox; WebKit cannot emulate it), and its text contrast is proved for every accent preset. The main components are also compared against snapshots of the browser's accessibility tree, and the ones with a keyboard contract (WAI-ARIA APG patterns) are driven key by key against it and by a keyboard fuzzer.
 
 The limit: automated checks find roughly half of real accessibility problems (Deque's own study puts axe at 57% by volume), and **no screen reader has been run by a person yet**. [SCREEN_READERS.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/SCREEN_READERS.md) lists what is automated and what still needs a human pass.
 

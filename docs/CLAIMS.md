@@ -9,7 +9,7 @@ Audited on 2026-10-31 against `main` at `e303195`, on a 4-core shared cloud VM w
 Chromium 141 (Playwright 1.63.0). Counted claims are checked on every push by
 `cargo test -p atoll-cli --test claims` (`crates/cli/tests/claims.rs`); the browser claims run
 in `.github/workflows/e2e.yml`; size and speed are measured by the scripts named in each row.
-For the questions a skeptical reviewer asks, see [HARD_QUESTIONS.md](HARD_QUESTIONS.md).
+For the questions a skeptical reviewer asks, see [HARD_QUESTIONS.md](HARD_QUESTIONS.md) (its size table was updated to these measurements); build and hot-reload times are in bench/README.md, "Build times".
 
 **Verdicts:** **CI** proven on every push. **Measured** re-measured for this audit, not
 guarded by CI. **Fixed** was false or unproven; the code or the wording changed in this audit.
@@ -31,6 +31,7 @@ guarded by CI. **Fixed** was false or unproven; the code or the wording changed 
 | axe passes on every demo, light and dark, on Chromium, Firefox and WebKit | CI | `tests/e2e/axe.mjs` scans the whole gallery (every demo is in it; `atoll doctor` fails a demo missing from the gallery) in light, dark and RTL, on each engine of the e2e matrix. Green on all three engines for `main` at `e303195` (run 41203281135, 2026-10-31). Covers the default (closed) state; open overlays are scanned by blocks.mjs, dashboard.mjs, booking.mjs and showcase.mjs. | `scripts/e2e.sh --browsers chromium,firefox,webkit` |
 | axe under every accent preset | CI (Chromium) | The accent loop in `scripts/e2e.sh` runs all 5 presets in light and dark, on Chromium only. The claims test fails if a preset in theme.css is missing from the loop. | `cargo test -p atoll-cli --test claims` |
 | Keyboard-only walkthrough of the whole gallery | CI | `tests/e2e/walkthrough.mjs`: every Tab stop visible with a focus indicator, no positive tabindex, Shift+Tab retraces, the walk reaches the end. | `GALLERY_URL=... node tests/e2e/walkthrough.mjs` |
+| Keyboard state machines exhaustively model-checked: 1,182,416 states, 33.5M transitions, 263 configurations | CI | `crates/ui/tests/model_check.rs` (PR #73, merged 2026-10-31); it found and fixed two time picker range bugs. | `cargo test -p atoll-ui --test model_check` |
 | Text contrast is proved for every accent preset | CI | `atoll_cli::contrast` evaluates every text/background pair in every component stylesheet, light and dark, every preset, including hover and selected states; fails on any unevaluated value. | `cargo test -p atoll-cli --test contrast` |
 | A dialog without a title, or an icon button without a label, doesn't compile | CI | `compile_fail` doc tests on `Dialog`, `AlertDialog`, `Sheet`, `Drawer`, `IconButton`, `Avatar` and the chat components. | `cargo test -p atoll-ui --doc` |
 | "Accessible" | Open | No screen reader has run (docs/SCREEN_READERS.md). axe finds only part of WCAG failures (Deque puts automated coverage at about 57% of issues). The copy says "accessible by test" and points here. | read docs/SCREEN_READERS.md |
@@ -102,7 +103,6 @@ Not claimable until the PR merges; then move each row to its section and mark it
 
 | Claim | PR | Evidence | Reproduce |
 |---|---|---|---|
-| Keyboard state machines exhaustively model-checked: 1,182,416 states, 33.5M transitions, 263 configurations (found and fixed 2 time picker range bugs) | #73 | `crates/ui/tests/model_check.rs` | `cargo test -p atoll-ui --test model_check` |
 | No unexplained layout animation: 173 composite, 74 paint, 24 explained layout | #75 | `crates/cli/tests/motion.rs::no_unexplained_layout_animation_in_the_kit` | `cargo test -p atoll-cli --test motion` |
 | 70 of 70 composite-only overlay animations run on the compositor (Chromium trace); under reduced motion, 0 runs over 1 ms | #75 | `tests/e2e/frames.mjs`, `bench/results/frames-2026-10-31-chromium.json` (Chromium only) | `node tests/e2e/frames.mjs` |
 | CI fails on >10% download growth or 2x startup | #77 | `tests/e2e/budgets.mjs`, `bench/budgets.json` | `node tests/e2e/budgets.mjs` |
