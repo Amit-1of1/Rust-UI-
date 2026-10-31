@@ -11,7 +11,8 @@
   "description": "The Tooltip component is used to display additional information when a user hovers over an element.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

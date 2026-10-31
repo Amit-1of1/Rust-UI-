@@ -472,10 +472,13 @@ pub fn materialize(source: &str, cache_root: &Path) -> Result<PathBuf, String> {
         let target = dir.to_string_lossy().into_owned();
         // `--` keeps a source from being read as an option; only the URL schemes in
         // `is_remote` get here, so `ext::` and other command-running transports never do.
-        git(
-            &["clone", "--depth", "1", "-q", "--", source, &target],
-            None,
-        )?;
+        // The kit's own repository: clone the release branch, whatever GitHub serves by default.
+        let mut args = vec!["clone", "--depth", "1", "-q"];
+        if source.trim_end_matches(".git").trim_end_matches('/') == create::REPO {
+            args.extend(["--branch", create::REPO_BRANCH]);
+        }
+        args.extend(["--", source, &target]);
+        git(&args, None)?;
     }
     Ok(dir)
 }

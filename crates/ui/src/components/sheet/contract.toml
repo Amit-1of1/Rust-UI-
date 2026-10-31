@@ -1,0 +1,57 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Dialog (Modal)"
+apg = "dialog-modal"
+roles = ["dialog"]
+
+[parts]
+trigger = "button"
+dialog = "[role=dialog]"
+
+[[states]]
+name = "open"
+means = "The sheet is shown over the page."
+check = "visible dialog"
+
+[[states]]
+name = "closed"
+means = "Only the buttons that open it are shown."
+check = "hidden dialog"
+
+[[keys]]
+key = "Enter"
+when = "On a button that opens it"
+does = "Opens the sheet and moves focus into it."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+focus-in dialog
+"""
+
+[[keys]]
+key = "Tab"
+when = "Inside the sheet"
+does = "Moves to the next control; focus stays in the sheet."
+native = true
+test = """
+focus trigger
+press Enter
+press Tab*5
+state open
+focus-in dialog
+"""
+
+[[keys]]
+key = "Escape"
+when = "Inside the sheet"
+does = "Closes the sheet and returns focus to the button that opened it."
+native = true
+test = """
+focus trigger
+press Enter
+press Escape
+state closed
+focused trigger
+"""

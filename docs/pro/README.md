@@ -20,7 +20,7 @@ folder"); `scripts/pro-repo.sh --overlay` puts them into the Pro repository. Its
 
 | Piece | Where | Status |
 | --- | --- | --- |
-| Free kit | this repository (public once the owner makes it so) | done |
+| Free kit | this repository (public) | done |
 | Pro items | a **private** copy of this repository that merges `main` and adds Pro items | `scripts/pro-repo.sh` builds it locally |
 | Marking an item Pro | a `LICENSE-PRO.md` in the item's folder (copy [LICENSE-PRO.md](LICENSE-PRO.md)) | done: the registry writes `"tier": "pro"` |
 | Telling the buyer | `atoll list` shows `(pro)`; `atoll add` and the MCP server's `add_component` print the licence reminder | done |
