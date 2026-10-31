@@ -22,11 +22,29 @@ Outside filters or actions (a date range, a status select, an "Export" button) g
 
 Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
+## Server mode (large tables)
+
+Past a few hundred rows, don't send every row to the browser: page on the server. Pass `total_rows: Some(total)` and only the current page as `rows`; the table then does no filtering, sorting or paging itself and calls `on_query_change` with a `TableQuery` (`query`, `sort`, `page`, `page_size`, `offset()`) whenever the filter, a sort header or the page changes. Fetch that page and hand it back. `loading: true` marks the table busy while you wait.
+
+```rust
+let mut q = use_signal(|| TableQuery::new(25));
+let page = use_server_future(move || fetch_customers(q()))?; // your server function
+let (rows, total) = /* the page's rows and the total match count */;
+rsx! {
+    DataTable { columns, rows, caption: "Customers", page_size: 25,
+        total_rows: Some(total),
+        on_query_change: move |next| q.set(next),
+    }
+}
+```
+
+On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page_size)` applies the same filter and sort rules to rows in memory; with a database, turn `TableQuery` into `WHERE`/`ORDER BY`/`LIMIT q.page_size OFFSET q.offset()`. Selection is per page in server mode (it clears when a new page arrives). In the fullstack trial this took a 20,000-customer page from a 4.4 MB HTML response to 44 KB.
+
 ## Accessibility
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".
 - Keyboard: everything is a native control (Tab, Space, Enter).
-- Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced.
+- Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced. While `loading` it reads "Loading" and the table has `aria-busy`.
 - Reduced motion: no animation.
 
 ## Source
@@ -50,6 +68,22 @@ pub struct DataColumn {
     pub sortable: bool,
     /// Right-aligned, and sorted as numbers (`$1,200`, `45%` and `3.5` all parse).
     pub numeric: bool,
+}
+
+/// What a [`DataTable`] in server mode asks for: the filter text, the sort and the page.
+/// Hand it to your server function; [`table_view`] applies the same rules to rows in memory.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct TableQuery {
+    /// What was typed in the filter box.
+    pub query: String,
+    /// The sorted column and direction, if any.
+    pub sort: Option<(usize, SortDirection)>,
+    /// Zero-based page.
+    pub page: usize,
+    pub page_size: usize,
 }
 
 /// What the table shows for a given query, sort and page. Pure, so it is easy to test.
@@ -103,6 +137,19 @@ pub fn DataTable(
     /// Extra controls (outside filters, actions) shown in the toolbar beside the filter box.
     #[props(default)]
     toolbar: Option<Element>,
+    /// Server mode: the number of rows that match on the server. `rows` is then only the
+    /// current page, already filtered and sorted there; the table does no filtering, sorting
+    /// or paging itself and reports every change through `on_query_change`.
+    #[props(default)]
+    total_rows: Option<usize>,
+    /// Server mode: called when the filter text, the sort or the page changes (not on the
+    /// first render, which shows `TableQuery::new(page_size)`). Fetch that page and pass it
+    /// back as `rows` and `total_rows`.
+    #[props(default)]
+    on_query_change: Callback<TableQuery>,
+    /// A page is being fetched: the table is marked busy and the status says so.
+    #[props(default)]
+    loading: bool,
 ) -> Element
 ```
 
