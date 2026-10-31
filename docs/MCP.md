@@ -5,7 +5,7 @@
 It is the same CLI as the rest of `atoll`, so install that first:
 
 ```sh
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli   # installs `atoll`
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli   # installs `atoll`
 ```
 
 ## What the agent gets

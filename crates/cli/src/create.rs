@@ -11,6 +11,9 @@ use std::path::{Path, PathBuf};
 
 /// The repository the git dependency points at by default.
 pub const REPO: &str = "https://github.com/Amit-1of1/Rust-UI-";
+/// The branch releases come from. Written into the dependency for [`REPO`] when no rev or tag
+/// is given, so the app doesn't depend on which branch GitHub serves by default.
+pub const REPO_BRANCH: &str = "main";
 
 /// Where the generated app gets the kit from.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -53,6 +56,7 @@ pub fn kit_dep(source: &KitSource) -> String {
             let pin = match (rev, tag) {
                 (Some(rev), _) => format!(", rev = \"{rev}\""),
                 (None, Some(tag)) => format!(", tag = \"{tag}\""),
+                (None, None) if url == REPO => format!(", branch = \"{REPO_BRANCH}\""),
                 (None, None) => String::new(),
             };
             format!("ui = {{ package = \"atoll-ui\", git = \"{url}\"{pin} }}")
@@ -229,6 +233,18 @@ mod tests {
             tag: Some("v0.1.0".into()),
         };
         assert!(kit_dep(&tag).ends_with("tag = \"v0.1.0\" }"));
+        let unpinned = KitSource::Git {
+            url: REPO.into(),
+            rev: None,
+            tag: None,
+        };
+        assert!(kit_dep(&unpinned).ends_with("branch = \"main\" }"));
+        let fork = KitSource::Git {
+            url: "https://example.com/fork".into(),
+            rev: None,
+            tag: None,
+        };
+        assert!(kit_dep(&fork).ends_with("git = \"https://example.com/fork\" }"));
     }
 
     #[test]

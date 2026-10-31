@@ -20,7 +20,8 @@
   "description": "A panel that slides up from the bottom and can be dragged down to dismiss.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"
