@@ -38,7 +38,9 @@
         "alert_dialog/mod.rs",
         "alert_dialog/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "aspect_ratio",
@@ -105,7 +107,9 @@
         "button/mod.rs",
         "button/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "button_group",
@@ -253,6 +257,7 @@
         "color_picker/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "input"
       ]
     },
@@ -349,7 +354,9 @@
         "dialog/mod.rs",
         "dialog/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "drag_and_drop_list",
@@ -372,7 +379,9 @@
         "drawer/mod.rs",
         "drawer/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "dropdown_menu",
@@ -446,6 +455,7 @@
       "files": [
         "hooks/clipboard.rs",
         "hooks/docs.md",
+        "hooks/focus_return.rs",
         "hooks/hotkey.rs",
         "hooks/id.rs",
         "hooks/media.rs",
@@ -655,7 +665,9 @@
         "popover/mod.rs",
         "popover/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "progress",
@@ -731,6 +743,7 @@
         "sheet/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "icons",
         "ui_strings"
       ]

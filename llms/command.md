@@ -14,21 +14,21 @@ Pass `hotkey: "k"` to open it with Ctrl+K (Cmd+K on macOS); it uses `use_hotkey`
 
 ## Keyboard and accessibility
 
-Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): not yet.
+Follows the WAI-ARIA [Dialog (Modal) with a Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `dialog`, `combobox`, `listbox`. Works on native (Blitz): partly.
 
 | Key | When | What it does | Native |
 |---|---|---|---|
 | Enter | On the button that opens it | Opens the palette with focus in the search input. | not yet |
 | Control + k | Anywhere on the page, with hotkey set (web only) | Opens the palette. | not yet |
 | z | In the search input | Typing filters the commands. | not yet |
-| Escape | In the palette | Closes it and returns focus to the button that opened it. | not yet |
+| Escape | In the palette | Closes it and returns focus to the button that opened it. | yes |
 
 States:
 
 - `open`: The palette is shown and the search input has focus.
 - `closed`: Only the trigger is shown.
 
-Native: The search input does not get focus when the palette opens, typing does not filter, and focus is not returned after Escape. Ctrl+K is web only.
+Native: The search input does not get focus when the palette opens, typing does not filter, and Ctrl+K is web only.
 
 Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
