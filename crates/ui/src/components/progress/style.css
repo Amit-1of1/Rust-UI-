@@ -22,10 +22,16 @@
 
 @keyframes dx-indeterminate {
     0% {
-        transform: translateX(-100%);
+        transform: translateX(calc(-100% * var(--dx-flip, 1)));
     }
 
     100% {
-        transform: translateX(200%);
+        transform: translateX(calc(200% * var(--dx-flip, 1)));
     }
+}
+
+/* Right-to-left pages: move the other way (docs/RTL.md). An attribute selector, not :dir(), which the
+   CSS minifier rewrites into a list of :lang() values. */
+[dir="rtl"] .dx-progress {
+    --dx-flip: -1;
 }

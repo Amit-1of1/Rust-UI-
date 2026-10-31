@@ -59,7 +59,7 @@ SidebarProvider {
 ```
 
 ## Behaviors
-- Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects left/right.
+- Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects the start (`Left`) or end (`Right`) edge, which swap on right-to-left pages (docs/RTL.md).
 - Collapse: `Offcanvas` hides the rail; `Icon` keeps a thin icon strip and hides labels/actions/badges; `None` is static.
 - Keyboard: ⌘/Ctrl+B toggles via provider. Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
 - Tooltips: `tooltip: Option<Element>` on `SidebarMenuButton`; `None` skips wrapping in Tooltip.

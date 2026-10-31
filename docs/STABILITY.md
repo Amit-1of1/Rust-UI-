@@ -40,6 +40,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 | `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
 | `ToastsExt` and `ToastMessage` | New on 2026-10-14. `ToastProvider` and `use_toast` are stable. |
 | `icons`: `Icon`, `IconData`, `IconNode`, the `icons::lucide` constants (`lucide::CHECK`, `ALL`), the `label` and `mirror_rtl` props and the named `IconSize` steps | New on 2026-10-14 with the generated Lucide set; the data shape may change when Lucide adds new SVG elements. |
+| `ui_strings`: `UiStrings::locale` and the per-language constructors, `LOCALES`, `text_direction` | New on 2026-10-31 (docs/RTL.md); the wording of the drafted translations will change after native-speaker review. |
 | `hooks::Selection`, `use_selection`, `use_selected` | Built for the benchmark app; the API may change with its next use. |
 | `number_field`: `NumberInput`, `NumberField` | New on 2026-10-15 (booking gap 12); `f64` values and the `empty` prop may change once forms need decimals or units. |
 | The `router` feature, `hooks::follow_in_app`, `in_app_href`, `is_current_route`, and `MainContent`'s focus move | New on 2026-10-15 (booking gaps 10 and 11); rides on the Dioxus router's untyped context. |
