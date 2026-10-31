@@ -7,6 +7,7 @@
 //! Internal: this library is the `rust-ui` binary's implementation, public for the repo's
 //! tests, and may change in any release. The commands are the supported interface; which of
 //! them are stable is in docs/STABILITY.md.
+#![forbid(unsafe_code)]
 
 pub mod app;
 pub mod changelog;
@@ -16,6 +17,7 @@ mod contract_tests;
 pub mod contrast;
 pub mod docsgen;
 pub mod doctor;
+pub mod explain;
 pub mod info;
 pub mod llms;
 pub mod manifest;
@@ -151,7 +153,7 @@ fn scan(dir: &Path, name: &str, kind: Kind, components: &[String]) -> io::Result
     let mut tier = Tier::Free;
     let mut entries: Vec<_> = fs::read_dir(dir.join(name))?
         .filter_map(Result::ok)
-        .filter(|e| e.path().is_file())
+        .filter(|e| e.file_type().is_ok_and(|t| t.is_file()))
         .collect();
     entries.sort_by_key(|e| e.file_name());
     for e in entries {
@@ -212,7 +214,64 @@ pub fn to_json(reg: &Registry) -> String {
 pub fn load(root: &Path) -> Result<Registry, String> {
     let path = root.join("registry.json");
     let text = fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    serde_json::from_str(&text).map_err(|e| format!("{}: {e}", path.display()))
+    let reg: Registry =
+        serde_json::from_str(&text).map_err(|e| format!("{}: {e}", path.display()))?;
+    validate(&reg).map_err(|e| format!("{}: {e}", path.display()))?;
+    Ok(reg)
+}
+
+/// Whether `name` can be an item: a Rust module name, so it is also a plain folder name.
+pub fn is_item_name(name: &str) -> bool {
+    let mut chars = name.chars();
+    matches!(chars.next(), Some('a'..='z' | '_'))
+        && chars.all(|c| matches!(c, 'a'..='z' | '0'..='9' | '_'))
+}
+
+/// Whether `file` is `<name>/<plain file name>`, the only shape an item's file can have.
+pub fn is_item_file(name: &str, file: &str) -> bool {
+    file.split_once('/').is_some_and(|(dir, f)| {
+        dir == name && !f.is_empty() && f != "." && f != ".." && !f.contains(['/', '\\', ':', '\0'])
+    })
+}
+
+/// Whether `dir` is a relative path that stays inside the folder it is joined onto.
+pub fn is_inside(dir: &Path) -> bool {
+    dir.components().all(|c| {
+        matches!(
+            c,
+            std::path::Component::Normal(_) | std::path::Component::CurDir
+        )
+    })
+}
+
+/// Refuse a registry whose names or paths would leave the item folders.
+///
+/// A `--source` can be any git URL, so its `registry.json` is untrusted input: `add` and the
+/// MCP server join its file paths onto the app's folders and write `pub mod <name>;` lines
+/// into its source. Every file must be `<item name>/<file name>` and every name a module name.
+pub fn validate(reg: &Registry) -> Result<(), String> {
+    for item in &reg.items {
+        if !is_item_name(&item.name) {
+            return Err(format!("`{}` is not a valid item name", item.name));
+        }
+        for dep in &item.registry_dependencies {
+            if !is_item_name(dep) {
+                return Err(format!(
+                    "`{}` depends on `{dep}`, not a valid item name",
+                    item.name
+                ));
+            }
+        }
+        for file in &item.files {
+            if !is_item_file(&item.name, file) {
+                return Err(format!(
+                    "`{}` lists `{file}`; files must be `{}/<file name>`",
+                    item.name, item.name
+                ));
+            }
+        }
+    }
+    Ok(())
 }
 
 /// The requested items plus everything they depend on, in a stable order.
@@ -306,6 +365,13 @@ pub fn add_to(
         for file in &item.files {
             let from = root.join(item.kind.dir()).join(file);
             let to = target.join(file);
+            // A link in a remote checkout could point anywhere (`~/.ssh/...`); copy only
+            // regular files, and never write through a link the app already has.
+            refuse_links(&from)?;
+            refuse_links(&to)?;
+            if let Some(dir) = to.parent() {
+                refuse_links(dir)?;
+            }
             match compare(&from, &to)? {
                 FileState::Same => continue,
                 FileState::Changed if !force => {
@@ -322,6 +388,17 @@ pub fn add_to(
         }
     }
     Ok((written, skipped))
+}
+
+/// An error if `path` exists and is a symbolic link.
+pub fn refuse_links(path: &Path) -> io::Result<()> {
+    match fs::symlink_metadata(path) {
+        Ok(m) if m.file_type().is_symlink() => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            format!("{} is a symbolic link; refusing to copy it", path.display()),
+        )),
+        _ => Ok(()),
+    }
 }
 
 /// `pub mod` lines for the items of one kind, to paste into the target's `components/mod.rs`
@@ -388,7 +465,12 @@ pub fn materialize(source: &str, cache_root: &Path) -> Result<PathBuf, String> {
     } else {
         fs::create_dir_all(cache_root).map_err(|e| e.to_string())?;
         let target = dir.to_string_lossy().into_owned();
-        git(&["clone", "--depth", "1", "-q", source, &target], None)?;
+        // `--` keeps a source from being read as an option; only the URL schemes in
+        // `is_remote` get here, so `ext::` and other command-running transports never do.
+        git(
+            &["clone", "--depth", "1", "-q", "--", source, &target],
+            None,
+        )?;
     }
     Ok(dir)
 }
