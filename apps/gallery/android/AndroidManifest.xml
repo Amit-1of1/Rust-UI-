@@ -4,7 +4,9 @@
   change itself. dx's default only lists orientation, screen size and keyboardHidden, so a
   dark-mode switch, font scale, density, locale or keyboard change made Android destroy and
   recreate the activity, and the app aborted ("pthread_mutex_lock called on a destroyed
-  mutex") because the Rust side cannot survive a recreated NativeActivity.
+  mutex") because the Rust side cannot survive a recreated NativeActivity. Android still
+  forces a recreate for changes no app can declare (asset paths, e.g. a system overlay or
+  wallpaper colours changing), so that crash remains possible until the runtime handles it.
   dx copies this file as-is (no template), so keep it in step with dx's
   assets/android/gen/app/src/main/AndroidManifest.xml.hbs when dx is upgraded.
 -->

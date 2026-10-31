@@ -8,4 +8,4 @@
 
 ### Fixed
 
-- **gallery:** On Android the gallery no longer aborts when the system changes dark mode, font size, density, locale or keyboard while it runs: its own `AndroidManifest.xml` lets the activity handle every configuration change instead of being recreated (dx's default only covers rotation). This was the intermittent crash in the Android emulator check. (#64)
+- **gallery:** On Android the gallery's activity now handles dark-mode, font-size, density, locale and keyboard changes itself instead of being destroyed and recreated (dx's default manifest only covers rotation), because the app cannot yet survive a recreated activity. Changes Android always forces a recreate for (such as a new system overlay right after boot) still crash it; see `apps/showcase/README.md`. (#64)
