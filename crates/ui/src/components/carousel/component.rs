@@ -8,9 +8,10 @@ use std::rc::Rc;
 struct Styles;
 
 fn scroll_by(track: &str, element: Option<Rc<MountedData>>, direction: f64) {
-    // `track` is generated here (`dx-carousel-<n>`), never user text.
+    // `track` is generated here (`dx-carousel-<n>`), never user text. On right-to-left pages
+    // "next" scrolls towards the left.
     let script = document::eval(&format!(
-        "var t=document.getElementById('{track}');if(t){{var r=matchMedia('(prefers-reduced-motion: reduce)').matches;t.scrollBy({{left:{direction}*t.clientWidth*0.9,behavior:r?'auto':'smooth'}});}}"
+        "var t=document.getElementById('{track}');if(t){{var r=matchMedia('(prefers-reduced-motion: reduce)').matches,d=getComputedStyle(t).direction==='rtl'?-1:1;t.scrollBy({{left:d*{direction}*t.clientWidth*0.9,behavior:r?'auto':'smooth'}});}}"
     ));
     // Without scripts (native) `send` fails; scroll through the element handle instead.
     if script.send(()).is_ok() {
