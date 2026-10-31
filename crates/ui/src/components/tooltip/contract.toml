@@ -1,0 +1,39 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+pattern = "Tooltip"
+apg = "tooltip"
+roles = ["tooltip"]
+native_note = "On native, Tab from the only focusable element in the demo leaves focus where it is, so the tooltip stays."
+
+[parts]
+trigger = "[tabindex='0']"
+tooltip = "[role=tooltip]"
+
+[[states]]
+name = "shown"
+means = "The tooltip text is shown next to the trigger."
+check = "visible tooltip"
+
+[[keys]]
+key = "Tab"
+when = "On the trigger, with the tooltip shown (focus shows it)"
+does = "Moves focus on and hides the tooltip."
+native = false
+test = """
+focus trigger
+state shown
+press Tab
+hidden tooltip
+"""
+
+[[keys]]
+key = "Escape"
+when = "While the tooltip is shown"
+does = "Hides the tooltip; focus stays on the trigger."
+native = true
+test = """
+focus trigger
+press Escape
+hidden tooltip
+focused trigger
+"""

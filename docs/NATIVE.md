@@ -1,6 +1,6 @@
 # Native (Blitz) status
 
-Tested 2026-10-14 on `dioxus-native` 0.7.10 (Blitz 0.2) **with our patches** to `blitz-dom`, `blitz-paint` and `dioxus-native-dom` (in `vendor/`, see [vendor/README.md](../vendor/README.md)). Static components, the modals (dialog, alert dialog, sheet, drawer, command palette), click-driven popups (popover, dropdown, select, combobox, date picker, multi select), the click controls (checkbox, switch, radio, toggle, accordion, collapsible, tabs), hover UI (tooltip, hover card), the menubar, clicking a slider track, keyboard focus (Tab, Shift+Tab, arrow keys between tabs, Enter and Space on buttons) work. What is still missing is anything that needs `document::eval` (see Limits). Native is still a preview, not a target.
+Tested 2026-10-14 on `dioxus-native` 0.7.10 (Blitz 0.2) **with our patches** to `blitz-dom`, `blitz-paint` and `dioxus-native-dom` (on our forks, pinned by commit; see [FORKS.md](FORKS.md)). Static components, the modals (dialog, alert dialog, sheet, drawer, command palette), click-driven popups (popover, dropdown, select, combobox, date picker, multi select), the click controls (checkbox, switch, radio, toggle, accordion, collapsible, tabs), hover UI (tooltip, hover card), the menubar, clicking a slider track, keyboard focus (Tab, Shift+Tab, arrow keys between tabs, Enter and Space on buttons) work. What is still missing is anything that needs `document::eval` (see Limits). Native is still a preview, not a target.
 
 ## How to run it
 
@@ -21,7 +21,7 @@ The smoke test fails a demo that exits, panics or draws a blank window. It canno
 
 ## Results
 
-All 68 demos start and draw (smoke test, before and after this pass). The headless interaction tests went from 2 of 10 passing on `main` to 10 of 10.
+All 68 demos of 2026-10-14 started and drew (smoke test, before and after this pass; the kit has more demos since, and `scripts/native-smoke.sh --build` reruns it). The headless tests below run every current demo in `cargo test`. The headless interaction tests went from 2 of 10 passing on `main` to 10 of 10.
 
 ### Fixed
 

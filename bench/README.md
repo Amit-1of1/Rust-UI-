@@ -12,9 +12,46 @@ The app uses tabs, a sortable, filterable, selectable, paged data table, a modal
 
 ## Results
 
+### Re-measured on 2026-10-31 (current numbers)
+
+Rerun for the claims audit ([docs/CLAIMS.md](../docs/CLAIMS.md)) on `main` at `e303195`: the same 4-core VM type, headless Chromium 153 (Playwright 1.63.0), release builds from `scripts/release-web.sh` (split wasm, one CSS file). Raw numbers: [`results/size-2026-10-31.json`](results/size-2026-10-31.json) (`size.mjs`, 5 runs) and [`results/run-2026-10-31.json`](results/run-2026-10-31.json) (`run.mjs`, 7 runs). The kit grew from about 50 to 80 components since the tables further down, and the downloads grew with it.
+
+| First screen, brotli (`size.mjs`) | Requests | Size | Styled on slow 4G |
+|---|---|---|---|
+| Taskboard, Rust (split) | 5 | **306 KB** | 2.29 s |
+| Taskboard, React | 3 | **101 KB** | 0.97 s |
+| Taskboard, Svelte | 3 | 71 KB | 0.83 s |
+| Gallery (split; everything: 1,105 KB) | 5 | 295 KB | 2.35 s |
+| Dashboard (split; everything: 752 KB) | 5 | 347 KB | 2.48 s |
+
+The Taskboard's first screen is 3.0x React's and 4.3x Svelte's (it was 2.9x and 4.1x on 2026-10-14). The gallery's first screen grew from 238 KB to 295 KB and its lazy part from 671 KB to 806 KB.
+
+| `run.mjs`, median of 7 | Rust | React | Svelte |
+|---|---|---|---|
+| Ready to use (local, fast CPU) | 140 ms | 147 ms | 132 ms |
+| Ready to use (CPU slowed 4x) | 488 ms | 493 ms | 463 ms |
+| Create 1,000 rows | 96 | **77** | 105 |
+| Replace 1,000 rows | **84** | 85 | 95 |
+| Update every 10th row | 20 | 18 | **15** |
+| Select a row | **3.5** | 5.8 | 5.1 |
+| Swap two rows | **13** | 63 | 15 |
+| Remove a row | 19 | **18** | 20 |
+| Create 10,000 rows | **734** | 839 | 992 |
+| Append 1,000 to 1,000 | 128 | **109** | 144 |
+| Clear 1,000 rows | 11 | 12 | **9.4** |
+| Filter / sort 1,000 tasks | 16 / 14 ms | 14 / 18 ms | 16 / 24 ms |
+| axe violations (4 states), keyboard checks | 0, 11/11 | 0, 11/11 | 0, 11/11 |
+| Whole browser RSS with 10,000 rows | 571 MB | 545 MB | 542 MB |
+| Lines written (app + CSS) | 594 | 1,400 | 1,348 |
+| Release rebuild after a one-line change (`dx build --release`, 2 runs) | 46 s | | |
+
+Startup once the bytes have arrived is still a tie (within 6% at 4x CPU). Rust is fastest on 4 of the 9 DOM operations now (6 of 9 on 2026-10-13): React is faster at creating 1,000 rows, removing a row and appending, Svelte at partial updates and clearing. The Taskboard is 594 lines now (532 before the wasm split, which added `lazy` wrappers). The tables below are the earlier rounds, kept for history.
+
+### Earlier rounds (2026-10-13 and 2026-10-14)
+
 These are from `results/latest.json`: release builds served as static files, headless Chromium 141, a 4-core shared cloud VM, and the median of 7 runs after one warm-up. Absolute numbers are noisy on this machine, so compare the columns with each other.
 
-### Download and startup
+#### Download and startup
 
 | | Rust | React | Svelte |
 |---|---|---|---|
@@ -27,7 +64,7 @@ These are from `results/latest.json`: release builds served as static files, hea
 
 The wasm file is most of the Rust download. Once the bytes have arrived, startup is a three-way tie. The size cost shows up only on the network.
 
-### Shrinking the Rust download
+#### Shrinking the Rust download
 
 The table above is the plain `dx build --release`. [`scripts/release-web.sh trial`](../scripts/release-web.sh) adds two steps:
 
@@ -47,7 +84,7 @@ Medians of 7 runs on 2026-10-13, measured with scripts like `bench/run.mjs` agai
 
 The CSS file alone saves requests, not bytes: the component styles are 6 KB brotli in total.
 
-### Split by default: the gallery and the dashboard
+#### Split by default: the gallery and the dashboard
 
 Since 2026-10-14 `scripts/release-web.sh` splits the gallery and the dashboard too. Measured with [`size.mjs`](size.mjs): served with brotli, 5 runs, "slow 4G" is 1.6 Mbps down with 150 ms RTT, and "everything" is after every screen has been opened once. Before is the plain release build plus the one CSS file; after adds the split, built with `dx` from `scripts/install-dx.sh`. Raw numbers: `results/size-2026-10-14.json`.
 
@@ -76,7 +113,7 @@ The React and Svelte comparison, rerun the same way on 2026-10-14 (Taskboard fir
 
 The Taskboard's split didn't change in this round, so the gap to React and Svelte is where it was (2.9x and 4.1x for the first screen).
 
-### DOM operations (`?bench`, ms, lower is better)
+#### DOM operations (`?bench`, ms, lower is better)
 
 Each time runs from the start of the click to the end of the last paint it causes, read from a Chrome trace, as js-framework-benchmark does.
 
@@ -92,11 +129,11 @@ Each time runs from the start of the click to the end of the last paint it cause
 | Remove a row | **18** | 21 | 26 |
 | Clear 1,000 rows | **12** | 18 | 14 |
 
-Rust is fastest on 6 of the 9 operations. It is within 10% of React on creating and replacing 1,000 rows, and Svelte is fastest at updating every 10th row.
+On 2026-10-13 Rust was fastest on 6 of the 9 operations (4 of 9 on 2026-10-31, above). It is within 10% of React on creating and replacing 1,000 rows, and Svelte is fastest at updating every 10th row.
 
 Two changes got it here (see "Tuning" below).
 
-### The real app
+#### The real app
 
 | | Rust | React | Svelte |
 |---|---|---|---|
@@ -107,7 +144,7 @@ Two changes got it here (see "Tuning" below).
 | Lines written (app + CSS) | **532** | 1,400 | 1,348 |
 | Release rebuild after a one-line change | 45 s | ~1 s | ~3.5 s |
 
-### Memory
+#### Memory
 
 | | Rust | React | Svelte |
 |---|---|---|---|
@@ -139,17 +176,17 @@ What didn't help:
 
 Better:
 
-- About 2.6x less code to write: 532 lines against roughly 1,400. The kit ships styled, accessible components, while the React and Svelte versions style bare primitives by hand.
-- Fastest on 6 of 9 DOM operations, including 10,000 rows (889 ms against 1,124 and 1,189), selection and swapping.
+- About 2.3x less code to write: 594 lines against roughly 1,400. The kit ships styled, accessible components, while the React and Svelte versions style bare primitives by hand.
+- Fastest on 4 of 9 DOM operations (2026-10-31), including 10,000 rows (734 ms against 839 and 992), selection and swapping.
 - Accessibility and keyboard behaviour come out of the box.
 - The compiler type-checks the whole app.
 
 Worse:
 
-- The download is 3.7x React's and 5.3x Svelte's. With the split build below it is 2.8x and 4x for the first screen.
-- Release builds are slow: 45 s for a one-line change. Day-to-day work uses `dx serve`, which hot-reloads.
+- The download is large: with the split build the first screen is 3.0x React's and 4.3x Svelte's (2026-10-31).
+- Release builds are slow: 46 s for a one-line change. Day-to-day work uses `dx serve`, which hot-reloads.
 - A plain build ships every component's CSS as its own file, so it makes 15 requests where the others make 3. `scripts/release-web.sh` brings that to 6.
-- Svelte is still faster at updating many rows in place, and React at creating 1,000 rows.
+- Svelte is still faster at updating many rows in place, and React at creating 1,000 rows, removing a row and appending.
 
 ## Ideas for the gaps that remain
 

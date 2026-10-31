@@ -3,9 +3,9 @@
 **Accessible, animated UI components for [Dioxus](https://dioxuslabs.com), in plain Rust and plain CSS.** shadcn-style: use them from the crate, or copy a component's source into your app and own it.
 
 - **80 components and 4 whole-screen blocks**: forms, pickers, menus, dialogs, sheets, toasts, data tables, charts, a command palette, a chat and agent UI set.
-- **Accessible by test, not by promise**: every component passes axe in light and dark on Chromium, Firefox and WebKit; keyboard contracts are checked key by key; text contrast is proved for every accent preset.
+- **Accessible by test, not by promise**: every demo passes axe in light and dark and a Tab-only walkthrough, on Chromium, Firefox and WebKit; 28 components ship a keyboard contract whose every row runs as a test in those browsers and on native; text contrast is proved for every accent preset. Each claim and how to check it: [docs/CLAIMS.md](docs/CLAIMS.md).
 - **Motion built in**: springs, enter and exit, gestures and layout animation, all switched off under reduced motion.
-- **Web, desktop and native**: the same components on the web, in a desktop window and on the Blitz native renderer.
+- **Web, desktop and native**: the same components on the web, in a desktop window and on Android (system webview, emulator-tested). The Blitz native renderer is a tested preview.
 - **Tooling an app actually needs**: `atoll create`, `add`, `update` with a three-way merge, `explain` for compiler errors, `theme --from-image`, an MCP server and an agent skill.
 
 ## Quick start
@@ -13,7 +13,7 @@
 ```sh
 rustup target add wasm32-unknown-unknown
 cargo install dioxus-cli --version 0.7.10 --locked
-cargo install --git https://github.com/Amit-1of1/Rust-UI- atoll-cli --locked   # crates.io: `cargo install atoll-cli` after the first release
+cargo install --git https://github.com/Amit-1of1/Rust-UI- --branch main atoll-cli --locked   # crates.io: `cargo install atoll-cli` after the first release
 atoll create my-app --git
 cd my-app && dx serve       # http://localhost:8080
 ```
@@ -65,7 +65,7 @@ cargo build -p gallery --target wasm32-unknown-unknown
 ```toml
 [dependencies]
 dioxus = { version = "0.7.10", features = ["web"] }
-ui = { git = "https://github.com/Amit-1of1/Rust-UI-", package = "atoll-ui", features = ["web"] }
+ui = { git = "https://github.com/Amit-1of1/Rust-UI-", branch = "main", package = "atoll-ui", features = ["web"] }
 ```
 
 ```rust
@@ -142,9 +142,9 @@ What changed is in [CHANGELOG.md](CHANGELOG.md), with upgrade steps for breaking
 
 `.github/workflows/pages.yml` builds the docs site (landing page) and the gallery (under `/gallery/`) and deploys them to GitHub Pages. It is manual and has not run yet; the one-time repo settings it needs are in [docs/PUBLISHING.md](docs/PUBLISHING.md#docs-site-on-github-pages).
 
-## Native (experimental)
+## Native (preview)
 
-`cargo check -p gallery --no-default-features --features native` compiles against Blitz. It has not been run; see `docs/GUARDRAILS.md`.
+`apps/native` renders the demos on Blitz, the native renderer. `cargo test -p native` runs them headless (no window or GPU): interaction checks, every keyboard contract row marked native, and a keyboard fuzzer over every demo. What works and what doesn't: [docs/NATIVE.md](docs/NATIVE.md).
 
 ## Accessibility check
 
