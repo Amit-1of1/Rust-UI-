@@ -1,8 +1,9 @@
 use crate::components::button::{Button, ButtonVariant, IconButton};
 use crate::components::icons::{
-    lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings, Star,
-    Trash,
+    atoll, lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings,
+    Star, Trash,
 };
+use crate::components::input::Input;
 use dioxus::prelude::*;
 
 #[component]
@@ -63,6 +64,77 @@ pub fn Demo() -> Element {
                     Settings { size: "1rem", "aria-hidden": "true" }
                     span { class: "sr-only", "Settings" }
                 }
+            }
+            AtollIcons {}
+        }
+    }
+}
+
+/// Atoll's own icons, searchable by name, default label and keyword, grouped by category.
+#[component]
+fn AtollIcons() -> Element {
+    let mut query = use_signal(String::new);
+    let q = query.read().trim().to_lowercase();
+    let matches = |i: usize| {
+        let m = &atoll::INDEX[i];
+        q.is_empty()
+            || m.name.contains(&q)
+            || m.label.to_lowercase().contains(&q)
+            || m.keywords.iter().any(|k| k.contains(&q))
+    };
+    let shown: Vec<usize> = (0..atoll::ALL.len()).filter(|&i| matches(i)).collect();
+    let count = shown.len();
+    rsx! {
+        section { "aria-labelledby": "atoll-icons-title", style: "display: flex; flex-direction: column; gap: 0.75rem;",
+            h3 { id: "atoll-icons-title", style: "margin: 0.5rem 0 0;", "Atoll icons" }
+            p { style: "margin: 0; color: var(--secondary-color-5);",
+                "Drawn for the kit on Lucide's 24px grid: ui::icons::atoll::Crate {{}}. Reserved icons mean one action everywhere."
+            }
+            label { r#for: "atoll-icon-search", style: "font-weight: 500;", "Search icons" }
+            Input {
+                id: "atoll-icon-search",
+                r#type: "search",
+                placeholder: "crate, agent, delete...",
+                value: "{query}",
+                oninput: move |e: FormEvent| query.set(e.value()),
+            }
+            p { role: "status", style: "margin: 0; font-size: 0.875rem; color: var(--secondary-color-5);",
+                "{count} of {atoll::ALL.len()} icons"
+            }
+            for category in atoll::CATEGORIES {
+                if shown.iter().any(|&i| atoll::INDEX[i].category == category) {
+                    div { key: "{category}",
+                        h4 { style: "margin: 0.5rem 0 0.25rem; font-size: 0.8125rem; text-transform: capitalize; color: var(--secondary-color-5);",
+                            "{category}"
+                        }
+                        ul {
+                            style: "display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 0.5rem; list-style: none; margin: 0; padding: 0;",
+                            for i in shown.iter().copied().filter(|&i| atoll::INDEX[i].category == category) {
+                                AtollTile { key: "{atoll::INDEX[i].name}", index: i }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn AtollTile(index: usize) -> Element {
+    let meta = &atoll::INDEX[index];
+    let title = match meta.reserved {
+        Some(r) => format!("{}: reserved for {r}. Keywords: {}", meta.label, meta.keywords.join(", ")),
+        None => format!("{}. Keywords: {}", meta.label, meta.keywords.join(", ")),
+    };
+    rsx! {
+        li {
+            title,
+            style: "display: flex; flex-direction: column; align-items: center; gap: 0.375rem; padding: 0.75rem 0.25rem 0.5rem; border: 1px solid var(--primary-color-6); border-radius: var(--radius, 0.5rem); font-size: 0.75rem; text-align: center;",
+            Icon { icon: atoll::ALL[index], size: IconSize::Lg }
+            span { "{meta.name}" }
+            if meta.reserved.is_some() {
+                span { style: "font-size: 0.6875rem; color: var(--secondary-color-5);", "reserved" }
             }
         }
     }

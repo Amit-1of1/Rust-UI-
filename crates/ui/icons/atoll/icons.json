@@ -1,0 +1,1039 @@
+{
+  "style": "lagoon",
+  "icons": {
+    "accessibility": {
+      "label": "Accessibility",
+      "category": "app",
+      "keywords": [
+        "a11y",
+        "inclusive",
+        "person",
+        "universal"
+      ]
+    },
+    "add": {
+      "label": "Add",
+      "category": "system",
+      "keywords": [
+        "plus",
+        "new",
+        "create"
+      ],
+      "reserved": "adding or creating an item"
+    },
+    "agent": {
+      "label": "Agent",
+      "category": "agent",
+      "keywords": [
+        "ai",
+        "assistant",
+        "bot",
+        "automation"
+      ]
+    },
+    "animate": {
+      "label": "Animation",
+      "category": "design",
+      "keywords": [
+        "motion",
+        "move",
+        "transition",
+        "speed"
+      ],
+      "mirror_rtl": true
+    },
+    "api": {
+      "label": "API",
+      "category": "dev",
+      "keywords": [
+        "plug",
+        "integration",
+        "endpoint",
+        "connect"
+      ]
+    },
+    "atoll": {
+      "label": "Atoll",
+      "category": "brand",
+      "keywords": [
+        "logo",
+        "brand",
+        "mark",
+        "ring island"
+      ],
+      "reserved": "the Atoll brand"
+    },
+    "attachment": {
+      "label": "Attachment",
+      "category": "content",
+      "keywords": [
+        "paperclip",
+        "attach",
+        "file"
+      ]
+    },
+    "back": {
+      "label": "Back",
+      "category": "navigation",
+      "keywords": [
+        "arrow left",
+        "previous",
+        "return"
+      ],
+      "reserved": "going back",
+      "mirror_rtl": true
+    },
+    "block": {
+      "label": "Block",
+      "category": "design",
+      "keywords": [
+        "section",
+        "template",
+        "page block",
+        "layout"
+      ]
+    },
+    "bookmark": {
+      "label": "Bookmark",
+      "category": "content",
+      "keywords": [
+        "save",
+        "read later",
+        "ribbon"
+      ]
+    },
+    "branch": {
+      "label": "Branch",
+      "category": "dev",
+      "keywords": [
+        "git",
+        "version control",
+        "fork",
+        "merge"
+      ]
+    },
+    "bug": {
+      "label": "Bug",
+      "category": "dev",
+      "keywords": [
+        "issue",
+        "defect",
+        "debug",
+        "error"
+      ]
+    },
+    "build": {
+      "label": "Build",
+      "category": "dev",
+      "keywords": [
+        "compile",
+        "cargo build",
+        "blocks",
+        "assemble"
+      ]
+    },
+    "calendar": {
+      "label": "Calendar",
+      "category": "content",
+      "keywords": [
+        "date",
+        "schedule",
+        "event",
+        "day"
+      ]
+    },
+    "chart-bar": {
+      "label": "Bar chart",
+      "category": "data",
+      "keywords": [
+        "columns",
+        "statistics",
+        "compare",
+        "analytics"
+      ]
+    },
+    "chart-pie": {
+      "label": "Pie chart",
+      "category": "data",
+      "keywords": [
+        "share",
+        "proportion",
+        "donut",
+        "breakdown"
+      ]
+    },
+    "chart-trend": {
+      "label": "Trend",
+      "category": "data",
+      "keywords": [
+        "line chart",
+        "growth",
+        "analytics",
+        "increase"
+      ]
+    },
+    "chat": {
+      "label": "Chat",
+      "category": "content",
+      "keywords": [
+        "message",
+        "comment",
+        "conversation",
+        "bubble"
+      ]
+    },
+    "check": {
+      "label": "Done",
+      "category": "system",
+      "keywords": [
+        "tick",
+        "confirm",
+        "selected",
+        "ok"
+      ],
+      "reserved": "confirming or a selected state"
+    },
+    "clock": {
+      "label": "Time",
+      "category": "content",
+      "keywords": [
+        "clock",
+        "hour",
+        "duration",
+        "schedule"
+      ]
+    },
+    "close": {
+      "label": "Close",
+      "category": "system",
+      "keywords": [
+        "x",
+        "dismiss",
+        "cancel",
+        "clear"
+      ],
+      "reserved": "closing or dismissing a surface"
+    },
+    "code": {
+      "label": "Code",
+      "category": "dev",
+      "keywords": [
+        "source",
+        "brackets",
+        "develop",
+        "snippet"
+      ]
+    },
+    "collapse": {
+      "label": "Collapse",
+      "category": "navigation",
+      "keywords": [
+        "chevron up",
+        "close",
+        "less",
+        "fold"
+      ],
+      "reserved": "closing a section"
+    },
+    "component": {
+      "label": "Component",
+      "category": "design",
+      "keywords": [
+        "ui",
+        "widget",
+        "building block",
+        "kit"
+      ]
+    },
+    "copy": {
+      "label": "Copy",
+      "category": "system",
+      "keywords": [
+        "duplicate",
+        "clipboard",
+        "clone"
+      ],
+      "reserved": "copying to the clipboard"
+    },
+    "crate": {
+      "label": "Crate",
+      "category": "dev",
+      "keywords": [
+        "package",
+        "cargo",
+        "dependency",
+        "library",
+        "rust"
+      ]
+    },
+    "dark-mode": {
+      "label": "Dark mode",
+      "category": "app",
+      "keywords": [
+        "moon",
+        "night",
+        "dim",
+        "theme"
+      ],
+      "reserved": "switching to the dark theme"
+    },
+    "dashboard": {
+      "label": "Dashboard",
+      "category": "data",
+      "keywords": [
+        "overview",
+        "widgets",
+        "panels",
+        "home"
+      ]
+    },
+    "database": {
+      "label": "Database",
+      "category": "dev",
+      "keywords": [
+        "storage",
+        "sql",
+        "data",
+        "table"
+      ]
+    },
+    "delete": {
+      "label": "Delete",
+      "category": "system",
+      "keywords": [
+        "trash",
+        "bin",
+        "discard",
+        "destroy"
+      ],
+      "reserved": "deleting for good"
+    },
+    "deploy": {
+      "label": "Deploy",
+      "category": "dev",
+      "keywords": [
+        "cloud",
+        "publish",
+        "ship",
+        "release"
+      ]
+    },
+    "desktop-app": {
+      "label": "Desktop app",
+      "category": "app",
+      "keywords": [
+        "monitor",
+        "computer",
+        "native",
+        "window"
+      ]
+    },
+    "download": {
+      "label": "Download",
+      "category": "system",
+      "keywords": [
+        "save",
+        "export",
+        "get"
+      ],
+      "reserved": "downloading a file"
+    },
+    "edit": {
+      "label": "Edit",
+      "category": "system",
+      "keywords": [
+        "pencil",
+        "write",
+        "change",
+        "rename"
+      ],
+      "reserved": "editing in place"
+    },
+    "error": {
+      "label": "Error",
+      "category": "status",
+      "keywords": [
+        "failed",
+        "problem",
+        "invalid",
+        "danger"
+      ],
+      "reserved": "errors"
+    },
+    "expand": {
+      "label": "Expand",
+      "category": "navigation",
+      "keywords": [
+        "chevron down",
+        "open",
+        "more",
+        "disclose"
+      ],
+      "reserved": "opening a section or list"
+    },
+    "external-link": {
+      "label": "Opens in a new tab",
+      "category": "system",
+      "keywords": [
+        "external",
+        "new window",
+        "outside",
+        "open"
+      ],
+      "reserved": "links that leave the app",
+      "mirror_rtl": true
+    },
+    "favorite": {
+      "label": "Favorite",
+      "category": "content",
+      "keywords": [
+        "star",
+        "rate",
+        "bookmark",
+        "important"
+      ]
+    },
+    "file": {
+      "label": "File",
+      "category": "content",
+      "keywords": [
+        "document",
+        "page",
+        "paper"
+      ]
+    },
+    "filter": {
+      "label": "Filter",
+      "category": "system",
+      "keywords": [
+        "funnel",
+        "narrow",
+        "refine"
+      ],
+      "reserved": "filtering a list"
+    },
+    "focus": {
+      "label": "Focus",
+      "category": "design",
+      "keywords": [
+        "focus ring",
+        "keyboard",
+        "a11y",
+        "target"
+      ]
+    },
+    "folder": {
+      "label": "Folder",
+      "category": "content",
+      "keywords": [
+        "directory",
+        "group",
+        "collection"
+      ]
+    },
+    "fullscreen": {
+      "label": "Full screen",
+      "category": "navigation",
+      "keywords": [
+        "maximize",
+        "expand view",
+        "zoom"
+      ]
+    },
+    "help": {
+      "label": "Help",
+      "category": "status",
+      "keywords": [
+        "question",
+        "support",
+        "faq"
+      ],
+      "reserved": "help"
+    },
+    "hide": {
+      "label": "Hide",
+      "category": "system",
+      "keywords": [
+        "eye off",
+        "invisible",
+        "conceal"
+      ],
+      "reserved": "hiding content"
+    },
+    "home": {
+      "label": "Home",
+      "category": "navigation",
+      "keywords": [
+        "house",
+        "start",
+        "main"
+      ],
+      "reserved": "the home page"
+    },
+    "hot-reload": {
+      "label": "Hot reload",
+      "category": "dev",
+      "keywords": [
+        "hot patch",
+        "live reload",
+        "refresh",
+        "fast"
+      ]
+    },
+    "image": {
+      "label": "Image",
+      "category": "content",
+      "keywords": [
+        "picture",
+        "photo",
+        "media"
+      ]
+    },
+    "info": {
+      "label": "Information",
+      "category": "status",
+      "keywords": [
+        "about",
+        "details",
+        "notice",
+        "tip"
+      ],
+      "reserved": "neutral information"
+    },
+    "keyboard": {
+      "label": "Keyboard",
+      "category": "app",
+      "keywords": [
+        "shortcut",
+        "keys",
+        "hotkey",
+        "typing"
+      ]
+    },
+    "layout": {
+      "label": "Layout",
+      "category": "design",
+      "keywords": [
+        "grid",
+        "columns",
+        "structure",
+        "template"
+      ]
+    },
+    "light-mode": {
+      "label": "Light mode",
+      "category": "app",
+      "keywords": [
+        "sun",
+        "day",
+        "bright",
+        "theme"
+      ],
+      "reserved": "switching to the light theme"
+    },
+    "like": {
+      "label": "Like",
+      "category": "content",
+      "keywords": [
+        "heart",
+        "love",
+        "save"
+      ]
+    },
+    "link": {
+      "label": "Link",
+      "category": "system",
+      "keywords": [
+        "url",
+        "chain",
+        "hyperlink",
+        "permalink"
+      ]
+    },
+    "loading": {
+      "label": "Loading",
+      "category": "status",
+      "keywords": [
+        "spinner",
+        "progress",
+        "busy",
+        "wait"
+      ],
+      "reserved": "work in progress"
+    },
+    "lock": {
+      "label": "Locked",
+      "category": "system",
+      "keywords": [
+        "secure",
+        "private",
+        "password",
+        "closed"
+      ]
+    },
+    "mail": {
+      "label": "Email",
+      "category": "content",
+      "keywords": [
+        "envelope",
+        "message",
+        "inbox",
+        "letter"
+      ]
+    },
+    "menu": {
+      "label": "Menu",
+      "category": "system",
+      "keywords": [
+        "hamburger",
+        "navigation",
+        "lines",
+        "open menu"
+      ],
+      "reserved": "opening the main menu"
+    },
+    "mobile-app": {
+      "label": "Mobile app",
+      "category": "app",
+      "keywords": [
+        "phone",
+        "android",
+        "ios",
+        "smartphone"
+      ]
+    },
+    "more": {
+      "label": "More",
+      "category": "system",
+      "keywords": [
+        "ellipsis",
+        "overflow",
+        "actions",
+        "dots"
+      ],
+      "reserved": "opening more actions"
+    },
+    "native-window": {
+      "label": "Window",
+      "category": "app",
+      "keywords": [
+        "native",
+        "desktop window",
+        "title bar",
+        "blitz"
+      ]
+    },
+    "next": {
+      "label": "Next",
+      "category": "navigation",
+      "keywords": [
+        "arrow right",
+        "forward",
+        "continue"
+      ],
+      "reserved": "going forward",
+      "mirror_rtl": true
+    },
+    "notification": {
+      "label": "Notifications",
+      "category": "status",
+      "keywords": [
+        "bell",
+        "alert",
+        "reminder"
+      ],
+      "reserved": "notifications"
+    },
+    "page-next": {
+      "label": "Next page",
+      "category": "navigation",
+      "keywords": [
+        "chevron right",
+        "later",
+        "pagination"
+      ],
+      "mirror_rtl": true
+    },
+    "page-previous": {
+      "label": "Previous page",
+      "category": "navigation",
+      "keywords": [
+        "chevron left",
+        "earlier",
+        "pagination"
+      ],
+      "mirror_rtl": true
+    },
+    "permission": {
+      "label": "Permission",
+      "category": "agent",
+      "keywords": [
+        "approve",
+        "shield",
+        "allow",
+        "trust"
+      ],
+      "reserved": "asking for or granting permission"
+    },
+    "pointer": {
+      "label": "Pointer",
+      "category": "app",
+      "keywords": [
+        "cursor",
+        "select",
+        "click",
+        "mouse"
+      ]
+    },
+    "prompt": {
+      "label": "Prompt",
+      "category": "agent",
+      "keywords": [
+        "ask",
+        "instruction",
+        "ai chat",
+        "input"
+      ]
+    },
+    "refresh": {
+      "label": "Refresh",
+      "category": "system",
+      "keywords": [
+        "reload",
+        "sync",
+        "update",
+        "retry"
+      ],
+      "reserved": "reloading data"
+    },
+    "remove": {
+      "label": "Remove",
+      "category": "system",
+      "keywords": [
+        "minus",
+        "subtract",
+        "less"
+      ],
+      "reserved": "removing an item from a list (not deleting it)"
+    },
+    "search": {
+      "label": "Search",
+      "category": "system",
+      "keywords": [
+        "find",
+        "magnifier",
+        "look up",
+        "query"
+      ],
+      "reserved": "searching"
+    },
+    "secret": {
+      "label": "Secret",
+      "category": "dev",
+      "keywords": [
+        "key",
+        "token",
+        "credential",
+        "api key"
+      ]
+    },
+    "server": {
+      "label": "Server",
+      "category": "dev",
+      "keywords": [
+        "backend",
+        "host",
+        "machine",
+        "fullstack"
+      ]
+    },
+    "settings": {
+      "label": "Settings",
+      "category": "system",
+      "keywords": [
+        "preferences",
+        "options",
+        "sliders",
+        "configure"
+      ],
+      "reserved": "opening settings"
+    },
+    "share": {
+      "label": "Share",
+      "category": "system",
+      "keywords": [
+        "send",
+        "export",
+        "social"
+      ],
+      "reserved": "sharing elsewhere"
+    },
+    "show": {
+      "label": "Show",
+      "category": "system",
+      "keywords": [
+        "eye",
+        "visible",
+        "reveal",
+        "view"
+      ],
+      "reserved": "showing hidden content"
+    },
+    "sidebar": {
+      "label": "Toggle sidebar",
+      "category": "navigation",
+      "keywords": [
+        "panel",
+        "drawer",
+        "navigation rail"
+      ],
+      "mirror_rtl": true
+    },
+    "sign-in": {
+      "label": "Sign in",
+      "category": "people",
+      "keywords": [
+        "log in",
+        "enter",
+        "login",
+        "authenticate"
+      ],
+      "reserved": "signing in",
+      "mirror_rtl": true
+    },
+    "sign-out": {
+      "label": "Sign out",
+      "category": "people",
+      "keywords": [
+        "log out",
+        "exit",
+        "logout",
+        "leave"
+      ],
+      "reserved": "signing out",
+      "mirror_rtl": true
+    },
+    "sort": {
+      "label": "Sort",
+      "category": "system",
+      "keywords": [
+        "order",
+        "arrange",
+        "ascending",
+        "descending"
+      ],
+      "reserved": "sorting a list"
+    },
+    "spacing": {
+      "label": "Spacing",
+      "category": "design",
+      "keywords": [
+        "gap",
+        "padding",
+        "density",
+        "measure"
+      ]
+    },
+    "sparkles": {
+      "label": "AI",
+      "category": "agent",
+      "keywords": [
+        "magic",
+        "generate",
+        "assist",
+        "spark"
+      ],
+      "reserved": "AI-generated content and actions"
+    },
+    "spring": {
+      "label": "Spring motion",
+      "category": "design",
+      "keywords": [
+        "animation",
+        "easing",
+        "bounce",
+        "physics"
+      ]
+    },
+    "stack": {
+      "label": "Layers",
+      "category": "data",
+      "keywords": [
+        "stack",
+        "cards",
+        "pile",
+        "depth"
+      ]
+    },
+    "streaming": {
+      "label": "Streaming",
+      "category": "agent",
+      "keywords": [
+        "typing",
+        "tokens",
+        "live text",
+        "output"
+      ]
+    },
+    "success": {
+      "label": "Success",
+      "category": "status",
+      "keywords": [
+        "check circle",
+        "done",
+        "passed",
+        "valid"
+      ],
+      "reserved": "success"
+    },
+    "table": {
+      "label": "Table",
+      "category": "data",
+      "keywords": [
+        "grid",
+        "rows",
+        "spreadsheet",
+        "data"
+      ]
+    },
+    "tag": {
+      "label": "Tag",
+      "category": "content",
+      "keywords": [
+        "label",
+        "category",
+        "price"
+      ]
+    },
+    "team": {
+      "label": "Team",
+      "category": "people",
+      "keywords": [
+        "users",
+        "group",
+        "members",
+        "people"
+      ]
+    },
+    "terminal": {
+      "label": "Terminal",
+      "category": "dev",
+      "keywords": [
+        "console",
+        "command line",
+        "shell",
+        "cli"
+      ]
+    },
+    "test": {
+      "label": "Tests",
+      "category": "dev",
+      "keywords": [
+        "flask",
+        "experiment",
+        "check",
+        "lab"
+      ]
+    },
+    "theme": {
+      "label": "Theme",
+      "category": "design",
+      "keywords": [
+        "contrast",
+        "appearance",
+        "colors",
+        "mode"
+      ]
+    },
+    "thinking": {
+      "label": "Thinking",
+      "category": "agent",
+      "keywords": [
+        "reasoning",
+        "typing",
+        "working",
+        "pending reply"
+      ]
+    },
+    "tool-call": {
+      "label": "Tool call",
+      "category": "agent",
+      "keywords": [
+        "function",
+        "action",
+        "invoke",
+        "mcp"
+      ]
+    },
+    "typography": {
+      "label": "Typography",
+      "category": "design",
+      "keywords": [
+        "font",
+        "text",
+        "type",
+        "letter"
+      ]
+    },
+    "unlock": {
+      "label": "Unlocked",
+      "category": "system",
+      "keywords": [
+        "open",
+        "public",
+        "unsecured"
+      ]
+    },
+    "upload": {
+      "label": "Upload",
+      "category": "system",
+      "keywords": [
+        "import",
+        "send",
+        "attach file"
+      ],
+      "reserved": "uploading a file"
+    },
+    "user": {
+      "label": "Account",
+      "category": "people",
+      "keywords": [
+        "person",
+        "profile",
+        "avatar",
+        "me"
+      ]
+    },
+    "warning": {
+      "label": "Warning",
+      "category": "status",
+      "keywords": [
+        "caution",
+        "alert",
+        "attention",
+        "triangle"
+      ],
+      "reserved": "warnings"
+    },
+    "wasm-module": {
+      "label": "WebAssembly module",
+      "category": "dev",
+      "keywords": [
+        "wasm",
+        "binary",
+        "compile",
+        "web build"
+      ]
+    },
+    "web-app": {
+      "label": "Web app",
+      "category": "app",
+      "keywords": [
+        "browser",
+        "website",
+        "page",
+        "url"
+      ]
+    }
+  }
+}

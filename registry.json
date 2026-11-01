@@ -488,6 +488,7 @@
     {
       "name": "icons",
       "files": [
+        "icons/atoll.rs",
         "icons/component.rs",
         "icons/docs.md",
         "icons/lucide.rs",
