@@ -1,0 +1,4 @@
+### Fixed
+
+- Release web builds work on current stable Rust (1.98+, LLVM 23). `strip = true` in the release profile made LLVM drop the `__wasm_bindgen_unstable` section, so `dx build --release`, `scripts/release-web.sh` and the GitHub Pages deploy failed. The workspace and apps made by `atoll create` now use `strip = "debuginfo"`; `atoll postbuild` still removes the wasm names. If your own app has `strip = true` under `[profile.release]`, change it to `strip = "debuginfo"`.
+- `dx components add --git https://github.com/Amit-1of1/Rust-UI-` installs again. The generated `component.json` files asked for `web-sys` version `0.3`, and `cargo add web-sys@0.3 --features ...,Clipboard` (which `dx` runs) rejects `Clipboard` as unknown, so any component needing `hooks` stopped with "Failed to add dependency web-sys". They now ask for `0.3.106`. `scripts/dx-compat.sh` passes again.
