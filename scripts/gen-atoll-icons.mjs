@@ -20,7 +20,7 @@ const SOURCE = join(ROOT, "crates/ui/icons/atoll");
 const OUTPUT = join(ROOT, "crates/ui/src/components/icons/atoll.rs");
 
 // Categories the docs page groups by, in display order.
-const CATEGORIES = ["system", "navigation", "status", "content", "people", "dev", "app", "agent", "data", "design", "brand"];
+const CATEGORIES = ["system", "navigation", "status", "content", "files", "people", "communication", "media", "editor", "commerce", "maps", "time", "weather", "devices", "dev", "app", "agent", "data", "design", "brand"];
 // Names a component may not take: components are functions, so they would clash with these
 // value names from Rust's prelude or the icons module (types and traits like `Copy` are fine).
 const RESERVED_RUST = new Set(["Some", "None", "Ok", "Err", "Icon"]);
