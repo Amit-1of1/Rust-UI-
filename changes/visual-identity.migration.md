@@ -1,4 +1,4 @@
-### The default look is Lagoon, not black and white (PR #PR)
+### The default look is Lagoon, not black and white (PR #83)
 
 **Who:** apps that render `ThemeStyles {}` (or copied `theme.css`) and liked the old neutral look, or that relied on the default accent being black.
 
