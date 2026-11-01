@@ -43,9 +43,10 @@ for (const scheme of ["light", "dark"]) {
   check((await token(page, "--primary-color", { "data-theme": null })) === os, `${scheme} OS: --primary-color follows it`);
   check((await token(page, "--primary-color", { "data-theme": "dark" })) === BLACK, `${scheme} OS + data-theme=dark: dark`);
   check((await token(page, "--primary-color", { "data-theme": "light" })) === WHITE, `${scheme} OS + data-theme=light: light`);
-  const blueLight = await token(page, "--accent-color", { "data-theme": "light", "data-accent": "blue" });
-  const blueDark = await token(page, "--accent-color", { "data-theme": "dark", "data-accent": "blue" });
-  check(blueLight === "rgb(29, 78, 216)" && blueDark === "rgb(96, 165, 250)", `${scheme} OS: blue accent switches (${blueLight} / ${blueDark})`);
+  // The accent fill keeps a white label in both modes, so its text shade is what switches.
+  const blueLight = await token(page, "--accent-text", { "data-theme": "light", "data-accent": "blue" });
+  const blueDark = await token(page, "--accent-text", { "data-theme": "dark", "data-accent": "blue" });
+  check(blueLight === "rgb(40, 112, 212)" && blueDark === "rgb(138, 185, 254)", `${scheme} OS: blue accent switches (${blueLight} / ${blueDark})`);
   const cs = await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme);
   check(cs === "dark", `data-theme=dark sets color-scheme (${cs})`);
   await page.close();
