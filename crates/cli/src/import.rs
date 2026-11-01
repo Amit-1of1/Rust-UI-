@@ -615,8 +615,9 @@ mod tests {
         let src = parse(reshaped).unwrap();
         assert_eq!(src.format, "Reshaped theme definition");
         let b = body(&src);
+        // The dark fill is darkened a step so white labels keep 5:1 (headroom for hover).
         assert!(
-            b.contains("--accent-color: light-dark(#5a4cdb, #6b5ef0);"),
+            b.contains("--accent-color: light-dark(#5a4cdb, #6658ea);"),
             "{b}"
         );
         assert!(
