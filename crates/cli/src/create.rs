@@ -94,7 +94,8 @@ desktop = ["dioxus/desktop", "ui/desktop"]
 opt-level = "z"
 lto = true
 codegen-units = 1
-strip = true
+# Not `true`: on Rust 1.98+ (LLVM 23) that strips the section wasm-bindgen needs.
+strip = "debuginfo"
 "#,
         kit = kit_dep(source),
     );
@@ -244,6 +245,23 @@ mod tests {
             tag: None,
         };
         assert!(kit_dep(&fork).ends_with("git = \"https://example.com/fork\" }"));
+    }
+
+    /// `strip = true` breaks release web builds on Rust 1.98+ (LLVM 23 drops every custom
+    /// section, including `__wasm_bindgen_unstable`). Neither a new app nor this workspace may use it.
+    #[test]
+    fn release_profiles_keep_the_wasm_bindgen_section() {
+        let app = files("x", &KitSource::Registry)
+            .into_iter()
+            .find(|(p, _)| *p == "Cargo.toml")
+            .unwrap()
+            .1;
+        let workspace =
+            fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/../../Cargo.toml")).unwrap();
+        for (what, toml) in [("new app", app), ("workspace", workspace)] {
+            assert!(toml.contains("strip = \"debuginfo\""), "{what}: {toml}");
+            assert!(!toml.contains("strip = true"), "{what} uses strip = true");
+        }
     }
 
     #[test]

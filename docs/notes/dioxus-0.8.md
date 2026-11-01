@@ -66,3 +66,6 @@ walrus), and a split made by the 0.7 fork's dx breaks the pages (axe finds conte
 landmarks, and the sidebar covers the page). Unsplit, the dashboard passes its browser checks.
 So the size budgets (`bench/budgets.json`, the split numbers from `main`) fail for those two apps
 until the fork's splitter fixes are ported to dx 0.8. Measured 2026-10-31: the gallery's main wasm is 1005.5 KB brotli unsplit, against 257.8 KB split on `main`.
+
+`dx serve --hot-patch` (docs/notes/hot-patch.md) relies on fixes in the 0.7 dx fork; they are
+not ported to dx 0.8 and hot-patching was not measured on this branch.

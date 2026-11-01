@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      # Pinned: release wasm builds on newer stable (LLVM 23) lose the __wasm_bindgen_unstable
-      # section to strip = true in [profile.release] (dx builds a wasm-release profile from it).
-      - uses: dtolnay/rust-toolchain@f08ac54821369508305fcb9e0121ec6e30ae9ada # 1.97.0
+      # Stable, like pages.yml and what users have. [profile.release] uses strip = "debuginfo":
+      # strip = true loses the __wasm_bindgen_unstable section on LLVM 23 (Rust 1.98+).
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2

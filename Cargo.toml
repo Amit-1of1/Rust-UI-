@@ -28,7 +28,9 @@ form-derive = { path = "crates/form-derive", package = "atoll-form-derive", vers
 opt-level = "z"
 lto = true
 codegen-units = 1
-strip = true
+# Not `true`: on Rust 1.98+ (LLVM 23) that strips every custom section, including the one
+# wasm-bindgen needs, and release web builds fail. `atoll postbuild` drops the wasm names.
+strip = "debuginfo"
 
 [profile.dev]
 debug = 0
