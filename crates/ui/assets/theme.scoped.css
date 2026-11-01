@@ -13,9 +13,11 @@
   color-scheme: light dark;
 }
 
-/* data-theme also works on any element, which then switches its own subtree: light-dark()
-   resolves against the element that uses the token. The native renderer has no <html> to
-   put it on, and a preview pane may want the other theme. */
+/* data-theme also works on any element, which then switches its own subtree. Browsers resolve
+   light-dark() in a custom property on the element that declares it, so the generated
+   "subtree themes" block below declares the colour tokens again on every [data-theme]
+   element. The native renderer has no <html> to put it on, and a preview pane may want the
+   other theme. */
 [data-rui-scope][data-theme="light"],
 [data-rui-scope] [data-theme="light"],
 [data-theme="light"] [data-rui-scope] {
@@ -156,6 +158,72 @@
     --light: initial;
   }
 }
+
+/* subtree themes: begin (generated, do not edit) */
+/* data-theme on any element switches its subtree: the colour tokens again, resolved there.
+ * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
+:where([data-rui-scope][data-theme], [data-rui-scope] [data-theme], [data-theme] [data-rui-scope]) {
+  --primary-color: light-dark(#fff, #000);
+  --primary-color-1: light-dark(#fbfbfb, #0e0e0e);
+  --primary-color-2: light-dark(#fff, #0a0a0a);
+  --primary-color-3: light-dark(#f8f8f8, #141313);
+  --primary-color-4: light-dark(#f8f8f8, #1a1a1a);
+  --primary-color-5: light-dark(#f5f5f5, #262626);
+  --primary-color-6: light-dark(#e5e5e5, #232323);
+  --primary-color-7: light-dark(#b0b0b0, #3e3e3e);
+  --secondary-color: light-dark(#000, #fff);
+  --secondary-color-1: light-dark(#000, #fafafa);
+  --secondary-color-2: light-dark(#0d0d0d, #e6e6e6);
+  --secondary-color-3: light-dark(#2b2b2b, #dcdcdc);
+  --secondary-color-4: light-dark(#111, #d4d4d4);
+  --secondary-color-5: light-dark(#6b6b6b, #a1a1a1);
+  --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
+  --accent-color: var(--secondary-color-2);
+  --accent-contrast: var(--primary-color);
+  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
+  --primary-success-color: light-dark(#ecfdf5, #02271c);
+  --secondary-success-color: light-dark(#10b981, #b6fae3);
+  --primary-warning-color: light-dark(#fffbeb, #342203);
+  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
+  --primary-error-color: light-dark(#dc2626, #a22e2e);
+  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
+  --error-text-color: light-dark(#b91c1c, #f87171);
+  --success-text-color: light-dark(#047857, #b6fae3);
+  --warning-text-color: light-dark(#b45309, #feeac7);
+  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
+  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
+  --secondary-info-color: var(--secondary-color-3);
+  --chart-2: light-dark(#0f766e, #2dd4bf);
+  --chart-3: light-dark(#c2410c, #fb923c);
+  --chart-4: light-dark(#7c3aed, #a78bfa);
+  --chart-5: light-dark(#be185d, #f472b6);
+}
+:where([data-rui-scope][data-accent="blue"] [data-theme], [data-rui-scope] [data-accent="blue"] [data-theme], [data-accent="blue"] [data-rui-scope] [data-theme]) {
+  --accent-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+}
+:where([data-rui-scope][data-accent="green"] [data-theme], [data-rui-scope] [data-accent="green"] [data-theme], [data-accent="green"] [data-rui-scope] [data-theme]) {
+  --accent-color: light-dark(#15803d, #4ade80);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#15803d, #4ade80);
+}
+:where([data-rui-scope][data-accent="violet"] [data-theme], [data-rui-scope] [data-accent="violet"] [data-theme], [data-accent="violet"] [data-rui-scope] [data-theme]) {
+  --accent-color: light-dark(#6d28d9, #a78bfa);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+}
+:where([data-rui-scope][data-accent="rose"] [data-theme], [data-rui-scope] [data-accent="rose"] [data-theme], [data-accent="rose"] [data-rui-scope] [data-theme]) {
+  --accent-color: light-dark(#be123c, #fb7185);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#be123c, #fb7185);
+}
+:where([data-rui-scope][data-accent="orange"] [data-theme], [data-rui-scope] [data-accent="orange"] [data-theme], [data-accent="orange"] [data-rui-scope] [data-theme]) {
+  --accent-color: light-dark(#c2410c, #fb923c);
+  --accent-contrast: light-dark(#fff, #0a0a0a);
+  --focused-border-color: light-dark(#c2410c, #fb923c);
+}
+/* subtree themes: end */
 
 /* theme fallback: begin (generated, do not edit) */
 /* For browsers without light-dark(): the same tokens as space toggles.

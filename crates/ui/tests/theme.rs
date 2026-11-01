@@ -2,12 +2,15 @@
 //! - every accent preset in `assets/theme.css` keeps its label text readable on the fill
 //!   (WCAG AA, 4.5:1) in both light and dark;
 //! - the fallback block for browsers without `light-dark()` matches the tokens. Regenerate it
-//!   with `UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme`.
+//!   with `UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme`;
+//! - so does the subtree block that lets `data-theme` on any element switch its own subtree.
 
 const THEME: &str = include_str!("../assets/theme.css");
 const THEME_PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/assets/theme.css");
 const FALLBACK_BEGIN: &str = "/* theme fallback: begin (generated, do not edit) */";
 const FALLBACK_END: &str = "/* theme fallback: end */";
+const SUBTREE_BEGIN: &str = "/* subtree themes: begin (generated, do not edit) */";
+const SUBTREE_END: &str = "/* subtree themes: end */";
 
 fn channel(v: u8) -> f64 {
     let c = f64::from(v) / 255.0;
@@ -110,12 +113,97 @@ fn chart_colours_meet_non_text_contrast_in_both_modes() {
     }
 }
 
-/// The theme without the generated fallback block.
-fn outside_fallback(theme: &str) -> String {
-    match (theme.find(FALLBACK_BEGIN), theme.find(FALLBACK_END)) {
-        (Some(a), Some(b)) => format!("{}{}", &theme[..a], &theme[b + FALLBACK_END.len()..]),
+/// `theme` without the generated block between `begin` and `end`.
+fn without(theme: &str, begin: &str, end: &str) -> String {
+    match (theme.find(begin), theme.find(end)) {
+        (Some(a), Some(b)) => format!("{}{}", &theme[..a], &theme[b + end.len()..]),
         _ => theme.to_string(),
     }
+}
+
+/// The theme without either generated block: what both are generated from.
+fn outside_fallback(theme: &str) -> String {
+    without(
+        &without(theme, FALLBACK_BEGIN, FALLBACK_END),
+        SUBTREE_BEGIN,
+        SUBTREE_END,
+    )
+}
+
+/// The subtree block. Browsers resolve `light-dark()` in a custom property on the element
+/// that declares it, so tokens declared on `:root` reach a `[data-theme="dark"]` box inside a
+/// light page already resolved to their light values. Declaring the colour tokens again on
+/// every `[data-theme]` element (and the accent presets on `[data-theme]` elements inside a
+/// `[data-accent]`) makes them resolve there. `:where()` keeps them at zero specificity, so
+/// an element's own `data-accent` still wins; plain values such as `--radius` are left out,
+/// so a value set on `<html>` still reaches the subtree.
+fn subtree(tokens: &str) -> String {
+    let mut out = format!(
+        "{SUBTREE_BEGIN}\n/* data-theme on any element switches its subtree: the colour tokens again, resolved there.\n * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */\n"
+    );
+    let mut selector = None;
+    let mut body = String::new();
+    for line in tokens.lines() {
+        if let Some(sel) = line.strip_suffix(" {").filter(|_| !line.starts_with(' ')) {
+            selector = Some(sel.to_string());
+            body.clear();
+        } else if line == "}" {
+            let Some(sel) = selector.take().filter(|_| !body.is_empty()) else {
+                continue;
+            };
+            let sel = if sel == ":root" {
+                ":where([data-theme])".to_string()
+            } else if sel.starts_with("[data-accent=") {
+                format!(":where({sel} [data-theme])")
+            } else {
+                continue;
+            };
+            out.push_str(&format!("{sel} {{\n{body}}}\n"));
+        } else if selector.is_some() {
+            let t = line.trim();
+            if t.starts_with("--") && (t.contains("light-dark(") || t.contains("var(")) {
+                body.push_str(&format!("  {t}\n"));
+            }
+        }
+    }
+    out.push_str(SUBTREE_END);
+    out
+}
+
+#[test]
+fn subtree_block_is_current() {
+    let theme = std::fs::read_to_string(THEME_PATH).expect("read theme.css");
+    let start = theme.find(SUBTREE_BEGIN).expect("subtree begin marker");
+    let end = theme.find(SUBTREE_END).expect("subtree end marker") + SUBTREE_END.len();
+    let fresh = subtree(&outside_fallback(&theme));
+    if theme[start..end] == fresh {
+        return;
+    }
+    if std::env::var_os("UPDATE_THEME_CSS").is_some() {
+        let updated = format!("{}{}{}", &theme[..start], fresh, &theme[end..]);
+        std::fs::write(THEME_PATH, updated).expect("write theme.css");
+        return;
+    }
+    panic!("the subtree block in theme.css is stale; rerun with UPDATE_THEME_CSS=1");
+}
+
+#[test]
+fn subtree_redeclares_colours_not_plain_values() {
+    let css = ":root {\n  color-scheme: light dark;\n}\n:root {\n  --a: light-dark(#fff, #000);\n  --b: var(--a);\n  --r: 1rem;\n}\n[data-accent=\"x\"] {\n  --a: light-dark(#111, #eee);\n}\n[data-density=\"compact\"] {\n  --r: 2rem;\n}\n";
+    let out = subtree(css);
+    assert!(
+        out.contains(":where([data-theme]) {\n  --a: light-dark(#fff, #000);\n  --b: var(--a);\n}"),
+        "{out}"
+    );
+    assert!(
+        out.contains(
+            ":where([data-accent=\"x\"] [data-theme]) {\n  --a: light-dark(#111, #eee);\n}"
+        ),
+        "{out}"
+    );
+    assert!(!out.contains("--r") && !out.contains("density"), "{out}");
+    // The root block comes first, so a preset inside an accent outranks it by order.
+    assert!(out.find(":where([data-theme])") < out.find(":where([data-accent"));
 }
 
 /// Repeats a selector so it outranks the plain one wherever it sits in the file (presets
