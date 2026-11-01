@@ -808,6 +808,9 @@ fn mobile_sidebar_closes_after_an_item_is_picked() {
                             SidebarMenuItem {
                                 SidebarMenuButton { id: "orders", "Orders" }
                             }
+                            SidebarMenuItem {
+                                SidebarMenuButton { id: "pinned", "data-keep-open": "true", "Pinned" }
+                            }
                         }
                     }
                 }
@@ -824,6 +827,11 @@ fn mobile_sidebar_closes_after_an_item_is_picked() {
     h.click("#group");
     h.settle();
     assert!(shown(&h), "a disclosure button closed the mobile sheet");
+
+    let mut h = Harness::new(app);
+    h.click("#pinned");
+    h.settle();
+    assert!(shown(&h), "a data-keep-open button closed the mobile sheet");
 
     let mut h = Harness::new(app);
     h.click("#orders");

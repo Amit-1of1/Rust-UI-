@@ -62,7 +62,7 @@ SidebarProvider {
 - Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects the start (`Left`) or end (`Right`) edge, which swap on right-to-left pages (docs/RTL.md).
 - Collapse: `Offcanvas` hides the rail; `Icon` keeps a thin icon strip and hides labels/actions/badges; `None` is static.
 - Keyboard: ⌘/Ctrl+B toggles via provider. Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
-- Phones: below 768 px the sidebar is a sheet. Clicking a `SidebarMenuButton` closes it (`close_on_mobile: false` keeps it open; buttons with `aria-expanded` or `aria-haspopup`, such as a collapsible group's trigger, never close it). With the `router` feature the provider also closes it after every in-app navigation, which covers router links passed through `as`; without the router, call `use_sidebar().set_open_mobile(false)` from your own links.
+- Phones: below 768 px the sidebar is a sheet. Clicking a `SidebarMenuButton` closes it (`"data-keep-open": "true"` keeps it open; buttons with `aria-expanded` or `aria-haspopup`, such as a collapsible group's trigger, never close it). With the `router` feature the provider also closes it after every in-app navigation, which covers router links passed through `as`; without the router, call `use_sidebar().set_open_mobile(false)` from your own links.
 - Tooltips: `tooltip: Option<Element>` on `SidebarMenuButton`; `None` skips wrapping in Tooltip.
 - Landmarks: `Sidebar` is a navigation landmark named "Sidebar" (`UiStrings::sidebar`; pass `aria_label` to rename it, or `role` to change it). `SidebarInset` renders `<main>`, so it is the page's `main` landmark: don't add another `main` inside it.
 

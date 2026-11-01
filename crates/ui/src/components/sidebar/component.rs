@@ -687,21 +687,20 @@ pub fn SidebarMenuButton(
     /// Click handler for the default `<button>` (ignored when `as` renders something else).
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
-    /// On a phone, where the sidebar is a sheet, close it after this button is clicked.
-    /// Defaults to `true`. Buttons that open something (`aria-expanded` or `aria-haspopup`,
-    /// such as a collapsible group's trigger) never close it. Applies to the default
-    /// `<button>`; with `as`, the provider closes the sheet when the route changes (`router`
-    /// feature) or call `use_sidebar().set_open_mobile(false)`.
-    #[props(default = true)]
-    close_on_mobile: bool,
     r#as: Option<Callback<Vec<Attribute>, Element>>,
     children: Element,
 ) -> Element {
     let ctx = use_sidebar();
-    let opens_something = attributes
-        .iter()
-        .any(|a| matches!(a.name, "aria-expanded" | "aria-haspopup"));
-    let close_after = close_on_mobile && !opens_something;
+    // On a phone, where the sidebar is a sheet, close it after a click. Buttons that open
+    // something (`aria-expanded` / `aria-haspopup`, such as a collapsible group's trigger)
+    // and buttons marked `"data-keep-open": "true"` leave it open. With `as`, the provider
+    // closes it when the route changes (`router` feature), or call
+    // `use_sidebar().set_open_mobile(false)`.
+    let close_after = !attributes.iter().any(|a| {
+        matches!(a.name, "aria-expanded" | "aria-haspopup")
+            || (a.name == "data-keep-open"
+                && matches!(&a.value, dioxus::core::AttributeValue::Text(t) if t == "true"))
+    });
     let click = move |e: MouseEvent| {
         if let Some(f) = &onclick {
             f.call(e);
