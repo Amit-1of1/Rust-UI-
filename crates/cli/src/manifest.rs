@@ -116,8 +116,11 @@ fn cargo_dependencies(source: &str, primitives: &Primitives, registry: &str) -> 
         deps.push(json!({"name": "tracing", "version": "0.1"}));
     }
     if uses("web_sys") {
+        // A full version, not "0.3": `cargo add web-sys@0.3 --features Window,Clipboard` (what
+        // `dx components add` runs) rejects Clipboard as an unknown feature, while
+        // `web-sys@0.3.106` accepts it. Keep in step with Cargo.lock.
         deps.push(
-            json!({"name": "web-sys", "version": "0.3", "features": web_sys_features(source)}),
+            json!({"name": "web-sys", "version": "0.3.106", "features": web_sys_features(source)}),
         );
     }
     if uses("wasm_bindgen") {
@@ -343,5 +346,24 @@ mod tests {
         }
         assert_eq!(f.iter().filter(|x| *x == "MediaQueryList").count(), 1);
         assert!(!f.iter().any(|x| x == "Bar"), "{f:?}");
+    }
+
+    /// `dx components add` runs `cargo add web-sys@<version> --features ...`, and with a bare
+    /// "0.3" cargo rejects `Clipboard` ("unrecognized feature"), so the install stops.
+    #[test]
+    fn web_sys_has_a_full_version() {
+        let path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../ui/src/components/hooks/component.json"
+        );
+        let json: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap();
+        let web_sys = json["cargoDependencies"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|d| d["name"] == "web-sys")
+            .unwrap();
+        assert_eq!(web_sys["version"].as_str().unwrap().split('.').count(), 3);
     }
 }

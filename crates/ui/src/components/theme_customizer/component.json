@@ -10,7 +10,7 @@
         "Storage"
       ],
       "name": "web-sys",
-      "version": "0.3"
+      "version": "0.3.106"
     }
   ],
   "componentDependencies": [

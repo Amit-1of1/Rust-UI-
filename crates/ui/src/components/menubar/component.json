@@ -15,7 +15,7 @@
         "EventTarget"
       ],
       "name": "web-sys",
-      "version": "0.3"
+      "version": "0.3.106"
     },
     {
       "name": "wasm-bindgen",
