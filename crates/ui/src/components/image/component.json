@@ -1,0 +1,25 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "atoll-primitives",
+      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    }
+  ],
+  "description": "A picture with a fixed shape, sharp on every screen, and a fallback when it can't load.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "image"
+}

@@ -7,7 +7,12 @@
       "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    }
+  ],
   "description": "The Progress component is used to display the progress of a task or operation. It can be used to indicate loading states, file uploads, or any other process that takes time to complete.",
   "exclude": [
     "docs.md",

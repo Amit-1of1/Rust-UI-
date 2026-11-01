@@ -60,7 +60,9 @@
         "avatar/mod.rs",
         "avatar/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "ui_strings"
+      ]
     },
     {
       "name": "badge",
@@ -71,7 +73,8 @@
         "badge/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "icons",
+        "ui_strings"
       ]
     },
     {
@@ -487,6 +490,18 @@
       "registryDependencies": []
     },
     {
+      "name": "image",
+      "files": [
+        "image/component.rs",
+        "image/docs.md",
+        "image/mod.rs",
+        "image/style.css"
+      ],
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
       "name": "input",
       "files": [
         "input/component.rs",
@@ -563,6 +578,16 @@
         "icons",
         "ui_strings"
       ]
+    },
+    {
+      "name": "list",
+      "files": [
+        "list/component.rs",
+        "list/docs.md",
+        "list/mod.rs",
+        "list/style.css"
+      ],
+      "registryDependencies": []
     },
     {
       "name": "marquee",
@@ -678,7 +703,9 @@
         "progress/mod.rs",
         "progress/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "radio_group",

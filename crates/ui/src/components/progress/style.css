@@ -38,3 +38,37 @@
 [dir="rtl"] .dx-progress {
     --dx-flip: -1;
 }
+
+/* Sizes (bar thickness). */
+.dx-progress[data-size="sm"] {
+    height: .25rem;
+}
+
+.dx-progress[data-size="lg"] {
+    height: .75rem;
+}
+
+/* A label and the percentage above the bar. */
+.dx-progress-field {
+    display: grid;
+    gap: .375rem;
+}
+
+.dx-progress-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .5rem;
+    font-size: .875rem;
+}
+
+.dx-progress-label {
+    color: var(--secondary-color-4);
+    font-weight: 500;
+}
+
+.dx-progress-value {
+    margin-inline-start: auto;
+    color: var(--secondary-color-5);
+    font-variant-numeric: tabular-nums;
+}

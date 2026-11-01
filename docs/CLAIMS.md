@@ -19,7 +19,8 @@ guarded by CI. **Fixed** was false or unproven; the code or the wording changed 
 
 | Claim | Verdict | Evidence | Reproduce |
 |---|---|---|---|
-| 80 components and 4 blocks | CI | `registry.json` has 87 items: 4 blocks, 3 support items (`hooks`, `icons`, `ui_strings`) and 80 components. The home page counted 83 before this audit (it included the support items). | `cargo test -p atoll-cli --test claims` |
+| 82 components and 4 blocks | CI | `registry.json` has 89 items: 4 blocks, 3 support items (`hooks`, `icons`, `ui_strings`) and 82 components (80 until `list` and `image` were added for the core components checklist, 2026-11-01). The home page counted 83 before this audit (it included the support items). | `cargo test -p atoll-cli --test claims` |
+| Core components checklist (designsystemchecklist.com): 136 of 166 items met, 21 partly, 9 not yet | CI | `docs/CHECKLIST.md`, one row per item with what meets it; the test checks every section's count, every status and the totals. The verdicts are read from the code and demos, not from an outside audit. | `cargo test -p atoll-ui --test checklist` |
 | 28 keyboard contracts, every key tested | CI | One `contract.toml` per component: accordion, alert dialog, chart, chat, chat composer, checkbox, collapsible, combobox, command, dialog, drawer, dropdown menu, menubar, multi select, number field, popover, radio group, select, sheet, slider, switch, tabs, time picker, toggle, toggle group, tool call, toolbar, tooltip. Sheet, drawer, tooltip and toggle group were added in this audit (24 before). | `cargo run -p atoll-cli -- contract`; `node tests/e2e/contracts.mjs` |
 | "Every component ships a keyboard contract" (old home page, launch posts) | Fixed | False: 28 of 80. Components with keyboard behaviour but no contract: context menu, calendar, date picker, date-time picker, colour picker, carousel, OTP input, resizable, tag group, data table, sidebar, drag-and-drop list. Several are driven by their own e2e scripts (otp, carousel, resizable, table, pickers, time pickers); the context menu can't be opened from the keyboard at all (the primitive only opens on right click). Wording now says which components have contracts. | `cargo run -p atoll-cli -- doctor` lists some; this list was made by reading each demo |
 | Every Lucide icon | Measured | 1,890 icon components generated from Lucide 1.57.0 (`crates/ui/src/components/icons/lucide.rs`). docs/ICONS.md's "1,705 icons" is the 2026-10-13 option table for the old `dioxus-icons` crate, kept as history. | `grep -c "pub fn" crates/ui/src/components/icons/lucide.rs` |
@@ -95,7 +96,7 @@ Checked on 2026-10-31 (web search; numbers are what each project states).
 
 | Claim | Verdict | Evidence |
 |---|---|---|
-| Other Dioxus kits are "larger in count" | Fixed (copy) | dioxus-shadcn: 83 components (2026-10-05). dioxus-element-plug: "107+" components. So two kits have more, and Atoll has 80. The crib sheet now says so instead of implying all are bigger. |
+| Other Dioxus kits are "larger in count" | Fixed (copy) | dioxus-shadcn: 83 components (2026-10-05). dioxus-element-plug: "107+" components. So two kits have more, and Atoll has 82. The crib sheet now says so instead of implying all are bigger. |
 | No other Dioxus kit has an agent skill | False, removed | dioxus-element-plug ships a `SKILL.md` and `AGENTS.md`. What we found no other Dioxus kit doing: an MCP server, tested keyboard contracts, a contrast proof, motion. |
 | Rust/UI has a Dioxus edition | Measured | dioxus.rust-ui.com changelog (components added 2026-08-08). |
 

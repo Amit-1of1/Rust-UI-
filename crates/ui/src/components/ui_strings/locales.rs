@@ -133,6 +133,8 @@ impl UiStrings {
             tool_status: s("{name} : {status}"),
             decrease: s("Diminuer {label}"),
             increase: s("Augmenter {label}"),
+            remove_named: s("Retirer {label}"),
+            more_count: s("{count} de plus"),
         }
     }
 
@@ -223,6 +225,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("{label} verringern"),
             increase: s("{label} erhöhen"),
+            remove_named: s("{label} entfernen"),
+            more_count: s("{count} weitere"),
         }
     }
 
@@ -313,6 +317,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("Reducir {label}"),
             increase: s("Aumentar {label}"),
+            remove_named: s("Quitar {label}"),
+            more_count: s("{count} más"),
         }
     }
 
@@ -403,6 +409,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("Diminuir {label}"),
             increase: s("Aumentar {label}"),
+            remove_named: s("Remover {label}"),
+            more_count: s("mais {count}"),
         }
     }
 
@@ -493,6 +501,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("إنقاص {label}"),
             increase: s("زيادة {label}"),
+            remove_named: s("إزالة {label}"),
+            more_count: s("{count} آخرون"),
         }
     }
 
@@ -583,6 +593,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("הקטנת {label}"),
             increase: s("הגדלת {label}"),
+            remove_named: s("הסרת {label}"),
+            more_count: s("{count} נוספים"),
         }
     }
 
@@ -673,6 +685,8 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("{label} を減らす"),
             increase: s("{label} を増やす"),
+            remove_named: s("{label} を削除"),
+            more_count: s("他 {count} 人"),
         }
     }
 
@@ -763,6 +777,8 @@ impl UiStrings {
             tool_status: s("{name}：{status}"),
             decrease: s("减少{label}"),
             increase: s("增加{label}"),
+            remove_named: s("移除{label}"),
+            more_count: s("另外 {count} 个"),
         }
     }
 

@@ -7,7 +7,12 @@
       "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
+    }
+  ],
   "description": "The Avatar components display a user's profile picture or fallback initials. Use the composable `Avatar`, `AvatarImage`, and `AvatarFallback` primitives when you need full control, or `ImageAvatar` for the common image-with-fallback case.",
   "exclude": [
     "docs.md",

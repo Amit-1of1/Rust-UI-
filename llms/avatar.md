@@ -1,6 +1,6 @@
 # Avatar
 
-- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
 - Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Avatar components display a user's profile picture or fallback initials. Use the composable `Avatar`, `AvatarImage`, and `AvatarFallback` primitives when you need full control, or `ImageAvatar` for the common image-with-fallback case.
@@ -32,6 +32,19 @@ ImageAvatar {
 The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.
 
 `alt` on `AvatarImage` and `ImageAvatar` is required, so an image with no text alternative doesn't compile. Pass `alt: ""` on purpose when the name is shown beside the avatar.
+
+## Sizes, shapes and groups
+
+`size` is `Small`, `Medium` or `Large`; `shape` is `Circle` or `Rounded` (a rounded square). The image is cropped to the shape (`object-fit: cover`), so photos of any size or ratio work. Without an image, the fallback (initials or an icon) sits on a filled background whose text passes WCAG AA.
+
+`AvatarGroup` overlaps several avatars, for a team or the people on a document. Pass the avatars you show and the number left out as `more`, which adds a "+N" avatar (read as "N more"):
+
+```rust
+AvatarGroup { label: "Design team", more: 3,
+    Avatar { size: AvatarImageSize::Small, label: "Ada Lovelace", AvatarFallback { "AL" } }
+    Avatar { size: AvatarImageSize::Small, label: "Grace Hopper", AvatarFallback { "GH" } }
+}
+```
 
 ## API
 
@@ -189,6 +202,44 @@ pub struct ImageAvatarProps {
 
 #[component]
 pub fn ImageAvatar(props: ImageAvatarProps) -> Element
+
+/// Stacks avatars so they overlap, for "who is in this team" rows. Pass the avatars to show
+/// as children and the number left out as `more`, which adds a "+N" avatar at the end.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     AvatarGroup { label: "Design team", more: 4,
+///         Avatar { label: "Ada Lovelace", AvatarFallback { "AL" } }
+///         Avatar { label: "Grace Hopper", AvatarFallback { "GH" } }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// The group is a `role="group"` named by `label`; each avatar keeps its own name, and the
+/// "+N" avatar is read as "N more".
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AvatarGroup(
+    /// What the group is ("Design team"), read by screen readers.
+    #[props(into)]
+    label: String,
+    /// How many avatars were left out; shown as "+N" when above zero.
+    #[props(default)]
+    more: usize,
+    /// The size of the "+N" avatar; match the avatars inside.
+    #[props(default)]
+    size: AvatarImageSize,
+    #[props(default)] shape: AvatarShape,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -271,6 +322,14 @@ pub fn Demo() -> Element {
                     },
                     aria_label: "Large avatar",
                     "DX"
+                }
+            }
+            div { class: Styles::dx_avatar_item,
+                p { class: Styles::dx_avatar_label, "Group" }
+                AvatarGroup { label: "Design team", more: 3,
+                    Avatar { size: AvatarImageSize::Small, label: "Ada Lovelace", AvatarFallback { "AL" } }
+                    Avatar { size: AvatarImageSize::Small, label: "Grace Hopper", AvatarFallback { "GH" } }
+                    ImageAvatar { size: AvatarImageSize::Small, src: DEMO_AVATAR_SRC, alt: "Alan Turing", "AT" }
                 }
             }
         }

@@ -8,7 +8,7 @@
     }
   ],
   "componentDependencies": [],
-  "description": "A message that interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.",
+  "description": "A message about the whole page or one part of it. By default it interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.",
   "exclude": [
     "docs.md",
     "component.json"

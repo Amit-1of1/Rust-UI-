@@ -11,6 +11,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "The Badge is a component designed to display small, distinct labels that help highlight important content or status indicators. Perfect for use cases like notifications, status labels, or categorization.",

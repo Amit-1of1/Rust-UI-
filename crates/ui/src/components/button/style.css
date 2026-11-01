@@ -216,3 +216,55 @@
   /* The border stays red here, so the ring is the only focus cue: keep it solid. */
   box-shadow: 0 0 0 2px var(--error-text-color);
 }
+
+/* Pressed: a cue while the pointer or Space holds the button down, and for toggle buttons
+   that are on (`aria-pressed`). Uses the hover colours; the small press reads in both themes. */
+.dx-button:not(:disabled, [aria-disabled="true"]):active {
+  transform: translateY(1px);
+}
+
+.dx-button[aria-pressed="true"] {
+  background-color: var(--primary-color-5);
+  color: var(--secondary-color-1);
+}
+
+/* Loading (`loading: true`): the label stays in place, invisible but still read, so the
+   button keeps its width and height; the spinner sits on top. */
+.dx-button[data-loading="true"] {
+  position: relative;
+  cursor: progress;
+}
+
+.dx-button-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  opacity: 0;
+}
+
+.dx-button-spinner {
+  position: absolute;
+  inset: 0;
+  width: 1em;
+  height: 1em;
+  box-sizing: border-box;
+  margin: auto;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 999px;
+  animation: dx-button-spin 700ms linear infinite;
+}
+
+@keyframes dx-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A slowly turning ring still says "busy" when motion is reduced (as Spinner does). */
+@media (prefers-reduced-motion: reduce) {
+  .dx-button-spinner {
+    animation-duration: 3s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

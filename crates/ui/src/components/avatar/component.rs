@@ -259,3 +259,64 @@ pub fn ImageAvatar(props: ImageAvatarProps) -> Element {
         }
     }
 }
+
+/// Stacks avatars so they overlap, for "who is in this team" rows. Pass the avatars to show
+/// as children and the number left out as `more`, which adds a "+N" avatar at the end.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     AvatarGroup { label: "Design team", more: 4,
+///         Avatar { label: "Ada Lovelace", AvatarFallback { "AL" } }
+///         Avatar { label: "Grace Hopper", AvatarFallback { "GH" } }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// The group is a `role="group"` named by `label`; each avatar keeps its own name, and the
+/// "+N" avatar is read as "N more".
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AvatarGroup(
+    /// What the group is ("Design team"), read by screen readers.
+    #[props(into)]
+    label: String,
+    /// How many avatars were left out; shown as "+N" when above zero.
+    #[props(default)]
+    more: usize,
+    /// The size of the "+N" avatar; match the avatars inside.
+    #[props(default)]
+    size: AvatarImageSize,
+    #[props(default)] shape: AvatarShape,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    let more_label = crate::components::ui_strings::fill(
+        &crate::components::ui_strings::use_ui_strings().more_count,
+        &[("count", &more.to_string())],
+    );
+    let more_class = format!(
+        "{} {} {} {}",
+        Styles::dx_avatar,
+        Styles::dx_avatar_more,
+        size.to_class(),
+        shape.to_class()
+    );
+    rsx! {
+        div {
+            role: "group",
+            aria_label: label,
+            ..merge_attributes(vec![attributes!(div { class: Styles::dx_avatar_group }), attributes]),
+            {children}
+            if more > 0 {
+                span { class: more_class, role: "img", aria_label: more_label, "+{more}" }
+            }
+        }
+    }
+}

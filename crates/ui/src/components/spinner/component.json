@@ -13,7 +13,7 @@
       "name": "ui_strings"
     }
   ],
-  "description": "A loading indicator.",
+  "description": "A loading indicator for waits of unknown length. For a known amount of work, use `Progress`, which can show how much is left.",
   "exclude": [
     "docs.md",
     "component.json"

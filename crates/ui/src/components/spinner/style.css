@@ -4,7 +4,8 @@
   height: 1rem;
   box-sizing: border-box;
   border: 2px solid var(--primary-color-7);
-  border-top-color: var(--secondary-color);
+  /* Follows the parent's text colour (in body text that is the theme's text colour). */
+  border-top-color: currentColor;
   border-radius: 999px;
   animation: dx-spinner-spin 700ms linear infinite;
 }
@@ -21,4 +22,21 @@
     animation-duration: 3s !important;
     animation-iteration-count: infinite !important;
   }
+}
+
+.dx-spinner[data-size="sm"] {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-width: 1.5px;
+}
+
+.dx-spinner[data-size="lg"] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.dx-spinner[data-size="xl"] {
+  width: 2rem;
+  height: 2rem;
+  border-width: 3px;
 }
