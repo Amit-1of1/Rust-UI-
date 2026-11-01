@@ -21,7 +21,7 @@ await page.keyboard.press("Escape");
 await page.waitForTimeout(400);
 assert.equal(await page.getByRole("dialog", { name: "Move goal" }).count(), 0, "Escape closes");
 
-// Drag the body down past the threshold (0.4 x 320 px), from the top of the drawer so the
+// Drag the body down past the threshold (see below), from the top of the drawer so the
 // pointer stays inside the window: Firefox's automation drops the release outside the viewport.
 await trigger.click();
 await dialog.waitFor();
@@ -36,11 +36,14 @@ await page.evaluate(() => {
 const box = await dialog.boundingBox();
 const start = { x: box.x + box.width / 2, y: box.y + 12 };
 const viewport = page.viewportSize();
-assert.ok(start.y + 160 < viewport.height, "the drag fits inside the window");
+// Drag as far as the window allows (at most 160 px); it must still pass the dismiss threshold
+// (0.4 x the measured height, or of 320 px when it cannot be measured), whatever height the fonts give it.
+const distance = Math.min(160, viewport.height - 4 - start.y);
+assert.ok(distance > Math.max(box.height, 320) * 0.4 + 8, `the drag (${distance} px) fits inside the window and passes the threshold`);
 await page.mouse.move(start.x, start.y);
 await page.mouse.down();
 for (let i = 1; i <= 10; i++) {
-  await page.mouse.move(start.x, start.y + i * 16);
+  await page.mouse.move(start.x, start.y + (i * distance) / 10);
   await page.waitForTimeout(30);
 }
 await page.waitForTimeout(150);
