@@ -686,9 +686,13 @@ fn toast_waits_while_hovered() {
         .build()
         .expect("runtime");
     let _rt = rt.enter();
+    // The toast counts down in 100 ms ticks, each run when the page settles, so wait in
+    // slices the way a running app would.
     let wait = |h: &mut Harness, ms: u64| {
-        rt.block_on(tokio::time::sleep(std::time::Duration::from_millis(ms)));
-        h.settle();
+        for _ in 0..ms / 50 {
+            rt.block_on(tokio::time::sleep(std::time::Duration::from_millis(50)));
+            h.settle();
+        }
     };
     let mut h = Harness::new(demo!("toast"));
     h.click("button");
@@ -781,13 +785,14 @@ fn carousel_buttons_scroll_the_track() {
     let track = h.find("[tabindex='0'][role=group]").expect("track");
     let offset = |h: &Harness| h.doc.get_node(track).unwrap().scroll_offset.x;
     assert_eq!(offset(&h), 0.0);
+    // The first carousel's Previous and Next (the demo has a second carousel below).
     let buttons: Vec<usize> = h
         .doc
         .query_selector_all("button")
         .unwrap()
         .into_iter()
         .collect();
-    let next = buttons.last().copied().unwrap();
+    let next = buttons[1];
     let (x, y) = {
         let n = h.doc.get_node(next).unwrap();
         let p = n.absolute_position(0.0, 0.0);
