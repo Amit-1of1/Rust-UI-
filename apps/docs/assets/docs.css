@@ -44,7 +44,7 @@ body {
   text-decoration: none;
 }
 .docs-look { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; align-self: center; }
-.docs-look select { width: auto; min-width: 8rem; text-transform: capitalize; }
+.docs-look select { text-transform: capitalize; }
 .docs-tagline { color: var(--secondary-color-5); font-size: 0.875rem; }
 
 .docs-layout {

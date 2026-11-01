@@ -21,8 +21,8 @@
 }
 
 .dx-badge[data-style="primary"] {
-  background-color: var(--secondary-color-2);
-  color: var(--primary-color);
+  background-color: var(--color-background-primary);
+  color: var(--color-on-background-primary);
 }
 
 .dx-badge[data-style="secondary"] {
