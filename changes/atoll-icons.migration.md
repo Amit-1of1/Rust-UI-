@@ -1,4 +1,4 @@
-### `IconNode` has a new `Fill` variant (PR #TBD)
+### `IconNode` has a new `Fill` variant (PR #85)
 
 **Who:** code that matches on `ui::icons::IconNode` exhaustively (a custom icon renderer or exporter). Code that only draws icons is not affected.
 
