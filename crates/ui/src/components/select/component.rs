@@ -1,4 +1,4 @@
-use crate::components::icons::{Check, ChevronDown};
+use crate::components::icons::{Check, ChevronDown, CircleAlert};
 use dioxus::dioxus_core::AttributeValue;
 use crate::components::hooks::use_unique_id;
 use dioxus::prelude::*;
@@ -134,6 +134,12 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
     pub typeahead_timeout: ReadSignal<Duration>,
 
+    /// Shown at the start of the trigger: an icon that says what the select is for, or a
+    /// prefix such as the chosen country's flag. Decorative (hidden from screen readers), so
+    /// the value and label still carry the meaning.
+    #[props(default)]
+    pub start: Option<Element>,
+
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 
@@ -189,6 +195,16 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
         class: Styles::dx_select
     });
     let name = use_trigger_name(props.attributes);
+    let invalid = name.trigger.iter().any(|a| {
+        use dioxus::dioxus_core::AttributeValue;
+        a.name == "aria-invalid"
+            && match &a.value {
+                AttributeValue::Text(t) => t == "true",
+                AttributeValue::Bool(b) => *b,
+                _ => false,
+            }
+    });
+    let start = props.start.clone();
     let merged = merge_attributes(vec![base, name.root]);
     // A plain `selected` becomes the signal the primitive wants. The memo follows the prop.
     let selected = props.selected.clone();
@@ -221,10 +237,17 @@ pub fn Select<T: Clone + PartialEq + 'static>(props: SelectProps<T>) -> Element 
                 id: name.trigger_id,
                 aria_labelledby: name.labelledby,
                 attributes: name.trigger,
+                if let Some(start) = start {
+                    span { class: Styles::dx_select_start, aria_hidden: "true", {start} }
+                }
                 if let Some(placeholder) = name.placeholder {
                     select::SelectValue { placeholder }
                 } else {
                     select::SelectValue {}
+                }
+                // An error icon as well as the red edge, so colour isn't the only cue.
+                if invalid {
+                    CircleAlert { "aria-hidden": "true", class: Styles::dx_select_error_icon.to_string(), size: "16px" }
                 }
                 ChevronDown { "aria-hidden": "true",
                     class: "dx-select-expand-icon",

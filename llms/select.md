@@ -41,6 +41,10 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
 
+## Start slot and errors
+
+`Select { start: rsx! { ShoppingBasket {} } }` puts an icon or short text before the value; it is hidden from screen readers. When the trigger has `aria_invalid: "true"` (or sits in a `Field` with an error) it gets the error outline and an alert icon.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
@@ -116,6 +120,12 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
     pub typeahead_timeout: ReadSignal<Duration>,
 
+    /// Shown at the start of the trigger: an icon that says what the select is for, or a
+    /// prefix such as the chosen country's flag. Decorative (hidden from screen readers), so
+    /// the value and label still carry the meaning.
+    #[props(default)]
+    pub start: Option<Element>,
+
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 
@@ -182,6 +192,7 @@ pub fn Demo() -> Element {
         Select::<Option<Fruit>> {
             width: "12rem",
             aria_label: "Fruit",
+            start: rsx! { crate::components::icons::ShoppingBasket {} },
             SelectGroup {
                 SelectGroupLabel { "Fruits" }
                 {fruits}

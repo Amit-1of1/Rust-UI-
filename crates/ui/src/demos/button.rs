@@ -19,6 +19,7 @@ pub fn Demo() -> Element {
             Button { "Default" }
             Button { size: ButtonSize::Lg, "Large" }
             Button { disabled: true, "Disabled" }
+            LoadingDemo {}
         }
         // Icon-only buttons need a `label` (their accessible name); leaving it out doesn't compile.
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
@@ -31,5 +32,26 @@ pub fn Demo() -> Element {
                 Trash { size: "1.25rem", "aria-hidden": "true" }
             }
         }
+    }
+}
+
+/// Press to see the loading state for two seconds; the button keeps its size.
+#[component]
+fn LoadingDemo() -> Element {
+    let mut loading = use_signal(|| false);
+    rsx! {
+        Button {
+            variant: ButtonVariant::Outline,
+            loading: loading(),
+            onclick: move |_| {
+                loading.set(true);
+                spawn(async move {
+                    dioxus_sdk_time::sleep(std::time::Duration::from_secs(2)).await;
+                    loading.set(false);
+                });
+            },
+            "Save changes"
+        }
+        Button { loading: true, "Loading" }
     }
 }

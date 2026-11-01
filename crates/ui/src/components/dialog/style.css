@@ -122,3 +122,38 @@
     transform: none;
   }
 }
+
+/* Sizes (`DialogSize`): the most the dialog may grow to; phones always get the full width. */
+@media (width >= 40rem) {
+  .dx-dialog[data-size="sm"] {
+    max-width: 24rem;
+  }
+
+  .dx-dialog[data-size="lg"] {
+    max-width: 42rem;
+  }
+
+  .dx-dialog[data-size="xl"] {
+    max-width: 56rem;
+  }
+
+  .dx-dialog[data-size="full"] {
+    max-width: calc(100% - 4rem);
+    max-height: calc(100% - 4rem);
+  }
+}
+
+/* DialogFooter: actions at the end, stacked on narrow screens. */
+.dx-dialog-footer {
+  display: flex;
+  flex-direction: column-reverse;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+@media (width >= 40rem) {
+  .dx-dialog-footer {
+    flex-flow: row wrap;
+    justify-content: flex-end;
+  }
+}

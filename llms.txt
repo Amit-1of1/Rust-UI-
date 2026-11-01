@@ -30,7 +30,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 ## Components
 
 - [Accordion](llms/accordion.md): The accordion component is used to display collapsible content panels for presenting information in a limited amount of space
-- [Alert](llms/alert.md): A message that interrupts: it is announced as soon as it appears
+- [Alert](llms/alert.md): A message about the whole page or one part of it
 - [Alert dialog](llms/alert_dialog.md): The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions)
 - [Aspect ratio](llms/aspect_ratio.md): The AspectRatio component is used to maintain a specific aspect ratio for its children
 - [Avatar](llms/avatar.md): The Avatar components display a user's profile picture or fallback initials
@@ -67,6 +67,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Hooks](llms/hooks.md): Hooks shared by the components and by apps
 - [Hover card](llms/hover_card.md): The HoverCard component can be used to display additional information when a user hovers over an element
 - [Icons](llms/icons.md): The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
+- [Image](llms/image.md): A picture with a fixed shape, sharp on every screen, and a fallback when it can't load
 - [Input](llms/input.md): The input element is used to accept a text input from the user
 - [InputGroup](llms/input_group.md): An input with text, icons or buttons attached inside one bordered box
 - [InputOtp](llms/input_otp.md): A one-time-code input: one box per character
@@ -74,6 +75,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Kbd](llms/kbd.md): A keyboard key cap, for showing shortcuts
 - [Label](llms/label.md): The Label component is used to provide a label for form elements, enhancing accessibility and usability
 - [Link](llms/link.md): `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring
+- [List](llms/list.md): A bulleted, numbered or plain list of items
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
@@ -94,7 +96,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Skeleton](llms/skeleton.md): The Skeleton component is used to display a placeholder preview of content before the data gets loaded
 - [SkipLink](llms/skip_link.md): `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation
 - [Slider](llms/slider.md): The slider component allows users to select a value from a range by sliding a handle along a track
-- [Spinner](llms/spinner.md): A loading indicator
+- [Spinner](llms/spinner.md): A loading indicator for waits of unknown length
 - [Status](llms/status.md): A coloured dot plus required text label (idle, online, degraded, down)
 - [Stepper](llms/stepper.md): A multi-step progress indicator with Back/Next control via `use_stepper()`
 - [Switch](llms/switch.md): The Switch component allows users to toggle between two states, such as on and off

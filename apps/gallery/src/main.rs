@@ -127,6 +127,8 @@ fn MoreSections() -> Element {
         Section { title: "Separator", blurb: "Visual divider.", ui::demos::separator::Demo {} }
         Section { title: "Alert dialog", blurb: "A dialog that demands an explicit answer.", ui::demos::alert_dialog::Demo {} }
         Section { title: "Aspect ratio", blurb: "Keeps content at a fixed ratio.", ui::demos::aspect_ratio::Demo {} }
+        Section { title: "Image", blurb: "A picture with a fixed ratio, srcset and a fallback.", ui::demos::image::Demo {} }
+        Section { title: "List", blurb: "Bulleted, numbered and plain lists that keep their list role.", ui::demos::list::Demo {} }
         Section { title: "Avatar", blurb: "Image with a fallback.", ui::demos::avatar::Demo {} }
         Section { title: "Calendar", blurb: "Date grid; arrow keys move between days.", ui::demos::calendar::Demo {} }
         Section { title: "Collapsible", blurb: "A single show/hide region.", ui::demos::collapsible::Demo {} }

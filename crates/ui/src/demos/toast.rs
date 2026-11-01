@@ -1,7 +1,7 @@
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::toast::{ToastProvider, ToastsExt};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::use_toast;
+use dioxus_primitives::toast::{use_toast, ToastType};
 
 /// Self-contained: the demo brings its own provider, so it also works on a docs page.
 #[component]
@@ -30,6 +30,14 @@ fn Buttons() -> Element {
                 variant: ButtonVariant::Outline,
                 onclick: move |_| toasts.notify_info("Copied"),
                 "Info toast"
+            }
+            Button {
+                variant: ButtonVariant::Outline,
+                onclick: move |_| {
+                    toasts.notify_action(ToastType::Info, ("Invoice deleted", "INV-1042 moved to the bin."), "Undo",
+                        move |_| toasts.notify_success("Invoice restored"))
+                },
+                "Toast with an action"
             }
         }
     }

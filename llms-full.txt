@@ -30,7 +30,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 ## Components
 
 - [Accordion](llms/accordion.md): The accordion component is used to display collapsible content panels for presenting information in a limited amount of space
-- [Alert](llms/alert.md): A message that interrupts: it is announced as soon as it appears
+- [Alert](llms/alert.md): A message about the whole page or one part of it
 - [Alert dialog](llms/alert_dialog.md): The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions)
 - [Aspect ratio](llms/aspect_ratio.md): The AspectRatio component is used to maintain a specific aspect ratio for its children
 - [Avatar](llms/avatar.md): The Avatar components display a user's profile picture or fallback initials
@@ -67,6 +67,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Hooks](llms/hooks.md): Hooks shared by the components and by apps
 - [Hover card](llms/hover_card.md): The HoverCard component can be used to display additional information when a user hovers over an element
 - [Icons](llms/icons.md): The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
+- [Image](llms/image.md): A picture with a fixed shape, sharp on every screen, and a fallback when it can't load
 - [Input](llms/input.md): The input element is used to accept a text input from the user
 - [InputGroup](llms/input_group.md): An input with text, icons or buttons attached inside one bordered box
 - [InputOtp](llms/input_otp.md): A one-time-code input: one box per character
@@ -74,6 +75,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Kbd](llms/kbd.md): A keyboard key cap, for showing shortcuts
 - [Label](llms/label.md): The Label component is used to provide a label for form elements, enhancing accessibility and usability
 - [Link](llms/link.md): `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring
+- [List](llms/list.md): A bulleted, numbered or plain list of items
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
 - [MultiSelect](llms/multi_select.md): Pick several options from a list
@@ -94,7 +96,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Skeleton](llms/skeleton.md): The Skeleton component is used to display a placeholder preview of content before the data gets loaded
 - [SkipLink](llms/skip_link.md): `SkipLink` is a "Skip to content" link that stays hidden until it has keyboard focus, then appears in the corner, so keyboard users can jump past the header and navigation
 - [Slider](llms/slider.md): The slider component allows users to select a value from a range by sliding a handle along a track
-- [Spinner](llms/spinner.md): A loading indicator
+- [Spinner](llms/spinner.md): A loading indicator for waits of unknown length
 - [Status](llms/status.md): A coloured dot plus required text label (idle, online, degraded, down)
 - [Stepper](llms/stepper.md): A multi-step progress indicator with Back/Next control via `use_stepper()`
 - [Switch](llms/switch.md): The Switch component allows users to toggle between two states, such as on and off
@@ -124,7 +126,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 
 # Accordion
 
-- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`).
 - Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The accordion component is used to display collapsible content panels for presenting information in a limited amount of space. It allows users to expand and collapse sections to view more or less content.
@@ -220,27 +222,70 @@ pub fn Demo() -> Element {
 - Copy into your app: `atoll add alert` or `dx components add alert --git https://github.com/Amit-1of1/Rust-UI-`.
 - Import: `use crate::components::alert::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
-A message that interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.
+A message about the whole page or one part of it. By default it interrupts: it is announced as soon as it appears. Use `Callout` for a quiet inline note.
+
+```rust
+Alert { variant: AlertVariant::Destructive, icon: rsx! { CircleAlert {} },
+    AlertTitle { "Payment failed" }
+    AlertDescription { "Your card was declined." }
+    AlertActions { Button { size: ButtonSize::Sm, "Update card" } }
+}
+```
+
+- `variant`: `Default`, `Destructive`, `Success`, `Warning` or `Info`. The status colours come from the theme's tokens and pass WCAG AA.
+- `icon`: an icon in its own column before the text (hidden from screen readers; the title carries the meaning). Use one for status variants so colour isn't the only cue.
+- `AlertTitle` for a short summary, `AlertDescription` for the details, `AlertActions` for buttons that answer the message.
+- `live`: `Assertive` (`role="alert"`, the default) for errors, `Polite` (`role="status"`) for good news, `Off` for a message that is part of the page from the start.
+- The alert fills its container's width, so on a phone it is full width.
 
 ## Accessibility
 
-- Role and name: `role="alert"`
-- Keyboard: none (not interactive)
+- Role and name: `role="alert"`, `role="status"` or none, from `live`
+- Keyboard: none of its own; actions inside are ordinary buttons
 - Reduced motion: none
 
 ## API
 
 ```rust
+/// An alert's role, shown by its colour (and, with `icon`, by an icon, so colour is not the
+/// only cue).
 pub enum AlertVariant {
     #[default]
     Default,
     Destructive,
+    Success,
+    Warning,
+    Info,
 }
 
-/// A callout. Announced to screen readers (`role="alert"`) when it appears.
+/// How an [`Alert`] is announced.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum AlertLive {
+    /// `role="alert"`: read at once, interrupting. For errors and anything urgent.
+    #[default]
+    Assertive,
+    /// `role="status"`: read when the screen reader is idle. For success and progress notes.
+    Polite,
+    /// No live region: for a message that is on the page from the start (a live region only
+    /// announces changes, and many alerts on load are noise).
+    Off,
+}
+
+/// A message about the page or a part of it. Announced to screen readers (`role="alert"`)
+/// when it appears, unless `live` says otherwise.
 #[component]
 pub fn Alert(
     #[props(default)] variant: AlertVariant,
+    /// How it is announced: at once (default), politely, or not at all.
+    #[props(default)]
+    live: AlertLive,
+    /// An icon before the text, such as `CircleAlert`. Mark it `aria-hidden`; the title says
+    /// what the icon shows.
+    #[props(default)]
+    icon: Option<Element>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -256,25 +301,54 @@ pub fn AlertDescription(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
+
+/// Buttons or links that answer the alert ("Retry", "Undo", "View details"), below the text.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AlertActions(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
 
 ```rust
 use crate::components::alert::*;
+use crate::components::button::*;
+use crate::components::icons::{CircleAlert, CircleCheck, Info, TriangleAlert};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
         div { style: "display: grid; gap: 0.75rem; max-width: 28rem;",
-            Alert {
+            Alert { live: AlertLive::Off,
                 AlertTitle { "Heads up" }
                 AlertDescription { "You can add components to your app with the registry." }
             }
             Alert { variant: AlertVariant::Destructive,
+                icon: rsx! { CircleAlert {} },
                 AlertTitle { "Something went wrong" }
                 AlertDescription { "Your session has expired. Sign in again to continue." }
+                AlertActions { Button { size: ButtonSize::Sm, variant: ButtonVariant::Outline, "Sign in" } }
+            }
+            Alert { variant: AlertVariant::Success, live: AlertLive::Polite,
+                icon: rsx! { CircleCheck {} },
+                AlertTitle { "Invoice sent" }
+                AlertDescription { "Ledgerly emailed the invoice to your client." }
+            }
+            Alert { variant: AlertVariant::Warning, live: AlertLive::Off,
+                icon: rsx! { TriangleAlert {} },
+                AlertTitle { "Trial ends in 3 days" }
+            }
+            Alert { variant: AlertVariant::Info, live: AlertLive::Off,
+                icon: rsx! { Info {} },
+                AlertTitle { "Maintenance on Sunday" }
+                AlertDescription { "Sync pauses from 02:00 to 03:00 UTC." }
             }
         }
     }
@@ -514,7 +588,7 @@ pub fn Demo() -> Element {
 
 # Avatar
 
-- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add avatar` or `dx components add avatar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
 - Import: `use crate::components::avatar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Avatar components display a user's profile picture or fallback initials. Use the composable `Avatar`, `AvatarImage`, and `AvatarFallback` primitives when you need full control, or `ImageAvatar` for the common image-with-fallback case.
@@ -546,6 +620,19 @@ ImageAvatar {
 The avatar is `role="img"`, so a screen reader reads its name, never the initials inside. `label` names it (`ImageAvatar` uses `alt` when there is no `label`). An avatar with no `label`, `alt`, `aria-label` or `aria-labelledby` is decorative: it renders `aria-hidden="true"`, which is right when the person's name is shown next to it.
 
 `alt` on `AvatarImage` and `ImageAvatar` is required, so an image with no text alternative doesn't compile. Pass `alt: ""` on purpose when the name is shown beside the avatar.
+
+## Sizes, shapes and groups
+
+`size` is `Small`, `Medium` or `Large`; `shape` is `Circle` or `Rounded` (a rounded square). The image is cropped to the shape (`object-fit: cover`), so photos of any size or ratio work. Without an image, the fallback (initials or an icon) sits on a filled background whose text passes WCAG AA.
+
+`AvatarGroup` overlaps several avatars, for a team or the people on a document. Pass the avatars you show and the number left out as `more`, which adds a "+N" avatar (read as "N more"):
+
+```rust
+AvatarGroup { label: "Design team", more: 3,
+    Avatar { size: AvatarImageSize::Small, label: "Ada Lovelace", AvatarFallback { "AL" } }
+    Avatar { size: AvatarImageSize::Small, label: "Grace Hopper", AvatarFallback { "GH" } }
+}
+```
 
 ## API
 
@@ -703,6 +790,44 @@ pub struct ImageAvatarProps {
 
 #[component]
 pub fn ImageAvatar(props: ImageAvatarProps) -> Element
+
+/// Stacks avatars so they overlap, for "who is in this team" rows. Pass the avatars to show
+/// as children and the number left out as `more`, which adds a "+N" avatar at the end.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     AvatarGroup { label: "Design team", more: 4,
+///         Avatar { label: "Ada Lovelace", AvatarFallback { "AL" } }
+///         Avatar { label: "Grace Hopper", AvatarFallback { "GH" } }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// The group is a `role="group"` named by `label`; each avatar keeps its own name, and the
+/// "+N" avatar is read as "N more".
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn AvatarGroup(
+    /// What the group is ("Design team"), read by screen readers.
+    #[props(into)]
+    label: String,
+    /// How many avatars were left out; shown as "+N" when above zero.
+    #[props(default)]
+    more: usize,
+    /// The size of the "+N" avatar; match the avatars inside.
+    #[props(default)]
+    size: AvatarImageSize,
+    #[props(default)] shape: AvatarShape,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -787,6 +912,14 @@ pub fn Demo() -> Element {
                     "DX"
                 }
             }
+            div { class: Styles::dx_avatar_item,
+                p { class: Styles::dx_avatar_label, "Group" }
+                AvatarGroup { label: "Design team", more: 3,
+                    Avatar { size: AvatarImageSize::Small, label: "Ada Lovelace", AvatarFallback { "AL" } }
+                    Avatar { size: AvatarImageSize::Small, label: "Grace Hopper", AvatarFallback { "GH" } }
+                    ImageAvatar { size: AvatarImageSize::Small, src: DEMO_AVATAR_SRC, alt: "Alan Turing", "AT" }
+                }
+            }
         }
     }
 }
@@ -796,7 +929,7 @@ pub fn Demo() -> Element {
 
 # Badge
 
-- Copy into your app: `atoll add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Copy into your app: `atoll add badge` or `dx components add badge --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `ui_strings`).
 - Import: `use crate::components::badge::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Badge is a component designed to display small, distinct labels that help highlight important content or status indicators. Perfect for use cases like notifications, status labels, or categorization.
@@ -809,15 +942,57 @@ Badge {
 }
 ```
 
+## Colours, sizes and icons
+
+`variant` picks the role: `Primary`, `Secondary` (a faded fill that draws less attention), `Outline`, `Destructive`, `Success` and `Warning`. The status colours come from the theme's success, warning and error tokens, and their text passes WCAG AA on the fill (`atoll contrast`). `size` is `Sm`, `Default` or `Lg`. Put a decorative icon before the text (`aria-hidden`); it follows the badge's text size and colour, so add words as well: colour and icon alone don't say what a badge means.
+
+## Dismissible badges
+
+`on_dismiss` adds a remove button after the text, named "Remove {dismiss_label}":
+
+```rust
+Badge { variant: BadgeVariant::Outline, dismiss_label: "Rust", on_dismiss: move |_| remove("Rust"), "Rust" }
+```
+
+Removing the badge removes the button that had focus, so move focus somewhere that stays, such as the next badge or the group around them (the demo focuses a `tabindex: "-1"` group). Otherwise keyboard users land back at the top of the page.
+
+For a whole set of removable, selectable values with arrow-key navigation, use `TagGroup`.
+
+## Dots and positioning
+
+`dot: true` draws a round marker with no text. Give it an `aria-label` when it means something on its own ("Online"); without one it is decorative. `BadgeAnchor` pins a badge to a corner of another element, such as a count on a bell button. Put the count in the button's own name too, and hide the badge itself (`aria_hidden: "true"`) so it isn't read twice:
+
+```rust
+BadgeAnchor { badge: rsx! { Badge { size: BadgeSize::Sm, aria_hidden: "true", "3" } },
+    IconButton { label: "Notifications, 3 unread", Bell { "aria-hidden": "true" } }
+}
+```
+
 ## API
 
 ```rust
+/// A badge's role, shown by its colour. Success and warning use the theme's status tokens.
 pub enum BadgeVariant {
     #[default]
     Primary,
+    /// A faded fill that draws less attention.
     Secondary,
     Destructive,
     Outline,
+    Success,
+    Warning,
+}
+
+/// A badge's size: `Sm` for dense tables, `Lg` for marketing pages.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum BadgeSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
 }
 
 /// The props for the [`Badge`] component.
@@ -825,16 +1000,81 @@ pub struct BadgeProps {
     #[props(default)]
     pub variant: BadgeVariant,
 
+    #[props(default)]
+    pub size: BadgeSize,
+
+    /// A dot with no text, such as an "unread" marker. Give it an `aria-label` when it means
+    /// something on its own; without one it is decorative and hidden from screen readers.
+    #[props(default)]
+    pub dot: bool,
+
+    /// Adds a remove button after the text (for selected values and filters). It is named
+    /// "Remove {dismiss_label}", so pass the badge's text as `dismiss_label`.
+    #[props(default)]
+    pub on_dismiss: Option<EventHandler<MouseEvent>>,
+
+    /// What the remove button removes ("Rust" gives "Remove Rust"). Needed with `on_dismiss`.
+    #[props(default, into)]
+    pub dismiss_label: Option<String>,
+
     /// Additional attributes to extend the badge element
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 
     /// The children of the badge element
+    #[props(default)]
     pub children: Element,
 }
 
 #[component]
 pub fn Badge(props: BadgeProps) -> Element
+
+/// Where a [`BadgeAnchor`] puts its badge. `End` follows the reading direction (right in
+/// English, left in Arabic).
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum BadgePlacement {
+    #[default]
+    TopEnd,
+    BottomEnd,
+    TopStart,
+    BottomStart,
+}
+
+/// Pins a badge to the corner of another element, such as a count on an icon button or a
+/// status dot on an avatar.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # use ui::icons::Bell;
+/// # fn app() -> Element {
+/// rsx! {
+///     BadgeAnchor { badge: rsx! { Badge { size: BadgeSize::Sm, "3" } },
+///         IconButton { label: "Notifications, 3 unread", variant: ButtonVariant::Outline,
+///             Bell { "aria-hidden": "true" }
+///         }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// The badge is drawn over the element, so put what it says into the element's own name too
+/// (as above) and mark it `aria-hidden` if it would be read twice.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn BadgeAnchor(
+    /// The badge (or any small element) to pin.
+    badge: Element,
+    #[props(default)] placement: BadgePlacement,
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 
 #[component]
 pub fn VerifiedIcon() -> Element
@@ -844,17 +1084,65 @@ pub fn VerifiedIcon() -> Element
 
 ```rust
 use crate::components::badge::*;
+use crate::components::button::*;
+use crate::components::icons::{Bell, Check, TriangleAlert};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
+    let mut tags = use_signal(|| vec!["Rust", "Dioxus", "WebAssembly"]);
+    // The pressed dismiss button goes away with its badge, so focus moves to the group.
+    let mut group = use_signal(|| None::<std::rc::Rc<MountedData>>);
     rsx! {
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;",
             Badge { "Primary" }
             Badge { variant: BadgeVariant::Secondary, "Secondary" }
             Badge { variant: BadgeVariant::Destructive, "Destructive" }
             Badge { variant: BadgeVariant::Outline, "Outline" }
+            Badge { variant: BadgeVariant::Success, Check { "aria-hidden": "true", size: "12px" } "Paid" }
+            Badge { variant: BadgeVariant::Warning, TriangleAlert { "aria-hidden": "true", size: "12px" } "Overdue" }
             Badge { variant: BadgeVariant::Secondary, VerifiedIcon {} "Verified" }
+        }
+        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
+            Badge { size: BadgeSize::Sm, "Small" }
+            Badge { "Default" }
+            Badge { size: BadgeSize::Lg, "Large" }
+            Badge { dot: true, variant: BadgeVariant::Success, aria_label: "Online" }
+            span { "Online" }
+        }
+        div {
+            style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem;",
+            role: "group",
+            aria_label: "Topics",
+            tabindex: "-1",
+            onmounted: move |e: MountedEvent| group.set(Some(e.data())),
+            for tag in tags() {
+                Badge { key: "{tag}", variant: BadgeVariant::Outline, dismiss_label: tag,
+                    on_dismiss: move |_| {
+                        tags.write().retain(|t| *t != tag);
+                        if let Some(group) = group() {
+                            spawn(async move {
+                                _ = group.set_focus(true).await;
+                            });
+                        }
+                    },
+                    "{tag}"
+                }
+            }
+        }
+        div { style: "display: flex; align-items: center; gap: 1.5rem; margin-top: 1rem;",
+            BadgeAnchor {
+                badge: rsx! { Badge { size: BadgeSize::Sm, variant: BadgeVariant::Destructive, aria_hidden: "true", "3" } },
+                IconButton { label: "Notifications, 3 unread", variant: ButtonVariant::Outline,
+                    Bell { "aria-hidden": "true" }
+                }
+            }
+            BadgeAnchor { placement: BadgePlacement::BottomEnd,
+                badge: rsx! { Badge { dot: true, variant: BadgeVariant::Success } },
+                IconButton { label: "Messages", variant: ButtonVariant::Ghost,
+                    Bell { "aria-hidden": "true" }
+                }
+            }
         }
     }
 }
@@ -943,15 +1231,42 @@ pub fn Demo() -> Element {
 
 # Breadcrumb
 
-- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
+- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A trail of links to the current page.
 
+```rust
+Breadcrumb {
+    BreadcrumbItem { BreadcrumbLink { href: "/", House { "aria-hidden": "true" } "Home" } }
+    BreadcrumbSeparator {}
+    BreadcrumbItem { BreadcrumbPage { "Settings" } }
+}
+```
+
+- Icons go inside `BreadcrumbLink`, decorative (`aria-hidden`); use them for every step or for none.
+- `BreadcrumbSeparator` draws "/" by default; pass your own: `BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }`.
+- `BreadcrumbLink { disabled: true }` keeps a step in the trail but can't be followed (no `href`, `aria-disabled`, skipped by Tab).
+
+## Collapsing long trails
+
+`BreadcrumbTrail` builds the trail from a list and, when there are more than `max_items` steps, shows the first and the last `max_items - 1` with a "…" button between. Pressing it shows every step and moves focus to the first one it revealed. `visible_crumbs` is the rule on its own.
+
+```rust
+BreadcrumbTrail { max_items: 3, items: vec![
+    Crumb::link("Home", "/"),
+    Crumb::link("Projects", "/projects"),
+    Crumb::link("Atoll", "/projects/atoll"),
+    Crumb::page("Members"),
+] }
+```
+
+For hand-built trails, `BreadcrumbEllipsis { label, on_click }` is the same button.
+
 ## Accessibility
 
-- Role and name: the current page is not a link and has `aria-current="page"`; separators are `aria-hidden`
-- Keyboard: links are tabbable in order
+- Role and name: a `nav` named "Breadcrumb" (translatable); the current page is not a link and has `aria-current="page"`; separators are `aria-hidden`; the "…" button is named "Show N more"
+- Keyboard: links are tabbable in order; Enter or Space on "…" expands the trail and focuses the first revealed step
 - Reduced motion: none
 
 ## API
@@ -972,10 +1287,15 @@ pub fn BreadcrumbItem(
 #[component]
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
+    /// Can't be followed for now: no `href`, `aria-disabled="true"`, out of the tab order and
+    /// drawn dimmed. Still read as a link in the trail.
+    #[props(default)]
+    disabled: bool,
     /// For in-app navigation without a router: call `prevent_default()` and switch the view.
     /// With the kit's `router` feature, a path `href` goes through the router by itself.
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
+    #[props(default)] onmounted: Option<EventHandler<MountedEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -987,26 +1307,128 @@ pub fn BreadcrumbPage(
     children: Element,
 ) -> Element
 
-/// The divider between items. Hidden from assistive technology.
+/// The divider between items: "/" unless you pass your own, such as a `ChevronRight` icon or
+/// "›". Hidden from assistive technology.
 #[component]
-pub fn BreadcrumbSeparator() -> Element
+pub fn BreadcrumbSeparator(#[props(default)] children: Element) -> Element {
+    // An empty `children` is a lone placeholder node, not an empty template.
+    let custom = children.as_ref().is_ok_and(|node|
+
+/// Stands in for the items a collapsed trail hides. A button: pressing it calls `on_click`
+/// (show the hidden items, or open a menu of them). [`BreadcrumbTrail`] uses it for you.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn BreadcrumbEllipsis(
+    /// Its name, such as "Show 3 more"; read instead of the dots.
+    #[props(into)]
+    label: String,
+    on_click: EventHandler<MouseEvent>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+
+/// One step of a [`BreadcrumbTrail`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct Crumb {
+    pub label: String,
+    /// `None` for the current page (the last step).
+    pub href: Option<String>,
+    pub disabled: bool,
+}
+
+/// Which crumbs a trail of `count` shows when at most `max` fit: the first one, then the last
+/// `max - 1`, with a gap (`None`) between. `max` below 2 counts as 2, and a gap never hides
+/// just one crumb (that crumb is shown instead).
+///
+/// ```
+/// use ui::components::breadcrumb::visible_crumbs;
+/// assert_eq!(visible_crumbs(6, 3), vec![Some(0), None, Some(4), Some(5)]);
+/// assert_eq!(visible_crumbs(3, 3), vec![Some(0), Some(1), Some(2)]);
+/// ```
+pub fn visible_crumbs(count: usize, max: usize) -> Vec<Option<usize>>
+
+/// A breadcrumb trail built from a list, which collapses the middle into a "…" button when
+/// there are more than `max_items` steps. Pressing the button shows every step and moves
+/// focus to the first one it revealed.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     BreadcrumbTrail { max_items: 3, items: vec![
+///         Crumb::link("Home", "/"),
+///         Crumb::link("Projects", "/projects"),
+///         Crumb::link("Atoll", "/projects/atoll"),
+///         Crumb::link("Settings", "/projects/atoll/settings"),
+///         Crumb::page("Members"),
+///     ] }
+/// }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn BreadcrumbTrail(
+    items: Vec<Crumb>,
+    /// How many steps to show before collapsing (the first and the last `max_items - 1`).
+    #[props(default = usize::MAX)]
+    max_items: usize,
+    /// A custom separator, drawn between every two steps.
+    #[props(default)]
+    separator: Option<Element>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
 ```
 
 ## Example
 
 ```rust
 use crate::components::breadcrumb::*;
+use crate::components::icons::{ChevronRight, House};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        Breadcrumb {
-            BreadcrumbItem { BreadcrumbLink { href: "#", "Home" } }
-            BreadcrumbSeparator {}
-            BreadcrumbItem { BreadcrumbLink { href: "#", "Components" } }
-            BreadcrumbSeparator {}
-            BreadcrumbItem { BreadcrumbPage { "Breadcrumb" } }
+        div { style: "display: grid; gap: 1rem;",
+            Breadcrumb {
+                BreadcrumbItem {
+                    BreadcrumbLink { href: "#",
+                        House { "aria-hidden": "true", size: "0.875rem" }
+                        "Home"
+                    }
+                }
+                BreadcrumbSeparator {}
+                BreadcrumbItem { BreadcrumbLink { href: "#", "Components" } }
+                BreadcrumbSeparator {}
+                BreadcrumbItem { BreadcrumbPage { "Breadcrumb" } }
+            }
+            // A custom separator and a step you can't open yet.
+            Breadcrumb { aria_label: "Billing breadcrumb",
+                BreadcrumbItem { BreadcrumbLink { href: "#", "Workspace" } }
+                BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }
+                BreadcrumbItem { BreadcrumbLink { href: "#", disabled: true, "Billing (owners only)" } }
+                BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }
+                BreadcrumbItem { BreadcrumbPage { "Invoices" } }
+            }
+            // A long trail collapses its middle; "…" shows the rest.
+            BreadcrumbTrail { aria_label: "Project breadcrumb", max_items: 3,
+                items: vec![
+                    Crumb::link("Home", "#"),
+                    Crumb::link("Projects", "#"),
+                    Crumb::link("Atoll", "#"),
+                    Crumb::link("Settings", "#"),
+                    Crumb::page("Members"),
+                ],
+            }
         }
     }
 }
@@ -1022,6 +1444,17 @@ pub fn Demo() -> Element {
 The button element is used to trigger actions or events in a user interface.
 
 For a link that should look like a button (the router's `Link`, which renders its own `<a>`), spread `button_look(variant, size)` onto it: `Link { to: Route::Trips {}, attributes: button_look(ButtonVariant::Outline, ButtonSize::Default), "My trips" }`. Don't also pass `class`. A link keeps link semantics: it navigates on Enter, not Space.
+
+## Loading
+
+`loading: true` keeps the button the same size and puts a spinner over its label. The label is
+still read, `aria-busy="true"` says the action is under way, and the button stays focusable
+(`aria-disabled`, not `disabled`) but ignores presses, so a submit button can't send its form
+twice. Set it back to `false` when the work finishes.
+
+```rust
+Button { loading: saving(), onclick: move |_| save(), "Save" }
+```
 
 ## Icon-only buttons
 
@@ -1079,6 +1512,11 @@ pub fn button_look(variant: ButtonVariant, size: ButtonSize) -> Vec<Attribute>
 pub fn Button(
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: ButtonSize,
+    /// Waiting for the result of the press: a spinner covers the label without changing the
+    /// button's size, `aria-busy` and `aria-disabled` are set (focus stays on the button), and
+    /// clicks, including a form submit, do nothing until it is `false` again.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -1139,6 +1577,9 @@ pub fn IconButton(
     label: String,
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: IconButtonSize,
+    /// Waiting for the result of the press; see [`Button`]'s `loading`.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -1175,6 +1616,7 @@ pub fn Demo() -> Element {
             Button { "Default" }
             Button { size: ButtonSize::Lg, "Large" }
             Button { disabled: true, "Disabled" }
+            LoadingDemo {}
         }
         // Icon-only buttons need a `label` (their accessible name); leaving it out doesn't compile.
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
@@ -1187,6 +1629,27 @@ pub fn Demo() -> Element {
                 Trash { size: "1.25rem", "aria-hidden": "true" }
             }
         }
+    }
+}
+
+/// Press to see the loading state for two seconds; the button keeps its size.
+#[component]
+fn LoadingDemo() -> Element {
+    let mut loading = use_signal(|| false);
+    rsx! {
+        Button {
+            variant: ButtonVariant::Outline,
+            loading: loading(),
+            onclick: move |_| {
+                loading.set(true);
+                spawn(async move {
+                    dioxus_sdk_time::sleep(std::time::Duration::from_secs(2)).await;
+                    loading.set(false);
+                });
+            },
+            "Save changes"
+        }
+        Button { loading: true, "Loading" }
     }
 }
 ```
@@ -1516,7 +1979,7 @@ pub fn Demo() -> Element {
 
 # Card
 
-- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.
@@ -1561,11 +2024,31 @@ Card {
 }
 ```
 
+## Whole-card links, side media and groups
+
+- `CardLink { href }` goes inside the title. Its click area covers the whole card, while screen readers hear only the title. Buttons in the card still work on their own.
+- `Card { horizontal: true }` puts a `CardMedia` beside the content on screens at least 40rem wide, and stacks it again below that.
+- `CardGroup { min_width: "16rem" }` fits as many columns as there is room for, each at least `min_width` wide. It adds no list roles; add `role: "list"` and `role: "listitem"` yourself when the count matters.
+
+```rust
+CardGroup {
+    Card { CardHeader { CardTitle { CardLink { href: "/guides/forms", "Forms guide" } } } }
+    Card { horizontal: true,
+        CardMedia { img { src: "/cabin.jpg", alt: "The cabin" } }
+        CardHeader { CardTitle { "Lakeside cabin" } }
+    }
+}
+```
+
 ## API
 
 ```rust
 #[component]
 pub fn Card(
+    /// Puts a `CardMedia` beside the content instead of above it (stacked again on narrow
+    /// screens).
+    #[props(default)]
+    horizontal: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -1618,6 +2101,36 @@ pub fn CardFooter(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
+
+/// Makes the whole card a link: the card's title goes inside, and the link's click area is
+/// stretched over the card, so one press anywhere opens it while screen readers hear just the
+/// title. Buttons in the card stay pressable above it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardLink(
+    #[props(into)] href: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// Lays cards out in a grid that fits as many columns as there is room for, each at least
+/// `min_width` wide, down to one column on phones. It adds no list semantics; give it
+/// `role: "list"` and each card `role: "listitem"` when screen readers should count them.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardGroup(
+    /// The narrowest a card may get before the grid drops a column (any CSS length).
+    #[props(into, default = "16rem".to_string())]
+    min_width: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -1632,6 +2145,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem; width: 100%;",
         Card { style: "width: 100%; max-width: 24rem;",
             CardHeader {
                 CardTitle { "Create project" }
@@ -1647,6 +2161,22 @@ pub fn Demo() -> Element {
                 Button { variant: ButtonVariant::Outline, "Cancel" }
                 Button { "Create" }
             }
+        }
+        CardGroup { min_width: "12rem",
+            Card {
+                CardHeader {
+                    CardTitle { CardLink { href: "#docs", "Read the docs" } }
+                    CardDescription { "The whole card opens the guide." }
+                }
+            }
+            Card { horizontal: true,
+                CardHeader {
+                    CardTitle { "Side by side" }
+                    CardDescription { "On wide screens the parts sit in a row." }
+                }
+                CardFooter { Button { variant: ButtonVariant::Outline, "Open" } }
+            }
+        }
         }
     }
 }
@@ -1668,7 +2198,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
+Slides are 80% of the carousel's width by default, so the next one peeks in and shows there is more. `item_size` takes any CSS length: `"16rem"`, `"33%"` for three in view, or `"max(40%, 11rem)"` to adapt to the space. Touch and trackpads scroll it natively; the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 
@@ -1690,6 +2220,11 @@ pub fn Carousel(
     /// Accessible name, for example "Featured products".
     #[props(into)]
     label: String,
+    /// The width of each slide, any CSS length: `"16rem"`, `"33%"` for three in view, or
+    /// `"min(80%, 20rem)"` to adapt to the space. Defaults to 80% of the carousel, so the
+    /// next slide peeks in and shows there is more.
+    #[props(into, default)]
+    item_size: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -1716,10 +2251,16 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        div { style: "max-width: 32rem;",
+        div { style: "max-width: 32rem; display: grid; gap: 1.5rem;",
             Carousel { label: "Featured plans",
                 for (i , name) in ["Starter", "Team", "Business", "Enterprise"].into_iter().enumerate() {
                     CarouselItem { label: "{i + 1} of 4", strong { "{name}" } }
+                }
+            }
+            // Smaller slides that adapt: two and a bit in view on a wide screen, one on a phone.
+            Carousel { label: "Recent invoices", item_size: "max(40%, 11rem)",
+                for n in 1..=6 {
+                    CarouselItem { key: "{n}", label: "{n} of 6", "Invoice #{n}" }
                 }
             }
         }
@@ -2726,6 +3267,26 @@ pub use dioxus_primitives::checkbox::CheckboxState;
 
 #[component]
 pub fn Checkbox(props: CheckboxProps) -> Element
+
+/// A set of related checkboxes under one visible label: a `<fieldset>` with a `<legend>`, so a
+/// screen reader reads the group's name when focus enters it. Put each `Checkbox` with its
+/// `Label` inside. For a "select all" box, give it `CheckboxState::Indeterminate` while only
+/// some are checked.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CheckboxGroup(
+    /// The group's visible name ("Notify me about").
+    #[props(into)]
+    label: String,
+    /// Shows the group as invalid; pair it with a text error that says what to fix.
+    #[props(default)]
+    invalid: bool,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -2735,12 +3296,49 @@ use crate::components::checkbox::*;
 use crate::components::label::Label;
 use dioxus::prelude::*;
 
+const TOPICS: [&str; 3] = ["Invoices", "Payments", "Team changes"];
+
 #[component]
 pub fn Demo() -> Element {
+    let mut picked = use_signal(|| vec![true, false, false]);
+    let all = use_memo(move || {
+        let p = picked();
+        if p.iter().all(|v| *v) {
+            CheckboxState::Checked
+        } else if p.iter().any(|v| *v) {
+            CheckboxState::Indeterminate
+        } else {
+            CheckboxState::Unchecked
+        }
+    });
+    let row = "display: flex; align-items: center; gap: 0.5rem;";
     rsx! {
-        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;",
-            Checkbox { id: "terms", name: "terms" }
-            Label { html_for: "terms", "Accept terms" }
+        div { style: "display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem;",
+            div { style: row,
+                Checkbox { id: "terms", name: "terms" }
+                Label { html_for: "terms", "Accept terms" }
+            }
+            CheckboxGroup { label: "Email me about",
+                div { style: row,
+                    Checkbox { id: "topic-all",
+                        checked: Some(all()),
+                        on_checked_change: move |state| {
+                            let on = state != CheckboxState::Unchecked;
+                            picked.set(vec![on; TOPICS.len()]);
+                        },
+                    }
+                    Label { html_for: "topic-all", "Everything" }
+                }
+                for (i, topic) in TOPICS.iter().enumerate() {
+                    div { key: "{topic}", style: "{row} padding-inline-start: 1.5rem;",
+                        Checkbox { id: "topic-{i}",
+                            checked: Some(if picked()[i] { CheckboxState::Checked } else { CheckboxState::Unchecked }),
+                            on_checked_change: move |state| picked.write()[i] = state == CheckboxState::Checked,
+                        }
+                        Label { html_for: "topic-{i}", "{topic}" }
+                    }
+                }
+            }
         }
     }
 }
@@ -4179,7 +4777,7 @@ pub fn Demo() -> Element {
 
 # Dialog
 
-- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
@@ -4205,6 +4803,12 @@ Dialog {
 - `title` is a required prop, so a dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). Radix and shadcn only warn about this at runtime.
 - `hide_title: true` hides the title and `description` visually but keeps them for screen readers, for dialogs whose content already makes the purpose clear (the command palette uses it).
 - For a description with links or formatting, put a `DialogDescription` in the children instead of `description` (not both).
+
+## Sizes, footer and close button
+
+- `size: DialogSize::Sm | Default | Lg | Xl | Full` sets the panel's width; `Full` fills the screen.
+- `DialogFooter` lines up the action buttons at the end (stacked on phones).
+- `DialogClose` is a button that closes the dialog (give it a `class`, or render your own element with `as`); `DialogContentClose` is the corner X, named "Close" in the current locale.
 
 ## Keyboard and accessibility
 
@@ -4264,6 +4868,15 @@ pub struct DialogProps {
     #[props(default)]
     pub hide_title: bool,
 
+    /// How wide the dialog may grow: `Sm` for a confirmation, `Lg`/`Xl` for forms and tables,
+    /// `Full` for most of the screen. On phones every size fills the width.
+    #[props(default)]
+    pub size: DialogSize,
+
+    /// Adds a close button (an X, named "Close") in the top corner.
+    #[props(default)]
+    pub show_close: bool,
+
     /// The ID of the dialog root element.
     pub id: ReadSignal<Option<String>>,
 
@@ -4297,6 +4910,60 @@ pub fn Dialog(props: DialogProps) -> Element
 /// dialog's `description` prop instead.
 #[component]
 pub fn DialogDescription(props: DialogDescriptionProps) -> Element
+
+/// How wide a [`Dialog`] may grow.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum DialogSize {
+    /// 24rem: a short confirmation.
+    Sm,
+    /// 32rem.
+    #[default]
+    Default,
+    /// 42rem: a form.
+    Lg,
+    /// 56rem: a table or a two-column form.
+    Xl,
+    /// Nearly the whole screen.
+    Full,
+}
+
+/// The row of buttons at the bottom of a [`Dialog`] ("Cancel", "Save"), aligned to the end and
+/// stacked on narrow screens.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogFooter(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// A button that closes the [`Dialog`] it is in ("Cancel", "Done"). Style it by passing a
+/// `class`, or render your own element with `as`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogClose(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    r#as: Option<Callback<Vec<Attribute>, Element>>,
+    children: Element,
+) -> Element
+
+/// The X in a [`Dialog`]'s corner, named "Close" (translatable). `show_close: true` adds it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogContentClose(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
 ```
 
 ## Example
@@ -4309,16 +4976,33 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut open = use_signal(|| false);
+    let mut wide = use_signal(|| false);
     rsx! {
-        Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
+        div { style: "display: flex; flex-wrap: wrap; gap: 0.75rem;",
+            Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
+            Button { variant: ButtonVariant::Outline, onclick: move |_| wide.set(true), "Open a large dialog" }
+        }
         Dialog {
             open: open(),
             on_open_change: move |v| open.set(v),
             title: "Are you sure?",
             description: "This action cannot be undone.",
-            div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;",
+            size: DialogSize::Sm,
+            DialogFooter {
                 Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(false), "Cancel" }
                 Button { variant: ButtonVariant::Destructive, onclick: move |_| open.set(false), "Delete" }
+            }
+        }
+        Dialog {
+            open: wide(),
+            on_open_change: move |v| wide.set(v),
+            title: "Invite people",
+            description: "They get an email with a link to join the workspace.",
+            size: DialogSize::Lg,
+            show_close: true,
+            p { style: "margin: 0;", "Paste one email address per line, or import a CSV file." }
+            DialogFooter {
+                Button { onclick: move |_| wide.set(false), "Send invites" }
             }
         }
     }
@@ -5093,6 +5777,20 @@ Wires a label, description and error to a control with matching ids. `use_field_
 ## API
 
 ```rust
+/// The size of a text field (`Input`, `Textarea`): `Sm` for dense tables and toolbars, `Lg`
+/// for sign-up and marketing forms. Named `field_size` on the components because `size` is
+/// an HTML attribute of `<input>`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum FieldSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
 /// DOM ids that tie a control to its description and error message, so assistive
 /// technology reads them together. Create with [`use_field_ids`].
 pub struct FieldIds {
@@ -6390,9 +7088,165 @@ fn IconCell(label: &'static str, children: Element) -> Element {
 
 ---
 
+# Image
+
+- Copy into your app: `atoll add image` or `dx components add image --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Import: `use crate::components::image::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
+
+A picture with a fixed shape, sharp on every screen, and a fallback when it can't load.
+
+```rust
+Image {
+    src: "/cabin-800.jpg",
+    srcset: "/cabin-800.jpg 800w, /cabin-1600.jpg 1600w",
+    sizes: "(min-width: 40rem) 40rem, 100vw",
+    alt: "The cabin from the lake",
+    ratio: 16.0 / 9.0,
+}
+```
+
+- `ratio` (width / height) keeps the box's shape at any width, so the page doesn't jump when the picture arrives; `fit` is `Cover` (crop, the default) or `Contain` (show it all). Set the width with `style` or a class; the box never grows past its container.
+- `srcset` and `sizes` let the browser pick the file for the screen's density and the layout width.
+- `alt` is required: describe what the picture shows, or pass `alt: ""` for a decorative picture.
+- When `src` is empty or fails to load, a muted box with an "image missing" icon takes its place, named by `alt`. Pass `fallback` for your own (initials, a placeholder picture).
+- Pictures load lazily (`loading="lazy"`); set `lazy: false` for the first one a visitor sees.
+
+## Component Structure
+
+```rust
+// A box that keeps the shape and holds the picture, or the fallback when it fails.
+Image { src, alt, srcset, sizes, ratio, fit, lazy,
+    fallback: rsx! { /* shown instead when src is empty or fails to load */ },
+}
+```
+
+## Accessibility
+
+- Role and name: a native `img` named by `alt`; the fallback is `role="img"` with the same name, or hidden when `alt` is empty
+- Keyboard: none (not interactive). For a clickable picture, wrap it in a link or button with its own name
+- Reduced motion: none
+
+## Source
+
+Original to this repo.
+
+## API
+
+```rust
+/// How an [`Image`] fills its box when the box and the picture have different shapes.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ImageFit {
+    /// Fills the box, cropping the edges.
+    #[default]
+    Cover,
+    /// Shows the whole picture, leaving bars.
+    Contain,
+}
+
+/// A picture with a fixed shape, sharp on every screen, and a fallback when it fails.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     Image {
+///         src: "/cabin-800.jpg",
+///         srcset: "/cabin-800.jpg 800w, /cabin-1600.jpg 1600w",
+///         sizes: "(min-width: 40rem) 40rem, 100vw",
+///         alt: "The cabin from the lake",
+///         ratio: 16.0 / 9.0,
+///     }
+/// }
+/// # }
+/// ```
+///
+/// `alt` is required, so a picture with no text alternative doesn't compile; pass `alt: ""`
+/// on purpose for a decorative one.
+///
+/// ```compile_fail,E0061
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! { Image { src: "/cabin.jpg" } }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn Image(
+    /// The picture's URL. Empty shows the fallback.
+    #[props(into)]
+    src: String,
+    /// What the picture shows, for people who can't see it; `""` for a decorative picture.
+    #[props(into)]
+    alt: String,
+    /// Other sizes of the same picture (`"a.jpg 1x, a@2x.jpg 2x"` or widths with `sizes`), so
+    /// the browser loads the one that fits the screen's density and the layout.
+    #[props(into, default)]
+    srcset: Option<String>,
+    /// How wide the picture is drawn at each breakpoint, for `srcset` widths.
+    #[props(into, default)]
+    sizes: Option<String>,
+    /// Width divided by height (`16.0 / 9.0`). The box keeps this shape at any width, so the
+    /// page doesn't jump when the picture arrives. Without it the picture keeps its own shape.
+    #[props(default)]
+    ratio: Option<f64>,
+    #[props(default)] fit: ImageFit,
+    /// Load only when near the screen (`loading="lazy"`). On by default; turn it off for the
+    /// first picture a visitor sees.
+    #[props(default = true)]
+    lazy: bool,
+    /// Shown instead of the picture when `src` is empty or fails to load. Defaults to a muted
+    /// box with an "image missing" icon, named by `alt`.
+    #[props(default)]
+    fallback: Option<Element>,
+    /// Attributes for the wrapper: `style` for a width, `class`, ...
+    #[props(extends=GlobalAttributes)]
+    attributes: Vec<Attribute>,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::image::*;
+use dioxus::prelude::*;
+
+/// A landscape drawn inline (no network in demos), at two densities via `srcset`.
+const SCENE: &str = concat!(
+    "data:image/svg+xml;utf8,",
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'>",
+    "<rect width='160' height='90' fill='%23bfdbfe'/>",
+    "<circle cx='122' cy='24' r='10' fill='%23fde68a'/>",
+    "<path d='M0 70 40 36l26 22 22-16 72 48H0z' fill='%2394a3b8'/></svg>"
+);
+
+#[component]
+pub fn Demo() -> Element {
+    let srcset = format!("{SCENE} 1x, {SCENE} 2x");
+    rsx! {
+        div { style: "display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;",
+            Image { style: "width: 12rem;", src: SCENE, srcset, alt: "Hills under a pale sun", ratio: 16.0 / 9.0 }
+            Image { style: "width: 6rem;", src: SCENE, alt: "Hills, cropped square", ratio: 1.0 }
+            Image { style: "width: 9rem;", src: SCENE, alt: "Hills, letterboxed", ratio: 1.0, fit: ImageFit::Contain }
+            // Empty source: the fallback, named by `alt`.
+            Image { style: "width: 9rem;", src: "", alt: "Profile banner (missing)", ratio: 16.0 / 9.0 }
+        }
+    }
+}
+```
+
+---
+
 # Input
 
-- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.
@@ -6407,6 +7261,10 @@ input {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -6433,6 +7291,9 @@ pub fn Input(
     oncut: Option<EventHandler<ClipboardEvent>>,
     onpaste: Option<EventHandler<ClipboardEvent>>,
     onmounted: Option<EventHandler<MountedEvent>>,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=input)]
     attributes: Vec<Attribute>,
@@ -6462,6 +7323,10 @@ pub fn Demo() -> Element {
             if !name.read().is_empty() {
                 p { style: "margin: 0; font-size: 0.875rem;", "Hello, {name}!" }
             }
+            Label { html_for: "gallery-search-sm", "Small" }
+            Input { id: "gallery-search-sm", field_size: crate::components::field::FieldSize::Sm, placeholder: "Filter rows" }
+            Label { html_for: "gallery-email-lg", "Large" }
+            Input { id: "gallery-email-lg", r#type: "email", field_size: crate::components::field::FieldSize::Lg, placeholder: "you@example.com" }
         }
     }
 }
@@ -7017,6 +7882,12 @@ TextLink { href: "https://lucide.dev", external: true, "Lucide" }
 
 It is named `TextLink` so it never clashes with the router's `Link`.
 
+## Colours, icons and disabled links
+
+`variant` is `Default`, `Muted` (secondary text), `Inherit` (the colour and weight of the text around it, for a link inside an alert or a heading) or `Destructive`. A link always takes its font size, family and line height from the surrounding text and wraps across lines with the paragraph. An icon can go before the text as a decorative child (`aria-hidden`); don't make an icon on its own a link, use an `IconButton` or give the link text.
+
+`disabled: true` drops the `href`, so the link can't be followed or tabbed to, sets `aria-disabled="true"` and draws it dimmed with a dotted underline. Say why it is disabled in the text near it.
+
 ## With the Dioxus router
 
 Turn on the kit's `router` feature (`ui = { ..., features = ["router"] }`). Inside a `Router`, `TextLink`, `BreadcrumbLink` and `PaginationLink` then send a plain left click on a path `href` (`"/stays/3"`) through the router instead of loading the page again, add the router's base path to the rendered `href`, and `TextLink` marks itself `aria-current="page"` while its path is the current route. Ctrl/Cmd-click, middle-click, external links and `href`s the route enum doesn't parse stay ordinary links. `SidebarMenuButton` renders a button; for a route, pass the router's `Link` through its `as` prop. The helpers (`follow_in_app`, `in_app_href`, `is_current_route`) are in `ui::hooks` for your own links. For buttons that look like links, use `Button { variant: ButtonVariant::Link }`; for actions that do not navigate, use a button.
@@ -7024,7 +7895,7 @@ Turn on the kit's `router` feature (`ui = { ..., features = ["router"] }`). Insi
 ## Accessibility
 
 - Role and name: a native link named by its text; external links add "(opens in a new tab)" (from `UiStrings`) and a hidden icon
-- Keyboard: Tab reaches it, Enter follows it
+- Keyboard: Tab reaches it, Enter follows it (a disabled link is skipped)
 - State: `aria-current="page"` when `current` (or, with the `router` feature, when its path is the current route), shown with a thicker underline, not colour alone
 - Reduced motion: the hover underline changes without transition
 
@@ -7035,6 +7906,24 @@ Idea from Rust/UI `link.rs` (rust-ui/ui@43ddc65, MIT). Not copied: its `force_re
 ## API
 
 ```rust
+/// A [`TextLink`]'s colour role.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum LinkVariant {
+    /// The kit's link colour, medium weight.
+    #[default]
+    Default,
+    /// Secondary text colour, for footers and meta lines.
+    Muted,
+    /// Takes the colour and weight of the text around it (in an alert, a heading, a
+    /// coloured message), keeping only the underline.
+    Inherit,
+    /// The error text colour, for "Delete account" style links.
+    Destructive,
+}
+
 /// An inline text link: a plain `<a href>` with the kit's colours and focus ring.
 ///
 /// Named `TextLink` so it does not clash with the router's `Link` when both preludes are
@@ -7050,6 +7939,11 @@ pub fn TextLink(
     /// Marks the link for the page you are on (`aria-current="page"`), e.g. in a nav list.
     #[props(default)]
     current: bool,
+    #[props(default)] variant: LinkVariant,
+    /// Not followable for now: no `href`, `aria-disabled="true"`, out of the tab order and
+    /// drawn dimmed. Screen readers still find it as a link in the text.
+    #[props(default)]
+    disabled: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -7058,7 +7952,7 @@ pub fn TextLink(
 ## Example
 
 ```rust
-use crate::components::link::TextLink;
+use crate::components::link::{LinkVariant, TextLink};
 use dioxus::prelude::*;
 
 #[component]
@@ -7072,12 +7966,162 @@ pub fn Demo() -> Element {
                 TextLink { href: "https://lucide.dev/icons", external: true, "Lucide icons" }
                 "."
             }
+            p { style: "margin: 0; max-width: 18rem;",
+                "Links wrap with the text: "
+                TextLink { href: "#start", "a long link that runs over more than one line of this paragraph" }
+                "."
+            }
+            p { style: "margin: 0; display: flex; flex-wrap: wrap; gap: 1rem;",
+                TextLink { href: "#privacy", variant: LinkVariant::Muted, "Privacy" }
+                span { style: "color: var(--error-text-color);",
+                    "Payment failed. "
+                    TextLink { href: "#billing", variant: LinkVariant::Inherit, "Update your card" }
+                }
+                TextLink { href: "#danger", variant: LinkVariant::Destructive, "Delete account" }
+                TextLink { href: "#export", disabled: true, "Export (Pro)" }
+            }
             nav { "aria-label": "Link demo",
                 ul { style: "display: flex; gap: 1rem; list-style: none; margin: 0; padding: 0;",
                     li { TextLink { href: "#link", current: true, "Overview" } }
                     li { TextLink { href: "#chips", "Chips" } }
                     li { TextLink { href: "#icons", "Icons" } }
                 }
+            }
+        }
+    }
+}
+```
+
+---
+
+# List
+
+- Copy into your app: `atoll add list` or `dx components add list --git https://github.com/Amit-1of1/Rust-UI-`.
+- Import: `use crate::components::list::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
+
+A bulleted, numbered or plain list of items. It renders a real `<ul>` or `<ol>`, so screen readers announce "list, 3 items" and count as you move through it. Items hold any content, other components included, and lists nest.
+
+```rust
+List { marker: ListMarker::Number,
+    ListItem { "Install the CLI" }
+    ListItem { "Run " Kbd { "atoll create" } }
+}
+```
+
+- `marker`: `Bullet` (default), `Number`, `Letter`, `Roman` or `None`. The ordered markers render an `<ol>`.
+- `spaced: true` puts more room between items, for lists of rows or cards.
+- `ListMarker::None` keeps the list role (`role="list"`), which Safari drops from lists drawn without markers.
+
+## Component Structure
+
+```rust
+// A <ul> or <ol>, depending on the marker.
+List { marker: ListMarker::Bullet, spaced: false,
+    // One <li> per item; any content, nested lists included.
+    ListItem { {children} }
+}
+```
+
+## Accessibility
+
+- Role and name: native `list` and `listitem`; give a plain list an `aria-label` when it is a group of its own ("Plans")
+- Keyboard: none (not interactive); controls inside keep their own keys
+- Reduced motion: none
+
+## Source
+
+Original to this repo.
+
+## API
+
+```rust
+/// How a [`List`] marks its items.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ListMarker {
+    /// Bullets (an unordered list).
+    #[default]
+    Bullet,
+    /// 1, 2, 3 (an ordered list).
+    Number,
+    /// a, b, c (an ordered list).
+    Letter,
+    /// i, ii, iii (an ordered list).
+    Roman,
+    /// No marker, for lists of rich rows (an unordered list that keeps its list role).
+    None,
+}
+
+/// A bulleted, numbered or plain list: a real `<ul>` or `<ol>`, so screen readers say "list,
+/// 3 items" and count as you move through it. Items hold any content, components included.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     List { marker: ListMarker::Number,
+///         ListItem { "Install the CLI" }
+///         ListItem { "Run " Kbd { "atoll create" } }
+///     }
+/// }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn List(
+    #[props(default)] marker: ListMarker,
+    /// Space between items: `true` for lists of rows or cards.
+    #[props(default)]
+    spaced: bool,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// One item of a [`List`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ListItem(
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+```
+
+## Example
+
+```rust
+use crate::components::badge::*;
+use crate::components::kbd::*;
+use crate::components::list::*;
+use dioxus::prelude::*;
+
+#[component]
+pub fn Demo() -> Element {
+    rsx! {
+        div { style: "display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start;",
+            List {
+                ListItem { "Light and dark themes" }
+                ListItem { "Keyboard first"
+                    List { ListItem { "Tab, arrows, Escape" } }
+                }
+                ListItem { "No JavaScript of your own" }
+            }
+            List { marker: ListMarker::Number,
+                ListItem { "Install the CLI" }
+                ListItem { "Run " Kbd { "atoll create" } }
+                ListItem { "Open the gallery" }
+            }
+            List { marker: ListMarker::None, spaced: true, aria_label: "Plans",
+                ListItem { Badge { variant: BadgeVariant::Secondary, "Free" } " Every component" }
+                ListItem { Badge { "Pro" } " Blocks and starters" }
             }
         }
     }
@@ -7742,7 +8786,7 @@ pub fn Demo() -> Element {
 
 # Pagination
 
-- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `native_select`, `ui_strings`).
 - Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
@@ -7863,6 +8907,11 @@ pub fn PaginationEllipsis(
 /// the first and last page, so they keep focus but do nothing; long ranges collapse to
 /// "1 … 4 5 6 … 20" (`siblings` pages each side of the current one).
 ///
+/// Each page button is named "Page N" (translatable), and the current one says so with
+/// `aria-current="page"`. With `page_sizes`, a "Rows per page" select comes after the pages.
+/// When the number of pages isn't known (a cursor-based API), leave `pages` out and pass
+/// `has_next`: the pager shows Previous, "Page N" and Next.
+///
 /// For pages that are URLs, compose [`Pagination`] with [`PaginationLink`] instead.
 ///
 /// # Stability
@@ -7871,9 +8920,21 @@ pub fn PaginationEllipsis(
 #[component]
 pub fn Pager(
     page: usize,
+    /// How many pages there are. Leave it out (0) with `has_next` when that isn't known.
+    #[props(default)]
     pages: usize,
     on_page_change: EventHandler<usize>,
     #[props(default = 1)] siblings: usize,
+    /// For an unknown number of pages: whether there is a page after this one.
+    #[props(default)]
+    has_next: Option<bool>,
+    /// Choices for the page size ("10, 25, 50"); shows a select when not empty.
+    #[props(default)]
+    page_sizes: Vec<usize>,
+    /// The current page size, one of `page_sizes`.
+    #[props(default)]
+    page_size: usize,
+    #[props(default)] on_page_size_change: Option<EventHandler<usize>>,
     /// Goes on the `<nav>`: give it an `aria-label` ("Pages of results").
     #[props(extends = GlobalAttributes)]
     attributes: Vec<Attribute>,
@@ -7893,6 +8954,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut page = use_signal(|| 6usize);
+    let mut size = use_signal(|| 25usize);
+    let mut feed = use_signal(|| 1usize);
     rsx! {
         div { style: "display: flex; flex-direction: column; gap: 1.5rem;",
         Pagination {
@@ -7923,6 +8986,16 @@ pub fn Demo() -> Element {
             page: page(),
             pages: 20,
             on_page_change: move |p| page.set(p),
+            page_sizes: vec![10, 25, 50],
+            page_size: size(),
+            on_page_size_change: move |n| size.set(n),
+        }
+        // Unknown total (a cursor-based feed): Previous, "Page N", Next.
+        Pager {
+            aria_label: "Pages of the activity feed",
+            page: feed(),
+            has_next: feed() < 4,
+            on_page_change: move |p| feed.set(p),
         }
         }
     }
@@ -8007,7 +9080,7 @@ pub fn Demo() -> Element {
 
 # Progress
 
-- Copy into your app: `atoll add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add progress` or `dx components add progress --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::progress::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Progress component is used to display the progress of a task or operation. It can be used to indicate loading states, file uploads, or any other process that takes time to complete.
@@ -8016,18 +9089,69 @@ The Progress component is used to display the progress of a task or operation. I
 
 ```rust
 Progress {
-    // The current progress value (0 to max
+    // The current progress value (0 to max). `None` is indeterminate.
     value: 0.5,
     // The maximum value of the progress (default is 100.0)
     max: 1.0,
-    // Elements that will be displayed inside the progress bar
-    {children}
 }
 ```
+
+## Label, value and size
+
+`label` puts a visible label above the bar and names it for screen readers; without one, give the bar an `aria-label`. `show_value` adds the percentage. `size` is `Sm`, `Default` or `Lg`.
+
+```rust
+Progress { label: "Uploading photos", show_value: true, value: uploaded() }
+```
+
+When the length of the wait is unknown, pass `value: None`: the bar moves until the work finishes or fails (and stops moving when the system asks for reduced motion). When you know how much is left, pass the value so the bar and the percentage show it.
 
 ## API
 
 ```rust
+/// A [`Progress`] bar's thickness.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum ProgressSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
+/// The props for [`Progress`].
+pub struct ProgressProps {
+    /// The current value, between 0 and `max`. `None` is indeterminate: the bar moves until
+    /// the work finishes or fails, for waits whose length is unknown.
+    pub value: ReadSignal<Option<f64>>,
+
+    /// The maximum value. Defaults to 100.
+    #[props(default = ReadSignal::new(Signal::new(100.0)))]
+    pub max: ReadSignal<f64>,
+
+    /// A visible label above the bar ("Uploading photos"), which also names it. Without one,
+    /// give the bar an `aria-label`.
+    #[props(default, into)]
+    pub label: Option<String>,
+
+    /// Shows the percentage next to the label (or above the bar).
+    #[props(default)]
+    pub show_value: bool,
+
+    #[props(default)]
+    pub size: ProgressSize,
+
+    /// Additional attributes for the bar (`role="progressbar"`), such as `aria-label`.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// Unused; kept so code that passes children still builds.
+    #[props(default)]
+    pub children: Element,
+}
+
 #[component]
 pub fn Progress(props: ProgressProps) -> Element
 ```
@@ -8046,7 +9170,8 @@ pub fn Demo() -> Element {
 
     rsx! {
         div { style: "display: grid; gap: 0.75rem; max-width: 20rem;",
-            Progress { aria_label: "Upload progress", value: progress() as f64 }
+            Progress { label: "Uploading photos", show_value: true, value: progress() as f64 }
+            Progress { aria_label: "Syncing", size: ProgressSize::Sm, value: None }
             div { style: "display: flex; gap: 0.5rem;",
                 Button {
                     variant: ButtonVariant::Outline,
@@ -8405,6 +9530,10 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
 
+## Start slot and errors
+
+`Select { start: rsx! { ShoppingBasket {} } }` puts an icon or short text before the value; it is hidden from screen readers. When the trigger has `aria_invalid: "true"` (or sits in a `Field` with an error) it gets the error outline and an alert icon.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
@@ -8480,6 +9609,12 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
     pub typeahead_timeout: ReadSignal<Duration>,
 
+    /// Shown at the start of the trigger: an icon that says what the select is for, or a
+    /// prefix such as the chosen country's flag. Decorative (hidden from screen readers), so
+    /// the value and label still carry the meaning.
+    #[props(default)]
+    pub start: Option<Element>,
+
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 
@@ -8546,6 +9681,7 @@ pub fn Demo() -> Element {
         Select::<Option<Fruit>> {
             width: "12rem",
             aria_label: "Fruit",
+            start: rsx! { crate::components::icons::ShoppingBasket {} },
             SelectGroup {
                 SelectGroupLabel { "Fruits" }
                 {fruits}
@@ -9740,12 +10876,44 @@ Skeleton {
 }
 ```
 
+## Shapes and composition
+
+`shape` is `Rect` (the default, with the theme's corner radius), `Circle` (give it a width; the height follows) or `Text` (one line at the current font size, so it lines up with the text it replaces; `lines: 3` draws a paragraph with a shorter last line). Size skeletons like the content they replace so nothing moves when it loads, and compose them freely: a circle and a few text lines make a list row.
+
+Skeletons are hidden from screen readers. Put `aria-busy="true"` on the region that is loading and remove it when the content arrives.
+
+When the system asks for reduced motion the pulse stops (the kit's theme turns animations off).
+
 ## API
 
 ```rust
+/// The shape a [`Skeleton`] stands in for.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum SkeletonShape {
+    /// A box with the theme's corner radius (cards, images, buttons).
+    #[default]
+    Rect,
+    /// A circle (avatars, icons): give it a width; the height follows.
+    Circle,
+    /// A line of text: one line high at the current font size, so it matches the text it
+    /// replaces. Set `lines` for a paragraph.
+    Text,
+}
+
+/// A placeholder shown while content loads. Size it with `style` (or a class) to the size of
+/// what it replaces, so nothing moves when the content arrives. Decorative: mark the region
+/// that is loading with `aria-busy="true"` instead.
 #[component]
-pub fn Skeleton(#[props(extends=GlobalAttributes)] attributes: Vec<Attribute>) -> Element {
-    let base = attributes!(div
+pub fn Skeleton(
+    #[props(default)] shape: SkeletonShape,
+    /// For `SkeletonShape::Text`: how many lines; the last one is shorter, like a paragraph.
+    #[props(default = 1)]
+    lines: usize,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
 ```
 
 ## Example
@@ -9760,6 +10928,7 @@ pub fn Demo() -> Element {
         div { style: "display: flex; flex-direction: column; align-items: center; gap: 2rem;",
             SkeletonInfoDemo {}
             SkeletonCardDemo {}
+            SkeletonShapesDemo {}
         }
     }
 }
@@ -9785,6 +10954,19 @@ fn SkeletonCardDemo() -> Element {
             div { style: "display: flex; flex-direction: column; gap: 0.5rem;",
                 Skeleton { style: "width: 15.625rem; height: 1rem;" }
                 Skeleton { style: "width: 12.5rem; height: 1rem;" }
+            }
+        }
+    }
+}
+
+/// The shapes: a circle for an avatar and text lines that follow the font size.
+#[component]
+fn SkeletonShapesDemo() -> Element {
+    rsx! {
+        div { style: "display: flex; align-items: flex-start; gap: 1rem; width: 16rem;", aria_busy: "true",
+            Skeleton { shape: SkeletonShape::Circle, style: "width: 2.5rem;" }
+            div { style: "flex: 1; font-size: 0.875rem;",
+                Skeleton { shape: SkeletonShape::Text, lines: 3 }
             }
         }
     }
@@ -9984,7 +11166,9 @@ pub fn Demo() -> Element {
 - Copy into your app: `atoll add spinner` or `dx components add spinner --git https://github.com/Amit-1of1/Rust-UI-` (also copies `ui_strings`).
 - Import: `use crate::components::spinner::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
-A loading indicator.
+A loading indicator for waits of unknown length. For a known amount of work, use `Progress`, which can show how much is left.
+
+`size` is `Sm`, `Default`, `Lg` or `Xl`. The ring takes the text colour of its parent, so it follows the colour of the button, alert or text it sits in. Give a spinner that stands alone a `label` that says what is loading ("Loading invoices"). Inside a button, use the button's `loading` instead.
 
 ## Accessibility
 
@@ -9995,12 +11179,28 @@ A loading indicator.
 ## API
 
 ```rust
-/// A loading indicator. `label` is read by screen readers.
+/// A [`Spinner`]'s size.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum SpinnerSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+    Xl,
+}
+
+/// A loading indicator. `label` is read by screen readers. The ring takes the text colour
+/// of its parent, so inside a destructive button or an alert it follows that colour.
 #[component]
 pub fn Spinner(
-    /// Defaults to [`UiStrings::loading`](crate::components::ui_strings::UiStrings).
+    /// Defaults to [`UiStrings::loading`](crate::components::ui_strings::UiStrings). Say what
+    /// is loading when the spinner stands alone ("Loading invoices").
     #[props(into)]
     label: Option<String>,
+    #[props(default)] size: SpinnerSize,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element
 ```
@@ -10015,9 +11215,15 @@ use dioxus::prelude::*;
 pub fn Demo() -> Element {
     rsx! {
         div { style: "display: flex; gap: 1rem; align-items: center;",
+            Spinner { size: SpinnerSize::Sm }
             Spinner {}
-            Spinner { style: "width: 1.5rem; height: 1.5rem;" }
-            Spinner { style: "width: 2rem; height: 2rem; border-width: 3px;" }
+            Spinner { size: SpinnerSize::Lg }
+            Spinner { size: SpinnerSize::Xl, label: "Loading invoices" }
+            // The ring follows the text colour around it.
+            span { style: "display: inline-flex; gap: 0.5rem; align-items: center; color: var(--error-text-color);",
+                Spinner { label: "Retrying payment" }
+                "Retrying payment"
+            }
         }
     }
 }
@@ -10518,6 +11724,10 @@ Tabs {
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
 
+## Variants, icons and width
+
+`variant` is `TabsVariant::Default` (pills on a track) or `Ghost` (for tabs inside cards). Icons go inside `TabTrigger`, decorative. `stretch: true` makes the list fill its container and gives every tab the same width. `TabTrigger { disabled: true }` keeps a tab visible but out of reach.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) pattern. Roles: `tablist`, `tab`, `tabpanel`. Works on native (Blitz): partly.
@@ -10577,6 +11787,10 @@ pub struct TabsProps {
     #[props(default)]
     pub variant: TabsVariant,
 
+    /// Stretch the tab list to the container's width, every tab the same width.
+    #[props(default)]
+    pub stretch: bool,
+
     /// Additional attributes to apply to the tabs element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -10611,11 +11825,13 @@ pub fn TabContent(props: TabContentProps) -> Element
 
 ```rust
 use crate::components::tabs::*;
+use crate::components::icons::{Bell, CreditCard, User};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem;",
         Tabs { default_value: "account".to_string(), horizontal: true, max_width: "24rem",
             TabList {
                 TabTrigger { value: "account".to_string(), index: 0usize, "Account" }
@@ -10627,6 +11843,18 @@ pub fn Demo() -> Element {
             TabContent { index: 1usize, value: "password".to_string(),
                 p { "Change your password here." }
             }
+        }
+        // Equal-width tabs with icons, and one you can't open yet.
+        Tabs { default_value: "profile".to_string(), horizontal: true, stretch: true, variant: TabsVariant::Ghost, max_width: "24rem",
+            TabList {
+                TabTrigger { value: "profile".to_string(), index: 0usize, User { "aria-hidden": "true", size: "1rem" } "Profile" }
+                TabTrigger { value: "alerts".to_string(), index: 1usize, Bell { "aria-hidden": "true", size: "1rem" } "Alerts" }
+                TabTrigger { value: "billing".to_string(), index: 2usize, disabled: true, CreditCard { "aria-hidden": "true", size: "1rem" } "Billing" }
+            }
+            TabContent { index: 0usize, value: "profile".to_string(), p { "Your name and photo." } }
+            TabContent { index: 1usize, value: "alerts".to_string(), p { "What we email you about." } }
+            TabContent { index: 2usize, value: "billing".to_string(), p { "Plans and invoices." } }
+        }
         }
     }
 }
@@ -10742,7 +11970,7 @@ pub fn Demo() -> Element {
 
 # Textarea
 
-- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The textarea element is used to allow users to enter multi-line text input in a user interface.
@@ -10758,6 +11986,10 @@ textarea {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -10796,6 +12028,9 @@ pub fn Textarea(
     /// `field-sizing: content`, no JavaScript). Browsers without it keep a fixed height.
     #[props(default)]
     autosize: bool,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=textarea)]
     attributes: Vec<Attribute>,
@@ -11346,7 +12581,7 @@ pub fn Demo() -> Element {
 
 # Toast
 
-- Copy into your app: `atoll add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
 - Import: `use crate::components::toast::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toast component is used to display brief messages to the user, typically for notifications or alerts. The toast messages can be focused with the keyboard with the `f6` key.
@@ -11387,9 +12622,32 @@ ToastProvider {
 }
 ```
 
+## Icons, actions and pausing
+
+Each kind of toast (success, error, warning, info) shows its own icon next to the title. A toast stops its countdown while the pointer is over it or focus is inside it, and starts again when they leave (`data-paused` is set meanwhile).
+
+`notify_action` adds one button, such as Undo. Pressing it runs your callback and closes the toast:
+
+```rust
+let toasts = consume_toast();
+toasts.notify_action(ToastType::Success, "Message archived", "Undo", move |_| restore());
+```
+
 ## API
 
 ```rust
+/// A button in a toast that answers it, such as "Undo" after a delete.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct ToastAction {
+    /// The button's text ("Undo").
+    pub label: String,
+    /// Runs when the button is pressed; the toast then closes.
+    pub on_action: Callback<()>,
+}
+
 #[component]
 pub fn ToastProvider(
     #[props(default = ReadSignal::new(Signal::new(Some(Duration::from_secs(5)))))]
@@ -11418,7 +12676,7 @@ pub struct ToastMessage {
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::toast::{ToastProvider, ToastsExt};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::use_toast;
+use dioxus_primitives::toast::{use_toast, ToastType};
 
 /// Self-contained: the demo brings its own provider, so it also works on a docs page.
 #[component]
@@ -11447,6 +12705,14 @@ fn Buttons() -> Element {
                 variant: ButtonVariant::Outline,
                 onclick: move |_| toasts.notify_info("Copied"),
                 "Info toast"
+            }
+            Button {
+                variant: ButtonVariant::Outline,
+                onclick: move |_| {
+                    toasts.notify_action(ToastType::Info, ("Invoice deleted", "INV-1042 moved to the bin."), "Undo",
+                        move |_| toasts.notify_success("Invoice restored"))
+                },
+                "Toast with an action"
             }
         }
     }
@@ -11978,6 +13244,10 @@ Tooltip {
 }
 ```
 
+## Timing
+
+Hovering waits `delay_ms` (400 ms by default) before the tooltip opens, so moving the pointer across a toolbar doesn't flash every tooltip. Keyboard focus opens it at once. `Tooltip { delay_ms: 0 }` opens on hover straight away. Escape closes it.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `tooltip`. Works on native (Blitz): partly.
@@ -11998,6 +13268,37 @@ Every row is run as a keyboard test on the web, and on native where it says yes.
 ## API
 
 ```rust
+/// The props for [`Tooltip`].
+pub struct TooltipProps {
+    /// Whether the tooltip is open (controlled). A controlled tooltip opens without delay.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// Default open state when uncontrolled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Callback when open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Whether the tooltip is disabled.
+    #[props(default)]
+    pub disabled: ReadSignal<bool>,
+
+    /// How long the pointer must rest on the trigger before the tooltip opens, in
+    /// milliseconds, so tooltips don't flash open as the cursor crosses the screen. Keyboard
+    /// focus opens it at once. Defaults to 400.
+    #[props(default = 400)]
+    pub delay_ms: u64,
+
+    /// Additional attributes for the tooltip.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// A [`TooltipTrigger`] and a [`TooltipContent`].
+    pub children: Element,
+}
+
 #[component]
 pub fn Tooltip(props: TooltipProps) -> Element
 
@@ -12199,6 +13500,21 @@ pub struct UiStrings {
     pub decrease: String,
     /// The + button's name. `{label}` is the field's name.
     pub increase: String,
+    // Badge, chips
+    /// A dismiss button's name. `{label}` is what it removes ("Remove Rust").
+    pub remove_named: String,
+    /// The label of a pager's page size select.
+    pub rows_per_page: String,
+    /// A page button's name in pagination. `{page}` is its number.
+    pub page_number: String,
+    /// Read for a pagination ellipsis.
+    pub more_pages: String,
+    /// The pagination `nav`'s name.
+    pub pagination: String,
+    /// The "…" button of a collapsed breadcrumb trail. `{count}` is how many steps it hides.
+    pub show_more_crumbs: String,
+    /// The "+N" avatar in a group. `{count}` is how many are left out.
+    pub more_count: String,
 }
 
 /// Provides `strings` to every kit component below it. Pass a signal to switch language

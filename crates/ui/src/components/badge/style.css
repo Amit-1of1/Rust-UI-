@@ -40,3 +40,139 @@
   background-color: var(--primary-error-color);
   color: var(--contrast-error-color);
 }
+
+/* Role colours on the theme's status tokens (text tokens pass AA on their fills). */
+.dx-badge[data-style="success"] {
+  background-color: var(--primary-success-color);
+  box-shadow: 0 0 0 1px var(--secondary-success-color);
+  color: var(--success-text-color);
+}
+
+.dx-badge[data-style="warning"] {
+  background-color: var(--primary-warning-color);
+  box-shadow: 0 0 0 1px var(--secondary-warning-color);
+  color: var(--warning-text-color);
+}
+
+/* Sizes. Icons inside follow the text size. */
+.dx-badge svg {
+  flex-shrink: 0;
+}
+
+.dx-badge[data-size="sm"] {
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  font-size: 11px;
+  gap: 2px;
+}
+
+.dx-badge[data-size="sm"][padding="true"] {
+  padding: 0 6px;
+}
+
+.dx-badge[data-size="lg"] {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.dx-badge[data-size="lg"][padding="true"] {
+  padding: 0 12px;
+}
+
+/* A dot: no text, so a fixed round shape. */
+.dx-badge[data-dot="true"] {
+  width: 8px;
+  min-width: 0;
+  height: 8px;
+  padding: 0;
+}
+
+.dx-badge[data-dot="true"][data-size="sm"] {
+  width: 6px;
+  height: 6px;
+}
+
+.dx-badge[data-dot="true"][data-size="lg"] {
+  width: 12px;
+  height: 12px;
+}
+
+.dx-badge-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  margin-inline: 0 -4px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.dx-badge-dismiss:hover {
+  background-color: color-mix(in oklab, currentColor 15%, transparent);
+}
+
+.dx-badge-dismiss:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 1px;
+}
+
+/* BadgeAnchor: the badge sits on a corner of its element, centred on the corner. */
+.dx-badge-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.dx-badge-anchored {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  pointer-events: none;
+}
+
+.dx-badge-anchored > * {
+  pointer-events: auto;
+}
+
+.dx-badge-anchored[data-placement="top-end"] {
+  top: 0;
+  inset-inline-end: 0;
+  transform: translate(50%, -50%);
+}
+
+.dx-badge-anchored[data-placement="bottom-end"] {
+  bottom: 0;
+  inset-inline-end: 0;
+  transform: translate(50%, 50%);
+}
+
+.dx-badge-anchored[data-placement="top-start"] {
+  top: 0;
+  inset-inline-start: 0;
+  transform: translate(-50%, -50%);
+}
+
+.dx-badge-anchored[data-placement="bottom-start"] {
+  bottom: 0;
+  inset-inline-start: 0;
+  transform: translate(-50%, 50%);
+}
+
+[dir="rtl"] .dx-badge-anchored[data-placement$="end"] {
+  transform: translate(-50%, var(--dx-badge-y, -50%));
+}
+
+[dir="rtl"] .dx-badge-anchored[data-placement$="start"] {
+  transform: translate(50%, var(--dx-badge-y, -50%));
+}
+
+[dir="rtl"] .dx-badge-anchored[data-placement^="bottom"] {
+  --dx-badge-y: 50%;
+}

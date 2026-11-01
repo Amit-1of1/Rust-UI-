@@ -7,6 +7,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem; width: 100%;",
         Card { style: "width: 100%; max-width: 24rem;",
             CardHeader {
                 CardTitle { "Create project" }
@@ -22,6 +23,22 @@ pub fn Demo() -> Element {
                 Button { variant: ButtonVariant::Outline, "Cancel" }
                 Button { "Create" }
             }
+        }
+        CardGroup { min_width: "12rem",
+            Card {
+                CardHeader {
+                    CardTitle { CardLink { href: "#docs", "Read the docs" } }
+                    CardDescription { "The whole card opens the guide." }
+                }
+            }
+            Card { horizontal: true,
+                CardHeader {
+                    CardTitle { "Side by side" }
+                    CardDescription { "On wide screens the parts sit in a row." }
+                }
+                CardFooter { Button { variant: ButtonVariant::Outline, "Open" } }
+            }
+        }
         }
     }
 }

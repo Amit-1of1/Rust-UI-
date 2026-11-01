@@ -71,6 +71,11 @@ pub fn button_look(variant: ButtonVariant, size: ButtonSize) -> Vec<Attribute> {
 pub fn Button(
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: ButtonSize,
+    /// Waiting for the result of the press: a spinner covers the label without changing the
+    /// button's size, `aria-busy` and `aria-disabled` are set (focus stays on the button), and
+    /// clicks, including a form submit, do nothing until it is `false` again.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -84,6 +89,9 @@ pub fn Button(
         class: Styles::dx_button,
         "data-style": variant.class(),
         "data-size": size.class(),
+        "data-loading": loading.then_some("true"),
+        aria_busy: loading.then_some("true"),
+        aria_disabled: loading.then_some("true"),
     });
     // Remembered as the opener while focused, so a dialog it opens can return focus to it.
     let opener = use_focus_opener();
@@ -91,7 +99,12 @@ pub fn Button(
 
     rsx! {
         button {
-            onclick: move |event| {
+            onclick: move |event: MouseEvent| {
+                if loading {
+                    // Also stops a submit button from submitting its form again.
+                    event.prevent_default();
+                    return;
+                }
                 if let Some(f) = &onclick {
                     f.call(event);
                 }
@@ -112,7 +125,12 @@ pub fn Button(
                 }
             },
             ..merged,
-            {children}
+            if loading {
+                span { class: Styles::dx_button_busy, {children} }
+                span { class: Styles::dx_button_spinner, aria_hidden: "true" }
+            } else {
+                {children}
+            }
         }
     }
 }
@@ -180,6 +198,9 @@ pub fn IconButton(
     label: String,
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: IconButtonSize,
+    /// Waiting for the result of the press; see [`Button`]'s `loading`.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -195,6 +216,9 @@ pub fn IconButton(
         "data-style": variant.class(),
         "data-size": size.class(),
         aria_label: label,
+        "data-loading": loading.then_some("true"),
+        aria_busy: loading.then_some("true"),
+        aria_disabled: loading.then_some("true"),
     });
     // Remembered as the opener while focused, so a dialog it opens can return focus to it.
     let opener = use_focus_opener();
@@ -202,7 +226,12 @@ pub fn IconButton(
 
     rsx! {
         button {
-            onclick: move |event| {
+            onclick: move |event: MouseEvent| {
+                if loading {
+                    // Also stops a submit button from submitting its form again.
+                    event.prevent_default();
+                    return;
+                }
                 if let Some(f) = &onclick {
                     f.call(event);
                 }
@@ -223,7 +252,12 @@ pub fn IconButton(
                 }
             },
             ..merged,
-            {children}
+            if loading {
+                span { class: Styles::dx_button_busy, {children} }
+                span { class: Styles::dx_button_spinner, aria_hidden: "true" }
+            } else {
+                {children}
+            }
         }
     }
 }

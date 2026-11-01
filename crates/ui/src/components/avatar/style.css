@@ -97,3 +97,28 @@
     background: var(--primary-color-3);
     color: var(--secondary-color-4);
 }
+
+/* An image of any size or ratio fills the shape without stretching. */
+.dx-avatar-image {
+    object-fit: cover;
+}
+
+/* AvatarGroup: avatars overlap, each with a ring in the page colour to keep them apart. */
+.dx-avatar-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dx-avatar-group > .dx-avatar {
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.dx-avatar-group > .dx-avatar + .dx-avatar {
+    margin-inline-start: -0.5rem;
+}
+
+.dx-avatar-more {
+    background: var(--primary-color-5);
+    color: var(--secondary-color-4);
+    font-size: 0.75rem;
+}
