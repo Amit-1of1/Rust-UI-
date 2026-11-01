@@ -5,6 +5,7 @@ use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 use crate::components::hooks::ReturnFocus;
+use crate::components::sound::OpenCloseSound;
 
 #[css_module("/src/components/sheet/style.css")]
 struct Styles;
@@ -139,6 +140,7 @@ pub fn Sheet(props: SheetProps) -> Element {
                 if (props.is_modal)() {
                     ReturnFocus { inside: None }
                 }
+                OpenCloseSound {}
             }
         }
 

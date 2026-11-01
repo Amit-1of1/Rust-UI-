@@ -66,6 +66,7 @@
     "crates/ui/src/components/skeleton",
     "crates/ui/src/components/skip_link",
     "crates/ui/src/components/slider",
+    "crates/ui/src/components/sound",
     "crates/ui/src/components/spinner",
     "crates/ui/src/components/status",
     "crates/ui/src/components/stepper",
