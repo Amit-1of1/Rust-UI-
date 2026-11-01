@@ -66,6 +66,7 @@ guarded by CI. **Fixed** was false or unproven; the code or the wording changed 
 | Fastest on 6 of 9 DOM operations (bench/README) | Fixed | Now 4 of 9 (replace 1,000, select, swap, create 10,000). README updated. | `node bench/run.mjs` |
 | 532 lines vs about 1,400 | Fixed | 594 now (the split added `lazy` wrappers); React 1,400, Svelte 1,348. | `wc -l apps/trial/src/*.rs apps/trial/assets/*.css` |
 | Release rebuild after a one-line change: 45 s | Measured | 46 s, twice (`dx build --release`, Taskboard). | change one string in apps/trial, `time dx build --release` |
+| Docs site's first screen: 326 KB (was 1,089 KB); home page ready in 2.4 s on slow 4G (was 6.4 s) | Measured (budget in CI) | Split release build (`DocPage`, docs/notes/split-docs-and-render-cost.md), measured before/after in one session on 2026-11-01. A component page opened from a link got slower: 7.0 s vs 6.1 s on slow 4G. Total download grew 13% (1,276 KB). The new sizes are the docs budgets in bench/budgets.json. | `scripts/release-web.sh docs`, then `node tests/e2e/budgets.mjs` |
 | Size and startup budgets in CI | CI | `tests/e2e/budgets.mjs` with `bench/budgets.json` (PR #77): `scripts/e2e.sh` fails on more than 10% growth of the first screen, the main wasm or the total download, or 2x startup. Baseline matches the numbers above. | `node tests/e2e/budgets.mjs` |
 
 ## Tooling

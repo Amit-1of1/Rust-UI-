@@ -21,3 +21,6 @@ web-sys = { version = "0.3", features = ["Window", "Document", "Element", "Locat
 default = ["web"]
 web = ["dioxus/web", "ui/web"]
 desktop = ["dioxus/desktop", "ui/desktop"]
+# Release builds split the wasm (scripts/release-web.sh turns this on): every page but the
+# home page loads later (src/main.rs, `DocPage`).
+wasm-split = ["dioxus/wasm-split"]

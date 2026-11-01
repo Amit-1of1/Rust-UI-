@@ -6,7 +6,7 @@
 //! numbers come from `bench/README.md` and the generated component list;
 //! `crates/cli/tests/claims.rs` checks both.
 
-use crate::generated::{demo, ENTRIES};
+use crate::generated::ENTRIES;
 use crate::pricing::{FOUNDING_ENDS, PRODUCT};
 use dioxus::prelude::*;
 use ui::prelude::*;
@@ -101,7 +101,7 @@ pub fn LandingPage() -> Element {
         section { "aria-labelledby": "try-heading",
             h2 { id: "try-heading", "Try it here" }
             p { "This page is built with the kit. Open the dialog, then press Escape: focus goes back to the button." }
-            div { class: "docs-preview", {demo("dialog")} }
+            div { class: "docs-preview", ui::demos::dialog::Demo {} }
         }
 
         section { "aria-labelledby": "why-heading",
