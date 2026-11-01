@@ -551,6 +551,16 @@
       "registryDependencies": []
     },
     {
+      "name": "layout",
+      "files": [
+        "layout/component.rs",
+        "layout/docs.md",
+        "layout/mod.rs",
+        "layout/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "link",
       "files": [
         "link/component.rs",

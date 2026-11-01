@@ -71,6 +71,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Item](llms/item.md): A versatile component for displaying content with media, title, description, and actions
 - [Kbd](llms/kbd.md): A keyboard key cap, for showing shortcuts
 - [Label](llms/label.md): The Label component is used to provide a label for form elements, enhancing accessibility and usability
+- [Layout](llms/layout.md): Page structure on the kit's foundations ([Foundations](../../../../docs/FOUNDATIONS.md)):
 - [Link](llms/link.md): `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus

@@ -5,8 +5,8 @@
 
 .dx-field-label {
   color: var(--secondary-color-3);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
   line-height: 1;
 }
 
@@ -17,13 +17,13 @@
 .dx-field-description {
   margin: 0;
   color: var(--secondary-color-5);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-body-3);
 }
 
 .dx-field-error {
   margin: 0;
   color: var(--error-text-color);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-body-3);
 }
 
 .dx-field[data-invalid="true"] input,

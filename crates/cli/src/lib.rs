@@ -20,6 +20,7 @@ pub mod create;
 pub mod docsgen;
 pub mod doctor;
 pub mod explain;
+pub mod icons;
 pub mod info;
 pub mod llms;
 pub mod logo;

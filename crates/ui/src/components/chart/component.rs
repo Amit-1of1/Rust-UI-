@@ -542,7 +542,7 @@ fn dash(series: usize) -> &'static str {
 }
 
 #[component]
-fn Grid(plot_height: f32, axis_max: f32) -> Element {
+fn ChartGrid(plot_height: f32, axis_max: f32) -> Element {
     let plot = Plot::new(plot_height, axis_max);
     rsx! {
         for (y, value) in plot.gridlines() {
@@ -729,7 +729,7 @@ pub fn BarChart(
                 view_box: "0 0 {WIDTH} {height}",
                 title { "{label}" }
                 desc { "{summary}" }
-                Grid { plot_height: height, axis_max: plot.axis_max }
+                ChartGrid { plot_height: height, axis_max: plot.axis_max }
                 for (s, marks) in bars {
                     g { key: "{s}", "data-series": palette_index(s),
                         for (c, x, y, bar_height, title) in marks {
@@ -820,7 +820,7 @@ pub fn LineChart(
                 view_box: "0 0 {WIDTH} {height}",
                 title { "{label}" }
                 desc { "{summary}" }
-                Grid { plot_height: height, axis_max: plot.axis_max }
+                ChartGrid { plot_height: height, axis_max: plot.axis_max }
                 HoverColumns { plot_height: height, titles, active: nav.active_category() }
                 for (s, points) in lines.iter().enumerate() {
                     g { key: "{s}", "data-series": palette_index(s),
@@ -931,7 +931,7 @@ pub fn AreaChart(
                 view_box: "0 0 {WIDTH} {height}",
                 title { "{label}" }
                 desc { "{summary}" }
-                Grid { plot_height: height, axis_max: plot.axis_max }
+                ChartGrid { plot_height: height, axis_max: plot.axis_max }
                 HoverColumns { plot_height: height, titles, active: nav.active_category() }
                 for (s, (area, line)) in areas.iter().enumerate() {
                     g { key: "{s}", "data-series": palette_index(s),

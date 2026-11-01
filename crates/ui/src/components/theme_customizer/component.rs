@@ -35,26 +35,26 @@ pub struct PresetInfo {
 pub const PRESET_INFO: [PresetInfo; 5] = [
     PresetInfo {
         name: "lagoon",
-        tagline: "Lagoon teal on sea-glass neutrals, soft corners",
-        fonts: "Bricolage Grotesque + Figtree",
-        radius_px: 12,
+        tagline: "Lagoon teal on neutral greys, Reshaped proportions",
+        fonts: "Inter",
+        radius_px: 10,
     },
     PresetInfo {
         name: "reef",
-        tagline: "Coral on warm sand, round and roomy",
-        fonts: "Nunito",
-        radius_px: 18,
+        tagline: "Coral on warm stone, round and a little roomier",
+        fonts: "Geist",
+        radius_px: 16,
     },
     PresetInfo {
         name: "abyss",
-        tagline: "Deep-sea navy with an indigo glow, sharp and compact",
-        fonts: "Space Grotesk",
+        tagline: "Indigo on cool slate, square and compact",
+        fonts: "IBM Plex Sans",
         radius_px: 4,
     },
     PresetInfo {
         name: "driftwood",
-        tagline: "Sun-bleached sand and terracotta, editorial serif headings",
-        fonts: "Fraunces + Figtree",
+        tagline: "Terracotta on warm sand, serif headings",
+        fonts: "Source Serif 4 + Inter",
         radius_px: 6,
     },
     PresetInfo {

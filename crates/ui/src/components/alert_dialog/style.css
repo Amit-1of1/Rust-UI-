@@ -3,7 +3,7 @@
    `translate`, which the native renderer (Blitz) ignores. */
 .dx-alert-dialog-backdrop {
   position: fixed;
-  z-index: 1000;
+  z-index: var(--z-index-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@
 }
 
 .dx-alert-dialog-backdrop[data-state="closed"] {
-  animation: dx-alert-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-alert-animate-out var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
 }
 
 @keyframes dx-alert-animate-out {
@@ -29,7 +29,7 @@
 
 .dx-alert-dialog-backdrop[data-state="open"] {
   opacity: 1;
-  animation: dx-alert-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
+  animation: dx-alert-animate-in var(--spring-snappy-duration, var(--duration-fast)) var(--spring-snappy, var(--easing-decelerate)) forwards;
 }
 
 @keyframes dx-alert-animate-in {
@@ -45,7 +45,7 @@
 /* Alert Dialog Container - improved for theme consistency */
 .dx-alert-dialog {
   position: relative;
-  z-index: 1001;
+  z-index: var(--z-index-modal);
   display: flex;
   width: 100%;
   max-width: calc(100% - 2rem);
@@ -53,11 +53,11 @@
   flex-direction: column;
   padding: 32px 24px 24px;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   margin: 0;
   animation: none;
-  background: var(--primary-color-2);
-  box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
+  background: var(--color-background-elevation-overlay);
+  box-shadow: var(--shadow-overlay);
   color: var(--secondary-color-4);
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif);
@@ -70,14 +70,14 @@
   letter-spacing: var(--heading-tracking, normal);
   margin: 0;
   color: var(--secondary-color-4);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: var(--font-size-title-3);
+  font-weight: var(--font-weight-bold);
 }
 
 .dx-alert-dialog-description {
   margin: 0;
   color: var(--secondary-color-5);
-  font-size: 1rem;
+  font-size: var(--font-size-body-1);
 }
 
 .dx-alert-dialog-actions {
@@ -101,13 +101,13 @@
 .dx-alert-dialog-cancel {
   padding: 8px 18px;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background-color: var(--light, var(--primary-color))
     var(--dark, var(--primary-color-3));
   color: var(--secondary-color-4);
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s ease;
+  font-size: var(--font-size-body-1);
+  transition: background-color var(--duration-medium) var(--easing-standard);
 }
 
 .dx-alert-dialog-cancel:hover {
@@ -121,12 +121,12 @@
 .dx-alert-dialog-action {
   padding: 8px 18px;
   border: 1px solid var(--primary-error-color);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background-color: var(--primary-error-color);
   color: var(--contrast-error-color);
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s ease;
+  font-size: var(--font-size-body-1);
+  transition: background-color var(--duration-medium) var(--easing-standard);
 }
 
 .dx-alert-dialog-action:hover {

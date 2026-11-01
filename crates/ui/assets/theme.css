@@ -26,26 +26,25 @@ html[data-theme="dark"],
 }
 
 :root {
-  /* Atoll's own look, "Lagoon": neutrals tinted toward sea water (each keeps the luminance
-     of the plain grey it replaces, so contrast is unchanged), a lagoon-teal accent, Figtree
-     for text and Bricolage Grotesque for headings. data-preset switches to another look
-     (below); docs/BRAND.md explains the choices. */
+  /* Atoll's default look, "Lagoon", built on Reshaped's foundations (docs/FOUNDATIONS.md):
+     neutral greys on Reshaped's lightness steps, a lagoon-teal accent, Inter. data-preset
+     switches to another look (below); docs/BRAND.md explains the choices. */
   /* Surfaces, page to raised (primary) and ink, strongest to faintest (secondary). */
-  --primary-color: light-dark(#faffff, #041111);
-  --primary-color-1: light-dark(#f6fdfd, #0c1a1a);
-  --primary-color-2: light-dark(#faffff, #0a1718);
-  --primary-color-3: light-dark(#f3fafa, #101d1e);
-  --primary-color-4: light-dark(#f3fafa, #152323);
-  --primary-color-5: light-dark(#f0f7f7, #1e2d2d);
-  --primary-color-6: light-dark(#e0e7e7, #1b2a2a);
-  --primary-color-7: light-dark(#abb2b2, #344243);
-  --secondary-color: light-dark(#000404, #f2ffff);
-  --secondary-color-1: light-dark(#000404, #edfefe);
-  --secondary-color-2: light-dark(#021010, #d9eaea);
-  --secondary-color-3: light-dark(#1d2e2f, #cfe0e0);
-  --secondary-color-4: light-dark(#041414, #c7d8d8);
-  --secondary-color-5: light-dark(#5c6f6f, #95a4a5);
-  --secondary-color-6: light-dark(#c0d4d5, #516060);
+  --primary-color: light-dark(#ffffff, #0d0d0d);
+  --primary-color-1: light-dark(#fafafa, #121212);
+  --primary-color-2: light-dark(#ffffff, #161616);
+  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
+  --primary-color-4: light-dark(#f0f0f0, #242424);
+  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
+  --primary-color-6: light-dark(#e1e1e1, #383838);
+  --primary-color-7: light-dark(#b7b7b7, #555555);
+  --secondary-color: light-dark(#090909, #fcfcfc);
+  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
+  --secondary-color-2: light-dark(#161616, #e8e8e8);
+  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
+  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
+  --secondary-color-5: light-dark(#666666, #ababab);
+  --secondary-color-6: light-dark(#cacaca, #525252);
 
   /* Highlight colors */
   --focused-border-color: light-dark(#0f766e, #2dd4bf);
@@ -58,16 +57,16 @@ html[data-theme="dark"],
   --accent-contrast: light-dark(#fff, #042f2e);
 
   /* Corner radius shared by controls; set on <html> to square or round everything. */
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 
   /* Type. Fonts ship with the kit (OFL-1.1, crates/ui/assets/fonts) and load only when a
      preset uses them; ThemeStyles declares them. The stacks end in system fonts, so text
      shows at once and swaps in when the file arrives. */
-  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Bricolage Grotesque Variable", var(--font-sans);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --heading-weight: 700;
-  --heading-tracking: -0.02em;
+  --heading-weight: 650;
+  --heading-tracking: -0.015em;
 
   /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
      mode, where a light scrim barely separates the panel from the page. */
@@ -96,6 +95,178 @@ html[data-theme="dark"],
   --chart-5: light-dark(#be185d, #f472b6);
 }
 
+/* Foundations: layout units, type scale, elevation, layers and motion as tokens, after
+ * Reshaped's (MIT, reshaped.so). docs/FOUNDATIONS.md says what each is for; components use
+ * these instead of literal values (tests/foundations.rs checks). Colours above stay the source;
+ * the semantic colour names below point at them. */
+:root {
+  /* Layout units: everything sits on a 4 px grid (in rem, so it follows the reader's font
+     size). x1 = 4 px ... x10 = 40 px, then page-sized steps. */
+  --unit-x1: 0.25rem;
+  --unit-x2: 0.5rem;
+  --unit-x3: 0.75rem;
+  --unit-x4: 1rem;
+  --unit-x5: 1.25rem;
+  --unit-x6: 1.5rem;
+  --unit-x7: 1.75rem;
+  --unit-x8: 2rem;
+  --unit-x9: 2.25rem;
+  --unit-x10: 2.5rem;
+  --unit-x12: 3rem;
+  --unit-x16: 4rem;
+  --unit-x20: 5rem;
+  --unit-x24: 6rem;
+
+  /* Page layout. Breakpoints (media queries cannot read custom properties, so they are
+     fixed): s below 768 px, m from 768 px, l from 1024 px, xl from 1280 px. The column count
+     and gutters grow with them (below). */
+  --layout-max-width: 80rem;
+  --layout-columns: 4;
+  --layout-gutter: 1rem;
+  --layout-margin: 1rem;
+
+  /* Type scale. Every size has a line height on the 4 px grid; the three largest grow from
+     the m breakpoint up. */
+  --font-size-display: 2.25rem;
+  --line-height-display: 2.75rem;
+  --font-size-title-1: 1.875rem;
+  --line-height-title-1: 2.25rem;
+  --font-size-title-2: 1.5rem;
+  --line-height-title-2: 2rem;
+  --font-size-title-3: 1.25rem;
+  --line-height-title-3: 1.75rem;
+  --font-size-title-4: 1.125rem;
+  --line-height-title-4: 1.75rem;
+  --font-size-body-1: 1rem;
+  --line-height-body-1: 1.5rem;
+  --font-size-body-2: 0.875rem;
+  --line-height-body-2: 1.25rem;
+  --font-size-body-3: 0.8125rem;
+  --line-height-body-3: 1.25rem;
+  --font-size-caption-1: 0.75rem;
+  --line-height-caption-1: 1rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  /* Comfortable reading width for running text. */
+  --text-measure: 70ch;
+
+  /* Shadow colours: soft in light mode, deeper in dark mode where a faint shadow vanishes. */
+  --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
+  --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
+  --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+
+  /* Layers, lowest to highest. Overlays share one layer and stack by order in the page; a
+     modal's panel sits one above its own scrim. */
+  --z-index-raised: 1;
+  --z-index-sticky: 10;
+  --z-index-fixed: 20;
+  --z-index-dropdown: 50;
+  --z-index-overlay: 1000;
+  --z-index-modal: 1001;
+  --z-index-toast: 9999;
+  --z-index-top: 10000;
+
+  /* Motion: four durations and three easings for CSS transitions (the springs further down
+     are for entrances that should feel physical). Small things move fast, big things slower;
+     enter decelerates, exit accelerates. */
+  --duration-rapid: 100ms;
+  --duration-fast: 150ms;
+  --duration-medium: 250ms;
+  --duration-slow: 400ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --layout-columns: 8;
+    --layout-gutter: 1.25rem;
+    --layout-margin: 1.5rem;
+    --font-size-display: 3rem;
+    --line-height-display: 3.5rem;
+    --font-size-title-1: 2.25rem;
+    --line-height-title-1: 2.75rem;
+    --font-size-title-2: 1.75rem;
+    --line-height-title-2: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --layout-columns: 12;
+    --layout-gutter: 1.5rem;
+    --layout-margin: 2rem;
+  }
+}
+
+/* Reduced motion: durations drop to (almost) zero, for code that reads them as well as for CSS
+   (the blanket rule further down covers literal values). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-rapid: 0.01ms;
+    --duration-fast: 0.01ms;
+    --duration-medium: 0.01ms;
+    --duration-slow: 0.01ms;
+  }
+}
+
+/* Semantic names, Reshaped-style: background / foreground / border, then the role (neutral,
+ * primary, critical, positive, warning) and a variant (faded, highlighted). They point at the
+ * tokens above, so presets, accents and data-theme switch them too; declared again on every
+ * element that sets one of those attributes so they resolve there. Prefer these in new CSS. */
+:root,
+[data-theme],
+[data-preset],
+[data-accent] {
+  --color-background-page: var(--primary-color);
+  --color-background-page-faded: var(--primary-color-1);
+  /* Surfaces by height: base (cards, panels), raised (sticky bars, hovered cards), overlay
+     (menus, popovers, dialogs). Each is a little lighter in dark mode, where shadows show
+     less. */
+  --color-background-elevation-base: var(--primary-color-2);
+  --color-background-elevation-raised: color-mix(in oklab, var(--primary-color-2) 96%, #fff);
+  --color-background-elevation-overlay: color-mix(in oklab, var(--primary-color-2) 92%, #fff);
+  --color-background-neutral: var(--primary-color-4);
+  --color-background-neutral-faded: var(--primary-color-3);
+  --color-background-neutral-highlighted: var(--primary-color-5);
+  --color-background-disabled: var(--primary-color-4);
+  --color-background-primary: var(--accent-color);
+  --color-background-primary-faded: color-mix(in oklab, var(--accent-color) 12%, var(--primary-color));
+  --color-background-critical: var(--primary-error-color);
+  --color-background-critical-faded: color-mix(in oklab, var(--error-text-color) 10%, var(--primary-color));
+  --color-background-positive-faded: var(--primary-success-color);
+  --color-background-warning-faded: var(--primary-warning-color);
+  --color-backdrop: var(--overlay-color);
+  --color-foreground-neutral: var(--secondary-color-4);
+  --color-foreground-neutral-faded: var(--secondary-color-5);
+  --color-foreground-disabled: var(--secondary-color-5);
+  --color-foreground-primary: var(--accent-color);
+  --color-foreground-critical: var(--error-text-color);
+  --color-foreground-positive: var(--success-text-color);
+  --color-foreground-warning: var(--warning-text-color);
+  --color-on-background-primary: var(--accent-contrast);
+  --color-border-neutral: var(--primary-color-6);
+  --color-border-neutral-faded: var(--primary-color-5);
+  --color-border-neutral-highlighted: var(--primary-color-7);
+  --color-border-primary: var(--accent-color);
+  --color-border-critical: var(--error-text-color);
+  --color-border-focus: var(--focused-border-color);
+
+  /* Corners: one --radius (a preset's or yours) sets all three. With 10 px: 4, 6, 10. */
+  --radius-small: calc(var(--radius) * 0.4);
+  --radius-medium: calc(var(--radius) * 0.6);
+  --radius-large: var(--radius);
+  --radius-full: 9999px;
+
+  /* Shadows by height (Reshaped's): raised for things that lift a little, overlay for things
+     that float over the page. */
+  --shadow-raised: 0 8px 12px -4px var(--color-shadow-raised-1), 0 1px 2px 0 var(--color-shadow-raised-2);
+  --shadow-overlay: 0 16px 24px -4px var(--color-shadow-overlay), 0 8px 12px -4px var(--color-shadow-overlay), 0 8px 6px -4px var(--color-shadow-overlay);
+}
+
 /* Theme presets: a whole look in one attribute. data-preset="reef|abyss|driftwood|classic" on
    <html> (or any element) swaps colours, fonts, corner radius, density and icon stroke; no
    attribute is Lagoon, the default above. They come before the accent and density blocks, so
@@ -104,118 +275,118 @@ html[data-theme="dark"],
 /* Lagoon, the default: the same values as :root above, so an element inside another preset
  * can switch back (tests/theme.rs keeps them equal). */
 [data-preset="lagoon"] {
-  --primary-color: light-dark(#faffff, #041111);
-  --primary-color-1: light-dark(#f6fdfd, #0c1a1a);
-  --primary-color-2: light-dark(#faffff, #0a1718);
-  --primary-color-3: light-dark(#f3fafa, #101d1e);
-  --primary-color-4: light-dark(#f3fafa, #152323);
-  --primary-color-5: light-dark(#f0f7f7, #1e2d2d);
-  --primary-color-6: light-dark(#e0e7e7, #1b2a2a);
-  --primary-color-7: light-dark(#abb2b2, #344243);
-  --secondary-color: light-dark(#000404, #f2ffff);
-  --secondary-color-1: light-dark(#000404, #edfefe);
-  --secondary-color-2: light-dark(#021010, #d9eaea);
-  --secondary-color-3: light-dark(#1d2e2f, #cfe0e0);
-  --secondary-color-4: light-dark(#041414, #c7d8d8);
-  --secondary-color-5: light-dark(#5c6f6f, #95a4a5);
-  --secondary-color-6: light-dark(#c0d4d5, #516060);
+  --primary-color: light-dark(#ffffff, #0d0d0d);
+  --primary-color-1: light-dark(#fafafa, #121212);
+  --primary-color-2: light-dark(#ffffff, #161616);
+  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
+  --primary-color-4: light-dark(#f0f0f0, #242424);
+  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
+  --primary-color-6: light-dark(#e1e1e1, #383838);
+  --primary-color-7: light-dark(#b7b7b7, #555555);
+  --secondary-color: light-dark(#090909, #fcfcfc);
+  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
+  --secondary-color-2: light-dark(#161616, #e8e8e8);
+  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
+  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
+  --secondary-color-5: light-dark(#666666, #ababab);
+  --secondary-color-6: light-dark(#cacaca, #525252);
   --accent-color: light-dark(#0f766e, #2dd4bf);
   --accent-contrast: light-dark(#fff, #042f2e);
   --focused-border-color: light-dark(#0f766e, #2dd4bf);
   --chart-2: light-dark(#1d4ed8, #60a5fa);
   --chart-3: light-dark(#c2410c, #fb923c);
-  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Bricolage Grotesque Variable", var(--font-sans);
-  --heading-weight: 700;
-  --heading-tracking: -0.02em;
-  --radius: 0.75rem;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 650;
+  --heading-tracking: -0.015em;
+  --radius: 0.625rem;
   --density: 1;
   --icon-stroke-width: 1.75;
   --chart-4: light-dark(#7c3aed, #a78bfa);
 }
 
-/* Reef: coral on warm sand, rounded Nunito, soft pill corners, a little roomier. */
+/* Reef: coral on warm stone, Geist, round corners, a little roomier. */
 [data-preset="reef"] {
-  --primary-color: light-dark(#fffdfd, #150b0a);
-  --primary-color-1: light-dark(#fffaf9, #1f1413);
-  --primary-color-2: light-dark(#fffdfd, #1d1111);
-  --primary-color-3: light-dark(#fdf7f6, #231717);
-  --primary-color-4: light-dark(#fdf7f6, #291c1c);
-  --primary-color-5: light-dark(#faf4f3, #332726);
-  --primary-color-6: light-dark(#eae4e3, #302423);
-  --primary-color-7: light-dark(#b5afae, #4a3c3b);
-  --secondary-color: light-dark(#070202, #fffbfb);
-  --secondary-color-1: light-dark(#070202, #fff9f8);
-  --secondary-color-2: light-dark(#160a0a, #f1e3e2);
-  --secondary-color-3: light-dark(#352827, #e7d9d8);
-  --secondary-color-4: light-dark(#1a0e0e, #dfd1d0);
-  --secondary-color-5: light-dark(#776867, #ac9e9d);
-  --secondary-color-6: light-dark(#decdcc, #675b5a);
+  --primary-color: light-dark(#fffffd, #100c0a);
+  --primary-color-1: light-dark(#fcfaf8, #14110e);
+  --primary-color-2: light-dark(#fffffd, #191512);
+  --primary-color-3: light-dark(#f7f5f3, #211d1a);
+  --primary-color-4: light-dark(#f2f0ee, #272320);
+  --primary-color-5: light-dark(#e9e7e6, #2e2a27);
+  --primary-color-6: light-dark(#e3e1df, #3b3734);
+  --primary-color-7: light-dark(#bbb6b2, #595451);
+  --secondary-color: light-dark(#0c0806, #fffbf6);
+  --secondary-color-1: light-dark(#100c0a, #f9f4f0);
+  --secondary-color-2: light-dark(#191512, #ece7e3);
+  --secondary-color-3: light-dark(#312d2a, #dcd6d2);
+  --secondary-color-4: light-dark(#221e1c, #f3ede9);
+  --secondary-color-5: light-dark(#6a6562, #afaaa6);
+  --secondary-color-6: light-dark(#cfc9c5, #56524e);
   --accent-color: light-dark(#be3a2e, #ff8b7b);
   --accent-contrast: light-dark(#fff, #2a0a06);
   --focused-border-color: light-dark(#be3a2e, #ff8b7b);
   --chart-2: light-dark(#0f766e, #2dd4bf);
   --chart-3: light-dark(#1d4ed8, #60a5fa);
-  --font-sans: "Nunito Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Nunito Variable", var(--font-sans);
-  --heading-weight: 800;
-  --heading-tracking: -0.01em;
-  --radius: 1.125rem;
-  --density: 1.08;
-  --icon-stroke-width: 2.25;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 600;
+  --heading-tracking: -0.02em;
+  --radius: 1rem;
+  --density: 1.04;
+  --icon-stroke-width: 1.75;
 }
-/* Abyss: deep-sea navy with an indigo glow, Space Grotesk, sharp corners, compact. */
+/* Abyss: cool slate with an indigo accent, IBM Plex Sans, square corners, compact. */
 [data-preset="abyss"] {
-  --primary-color: light-dark(#fbffff, #0a131d);
-  --primary-color-1: light-dark(#f7fcff, #121b26);
-  --primary-color-2: light-dark(#fbffff, #101824);
-  --primary-color-3: light-dark(#f4f9ff, #151e29);
-  --primary-color-4: light-dark(#f4f9ff, #1a232e);
-  --primary-color-5: light-dark(#f1f6fc, #232c38);
-  --primary-color-6: light-dark(#e1e6ec, #202a35);
-  --primary-color-7: light-dark(#acb1b6, #38424e);
-  --secondary-color: light-dark(#00030b, #f5ffff);
-  --secondary-color-1: light-dark(#00030b, #f1fdff);
-  --secondary-color-2: light-dark(#050e1a, #dce8f7);
-  --secondary-color-3: light-dark(#212c3a, #d2deec);
-  --secondary-color-4: light-dark(#08121e, #cad6e4);
-  --secondary-color-5: light-dark(#606d7d, #98a2b0);
-  --secondary-color-6: light-dark(#c3d2e4, #545e6b);
+  --primary-color: light-dark(#fcffff, #060911);
+  --primary-color-1: light-dark(#f7faff, #090d16);
+  --primary-color-2: light-dark(#fcffff, #0d111b);
+  --primary-color-3: light-dark(#f2f5fb, #151923);
+  --primary-color-4: light-dark(#edf0f6, #1b1f29);
+  --primary-color-5: light-dark(#e5e8ed, #222630);
+  --primary-color-6: light-dark(#dfe1e7, #2e333d);
+  --primary-color-7: light-dark(#b1b7c5, #4a505b);
+  --secondary-color: light-dark(#060911, #eff5ff);
+  --secondary-color-1: light-dark(#090d16, #e8effc);
+  --secondary-color-2: light-dark(#12161f, #dbe1ef);
+  --secondary-color-3: light-dark(#292e38, #cbd1df);
+  --secondary-color-4: light-dark(#1b1f29, #e1e8f6);
+  --secondary-color-5: light-dark(#606672, #9ea5b2);
+  --secondary-color-6: light-dark(#c4cbd8, #484d58);
   --accent-color: light-dark(#4f46e5, #a5b4fc);
   --accent-contrast: light-dark(#fff, #0b1020);
   --focused-border-color: light-dark(#4f46e5, #a5b4fc);
   --chart-4: light-dark(#0e7490, #22d3ee);
-  --font-sans: "Space Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Space Grotesk Variable", var(--font-sans);
+  --font-sans: "IBM Plex Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
   --heading-weight: 600;
-  --heading-tracking: -0.03em;
+  --heading-tracking: -0.01em;
   --radius: 0.25rem;
   --density: 0.92;
   --icon-stroke-width: 1.5;
 }
-/* Driftwood: sun-bleached sand and terracotta, Fraunces serif headings, editorial. */
+/* Driftwood: warm sand and terracotta, Source Serif 4 headings over Inter, editorial. */
 [data-preset="driftwood"] {
-  --primary-color: light-dark(#fffef9, #130c03);
-  --primary-color-1: light-dark(#fffbf5, #1d150b);
-  --primary-color-2: light-dark(#fffef9, #1a1308);
-  --primary-color-3: light-dark(#fcf8f2, #20190e);
-  --primary-color-4: light-dark(#fcf8f2, #261e13);
-  --primary-color-5: light-dark(#f9f5ef, #31281e);
-  --primary-color-6: light-dark(#e9e5df, #2d261b);
-  --primary-color-7: light-dark(#b3b0aa, #463e32);
-  --secondary-color: light-dark(#060200, #fffef4);
-  --secondary-color-1: light-dark(#060200, #fffaef);
-  --secondary-color-2: light-dark(#120c05, #ede5db);
-  --secondary-color-3: light-dark(#312a21, #e3dbd1);
-  --secondary-color-4: light-dark(#171007, #dbd3c9);
-  --secondary-color-5: light-dark(#726a5f, #a8a097);
-  --secondary-color-6: light-dark(#d8cfc2, #635c54);
+  --primary-color: light-dark(#fffffc, #100d08);
+  --primary-color-1: light-dark(#fcfaf7, #14110c);
+  --primary-color-2: light-dark(#fffffc, #191610);
+  --primary-color-3: light-dark(#f7f5f2, #211e18);
+  --primary-color-4: light-dark(#f2f0ed, #27231e);
+  --primary-color-5: light-dark(#e9e7e4, #2e2b25);
+  --primary-color-6: light-dark(#e3e1de, #3b3731);
+  --primary-color-7: light-dark(#bbb7af, #59554e);
+  --secondary-color: light-dark(#0c0905, #fffbf3);
+  --secondary-color-1: light-dark(#100d08, #f9f4ec);
+  --secondary-color-2: light-dark(#191610, #ece7df);
+  --secondary-color-3: light-dark(#312d27, #dcd7cf);
+  --secondary-color-4: light-dark(#221f19, #f3eee6);
+  --secondary-color-5: light-dark(#6a655f, #afaaa3);
+  --secondary-color-6: light-dark(#cfcac2, #56524b);
   --accent-color: light-dark(#9a3412, #fdba74);
   --accent-contrast: light-dark(#fff, #1f1105);
   --focused-border-color: light-dark(#9a3412, #fdba74);
   --chart-3: light-dark(#4d7c0f, #a3e635);
-  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
   --heading-weight: 600;
   --heading-tracking: -0.01em;
   --radius: 0.375rem;
@@ -314,21 +485,21 @@ html[data-theme="light"],
 /* data-theme on any element switches its subtree: the colour tokens again, resolved there.
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 :where([data-theme]) {
-  --primary-color: light-dark(#faffff, #041111);
-  --primary-color-1: light-dark(#f6fdfd, #0c1a1a);
-  --primary-color-2: light-dark(#faffff, #0a1718);
-  --primary-color-3: light-dark(#f3fafa, #101d1e);
-  --primary-color-4: light-dark(#f3fafa, #152323);
-  --primary-color-5: light-dark(#f0f7f7, #1e2d2d);
-  --primary-color-6: light-dark(#e0e7e7, #1b2a2a);
-  --primary-color-7: light-dark(#abb2b2, #344243);
-  --secondary-color: light-dark(#000404, #f2ffff);
-  --secondary-color-1: light-dark(#000404, #edfefe);
-  --secondary-color-2: light-dark(#021010, #d9eaea);
-  --secondary-color-3: light-dark(#1d2e2f, #cfe0e0);
-  --secondary-color-4: light-dark(#041414, #c7d8d8);
-  --secondary-color-5: light-dark(#5c6f6f, #95a4a5);
-  --secondary-color-6: light-dark(#c0d4d5, #516060);
+  --primary-color: light-dark(#ffffff, #0d0d0d);
+  --primary-color-1: light-dark(#fafafa, #121212);
+  --primary-color-2: light-dark(#ffffff, #161616);
+  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
+  --primary-color-4: light-dark(#f0f0f0, #242424);
+  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
+  --primary-color-6: light-dark(#e1e1e1, #2e2e2e);
+  --primary-color-7: light-dark(#b7b7b7, #4d4d4d);
+  --secondary-color: light-dark(#090909, #fcfcfc);
+  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
+  --secondary-color-2: light-dark(#161616, #e8e8e8);
+  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
+  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
+  --secondary-color-5: light-dark(#666666, #ababab);
+  --secondary-color-6: light-dark(#cacaca, #525252);
   --focused-border-color: light-dark(#0f766e, #2dd4bf);
   --accent-color: light-dark(#0f766e, #2dd4bf);
   --accent-contrast: light-dark(#fff, #042f2e);
@@ -350,22 +521,27 @@ html[data-theme="light"],
   --chart-4: light-dark(#7c3aed, #a78bfa);
   --chart-5: light-dark(#be185d, #f472b6);
 }
+:where([data-theme]) {
+  --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
+  --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
+  --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+}
 :where([data-preset="lagoon"] [data-theme]) {
-  --primary-color: light-dark(#faffff, #041111);
-  --primary-color-1: light-dark(#f6fdfd, #0c1a1a);
-  --primary-color-2: light-dark(#faffff, #0a1718);
-  --primary-color-3: light-dark(#f3fafa, #101d1e);
-  --primary-color-4: light-dark(#f3fafa, #152323);
-  --primary-color-5: light-dark(#f0f7f7, #1e2d2d);
-  --primary-color-6: light-dark(#e0e7e7, #1b2a2a);
-  --primary-color-7: light-dark(#abb2b2, #344243);
-  --secondary-color: light-dark(#000404, #f2ffff);
-  --secondary-color-1: light-dark(#000404, #edfefe);
-  --secondary-color-2: light-dark(#021010, #d9eaea);
-  --secondary-color-3: light-dark(#1d2e2f, #cfe0e0);
-  --secondary-color-4: light-dark(#041414, #c7d8d8);
-  --secondary-color-5: light-dark(#5c6f6f, #95a4a5);
-  --secondary-color-6: light-dark(#c0d4d5, #516060);
+  --primary-color: light-dark(#ffffff, #0d0d0d);
+  --primary-color-1: light-dark(#fafafa, #121212);
+  --primary-color-2: light-dark(#ffffff, #161616);
+  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
+  --primary-color-4: light-dark(#f0f0f0, #242424);
+  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
+  --primary-color-6: light-dark(#e1e1e1, #2e2e2e);
+  --primary-color-7: light-dark(#b7b7b7, #4d4d4d);
+  --secondary-color: light-dark(#090909, #fcfcfc);
+  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
+  --secondary-color-2: light-dark(#161616, #e8e8e8);
+  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
+  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
+  --secondary-color-5: light-dark(#666666, #ababab);
+  --secondary-color-6: light-dark(#cacaca, #525252);
   --accent-color: light-dark(#0f766e, #2dd4bf);
   --accent-contrast: light-dark(#fff, #042f2e);
   --focused-border-color: light-dark(#0f766e, #2dd4bf);
@@ -374,21 +550,21 @@ html[data-theme="light"],
   --chart-4: light-dark(#7c3aed, #a78bfa);
 }
 :where([data-preset="reef"] [data-theme]) {
-  --primary-color: light-dark(#fffdfd, #150b0a);
-  --primary-color-1: light-dark(#fffaf9, #1f1413);
-  --primary-color-2: light-dark(#fffdfd, #1d1111);
-  --primary-color-3: light-dark(#fdf7f6, #231717);
-  --primary-color-4: light-dark(#fdf7f6, #291c1c);
-  --primary-color-5: light-dark(#faf4f3, #332726);
-  --primary-color-6: light-dark(#eae4e3, #302423);
-  --primary-color-7: light-dark(#b5afae, #4a3c3b);
-  --secondary-color: light-dark(#070202, #fffbfb);
-  --secondary-color-1: light-dark(#070202, #fff9f8);
-  --secondary-color-2: light-dark(#160a0a, #f1e3e2);
-  --secondary-color-3: light-dark(#352827, #e7d9d8);
-  --secondary-color-4: light-dark(#1a0e0e, #dfd1d0);
-  --secondary-color-5: light-dark(#776867, #ac9e9d);
-  --secondary-color-6: light-dark(#decdcc, #675b5a);
+  --primary-color: light-dark(#fffffd, #100c0a);
+  --primary-color-1: light-dark(#fcfaf8, #14110e);
+  --primary-color-2: light-dark(#fffffd, #191512);
+  --primary-color-3: light-dark(#f7f5f3, #211d1a);
+  --primary-color-4: light-dark(#f2f0ee, #272320);
+  --primary-color-5: light-dark(#e9e7e6, #2e2a27);
+  --primary-color-6: light-dark(#e3e1df, #312d2a);
+  --primary-color-7: light-dark(#bbb6b2, #504c49);
+  --secondary-color: light-dark(#0c0806, #fffbf6);
+  --secondary-color-1: light-dark(#100c0a, #f9f4f0);
+  --secondary-color-2: light-dark(#191512, #ece7e3);
+  --secondary-color-3: light-dark(#312d2a, #dcd6d2);
+  --secondary-color-4: light-dark(#221e1c, #f3ede9);
+  --secondary-color-5: light-dark(#6a6562, #afaaa6);
+  --secondary-color-6: light-dark(#cfc9c5, #56524e);
   --accent-color: light-dark(#be3a2e, #ff8b7b);
   --accent-contrast: light-dark(#fff, #2a0a06);
   --focused-border-color: light-dark(#be3a2e, #ff8b7b);
@@ -396,42 +572,42 @@ html[data-theme="light"],
   --chart-3: light-dark(#1d4ed8, #60a5fa);
 }
 :where([data-preset="abyss"] [data-theme]) {
-  --primary-color: light-dark(#fbffff, #0a131d);
-  --primary-color-1: light-dark(#f7fcff, #121b26);
-  --primary-color-2: light-dark(#fbffff, #101824);
-  --primary-color-3: light-dark(#f4f9ff, #151e29);
-  --primary-color-4: light-dark(#f4f9ff, #1a232e);
-  --primary-color-5: light-dark(#f1f6fc, #232c38);
-  --primary-color-6: light-dark(#e1e6ec, #202a35);
-  --primary-color-7: light-dark(#acb1b6, #38424e);
-  --secondary-color: light-dark(#00030b, #f5ffff);
-  --secondary-color-1: light-dark(#00030b, #f1fdff);
-  --secondary-color-2: light-dark(#050e1a, #dce8f7);
-  --secondary-color-3: light-dark(#212c3a, #d2deec);
-  --secondary-color-4: light-dark(#08121e, #cad6e4);
-  --secondary-color-5: light-dark(#606d7d, #98a2b0);
-  --secondary-color-6: light-dark(#c3d2e4, #545e6b);
+  --primary-color: light-dark(#fcffff, #060911);
+  --primary-color-1: light-dark(#f7faff, #090d16);
+  --primary-color-2: light-dark(#fcffff, #0d111b);
+  --primary-color-3: light-dark(#f2f5fb, #151923);
+  --primary-color-4: light-dark(#edf0f6, #1b1f29);
+  --primary-color-5: light-dark(#e5e8ed, #222630);
+  --primary-color-6: light-dark(#dfe1e7, #242933);
+  --primary-color-7: light-dark(#b1b7c5, #424853);
+  --secondary-color: light-dark(#060911, #eff5ff);
+  --secondary-color-1: light-dark(#090d16, #e8effc);
+  --secondary-color-2: light-dark(#12161f, #dbe1ef);
+  --secondary-color-3: light-dark(#292e38, #cbd1df);
+  --secondary-color-4: light-dark(#1b1f29, #e1e8f6);
+  --secondary-color-5: light-dark(#606672, #9ea5b2);
+  --secondary-color-6: light-dark(#c4cbd8, #484d58);
   --accent-color: light-dark(#4f46e5, #a5b4fc);
   --accent-contrast: light-dark(#fff, #0b1020);
   --focused-border-color: light-dark(#4f46e5, #a5b4fc);
   --chart-4: light-dark(#0e7490, #22d3ee);
 }
 :where([data-preset="driftwood"] [data-theme]) {
-  --primary-color: light-dark(#fffef9, #130c03);
-  --primary-color-1: light-dark(#fffbf5, #1d150b);
-  --primary-color-2: light-dark(#fffef9, #1a1308);
-  --primary-color-3: light-dark(#fcf8f2, #20190e);
-  --primary-color-4: light-dark(#fcf8f2, #261e13);
-  --primary-color-5: light-dark(#f9f5ef, #31281e);
-  --primary-color-6: light-dark(#e9e5df, #2d261b);
-  --primary-color-7: light-dark(#b3b0aa, #463e32);
-  --secondary-color: light-dark(#060200, #fffef4);
-  --secondary-color-1: light-dark(#060200, #fffaef);
-  --secondary-color-2: light-dark(#120c05, #ede5db);
-  --secondary-color-3: light-dark(#312a21, #e3dbd1);
-  --secondary-color-4: light-dark(#171007, #dbd3c9);
-  --secondary-color-5: light-dark(#726a5f, #a8a097);
-  --secondary-color-6: light-dark(#d8cfc2, #635c54);
+  --primary-color: light-dark(#fffffc, #100d08);
+  --primary-color-1: light-dark(#fcfaf7, #14110c);
+  --primary-color-2: light-dark(#fffffc, #191610);
+  --primary-color-3: light-dark(#f7f5f2, #211e18);
+  --primary-color-4: light-dark(#f2f0ed, #27231e);
+  --primary-color-5: light-dark(#e9e7e4, #2e2b25);
+  --primary-color-6: light-dark(#e3e1de, #312d27);
+  --primary-color-7: light-dark(#bbb7af, #514c46);
+  --secondary-color: light-dark(#0c0905, #fffbf3);
+  --secondary-color-1: light-dark(#100d08, #f9f4ec);
+  --secondary-color-2: light-dark(#191610, #ece7df);
+  --secondary-color-3: light-dark(#312d27, #dcd7cf);
+  --secondary-color-4: light-dark(#221f19, #f3eee6);
+  --secondary-color-5: light-dark(#6a655f, #afaaa3);
+  --secondary-color-6: light-dark(#cfcac2, #56524b);
   --accent-color: light-dark(#9a3412, #fdba74);
   --accent-contrast: light-dark(#fff, #1f1105);
   --focused-border-color: light-dark(#9a3412, #fdba74);
@@ -490,21 +666,21 @@ html[data-theme="light"],
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 @supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
   :root:root, [data-theme][data-theme] {
-    --primary-color: var(--dark, #041111) var(--light, #faffff);
-    --primary-color-1: var(--dark, #0c1a1a) var(--light, #f6fdfd);
-    --primary-color-2: var(--dark, #0a1718) var(--light, #faffff);
-    --primary-color-3: var(--dark, #101d1e) var(--light, #f3fafa);
-    --primary-color-4: var(--dark, #152323) var(--light, #f3fafa);
-    --primary-color-5: var(--dark, #1e2d2d) var(--light, #f0f7f7);
-    --primary-color-6: var(--dark, #1b2a2a) var(--light, #e0e7e7);
-    --primary-color-7: var(--dark, #344243) var(--light, #abb2b2);
-    --secondary-color: var(--dark, #f2ffff) var(--light, #000404);
-    --secondary-color-1: var(--dark, #edfefe) var(--light, #000404);
-    --secondary-color-2: var(--dark, #d9eaea) var(--light, #021010);
-    --secondary-color-3: var(--dark, #cfe0e0) var(--light, #1d2e2f);
-    --secondary-color-4: var(--dark, #c7d8d8) var(--light, #041414);
-    --secondary-color-5: var(--dark, #95a4a5) var(--light, #5c6f6f);
-    --secondary-color-6: var(--dark, #516060) var(--light, #c0d4d5);
+    --primary-color: var(--dark, #0d0d0d) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #121212) var(--light, #fafafa);
+    --primary-color-2: var(--dark, #161616) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1e1e1e) var(--light, #f5f5f5);
+    --primary-color-4: var(--dark, #242424) var(--light, #f0f0f0);
+    --primary-color-5: var(--dark, #2b2b2b) var(--light, #e8e8e8);
+    --primary-color-6: var(--dark, #2e2e2e) var(--light, #e1e1e1);
+    --primary-color-7: var(--dark, #4d4d4d) var(--light, #b7b7b7);
+    --secondary-color: var(--dark, #fcfcfc) var(--light, #090909);
+    --secondary-color-1: var(--dark, #f5f5f5) var(--light, #0d0d0d);
+    --secondary-color-2: var(--dark, #e8e8e8) var(--light, #161616);
+    --secondary-color-3: var(--dark, #d7d7d7) var(--light, #2e2e2e);
+    --secondary-color-4: var(--dark, #eeeeee) var(--light, #1f1f1f);
+    --secondary-color-5: var(--dark, #ababab) var(--light, #666666);
+    --secondary-color-6: var(--dark, #525252) var(--light, #cacaca);
     --focused-border-color: var(--dark, #2dd4bf) var(--light, #0f766e);
     --accent-color: var(--dark, #2dd4bf) var(--light, #0f766e);
     --accent-contrast: var(--dark, #042f2e) var(--light, #fff);
@@ -525,22 +701,27 @@ html[data-theme="light"],
     --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
     --chart-5: var(--dark, #f472b6) var(--light, #be185d);
   }
+  :root:root, [data-theme][data-theme] {
+    --color-shadow-raised-1: var(--dark, rgb(0 0 0 / 32%)) var(--light, rgb(0 0 0 / 8%));
+    --color-shadow-raised-2: var(--dark, rgb(0 0 0 / 40%)) var(--light, rgb(0 0 0 / 10%));
+    --color-shadow-overlay: var(--dark, rgb(0 0 0 / 36%)) var(--light, rgb(0 0 0 / 6%));
+  }
   [data-preset="lagoon"][data-preset="lagoon"] {
-    --primary-color: var(--dark, #041111) var(--light, #faffff);
-    --primary-color-1: var(--dark, #0c1a1a) var(--light, #f6fdfd);
-    --primary-color-2: var(--dark, #0a1718) var(--light, #faffff);
-    --primary-color-3: var(--dark, #101d1e) var(--light, #f3fafa);
-    --primary-color-4: var(--dark, #152323) var(--light, #f3fafa);
-    --primary-color-5: var(--dark, #1e2d2d) var(--light, #f0f7f7);
-    --primary-color-6: var(--dark, #1b2a2a) var(--light, #e0e7e7);
-    --primary-color-7: var(--dark, #344243) var(--light, #abb2b2);
-    --secondary-color: var(--dark, #f2ffff) var(--light, #000404);
-    --secondary-color-1: var(--dark, #edfefe) var(--light, #000404);
-    --secondary-color-2: var(--dark, #d9eaea) var(--light, #021010);
-    --secondary-color-3: var(--dark, #cfe0e0) var(--light, #1d2e2f);
-    --secondary-color-4: var(--dark, #c7d8d8) var(--light, #041414);
-    --secondary-color-5: var(--dark, #95a4a5) var(--light, #5c6f6f);
-    --secondary-color-6: var(--dark, #516060) var(--light, #c0d4d5);
+    --primary-color: var(--dark, #0d0d0d) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #121212) var(--light, #fafafa);
+    --primary-color-2: var(--dark, #161616) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1e1e1e) var(--light, #f5f5f5);
+    --primary-color-4: var(--dark, #242424) var(--light, #f0f0f0);
+    --primary-color-5: var(--dark, #2b2b2b) var(--light, #e8e8e8);
+    --primary-color-6: var(--dark, #2e2e2e) var(--light, #e1e1e1);
+    --primary-color-7: var(--dark, #4d4d4d) var(--light, #b7b7b7);
+    --secondary-color: var(--dark, #fcfcfc) var(--light, #090909);
+    --secondary-color-1: var(--dark, #f5f5f5) var(--light, #0d0d0d);
+    --secondary-color-2: var(--dark, #e8e8e8) var(--light, #161616);
+    --secondary-color-3: var(--dark, #d7d7d7) var(--light, #2e2e2e);
+    --secondary-color-4: var(--dark, #eeeeee) var(--light, #1f1f1f);
+    --secondary-color-5: var(--dark, #ababab) var(--light, #666666);
+    --secondary-color-6: var(--dark, #525252) var(--light, #cacaca);
     --accent-color: var(--dark, #2dd4bf) var(--light, #0f766e);
     --accent-contrast: var(--dark, #042f2e) var(--light, #fff);
     --focused-border-color: var(--dark, #2dd4bf) var(--light, #0f766e);
@@ -549,21 +730,21 @@ html[data-theme="light"],
     --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
   }
   [data-preset="reef"][data-preset="reef"] {
-    --primary-color: var(--dark, #150b0a) var(--light, #fffdfd);
-    --primary-color-1: var(--dark, #1f1413) var(--light, #fffaf9);
-    --primary-color-2: var(--dark, #1d1111) var(--light, #fffdfd);
-    --primary-color-3: var(--dark, #231717) var(--light, #fdf7f6);
-    --primary-color-4: var(--dark, #291c1c) var(--light, #fdf7f6);
-    --primary-color-5: var(--dark, #332726) var(--light, #faf4f3);
-    --primary-color-6: var(--dark, #302423) var(--light, #eae4e3);
-    --primary-color-7: var(--dark, #4a3c3b) var(--light, #b5afae);
-    --secondary-color: var(--dark, #fffbfb) var(--light, #070202);
-    --secondary-color-1: var(--dark, #fff9f8) var(--light, #070202);
-    --secondary-color-2: var(--dark, #f1e3e2) var(--light, #160a0a);
-    --secondary-color-3: var(--dark, #e7d9d8) var(--light, #352827);
-    --secondary-color-4: var(--dark, #dfd1d0) var(--light, #1a0e0e);
-    --secondary-color-5: var(--dark, #ac9e9d) var(--light, #776867);
-    --secondary-color-6: var(--dark, #675b5a) var(--light, #decdcc);
+    --primary-color: var(--dark, #100c0a) var(--light, #fffffd);
+    --primary-color-1: var(--dark, #14110e) var(--light, #fcfaf8);
+    --primary-color-2: var(--dark, #191512) var(--light, #fffffd);
+    --primary-color-3: var(--dark, #211d1a) var(--light, #f7f5f3);
+    --primary-color-4: var(--dark, #272320) var(--light, #f2f0ee);
+    --primary-color-5: var(--dark, #2e2a27) var(--light, #e9e7e6);
+    --primary-color-6: var(--dark, #312d2a) var(--light, #e3e1df);
+    --primary-color-7: var(--dark, #504c49) var(--light, #bbb6b2);
+    --secondary-color: var(--dark, #fffbf6) var(--light, #0c0806);
+    --secondary-color-1: var(--dark, #f9f4f0) var(--light, #100c0a);
+    --secondary-color-2: var(--dark, #ece7e3) var(--light, #191512);
+    --secondary-color-3: var(--dark, #dcd6d2) var(--light, #312d2a);
+    --secondary-color-4: var(--dark, #f3ede9) var(--light, #221e1c);
+    --secondary-color-5: var(--dark, #afaaa6) var(--light, #6a6562);
+    --secondary-color-6: var(--dark, #56524e) var(--light, #cfc9c5);
     --accent-color: var(--dark, #ff8b7b) var(--light, #be3a2e);
     --accent-contrast: var(--dark, #2a0a06) var(--light, #fff);
     --focused-border-color: var(--dark, #ff8b7b) var(--light, #be3a2e);
@@ -571,42 +752,42 @@ html[data-theme="light"],
     --chart-3: var(--dark, #60a5fa) var(--light, #1d4ed8);
   }
   [data-preset="abyss"][data-preset="abyss"] {
-    --primary-color: var(--dark, #0a131d) var(--light, #fbffff);
-    --primary-color-1: var(--dark, #121b26) var(--light, #f7fcff);
-    --primary-color-2: var(--dark, #101824) var(--light, #fbffff);
-    --primary-color-3: var(--dark, #151e29) var(--light, #f4f9ff);
-    --primary-color-4: var(--dark, #1a232e) var(--light, #f4f9ff);
-    --primary-color-5: var(--dark, #232c38) var(--light, #f1f6fc);
-    --primary-color-6: var(--dark, #202a35) var(--light, #e1e6ec);
-    --primary-color-7: var(--dark, #38424e) var(--light, #acb1b6);
-    --secondary-color: var(--dark, #f5ffff) var(--light, #00030b);
-    --secondary-color-1: var(--dark, #f1fdff) var(--light, #00030b);
-    --secondary-color-2: var(--dark, #dce8f7) var(--light, #050e1a);
-    --secondary-color-3: var(--dark, #d2deec) var(--light, #212c3a);
-    --secondary-color-4: var(--dark, #cad6e4) var(--light, #08121e);
-    --secondary-color-5: var(--dark, #98a2b0) var(--light, #606d7d);
-    --secondary-color-6: var(--dark, #545e6b) var(--light, #c3d2e4);
+    --primary-color: var(--dark, #060911) var(--light, #fcffff);
+    --primary-color-1: var(--dark, #090d16) var(--light, #f7faff);
+    --primary-color-2: var(--dark, #0d111b) var(--light, #fcffff);
+    --primary-color-3: var(--dark, #151923) var(--light, #f2f5fb);
+    --primary-color-4: var(--dark, #1b1f29) var(--light, #edf0f6);
+    --primary-color-5: var(--dark, #222630) var(--light, #e5e8ed);
+    --primary-color-6: var(--dark, #242933) var(--light, #dfe1e7);
+    --primary-color-7: var(--dark, #424853) var(--light, #b1b7c5);
+    --secondary-color: var(--dark, #eff5ff) var(--light, #060911);
+    --secondary-color-1: var(--dark, #e8effc) var(--light, #090d16);
+    --secondary-color-2: var(--dark, #dbe1ef) var(--light, #12161f);
+    --secondary-color-3: var(--dark, #cbd1df) var(--light, #292e38);
+    --secondary-color-4: var(--dark, #e1e8f6) var(--light, #1b1f29);
+    --secondary-color-5: var(--dark, #9ea5b2) var(--light, #606672);
+    --secondary-color-6: var(--dark, #484d58) var(--light, #c4cbd8);
     --accent-color: var(--dark, #a5b4fc) var(--light, #4f46e5);
     --accent-contrast: var(--dark, #0b1020) var(--light, #fff);
     --focused-border-color: var(--dark, #a5b4fc) var(--light, #4f46e5);
     --chart-4: var(--dark, #22d3ee) var(--light, #0e7490);
   }
   [data-preset="driftwood"][data-preset="driftwood"] {
-    --primary-color: var(--dark, #130c03) var(--light, #fffef9);
-    --primary-color-1: var(--dark, #1d150b) var(--light, #fffbf5);
-    --primary-color-2: var(--dark, #1a1308) var(--light, #fffef9);
-    --primary-color-3: var(--dark, #20190e) var(--light, #fcf8f2);
-    --primary-color-4: var(--dark, #261e13) var(--light, #fcf8f2);
-    --primary-color-5: var(--dark, #31281e) var(--light, #f9f5ef);
-    --primary-color-6: var(--dark, #2d261b) var(--light, #e9e5df);
-    --primary-color-7: var(--dark, #463e32) var(--light, #b3b0aa);
-    --secondary-color: var(--dark, #fffef4) var(--light, #060200);
-    --secondary-color-1: var(--dark, #fffaef) var(--light, #060200);
-    --secondary-color-2: var(--dark, #ede5db) var(--light, #120c05);
-    --secondary-color-3: var(--dark, #e3dbd1) var(--light, #312a21);
-    --secondary-color-4: var(--dark, #dbd3c9) var(--light, #171007);
-    --secondary-color-5: var(--dark, #a8a097) var(--light, #726a5f);
-    --secondary-color-6: var(--dark, #635c54) var(--light, #d8cfc2);
+    --primary-color: var(--dark, #100d08) var(--light, #fffffc);
+    --primary-color-1: var(--dark, #14110c) var(--light, #fcfaf7);
+    --primary-color-2: var(--dark, #191610) var(--light, #fffffc);
+    --primary-color-3: var(--dark, #211e18) var(--light, #f7f5f2);
+    --primary-color-4: var(--dark, #27231e) var(--light, #f2f0ed);
+    --primary-color-5: var(--dark, #2e2b25) var(--light, #e9e7e4);
+    --primary-color-6: var(--dark, #312d27) var(--light, #e3e1de);
+    --primary-color-7: var(--dark, #514c46) var(--light, #bbb7af);
+    --secondary-color: var(--dark, #fffbf3) var(--light, #0c0905);
+    --secondary-color-1: var(--dark, #f9f4ec) var(--light, #100d08);
+    --secondary-color-2: var(--dark, #ece7df) var(--light, #191610);
+    --secondary-color-3: var(--dark, #dcd7cf) var(--light, #312d27);
+    --secondary-color-4: var(--dark, #f3eee6) var(--light, #221f19);
+    --secondary-color-5: var(--dark, #afaaa3) var(--light, #6a655f);
+    --secondary-color-6: var(--dark, #56524b) var(--light, #cfcac2);
     --accent-color: var(--dark, #fdba74) var(--light, #9a3412);
     --accent-contrast: var(--dark, #1f1105) var(--light, #fff);
     --focused-border-color: var(--dark, #fdba74) var(--light, #9a3412);

@@ -39,6 +39,11 @@ const GUIDES: &[(&str, &str, &str)] = &[
         include_str!("../../../docs/BRAND.md"),
     ),
     (
+        "foundations",
+        "Foundations",
+        include_str!("../../../docs/FOUNDATIONS.md"),
+    ),
+    (
         "hard-questions",
         "Hard questions",
         include_str!("../../../docs/HARD_QUESTIONS.md"),

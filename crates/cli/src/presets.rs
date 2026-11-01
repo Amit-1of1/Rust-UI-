@@ -99,7 +99,7 @@ mod tests {
             "{kit}"
         );
         assert!(
-            kit.contains(":root:not([data-density]) {\n  --density: 1.08;\n}"),
+            kit.contains(":root:not([data-density]) {\n  --density: 1.04;\n}"),
             "{kit}"
         );
         assert!(css(THEME, "nope").unwrap_err().contains("lagoon, reef"));
@@ -112,6 +112,6 @@ mod tests {
             names(kit),
             ["lagoon", "reef", "abyss", "driftwood", "classic"]
         );
-        assert!(css(kit, "abyss").unwrap().contains("Space Grotesk"));
+        assert!(css(kit, "abyss").unwrap().contains("IBM Plex Sans"));
     }
 }

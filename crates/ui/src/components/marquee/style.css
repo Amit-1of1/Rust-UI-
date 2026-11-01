@@ -38,12 +38,12 @@
   align-self: flex-start;
   padding: 0.125rem 0.5rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background: transparent;
   color: var(--secondary-color-4);
   cursor: pointer;
   font: inherit;
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
 }
 
 .dx-marquee-toggle:focus-visible {

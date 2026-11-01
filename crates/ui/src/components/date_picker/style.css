@@ -12,7 +12,7 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
-    transition: rotate 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: rotate var(--duration-fast) var(--easing-standard);
 }
 
 .dx-date-picker [data-state="open"] .dx-date-picker-trigger {
@@ -26,7 +26,7 @@
 
 /* A failed submit focuses the group itself (tabindex -1) so it is read with its error. */
 .dx-date-picker:focus-visible {
-    border-radius: var(--radius);
+    border-radius: var(--radius-medium);
     outline: 2px solid var(--focused-border-color);
     outline-offset: 2px;
 }
@@ -46,7 +46,7 @@
     justify-content: space-between;
     padding: 0.5rem;
     border: none;
-    border-radius: var(--radius);
+    border-radius: var(--radius-medium);
     background: none;
     background: var(--light, var(--primary-color))
         var(--dark, var(--primary-color-3));
@@ -54,7 +54,7 @@
         var(--dark, var(--primary-color-7));
     color: var(--secondary-color-4);
     gap: 0.25rem;
-    transition: background-color 100ms ease-out;
+    transition: background-color var(--duration-rapid) var(--easing-decelerate);
 }
 
 .dx-date-picker-group .dx-date-picker-popover-content {
@@ -63,11 +63,11 @@
 }
 
 .dx-date-picker-popover-content[data-state="open"] {
-    animation: dx-date-picker-popover-fade-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out);
+    animation: dx-date-picker-popover-fade-in var(--spring-snappy-duration, var(--duration-fast)) var(--spring-snappy, var(--easing-decelerate));
 }
 
 .dx-date-picker-popover-content[data-state="closed"] {
-    animation: dx-date-picker-popover-fade-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-out) forwards;
+    animation: dx-date-picker-popover-fade-out var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-decelerate)) forwards;
     pointer-events: none;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .dx-date-segment:focus-visible {
-    border-radius: calc(var(--radius) * 0.5);
+    border-radius: var(--radius-small);
     background: var(--secondary-color-3);
     color: var(--primary-color);
     outline: none;

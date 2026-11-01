@@ -6,12 +6,12 @@
   position: absolute;
   inset-inline-start: 1rem;
   top: 0.5rem;
-  z-index: 50;
+  z-index: var(--z-index-top);
   padding: 0.5rem 0.75rem;
-  border-radius: var(--radius, 0.5rem);
+  border-radius: var(--radius-large);
   background: var(--secondary-color-1);
   color: var(--primary-color);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   text-decoration: underline;
   text-underline-offset: 0.2em;
   box-shadow: 0 0 0 1px var(--primary-color-6);

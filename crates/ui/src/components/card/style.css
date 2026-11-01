@@ -4,9 +4,9 @@
   padding: 1.5rem 0;
   border: 1px solid var(--light, var(--primary-color-6)) var(--dark, var(--primary-color-5));
   /* Twice the theme radius (1rem by default), so the radius setting reaches cards too. */
-  border-radius: calc(var(--radius, 0.5rem) * 2);
+  border-radius: calc(var(--radius-large) * 2);
   background-color: var(--light, var(--primary-color-2)) var(--dark, var(--primary-color-3));
-  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-raised);
   color: var(--secondary-color-4);
   gap: 1.5rem;
 }
@@ -27,14 +27,14 @@
 .dx-card-title {
   font-family: var(--font-heading, inherit);
   letter-spacing: var(--heading-tracking, normal);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: var(--font-size-body-1);
+  font-weight: var(--font-weight-semibold);
   line-height: 1;
 }
 
 .dx-card-description {
   color: var(--secondary-color-5);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   line-height: 1.25rem;
 }
 

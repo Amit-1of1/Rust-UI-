@@ -109,8 +109,8 @@ fn the_proof_catches_regressions() {
         ),
         // A theme preset whose muted text is too pale on its own page.
         (
-            "--secondary-color-5: light-dark(#776867, #ac9e9d);",
-            "--secondary-color-5: light-dark(#b0a39d, #ac9e9d);",
+            "--secondary-color-5: light-dark(#6a6562, #afaaa6);",
+            "--secondary-color-5: light-dark(#b0a39d, #afaaa6);",
             "var(--secondary-color-5)",
         ),
     ];

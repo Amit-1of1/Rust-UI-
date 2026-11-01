@@ -1,9 +1,9 @@
 /* Tool call cards and agent steps. Status is always shown in words as well as colour. */
 .dx-tool-call {
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background: var(--light, var(--primary-color-1)) var(--dark, var(--primary-color-3));
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-tool-call[data-status="failed"] {
@@ -23,7 +23,7 @@
   box-sizing: border-box;
   padding: 0.375rem 0.75rem;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background: none;
   color: var(--secondary-color-4);
   cursor: pointer;
@@ -43,8 +43,8 @@
 .dx-tool-call-name {
   color: var(--secondary-color-2);
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: var(--font-size-body-3);
+  font-weight: var(--font-weight-semibold);
 }
 
 .dx-tool-call-summary {
@@ -60,7 +60,7 @@
   flex: none;
   margin-inline-start: auto;
   color: var(--secondary-color-5);
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
 }
 
 .dx-tool-call[data-status="failed"] .dx-tool-call-status {
@@ -83,9 +83,9 @@
   overflow-x: auto;
   margin: 0;
   padding: 0.5rem 0.625rem;
-  border-radius: calc(var(--radius) * 0.75);
+  border-radius: var(--radius-medium);
   background: var(--light, var(--primary-color-5)) var(--dark, var(--primary-color-2));
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
   line-height: 1.5;
 }
 
@@ -127,7 +127,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-agent-step {
@@ -146,7 +146,7 @@
 }
 
 .dx-agent-step[data-status="running"] {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .dx-agent-step[data-status="succeeded"] .dx-agent-step-text {

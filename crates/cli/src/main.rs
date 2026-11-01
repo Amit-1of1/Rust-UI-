@@ -147,6 +147,18 @@ enum Command {
         #[arg(long)]
         all: bool,
     },
+    /// Find an icon by name or by what it is for (`atoll icons delete`), with its component
+    /// name; `--reserved` lists the icons the kit keeps for one meaning.
+    Icons {
+        /// Words to look for, e.g. `upload file`.
+        words: Vec<String>,
+        /// List the reserved icons instead.
+        #[arg(long)]
+        reserved: bool,
+        /// How many to show.
+        #[arg(long, default_value_t = 12)]
+        limit: usize,
+    },
     /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
     /// the colours of a logo; or one of the kit's theme presets (`--preset reef`) as a
     /// `:root` block.
@@ -542,6 +554,49 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             );
             if errors > 0 {
                 return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Icons {
+            words,
+            reserved,
+            limit,
+        } => {
+            use atoll_cli::icons;
+            if reserved || words.is_empty() {
+                println!("Reserved icons (keep them for this meaning only):");
+                for (name, meaning) in icons::RESERVED {
+                    let icon = icons::Icon {
+                        name: name.to_string(),
+                        keywords: Vec::new(),
+                    };
+                    println!(
+                        "  {:<18} ui::icons::{:<16} {meaning}",
+                        name,
+                        icon.component()
+                    );
+                }
+            } else {
+                let source = std::fs::read_to_string(root.join(icons::ICONS_FILE))
+                    .map_err(|e| format!("{}: {e}", icons::ICONS_FILE))?;
+                let all = icons::parse(&source);
+                let query = words.join(" ");
+                let hits = icons::search(&all, &query);
+                if hits.is_empty() {
+                    return Err(format!("no icon matches `{query}`"));
+                }
+                for icon in hits.iter().take(limit) {
+                    let note = icon
+                        .reserved()
+                        .map(|m| format!("  [reserved: {m}]"))
+                        .unwrap_or_default();
+                    println!("{:<24} ui::icons::{}{note}", icon.name, icon.component());
+                    if !icon.keywords.is_empty() {
+                        println!("    {}", icon.keywords.join(", "));
+                    }
+                }
+                if hits.len() > limit {
+                    println!("... and {} more (--limit)", hits.len() - limit);
+                }
             }
         }
         Command::Theme {

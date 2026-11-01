@@ -1,7 +1,7 @@
 //! The fonts the theme presets use, shipped with the kit so nothing is fetched from a font
 //! service. All are under the SIL Open Font License 1.1; each licence sits beside its file in
 //! `assets/fonts/` and is listed in THIRD_PARTY.md. Latin subsets of the variable fonts from
-//! Fontsource 5.3.0 (one file per family covers every weight).
+//! Fontsource 5.3 (one file per family covers every weight).
 //!
 //! [`ThemeStyles`](crate::ThemeStyles) declares them with `@font-face`. A browser downloads a
 //! file only when text on the page uses that family, so declaring all of them costs a few
@@ -20,31 +20,26 @@ pub struct FontFace {
 }
 
 /// Every font the presets use.
-pub const FONT_FACES: [FontFace; 6] = [
+pub const FONT_FACES: [FontFace; 5] = [
     FontFace {
-        family: "Figtree Variable",
-        file: asset!("/assets/fonts/figtree.woff2"),
-        weights: "300 900",
-    },
-    FontFace {
-        family: "Bricolage Grotesque Variable",
-        file: asset!("/assets/fonts/bricolage-grotesque.woff2"),
-        weights: "200 800",
-    },
-    FontFace {
-        family: "Nunito Variable",
-        file: asset!("/assets/fonts/nunito.woff2"),
-        weights: "200 1000",
-    },
-    FontFace {
-        family: "Space Grotesk Variable",
-        file: asset!("/assets/fonts/space-grotesk.woff2"),
-        weights: "300 700",
-    },
-    FontFace {
-        family: "Fraunces Variable",
-        file: asset!("/assets/fonts/fraunces.woff2"),
+        family: "Inter Variable",
+        file: asset!("/assets/fonts/inter.woff2"),
         weights: "100 900",
+    },
+    FontFace {
+        family: "Geist Variable",
+        file: asset!("/assets/fonts/geist.woff2"),
+        weights: "100 900",
+    },
+    FontFace {
+        family: "IBM Plex Sans Variable",
+        file: asset!("/assets/fonts/ibm-plex-sans.woff2"),
+        weights: "100 700",
+    },
+    FontFace {
+        family: "Source Serif 4 Variable",
+        file: asset!("/assets/fonts/source-serif-4.woff2"),
+        weights: "200 900",
     },
     FontFace {
         family: "JetBrains Mono Variable",

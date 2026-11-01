@@ -2,7 +2,7 @@
   overflow: hidden;
   box-sizing: border-box;
   padding: 1rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
 }
 
 .dx-aspect-ratio-image {

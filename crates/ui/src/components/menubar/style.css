@@ -3,7 +3,7 @@
   box-sizing: border-box;
   padding: 0.25rem;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-medium);
   background: var(--primary-color-2);
   box-shadow: inset 0 0 0 1px var(--primary-color-6);
   gap: 0.25rem;
@@ -16,11 +16,11 @@
 .dx-menubar-trigger {
   padding: calc(8px * var(--density, 1)) 12px;
   border: none;
-  border-radius: calc(0.5rem - 0.25rem);
+  border-radius: var(--radius-small);
   background: none;
   color: var(--secondary-color-4);
   cursor: pointer;
-  transition: background-color 100ms ease-out;
+  transition: background-color var(--duration-rapid) var(--easing-decelerate);
 }
 
 .dx-menubar-menu[data-state="open"] .dx-menubar-trigger {
@@ -45,17 +45,15 @@
 
 .dx-menubar-content {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--z-index-overlay);
   top: 100%;
   inset-inline-start: 0;
   min-width: 200px;
   padding: 0.25rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   margin-top: 0.5rem;
-  background: var(--light, var(--primary-color))
-    var(--dark, var(--primary-color-5));
-  box-shadow: inset 0 0 0 1px var(--light, var(--primary-color-6))
-    var(--dark, var(--primary-color-7));
+  background: var(--color-background-elevation-overlay);
+  box-shadow: inset 0 0 0 1px var(--color-border-neutral), var(--shadow-overlay);
   opacity: 0;
   pointer-events: none;
   transform-origin: top;
@@ -67,7 +65,7 @@
 }
 
 .dx-menubar-content[data-state="closed"] {
-  animation: dx-menubar-content-animate-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-menubar-content-animate-out var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
   pointer-events: none;
 }
 
@@ -84,7 +82,7 @@
 }
 
 .dx-menubar-content[data-state="open"] {
-  animation: dx-menubar-content-animate-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out) forwards;
+  animation: dx-menubar-content-animate-in var(--spring-snappy-duration, var(--duration-fast)) var(--spring-snappy, var(--easing-decelerate)) forwards;
   pointer-events: auto;
 }
 
@@ -103,9 +101,9 @@
 .dx-menubar-item {
   display: block;
   padding: calc(8px * var(--density, 1)) 12px;
-  border-radius: calc(0.5rem - 0.25rem);
+  border-radius: var(--radius-small);
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-menubar-item[data-disabled="true"] {

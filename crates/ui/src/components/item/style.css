@@ -16,13 +16,13 @@
   flex-wrap: wrap;
   align-items: center;
   border: 1px solid transparent;
-  border-radius: calc(var(--radius) * 0.75);
-  font-size: 0.875rem;
+  border-radius: var(--radius-medium);
+  font-size: var(--font-size-body-2);
   outline: none;
   transition:
-    color 0.1s ease,
-    background-color 0.1s ease,
-    border-color 0.1s ease;
+    color var(--duration-rapid) var(--easing-standard),
+    background-color var(--duration-rapid) var(--easing-standard),
+    border-color var(--duration-rapid) var(--easing-standard);
 }
 
 .dx-item:focus-visible {
@@ -91,7 +91,7 @@ a.dx-item:hover {
 .dx-item-media[data-variant="icon"] {
   width: 2rem;
   height: 2rem;
-  border-radius: calc(var(--radius) * 0.5);
+  border-radius: var(--radius-small);
 }
 
 .dx-item-media[data-variant="icon"] svg {
@@ -103,7 +103,7 @@ a.dx-item:hover {
   overflow: hidden;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: calc(var(--radius) * 0.5);
+  border-radius: var(--radius-small);
 }
 
 .dx-item-media[data-variant="image"] img {
@@ -129,8 +129,8 @@ a.dx-item:hover {
   display: flex;
   width: fit-content;
   align-items: center;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
   gap: 0.5rem;
   line-height: 1.375;
 }
@@ -142,8 +142,8 @@ a.dx-item:hover {
   margin: 0;
   -webkit-box-orient: vertical;
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
-  font-weight: 400;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-regular);
   -webkit-line-clamp: 2;
   line-height: 1.5;
   text-align: start;

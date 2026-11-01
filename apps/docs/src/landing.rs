@@ -33,7 +33,7 @@ const FEATURES: &[(&str, &str)] = &[
     ),
     (
         "A look of its own, and four more",
-        "Lagoon teal, sea-glass neutrals, Bricolage Grotesque and Figtree by default. Reef, Abyss, Driftwood and Classic change colours, fonts, corners and density with one attribute, at build time or live. Plain CSS, fonts shipped with the kit, no Tailwind build step.",
+        "Lagoon teal on Reshaped-style foundations and Inter by default. Reef, Abyss, Driftwood and Classic change colours, fonts, corners and density with one attribute, at build time or live. Plain CSS, fonts shipped with the kit, no Tailwind build step.",
     ),
     (
         "You own the code",

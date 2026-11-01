@@ -4,7 +4,7 @@
     min-width: 200px;
     height: .5rem;
     box-sizing: border-box;
-    border-radius: 9999px;
+    border-radius: var(--radius-full);
     background: var(--primary-color-5);
 }
 
@@ -20,7 +20,7 @@
     /* Slide a full-width bar in rather than grow its width: a transform runs on the compositor,
        a width change lays the page out every frame (atoll motion). */
     transform: translateX(calc((var(--progress-value, 0%) - 100%) * var(--dx-flip, 1)));
-    transition: transform 250ms ease;
+    transition: transform var(--duration-medium) var(--easing-standard);
 }
 
 @keyframes dx-indeterminate {

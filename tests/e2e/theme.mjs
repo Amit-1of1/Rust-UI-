@@ -33,8 +33,8 @@ async function token(page, name, attrs = {}) {
 }
 
 // The default look's (Lagoon's) page colours: sea-tinted white and near-black.
-const WHITE = "rgb(250, 255, 255)";
-const BLACK = "rgb(4, 17, 17)";
+const WHITE = "rgb(255, 255, 255)";
+const BLACK = "rgb(13, 13, 13)";
 for (const scheme of ["light", "dark"]) {
   const page = await browser.newPage({ colorScheme: scheme });
   await page.goto(url);
