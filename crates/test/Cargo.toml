@@ -1,0 +1,42 @@
+[package]
+name = "atoll-test"
+version = "0.1.0"
+description = "Test Atoll and Dioxus screens inside `cargo test`: render headless, click, type, press keys and assert, with no browser"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["dioxus", "testing", "ui", "headless"]
+categories = ["development-tools::testing", "gui"]
+# Depends on atoll-ui, which is git-only until atoll-primitives is on crates.io
+# (docs/PUBLISHING.md). Install it from git, next to the kit, at the same rev.
+publish = false
+
+[lib]
+name = "atoll_test"
+
+[dependencies]
+dioxus.workspace = true
+# The kit is only here so its CSS sits next to this crate in the same checkout (`kit_css`),
+# and so its version always matches the kit the app uses.
+ui.workspace = true
+# Blitz, the engine behind dioxus-native, without a window or GPU. Exact pins: the harness
+# reaches into the document, and the kit's `[patch.crates-io]` forks sit on these releases.
+dioxus-native-dom = "=0.7.10"
+manganis-core = "=0.7.10"
+blitz-dom = { version = "0.2.4", default-features = false }
+blitz-traits = "0.2"
+blitz-paint = "0.2.1"
+anyrender = "0.6.2"
+anyrender_vello_cpu = "0.8.1"
+image = { version = "0.25.6", default-features = false, features = ["png"] }
+keyboard-types = { version = "0.7", default-features = false }
+# Computed styles, to tell hidden elements (display: none, visibility: hidden) from shown ones.
+style = { version = "0.8", package = "stylo", default-features = false }
+# Timers in the app (toasts, debounces) run on a paused Tokio clock that `Screen::advance` moves.
+tokio = { version = "1", features = ["rt", "time", "test-util"] }
+
+[dev-dependencies]
+# tests/screen.rs sleeps in a future to show `wait_for`.
+tokio = { version = "1", features = ["time"] }

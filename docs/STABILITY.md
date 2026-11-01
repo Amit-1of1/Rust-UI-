@@ -108,11 +108,18 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `atoll info [--json]` (its JSON fields), `atoll skill` and `skills/atoll/SKILL.md`: new on 2026-10-30; fields may be added.
 - `atoll contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
 - `atoll explain` and its `--json` shape: new on 2026-10-30; which errors it explains will grow.
+- `atoll setup-tests`: new on 2026-11-01; which `Cargo.toml` lines it writes may change with atoll-test.
 
 ### Internal
 
 - `atoll new` and `atoll registry`: tools for working inside this repository.
 - The library crate `atoll_cli` (every module and function). It is the binary's implementation, public for the repo's tests. Use the commands instead.
+
+## `atoll-test` (`atoll_test`)
+
+### Experimental
+
+- Everything (`Screen`, `ScreenBuilder`, the queries, `El`, `Rect`, `kit_css` and the CSS helpers): new on 2026-11-01 ([TESTING.md](TESTING.md)). Method names and failure messages may change with use.
 
 ## Marking experimental items
 

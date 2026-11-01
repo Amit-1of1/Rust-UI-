@@ -664,6 +664,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "atoll-test"
+version = "0.1.0"
+dependencies = [
+ "anyrender",
+ "anyrender_vello_cpu",
+ "atoll-ui",
+ "blitz-dom",
+ "blitz-paint",
+ "blitz-traits",
+ "dioxus",
+ "dioxus-native-dom",
+ "image",
+ "keyboard-types",
+ "manganis-core",
+ "stylo",
+ "tokio",
+]
+
+[[package]]
 name = "atoll-ui"
 version = "0.1.0"
 dependencies = [
