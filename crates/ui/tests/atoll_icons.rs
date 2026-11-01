@@ -21,7 +21,7 @@ fn source_dir() -> &'static Path {
 
 #[test]
 fn every_atoll_icon_renders_its_shapes() {
-    assert!(atoll::ALL.len() >= 100, "{}", atoll::ALL.len());
+    assert!(atoll::ALL.len() >= 500, "{}", atoll::ALL.len());
     for icon in atoll::ALL.iter() {
         let html = render_icon(*icon);
         assert!(
