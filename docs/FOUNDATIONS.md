@@ -117,11 +117,13 @@ The shadows are Reshaped's, with deeper colours in dark mode (`--color-shadow-*`
 
 **Duration.** `--duration-rapid` (100 ms: hover and press colours), `--duration-fast` (150 ms: small things, exits), `--duration-medium` (250 ms: panels, accordions), `--duration-slow` (400 ms: large surfaces). Things leave faster than they arrive.
 
-**Accessibility.** Under the OS "reduce motion" setting the duration tokens drop to 0.01 ms and every CSS animation and transition is cut to the same (theme.css), Rust springs jump to their end, and nothing moves on its own. Loops (spinners) slow down instead of stopping, so loading is still visible. No motion carries meaning alone.
+**Hover and press.** Filled and outlined buttons lift by `--hover-lift` (1 px) onto `--shadow-hover` when a pointer hovers them; primary and destructive buttons add a soft glow in their own colour. In dark mode, where shadows barely show, `--shadow-hover` adds a lit top edge (`--color-highlight`). Pressing settles the button back at `--duration-rapid`. Focus keeps its ring instead of the lift, and touch screens never get the hover state (`@media (hover: hover)`).
+
+**Accessibility.** Under the OS "reduce motion" setting the duration tokens drop to 0.01 ms, `--hover-lift` drops to 0 (the hover shadow stays) and every CSS animation and transition is cut to the same (theme.css), Rust springs jump to their end, and nothing moves on its own. Loops (spinners) slow down instead of stopping, so loading is still visible. No motion carries meaning alone.
 
 ## Iconography
 
-**Style.** Lucide, every icon generated into the kit (`ui::icons::*`): 24 px grid, round caps, one stroke weight per look (`--icon-stroke-width`: 1.75 in Lagoon and Reef, 1.5 in Abyss and Driftwood, 2 in Classic).
+**Style.** Lucide, every icon generated into the kit (`ui::icons::*`): 24 px grid, round caps, one stroke weight per look (`--icon-stroke-width`: 2 in Lagoon, Reef and Classic, 1.5 in Abyss and Driftwood).
 
 **Naming.** Lucide's names in kebab case, as Rust components in PascalCase: `circle-check` is `ui::icons::CircleCheck`. Old names stay as aliases.
 

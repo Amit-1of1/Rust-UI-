@@ -42,7 +42,7 @@ The font files ship inside the kit (`crates/ui/assets/fonts/`, SIL Open Font Lic
 - Corner radius `--radius: 0.625rem` (10 px). `--radius-large` is it, `--radius-medium` (6 px, controls) and `--radius-small` (4 px, small parts) follow from it, so one token rounds the whole kit.
 - Density stays at 1; presets move it a little.
 - Motion uses the duration and easing tokens, keeps the kit's springs for entrances, and switches off under reduced motion.
-- Icons are Lucide at a 1.75 stroke (`--icon-stroke-width`).
+- Icons are Lucide and the Atoll set at a 2 px stroke (`--icon-stroke-width`).
 
 ## Five looks
 

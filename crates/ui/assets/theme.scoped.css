@@ -161,6 +161,8 @@
   --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
   --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
   --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+  /* A lit top edge for things that rise in dark mode, where a shadow barely shows. */
+  --color-highlight: light-dark(rgb(255 255 255 / 0%), rgb(255 255 255 / 10%));
 
   /* Layers, lowest to highest. Overlays share one layer and stack by order in the page; a
      modal's panel sits one above its own scrim. */
@@ -172,6 +174,9 @@
   --z-index-modal: 1001;
   --z-index-toast: 9999;
   --z-index-top: 10000;
+
+  /* How far a control rises under the pointer (button hover). */
+  --hover-lift: -1px;
 
   /* Motion: four durations and three easings for CSS transitions (the springs further down
      are for entrances that should feel physical). Small things move fast, big things slower;
@@ -211,6 +216,7 @@
    (the blanket rule further down covers literal values). */
 @media (prefers-reduced-motion: reduce) {
   [data-rui-scope] {
+    --hover-lift: 0px;
     --duration-rapid: 0.01ms;
     --duration-fast: 0.01ms;
     --duration-medium: 0.01ms;
@@ -276,6 +282,9 @@
      that float over the page. */
   --shadow-raised: 0 8px 12px -4px var(--color-shadow-raised-1), 0 1px 2px 0 var(--color-shadow-raised-2);
   --shadow-overlay: 0 16px 24px -4px var(--color-shadow-overlay), 0 8px 12px -4px var(--color-shadow-overlay), 0 8px 6px -4px var(--color-shadow-overlay);
+  /* Hover: a control lifted under the pointer. Soft shadow in light mode, a lit top edge in
+     dark mode. */
+  --shadow-hover: 0 4px 8px -2px var(--color-shadow-raised-1), 0 2px 4px -2px var(--color-shadow-raised-2), inset 0 1px 0 var(--color-highlight);
 }
 
 /* Theme presets: a whole look in one attribute. data-preset="reef|abyss|driftwood|classic" on
@@ -314,7 +323,7 @@
   --heading-tracking: -0.015em;
   --radius: 0.625rem;
   --density: 1;
-  --icon-stroke-width: 1.75;
+  --icon-stroke-width: 2;
   --chart-4: light-dark(#7c3aed, #a78bfa);
 }
 
@@ -348,7 +357,7 @@
   --heading-tracking: -0.02em;
   --radius: 1rem;
   --density: 1.04;
-  --icon-stroke-width: 1.75;
+  --icon-stroke-width: 2;
 }
 /* Abyss: cool slate with an indigo accent, IBM Plex Sans, square corners, compact. */
 [data-rui-scope][data-preset="abyss"],
@@ -558,6 +567,7 @@
   --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
   --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
   --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+  --color-highlight: light-dark(rgb(255 255 255 / 0%), rgb(255 255 255 / 10%));
 }
 :where([data-rui-scope][data-preset="lagoon"] [data-theme], [data-rui-scope] [data-preset="lagoon"] [data-theme], [data-preset="lagoon"] [data-rui-scope] [data-theme]) {
   --primary-color: light-dark(#ffffff, #0d0d0d);
@@ -744,6 +754,7 @@
     --color-shadow-raised-1: var(--dark, rgb(0 0 0 / 32%)) var(--light, rgb(0 0 0 / 8%));
     --color-shadow-raised-2: var(--dark, rgb(0 0 0 / 40%)) var(--light, rgb(0 0 0 / 10%));
     --color-shadow-overlay: var(--dark, rgb(0 0 0 / 36%)) var(--light, rgb(0 0 0 / 6%));
+    --color-highlight: var(--dark, rgb(255 255 255 / 10%)) var(--light, rgb(255 255 255 / 0%));
   }
   [data-rui-scope][data-preset="lagoon"][data-preset="lagoon"],
 [data-rui-scope] [data-preset="lagoon"][data-preset="lagoon"],
@@ -949,8 +960,8 @@
   --icon-size-md: 1.25rem;
   --icon-size-lg: 1.5rem;
   --icon-size-xl: 2rem;
-  /* Lagoon draws icons a touch lighter than Lucide's 2; presets set their own. */
-  --icon-stroke-width: 1.75;
+  /* Lucide's 2 px stroke, like the Atoll icon set; presets set their own. */
+  --icon-stroke-width: 2;
 }
 
 :where([data-rui-scope] svg[data-icon][data-size="xs"]) { width: var(--icon-size-xs); height: var(--icon-size-xs); }

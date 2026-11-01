@@ -180,9 +180,10 @@ fn the_type_scale_sits_on_the_4px_grid() {
 #[test]
 fn reduced_motion_zeroes_the_duration_tokens() {
     let at = THEME
-        .find("@media (prefers-reduced-motion: reduce) {\n  :root {\n    --duration-rapid")
+        .find("@media (prefers-reduced-motion: reduce) {\n  :root {\n    --hover-lift: 0px;")
         .expect("a reduced-motion block for the duration tokens");
     let block = &THEME[at..at + 300];
+    // Nothing rises under the pointer either.
     for d in ["rapid", "fast", "medium", "slow"] {
         assert!(
             block.contains(&format!("--duration-{d}: 0.01ms")),
