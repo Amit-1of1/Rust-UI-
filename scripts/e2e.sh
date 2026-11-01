@@ -99,6 +99,7 @@ for engine in ${BROWSERS//,/ }; do
   step "[$engine] right-to-left layout (gallery)";   e2e env GALLERY_URL=$G node rtl.mjs
 
   step "[$engine] docs navigation behaviour";        e2e env GALLERY_URL=$D node docs.mjs
+  step "[$engine] data-theme on a subtree (docs)";   e2e env GALLERY_URL=$D node theme_subtree.mjs
   step "[$engine] form behaviour (site)";            e2e env GALLERY_URL=$S node form.mjs
   step "[$engine] Ctrl+K hotkey (site)";             e2e env GALLERY_URL=$S READY_SELECTOR=#pricing node hotkey.mjs
   step "[$engine] otp + carousel (gallery)";         e2e env GALLERY_URL=$G node otp.mjs

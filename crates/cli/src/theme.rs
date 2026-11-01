@@ -123,13 +123,19 @@ pub fn preset(brand: Rgb) -> Result<Preset, String> {
     })
 }
 
-/// The CSS block, in the same shape as the presets in `theme.css`.
+/// The CSS, in the same shape as the presets in `theme.css`: the preset, then the same tokens
+/// on `[data-theme]` elements inside it, so a dark box in a light page (or the other way
+/// round) resolves them for its own mode, as `theme.css`'s generated subtree block does for
+/// the kit's presets.
 pub fn css(name: &str, p: &Preset) -> String {
     let fill = format!("light-dark({}, {})", p.light_fill.hex(), p.dark_fill.hex());
-    format!(
-        "[data-accent=\"{name}\"] {{\n  --accent-color: {fill};\n  --accent-contrast: light-dark({}, {});\n  --focused-border-color: {fill};\n}}\n",
+    let body = format!(
+        "  --accent-color: {fill};\n  --accent-contrast: light-dark({}, {});\n  --focused-border-color: {fill};\n",
         p.light_text.hex(),
         p.dark_text.hex()
+    );
+    format!(
+        "[data-accent=\"{name}\"] {{\n{body}}}\n:where([data-accent=\"{name}\"] [data-theme]) {{\n{body}}}\n"
     )
 }
 
@@ -195,5 +201,7 @@ mod tests {
         assert!(css.starts_with("[data-accent=\"brand\"] {"));
         assert!(css.contains("--accent-color: light-dark(#"));
         assert!(css.contains("--accent-contrast: light-dark(#"));
+        // The subtree copy, after the preset so it never outranks it.
+        assert!(css.contains("\n:where([data-accent=\"brand\"] [data-theme]) {\n"));
     }
 }

@@ -1,0 +1,3 @@
+### Fixed
+
+- **ui:** `data-theme="dark"` (or `"light"`) on an element inside the page, and so `ThemeScope`, now switches that part of the page in browsers with `light-dark()`. Before, the kit's colour tokens were resolved once on `<html>`, so a dark panel in a light page kept light colours. `theme.css` has a generated block that declares the colour tokens again on `[data-theme]` elements at zero specificity: the page's accent carries into the panel in the panel's own shade, an element's own `data-accent` still wins, and values set on `<html>` such as `--radius` still reach it. `tests/e2e/theme_subtree.mjs` checks it in the browser. `atoll theme --brand` output also includes the subtree copy of the preset. (#79)
