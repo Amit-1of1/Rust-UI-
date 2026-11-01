@@ -98,7 +98,7 @@ fn test_rs(name: &str) -> String {
 
 fn docs_md(name: &str) -> String {
     format!(
-        "# {p}\n\nTODO: what it is, when to use it.\n\n## Accessibility\n\n- Role and name: TODO\n- Keyboard: TODO\n- Reduced motion: TODO\n\n## Source\n\nOriginal to this repo.\n",
+        "# {p}\n\nTODO: what it is, when to use it.\n\n## Component Structure\n\n```rust\n// TODO: the parts and how they nest (docs/ANATOMY.md).\n{p} {{\n    \"...\"\n}}\n```\n\n## Accessibility\n\n- Role and name: TODO\n- Keyboard: TODO\n- Reduced motion: TODO\n\n## Source\n\nOriginal to this repo.\n",
         p = pascal(name)
     )
 }

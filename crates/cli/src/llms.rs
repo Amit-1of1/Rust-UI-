@@ -32,6 +32,16 @@ const GUIDES: &[(&str, &str, &str)] = &[
         "`atoll mcp` lets MCP clients list, search, read and add components",
     ),
     (
+        "Composing components",
+        "docs/COMPOSITION.md",
+        "compiled examples of components nested and slotted together",
+    ),
+    (
+        "Best practices",
+        "docs/BEST_PRACTICES.md",
+        "designing and building screens with the kit, and common pitfalls",
+    ),
+    (
         "Theming",
         "docs/THEMING.md",
         "light and dark mode, accent presets, a brand colour, radius",
