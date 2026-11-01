@@ -39,7 +39,8 @@
         "alert_dialog/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "sound"
       ]
     },
     {
@@ -108,7 +109,8 @@
         "button/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "sound"
       ]
     },
     {
@@ -220,7 +222,8 @@
         "checkbox/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "icons",
+        "sound"
       ]
     },
     {
@@ -355,7 +358,8 @@
         "dialog/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "sound"
       ]
     },
     {
@@ -446,6 +450,7 @@
         "hooks",
         "input",
         "select",
+        "sound",
         "textarea",
         "time_picker",
         "ui_strings"
@@ -758,6 +763,7 @@
       "registryDependencies": [
         "hooks",
         "icons",
+        "sound",
         "ui_strings"
       ]
     },
@@ -824,6 +830,21 @@
       "registryDependencies": []
     },
     {
+      "name": "sound",
+      "files": [
+        "sound/component.rs",
+        "sound/docs.md",
+        "sound/mod.rs",
+        "sound/style.css"
+      ],
+      "registryDependencies": [
+        "hooks",
+        "label",
+        "native_select",
+        "switch"
+      ]
+    },
+    {
       "name": "spinner",
       "files": [
         "spinner/component.rs",
@@ -864,7 +885,9 @@
         "switch/mod.rs",
         "switch/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "sound"
+      ]
     },
     {
       "name": "table",
@@ -947,7 +970,9 @@
         "toast/mod.rs",
         "toast/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "sound"
+      ]
     },
     {
       "name": "toggle",

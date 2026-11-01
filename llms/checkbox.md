@@ -1,6 +1,6 @@
 # Checkbox
 
-- Copy into your app: `atoll add checkbox` or `dx components add checkbox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Copy into your app: `atoll add checkbox` or `dx components add checkbox --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`, `sound`).
 - Import: `use crate::components::checkbox::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Checkbox component is used to create an accessible checkbox input.

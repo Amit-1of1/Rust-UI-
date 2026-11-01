@@ -18,6 +18,10 @@
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "sound"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "ui_strings"
     }
   ],

@@ -1,6 +1,6 @@
 # Alert dialog
 
-- Copy into your app: `atoll add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Copy into your app: `atoll add alert_dialog` or `dx components add alert_dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `sound`).
 - Import: `use crate::components::alert_dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The AlertDialog primitive provides an accessible, composable modal dialog for critical user confirmations (such as destructive actions).
