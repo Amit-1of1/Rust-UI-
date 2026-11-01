@@ -3,12 +3,18 @@
 pattern = "Menu Bar"
 apg = "menubar"
 roles = ["menubar", "menu", "menuitem"]
+gaps = [
+    "Submenus open to the inline end and do not flip at screen edges; in right-to-left text ArrowRight still opens and ArrowLeft still closes.",
+]
 
 [parts]
 bar = "[role=menubar]"
 menu = "[role=menubar] > [role=menu]"
 top = "[role=menubar] > [role=menu] > [role=menuitem]"
 item = "[role=menubar] [role=menu] [role=menu] [role=menuitem]"
+subtrigger = "[role=menubar] [role=menuitem][aria-haspopup=menu]"
+sublist = "[role=menubar] [role=menu] [role=menu] [role=menu]"
+subitem = "[role=menubar] [role=menu] [role=menu] [role=menu] [role=menuitem]"
 
 [[states]]
 name = "file-open"
@@ -90,4 +96,50 @@ focus top@1
 press ArrowDown
 press Escape
 focused top@1
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On an item with a submenu"
+does = "Opens the submenu and moves focus to its first item."
+native = true
+test = """
+focus top@1
+press ArrowDown*2
+focused subtrigger@1
+attr subtrigger@1 aria-expanded=false
+press ArrowRight
+visible sublist
+attr subtrigger@1 aria-expanded=true
+focused subitem@1
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "In a submenu"
+does = "Closes the submenu and returns focus to the item that opened it."
+native = true
+test = """
+focus top@1
+press ArrowDown*2
+press ArrowRight
+press ArrowLeft
+hidden sublist
+focused subtrigger@1
+state file-open
+"""
+
+[[keys]]
+key = "Escape"
+when = "In a submenu"
+does = "Closes only the submenu; focus goes back to the item that opened it."
+native = true
+test = """
+focus top@1
+press ArrowDown*2
+press ArrowRight
+press Escape
+hidden sublist
+focused subtrigger@1
+state file-open
 """

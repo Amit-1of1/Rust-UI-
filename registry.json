@@ -300,7 +300,9 @@
         "context_menu/mod.rs",
         "context_menu/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "data_table",
@@ -397,7 +399,9 @@
         "dropdown_menu/mod.rs",
         "dropdown_menu/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "dropzone",
@@ -591,7 +595,9 @@
         "menubar/mod.rs",
         "menubar/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "multi_select",
