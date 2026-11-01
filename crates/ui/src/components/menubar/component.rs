@@ -95,7 +95,7 @@ pub fn MenubarContent(props: MenubarContentProps) -> Element {
                 // Escape closes the menu but leaves focus on the removed item; APG returns
                 // it to the menubar item that opened the menu.
                 onkeydown: move |e: KeyboardEvent| {
-                    if e.key() == Key::Escape {
+                    if e.key() == Key::Named(NamedKey::Escape) {
                         refocus_menubar_trigger();
                     }
                 },

@@ -335,7 +335,7 @@ mod tests {
         let dioxus = &doc["dependencies"]["dioxus"];
         assert!(dioxus["version"]
             .as_str()
-            .is_some_and(|v| v.starts_with("0.7")));
+            .is_some_and(|v| v.contains("0.8")));
         let has = |item: &Item, f: &str| {
             item["features"]
                 .as_array()
@@ -362,9 +362,13 @@ mod tests {
         assert!(main.contains("phone_app::App") && !main.contains("showcase::App"));
         let dioxus = fs::read_to_string(dir.join("Dioxus.toml")).unwrap();
         assert!(dioxus.contains("name = \"phone-app\""));
-        // The native renderer fixes come along, pinned like the kit's.
+        // Dioxus 0.8 branch: the native renderer forks are 0.7-only and the kit's root has no
+        // patches, so none come along (on `main` they do, pinned like the kit's).
         let cargo = fs::read_to_string(dir.join("Cargo.toml")).unwrap();
-        assert!(cargo.contains("[patch.crates-io]") && cargo.contains("rev = "));
+        assert!(
+            cargo.parse::<Document>().is_ok() && !cargo.contains("blitz"),
+            "{cargo}"
+        );
         // A second run refuses to overwrite the app.
         assert!(create(&dir, "phone-app", &KitSource::Registry, t, &kit()).is_err());
     }

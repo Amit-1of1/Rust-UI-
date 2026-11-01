@@ -363,11 +363,11 @@ pub fn Draggable(
             onkeydown: move |e| {
                 let far = if e.modifiers().shift() { 4.0 } else { 1.0 };
                 let direction = match e.key() {
-                    Key::ArrowLeft => (-1.0, 0.0),
-                    Key::ArrowRight => (1.0, 0.0),
-                    Key::ArrowUp => (0.0, -1.0),
-                    Key::ArrowDown => (0.0, 1.0),
-                    Key::Home => {
+                    Key::Named(NamedKey::ArrowLeft) => (-1.0, 0.0),
+                    Key::Named(NamedKey::ArrowRight) => (1.0, 0.0),
+                    Key::Named(NamedKey::ArrowUp) => (0.0, -1.0),
+                    Key::Named(NamedKey::ArrowDown) => (0.0, 1.0),
+                    Key::Named(NamedKey::Home) => {
                         e.prevent_default();
                         x.spring_to(0.0, preset);
                         y.spring_to(0.0, preset);

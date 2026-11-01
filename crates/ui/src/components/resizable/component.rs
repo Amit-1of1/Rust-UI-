@@ -271,18 +271,18 @@ pub fn ResizableHandle(
             onkeydown: move |e: KeyboardEvent| {
                 let step = if e.modifiers().shift() { RESIZE_STEP * 2.0 } else { RESIZE_STEP };
                 let (less, more) = if vertical {
-                    (Key::ArrowUp, Key::ArrowDown)
+                    (Key::Named(NamedKey::ArrowUp), Key::Named(NamedKey::ArrowDown))
                 } else {
-                    (Key::ArrowLeft, Key::ArrowRight)
+                    (Key::Named(NamedKey::ArrowLeft), Key::Named(NamedKey::ArrowRight))
                 };
                 let key = e.key();
                 if key == less {
                     group.move_divider(index, -step);
                 } else if key == more {
                     group.move_divider(index, step);
-                } else if key == Key::Home {
+                } else if key == Key::Named(NamedKey::Home) {
                     group.set_first(index, min);
-                } else if key == Key::End {
+                } else if key == Key::Named(NamedKey::End) {
                     group.set_first(index, max);
                 } else {
                     return;

@@ -2,6 +2,8 @@
 resolver = "3"
 # Globs, so a branch that adds a crate or app does not edit this line (docs/PROTOCOL.md).
 members = ["crates/*", "apps/*"]
+# Dioxus 0.8 branch: the native preview stays on 0.7 (its Blitz 0.2 fixes do not apply to Blitz 0.3).
+exclude = ["apps/native"]
 
 [workspace.package]
 edition = "2021"
@@ -11,15 +13,12 @@ repository = "https://github.com/Amit-1of1/Rust-UI-"
 
 [workspace.dependencies]
 # Pinned to a minor version on purpose; see docs/GUARDRAILS.md.
-dioxus = "0.7.10"
+dioxus = "=0.8.0-alpha.3"
 # Upstream DioxusLabs/components primitives are unreleased (crates.io holds an empty 0.0.0
 # placeholder), so we use our fork, published under its own name: `atoll-primitives`, library
-# still `dioxus_primitives`. Amit-1of1/dioxus-components, branch rust-ui/primitives-9a75825:
-# upstream 9a75825 plus the fixes in docs/FORKS.md and the rename. The newest commit (cda2513)
-# is on branch claude/project-thread-aqqle7 until rust-ui/primitives-9a75825 is fast-forwarded
-# to it. Cargo builds from `git`; `version` is what a packaged kit depends on. Once
-# `atoll-primitives` is on crates.io, delete `git` and `rev` (docs/PUBLISHING.md).
-dioxus-primitives = { package = "atoll-primitives", version = "0.1.0", git = "https://github.com/Amit-1of1/dioxus-components", rev = "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee" }
+# still `dioxus_primitives`. Dioxus 0.8 branch: Amit-1of1/dioxus-components, branch
+# claude/project-thread-hgbr1g: the 0.7 fork commit (cda2513) ported to 0.8.0-alpha.3.
+dioxus-primitives = { package = "atoll-primitives", version = "0.1.0", git = "https://github.com/Amit-1of1/dioxus-components", rev = "753e824dd5bdf6698f4ded2de731af7e5619170b" }
 # `version` lets these be packaged for crates.io; see docs/PUBLISHING.md.
 ui = { path = "crates/ui", package = "atoll-ui", version = "0.1.0" }
 motion = { path = "crates/motion", package = "atoll-motion", version = "0.1.0" }
@@ -39,14 +38,6 @@ debug = 0
 # Native (Blitz) fixes, carried on forks as small patches on the exact upstream releases we use.
 # Pinned to commits; the branch each commit is on is named alongside. See docs/FORKS.md.
 [patch.crates-io]
-# Amit-1of1/blitz, branch rust-ui/blitz-dom-0.2.4; the newest commit (a095949) is on branch
-# claude/showcase-multi-target-tc6fhc until rust-ui/blitz-dom-0.2.4 is fast-forwarded to it.
-blitz-dom = { git = "https://github.com/Amit-1of1/blitz", rev = "a0959491764b9cf8694fe32ba68b420d11cf9fb6" }
-# Amit-1of1/blitz, branch rust-ui/blitz-traits-0.2.0
-blitz-traits = { git = "https://github.com/Amit-1of1/blitz", rev = "14f766f1e18a9daad1465ca5d9d9f7f52f0ccf9e" }
-# Amit-1of1/blitz, branch rust-ui/blitz-net-0.2.1
-blitz-net = { git = "https://github.com/Amit-1of1/blitz", rev = "505d30e40c295e5ea71bcc182167edcfcd6f86c5" }
-# Amit-1of1/blitz, branch rust-ui/blitz-paint-0.2.1
-blitz-paint = { git = "https://github.com/Amit-1of1/blitz", rev = "d69d92a512ed58a28d2015b6199a1bbf6878aa39" }
-# Amit-1of1/dioxus, branch rust-ui/dioxus-native-dom-0.7.10
-dioxus-native-dom = { git = "https://github.com/Amit-1of1/dioxus", rev = "8f3d575287a6fe12c689aa09cef92ad7ac521aac" }
+# The native renderer forks (Blitz 0.2, dioxus-native-dom 0.7.10) are for Dioxus 0.7; this branch
+# builds the web and desktop targets only (docs/notes/dioxus-0.8.md).
+# dioxus-motion's 0.8 port is a git dependency of crates/motion (not a patch), so apps get it too.

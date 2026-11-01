@@ -49,7 +49,7 @@ fn refocus_within(container: &str, selector: &str, only_single: bool) {
 }
 
 fn is_close_key(e: &KeyboardEvent) -> bool {
-    matches!(e.key(), Key::Escape | Key::Enter) || e.key() == Key::Character(" ".into())
+    matches!(e.key(), Key::Named(NamedKey::Escape) | Key::Named(NamedKey::Enter)) || e.key() == Key::Character(" ".into())
 }
 
 #[component]

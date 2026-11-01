@@ -26,8 +26,8 @@ pub fn Slider(props: SliderProps) -> Element {
                 return;
             }
             let to = match e.key() {
-                Key::Home => min(),
-                Key::End => max(),
+                Key::Named(NamedKey::Home) => min(),
+                Key::Named(NamedKey::End) => max(),
                 _ => return,
             };
             e.prevent_default();

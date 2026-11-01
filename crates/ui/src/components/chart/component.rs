@@ -185,12 +185,12 @@ impl ChartKey {
     /// The move a key makes, or `None` for keys a chart leaves alone.
     pub fn from_key(key: &Key) -> Option<Self> {
         Some(match key {
-            Key::ArrowRight => Self::Next,
-            Key::ArrowLeft => Self::Previous,
-            Key::ArrowDown => Self::NextSeries,
-            Key::ArrowUp => Self::PreviousSeries,
-            Key::Home => Self::First,
-            Key::End => Self::Last,
+            Key::Named(NamedKey::ArrowRight) => Self::Next,
+            Key::Named(NamedKey::ArrowLeft) => Self::Previous,
+            Key::Named(NamedKey::ArrowDown) => Self::NextSeries,
+            Key::Named(NamedKey::ArrowUp) => Self::PreviousSeries,
+            Key::Named(NamedKey::Home) => Self::First,
+            Key::Named(NamedKey::End) => Self::Last,
             _ => return None,
         })
     }

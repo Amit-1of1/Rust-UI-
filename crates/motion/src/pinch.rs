@@ -391,10 +391,10 @@ pub fn PinchZoom(
                         zoom_view(current, center(), 1.0 / step, size(), min, max)
                     }
                     Key::Character(c) if c == "0" => clamp_view((0.0, 0.0, min), size()),
-                    Key::ArrowLeft => clamp_view((current.0 + pan, current.1, current.2), size()),
-                    Key::ArrowRight => clamp_view((current.0 - pan, current.1, current.2), size()),
-                    Key::ArrowUp => clamp_view((current.0, current.1 + pan, current.2), size()),
-                    Key::ArrowDown => clamp_view((current.0, current.1 - pan, current.2), size()),
+                    Key::Named(NamedKey::ArrowLeft) => clamp_view((current.0 + pan, current.1, current.2), size()),
+                    Key::Named(NamedKey::ArrowRight) => clamp_view((current.0 - pan, current.1, current.2), size()),
+                    Key::Named(NamedKey::ArrowUp) => clamp_view((current.0, current.1 + pan, current.2), size()),
+                    Key::Named(NamedKey::ArrowDown) => clamp_view((current.0, current.1 - pan, current.2), size()),
                     _ => return,
                 };
                 if target != current {

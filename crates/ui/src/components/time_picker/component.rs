@@ -763,16 +763,16 @@ pub fn TimePicker(
                                         }
                                         let editing = !is_read_only;
                                         let key = match e.key() {
-                                            Key::ArrowLeft => TimeKey::Left,
-                                            Key::ArrowRight => TimeKey::Right,
-                                            Key::ArrowUp if editing => TimeKey::Up,
-                                            Key::ArrowDown if editing => TimeKey::Down,
-                                            Key::PageUp if editing => TimeKey::PageUp,
-                                            Key::PageDown if editing => TimeKey::PageDown,
-                                            Key::Home if editing => TimeKey::Home,
-                                            Key::End if editing => TimeKey::End,
-                                            Key::Backspace if editing => TimeKey::Backspace,
-                                            Key::Delete if editing => TimeKey::Delete,
+                                            Key::Named(NamedKey::ArrowLeft) => TimeKey::Left,
+                                            Key::Named(NamedKey::ArrowRight) => TimeKey::Right,
+                                            Key::Named(NamedKey::ArrowUp) if editing => TimeKey::Up,
+                                            Key::Named(NamedKey::ArrowDown) if editing => TimeKey::Down,
+                                            Key::Named(NamedKey::PageUp) if editing => TimeKey::PageUp,
+                                            Key::Named(NamedKey::PageDown) if editing => TimeKey::PageDown,
+                                            Key::Named(NamedKey::Home) if editing => TimeKey::Home,
+                                            Key::Named(NamedKey::End) if editing => TimeKey::End,
+                                            Key::Named(NamedKey::Backspace) if editing => TimeKey::Backspace,
+                                            Key::Named(NamedKey::Delete) if editing => TimeKey::Delete,
                                             Key::Character(c) if editing => {
                                                 let lower = c.to_lowercase();
                                                 if Some(&lower) == am_key.as_ref() {
