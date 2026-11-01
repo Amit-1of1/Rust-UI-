@@ -365,7 +365,10 @@ mod tests {
         // Dioxus 0.8 branch: the native renderer forks are 0.7-only and the kit's root has no
         // patches, so none come along (on `main` they do, pinned like the kit's).
         let cargo = fs::read_to_string(dir.join("Cargo.toml")).unwrap();
-        assert!(cargo.parse::<Document>().is_ok() && !cargo.contains("blitz"), "{cargo}");
+        assert!(
+            cargo.parse::<Document>().is_ok() && !cargo.contains("blitz"),
+            "{cargo}"
+        );
         // A second run refuses to overwrite the app.
         assert!(create(&dir, "phone-app", &KitSource::Registry, t, &kit()).is_err());
     }
