@@ -32,7 +32,13 @@ async function open(trigger, content, where, how = "click") {
     window.scrollBy(0, where === "bottom" ? 20 : -20);
   }, where);
   // A DOM click: Playwright's mouse click scrolls the page to "stabilise" the target.
-  await trigger.evaluate((el, how) => (how === "focus" ? el.focus() : el.click()), how);
+  // Focus first, as a real click does (and a mouse is over the section): the gallery renders
+  // a section normally only while it is hovered, focused or holds an open overlay
+  // (content-visibility). Opened by a bare DOM click, the dropdown menu did not flip in Firefox.
+  await trigger.evaluate((el, how) => {
+    el.focus();
+    if (how !== "focus") el.click();
+  }, how);
   const c = page.locator(content).first();
   await c.waitFor({ state: "visible" });
   await page.waitForTimeout(700); // let the enter spring settle

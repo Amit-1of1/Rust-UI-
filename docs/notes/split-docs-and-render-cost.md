@@ -60,7 +60,7 @@ Containment has a catch: a section with `content-visibility: auto` is the box th
 overlays flip inside, so menus, selects, popovers and tooltips near the screen edge stopped
 flipping (tests/e2e/anchor.mjs caught it: 7 checks). A section that is hovered, has focus or
 holds an open overlay (`[data-state="open"]`) is rendered normally, which fixed all 7. Don't
-put `content-visibility` on a box whose overlays must escape it.
+put `content-visibility` on a box whose overlays must escape it. In Firefox CI the dropdown menu still didn't flip when opened by a bare DOM click (no hover, no focus, which no real click produces); `anchor.mjs` now focuses the trigger before clicking, as a real click does.
 
 Two test scripts had to learn about it: `axe.mjs` renders everything before scanning
 (`content-visibility: visible` on all elements), because axe measures colours and sizes of
