@@ -5,13 +5,70 @@ use dioxus::prelude::*;
 #[css_module("/src/components/theme_customizer/style.css")]
 struct Styles;
 
-/// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` is the default.
+/// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` means none: the
+/// theme preset's own accent (lagoon teal by default).
 pub const ACCENTS: [&str; 6] = ["neutral", "blue", "green", "violet", "rose", "orange"];
+
+/// Theme presets defined in `theme.css` (`[data-preset=...]`): a whole look (colours, fonts,
+/// corner radius, density, icon stroke) in one attribute. `lagoon` is the default and sets
+/// none. docs/BRAND.md describes each.
+pub const PRESETS: [&str; 5] = ["lagoon", "reef", "abyss", "driftwood", "classic"];
+
+/// One theme preset, for pickers and docs.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct PresetInfo {
+    /// The `data-preset` value (`lagoon` sets none).
+    pub name: &'static str,
+    /// What it looks like, in a few words.
+    pub tagline: &'static str,
+    /// The heading and text fonts.
+    pub fonts: &'static str,
+    /// Its corner radius in pixels (`--radius`).
+    pub radius_px: u32,
+}
+
+/// [`PRESETS`] with what each one looks like, in the same order.
+pub const PRESET_INFO: [PresetInfo; 5] = [
+    PresetInfo {
+        name: "lagoon",
+        tagline: "Lagoon teal on sea-glass neutrals, soft corners",
+        fonts: "Bricolage Grotesque + Figtree",
+        radius_px: 12,
+    },
+    PresetInfo {
+        name: "reef",
+        tagline: "Coral on warm sand, round and roomy",
+        fonts: "Nunito",
+        radius_px: 18,
+    },
+    PresetInfo {
+        name: "abyss",
+        tagline: "Deep-sea navy with an indigo glow, sharp and compact",
+        fonts: "Space Grotesk",
+        radius_px: 4,
+    },
+    PresetInfo {
+        name: "driftwood",
+        tagline: "Sun-bleached sand and terracotta, editorial serif headings",
+        fonts: "Fraunces + Figtree",
+        radius_px: 6,
+    },
+    PresetInfo {
+        name: "classic",
+        tagline: "Plain black and white, system fonts, nothing to download",
+        fonts: "System fonts",
+        radius_px: 8,
+    },
+];
 
 /// The customizer's choices, shared with [`ThemeScope`]. Empty strings mean "not set".
 #[derive(Clone, Copy, PartialEq)]
 struct Choices {
-    attrs: Signal<[(&'static str, &'static str); 3]>,
+    attrs: Signal<[(&'static str, &'static str); 4]>,
     radius: Signal<Option<u32>>,
     /// Whether the choices also go on `<html>`; off under `ThemeStyles { scoped: true }`, so
     /// the kit leaves an existing app's own `data-theme` alone.
@@ -26,6 +83,7 @@ fn choices() -> Choices {
                     ("data-accent", ""),
                     ("data-density", ""),
                     ("data-theme", ""),
+                    ("data-preset", ""),
                 ],
                 ScopeId::ROOT,
             ),
@@ -67,13 +125,15 @@ pub fn set_writes_html(on: bool) {
     choices().html.set(on);
 }
 
-fn set_root_radius(px: u32) {
+fn set_root_radius(px: Option<u32>) {
     if *choices().html.peek() {
-        let _ = document::eval(&format!(
-            "document.documentElement.style.setProperty('--radius','{px}px')"
-        ));
+        let js = match px {
+            Some(px) => format!("document.documentElement.style.setProperty('--radius','{px}px')"),
+            None => "document.documentElement.style.removeProperty('--radius')".to_string(),
+        };
+        let _ = document::eval(&js);
     }
-    choices().radius.set(Some(px));
+    choices().radius.set(px);
 }
 
 /// Light or dark, or whatever the operating system prefers.
@@ -185,14 +245,50 @@ impl Theme {
         }
     }
 
-    /// The corner radius in pixels (8 until set).
+    /// The corner radius in pixels: the one set with [`set_radius`](Self::set_radius), else
+    /// the preset's own (12 for lagoon).
     pub fn radius(&self) -> u32 {
-        (self.choices.radius)().unwrap_or(8)
+        (self.choices.radius)().unwrap_or_else(|| self.preset_info().radius_px)
+    }
+
+    /// The radius set with [`set_radius`](Self::set_radius), `None` while the preset's own
+    /// applies.
+    pub fn radius_override(&self) -> Option<u32> {
+        (self.choices.radius)()
     }
 
     /// Set the corner radius, clamped to 0–20 px like the customizer's slider.
     pub fn set_radius(&self, px: u32) {
-        set_root_radius(px.min(20));
+        set_root_radius(Some(px.min(20)));
+    }
+
+    /// One of [`PRESETS`]; `"lagoon"` when none is set.
+    pub fn preset(&self) -> &'static str {
+        match self.attr(3) {
+            "" => "lagoon",
+            name => name,
+        }
+    }
+
+    /// The [`PresetInfo`] of [`preset`](Self::preset).
+    pub fn preset_info(&self) -> PresetInfo {
+        let name = self.preset();
+        PRESET_INFO
+            .into_iter()
+            .find(|p| p.name == name)
+            .unwrap_or(PRESET_INFO[0])
+    }
+
+    /// Pick one of [`PRESETS`]: a whole look at once. It also drops a radius set with
+    /// [`set_radius`](Self::set_radius), so the preset's own corners show. Other names are
+    /// ignored.
+    pub fn set_preset(&self, name: &str) {
+        if let Some(name) = PRESETS.into_iter().find(|p| *p == name) {
+            set_root_attr("data-preset", if name == "lagoon" { "" } else { name });
+            if self.choices.radius.peek().is_some() {
+                set_root_radius(None);
+            }
+        }
     }
 }
 
@@ -225,6 +321,7 @@ pub fn ThemeScope(children: Element) -> Element {
             "data-accent": value(0),
             "data-density": value(1),
             "data-theme": value(2),
+            "data-preset": value(3),
             style,
             {children}
         }
@@ -234,19 +331,23 @@ pub fn ThemeScope(children: Element) -> Element {
 /// Density presets defined in `theme.css` (`[data-density=...]`). `default` sets nothing.
 pub const DENSITIES: [&str; 3] = ["compact", "default", "comfortable"];
 
-/// Controls for the accent colour, corner radius, density and light/dark mode of the whole page.
+/// Controls for the look (theme preset), accent colour, corner radius, density and light/dark
+/// mode of the whole page.
 ///
-/// It only sets `data-accent` / `data-density` / `data-theme` and `--radius` on `<html>`. Its
-/// state is the shared [`use_theme`], so app controls (a header dark-mode switch) stay in step.
+/// It only sets `data-preset` / `data-accent` / `data-density` / `data-theme` and `--radius`
+/// on `<html>`. Its state is the shared [`use_theme`], so app controls (a header dark-mode
+/// switch) stay in step.
 #[component]
 pub fn ThemeCustomizer() -> Element {
     let theme = use_theme();
+    let preset = theme.preset();
     let accent = theme.accent();
     let radius = theme.radius();
     let mode = theme.mode();
     let density = theme.density();
     rsx! {
         div { class: Styles::dx_theme_customizer,
+            PresetPicker {}
             fieldset { class: Styles::dx_theme_group,
                 legend { "Accent colour" }
                 div { class: Styles::dx_theme_swatches,
@@ -262,7 +363,7 @@ pub fn ThemeCustomizer() -> Element {
                                 onchange: move |_| theme.set_accent(name),
                             }
                             span { class: Styles::dx_theme_dot, "aria-hidden": "true" }
-                            span { "{name}" }
+                            span { if name == "neutral" { "{preset}" } else { "{name}" } }
                         }
                     }
                 }
@@ -318,6 +419,48 @@ pub fn ThemeCustomizer() -> Element {
                             }
                             span { "{label_text}" }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Picks the page's look, one of [`PRESETS`]: a card per preset, each drawn in its own
+/// colours and fonts. [`ThemeCustomizer`] shows it first; render it alone in a header or a
+/// settings page. Writes the shared [`use_theme`] state like the customizer.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn PresetPicker(
+    /// The group's visible label.
+    #[props(into, default = "Look".to_string())]
+    label: String,
+) -> Element {
+    let theme = use_theme();
+    let preset = theme.preset();
+    // Its own radio group, so a header picker and the customizer's don't merge into one.
+    let group = crate::components::hooks::use_unique_id("dx-theme-preset");
+    rsx! {
+        fieldset { class: Styles::dx_theme_group,
+            legend { "{label}" }
+            div { class: Styles::dx_theme_presets,
+                for info in PRESET_INFO {
+                    label {
+                        class: Styles::dx_theme_preset,
+                        "data-preset": info.name,
+                        title: info.tagline,
+                        input {
+                            r#type: "radio",
+                            name: "{group}",
+                            value: info.name,
+                            checked: preset == info.name,
+                            onchange: move |_| theme.set_preset(info.name),
+                        }
+                        span { class: Styles::dx_theme_preset_name, "{info.name}" }
+                        span { class: Styles::dx_theme_preset_fonts, "{info.fonts}" }
                     }
                 }
             }

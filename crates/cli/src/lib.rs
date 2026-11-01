@@ -27,6 +27,7 @@ pub mod manifest;
 pub mod mcp;
 pub mod motion;
 pub mod postbuild;
+pub mod presets;
 pub mod scaffold;
 pub mod scope;
 pub mod template;

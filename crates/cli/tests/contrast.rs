@@ -46,6 +46,13 @@ fn the_proof_covers_every_component_mode_and_accent() {
         accents.len() >= 6,
         "neutral and the five presets: {accents:?}"
     );
+    for preset in ["reef", "abyss", "driftwood", "classic"] {
+        let name = format!("preset:{preset}");
+        assert!(
+            accents.contains(&name),
+            "theme preset {preset} is not proven"
+        );
+    }
     for mode in Mode::ALL {
         for accent in &accents {
             let n = report
@@ -96,9 +103,15 @@ fn the_proof_catches_regressions() {
         ),
         // A focus colour too close to the page.
         (
-            "--focused-border-color: #2b7fff;",
-            "--focused-border-color: #c6dcff;",
+            "--focused-border-color: light-dark(#0f766e, #2dd4bf);",
+            "--focused-border-color: light-dark(#c6f0ea, #2dd4bf);",
             "var(--focused-border-color)",
+        ),
+        // A theme preset whose muted text is too pale on its own page.
+        (
+            "--secondary-color-5: light-dark(#776867, #ac9e9d);",
+            "--secondary-color-5: light-dark(#b0a39d, #ac9e9d);",
+            "var(--secondary-color-5)",
         ),
     ];
     for (good, bad, expect) in cases {

@@ -48,7 +48,7 @@
   background: var(--primary-color-2);
   box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
   color: var(--secondary-color-4);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
   gap: 1rem;
   will-change: transform;
 }
@@ -219,6 +219,8 @@
 }
 
 .dx-sheet-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   margin: 0;
   color: var(--secondary-color-4);
   font-size: 1.125rem;

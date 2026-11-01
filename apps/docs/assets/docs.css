@@ -5,7 +5,7 @@ body {
   margin: 0;
   background: var(--primary-color);
   color: var(--secondary-color-4);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -31,7 +31,20 @@ body {
   border-bottom: 1px solid var(--primary-color-6);
   background: var(--primary-color);
 }
-.docs-brand { color: inherit; font-size: 1.125rem; font-weight: 600; text-decoration: none; }
+.docs-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: center;
+  color: inherit;
+  font-family: var(--font-heading, inherit);
+  font-size: 1.25rem;
+  font-weight: var(--heading-weight, 700);
+  letter-spacing: var(--heading-tracking, normal);
+  text-decoration: none;
+}
+.docs-look { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; align-self: center; }
+.docs-look select { width: auto; min-width: 8rem; text-transform: capitalize; }
 .docs-tagline { color: var(--secondary-color-5); font-size: 0.875rem; }
 
 .docs-layout {
@@ -135,3 +148,9 @@ body {
 .pricing-faq { max-width: 44rem; margin-top: 2.5rem; }
 .pricing-faq h3 { margin: 1.25rem 0 0.25rem; font-size: 1rem; }
 .pricing-faq p { margin: 0; }
+
+/* Headings in the theme preset's display face. */
+:where(h1, h2, h3) {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
+}

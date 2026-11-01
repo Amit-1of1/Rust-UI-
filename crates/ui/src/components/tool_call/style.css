@@ -42,7 +42,7 @@
 
 .dx-tool-call-name {
   color: var(--secondary-color-2);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
   font-size: 0.8125rem;
   font-weight: 600;
 }

@@ -109,6 +109,27 @@ fn every_accent_preset_is_scanned_by_axe() {
     }
 }
 
+/// Theme presets get the same axe scan: every `[data-preset]` but the default.
+#[test]
+fn every_theme_preset_is_scanned_by_axe() {
+    let theme = read("crates/ui/assets/theme.css");
+    let e2e = read("scripts/e2e.sh");
+    let line = e2e
+        .lines()
+        .find(|l| l.contains("for preset in"))
+        .expect("scripts/e2e.sh has a theme preset loop");
+    for part in theme.split("\n[data-preset=\"").skip(1) {
+        let name = part.split('"').next().unwrap();
+        assert!(
+            name == "lagoon"
+                || line
+                    .split_whitespace()
+                    .any(|w| w.trim_end_matches(';') == name),
+            "theme preset `{name}` is not in the axe loop of scripts/e2e.sh"
+        );
+    }
+}
+
 /// "axe and keyboard checks in Chromium, Firefox and WebKit in CI".
 #[test]
 fn ci_runs_the_browser_checks_on_three_engines() {

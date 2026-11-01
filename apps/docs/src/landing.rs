@@ -32,8 +32,8 @@ const FEATURES: &[(&str, &str)] = &[
         "Springs, enter and exit, layout (FLIP) and drag gestures. All of it switches off under prefers-reduced-motion, in the same change that adds it.",
     ),
     (
-        "Plain CSS themes",
-        "Light and dark tokens, accent presets and a theme from your logo. No Tailwind build step in your CI.",
+        "A look of its own, and four more",
+        "Lagoon teal, sea-glass neutrals, Bricolage Grotesque and Figtree by default. Reef, Abyss, Driftwood and Classic change colours, fonts, corners and density with one attribute, at build time or live. Plain CSS, fonts shipped with the kit, no Tailwind build step.",
     ),
     (
         "You own the code",
@@ -76,7 +76,10 @@ pub fn LandingPage() -> Element {
         document::Title { "{PRODUCT}: accessible, animated components for Dioxus" }
         section { class: "landing-hero", "aria-labelledby": "page-title",
             Badge { "For Dioxus 0.7 · web and desktop" }
-            h1 { id: "page-title", tabindex: "-1", {PRODUCT} }
+            div { class: "landing-title",
+                crate::AtollMark { size: 64 }
+                h1 { id: "page-title", tabindex: "-1", {PRODUCT} }
+            }
             p { class: "docs-lede landing-tagline",
                 "Accessible, animated components for Rust apps. Copy them into your app with one command; every one of them is checked with axe and the keyboard in three browsers."
             }
@@ -96,6 +99,43 @@ pub fn LandingPage() -> Element {
             li { strong { "3" } span { "browsers checked with axe in CI" } }
             li { strong { "0" } span { "Tailwind build steps" } }
             li { strong { "Free" } span { "kit, MIT or Apache-2.0" } }
+        }
+
+        section { class: "landing-looks", "aria-labelledby": "looks-heading",
+            h2 { id: "looks-heading", "Five looks, one attribute" }
+            p {
+                "Pick a look and this whole site changes: colours, fonts, corners, density and icon stroke. Each one passes the same contrast proof and axe scan as the default. "
+                a { href: "#brand", "How the looks are made" }
+                "."
+            }
+            div { class: "landing-looks-grid",
+                PresetPicker { label: "Look for this site" }
+                Card { class: "landing-looks-preview",
+                    CardHeader {
+                        CardTitle { "Reef check" }
+                        CardDescription { "Survey notes for the north channel" }
+                    }
+                    CardContent {
+                        div { class: "landing-looks-row",
+                            Badge { "Live" }
+                            Badge { variant: BadgeVariant::Secondary, "12 divers" }
+                            Badge { variant: BadgeVariant::Outline, "Low tide 06:40" }
+                        }
+                        div { class: "landing-looks-row",
+                            Switch { aria_label: "Share with the team", default_checked: true }
+                            span { "Share with the team" }
+                        }
+                        Progress { value: 64.0, aria_label: "Survey progress" }
+                    }
+                    CardFooter { class: "landing-looks-row",
+                        Button { "Save survey" }
+                        Button { variant: ButtonVariant::Outline, "Export" }
+                    }
+                }
+            }
+            pre { class: "landing-code", tabindex: "0",
+                code { "// at build time\nThemeStyles {{ preset: \"reef\" }}\n\n// or live\nuse_theme().set_preset(\"abyss\");" }
+            }
         }
 
         section { "aria-labelledby": "try-heading",

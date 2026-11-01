@@ -16,7 +16,7 @@
   flex-wrap: wrap;
   align-items: center;
   border: 1px solid transparent;
-  border-radius: 0.375rem;
+  border-radius: calc(var(--radius) * 0.75);
   font-size: 0.875rem;
   outline: none;
   transition:
@@ -91,7 +91,7 @@ a.dx-item:hover {
 .dx-item-media[data-variant="icon"] {
   width: 2rem;
   height: 2rem;
-  border-radius: 0.25rem;
+  border-radius: calc(var(--radius) * 0.5);
 }
 
 .dx-item-media[data-variant="icon"] svg {
@@ -103,7 +103,7 @@ a.dx-item:hover {
   overflow: hidden;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 0.25rem;
+  border-radius: calc(var(--radius) * 0.5);
 }
 
 .dx-item-media[data-variant="image"] img {

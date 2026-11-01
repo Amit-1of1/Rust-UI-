@@ -704,7 +704,8 @@ fn from_oklab([l, a, b]: [f64; 3]) -> [f64; 3] {
 // ---------------------------------------------------------------------------------------------
 // Theme
 
-/// The theme: root tokens plus each `[data-accent="..."]` preset.
+/// The theme: root tokens plus each `[data-accent="..."]` preset, and each
+/// `[data-preset="..."]` theme preset as one more variant named `preset:<name>`.
 #[derive(Debug, Clone, Default)]
 pub struct Theme {
     pub root: Tokens,
@@ -728,7 +729,17 @@ impl Theme {
                 .strip_prefix("[data-accent=\"")
                 .and_then(|s| s.strip_suffix("\"]"))
                 .filter(|n| !n.contains('['))
+                .map(str::to_string)
+                .or_else(|| {
+                    // A theme preset is one more variant over the root tokens, with its own
+                    // neutrals and accent: "preset:reef".
+                    sel.strip_prefix("[data-preset=\"")
+                        .and_then(|s| s.strip_suffix("\"]"))
+                        .filter(|n| !n.contains('['))
+                        .map(|n| format!("preset:{n}"))
+                })
             {
+                let name = name.as_str();
                 if !theme.accents.iter().any(|(n, _)| n == name) {
                     theme.accents.push((name.to_string(), Tokens::default()));
                 }

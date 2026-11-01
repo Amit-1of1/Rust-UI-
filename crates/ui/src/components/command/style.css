@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: calc(var(--radius) * 0.75);
   color: var(--secondary-color-3);
   cursor: default;
   font-size: 0.875rem;

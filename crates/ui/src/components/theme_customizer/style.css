@@ -49,6 +49,69 @@
   outline-offset: 2px;
 }
 
+/* Each preset card wears its own look: data-preset on the label switches the tokens inside it. */
+.dx-theme-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.5rem;
+}
+
+.dx-theme-preset {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius);
+  background: var(--primary-color);
+  color: var(--secondary-color-4);
+  cursor: pointer;
+}
+
+.dx-theme-preset::before {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.625rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--accent-color);
+  content: "";
+}
+
+.dx-theme-preset:has(input:checked) {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.dx-theme-preset:has(input:focus-visible) {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-theme-preset-name {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight, 600);
+  letter-spacing: var(--heading-tracking, normal);
+  text-transform: capitalize;
+}
+
+.dx-theme-preset-fonts {
+  color: var(--secondary-color-5);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+}
+
+.dx-theme-preset input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
 /* Visually hidden but still focusable, so the native radio keeps keyboard and screen reader support. */
 .dx-theme-swatch input {
   position: absolute;

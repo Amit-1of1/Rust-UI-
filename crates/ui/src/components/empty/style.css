@@ -36,6 +36,8 @@
 }
 
 .dx-empty-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   color: var(--secondary-color-1);
   font-size: 1.125rem;
   font-weight: 600;

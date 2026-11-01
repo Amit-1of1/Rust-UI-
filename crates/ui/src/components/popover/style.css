@@ -12,7 +12,7 @@
   box-sizing: border-box;
   flex-direction: column;
   padding: .25rem;
-  border-radius: .5rem;
+  border-radius: var(--radius);
   margin-top: .5rem;
   background: var(--light, var(--primary-color))
       var(--dark, var(--primary-color-5));

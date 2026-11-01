@@ -108,7 +108,7 @@
 }
 
 .dx-date-segment:focus-visible {
-    border-radius: 0.25rem;
+    border-radius: calc(var(--radius) * 0.5);
     background: var(--secondary-color-3);
     color: var(--primary-color);
     outline: none;

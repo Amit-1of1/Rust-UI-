@@ -60,6 +60,8 @@
 }
 
 .dx-drawer-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   margin: 0;
   color: var(--secondary-color-1);
   font-size: 1.125rem;

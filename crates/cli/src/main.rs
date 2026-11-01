@@ -148,15 +148,20 @@ enum Command {
         all: bool,
     },
     /// Print an accent preset (`[data-accent=...]`) generated from one brand colour, or from
-    /// the colours of a logo.
+    /// the colours of a logo; or one of the kit's theme presets (`--preset reef`) as a
+    /// `:root` block.
     Theme {
         /// Brand colour as hex, e.g. `#7c3aed`.
         #[arg(
             long,
-            required_unless_present = "from_image",
-            conflicts_with = "from_image"
+            required_unless_present_any = ["from_image", "preset"],
+            conflicts_with_all = ["from_image", "preset"]
         )]
         brand: Option<String>,
+        /// One of the kit's theme presets (lagoon, reef, abyss, driftwood, classic), printed
+        /// as the page default; `--preset list` lists them.
+        #[arg(long, conflicts_with = "from_image")]
+        preset: Option<String>,
         /// A logo (PNG, JPEG or SVG): its most visible saturated colour becomes the brand
         /// colour, and a clearly different second colour is printed as an alternative preset.
         #[arg(long)]
@@ -542,7 +547,24 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
         Command::Theme {
             brand,
             from_image,
+            preset: Some(look),
+            ..
+        } if brand.is_none() && from_image.is_none() => {
+            let theme = std::fs::read_to_string(root.join(atoll_cli::THEME_FILE))
+                .map_err(|e| format!("{}: {e}", atoll_cli::THEME_FILE))?;
+            if look == "list" {
+                for n in atoll_cli::presets::names(&theme) {
+                    println!("{n}");
+                }
+            } else {
+                print!("{}", atoll_cli::presets::css(&theme, &look)?);
+            }
+        }
+        Command::Theme {
+            brand,
+            from_image,
             name,
+            ..
         } => {
             use atoll_cli::theme::{css, preset, Rgb};
             if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {

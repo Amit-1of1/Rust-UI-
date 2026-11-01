@@ -33,7 +33,7 @@
 .dx-breadcrumb-link:focus-visible {
   outline: 2px solid var(--focused-border-color);
   outline-offset: 2px;
-  border-radius: 0.25rem;
+  border-radius: calc(var(--radius) * 0.5);
 }
 
 .dx-breadcrumb-page {

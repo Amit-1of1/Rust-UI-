@@ -25,6 +25,8 @@
 }
 
 .dx-card-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   font-size: 1rem;
   font-weight: 600;
   line-height: 1;
