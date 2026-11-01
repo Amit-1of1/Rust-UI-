@@ -6051,7 +6051,7 @@ Import icons by path (`ui::icons::Check`), not with a glob: Lucide has icons nam
 
 ## Atoll icons
 
-`ui::icons::atoll` holds 101 original icons in the kit's own style (Feather-style like Reshaped: 2px stroke, 2px corners, round ends; the rendered stroke follows the theme), drawn on the same 24px grid as Lucide so the two mix in one row.
+`ui::icons::atoll` holds 558 original icons in the kit's own style (Feather-style like Reshaped: 2px stroke, 2px corners, round ends; the rendered stroke follows the theme), drawn on the same 24px grid as Lucide so the two mix in one row.
 
 ```rust
 use ui::icons::{atoll, Icon, IconSize};
@@ -6066,7 +6066,8 @@ rsx! {
 - **Names say what an icon means**, not what it shows: `delete`, not `trash`; `next`, not `arrow-right`. Search words go in its keywords.
 - **Every icon has a default accessible name** (`atoll::meta(name).label`), keywords and a category. `atoll::INDEX` lists them; it holds only strings, so naming it keeps no shapes in your binary.
 - **Reserved icons** mean one action everywhere: `add`, `remove`, `close`, `delete`, `edit`, `copy`, `search`, `settings`, `menu`, `more`, `back`, `next`, `expand`, `collapse`, `download`, `upload`, `share`, `refresh`, the status icons and more. Don't use a reserved icon for anything else (no `delete` for "clear filter"; that's `close`).
-- The browser on this page searches names, default names and keywords.
+- **Families:** common icons come with badge variants drawn on the same grid (`file-add`, `user-check`, `calendar-cancel`, `database-lock`, `image-ai`, `deploy-scheduled`) and switched-off variants (`microphone-off`, `wifi-off`, `notification-off`).
+- The browser on this page searches names, default names and keywords, grouped into 20 categories (system, navigation, files, media, editor, commerce, maps, weather, devices, dev, agent and more).
 
 ## Size and stroke
 
