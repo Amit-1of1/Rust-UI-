@@ -1,0 +1,58 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget",
+        "MediaQueryList",
+        "AudioContext",
+        "AudioContextState",
+        "AudioDestinationNode",
+        "AudioNode",
+        "AudioParam",
+        "AudioScheduledSourceNode",
+        "BaseAudioContext",
+        "GainNode",
+        "OscillatorNode",
+        "OscillatorType",
+        "Storage"
+      ],
+      "name": "web-sys",
+      "version": "0.3.106"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2"
+    }
+  ],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "label"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "native_select"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "switch"
+    }
+  ],
+  "description": "Interface sounds for presses, switches, dialogs, notices, success and errors, in three sets: **Ripple** (soft water drops), **Glass** (bright chimes) and **Driftwood** (warm marimba and wood). **Off until the person using the app turns them on**, and each person can mix and match: a different set, or silence, for each sound. Their choices are remembered on that device.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "sound"
+}

@@ -3,6 +3,7 @@ use dioxus_primitives::dioxus_attributes::attributes;
 use dioxus_primitives::merge_attributes;
 
 use crate::components::hooks::use_focus_opener;
+use crate::components::sound::{use_sound, SoundEvent};
 
 #[css_module("/src/components/button/style.css")]
 struct Styles;
@@ -80,6 +81,7 @@ pub fn Button(
     onkeydown: Option<EventHandler<KeyboardEvent>>,
     children: Element,
 ) -> Element {
+    let sound = use_sound();
     let base = attributes!(button {
         class: Styles::dx_button,
         "data-style": variant.class(),
@@ -95,6 +97,7 @@ pub fn Button(
                 if let Some(f) = &onclick {
                     f.call(event);
                 }
+                sound.play(SoundEvent::Tap);
             },
             onmousedown: move |event| {
                 if let Some(f) = &onmousedown {
@@ -190,6 +193,7 @@ pub fn IconButton(
     /// The icon.
     children: Element,
 ) -> Element {
+    let sound = use_sound();
     let base = attributes!(button {
         class: Styles::dx_button,
         "data-style": variant.class(),
@@ -206,6 +210,7 @@ pub fn IconButton(
                 if let Some(f) = &onclick {
                     f.call(event);
                 }
+                sound.play(SoundEvent::Tap);
             },
             onmousedown: move |event| {
                 if let Some(f) = &onmousedown {

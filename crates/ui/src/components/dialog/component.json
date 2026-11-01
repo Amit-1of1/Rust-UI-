@@ -11,6 +11,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "sound"
     }
   ],
   "description": "The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.",

@@ -1,6 +1,6 @@
 # Form
 
-- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `hooks`, `input`, `select`, `textarea`, `time_picker`, `ui_strings`).
+- Copy into your app: `atoll add form` or `dx components add form --git https://github.com/Amit-1of1/Rust-UI-` (also copies `checkbox`, `combobox`, `date_picker`, `date_time_picker`, `field`, `hooks`, `input`, `select`, `sound`, `textarea`, `time_picker`, `ui_strings`).
 - Import: `use crate::components::form::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 Validation state for a form, with the accessibility wiring done for you. `use_form()` creates the state, `form.field(vec![required(), email()])` declares each field (call it like a hook), and `Form` / `TextField` render a native `<form novalidate>` and fully labelled inputs.

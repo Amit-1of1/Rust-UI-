@@ -6,6 +6,8 @@ use dioxus_primitives::toast::{
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::time::Duration;
 
+use crate::components::sound::{MountSound, SoundEvent};
+
 #[css_module("/src/components/toast/style.css")]
 struct Styles;
 
@@ -25,6 +27,7 @@ fn StyledToast(props: ToastProps) -> Element {
             ToastContent {
                 ToastTitle {}
                 ToastDescription {}
+                MountSound { event: toast_sound(props.toast_type) }
             }
             ToastCloseButton {}
         }
@@ -177,6 +180,15 @@ impl ToastsExt for toast::Toasts {
     fn notify_info(&self, message: impl Into<ToastMessage>) {
         let (title, options) = message.into().split();
         self.info(title, options);
+    }
+}
+
+/// The sound a toast plays when it appears (if the person turned sounds on).
+fn toast_sound(kind: toast::ToastType) -> SoundEvent {
+    match kind {
+        toast::ToastType::Success => SoundEvent::Success,
+        toast::ToastType::Error => SoundEvent::Error,
+        _ => SoundEvent::Notice,
     }
 }
 

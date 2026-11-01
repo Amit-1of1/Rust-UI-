@@ -1,6 +1,6 @@
 # Dialog
 
-- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `sound`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
