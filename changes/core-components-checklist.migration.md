@@ -1,4 +1,4 @@
-### `Progress` has its own props (PR #N)
+### `Progress` has its own props (#86)
 
 **Who:** code that names `ui::progress::ProgressProps` or builds it by hand (the `rsx!` form `Progress { value, max, aria_label }` is unchanged).
 
@@ -8,7 +8,7 @@
 
 **What to do:** import `ui::progress::ProgressProps` instead of the primitive's, if you name it.
 
-### `Tooltip` has its own props and a hover delay (PR #N)
+### `Tooltip` has its own props and a hover delay (#86)
 
 **Who:** code that names `ui::tooltip::TooltipProps`, or tests that hover a tooltip and expect it at once.
 
