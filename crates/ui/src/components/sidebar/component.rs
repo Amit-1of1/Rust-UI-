@@ -1,4 +1,5 @@
 use crate::components::button::{Button, ButtonVariant};
+use crate::components::hooks::current_route;
 use crate::components::icons::PanelLeft;
 use crate::components::separator::Separator;
 use crate::components::sheet::{Sheet, SheetContentClose, SheetSide};
@@ -200,6 +201,18 @@ pub fn SidebarProvider(
     };
 
     use_context_provider(|| ctx);
+
+    // On a phone the sidebar is a sheet over the page. With the `router` feature, close it
+    // after every in-app navigation, so tapping a link (a router `Link` passed through `as`
+    // included) shows the new page instead of leaving the sheet on top of it.
+    let route = current_route();
+    let mut seen = use_signal(|| route.clone());
+    use_effect(use_reactive!(|route| {
+        if *seen.peek() != route {
+            seen.set(route);
+            ctx.set_open_mobile(false);
+        }
+    }));
 
     use_effect(move || {
         spawn(async move {
@@ -674,13 +687,27 @@ pub fn SidebarMenuButton(
     /// Click handler for the default `<button>` (ignored when `as` renders something else).
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
+    /// On a phone, where the sidebar is a sheet, close it after this button is clicked.
+    /// Defaults to `true`. Buttons that open something (`aria-expanded` or `aria-haspopup`,
+    /// such as a collapsible group's trigger) never close it. Applies to the default
+    /// `<button>`; with `as`, the provider closes the sheet when the route changes (`router`
+    /// feature) or call `use_sidebar().set_open_mobile(false)`.
+    #[props(default = true)]
+    close_on_mobile: bool,
     r#as: Option<Callback<Vec<Attribute>, Element>>,
     children: Element,
 ) -> Element {
     let ctx = use_sidebar();
+    let opens_something = attributes
+        .iter()
+        .any(|a| matches!(a.name, "aria-expanded" | "aria-haspopup"));
+    let close_after = close_on_mobile && !opens_something;
     let click = move |e: MouseEvent| {
         if let Some(f) = &onclick {
             f.call(e);
+        }
+        if close_after && (ctx.is_mobile)() {
+            ctx.set_open_mobile(false);
         }
     };
     let is_mobile = ctx.is_mobile;

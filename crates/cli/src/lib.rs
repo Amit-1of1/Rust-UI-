@@ -32,6 +32,7 @@ pub mod scaffold;
 pub mod scope;
 pub mod template;
 pub mod theme;
+pub mod tokens;
 pub mod update;
 
 use serde::{Deserialize, Serialize};

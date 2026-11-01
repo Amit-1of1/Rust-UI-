@@ -62,6 +62,17 @@ pub fn is_current_route(href: &str) -> bool {
     false
 }
 
+/// The router's current path, or `None` without the `router` feature or outside a `Router`.
+/// Reading it subscribes the calling component to navigation.
+pub(crate) fn current_route() -> Option<String> {
+    #[cfg(feature = "router")]
+    {
+        dioxus::router::try_router().map(|r| r.full_route_string())
+    }
+    #[cfg(not(feature = "router"))]
+    None
+}
+
 /// A same-site absolute path: `/stays/3`, not `//cdn.example`, `#top`, `https://..` or `mailto:`.
 #[cfg(feature = "router")]
 fn is_path(href: &str) -> bool {

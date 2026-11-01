@@ -137,6 +137,20 @@ enum Command {
         #[arg(long)]
         theme: Vec<PathBuf>,
     },
+    /// Export the theme's tokens as W3C Design Tokens (DTCG) JSON, one file per colour mode
+    /// (`light.tokens.json`, `dark.tokens.json`), for Figma variables, Tokens Studio, Penpot
+    /// or Style Dictionary.
+    Tokens {
+        /// Your own theme or preset files, loaded after the kit's theme (repeatable).
+        #[arg(long)]
+        theme: Vec<PathBuf>,
+        /// Export with this accent preset applied (`data-accent`), e.g. `blue`.
+        #[arg(long)]
+        accent: Option<String>,
+        /// Folder to write the files to.
+        #[arg(long, default_value = "tokens")]
+        out: PathBuf,
+    },
     /// Audit what every animation and transition costs the browser (composite, paint or
     /// layout). Layout animations fail unless an `atoll-motion: layout` comment explains them.
     Motion {
@@ -511,6 +525,32 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             );
             if !failures.is_empty() {
                 return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Tokens { theme, accent, out } => {
+            use atoll_cli::contrast::{Mode, Theme};
+            let read =
+                |p: &Path| std::fs::read_to_string(p).map_err(|e| format!("{}: {e}", p.display()));
+            let mut parsed = Theme::parse(&read(&root.join(atoll_cli::THEME_FILE))?);
+            for t in &theme {
+                parsed.overlay(Theme::parse(&read(t)?));
+            }
+            std::fs::create_dir_all(&out).map_err(err)?;
+            for mode in Mode::ALL {
+                let e = atoll_cli::tokens::export(&parsed, accent.as_deref(), mode)?;
+                let path = out.join(format!("{}.tokens.json", mode.name()));
+                let json = serde_json::to_string_pretty(&e.doc).map_err(|e| e.to_string())?;
+                std::fs::write(&path, json + "\n").map_err(err)?;
+                let count = e.doc.as_object().map_or(0, |o| o.len() - 1);
+                println!("wrote {} ({count} tokens)", path.display());
+                if mode == Mode::Light && !e.skipped.is_empty() {
+                    let names: Vec<_> = e.skipped.iter().map(|(k, _)| k.as_str()).collect();
+                    println!(
+                        "left out {} token(s) with no DTCG type (shadows, gradients, raw CSS): {}",
+                        names.len(),
+                        names.join(", ")
+                    );
+                }
             }
         }
         Command::Motion { css, all } => {
