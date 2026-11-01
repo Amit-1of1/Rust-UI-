@@ -162,3 +162,25 @@
     margin-block-start: 0.25rem;
   }
 }
+
+/* Async combobox (AsyncCombobox): the "Loading results…" and error lines, and the
+   "Load more results" / "Try again" options. Same metrics as an option, muted text. */
+.dx-combobox-status {
+  padding: calc(0.375rem * var(--density, 1)) 0.5rem;
+  color: var(--secondary-color-5);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.dx-combobox-more {
+  color: var(--secondary-color-5);
+}
+
+/* The hidden option that keeps the picked label on the input. */
+.dx-combobox-option[hidden] {
+  display: none;
+}
+
+.dx-combobox-error {
+  color: var(--error-text-color);
+}

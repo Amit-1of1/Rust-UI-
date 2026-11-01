@@ -6,7 +6,7 @@ use dioxus_primitives::combobox::{
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 #[css_module("/src/components/combobox/style.css")]
-struct Styles;
+pub(super) struct Styles;
 
 #[derive(Props, Clone, PartialEq)]
 pub struct ComboboxProps<T: Clone + PartialEq + 'static = String> {
@@ -54,6 +54,16 @@ pub struct ComboboxProps<T: Clone + PartialEq + 'static = String> {
 
     #[props(default)]
     pub list_aria_label: Option<String>,
+
+    /// Marks the list `aria-busy` while its options are loading (see [`AsyncCombobox`]).
+    #[props(default)]
+    pub list_busy: ReadSignal<bool>,
+
+    /// Text for a polite live region next to the input, such as "Loading results…" or
+    /// "12 results". `None` (the default) renders no live region; pass `Some` from the first
+    /// render (an empty string is fine) so screen readers notice later changes.
+    #[props(default)]
+    pub announcement: Option<String>,
 
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -121,7 +131,18 @@ pub fn Combobox<T: Clone + PartialEq + 'static>(props: ComboboxProps<T>) -> Elem
             combobox::ComboboxList {
                 class: Styles::dx_combobox_list,
                 aria_label: props.list_aria_label.clone(),
+                aria_busy: (props.list_busy)().then_some("true"),
                 {props.children}
+            }
+            if let Some(text) = props.announcement.clone() {
+                span {
+                    class: "sr-only",
+                    role: "status",
+                    aria_live: "polite",
+                    aria_atomic: "true",
+                    "data-slot": "combobox-announcer",
+                    {text}
+                }
             }
         }
     }

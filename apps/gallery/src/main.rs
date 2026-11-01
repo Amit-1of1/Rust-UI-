@@ -133,6 +133,7 @@ fn MoreSections() -> Element {
         Section { title: "Collapsible", blurb: "A single show/hide region.", ui::demos::collapsible::Demo {} }
         Section { title: "Color picker", blurb: "Pick a color by hue, saturation and value.", ui::demos::color_picker::Demo {} }
         Section { title: "Combobox", blurb: "Type to filter, arrow keys to choose.", ui::demos::combobox::Demo {} }
+        Section { title: "Async combobox", blurb: "Results load as you type (debounced), with a loading line, Load more and screen-reader announcements.", ui::demos::async_combobox::Demo {} }
         Section { title: "Context menu", blurb: "Right-click for actions.", ui::demos::context_menu::Demo {} }
         Section { title: "Date picker", blurb: "Calendar in a popover.", ui::demos::date_picker::Demo {} }
         Section { title: "Time picker", blurb: "Hour and minute fields; type digits or use the arrow keys.", ui::demos::time_picker::Demo {} }
