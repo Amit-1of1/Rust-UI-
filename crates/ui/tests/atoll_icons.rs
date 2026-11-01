@@ -145,7 +145,7 @@ fn directional_icons_mirror_in_rtl() {
         let icon = atoll::ALL.iter().find(|i| i.name == name).unwrap();
         assert!(icon.mirror_rtl, "{name}");
     }
-    assert!(!atoll::EXPAND.mirror_rtl);
+    const { assert!(!atoll::EXPAND.mirror_rtl) };
 }
 
 #[test]
