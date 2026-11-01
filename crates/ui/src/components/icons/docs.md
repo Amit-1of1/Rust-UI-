@@ -23,7 +23,7 @@ Import icons by path (`ui::icons::Check`), not with a glob: Lucide has icons nam
 
 ## Atoll icons
 
-`ui::icons::atoll` holds 101 original icons in the kit's own style (1.75 stroke at the Lagoon default, soft 3px corners, round ends), drawn on the same 24px grid as Lucide so the two mix in one row.
+`ui::icons::atoll` holds 101 original icons in the kit's own style (Feather-style like Reshaped: 2px stroke, 2px corners, round ends; the rendered stroke follows the theme), drawn on the same 24px grid as Lucide so the two mix in one row.
 
 ```rust
 use ui::icons::{atoll, Icon, IconSize};

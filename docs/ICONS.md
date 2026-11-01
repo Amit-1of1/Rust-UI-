@@ -4,14 +4,15 @@
 
 ## Atoll icons (2026-11-01)
 
-**Decision: the kit draws its own icons for what Lucide doesn't cover well (the Rust and app stack: crates, wasm, native windows, agents, tool calls, motion, focus) plus the everyday system actions, in one style that matches the Lagoon look.** They live next to Lucide in `ui::icons::atoll` and use the same `IconData`, renderer, sizes, stroke token and RTL rule, so the two sets mix in one row. Style picked from a three-way sample sheet (soft line / two-tone / crisp) in the "Create an original Atoll icon set" thread.
+**Decision: the kit draws its own icons for what Lucide doesn't cover well (the Rust and app stack: crates, wasm, native windows, agents, tool calls, motion, focus) plus the everyday system actions, in one style that matches the kit's design system (Reshaped's foundations: Feather-style outline icons).** They live next to Lucide in `ui::icons::atoll` and use the same `IconData`, renderer, sizes, stroke token and RTL rule, so the two sets mix in one row. Style: soft outline, chosen from a three-way sample sheet (soft line / two-tone / crisp) and then matched to Reshaped, which the owner picked as the design system: Reshaped's own components use Feather icons (24px box, 2px stroke, round ends, 2px corners) and size icons in 4px units.
 
 ### Drawing rules
 
 - **Grid:** 24 x 24 viewBox, the same box as Lucide, so icons pair with text and controls at `--icon-size-*` (12, 16, 20, 24, 32px).
 - **Safe area and keylines:** shapes stay inside 1..23 (the generator rejects circles, rects, lines and points outside it), and the live area is 2..22. A full square is 18 x 18 at (3, 3), a full circle `r = 9` at the centre, portrait shapes 12-16 wide x 20 tall, landscape ones 20 wide x 13-16 tall. Leave visual weight even: a circle reaches 1px further than a square.
-- **Stroke:** drawn at 1.75 with round ends and joins; the rendered width is the theme's `--icon-stroke-width`, so a preset can thin or thicken every icon at once. No shape relies on a hairline: gaps between strokes are at least 2px, so icons survive at 16px.
-- **Corners:** outer corners of boxes round by 3px (4px for tall devices, 2px for small tiles); interior details stay sharp.
+- **Stroke:** drawn at 2 with round ends and joins; the rendered width is the theme's `--icon-stroke-width`, so a preset can thin or thicken every icon at once. No shape relies on a hairline: gaps between strokes are at least 2px, so icons survive at 16px.
+- **Corners:** outer corners of boxes round by 2px (3px for tall devices, 1px for small tiles); interior details stay sharp.
+- **Sizes:** on the 4px unit scale (12, 16, 20, 24, 32px, the `--icon-size-*` tokens). Use `size: "1em"` to follow the text size, as Reshaped's icons do by default.
 - **Fills:** outline style. Solid fill (`fill="currentColor" stroke="none"`) only for dots (status dots, the "more" ellipsis, eyes) and for icons whose meaning is half-filled (`theme`). Colour always comes from `currentColor`.
 - **No text, no logos.** No letters except where the meaning is a glyph (`typography`); no third-party marks (the WebAssembly logo, Rust's gear, Git's logo). `wasm-module` and `branch` are our own metaphors.
 - **Flat SVG:** no groups, transforms, styles, titles or masks; the generator rejects them so the file stays a list of shapes.

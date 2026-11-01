@@ -69,7 +69,7 @@ pub const AGENT: IconData = IconData {
             y: "8",
             width: "16",
             height: "12",
-            rx: Some("4"),
+            rx: Some("3"),
             ry: None,
         },
         Path {
@@ -165,7 +165,7 @@ pub const BLOCK: IconData = IconData {
             y: "3",
             width: "18",
             height: "18",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Rect {
@@ -249,7 +249,7 @@ pub const BUILD: IconData = IconData {
             y: "4",
             width: "8",
             height: "7",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -257,7 +257,7 @@ pub const BUILD: IconData = IconData {
             y: "13",
             width: "8",
             height: "7",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -265,7 +265,7 @@ pub const BUILD: IconData = IconData {
             y: "13",
             width: "8",
             height: "7",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
     ],
@@ -280,7 +280,7 @@ pub const CALENDAR: IconData = IconData {
             y: "5",
             width: "18",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -294,7 +294,7 @@ pub const CHART_BAR: IconData = IconData {
     mirror_rtl: false,
     nodes: &[
         Path {
-            d: "M3 3L3 18Q3 21 6 21L21 21",
+            d: "M3 3L3 19Q3 21 5 21L21 21",
         },
         Rect {
             x: "7",
@@ -341,7 +341,7 @@ pub const CHART_TREND: IconData = IconData {
     mirror_rtl: false,
     nodes: &[
         Path {
-            d: "M3 3L3 18Q3 21 6 21L21 21",
+            d: "M3 3L3 19Q3 21 5 21L21 21",
         },
         Path {
             d: "M7 15l4-4 3 3 6-6M16 8h4v4",
@@ -415,7 +415,7 @@ pub const COMPONENT: IconData = IconData {
             y: "3",
             width: "7.5",
             height: "7.5",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -423,7 +423,7 @@ pub const COMPONENT: IconData = IconData {
             y: "3",
             width: "7.5",
             height: "7.5",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -431,7 +431,7 @@ pub const COMPONENT: IconData = IconData {
             y: "13.5",
             width: "7.5",
             height: "7.5",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Path {
@@ -450,11 +450,11 @@ pub const COPY: IconData = IconData {
             y: "8",
             width: "13",
             height: "13",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
-            d: "M16 8L16 5.5Q16 3 13.5 3L6 3Q3 3 3 6L3 13.5Q3 16 5.5 16L8 16",
+            d: "M16 8L16 5Q16 3 14 3L5 3Q3 3 3 5L3 14Q3 16 5 16L8 16",
         },
     ],
 };
@@ -468,7 +468,7 @@ pub const CRATE: IconData = IconData {
             y: "4",
             width: "18",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -495,7 +495,7 @@ pub const DASHBOARD: IconData = IconData {
             y: "3",
             width: "8",
             height: "10",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -503,7 +503,7 @@ pub const DASHBOARD: IconData = IconData {
             y: "3",
             width: "8",
             height: "6",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -511,7 +511,7 @@ pub const DASHBOARD: IconData = IconData {
             y: "11",
             width: "8",
             height: "10",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -519,7 +519,7 @@ pub const DASHBOARD: IconData = IconData {
             y: "15",
             width: "8",
             height: "6",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
     ],
@@ -583,7 +583,7 @@ pub const DESKTOP_APP: IconData = IconData {
             y: "4",
             width: "20",
             height: "13",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -601,7 +601,7 @@ pub const DOWNLOAD: IconData = IconData {
             d: "M12 3.5v11.5M7.5 10.5 12 15l4.5-4.5",
         },
         Path {
-            d: "M4 15.5L4 18Q4 20.5 6.5 20.5L17.5 20.5Q20 20.5 20 18L20 15.5",
+            d: "M4 15.5L4 18.5Q4 20.5 6 20.5L18 20.5Q20 20.5 20 18.5L20 15.5",
         },
     ],
 };
@@ -647,7 +647,7 @@ pub const EXPAND: IconData = IconData {
 };
 /// Atoll `external-link`: Opens in a new tab (external, new window, outside, open). Mirrored in right-to-left text.
 /// Reserved for: links that leave the app.
-pub const EXTERNAL_LINK: IconData = IconData { name: "external-link", mirror_rtl: true, nodes: &[Path { d: "M10.5 4.5L7.5 4.5Q4.5 4.5 4.5 7.5L4.5 16.5Q4.5 19.5 7.5 19.5L16.5 19.5Q19.5 19.5 19.5 16.5L19.5 13.5" }, Path { d: "M14 4.5h5.5V10M19.5 4.5 11 13" }] };
+pub const EXTERNAL_LINK: IconData = IconData { name: "external-link", mirror_rtl: true, nodes: &[Path { d: "M10.5 4.5L6.5 4.5Q4.5 4.5 4.5 6.5L4.5 17.5Q4.5 19.5 6.5 19.5L17.5 19.5Q19.5 19.5 19.5 17.5L19.5 13.5" }, Path { d: "M14 4.5h5.5V10M19.5 4.5 11 13" }] };
 /// Atoll `favorite`: Favorite (star, rate, bookmark, important).
 pub const FAVORITE: IconData = IconData { name: "favorite", mirror_rtl: false, nodes: &[Path { d: "M14 8.43Q14.35 9.36 15.35 9.41L20.04 9.62Q21.04 9.66 20.25 10.29L16.59 13.21Q15.8 13.84 16.07 14.8L17.32 19.32Q17.58 20.29 16.75 19.73L12.83 17.15Q12 16.6 11.17 17.15L7.25 19.73Q6.42 20.29 6.68 19.32L7.93 14.8Q8.2 13.84 7.41 13.21L3.75 10.29Q2.96 9.66 3.96 9.62L8.65 9.41Q9.65 9.36 10 8.43L11.65 4.04Q12 3.1 12.35 4.04Z" }] };
 /// Atoll `file`: File (document, page, paper).
@@ -711,16 +711,16 @@ pub const FULLSCREEN: IconData = IconData {
     mirror_rtl: false,
     nodes: &[
         Path {
-            d: "M3.5 9L3.5 6.75Q3.5 4.5 5.75 4.5L8 4.5",
+            d: "M3.5 9L3.5 6.5Q3.5 4.5 5.5 4.5L8 4.5",
         },
         Path {
-            d: "M16 4.5L18.25 4.5Q20.5 4.5 20.5 6.75L20.5 9",
+            d: "M16 4.5L18.5 4.5Q20.5 4.5 20.5 6.5L20.5 9",
         },
         Path {
-            d: "M20.5 15L20.5 17.25Q20.5 19.5 18.25 19.5L16 19.5",
+            d: "M20.5 15L20.5 17.5Q20.5 19.5 18.5 19.5L16 19.5",
         },
         Path {
-            d: "M8 19.5L5.75 19.5Q3.5 19.5 3.5 17.25L3.5 15",
+            d: "M8 19.5L5.5 19.5Q3.5 19.5 3.5 17.5L3.5 15",
         },
     ],
 };
@@ -767,7 +767,7 @@ pub const HIDE: IconData = IconData {
 };
 /// Atoll `home`: Home (house, start, main).
 /// Reserved for: the home page.
-pub const HOME: IconData = IconData { name: "home", mirror_rtl: false, nodes: &[Path { d: "M9.7 4.92Q12 3 14.3 4.92L18.7 8.58Q21 10.5 21 13.5L21 18Q21 21 18 21L6 21Q3 21 3 18L3 13.5Q3 10.5 5.3 8.58Z" }, Path { d: "M9.5 21v-5.5h5V21" }] };
+pub const HOME: IconData = IconData { name: "home", mirror_rtl: false, nodes: &[Path { d: "M10.46 4.28Q12 3 13.54 4.28L19.46 9.22Q21 10.5 21 12.5L21 19Q21 21 19 21L5 21Q3 21 3 19L3 12.5Q3 10.5 4.54 9.22Z" }, Path { d: "M9.5 21v-5.5h5V21" }] };
 /// Atoll `hot-reload`: Hot reload (hot patch, live reload, refresh, fast).
 pub const HOT_RELOAD: IconData = IconData {
     name: "hot-reload",
@@ -794,7 +794,7 @@ pub const IMAGE: IconData = IconData {
             y: "4",
             width: "18",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Circle {
@@ -839,7 +839,7 @@ pub const KEYBOARD: IconData = IconData {
             y: "6",
             width: "20",
             height: "12",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path { d: "M7.5 14.5h9" },
@@ -879,7 +879,7 @@ pub const LAYOUT: IconData = IconData {
             y: "3",
             width: "18",
             height: "18",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -930,7 +930,7 @@ pub const LOCK: IconData = IconData {
             y: "10.5",
             width: "15",
             height: "10.5",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -948,7 +948,7 @@ pub const MAIL: IconData = IconData {
             y: "5",
             width: "19",
             height: "14",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -975,7 +975,7 @@ pub const MOBILE_APP: IconData = IconData {
             y: "2",
             width: "12",
             height: "20",
-            rx: Some("4"),
+            rx: Some("3"),
             ry: None,
         },
         Path {
@@ -1019,7 +1019,7 @@ pub const NATIVE_WINDOW: IconData = IconData {
             y: "4",
             width: "19",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path { d: "M2.5 9h19" },
@@ -1177,7 +1177,7 @@ pub const SERVER: IconData = IconData {
             y: "3.5",
             width: "18",
             height: "7",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Rect {
@@ -1185,7 +1185,7 @@ pub const SERVER: IconData = IconData {
             y: "13.5",
             width: "18",
             height: "7",
-            rx: Some("2"),
+            rx: Some("1"),
             ry: None,
         },
         Circle {
@@ -1227,7 +1227,7 @@ pub const SETTINGS: IconData = IconData {
 };
 /// Atoll `share`: Share (send, export, social).
 /// Reserved for: sharing elsewhere.
-pub const SHARE: IconData = IconData { name: "share", mirror_rtl: false, nodes: &[Path { d: "M12 14V3.5M8 7.5l4-4 4 4" }, Path { d: "M8.5 10L6.75 10Q5 10 5 11.75L5 17.5Q5 20.5 8 20.5L16 20.5Q19 20.5 19 17.5L19 11.75Q19 10 17.25 10L15.5 10" }] };
+pub const SHARE: IconData = IconData { name: "share", mirror_rtl: false, nodes: &[Path { d: "M12 14V3.5M8 7.5l4-4 4 4" }, Path { d: "M8.5 10L6.75 10Q5 10 5 11.75L5 18.5Q5 20.5 7 20.5L17 20.5Q19 20.5 19 18.5L19 11.75Q19 10 17.25 10L15.5 10" }] };
 /// Atoll `show`: Show (eye, visible, reveal, view).
 /// Reserved for: showing hidden content.
 pub const SHOW: IconData = IconData {
@@ -1255,7 +1255,7 @@ pub const SIDEBAR: IconData = IconData {
             y: "4",
             width: "18",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path { d: "M9 4v16" },
@@ -1348,14 +1348,14 @@ pub const STACK: IconData = IconData {
             y: "9",
             width: "14",
             height: "12",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
-            d: "M6 9L6 7.5Q6 6 7.5 6L16 6Q19 6 19 9L19 17Q19 18 18 18L17 18",
+            d: "M6 9L6 7.5Q6 6 7.5 6L17 6Q19 6 19 8L19 17Q19 18 18 18L17 18",
         },
         Path {
-            d: "M9 6L9 4.5Q9 3 10.5 3L19 3Q22 3 22 6L22 13.5Q22 15 20.5 15L19 15",
+            d: "M9 6L9 4.5Q9 3 10.5 3L20 3Q22 3 22 5L22 13.5Q22 15 20.5 15L19 15",
         },
     ],
 };
@@ -1394,7 +1394,7 @@ pub const TABLE: IconData = IconData {
             y: "4",
             width: "18",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -1433,7 +1433,7 @@ pub const TERMINAL: IconData = IconData {
             y: "4",
             width: "20",
             height: "16",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -1504,7 +1504,7 @@ pub const UNLOCK: IconData = IconData {
             y: "10.5",
             width: "15",
             height: "10.5",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path {
@@ -1522,7 +1522,7 @@ pub const UPLOAD: IconData = IconData {
             d: "M12 15V3.5M7.5 8 12 3.5 16.5 8",
         },
         Path {
-            d: "M4 15.5L4 18Q4 20.5 6.5 20.5L17.5 20.5Q20 20.5 20 18L20 15.5",
+            d: "M4 15.5L4 18.5Q4 20.5 6 20.5L18 20.5Q20 20.5 20 18.5L20 15.5",
         },
     ],
 };
@@ -1570,7 +1570,7 @@ pub const WASM_MODULE: IconData = IconData {
             y: "3",
             width: "18",
             height: "18",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Path { d: "M7 9.5 9 8v8" },
@@ -1594,7 +1594,7 @@ pub const WEB_APP: IconData = IconData {
             y: "3.5",
             width: "20",
             height: "17",
-            rx: Some("3"),
+            rx: Some("2"),
             ry: None,
         },
         Rect {
