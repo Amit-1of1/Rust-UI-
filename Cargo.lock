@@ -2702,6 +2702,7 @@ version = "0.1.0"
 dependencies = [
  "atoll-ui",
  "dioxus",
+ "palette",
  "pulldown-cmark",
  "web-sys",
 ]

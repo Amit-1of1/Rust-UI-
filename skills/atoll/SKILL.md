@@ -67,4 +67,9 @@ Then run `atoll info --json` and resolve every file under `conflicts` (it holds 
 
 ## 6. Check your work
 
-`cargo build`, then `dx serve` to look at it. Tab through what you built: every control must be reachable and show a focus ring.
+`cargo build`, then `dx serve` to look at it. When the build fails, run `atoll --source <kit> explain` (MCP: `explain_errors`) before guessing: it turns errors from kit components into the missing or misspelt prop, its docs, the enum variants that exist, or the component to `add`. Tab through what you built: every control must be reachable and show a focus ring; `atoll contract <name>` (MCP: `get_contract`) lists what each key must do.
+
+## Starting a new app or a brand theme
+
+- A new app of a kind the kit already has (admin dashboard, booking or other routed app with long forms, marketing site, web + desktop + mobile): `atoll create my-app --git --template dashboard` (or `booking`, `marketing`, `showcase`; MCP: `list_templates`) instead of building the shell from scratch. Anything else: `atoll create my-app --git`.
+- A brand colour: `atoll theme --brand '#7c3aed' --name brand` (MCP: `generate_theme`), or `--from-image logo.png`. Never hand-pick an accent: the generated one is proven readable in light and dark.

@@ -120,7 +120,11 @@ fn lists_the_tools_with_schemas() {
             "search_components",
             "get_component",
             "add_component",
-            "init_theme"
+            "init_theme",
+            "explain_errors",
+            "get_contract",
+            "generate_theme",
+            "list_templates"
         ]
     );
     for t in tools {
@@ -319,4 +323,91 @@ fn unknown_protocol_version_gets_the_newest() {
         .handle_line(r#"{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}"#)
         .unwrap();
     assert!(old.contains("\"protocolVersion\":\"2024-11-05\""));
+}
+
+#[test]
+fn explain_errors_reads_cargo_output() {
+    let tmp = tempfile::tempdir().unwrap();
+    let mut c = Client::start(tmp.path());
+    let fixture = repo_root().join("crates/cli/tests/fixtures/explain/cargo.jsonl");
+    let output = std::fs::read_to_string(fixture).unwrap();
+    let (text, is_error) = c.call("explain_errors", json!({ "cargo_output": output }));
+    assert!(!is_error, "{text}");
+    // The same plain-words report `atoll explain` prints.
+    let expected = atoll_cli::explain::render(
+        &atoll_cli::explain::Api::load(
+            &repo_root(),
+            &[
+                tmp.path().join("src/components"),
+                tmp.path().join("src/blocks"),
+            ],
+        )
+        .explain(
+            &std::fs::read_to_string(
+                repo_root().join("crates/cli/tests/fixtures/explain/cargo.jsonl"),
+            )
+            .unwrap(),
+            tmp.path(),
+        ),
+    );
+    assert_eq!(text, expected);
+    assert!(!text.is_empty());
+    let (text, is_error) = c.call("explain_errors", json!({ "cargo_output": "" }));
+    assert!(!is_error);
+    assert!(text.starts_with("No errors"), "{text}");
+}
+
+#[test]
+fn contracts_are_served() {
+    let tmp = tempfile::tempdir().unwrap();
+    let mut c = Client::start(tmp.path());
+    let (text, is_error) = c.call("get_contract", json!({ "name": "dialog" }));
+    assert!(!is_error, "{text}");
+    assert!(text.contains("| Escape |"), "{text}");
+    let (index, _) = c.call("get_contract", json!({}));
+    assert!(
+        index.contains("dialog") && index.contains("keyboard contract"),
+        "{index}"
+    );
+    let (text, is_error) = c.call("get_contract", json!({ "name": "badge" }));
+    assert!(!is_error && text.contains("no keyboard contract"), "{text}");
+    let (text, is_error) = c.call("get_contract", json!({ "name": "dialgo" }));
+    assert!(is_error, "{text}");
+}
+
+#[test]
+fn themes_are_readable_in_both_modes() {
+    let tmp = tempfile::tempdir().unwrap();
+    let mut c = Client::start(tmp.path());
+    let (text, is_error) = c.call(
+        "generate_theme",
+        json!({ "brand": "#facc15", "name": "acme" }),
+    );
+    assert!(!is_error, "{text}");
+    assert!(text.contains("[data-accent=\"acme\"]"), "{text}");
+    assert!(text.contains("--accent-color: light-dark(#"), "{text}");
+    let (text, is_error) = c.call("generate_theme", json!({ "brand": "yellow" }));
+    assert!(is_error, "{text}");
+    let (text, is_error) = c.call(
+        "generate_theme",
+        json!({ "brand": "#fff", "name": "a\"]{" }),
+    );
+    assert!(is_error, "{text}");
+}
+
+#[test]
+fn templates_match_the_cli() {
+    let tmp = tempfile::tempdir().unwrap();
+    let mut c = Client::start(tmp.path());
+    let rows = c.call_json("list_templates", json!({}));
+    let listed = names(&rows);
+    let expected: Vec<&str> = atoll_cli::template::TEMPLATES
+        .iter()
+        .map(|t| t.name)
+        .collect();
+    assert_eq!(listed, expected);
+    assert!(rows[0]["command"]
+        .as_str()
+        .unwrap()
+        .contains("--template dashboard"));
 }

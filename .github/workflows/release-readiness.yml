@@ -8,6 +8,8 @@ name: Release readiness
 #   (scripts/semver.sh, docs/VERSIONING.md).
 # - getting-started: docs/GETTING_STARTED.md works from a fresh app
 #   (scripts/getting-started-check.sh).
+# - templates: every `atoll create --template` app builds outside the repo
+#   (scripts/template-check.sh).
 on:
   push:
     branches: [main]
@@ -44,6 +46,19 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev
       - run: scripts/getting-started-check.sh
+
+  # Every `atoll create --template` app, created outside the repo and built for the web and
+  # the desktop (scripts/template-check.sh).
+  templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev
+      - run: scripts/template-check.sh
 
   semver:
     if: github.event_name == 'pull_request'
