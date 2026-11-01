@@ -77,6 +77,14 @@ enum Command {
         #[arg(long, default_value = ".")]
         app: PathBuf,
     },
+    /// Get an app ready for `atoll-test` (headless screen tests in `cargo test`): adds it to
+    /// `[dev-dependencies]` from the same source as the kit, plus the kit's renderer fixes
+    /// (`[patch.crates-io]`). docs/TESTING.md.
+    SetupTests {
+        /// The app's root folder (where its Cargo.toml is).
+        #[arg(long, default_value = ".")]
+        app: PathBuf,
+    },
     /// Copy components or blocks (and the components they depend on) into a project.
     Add {
         names: Vec<String>,
@@ -366,6 +374,7 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             reset,
             app,
         } => init(root, &app, &dest, scoped, reset)?,
+        Command::SetupTests { app } => setup_tests(root, &app)?,
         Command::Add {
             names,
             dest,
@@ -991,4 +1000,34 @@ fn same_dir(a: &Path, b: &Path) -> bool {
         (Ok(a), Ok(b)) => a == b,
         _ => a == b,
     }
+}
+
+/// `atoll setup-tests`: edit the app's Cargo.toml for atoll-test (crates/cli/src/testkit.rs).
+fn setup_tests(root: &Path, app: &Path) -> Result<(), String> {
+    let manifest = app.join("Cargo.toml");
+    let text =
+        std::fs::read_to_string(&manifest).map_err(|e| format!("{}: {e}", manifest.display()))?;
+    let kit = std::fs::read_to_string(root.join("Cargo.toml"))
+        .map_err(|e| format!("{}: {e}", root.join("Cargo.toml").display()))?;
+    let (out, report) = atoll_cli::testkit::setup(&text, &kit)?;
+    if out != text {
+        std::fs::write(&manifest, &out).map_err(|e| format!("{}: {e}", manifest.display()))?;
+    }
+    if report.added_dep {
+        println!("added atoll-test to [dev-dependencies]");
+    }
+    if !report.patches.is_empty() {
+        println!(
+            "added the kit's renderer fixes to [patch.crates-io]: {}",
+            report.patches.join(", ")
+        );
+    }
+    if !report.added_dep && report.patches.is_empty() {
+        println!("{} is already set up for atoll-test", manifest.display());
+    }
+    println!(
+        "\nA first test, for the bottom of src/main.rs (docs/TESTING.md has more):\n\n{}\n\nThen: cargo test",
+        atoll_cli::testkit::EXAMPLE
+    );
+    Ok(())
 }
