@@ -2,6 +2,42 @@
 
 **Decision (2026-10-14): every Lucide icon, generated into the kit by `scripts/gen-lucide-icons.mjs`.** This replaces the 2026-10-13 decision below (Lucide through `dioxus-icons` 0.1.0). Apps import `ui::icons::Check`; components import `crate::components::icons::Check`. Nothing depends on an icon crate.
 
+## Atoll icons (2026-11-01)
+
+**Decision: the kit draws its own icons for what Lucide doesn't cover well (the Rust and app stack: crates, wasm, native windows, agents, tool calls, motion, focus) plus the everyday system actions, in one style that matches the Lagoon look.** They live next to Lucide in `ui::icons::atoll` and use the same `IconData`, renderer, sizes, stroke token and RTL rule, so the two sets mix in one row. Style picked from a three-way sample sheet (soft line / two-tone / crisp) in the "Create an original Atoll icon set" thread.
+
+### Drawing rules
+
+- **Grid:** 24 x 24 viewBox, the same box as Lucide, so icons pair with text and controls at `--icon-size-*` (12, 16, 20, 24, 32px).
+- **Safe area and keylines:** shapes stay inside 1..23 (the generator rejects circles, rects, lines and points outside it), and the live area is 2..22. A full square is 18 x 18 at (3, 3), a full circle `r = 9` at the centre, portrait shapes 12-16 wide x 20 tall, landscape ones 20 wide x 13-16 tall. Leave visual weight even: a circle reaches 1px further than a square.
+- **Stroke:** drawn at 1.75 with round ends and joins; the rendered width is the theme's `--icon-stroke-width`, so a preset can thin or thicken every icon at once. No shape relies on a hairline: gaps between strokes are at least 2px, so icons survive at 16px.
+- **Corners:** outer corners of boxes round by 3px (4px for tall devices, 2px for small tiles); interior details stay sharp.
+- **Fills:** outline style. Solid fill (`fill="currentColor" stroke="none"`) only for dots (status dots, the "more" ellipsis, eyes) and for icons whose meaning is half-filled (`theme`). Colour always comes from `currentColor`.
+- **No text, no logos.** No letters except where the meaning is a glyph (`typography`); no third-party marks (the WebAssembly logo, Rust's gear, Git's logo). `wasm-module` and `branch` are our own metaphors.
+- **Flat SVG:** no groups, transforms, styles, titles or masks; the generator rejects them so the file stays a list of shapes.
+
+### Naming, keywords and accessibility (from the design-system checklist)
+
+- **Name by purpose, not shape:** `delete` not `trash`, `next` not `arrow-right`, `notification` not `bell`. A test rejects shape words (arrow, chevron, circle, triangle...) in names. The shape words go in the keywords.
+- **Keywords:** at least two per icon in `icons.json`; the docs browser and rustdoc search them.
+- **Default accessible name:** every icon has a `label` in `icons.json` (`atoll::meta(name).label`). Icons stay decorative by default; when an icon stands alone and means something, pass that label (or a better one in context).
+- **Reserved icons:** system actions (`add`, `remove`, `close`, `delete`, `edit`, `copy`, `search`, `settings`, `menu`, `more`, `filter`, `sort`, `refresh`, `download`, `upload`, `share`, `show`, `hide`, `back`, `next`, `expand`, `collapse`, `home`, `sign-in`, `sign-out`, the five status icons, `light-mode`, `dark-mode`, `sparkles`, `permission`, `atoll`) carry a `reserved` meaning, and no two icons share one. Don't use a reserved icon for anything else, and don't draw a second icon for a reserved action.
+- **Categories:** system, navigation, status, content, people, dev, app, agent, data, design, brand (`atoll::CATEGORIES`).
+
+### Adding an icon
+
+1. Draw `crates/ui/icons/atoll/<name>.svg` on the grid above (copy the root `<svg>` line from any existing file).
+2. Add its entry to `crates/ui/icons/atoll/icons.json`: `label`, `category`, `keywords`, and `reserved` / `mirror_rtl` when they apply.
+3. Run `node scripts/gen-atoll-icons.mjs` (needs `rustfmt`), then `cargo test -p atoll-ui --test atoll_icons`. The test fails when an SVG and `atoll.rs` disagree.
+4. Check it in the gallery's Icons section at 16 and 24px, in light and dark.
+
+### Don't
+
+- Don't hand-edit `atoll.rs`.
+- Don't use an icon as the only cue for state or meaning; pair it with text or give it a name.
+- Don't mix sizes in one row, and don't scale icons to sizes that aren't on the token scale.
+- Don't recolour parts of an icon; tint the whole icon through `color`.
+
 ## How it works
 
 - `scripts/gen-lucide-icons.mjs` downloads the pinned `lucide-static` release with `npm pack` (which checks the registry's integrity hash), reads `icon-nodes.json` (each icon's shapes), `tags.json` (search words, put in the rustdoc) and the alias exports (old names), and writes `crates/ui/src/components/icons/lucide.rs` through `rustfmt`. Run it again with `--version` to upgrade; `--from` takes an unpacked or packed package for offline use.
