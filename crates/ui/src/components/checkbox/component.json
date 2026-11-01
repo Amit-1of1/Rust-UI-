@@ -11,6 +11,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "sound"
     }
   ],
   "description": "The Checkbox component is used to create an accessible checkbox input.",
