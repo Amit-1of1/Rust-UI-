@@ -408,6 +408,9 @@ pub fn DataTable(
     let mut widths = use_signal(|| columns.iter().map(|c| c.width).collect::<Vec<_>>());
     let mut select_width = use_signal(|| None::<f64>);
     let mut boxes = use_signal(Vec::<Option<Rc<MountedData>>>::new);
+    // Widths measured when the headers mount, for the handles' `aria-valuenow` before any
+    // resize (the layout is still automatic then).
+    let mut natural = use_signal(Vec::<Option<f64>>::new);
     let mut select_box = use_signal(|| None::<Rc<MountedData>>);
     let mut rtl = use_signal(|| false);
     let mut drag = use_signal(|| None::<ResizeDrag>);
@@ -771,7 +774,11 @@ pub fn DataTable(
                                     };
                                     let min = column.min_width;
                                     let resize_label = fill(&t.resize_column, &[("column", &column.header)]);
-                                    let now = width_of(index);
+                                    // A focusable separator needs a value: the set width, else
+                                    // the measured one, else (before mounting) the minimum.
+                                    let now = width_of(index)
+                                        .or_else(|| natural.read().get(index).copied().flatten())
+                                        .unwrap_or(min);
                                     rsx! {
                                         TableHead {
                                             key: "{index}",
@@ -795,12 +802,22 @@ pub fn DataTable(
                                                     span {
                                                         class: Styles::dx_data_table_measure,
                                                         "aria-hidden": "true",
-                                                        onmounted: move |e| {
-                                                            let mut b = boxes.write();
-                                                            if b.len() <= index {
-                                                                b.resize(index + 1, None);
+                                                        onmounted: move |e| async move {
+                                                            let mounted = e.data();
+                                                            {
+                                                                let mut b = boxes.write();
+                                                                if b.len() <= index {
+                                                                    b.resize(index + 1, None);
+                                                                }
+                                                                b[index] = Some(mounted.clone());
                                                             }
-                                                            b[index] = Some(e.data());
+                                                            if let Ok(rect) = mounted.get_client_rect().await {
+                                                                let mut n = natural.write();
+                                                                if n.len() <= index {
+                                                                    n.resize(index + 1, None);
+                                                                }
+                                                                n[index] = Some(rect.size.width.round());
+                                                            }
                                                         },
                                                     }
                                                     div {
@@ -809,7 +826,7 @@ pub fn DataTable(
                                                         tabindex: "0",
                                                         "aria-orientation": "vertical",
                                                         "aria-label": resize_label,
-                                                        "aria-valuenow": now.map(|w| format!("{w}")),
+                                                        "aria-valuenow": format!("{now}"),
                                                         "aria-valuemin": format!("{min}"),
                                                         "data-dragging": drag().is_some_and(|d| d.column == index).then_some("true"),
                                                         onpointerdown: move |e: PointerEvent| {
