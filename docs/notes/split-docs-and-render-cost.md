@@ -41,34 +41,20 @@ undefined (reading 'listening')" and the page never becomes ready when a second 
 finishes downloading before the route's own part; only start a prefetch after the first lazy
 part has mounted.
 
-## Gallery: content-visibility
+## Gallery: content-visibility (tried, not kept)
 
 The gallery's startup budget (ready at 4x CPU) counts the whole page, because the lazy part
 with 70 sections arrives before the stylesheets it adds finish loading. A Chromium trace of
 that load: about 2.1 s running wasm (building the DOM), 0.4-0.5 s layout and 0.2-0.3 s style
-recalculation. `content-visibility: auto` on `.gallery-section` (apps/gallery/assets/gallery.css)
-skips style, layout and paint for sections off screen:
+recalculation. `content-visibility: auto` on `.gallery-section` cut ready at 4x CPU from
+3,213 / 3,020 / 3,192 ms to 2,205 / 2,199 / 2,325 ms (layout ~400 -> ~80 ms) in Chromium.
 
-| Run | before | after |
-|---|---|---|
-| Ready, CPU 4x | 3,213 / 3,020 / 3,192 ms | 2,205 / 2,199 / 2,325 ms |
-| Layout | 472 / 366 / 393 ms | 109 / 69 / 77 ms |
-| Style recalculation | 229 / 237 / 290 ms | 51 / 59 ms |
-| `budgets.mjs` startup (median of 5) | 2,904 / 2,856 ms | 2,001 ms |
-
-Containment has a catch: a section with `content-visibility: auto` is the box that anchored
-overlays flip inside, so menus, selects, popovers and tooltips near the screen edge stopped
-flipping (tests/e2e/anchor.mjs caught it: 7 checks). A section that is hovered, has focus or
-holds an open overlay (`[data-state="open"]`) is rendered normally, which fixed all 7. Don't
-put `content-visibility` on a box whose overlays must escape it. In Firefox CI the dropdown menu still didn't flip when opened by a bare DOM click (no hover, no focus, which no real click produces); `anchor.mjs` now focuses the trigger before clicking, as a real click does.
-
-Two test scripts had to learn about it: `axe.mjs` renders everything before scanning
-(`content-visibility: visible` on all elements), because axe measures colours and sizes of
-boxes that were never laid out and reported a contrast failure that isn't there; `table.mjs`
-waits for the table's status text, since `innerText` of a skipped section is empty until it
-renders.
-
-Off-screen sections stay in the accessibility tree, in find-in-page and in the tab order; a
-section is rendered as soon as focus or scrolling reaches it. `contain-intrinsic-size: auto
-320px` keeps the scrollbar from jumping. Code that measures an element far down the page
-(`getBoundingClientRect`) forces that section to render, which is correct but costs time.
+Not kept, because containment breaks overlays that are not portaled. `content-visibility: auto`
+always applies layout and paint containment, so each section becomes the containing block of
+the menus, popovers, dialogs and drawers rendered inside it: anchored overlays stopped flipping
+at the screen edge (7 anchor checks in Chromium), and in WebKit CI the drawer never became
+visible and the table and multi-select checks failed. Rendering a section normally while it is
+hovered, focused or holds `[data-state="open"]` fixed Chromium but not Firefox or WebKit.
+axe also reported a false contrast failure on never-rendered sections, and `innerText` of a
+skipped section is empty. Revisit once overlays render at the document root (a portal), which
+is what makes containment safe.

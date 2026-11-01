@@ -10,7 +10,7 @@
       "firstRequests": 4,
       "mainWasmKB": 258.1,
       "totalKB": 1374.9,
-      "startupMs4x": 2001,
+      "startupMs4x": 2904,
       "files": {
         "assets/atoll.css": 21.7,
         "assets/chunk_0_split.wasm": 0.2,

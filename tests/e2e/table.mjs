@@ -12,10 +12,6 @@ const table = page.locator("table", { has: page.locator("caption", { hasText: "T
 const root = page.locator("div").filter({ has: table }).filter({ has: page.getByLabel("Filter rows") }).last();
 await table.scrollIntoViewIfNeeded();
 const status = root.getByRole("status");
-// The gallery renders a section once it scrolls near the screen (content-visibility).
-await page.waitForFunction(
-  () => [...document.querySelectorAll("[role=status]")].some((s) => /Showing 1–5 of 14 rows/.test(s.innerText)),
-);
 const firstName = () => table.locator("tbody tr").first().locator("td").nth(1).innerText();
 
 assert.match(await status.innerText(), /Showing 1–5 of 14 rows/);
