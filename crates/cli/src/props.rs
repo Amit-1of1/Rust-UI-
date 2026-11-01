@@ -265,7 +265,7 @@ fn prop(item: &str, is_field: bool) -> Option<Prop> {
     let extends: Vec<&str> = props_attr
         .iter()
         .filter_map(|a| a.strip_prefix("extends"))
-        .map(|a| a.trim_start_matches(|c| c == ' ' || c == '=').trim())
+        .map(|a| a.trim_start_matches([' ', '=']).trim())
         .collect();
     let explicit_default = props_attr.iter().find_map(|a| {
         if a == "default" {
