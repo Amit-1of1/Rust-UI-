@@ -10,6 +10,8 @@ rust-version.workspace = true
 [dependencies]
 dioxus.workspace = true
 ui = { workspace = true, features = ["demos", "contract-check"] }
+# The theme builder converts the colour picker's HSV value (the version the kit uses).
+palette = "0.7.6"
 pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

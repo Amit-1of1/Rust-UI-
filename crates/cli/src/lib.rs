@@ -29,6 +29,7 @@ pub mod motion;
 pub mod postbuild;
 pub mod scaffold;
 pub mod scope;
+pub mod template;
 pub mod theme;
 pub mod update;
 

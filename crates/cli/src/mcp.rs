@@ -320,6 +320,99 @@ impl Server {
                 fs::copy(&from, &dest).map_err(|e| e.to_string())?;
                 Ok(format!("Wrote {rel}. Link it from the app, e.g. `document::Stylesheet {{ href: asset!(\"/{rel}\") }}`."))
             }
+            "explain_errors" => {
+                let output = match optional_str(args, "cargo_output")? {
+                    Some(text) => text.to_string(),
+                    None => {
+                        let extra: Vec<String> = match args.get("cargo_args") {
+                            None | Some(Value::Null) => Vec::new(),
+                            Some(Value::Array(a)) => a
+                                .iter()
+                                .map(|v| v.as_str().map(String::from))
+                                .collect::<Option<_>>()
+                                .ok_or("`cargo_args` must be a list of strings")?,
+                            Some(_) => return Err("`cargo_args` must be a list of strings".into()),
+                        };
+                        let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".into());
+                        let out = std::process::Command::new(cargo)
+                            .args(["check", "--message-format=json"])
+                            .args(&extra)
+                            .current_dir(&self.project)
+                            .stdin(std::process::Stdio::null())
+                            .output()
+                            .map_err(|e| format!("could not run cargo: {e}"))?;
+                        String::from_utf8_lossy(&out.stdout).into_owned()
+                    }
+                };
+                let dirs = [
+                    self.project.join("src/components"),
+                    self.project.join("src/blocks"),
+                ];
+                let report =
+                    crate::explain::Api::load(&self.root, &dirs).explain(&output, &self.project);
+                if report.hints.is_empty() && report.other.is_empty() {
+                    return Ok("No errors: `cargo check` passes.".into());
+                }
+                Ok(crate::explain::render(&report))
+            }
+            "get_contract" => {
+                let dir = self.root.join(crate::COMPONENTS_DIR);
+                match optional_str(args, "name")? {
+                    Some(name) => {
+                        let reg = self.registry()?;
+                        if !reg.items.iter().any(|i| i.name == name) {
+                            return Err(unknown(&reg, name));
+                        }
+                        Ok(match crate::contract::Contract::load(&dir, name)? {
+                            Some(c) => c.markdown(),
+                            None => format!("`{name}` has no keyboard contract yet; its docs (`get_component`) describe its keyboard use."),
+                        })
+                    }
+                    None => {
+                        let all = crate::contract::Contract::load_all(&dir)?;
+                        let names: Vec<&str> = all.iter().map(|c| c.name.as_str()).collect();
+                        Ok(format!(
+                            "{} components have a keyboard contract (every row is a test the kit runs in three browsers): {}.\nCall get_contract with a `name` for its table.",
+                            names.len(),
+                            names.join(", ")
+                        ))
+                    }
+                }
+            }
+            "generate_theme" => {
+                use crate::theme::{contrast, css, preset, Rgb};
+                let brand = Rgb::parse(required_str(args, "brand")?)?;
+                let name = optional_str(args, "name")?.unwrap_or("brand");
+                if name.is_empty()
+                    || !name
+                        .chars()
+                        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+                {
+                    return Err("`name` may use letters, digits, `-` and `_` only".into());
+                }
+                let p = preset(brand)?;
+                Ok(format!(
+                    "Add this to the app's CSS after the theme, then set `data-accent=\"{name}\"` on <html> (or any element):\n\n```css\n{}```\n\nLabel contrast: light mode {:.1}:1 on {}, dark mode {:.1}:1 on {} (WCAG AA needs 4.5:1). Hue and saturation are the brand's; only lightness moved.",
+                    css(name, &p),
+                    contrast(p.light_fill, p.light_text),
+                    p.light_fill.hex(),
+                    contrast(p.dark_fill, p.dark_text),
+                    p.dark_fill.hex(),
+                ))
+            }
+            "list_templates" => {
+                let rows: Vec<Value> = crate::template::TEMPLATES
+                    .iter()
+                    .map(|t| {
+                        json!({
+                            "name": t.name,
+                            "summary": t.summary,
+                            "command": format!("atoll create my-app --git --template {}", t.name),
+                        })
+                    })
+                    .collect();
+                Ok(pretty(&rows))
+            }
             _ => unreachable!("checked against tools()"),
         }
     }
@@ -438,7 +531,7 @@ impl Server {
     }
 }
 
-const INSTRUCTIONS: &str = "Atoll is a shadcn-style component kit for Dioxus 0.8 (alpha). Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add.";
+const INSTRUCTIONS: &str = "Atoll is a shadcn-style component kit for Dioxus 0.8 (alpha). Components are copied into the app as source. Before writing UI code, call search_components or list_components, then get_component for the exact props and an example; prefer kit components over hand-written markup. add_component copies a component and the components it needs into the project and lists the `pub mod` lines to add. After editing, call explain_errors instead of guessing at compiler errors; get_contract says what each key must do; generate_theme makes a brand accent; for a new app, list_templates.";
 
 fn tools() -> Vec<Value> {
     let read_only = json!({ "readOnlyHint": true, "openWorldHint": false });
@@ -493,6 +586,42 @@ fn tools() -> Vec<Value> {
                 "force": { "type": "boolean", "description": "Overwrite a theme file that differs. Default: false." }
             } },
             "annotations": { "readOnlyHint": false, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false },
+        }),
+        json!({
+            "name": "explain_errors",
+            "title": "Explain build errors",
+            "description": "Run `cargo check` in the project (or read its JSON output) and explain errors that come from using kit components in plain words: the missing or misspelt prop with its docs, the enum variants that exist, and the component to add. Same as `atoll explain`. Call it after editing UI code and before guessing at a fix.",
+            "inputSchema": { "type": "object", "properties": {
+                "cargo_args": { "type": "array", "items": { "type": "string" }, "description": "Extra arguments for `cargo check`, e.g. [\"--features\", \"web\"]." },
+                "cargo_output": { "type": "string", "description": "Output of `cargo check --message-format=json` to read instead of running cargo." }
+            } },
+            "annotations": { "readOnlyHint": true, "openWorldHint": false },
+        }),
+        json!({
+            "name": "get_contract",
+            "title": "Read a keyboard contract",
+            "description": "What each key does in a component (Tab, Escape, arrows, Enter), the WAI-ARIA pattern it follows and whether it works on the native renderer. Every row is a test the kit runs. Without `name`, lists the components that have one.",
+            "inputSchema": { "type": "object", "properties": {
+                "name": { "type": "string", "description": "Registry name, e.g. `dialog`." }
+            } },
+            "annotations": read_only,
+        }),
+        json!({
+            "name": "generate_theme",
+            "title": "Make an accent theme from a brand colour",
+            "description": "Turn one brand colour into an accent preset that stays readable (WCAG AA) in light and dark mode, like `atoll theme --brand`. Returns the CSS and the contrast it reaches.",
+            "inputSchema": { "type": "object", "properties": {
+                "brand": { "type": "string", "description": "Brand colour as hex, e.g. `#7c3aed`." },
+                "name": { "type": "string", "description": "Preset name for `data-accent`. Default: brand." }
+            }, "required": ["brand"] },
+            "annotations": read_only,
+        }),
+        json!({
+            "name": "list_templates",
+            "title": "List app templates",
+            "description": "The kit's example apps that `atoll create --template` starts a new app from (admin dashboard, booking app, marketing site, web+desktop+mobile showcase). Use one when the user asks for a new app of that kind.",
+            "inputSchema": { "type": "object", "properties": {} },
+            "annotations": read_only,
         }),
     ]
 }
