@@ -1,7 +1,7 @@
 {
   "cargoDependencies": [],
   "componentDependencies": [],
-  "description": "The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.",
+  "description": "The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.",
   "exclude": [
     "docs.md",
     "component.json"

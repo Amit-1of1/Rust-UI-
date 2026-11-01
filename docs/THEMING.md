@@ -4,7 +4,7 @@ All colour, type, radius and mode live in `theme.css` as CSS custom properties. 
 
 ## Looks (theme presets)
 
-Atoll's default look is Lagoon: teal on neutral greys, Inter, 10 px corners, on foundations taken from Reshaped ([Foundations](#foundations) lists the tokens, [Brand and looks](#brand) explains the look). Four more looks change colours, fonts, corner radius, density and icon stroke together: `reef`, `abyss`, `driftwood` and `classic` (the old black-and-white look, system fonts).
+Atoll's default look is Lagoon: teal on neutral greys, Inter, 10 px corners, on foundations taken from Reshaped ([Foundations](FOUNDATIONS.md) lists the tokens, [Brand and looks](BRAND.md) explains the look). Four more looks change colours, fonts, corner radius, density and icon stroke together: `reef`, `abyss`, `driftwood` and `classic` (the old black-and-white look, system fonts).
 
 - At build time: `ThemeStyles { preset: "reef" }`, or `data-preset="reef"` on `<html>` in `index.html`.
 - While the app runs: `use_theme().set_preset("abyss")`, or render `PresetPicker {}` (also the first part of `ThemeCustomizer`). `PersistTheme` remembers it.

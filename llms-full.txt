@@ -20,6 +20,8 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 
 - [Installing components](docs/INSTALL.md): copy the source with `atoll` or `dx`, or depend on the crate from git
 - [MCP server](docs/MCP.md): `atoll mcp` lets MCP clients list, search, read and add components
+- [Composing components](docs/COMPOSITION.md): compiled examples of components nested and slotted together
+- [Best practices](docs/BEST_PRACTICES.md): designing and building screens with the kit, and common pitfalls
 - [Theming](docs/THEMING.md): light and dark mode, accent presets, a brand colour, radius
 - [Icons](docs/ICONS.md): the Lucide set and when an icon needs a label
 - [Stability](docs/STABILITY.md): which items are stable, experimental or internal
@@ -64,7 +66,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Form](llms/form.md): Validation state for a form, with the accessibility wiring done for you
 - [Hooks](llms/hooks.md): Hooks shared by the components and by apps
 - [Hover card](llms/hover_card.md): The HoverCard component can be used to display additional information when a user hovers over an element
-- [Icons](llms/icons.md): The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
+- [Icons](llms/icons.md): The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
 - [Input](llms/input.md): The input element is used to accept a text input from the user
 - [InputGroup](llms/input_group.md): An input with text, icons or buttons attached inside one bordered box
 - [InputOtp](llms/input_otp.md): A one-time-code input: one box per character
@@ -6027,7 +6029,7 @@ pub fn Demo() -> Element {
 - Copy into your app: `atoll add icons` or `dx components add icons --git https://github.com/Amit-1of1/Rust-UI-`.
 - Import: `use crate::components::icons::*;` after copying, or `use ui::icons::{...};` (by path, no glob) with the `atoll-ui` crate.
 
-The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.
+The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place.
 
 ```rust
 use ui::icons::{lucide, Icon, IconSize, Search, Trash};
@@ -6048,6 +6050,25 @@ Only the icons you name end up in your app's binary. `lucide::ALL` lists every i
 
 Import icons by path (`ui::icons::Check`), not with a glob: Lucide has icons named `Link`, `Badge`, `Calendar` and so on that would clash with the components.
 
+## Atoll icons
+
+`ui::icons::atoll` holds 101 original icons in the kit's own style (Feather-style like Reshaped: 2px stroke, 2px corners, round ends; the rendered stroke follows the theme), drawn on the same 24px grid as Lucide so the two mix in one row.
+
+```rust
+use ui::icons::{atoll, Icon, IconSize};
+
+rsx! {
+    button { atoll::Crate { size: IconSize::Sm } "Add crate" }
+    // Standing alone and meaningful: use the icon's default accessible name.
+    Icon { icon: atoll::AGENT, label: atoll::meta("agent").map(|m| m.label) }
+}
+```
+
+- **Names say what an icon means**, not what it shows: `delete`, not `trash`; `next`, not `arrow-right`. Search words go in its keywords.
+- **Every icon has a default accessible name** (`atoll::meta(name).label`), keywords and a category. `atoll::INDEX` lists them; it holds only strings, so naming it keeps no shapes in your binary.
+- **Reserved icons** mean one action everywhere: `add`, `remove`, `close`, `delete`, `edit`, `copy`, `search`, `settings`, `menu`, `more`, `back`, `next`, `expand`, `collapse`, `download`, `upload`, `share`, `refresh`, the status icons and more. Don't use a reserved icon for anything else (no `delete` for "clear filter"; that's `close`).
+- The browser on this page searches names, default names and keywords.
+
 ## Size and stroke
 
 - `size: IconSize::Sm` (and `Xs`, `Md`, `Lg`, `Xl`) read `--icon-size-sm` and friends from the theme. The default is `Lg`, 24px like Lucide's own.
@@ -6067,11 +6088,13 @@ Icons that point along the reading direction (arrows and chevrons that point lef
 
 ## Stability
 
-`Icon`, `IconData`, `IconNode`, the `lucide` constants and the `label`, `mirror_rtl` and named `size` props are experimental. The icon component names (`ui::icons::Check`) are stable.
+`Icon`, `IconData`, `IconNode`, `IconMeta`, everything in `atoll`, the `lucide` constants and the `label`, `mirror_rtl` and named `size` props are experimental. The icon component names (`ui::icons::Check`) are stable.
 
 ## Source
 
-Generated by `scripts/gen-lucide-icons.mjs` from the `lucide-static` npm package (Lucide 1.57.0, ISC; the Feather-derived icons MIT). The licence is in the header of `lucide.rs` and in `crates/ui/LICENSE-lucide`. The choice is in `docs/ICONS.md`.
+Atoll icons: drawn for this kit (MIT OR Apache-2.0, like the rest of it), one SVG each in `crates/ui/icons/atoll/` with their names and keywords in `icons.json`; `scripts/gen-atoll-icons.mjs` writes `atoll.rs`. Drawing rules are in `docs/ICONS.md`.
+
+Lucide icons: generated by `scripts/gen-lucide-icons.mjs` from the `lucide-static` npm package (Lucide 1.57.0, ISC; the Feather-derived icons MIT). The licence is in the header of `lucide.rs` and in `crates/ui/LICENSE-lucide`. The choice is in `docs/ICONS.md`.
 
 ## API
 
@@ -6114,6 +6137,8 @@ pub enum IconNode {
     Polyline { points: &'static str },
     /// `<polygon points>`.
     Polygon { points: &'static str },
+    /// `<path d>` filled with `currentColor` and no stroke (a solid shape; Atoll icons only).
+    Fill { d: &'static str },
 }
 
 /// One icon's shape data, as generated from Lucide: `ui::icons::lucide::CHECK`.
@@ -6124,6 +6149,23 @@ pub struct IconData {
     pub mirror_rtl: bool,
     /// The shapes, drawn in order.
     pub nodes: &'static [IconNode],
+}
+
+/// What the docs and tools know about one icon of a hand-drawn set ([`atoll::INDEX`](super::atoll::INDEX)):
+/// its default accessible name, search keywords, category, and the action it is reserved for.
+pub struct IconMeta {
+    /// The icon's name (`"crate"`), the same as its [`IconData::name`].
+    pub name: &'static str,
+    /// The default accessible name: pass it as `label` when the icon stands alone and means
+    /// something (`Icon { icon: atoll::CRATE, label: meta.label }`).
+    pub label: &'static str,
+    /// Search words beyond the name.
+    pub keywords: &'static [&'static str],
+    /// The group it is shown in (`"dev"`, `"system"`); one of [`atoll::CATEGORIES`](super::atoll::CATEGORIES).
+    pub category: &'static str,
+    /// The one action this icon means everywhere (`"delete"`), when it is a reserved system
+    /// icon. Don't use a reserved icon for anything else.
+    pub reserved: Option<&'static str>,
 }
 
 /// Width and height of an icon. The named steps read `--icon-size-xs` … `--icon-size-xl`
@@ -6195,9 +6237,10 @@ pub use lucide::components::*;
 ```rust
 use crate::components::button::{Button, ButtonVariant, IconButton};
 use crate::components::icons::{
-    lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings, Star,
-    Trash,
+    atoll, lucide, Bell, ChevronRight, Copy, Download, Heart, Icon, IconSize, Search, Settings,
+    Star, Trash,
 };
+use crate::components::input::Input;
 use dioxus::prelude::*;
 
 #[component]
@@ -6258,6 +6301,77 @@ pub fn Demo() -> Element {
                     Settings { size: "1rem", "aria-hidden": "true" }
                     span { class: "sr-only", "Settings" }
                 }
+            }
+            AtollIcons {}
+        }
+    }
+}
+
+/// Atoll's own icons, searchable by name, default label and keyword, grouped by category.
+#[component]
+fn AtollIcons() -> Element {
+    let mut query = use_signal(String::new);
+    let q = query.read().trim().to_lowercase();
+    let matches = |i: usize| {
+        let m = &atoll::INDEX[i];
+        q.is_empty()
+            || m.name.contains(&q)
+            || m.label.to_lowercase().contains(&q)
+            || m.keywords.iter().any(|k| k.contains(&q))
+    };
+    let shown: Vec<usize> = (0..atoll::ALL.len()).filter(|&i| matches(i)).collect();
+    let count = shown.len();
+    rsx! {
+        section { "aria-labelledby": "atoll-icons-title", style: "display: flex; flex-direction: column; gap: 0.75rem;",
+            h3 { id: "atoll-icons-title", style: "margin: 0.5rem 0 0;", "Atoll icons" }
+            p { style: "margin: 0; color: var(--secondary-color-5);",
+                "Drawn for the kit on Lucide's 24px grid: ui::icons::atoll::Crate {{}}. Reserved icons mean one action everywhere."
+            }
+            label { r#for: "atoll-icon-search", style: "font-weight: 500;", "Search icons" }
+            Input {
+                id: "atoll-icon-search",
+                r#type: "search",
+                placeholder: "crate, agent, delete...",
+                value: "{query}",
+                oninput: move |e: FormEvent| query.set(e.value()),
+            }
+            p { role: "status", style: "margin: 0; font-size: 0.875rem; color: var(--secondary-color-5);",
+                "{count} of {atoll::ALL.len()} icons"
+            }
+            for category in atoll::CATEGORIES {
+                if shown.iter().any(|&i| atoll::INDEX[i].category == category) {
+                    div { key: "{category}",
+                        h4 { style: "margin: 0.5rem 0 0.25rem; font-size: 0.8125rem; text-transform: capitalize; color: var(--secondary-color-5);",
+                            "{category}"
+                        }
+                        ul {
+                            style: "display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 0.5rem; list-style: none; margin: 0; padding: 0;",
+                            for i in shown.iter().copied().filter(|&i| atoll::INDEX[i].category == category) {
+                                AtollTile { key: "{atoll::INDEX[i].name}", index: i }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[component]
+fn AtollTile(index: usize) -> Element {
+    let meta = &atoll::INDEX[index];
+    let title = match meta.reserved {
+        Some(r) => format!("{}: reserved for {r}. Keywords: {}", meta.label, meta.keywords.join(", ")),
+        None => format!("{}. Keywords: {}", meta.label, meta.keywords.join(", ")),
+    };
+    rsx! {
+        li {
+            title,
+            style: "display: flex; flex-direction: column; align-items: center; gap: 0.375rem; padding: 0.75rem 0.25rem 0.5rem; border: 1px solid var(--primary-color-6); border-radius: var(--radius, 0.5rem); font-size: 0.75rem; text-align: center;",
+            Icon { icon: atoll::ALL[index], size: IconSize::Lg }
+            span { "{meta.name}" }
+            if meta.reserved.is_some() {
+                span { style: "font-size: 0.6875rem; color: var(--secondary-color-5);", "reserved" }
             }
         }
     }

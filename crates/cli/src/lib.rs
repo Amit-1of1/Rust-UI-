@@ -29,6 +29,7 @@ pub mod mcp;
 pub mod motion;
 pub mod postbuild;
 pub mod presets;
+pub mod props;
 pub mod scaffold;
 pub mod scope;
 pub mod template;

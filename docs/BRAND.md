@@ -1,6 +1,6 @@
 # Brand and looks
 
-Atoll's look has two layers. Underneath are the foundations, taken from Reshaped, a well-tried design system (MIT): neutral greys, Inter, 4 px spacing, a type scale, soft layered shadows, calm motion ([Foundations](#foundations)). On top is what makes it Atoll: the lagoon-teal accent, the mark, and five looks that switch with one attribute. This page is the top layer.
+Atoll's look has two layers. Underneath are the foundations, taken from Reshaped, a well-tried design system (MIT): neutral greys, Inter, 4 px spacing, a type scale, soft layered shadows, calm motion ([Foundations](FOUNDATIONS.md)). On top is what makes it Atoll: the lagoon-teal accent, the mark, and five looks that switch with one attribute. This page is the top layer.
 
 ## The idea
 
@@ -33,7 +33,7 @@ The neutrals sit on Reshaped's lightness steps (page 100 % / 16 %, text 24 % / 9
 
 - **Headings and text:** Inter, the typeface Reshaped and much of the web's best UI is set in: very readable at small sizes, with a full range of weights. Headings use weight 650 and slightly tighter tracking. `--font-sans`, `--font-heading`.
 - **Code:** JetBrains Mono. `--font-mono`.
-- Sizes come from the type scale ([Foundations](#foundations)).
+- Sizes come from the type scale ([Foundations](FOUNDATIONS.md)).
 
 The font files ship inside the kit (`crates/ui/assets/fonts/`, SIL Open Font License 1.1, Latin subsets of the variable fonts, 30 to 50 KB each). Nothing is fetched from a font service. `ThemeStyles` declares them, and a browser downloads a file only when the page uses that family. Text shows at once in the system font and switches when the file arrives (`font-display: swap`), so fonts never hold up the first screen. `ThemeStyles { fonts: false }` turns them off.
 

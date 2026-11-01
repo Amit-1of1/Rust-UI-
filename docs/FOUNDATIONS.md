@@ -1,6 +1,6 @@
 # Foundations
 
-Atoll's foundations follow [Reshaped](https://reshaped.so) (MIT): a small set of named tokens for colour, layout, type, elevation and motion, all CSS custom properties in `crates/ui/assets/theme.css`. Components use the tokens, never literal values, and `cargo test -p atoll-ui --test foundations` keeps it that way. Atoll's own accent, mark and looks sit on top ([Brand and looks](#brand)).
+Atoll's foundations follow [Reshaped](https://reshaped.so) (MIT): a small set of named tokens for colour, layout, type, elevation and motion, all CSS custom properties in `crates/ui/assets/theme.css`. Components use the tokens, never literal values, and `cargo test -p atoll-ui --test foundations` keeps it that way. Atoll's own accent, mark and looks sit on top ([Brand and looks](BRAND.md)).
 
 The checklist this page answers is the Foundations list from [designsystemchecklist.com](https://www.designsystemchecklist.com/category/foundations): colour, layout, typography, elevation, motion and iconography.
 
@@ -150,7 +150,7 @@ The shadows are Reshaped's, with deeper colours in dark mode (`--color-shadow-*`
 
 **Accessibility.** Icons are decorative (`aria-hidden`) unless given a `label`; an icon-only button is named on the button. Icons draw in `currentColor`, so they meet the same contrast as the text beside them.
 
-**Guidelines.** One icon per meaning across an app; an icon never replaces a word where the meaning is not obvious; directional icons mirror in right-to-left pages (docs/ICONS.md).
+**Guidelines.** One icon per meaning across an app; an icon never replaces a word where the meaning is not obvious; directional icons mirror in right-to-left pages ([Icons](ICONS.md)).
 
 ## Checked
 

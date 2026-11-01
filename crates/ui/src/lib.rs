@@ -138,3 +138,9 @@ pub mod prelude {
     pub use dioxus_primitives::ContentSide;
     pub use form_derive::Form;
 }
+
+/// The examples in docs/COMPOSITION.md, compiled as doctests so the guide can't fall behind
+/// the API. Only exists under `cargo test --doc`.
+#[cfg(doctest)]
+#[doc = include_str!("../../../docs/COMPOSITION.md")]
+pub struct CompositionGuide;

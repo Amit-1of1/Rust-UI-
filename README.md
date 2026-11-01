@@ -24,6 +24,10 @@ Before you adopt it: [docs/HARD_QUESTIONS.md](docs/HARD_QUESTIONS.md) answers th
 
 Atoll was called "Rust UI" until 2026-10-31; [MIGRATION.md](docs/MIGRATION.md) maps the old crate and command names to the new ones.
 
+## Help, contributing and plans
+
+Questions go to Discussions, bugs and proposals to [issues](https://github.com/Amit-1of1/Rust-UI-/issues/new/choose), vulnerabilities to a private advisory ([SECURITY.md](SECURITY.md)). How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md). Response times, support and the monthly update: [docs/MAINTAINING.md](docs/MAINTAINING.md). Where the kit is going: [docs/ROADMAP.md](docs/ROADMAP.md). What runs where: [docs/SUPPORT_MATRIX.md](docs/SUPPORT_MATRIX.md). Designing and building with it: [docs/PRINCIPLES.md](docs/PRINCIPLES.md), [docs/BEST_PRACTICES.md](docs/BEST_PRACTICES.md), [docs/COMPOSITION.md](docs/COMPOSITION.md), [docs/ANATOMY.md](docs/ANATOMY.md), [docs/LOCAL_LIBRARIES.md](docs/LOCAL_LIBRARIES.md).
+
 ## Working on the kit
 
 **Read [docs/GUARDRAILS.md](docs/GUARDRAILS.md) before changing anything.** Behaviour and accessibility come from [`dioxus-primitives`](https://github.com/DioxusLabs/components) (through our fork, published as `atoll-primitives`), and the styled layer started as a copy of DioxusLabs' components that this repo now owns.
