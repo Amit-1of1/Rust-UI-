@@ -778,6 +778,7 @@
       ],
       "registryDependencies": [
         "button",
+        "hooks",
         "icons",
         "separator",
         "sheet",

@@ -1,4 +1,5 @@
 use crate::components::button::{Button, ButtonVariant};
+use crate::components::hooks::current_route;
 use crate::components::icons::PanelLeft;
 use crate::components::separator::Separator;
 use crate::components::sheet::{Sheet, SheetContentClose, SheetSide};
@@ -200,6 +201,18 @@ pub fn SidebarProvider(
     };
 
     use_context_provider(|| ctx);
+
+    // On a phone the sidebar is a sheet over the page. With the `router` feature, close it
+    // after every in-app navigation, so tapping a link (a router `Link` passed through `as`
+    // included) shows the new page instead of leaving the sheet on top of it.
+    let route = current_route();
+    let mut seen = use_signal(|| route.clone());
+    use_effect(use_reactive!(|route| {
+        if *seen.peek() != route {
+            seen.set(route);
+            ctx.set_open_mobile(false);
+        }
+    }));
 
     use_effect(move || {
         spawn(async move {
@@ -678,9 +691,22 @@ pub fn SidebarMenuButton(
     children: Element,
 ) -> Element {
     let ctx = use_sidebar();
+    // On a phone, where the sidebar is a sheet, close it after a click. Buttons that open
+    // something (`aria-expanded` / `aria-haspopup`, such as a collapsible group's trigger)
+    // and buttons marked `"data-keep-open": "true"` leave it open. With `as`, the provider
+    // closes it when the route changes (`router` feature), or call
+    // `use_sidebar().set_open_mobile(false)`.
+    let close_after = !attributes.iter().any(|a| {
+        matches!(a.name, "aria-expanded" | "aria-haspopup")
+            || (a.name == "data-keep-open"
+                && matches!(&a.value, dioxus::core::AttributeValue::Text(t) if t == "true"))
+    });
     let click = move |e: MouseEvent| {
         if let Some(f) = &onclick {
             f.call(e);
+        }
+        if close_after && (ctx.is_mobile)() {
+            ctx.set_open_mobile(false);
         }
     };
     let is_mobile = ctx.is_mobile;
