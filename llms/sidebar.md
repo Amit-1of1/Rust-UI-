@@ -1,6 +1,6 @@
 # Sidebar
 
-- Copy into your app: `atoll add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
+- Copy into your app: `atoll add sidebar` or `dx components add sidebar --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `hooks`, `icons`, `separator`, `sheet`, `skeleton`, `tooltip`, `ui_strings`).
 - Import: `use crate::components::sidebar::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Sidebar component is a vertical interface panel fixed to the screen edge, displaying navigation menus or filters that enable quick access to different sections of an application.
@@ -67,6 +67,7 @@ SidebarProvider {
 - Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects the start (`Left`) or end (`Right`) edge, which swap on right-to-left pages (docs/RTL.md).
 - Collapse: `Offcanvas` hides the rail; `Icon` keeps a thin icon strip and hides labels/actions/badges; `None` is static.
 - Keyboard: ⌘/Ctrl+B toggles via provider. Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
+- Phones: below 768 px the sidebar is a sheet. Clicking a `SidebarMenuButton` closes it (`close_on_mobile: false` keeps it open; buttons with `aria-expanded` or `aria-haspopup`, such as a collapsible group's trigger, never close it). With the `router` feature the provider also closes it after every in-app navigation, which covers router links passed through `as`; without the router, call `use_sidebar().set_open_mobile(false)` from your own links.
 - Tooltips: `tooltip: Option<Element>` on `SidebarMenuButton`; `None` skips wrapping in Tooltip.
 - Landmarks: `Sidebar` is a navigation landmark named "Sidebar" (`UiStrings::sidebar`; pass `aria_label` to rename it, or `role` to change it). `SidebarInset` renders `<main>`, so it is the page's `main` landmark: don't add another `main` inside it.
 
@@ -245,6 +246,13 @@ pub fn SidebarMenuButton(
     /// Click handler for the default `<button>` (ignored when `as` renders something else).
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
+    /// On a phone, where the sidebar is a sheet, close it after this button is clicked.
+    /// Defaults to `true`. Buttons that open something (`aria-expanded` or `aria-haspopup`,
+    /// such as a collapsible group's trigger) never close it. Applies to the default
+    /// `<button>`; with `as`, the provider closes the sheet when the route changes (`router`
+    /// feature) or call `use_sidebar().set_open_mobile(false)`.
+    #[props(default = true)]
+    close_on_mobile: bool,
     r#as: Option<Callback<Vec<Attribute>, Element>>,
     children: Element,
 ) -> Element

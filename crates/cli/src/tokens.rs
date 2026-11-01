@@ -195,9 +195,11 @@ fn typed(name: &str, v: &str) -> Option<(&'static str, Value)> {
 }
 
 fn is_size_name(name: &str) -> bool {
-    ["radius", "space", "size", "width", "height", "gap", "padding", "offset"]
-        .iter()
-        .any(|w| name.contains(w))
+    [
+        "radius", "space", "size", "width", "height", "gap", "padding", "offset",
+    ]
+    .iter()
+    .any(|w| name.contains(w))
 }
 
 /// `0.5rem` -> (0.5, "rem"); `400` -> (400, "").
@@ -268,7 +270,10 @@ mod tests {
             get(&e, "radius"),
             &json!({ "$type": "dimension", "$value": { "value": 0.5, "unit": "rem" } })
         );
-        assert_eq!(get(&e, "space-0")["$value"], json!({ "value": 0, "unit": "px" }));
+        assert_eq!(
+            get(&e, "space-0")["$value"],
+            json!({ "value": 0, "unit": "px" })
+        );
         assert_eq!(get(&e, "duration-fast")["$type"], "duration");
         assert_eq!(get(&e, "ease-out")["$value"], json!([0.2, 0.0, 0.0, 1.0]));
         assert_eq!(
@@ -303,7 +308,12 @@ mod tests {
         let theme = Theme::parse(&css);
         for mode in Mode::ALL {
             let e = export(&theme, None, mode).unwrap();
-            for key in ["primary-color", "secondary-color-4", "accent-color", "radius"] {
+            for key in [
+                "primary-color",
+                "secondary-color-4",
+                "accent-color",
+                "radius",
+            ] {
                 assert!(
                     e.doc.get(key).is_some(),
                     "{key} missing in {}: skipped {:?}",
