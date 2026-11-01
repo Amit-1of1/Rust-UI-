@@ -61,7 +61,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+  padding-block: 0.5rem;
+  padding-inline: 1.75rem 0.75rem;
   border: 1px solid var(--primary-color-6);
   border-radius: var(--radius);
   background: var(--primary-color);
@@ -71,8 +72,8 @@
 
 .dx-theme-preset::before {
   position: absolute;
-  top: 0.75rem;
-  left: 0.625rem;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.625rem;
   width: 0.625rem;
   height: 0.625rem;
   border-radius: 50%;

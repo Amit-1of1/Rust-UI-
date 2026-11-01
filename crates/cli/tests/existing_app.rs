@@ -102,7 +102,8 @@ fn init_reports_clashes_and_writes_the_scoped_theme() {
         "the kit's own copy is not a clash:\n{out}"
     );
     let theme = fs::read_to_string(app.path().join("assets/theme.css")).unwrap();
-    assert!(theme.contains("[data-rui-scope] {\n  /* Primary colors */\n  --primary-color"));
+    assert!(theme.contains("[data-rui-scope] {\n  /* Atoll's own look"));
+    assert!(theme.contains("\n  --primary-color: light-dark("));
     assert!(!theme.contains("\n:root"), "scoped theme still has :root");
     let reset = fs::read_to_string(app.path().join("assets/reset.css")).unwrap();
     assert!(reset.contains("[data-rui-scope] *"));
