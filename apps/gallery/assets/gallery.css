@@ -36,6 +36,22 @@ body {
   padding: 1.5rem;
   border: 1px solid var(--primary-color-6);
   border-radius: 0.75rem;
+  /* Sections off screen skip style, layout and paint until they scroll near the viewport
+     (web.dev/articles/content-visibility). The gallery is 80 demos long: this took startup at
+     4x CPU from about 3.1 s to 2.2 s. They stay in the accessibility tree, in find-in-page and
+     in the tab order. `auto 320px` keeps the scrollbar steady and then remembers each
+     section's real height. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* Containment makes the section the box that menus, selects, popovers and tooltips flip
+   inside (CSS anchor positioning), so they stopped flipping at the screen edge. Render a
+   section normally while someone is using it. */
+.gallery-section:has([data-state="open"]),
+.gallery-section:focus-within,
+.gallery-section:hover {
+  content-visibility: visible;
 }
 
 .gallery-section h2 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 600; }

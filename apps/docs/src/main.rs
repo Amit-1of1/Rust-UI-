@@ -172,7 +172,14 @@ fn App() -> Element {
                 // Land on the new page's heading so screen readers announce it.
                 let _ = document::eval(
                     "window.scrollTo(0, 0);
-                     setTimeout(() => document.getElementById('page-title')?.focus({ preventScroll: true }), 60)",
+                     // A page from the lazy part can take a moment to arrive: wait for its heading.
+                     let tries = 0;
+                     const land = () => {
+                       const h = document.getElementById('page-title');
+                       if (h) h.focus({ preventScroll: true });
+                       else if (++tries < 100) setTimeout(land, 30);
+                     };
+                     setTimeout(land, 60);",
                 );
             }
         });
@@ -240,8 +247,43 @@ fn NavLink(slug: &'static str, title: &'static str, current: String) -> Element 
     }
 }
 
+/// The page for `slug`. The home page is in the main wasm file; every other page is
+/// [`DocPage`], which with `wasm-split` (release builds, scripts/release-web.sh) is one lazy
+/// wasm file. The 80 live demos, the props tables and the guides' renderer live there, so the
+/// first screen doesn't download them. The home page fetches that file once it is up, so
+/// the first click on a link doesn't wait for it.
 #[component]
 fn Page(slug: String) -> Element {
+    if !is_doc_page(&slug) {
+        return rsx! {
+            landing::LandingPage {}
+            div { hidden: true, "aria-hidden": "true",
+                SuspenseBoundary { fallback: |_| rsx! {}, DocPage { slug: String::new() } }
+            }
+        };
+    }
+    rsx! {
+        SuspenseBoundary {
+            fallback: |_| rsx! {
+                div { class: "docs-loading", Spinner { label: "Loading the page" } }
+            },
+            DocPage { slug }
+        }
+    }
+}
+
+/// Whether `slug` names a page other than the home page.
+fn is_doc_page(slug: &str) -> bool {
+    matches!(slug, "pricing" | "theme-builder" | "examples")
+        || GUIDES.iter().any(|(s, _, _, _)| *s == slug)
+        || ENTRIES.iter().any(|e| e.name == slug)
+}
+
+/// Every page but the home page. One lazy unit, not one per page: the splitter copies code
+/// shared by several lazy parts into each of them (docs/GUARDRAILS.md, split builds). An
+/// unknown slug renders nothing (the home page uses that to fetch this part early).
+#[component(lazy)]
+fn DocPage(slug: String) -> Element {
     match slug.as_str() {
         "pricing" => return rsx! { pricing::PricingPage {} },
         "theme-builder" => return rsx! { theme_builder::ThemeBuilderPage {} },
@@ -256,7 +298,7 @@ fn Page(slug: String) -> Element {
         };
     }
     let Some(entry) = ENTRIES.iter().find(|e| e.name == slug) else {
-        return rsx! { landing::LandingPage {} };
+        return rsx! {};
     };
     rsx! {
         document::Title { "{entry.title} - Atoll" }

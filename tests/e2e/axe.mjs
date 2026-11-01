@@ -32,6 +32,10 @@ if (process.env.ACCENT) {
 if (process.env.DIR) {
   await page.evaluate((d) => document.documentElement.setAttribute("dir", d), process.env.DIR);
 }
+// Check every part as it looks once it is on screen: content skipped by
+// `content-visibility: auto` (the gallery's sections) has no layout, so axe would measure
+// colours and sizes of boxes that were never rendered.
+await page.addStyleTag({ content: "* { content-visibility: visible !important; }" });
 if (process.env.SHOT) await page.screenshot({ path: process.env.SHOT, fullPage: true });
 await page.waitForTimeout(1500);
 await page.evaluate(axeSource);
