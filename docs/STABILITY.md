@@ -99,7 +99,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Experimental
 
 - `atoll add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
-- `atoll theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned.
+- `atoll theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned. `--import <file>` (shadcn, tweakcn, Reshaped) and `atoll font` are new on 2026-11-01; how they map names and pick files may be tuned.
 - `atoll postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `atoll doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
 - `atoll acr` and `docs/acr/wcag22.toml`: new on 2026-10-30; rows change as checks are added.

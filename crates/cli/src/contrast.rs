@@ -678,7 +678,7 @@ fn gam(c: f64) -> f64 {
     (v * 255.0).clamp(0.0, 255.0)
 }
 
-fn oklab(c: Rgba) -> [f64; 3] {
+pub(crate) fn oklab(c: Rgba) -> [f64; 3] {
     let (r, g, b) = (lin(c.r), lin(c.g), lin(c.b));
     let l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b).cbrt();
     let m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b).cbrt();
@@ -690,7 +690,7 @@ fn oklab(c: Rgba) -> [f64; 3] {
     ]
 }
 
-fn from_oklab([l, a, b]: [f64; 3]) -> [f64; 3] {
+pub(crate) fn from_oklab([l, a, b]: [f64; 3]) -> [f64; 3] {
     let l_ = (l + 0.3963377774 * a + 0.2158037573 * b).powi(3);
     let m_ = (l - 0.1055613458 * a - 0.0638541728 * b).powi(3);
     let s_ = (l - 0.0894841775 * a - 1.2914855480 * b).powi(3);

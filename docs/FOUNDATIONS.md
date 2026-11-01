@@ -82,7 +82,7 @@ Tokens: `--font-size-<step>` and `--line-height-<step>`; weights `--font-weight-
 
 **Readability.** Body text is at least 14 px; long text uses `body-1`. Keep running text to `--text-measure` (70 characters). Headings track slightly tighter (`--heading-tracking`), body text never.
 
-**Performance.** Fonts ship with the kit (`crates/ui/assets/fonts/`, Latin subsets of variable fonts, one file per family, 30 to 50 KB): nothing is fetched from a font service. A browser downloads a file only when the page uses it; text shows at once in the system font and swaps when the file arrives (`font-display: swap`), so fonts never hold up the first screen. The Classic look downloads nothing.
+**Performance.** Fonts ship with the kit (`crates/ui/assets/fonts/`, Latin subsets of variable fonts, one file per family, 30 to 50 KB): nothing is fetched from a font service. A browser downloads a file only when the page uses it; text shows at once in the system font and swaps when the file arrives (`font-display: swap`), so fonts never hold up the first screen. The Classic look downloads nothing. Your own font, from a file or Google Fonts, goes in the same way: `atoll font` copies it into your app and `CustomFont` declares it ([Theming](THEMING.md)).
 
 **Guidelines.** Pick the element by meaning and the look by step: `Text { variant: TextVariant::Title2, as_: TextAs::H2 }`. One `title-1` per page. Don't skip heading levels for size.
 

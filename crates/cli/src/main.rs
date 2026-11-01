@@ -147,6 +147,29 @@ enum Command {
         #[arg(long)]
         all: bool,
     },
+    /// Use a font of your own: copy a font file (or download a Google font by name) into the
+    /// app's `assets/fonts/` and print the `CustomFont` call that switches the kit to it.
+    Font {
+        /// A font file (woff2, woff, ttf or otf).
+        #[arg(required_unless_present = "google", conflicts_with = "google")]
+        file: Option<PathBuf>,
+        /// A Google Fonts family name, e.g. "Plus Jakarta Sans": downloaded once (Latin
+        /// subset) from its Fontsource package on npm, with its licence. Needs curl and tar.
+        #[arg(long)]
+        google: Option<String>,
+        /// The family name to declare (from the file name if left out).
+        #[arg(long)]
+        family: Option<String>,
+        /// Which text it is for: sans (all text), heading or mono.
+        #[arg(long, default_value = "sans", value_parser = ["sans", "heading", "mono"])]
+        role: String,
+        /// The weights a font file covers: "100 900" for a variable font, "400" for one weight.
+        #[arg(long, default_value = "100 900")]
+        weights: String,
+        /// The app folder (with its `assets/`).
+        #[arg(long, default_value = ".")]
+        app: PathBuf,
+    },
     /// Find an icon by name or by what it is for (`atoll icons delete`), with its component
     /// name; `--reserved` lists the icons the kit keeps for one meaning.
     Icons {
@@ -166,8 +189,8 @@ enum Command {
         /// Brand colour as hex, e.g. `#7c3aed`.
         #[arg(
             long,
-            required_unless_present_any = ["from_image", "preset"],
-            conflicts_with_all = ["from_image", "preset"]
+            required_unless_present_any = ["from_image", "preset", "import"],
+            conflicts_with_all = ["from_image", "preset", "import"]
         )]
         brand: Option<String>,
         /// One of the kit's theme presets (lagoon, reef, abyss, driftwood, classic), printed
@@ -176,9 +199,14 @@ enum Command {
         preset: Option<String>,
         /// A logo (PNG, JPEG or SVG): its most visible saturated colour becomes the brand
         /// colour, and a clearly different second colour is printed as an alternative preset.
-        #[arg(long)]
+        #[arg(long, conflicts_with = "import")]
         from_image: Option<PathBuf>,
-        /// Preset name used in `data-accent="..."`.
+        /// A theme made with another tool, as an Atoll look: shadcn/ui or tweakcn CSS
+        /// (`:root` and `.dark` blocks), shadcn registry JSON (`cssVars`) or a Reshaped theme
+        /// definition (JSON). Prints it as the page default and checks its contrast.
+        #[arg(long, conflicts_with = "preset")]
+        import: Option<PathBuf>,
+        /// Preset name used in `data-accent="..."` (and `data-preset="..."` with --import).
         #[arg(long, default_value = "brand")]
         name: String,
     },
@@ -556,6 +584,41 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 return Ok(ExitCode::FAILURE);
             }
         }
+        Command::Font {
+            file,
+            google,
+            family,
+            role,
+            weights,
+            app,
+        } => {
+            let added = match (file, google) {
+                (Some(file), _) => {
+                    atoll_cli::font::from_file(&app, &file, family.as_deref(), &weights)?
+                }
+                (None, Some(name)) => {
+                    let mut added =
+                        atoll_cli::font::from_google(&app, &name, &std::env::temp_dir())?;
+                    if let Some(f) = family {
+                        added.family = f;
+                    }
+                    added
+                }
+                (None, None) => return Err("give a font file or --google <name>".into()),
+            };
+            for (file, _, _) in &added.faces {
+                println!("added {}", app.join(file.trim_start_matches('/')).display());
+            }
+            if let Some(l) = &added.licence {
+                println!("licence: {l} (kept beside the file; fine for web use and to ship with your app)");
+            }
+            let role = match role.as_str() {
+                "heading" => "Heading",
+                "mono" => "Mono",
+                _ => "Sans",
+            };
+            print!("\n{}", atoll_cli::font::snippet(&added, role));
+        }
         Command::Icons {
             words,
             reserved,
@@ -597,6 +660,55 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
                 if hits.len() > limit {
                     println!("... and {} more (--limit)", hits.len() - limit);
                 }
+            }
+        }
+        Command::Theme {
+            import: Some(file),
+            name,
+            ..
+        } => {
+            if !name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || name.is_empty() {
+                return Err(format!("`{name}` must be letters, digits or `-`"));
+            }
+            let text =
+                std::fs::read_to_string(&file).map_err(|e| format!("{}: {e}", file.display()))?;
+            let src = atoll_cli::import::parse(&text)?;
+            let body = atoll_cli::import::body(&src);
+            let block = format!("\n[data-preset=\"{name}\"] {{\n{body}\n}}\n");
+            println!(
+                "/* Imported from {} ({}). As a switchable look instead, use:\n{}*/",
+                file.display(),
+                src.format,
+                block.trim_start()
+            );
+            print!("{}", atoll_cli::presets::css(&block, &name)?);
+            for font in atoll_cli::import::missing_fonts(&src) {
+                eprintln!("note: the theme uses the font \"{font}\", which the kit doesn't ship; add it with `atoll font --google \"{font}\"` or `atoll font <file>`");
+            }
+            // The contrast proof, on the look as a preset over the kit's theme.
+            let tmp = std::env::temp_dir().join(format!("atoll-import-{}.css", std::process::id()));
+            if std::fs::write(&tmp, &block).is_ok() {
+                match atoll_cli::contrast::run(root, std::slice::from_ref(&tmp)) {
+                    Ok(report) => {
+                        let tag = format!("preset:{name}");
+                        let fails: Vec<String> = atoll_cli::contrast::summary(&report)
+                            .into_iter()
+                            .filter(|f| f.contains(&tag))
+                            .collect();
+                        if fails.is_empty() {
+                            eprintln!(
+                                "contrast: every text and focus pair passes in light and dark"
+                            );
+                        } else {
+                            for f in &fails {
+                                eprintln!("contrast fail {f}");
+                            }
+                            eprintln!("contrast: {} pair(s) fail; adjust those colours in the printed CSS", fails.len());
+                        }
+                    }
+                    Err(e) => eprintln!("contrast: not checked ({e})"),
+                }
+                let _ = std::fs::remove_file(&tmp);
             }
         }
         Command::Theme {
