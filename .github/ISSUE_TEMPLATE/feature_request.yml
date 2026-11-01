@@ -1,0 +1,45 @@
+name: Feature request
+description: A prop, variant, behaviour or tool for something Atoll already has.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a whole new component, use the component proposal template instead. Feature requests get an answer (accepted onto the roadmap, needs details, or declined with a reason) within 14 days.
+  - type: input
+    id: target
+    attributes:
+      label: Component or tool
+      placeholder: "DataTable, atoll theme, the docs site, ..."
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The screen or task in your app, not the solution yet.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would solve it?
+      description: The prop, variant or behaviour you'd like, with an `rsx!` sketch if you can.
+      render: rust
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What do you do today?
+      description: Your workaround, and what it costs you.
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: How do others do it?
+      description: Links to shadcn/ui, Radix, React Aria, a WAI-ARIA pattern or another kit, if relevant.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I checked the component's props table and docs page, and the roadmap.
+          required: true
