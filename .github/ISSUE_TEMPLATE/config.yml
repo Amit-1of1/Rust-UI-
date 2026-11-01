@@ -1,0 +1,13 @@
+# The issue chooser. Questions go to Discussions; security reports go to a private advisory.
+# Office hours: when a booking page exists, add it here as a contact link (docs/MAINTAINING.md).
+blank_issues_enabled: false
+contact_links:
+  - name: Question or help with an error
+    url: https://github.com/Amit-1of1/Rust-UI-/discussions/categories/q-a
+    about: Ask in Discussions (Q&A, or the Web, Desktop, Mobile and Native categories).
+  - name: Report a security vulnerability
+    url: https://github.com/Amit-1of1/Rust-UI-/security/advisories/new
+    about: Privately, never in a public issue (SECURITY.md).
+  - name: Docs and guides
+    url: https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/GETTING_STARTED.md
+    about: Getting started, composition examples, best practices and the hard questions.

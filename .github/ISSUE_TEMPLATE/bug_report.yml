@@ -1,0 +1,72 @@
+name: Bug report
+description: Something in a component, the CLI or the docs doesn't work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. A minimal reproduction is the fastest way to a fix; response times are in docs/MAINTAINING.md (service levels). Security issues go to a private advisory instead (SECURITY.md).
+  - type: input
+    id: component
+    attributes:
+      label: Component, command or page
+      placeholder: "Dialog, atoll add, the Theming guide, ..."
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Include error messages and console output as text.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps or code to reproduce
+      description: The smallest `rsx!` or command that shows it, or a link to a repository. A gallery demo URL works too.
+      render: rust
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Web
+        - Desktop (system webview)
+        - Android
+        - Native (Blitz preview)
+        - Server rendering (fullstack)
+        - CLI only
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser or OS, and versions
+      placeholder: "Firefox 140 on Windows 11; atoll-ui rev abc1234; dioxus 0.7.10"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you use the kit?
+      options:
+        - Depend on the atoll-ui crate
+        - Copied components (atoll add or dx components add)
+        - Both
+  - type: checkboxes
+    id: a11y
+    attributes:
+      label: Accessibility
+      options:
+        - label: This affects keyboard or screen-reader use (it gets the `a11y` label and a faster target).
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and discussions.
+          required: true

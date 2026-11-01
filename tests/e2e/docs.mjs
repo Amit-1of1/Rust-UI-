@@ -32,6 +32,20 @@ await page.getByRole("dialog").waitFor();
 await page.keyboard.press("Escape");
 await page.getByRole("dialog").waitFor({ state: "detached" });
 
+// The props table is generated from the source: `title` is a required prop.
+await page.getByRole("heading", { name: "Properties", exact: true }).waitFor();
+const titleRow = page.locator(".docs-prose table tr", { hasText: "The dialog's heading" }).first();
+assert.match(await titleRow.innerText(), /required/);
+
+// Guides link to each other on the site, and to GitHub for files that aren't guides.
+await page.goto(base + "#composition");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Composing components");
+assert.equal(
+  await page.locator(".docs-prose a", { hasText: "BEST_PRACTICES.md" }).first().getAttribute("href"),
+  "#best-practices",
+);
+await page.goBack();
+
 // The getting-started guide is a page of its own.
 await page.goto(base + "#start");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Getting started");
