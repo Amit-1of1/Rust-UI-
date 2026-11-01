@@ -3,7 +3,7 @@
 - Copy into your app: `atoll add theme_customizer` or `dx components add theme_customizer --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::theme_customizer::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
-Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.
+Pick a look (theme preset), accent colour, corner radius and light/dark mode for the whole page. It only writes `data-preset`, `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings. `PresetPicker {}` is the look picker on its own, for a header or settings page.
 
 ## One theme state: `use_theme()`
 
@@ -20,7 +20,7 @@ rsx! {
 }
 ```
 
-`mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
+`mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `preset()` / `set_preset(name)` (one of `PRESETS`; picking one drops a radius set by hand), `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
 
 ## Remember the theme between visits
 
@@ -62,8 +62,33 @@ Original to this repo.
 ## API
 
 ```rust
-/// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` is the default.
+/// Accent presets defined in `theme.css` (`[data-accent=...]`). `neutral` means none: the
+/// theme preset's own accent (lagoon teal by default).
 pub const ACCENTS: [&str; 6];
+
+/// Theme presets defined in `theme.css` (`[data-preset=...]`): a whole look (colours, fonts,
+/// corner radius, density, icon stroke) in one attribute. `lagoon` is the default and sets
+/// none. docs/BRAND.md describes each.
+pub const PRESETS: [&str; 5];
+
+/// One theme preset, for pickers and docs.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct PresetInfo {
+    /// The `data-preset` value (`lagoon` sets none).
+    pub name: &'static str,
+    /// What it looks like, in a few words.
+    pub tagline: &'static str,
+    /// The heading and text fonts.
+    pub fonts: &'static str,
+    /// Its corner radius in pixels (`--radius`).
+    pub radius_px: u32,
+}
+
+/// [`PRESETS`] with what each one looks like, in the same order.
+pub const PRESET_INFO: [PresetInfo; 5];
 
 /// Whether [`use_theme`]'s setters also write `<html>` (on by default).
 /// `ThemeStyles { scoped: true }` turns it off, so an existing app's own `data-theme` on
@@ -127,14 +152,30 @@ pub fn ThemeScope(children: Element) -> Element
 /// Density presets defined in `theme.css` (`[data-density=...]`). `default` sets nothing.
 pub const DENSITIES: [&str; 3];
 
-/// Controls for the accent colour, corner radius, density and light/dark mode of the whole page.
+/// Controls for the look (theme preset), accent colour, corner radius, density and light/dark
+/// mode of the whole page.
 ///
-/// It only sets `data-accent` / `data-density` / `data-theme` and `--radius` on `<html>`. Its
-/// state is the shared [`use_theme`], so app controls (a header dark-mode switch) stay in step.
+/// It only sets `data-preset` / `data-accent` / `data-density` / `data-theme` and `--radius`
+/// on `<html>`. Its state is the shared [`use_theme`], so app controls (a header dark-mode
+/// switch) stay in step.
 #[component]
 pub fn ThemeCustomizer() -> Element
 
-/// Saves [`use_theme`]'s choices (mode, accent, density, radius) in the browser's
+/// Picks the page's look, one of [`PRESETS`]: a card per preset, each drawn in its own
+/// colours and fonts. [`ThemeCustomizer`] shows it first; render it alone in a header or a
+/// settings page. Writes the shared [`use_theme`] state like the customizer.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn PresetPicker(
+    /// The group's visible label.
+    #[props(into, default = "Look".to_string())]
+    label: String,
+) -> Element
+
+/// Saves [`use_theme`]'s choices (mode, preset, accent, density, radius) in the browser's
 /// `localStorage` under `storage_key` (default `"theme"`), and restores them on the next visit. Render it once, next to
 /// `ThemeStyles {}`:
 ///
@@ -158,7 +199,8 @@ pub fn PersistTheme(
     storage_key: String,
 ) -> Element
 
-/// `mode=dark;accent=blue;density=compact;radius=12` (radius only when it isn't the default).
+/// `mode=dark;preset=reef;accent=blue;density=compact;radius=12` (preset only when it isn't
+/// lagoon, radius only when one was set).
 pub fn encode_theme(theme: &Theme) -> String
 
 /// Applies a value written by [`encode_theme`]. The stored text is user-controlled, so every part

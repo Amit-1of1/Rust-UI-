@@ -19,7 +19,7 @@
       "name": "hooks"
     }
   ],
-  "description": "Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.",
+  "description": "Pick a look (theme preset), accent colour, corner radius and light/dark mode for the whole page. It only writes `data-preset`, `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings. `PresetPicker {}` is the look picker on its own, for a header or settings page.",
   "exclude": [
     "docs.md",
     "component.json"
