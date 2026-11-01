@@ -41,11 +41,21 @@ jobs:
       # then one stylesheet per app instead of one per component (see crates/cli/README.md).
       - run: scripts/release-web.sh docs --base-path Rust-UI-
       - run: scripts/release-web.sh gallery --base-path Rust-UI-/gallery
+      # The example apps, linked from the docs' Example apps page (`#examples`) and offered
+      # as `atoll create --template` starting points.
+      - run: |
+          for app in dashboard booking site showcase; do
+            scripts/release-web.sh "$app" --base-path "Rust-UI-/examples/$app"
+          done
       - run: |
           mkdir -p public
           cp -r target/dx/docs/release/web/public/. public/
           mkdir -p public/gallery
           cp -r target/dx/gallery/release/web/public/. public/gallery/
+          for app in dashboard booking site showcase; do
+            mkdir -p "public/examples/$app"
+            cp -r "target/dx/$app/release/web/public/." "public/examples/$app/"
+          done
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: public

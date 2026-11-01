@@ -90,7 +90,7 @@ for engine in ${BROWSERS//,/ }; do
     step "[$engine] axe docs ($scheme)"
     e2e env GALLERY_URL=$D READY_SELECTOR=.docs-main node axe.mjs "$scheme"
   done
-  for route in "#button" "#data_table" "#theming" "#hard-questions" "#pricing"; do
+  for route in "#button" "#data_table" "#theming" "#hard-questions" "#pricing" "#theme-builder" "#examples"; do
     step "[$engine] axe docs ($route)"
     e2e env GALLERY_URL="$D$route" READY_SELECTOR=.docs-main node axe.mjs light
   done
