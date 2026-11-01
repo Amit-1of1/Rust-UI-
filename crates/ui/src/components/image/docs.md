@@ -18,6 +18,15 @@ Image {
 - When `src` is empty or fails to load, a muted box with an "image missing" icon takes its place, named by `alt`. Pass `fallback` for your own (initials, a placeholder picture).
 - Pictures load lazily (`loading="lazy"`); set `lazy: false` for the first one a visitor sees.
 
+## Component Structure
+
+```rust
+// A box that keeps the shape and holds the picture, or the fallback when it fails.
+Image { src, alt, srcset, sizes, ratio, fit, lazy,
+    fallback: rsx! { /* shown instead when src is empty or fails to load */ },
+}
+```
+
 ## Accessibility
 
 - Role and name: a native `img` named by `alt`; the fallback is `role="img"` with the same name, or hidden when `alt` is empty

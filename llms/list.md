@@ -16,6 +16,16 @@ List { marker: ListMarker::Number,
 - `spaced: true` puts more room between items, for lists of rows or cards.
 - `ListMarker::None` keeps the list role (`role="list"`), which Safari drops from lists drawn without markers.
 
+## Component Structure
+
+```rust
+// A <ul> or <ol>, depending on the marker.
+List { marker: ListMarker::Bullet, spaced: false,
+    // One <li> per item; any content, nested lists included.
+    ListItem { {children} }
+}
+```
+
 ## Accessibility
 
 - Role and name: native `list` and `listitem`; give a plain list an `aria-label` when it is a group of its own ("Plans")
