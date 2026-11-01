@@ -4,13 +4,17 @@
       "features": [],
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "atoll-primitives",
-      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+      "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
     }
   ],
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",

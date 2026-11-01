@@ -32,3 +32,7 @@ Tabs {
 ## Accessibility
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
+
+## Variants, icons and width
+
+`variant` is `TabsVariant::Default` (pills on a track) or `Ghost` (for tabs inside cards). Icons go inside `TabTrigger`, decorative. `stretch: true` makes the list fill its container and gives every tab the same width. `TabTrigger { disabled: true }` keeps a tab visible but out of reach.

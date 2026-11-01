@@ -172,6 +172,16 @@ pub struct UiStrings {
     // Badge, chips
     /// A dismiss button's name. `{label}` is what it removes ("Remove Rust").
     pub remove_named: String,
+    /// The label of a pager's page size select.
+    pub rows_per_page: String,
+    /// A page button's name in pagination. `{page}` is its number.
+    pub page_number: String,
+    /// Read for a pagination ellipsis.
+    pub more_pages: String,
+    /// The pagination `nav`'s name.
+    pub pagination: String,
+    /// The "…" button of a collapsed breadcrumb trail. `{count}` is how many steps it hides.
+    pub show_more_crumbs: String,
     /// The "+N" avatar in a group. `{count}` is how many are left out.
     pub more_count: String,
 }

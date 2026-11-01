@@ -20,6 +20,8 @@ Badge {
 Badge { variant: BadgeVariant::Outline, dismiss_label: "Rust", on_dismiss: move |_| remove("Rust"), "Rust" }
 ```
 
+Removing the badge removes the button that had focus, so move focus somewhere that stays, such as the next badge or the group around them (the demo focuses a `tabindex: "-1"` group). Otherwise keyboard users land back at the top of the page.
+
 For a whole set of removable, selectable values with arrow-key navigation, use `TagGroup`.
 
 ## Dots and positioning

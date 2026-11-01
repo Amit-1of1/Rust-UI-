@@ -12,7 +12,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
+Slides are 80% of the carousel's width by default, so the next one peeks in and shows there is more. `item_size` takes any CSS length: `"16rem"`, `"33%"` for three in view, or `"max(40%, 11rem)"` to adapt to the space. Touch and trackpads scroll it natively; the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 
@@ -34,6 +34,11 @@ pub fn Carousel(
     /// Accessible name, for example "Featured products".
     #[props(into)]
     label: String,
+    /// The width of each slide, any CSS length: `"16rem"`, `"33%"` for three in view, or
+    /// `"min(80%, 20rem)"` to adapt to the space. Defaults to 80% of the carousel, so the
+    /// next slide peeks in and shows there is more.
+    #[props(into, default)]
+    item_size: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -60,10 +65,16 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        div { style: "max-width: 32rem;",
+        div { style: "max-width: 32rem; display: grid; gap: 1.5rem;",
             Carousel { label: "Featured plans",
                 for (i , name) in ["Starter", "Team", "Business", "Enterprise"].into_iter().enumerate() {
                     CarouselItem { label: "{i + 1} of 4", strong { "{name}" } }
+                }
+            }
+            // Smaller slides that adapt: two and a bit in view on a wide screen, one on a phone.
+            Carousel { label: "Recent invoices", item_size: "max(40%, 11rem)",
+                for n in 1..=6 {
+                    CarouselItem { key: "{n}", label: "{n} of 6", "Invoice #{n}" }
                 }
             }
         }

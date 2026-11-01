@@ -35,3 +35,14 @@ ToastProvider {
     }
 }
 ```
+
+## Icons, actions and pausing
+
+Each kind of toast (success, error, warning, info) shows its own icon next to the title. A toast stops its countdown while the pointer is over it or focus is inside it, and starts again when they leave (`data-paused` is set meanwhile).
+
+`notify_action` adds one button, such as Undo. Pressing it runs your callback and closes the toast:
+
+```rust
+let toasts = consume_toast();
+toasts.notify_action(ToastType::Success, "Message archived", "Undo", move |_| restore());
+```

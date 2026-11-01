@@ -4,10 +4,22 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 
 **Met** means a component, prop or documented pattern does it today, covered by the kit's tests (markup snapshots, the ARIA check, contracts, contrast proof). **Partly** names what is missing. **Not yet** is open work. `crates/ui/tests/checklist.rs` keeps the totals below in step with the rows.
 
+### Names next to Reshaped
+
+The owner picked Reshaped as the reference design system. The kit keeps its own names so existing apps keep compiling; this is how they line up:
+
+| Reshaped | Atoll |
+|---|---|
+| `size`: small, medium, large, xlarge | `Sm`, `Default`, `Lg`, `Xl` (`size` on buttons, badges, avatars, spinners, progress; `field_size` on inputs and text areas) |
+| `variant`: solid, outline, faded, ghost | `Default`, `Outline`, `Secondary`, `Ghost` (`Fade` on text areas) |
+| `color`: neutral, primary, critical, positive, warning | `Secondary`, `Default`, `Destructive`, `Success`, `Warning` (badges and alerts; `Info` for alerts) |
+| `Modal` `size` | `DialogSize::Sm` to `Full` |
+| `Toast` `actionsSlot` | `notify_action` |
+
 <!-- checklist-totals -->
 | | Met | Partly | Not yet | Total |
 |---|---|---|---|---|
-| All components | 136 | 21 | 9 | 166 |
+| All components | 161 | 4 | 1 | 166 |
 <!-- /checklist-totals -->
 
 ## Accordion (4)
@@ -17,7 +29,7 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Active state | Met | The chevron turns when an item opens; `data-open` styles the item. |
 | Composition | Met | `AccordionContent` takes any children. |
 | Toggle transition | Met | Height slide on open and close; off under reduced motion. |
-| Content and trigger relation | Not yet | The trigger has `aria-controls`, but the panel is not a named `region`. |
+| Content and trigger relation | Met | Each panel is a `region` named by its trigger (`aria-labelledby`), which has `aria-controls` and `aria-expanded`. |
 
 ## Alert (6)
 
@@ -74,9 +86,9 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Item | Status | How |
 |---|---|---|
 | Icon support | Met | Any icon inside `BreadcrumbLink`, decorative. |
-| Disabled state | Not yet | |
-| Collapsed state | Not yet | |
-| Custom separator | Partly | `BreadcrumbSeparator` always draws "/". |
+| Disabled state | Met | `BreadcrumbLink { disabled }` (and `Crumb::disabled`): no `href`, `aria-disabled`, skipped by Tab. |
+| Collapsed state | Met | `BreadcrumbTrail { max_items }` keeps the first and last steps with a "Show N more" button that expands the trail and focuses the first revealed step. |
+| Custom separator | Met | `BreadcrumbSeparator { ChevronRight {} }`, or `separator` on `BreadcrumbTrail`; "/" by default. |
 
 ## Calendar (7)
 
@@ -95,10 +107,10 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Item | Status | How |
 |---|---|---|
 | Content composition | Met | `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`. |
-| Media sections | Partly | `CardMedia` meets the top or bottom edge; no side-media layout. |
-| Supplementary actions | Partly | Footer and header actions; no whole-card link or button pattern. |
+| Media sections | Met | `CardMedia` meets the top or bottom edge; `Card { horizontal: true }` puts it beside the content on wide screens. |
+| Supplementary actions | Met | Footer and header actions; `CardLink` makes the whole card open one link while its buttons still work. |
 | Responsiveness | Met | Fills its container's width. |
-| Card groups | Partly | Lay cards out in a grid yourself; `ItemGroup` for list rows. |
+| Card groups | Met | `CardGroup` fits as many columns as there is room for (`min_width`); `ItemGroup` for list rows. |
 
 ## Carousel (6)
 
@@ -106,9 +118,9 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 |---|---|---|
 | Navigation controls | Met | Previous and Next buttons. |
 | Item composition | Met | `CarouselItem` takes any children; `media` for full-bleed photos. |
-| Item sizes | Partly | Slides are 80% wide, so the next one peeks in; no size option. |
+| Item sizes | Met | `item_size` takes any CSS length; the default 80% lets the next slide peek in. |
 | Touch navigation | Met | A native scroll area with scroll snapping. |
-| Responsiveness | Partly | Same slide width at every size. |
+| Responsiveness | Met | `item_size: "max(40%, 11rem)"` (or `min()`, `clamp()`) adapts the number of slides in view to the space. |
 | Keyboard navigation | Met | The track is focusable and arrow keys scroll it; controls are buttons. |
 
 ## Checkbox (7)
@@ -192,10 +204,10 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Item | Status | How |
 |---|---|---|
 | Content composition | Met | `Dialog` takes any children. |
-| Supplementary actions | Partly | Put buttons in the dialog yourself; `SheetFooter` exists, no `DialogFooter`. |
-| Close action | Partly | Escape and buttons you add; no built-in close button on `Dialog` (`Sheet` has one). |
+| Supplementary actions | Met | `DialogFooter` (end-aligned, stacked on phones); `SheetFooter`. |
+| Close action | Met | `show_close` adds a named X; `DialogClose` turns any button into a close action; Escape. |
 | Positioning | Met | Centred `Dialog`; `Sheet` slides in from any side; `Drawer` from the bottom. |
-| Sizes | Not yet | One width; override with `style`. |
+| Sizes | Met | `DialogSize::Sm`, `Default`, `Lg`, `Xl`, `Full`; full width on phones. |
 | Focus trapping | Met | Focus moves in, stays in, and returns to the opener. |
 | Keyboard navigation | Met | Escape closes; Tab cycles inside (keyboard contract). |
 | Title and subtitle labeling | Met | `title` is required (`aria-labelledby`), `description` gives `aria-describedby`; `hide_title` keeps them for screen readers only. |
@@ -206,9 +218,9 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 |---|---|---|
 | Selected page state | Met | `aria-current="page"`, highlighted; pressing it does nothing. |
 | Page display ranges | Met | `Pager { siblings }` collapses long ranges to "1 … 4 5 6 … 20". |
-| Amount of items per page | Partly | `DataTable` has a page size; `Pager` has none. |
-| Indeterminate amount of pages | Not yet | |
-| Full page label announcements | Partly | Previous and Next are named; page buttons are read as bare numbers. |
+| Amount of items per page | Met | `Pager { page_sizes, page_size, on_page_size_change }` adds a "Rows per page" select; `DataTable` has its own. |
+| Indeterminate amount of pages | Met | `Pager { has_next }` without `pages`: Previous, "Page N", Next. |
+| Full page label announcements | Met | Page buttons are named "Page N" (translatable), Previous and Next "Go to previous/next page", the `nav` "Pagination". |
 | State announcement | Met | The current page announces `aria-current="page"` on focus. |
 
 ## Progress bar (4)
@@ -235,12 +247,12 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Item | Status | How |
 |---|---|---|
 | Label | Met | `SelectField { label }`; clicking the label opens it. |
-| Error state | Partly | `aria-invalid` and a red edge with `FieldError`; no error icon. |
+| Error state | Met | `aria-invalid` gives a red edge and an error icon; `FieldError` gives the text. |
 | Disabled state | Met | `disabled`. |
 | Placeholder | Met | `placeholder` while nothing is chosen. |
 | Helper text | Met | `SelectField { description }`, in `aria-describedby`. |
-| Icon support | Partly | Icons inside options; none at the start of the trigger. |
-| Prefix | Not yet | |
+| Icon support | Met | `start` puts an icon at the start of the trigger; options take icons too. |
+| Prefix | Met | `start` also takes any content, such as the chosen country's flag. |
 | Accessibility label | Met | `aria_label` moves to the trigger. |
 
 ## Skeleton (4)
@@ -271,7 +283,7 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Selected state | Met | One tab is always selected and highlighted. |
 | Disabled state | Met | `TabTrigger { disabled }`. |
 | Icon support | Met | Icons inside `TabTrigger`. |
-| Equal width layout | Not yet | |
+| Equal width layout | Met | `Tabs { stretch: true }`: the list fills the container, tabs share it equally. |
 | Keyboard support | Met | Arrow keys, Home and End move between tabs (manual activation: Enter or Space selects; keyboard contract). |
 
 ## Text area (7)
@@ -283,7 +295,7 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Disabled state | Met | `disabled`. |
 | Placeholder | Met | `placeholder`, never instead of the label. |
 | Helper text | Met | `TextareaField { description }`. |
-| Sizes | Partly | Variants and `autosize`; no size scale. |
+| Sizes | Met | `field_size: FieldSize::Sm`, `Default`, `Lg`; variants and `autosize` too. |
 | Accessibility label | Met | `aria-label` when there is no visible label. |
 
 ## Text field (9)
@@ -297,7 +309,7 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Helper text | Met | `FieldDescription`, in `aria-describedby`. |
 | Icon support | Met | `InputGroup` with an `InputGroupAddon` icon at the start. |
 | Prefix / Suffix | Met | `InputGroupAddon` before or after the input. |
-| Sizes | Partly | Follows the density setting; no per-field size. |
+| Sizes | Met | `field_size: FieldSize::Sm`, `Default`, `Lg`, on top of the density setting. |
 | Accessibility label | Met | `aria-label` when there is no visible label. |
 
 ## Toast (8)
@@ -306,11 +318,11 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 |---|---|---|
 | Content composition | Partly | Title and description; `render_toast` for anything else. |
 | Colors | Met | Success, error, warning and info types. |
-| Icon support | Partly | No built-in icon per type. |
+| Icon support | Met | Each type shows its icon (check, alert, warning, info) before the text. |
 | Timeout | Met | 5 seconds by default, `permanent` toasts with a close button. |
 | Stacking | Met | Toasts stack and spread out on hover and focus. |
-| Supplementary action | Partly | Through `render_toast` only. |
-| Focus management | Partly | F6 jumps to the toasts and their buttons take focus; the timeout keeps running while focus or the pointer is inside. |
+| Supplementary action | Met | `notify_action(kind, message, "Undo", on_action)` adds a button that runs the action and closes the toast. |
+| Focus management | Met | F6 jumps to the toasts and their buttons take focus; the timeout pauses while focus or the pointer is inside (`data-paused`). |
 | Reduced motion | Met | Animations off (theme rule). |
 
 ## Tooltip (3)
@@ -318,5 +330,5 @@ How Atoll's components meet the "Core components" list of [designsystemchecklist
 | Item | Status | How |
 |---|---|---|
 | Positioning | Met | CSS anchor positioning flips it when it would leave the screen. |
-| Timeout | Not yet | Opens at once on hover. |
+| Timeout | Met | `delay_ms` (400 by default) before opening on hover; keyboard focus opens at once. |
 | Keyboard support | Met | Opens on focus, Escape closes. |

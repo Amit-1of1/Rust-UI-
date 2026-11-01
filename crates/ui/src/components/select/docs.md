@@ -35,3 +35,7 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 // No visible label.
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
+
+## Start slot and errors
+
+`Select { start: rsx! { ShoppingBasket {} } }` puts an icon or short text before the value; it is hidden from screen readers. When the trigger has `aria_invalid: "true"` (or sits in a `Field` with an error) it gets the error outline and an alert icon.

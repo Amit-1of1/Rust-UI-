@@ -1,6 +1,7 @@
 use crate::components::hooks::{follow_in_app, in_app_href};
 use crate::components::icons::{ChevronLeft, ChevronRight, Ellipsis};
-use crate::components::ui_strings::use_ui_strings;
+use crate::components::native_select::{NativeSelect, NativeSelectOption};
+use crate::components::ui_strings::{fill, use_ui_strings};
 use dioxus::dioxus_core::AttributeValue;
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
@@ -45,11 +46,12 @@ pub fn Pagination(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let label = use_ui_strings().pagination;
     rsx! {
         nav {
             "data-slot": "pagination",
             role: "navigation",
-            aria_label: "pagination",
+            aria_label: label,
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination }), attributes]),
             {children}
         }
@@ -198,12 +200,13 @@ pub fn PaginationNext(
 pub fn PaginationEllipsis(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
 ) -> Element {
+    let more = use_ui_strings().more_pages;
     rsx! {
         span {
             "data-slot": "pagination-ellipsis",
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination_ellipsis }), attributes]),
             Ellipsis { "aria-hidden": "true", size: "1rem" }
-            span { class: Styles::dx_sr_only, "More pages" }
+            span { class: Styles::dx_sr_only, {more} }
         }
     }
 }
@@ -213,6 +216,11 @@ pub fn PaginationEllipsis(
 /// the first and last page, so they keep focus but do nothing; long ranges collapse to
 /// "1 … 4 5 6 … 20" (`siblings` pages each side of the current one).
 ///
+/// Each page button is named "Page N" (translatable), and the current one says so with
+/// `aria-current="page"`. With `page_sizes`, a "Rows per page" select comes after the pages.
+/// When the number of pages isn't known (a cursor-based API), leave `pages` out and pass
+/// `has_next`: the pager shows Previous, "Page N" and Next.
+///
 /// For pages that are URLs, compose [`Pagination`] with [`PaginationLink`] instead.
 ///
 /// # Stability
@@ -221,18 +229,37 @@ pub fn PaginationEllipsis(
 #[component]
 pub fn Pager(
     page: usize,
+    /// How many pages there are. Leave it out (0) with `has_next` when that isn't known.
+    #[props(default)]
     pages: usize,
     on_page_change: EventHandler<usize>,
     #[props(default = 1)] siblings: usize,
+    /// For an unknown number of pages: whether there is a page after this one.
+    #[props(default)]
+    has_next: Option<bool>,
+    /// Choices for the page size ("10, 25, 50"); shows a select when not empty.
+    #[props(default)]
+    page_sizes: Vec<usize>,
+    /// The current page size, one of `page_sizes`.
+    #[props(default)]
+    page_size: usize,
+    #[props(default)] on_page_size_change: Option<EventHandler<usize>>,
     /// Goes on the `<nav>`: give it an `aria-label` ("Pages of results").
     #[props(extends = GlobalAttributes)]
     attributes: Vec<Attribute>,
 ) -> Element {
     let t = use_ui_strings();
-    let pages = pages.max(1);
+    let unknown = has_next.is_some() && pages == 0;
+    let pages = if unknown { page.max(1) } else { pages.max(1) };
     let page = page.clamp(1, pages);
     let first = page == 1;
-    let last = page == pages;
+    let last = if unknown { has_next != Some(true) } else { page == pages };
+    let items = if unknown {
+        vec![("current".to_string(), Some(page))]
+    } else {
+        keyed_items(page, pages, siblings)
+    };
+    let size_id = crate::components::hooks::use_unique_id("dx-pager-size");
     rsx! {
         Pagination { attributes,
             PaginationContent {
@@ -254,15 +281,20 @@ pub fn Pager(
                         span { class: Styles::dx_pagination_label, {t.previous.clone()} }
                     }
                 }
-                for (slot, item) in keyed_items(page, pages, siblings) {
+                for (slot, item) in items {
                     PaginationItem { key: "{slot}",
-                        if let Some(p) = item {
+                        if unknown {
+                            span { class: Styles::dx_pagination_status, aria_current: "page",
+                                {fill(&t.page_number, &[("page", &page.to_string())])}
+                            }
+                        } else if let Some(p) = item {
                             button {
                                 r#type: "button",
                                 class: "{Styles::dx_pagination_link} {Styles::dx_pagination_button}",
                                 "data-size": PaginationLinkSize::Icon.class(),
                                 "data-active": p == page,
                                 aria_current: (p == page).then_some("page"),
+                                aria_label: fill(&t.page_number, &[("page", &p.to_string())]),
                                 onclick: move |_| {
                                     if p != page {
                                         on_page_change.call(p);
@@ -291,6 +323,22 @@ pub fn Pager(
                         },
                         span { class: Styles::dx_pagination_label, {t.next.clone()} }
                         ChevronRight { "aria-hidden": "true", size: "1rem" }
+                    }
+                }
+                if !page_sizes.is_empty() {
+                    li { class: Styles::dx_pagination_size,
+                        label { r#for: "{size_id}", {t.rows_per_page.clone()} }
+                        NativeSelect {
+                            id: "{size_id}",
+                            onchange: move |e: FormEvent| {
+                                if let (Some(f), Ok(n)) = (&on_page_size_change, e.value().parse()) {
+                                    f.call(n);
+                                }
+                            },
+                            for n in page_sizes.iter().copied() {
+                                NativeSelectOption { key: "{n}", value: "{n}", selected: n == page_size, "{n}" }
+                            }
+                        }
                     }
                 }
             }

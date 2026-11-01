@@ -17,6 +17,10 @@ pub fn Demo() -> Element {
             if !name.read().is_empty() {
                 p { style: "margin: 0; font-size: 0.875rem;", "Hello, {name}!" }
             }
+            Label { html_for: "gallery-search-sm", "Small" }
+            Input { id: "gallery-search-sm", field_size: crate::components::field::FieldSize::Sm, placeholder: "Filter rows" }
+            Label { html_for: "gallery-email-lg", "Large" }
+            Input { id: "gallery-email-lg", r#type: "email", field_size: crate::components::field::FieldSize::Lg, placeholder: "you@example.com" }
         }
     }
 }

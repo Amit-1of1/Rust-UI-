@@ -134,6 +134,11 @@ impl UiStrings {
             decrease: s("Diminuer {label}"),
             increase: s("Augmenter {label}"),
             remove_named: s("Retirer {label}"),
+            rows_per_page: s("Lignes par page"),
+            page_number: s("Page {page}"),
+            more_pages: s("Autres pages"),
+            pagination: s("Pagination"),
+            show_more_crumbs: s("Afficher {count} de plus"),
             more_count: s("{count} de plus"),
         }
     }
@@ -226,6 +231,11 @@ impl UiStrings {
             decrease: s("{label} verringern"),
             increase: s("{label} erhöhen"),
             remove_named: s("{label} entfernen"),
+            rows_per_page: s("Zeilen pro Seite"),
+            page_number: s("Seite {page}"),
+            more_pages: s("Weitere Seiten"),
+            pagination: s("Seitennavigation"),
+            show_more_crumbs: s("{count} weitere anzeigen"),
             more_count: s("{count} weitere"),
         }
     }
@@ -318,6 +328,11 @@ impl UiStrings {
             decrease: s("Reducir {label}"),
             increase: s("Aumentar {label}"),
             remove_named: s("Quitar {label}"),
+            rows_per_page: s("Filas por página"),
+            page_number: s("Página {page}"),
+            more_pages: s("Más páginas"),
+            pagination: s("Paginación"),
+            show_more_crumbs: s("Mostrar {count} más"),
             more_count: s("{count} más"),
         }
     }
@@ -410,6 +425,11 @@ impl UiStrings {
             decrease: s("Diminuir {label}"),
             increase: s("Aumentar {label}"),
             remove_named: s("Remover {label}"),
+            rows_per_page: s("Linhas por página"),
+            page_number: s("Página {page}"),
+            more_pages: s("Mais páginas"),
+            pagination: s("Paginação"),
+            show_more_crumbs: s("Mostrar mais {count}"),
             more_count: s("mais {count}"),
         }
     }
@@ -502,6 +522,11 @@ impl UiStrings {
             decrease: s("إنقاص {label}"),
             increase: s("زيادة {label}"),
             remove_named: s("إزالة {label}"),
+            rows_per_page: s("صفوف لكل صفحة"),
+            page_number: s("الصفحة {page}"),
+            more_pages: s("صفحات أخرى"),
+            pagination: s("التنقل بين الصفحات"),
+            show_more_crumbs: s("إظهار {count} أخرى"),
             more_count: s("{count} آخرون"),
         }
     }
@@ -594,6 +619,11 @@ impl UiStrings {
             decrease: s("הקטנת {label}"),
             increase: s("הגדלת {label}"),
             remove_named: s("הסרת {label}"),
+            rows_per_page: s("שורות בעמוד"),
+            page_number: s("עמוד {page}"),
+            more_pages: s("עמודים נוספים"),
+            pagination: s("ניווט בין עמודים"),
+            show_more_crumbs: s("הצגת {count} נוספים"),
             more_count: s("{count} נוספים"),
         }
     }
@@ -686,6 +716,11 @@ impl UiStrings {
             decrease: s("{label} を減らす"),
             increase: s("{label} を増やす"),
             remove_named: s("{label} を削除"),
+            rows_per_page: s("1 ページの行数"),
+            page_number: s("{page} ページ"),
+            more_pages: s("その他のページ"),
+            pagination: s("ページ送り"),
+            show_more_crumbs: s("さらに {count} 件を表示"),
             more_count: s("他 {count} 人"),
         }
     }
@@ -778,6 +813,11 @@ impl UiStrings {
             decrease: s("减少{label}"),
             increase: s("增加{label}"),
             remove_named: s("移除{label}"),
+            rows_per_page: s("每页行数"),
+            page_number: s("第 {page} 页"),
+            more_pages: s("更多页面"),
+            pagination: s("分页"),
+            show_more_crumbs: s("再显示 {count} 项"),
             more_count: s("另外 {count} 个"),
         }
     }

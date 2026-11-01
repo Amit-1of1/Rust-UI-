@@ -124,7 +124,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 
 # Accordion
 
-- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
+- Copy into your app: `atoll add accordion` or `dx components add accordion --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`).
 - Import: `use crate::components::accordion::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The accordion component is used to display collapsible content panels for presenting information in a limited amount of space. It allows users to expand and collapse sections to view more or less content.
@@ -952,6 +952,8 @@ Badge {
 Badge { variant: BadgeVariant::Outline, dismiss_label: "Rust", on_dismiss: move |_| remove("Rust"), "Rust" }
 ```
 
+Removing the badge removes the button that had focus, so move focus somewhere that stays, such as the next badge or the group around them (the demo focuses a `tabindex: "-1"` group). Otherwise keyboard users land back at the top of the page.
+
 For a whole set of removable, selectable values with arrow-key navigation, use `TagGroup`.
 
 ## Dots and positioning
@@ -1087,6 +1089,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut tags = use_signal(|| vec!["Rust", "Dioxus", "WebAssembly"]);
+    // The pressed dismiss button goes away with its badge, so focus moves to the group.
+    let mut group = use_signal(|| None::<std::rc::Rc<MountedData>>);
     rsx! {
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;",
             Badge { "Primary" }
@@ -1104,10 +1108,22 @@ pub fn Demo() -> Element {
             Badge { dot: true, variant: BadgeVariant::Success, aria_label: "Online" }
             span { "Online" }
         }
-        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem;",
+        div {
+            style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem;",
+            role: "group",
+            aria_label: "Topics",
+            tabindex: "-1",
+            onmounted: move |e: MountedEvent| group.set(Some(e.data())),
             for tag in tags() {
                 Badge { key: "{tag}", variant: BadgeVariant::Outline, dismiss_label: tag,
-                    on_dismiss: move |_| tags.write().retain(|t| *t != tag),
+                    on_dismiss: move |_| {
+                        tags.write().retain(|t| *t != tag);
+                        if let Some(group) = group() {
+                            spawn(async move {
+                                _ = group.set_focus(true).await;
+                            });
+                        }
+                    },
                     "{tag}"
                 }
             }
@@ -1213,15 +1229,42 @@ pub fn Demo() -> Element {
 
 # Breadcrumb
 
-- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `ui_strings`).
+- Copy into your app: `atoll add breadcrumb` or `dx components add breadcrumb --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::breadcrumb::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 A trail of links to the current page.
 
+```rust
+Breadcrumb {
+    BreadcrumbItem { BreadcrumbLink { href: "/", House { "aria-hidden": "true" } "Home" } }
+    BreadcrumbSeparator {}
+    BreadcrumbItem { BreadcrumbPage { "Settings" } }
+}
+```
+
+- Icons go inside `BreadcrumbLink`, decorative (`aria-hidden`); use them for every step or for none.
+- `BreadcrumbSeparator` draws "/" by default; pass your own: `BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }`.
+- `BreadcrumbLink { disabled: true }` keeps a step in the trail but can't be followed (no `href`, `aria-disabled`, skipped by Tab).
+
+## Collapsing long trails
+
+`BreadcrumbTrail` builds the trail from a list and, when there are more than `max_items` steps, shows the first and the last `max_items - 1` with a "…" button between. Pressing it shows every step and moves focus to the first one it revealed. `visible_crumbs` is the rule on its own.
+
+```rust
+BreadcrumbTrail { max_items: 3, items: vec![
+    Crumb::link("Home", "/"),
+    Crumb::link("Projects", "/projects"),
+    Crumb::link("Atoll", "/projects/atoll"),
+    Crumb::page("Members"),
+] }
+```
+
+For hand-built trails, `BreadcrumbEllipsis { label, on_click }` is the same button.
+
 ## Accessibility
 
-- Role and name: the current page is not a link and has `aria-current="page"`; separators are `aria-hidden`
-- Keyboard: links are tabbable in order
+- Role and name: a `nav` named "Breadcrumb" (translatable); the current page is not a link and has `aria-current="page"`; separators are `aria-hidden`; the "…" button is named "Show N more"
+- Keyboard: links are tabbable in order; Enter or Space on "…" expands the trail and focuses the first revealed step
 - Reduced motion: none
 
 ## API
@@ -1242,10 +1285,15 @@ pub fn BreadcrumbItem(
 #[component]
 pub fn BreadcrumbLink(
     #[props(into, default = "#".to_string())] href: String,
+    /// Can't be followed for now: no `href`, `aria-disabled="true"`, out of the tab order and
+    /// drawn dimmed. Still read as a link in the trail.
+    #[props(default)]
+    disabled: bool,
     /// For in-app navigation without a router: call `prevent_default()` and switch the view.
     /// With the kit's `router` feature, a path `href` goes through the router by itself.
     #[props(default)]
     onclick: Option<EventHandler<MouseEvent>>,
+    #[props(default)] onmounted: Option<EventHandler<MountedEvent>>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -1257,26 +1305,128 @@ pub fn BreadcrumbPage(
     children: Element,
 ) -> Element
 
-/// The divider between items. Hidden from assistive technology.
+/// The divider between items: "/" unless you pass your own, such as a `ChevronRight` icon or
+/// "›". Hidden from assistive technology.
 #[component]
-pub fn BreadcrumbSeparator() -> Element
+pub fn BreadcrumbSeparator(#[props(default)] children: Element) -> Element {
+    // An empty `children` is a lone placeholder node, not an empty template.
+    let custom = children.as_ref().is_ok_and(|node|
+
+/// Stands in for the items a collapsed trail hides. A button: pressing it calls `on_click`
+/// (show the hidden items, or open a menu of them). [`BreadcrumbTrail`] uses it for you.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn BreadcrumbEllipsis(
+    /// Its name, such as "Show 3 more"; read instead of the dots.
+    #[props(into)]
+    label: String,
+    on_click: EventHandler<MouseEvent>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
+
+/// One step of a [`BreadcrumbTrail`].
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct Crumb {
+    pub label: String,
+    /// `None` for the current page (the last step).
+    pub href: Option<String>,
+    pub disabled: bool,
+}
+
+/// Which crumbs a trail of `count` shows when at most `max` fit: the first one, then the last
+/// `max - 1`, with a gap (`None`) between. `max` below 2 counts as 2, and a gap never hides
+/// just one crumb (that crumb is shown instead).
+///
+/// ```
+/// use ui::components::breadcrumb::visible_crumbs;
+/// assert_eq!(visible_crumbs(6, 3), vec![Some(0), None, Some(4), Some(5)]);
+/// assert_eq!(visible_crumbs(3, 3), vec![Some(0), Some(1), Some(2)]);
+/// ```
+pub fn visible_crumbs(count: usize, max: usize) -> Vec<Option<usize>>
+
+/// A breadcrumb trail built from a list, which collapses the middle into a "…" button when
+/// there are more than `max_items` steps. Pressing the button shows every step and moves
+/// focus to the first one it revealed.
+///
+/// ```
+/// # use dioxus::prelude::*;
+/// # use ui::prelude::*;
+/// # fn app() -> Element {
+/// rsx! {
+///     BreadcrumbTrail { max_items: 3, items: vec![
+///         Crumb::link("Home", "/"),
+///         Crumb::link("Projects", "/projects"),
+///         Crumb::link("Atoll", "/projects/atoll"),
+///         Crumb::link("Settings", "/projects/atoll/settings"),
+///         Crumb::page("Members"),
+///     ] }
+/// }
+/// # }
+/// ```
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn BreadcrumbTrail(
+    items: Vec<Crumb>,
+    /// How many steps to show before collapsing (the first and the last `max_items - 1`).
+    #[props(default = usize::MAX)]
+    max_items: usize,
+    /// A custom separator, drawn between every two steps.
+    #[props(default)]
+    separator: Option<Element>,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
 ```
 
 ## Example
 
 ```rust
 use crate::components::breadcrumb::*;
+use crate::components::icons::{ChevronRight, House};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        Breadcrumb {
-            BreadcrumbItem { BreadcrumbLink { href: "#", "Home" } }
-            BreadcrumbSeparator {}
-            BreadcrumbItem { BreadcrumbLink { href: "#", "Components" } }
-            BreadcrumbSeparator {}
-            BreadcrumbItem { BreadcrumbPage { "Breadcrumb" } }
+        div { style: "display: grid; gap: 1rem;",
+            Breadcrumb {
+                BreadcrumbItem {
+                    BreadcrumbLink { href: "#",
+                        House { "aria-hidden": "true", size: "0.875rem" }
+                        "Home"
+                    }
+                }
+                BreadcrumbSeparator {}
+                BreadcrumbItem { BreadcrumbLink { href: "#", "Components" } }
+                BreadcrumbSeparator {}
+                BreadcrumbItem { BreadcrumbPage { "Breadcrumb" } }
+            }
+            // A custom separator and a step you can't open yet.
+            Breadcrumb { aria_label: "Billing breadcrumb",
+                BreadcrumbItem { BreadcrumbLink { href: "#", "Workspace" } }
+                BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }
+                BreadcrumbItem { BreadcrumbLink { href: "#", disabled: true, "Billing (owners only)" } }
+                BreadcrumbSeparator { ChevronRight { "aria-hidden": "true" } }
+                BreadcrumbItem { BreadcrumbPage { "Invoices" } }
+            }
+            // A long trail collapses its middle; "…" shows the rest.
+            BreadcrumbTrail { aria_label: "Project breadcrumb", max_items: 3,
+                items: vec![
+                    Crumb::link("Home", "#"),
+                    Crumb::link("Projects", "#"),
+                    Crumb::link("Atoll", "#"),
+                    Crumb::link("Settings", "#"),
+                    Crumb::page("Members"),
+                ],
+            }
         }
     }
 }
@@ -1827,7 +1977,7 @@ pub fn Demo() -> Element {
 
 # Card
 
-- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.
@@ -1872,11 +2022,31 @@ Card {
 }
 ```
 
+## Whole-card links, side media and groups
+
+- `CardLink { href }` goes inside the title. Its click area covers the whole card, while screen readers hear only the title. Buttons in the card still work on their own.
+- `Card { horizontal: true }` puts a `CardMedia` beside the content on screens at least 40rem wide, and stacks it again below that.
+- `CardGroup { min_width: "16rem" }` fits as many columns as there is room for, each at least `min_width` wide. It adds no list roles; add `role: "list"` and `role: "listitem"` yourself when the count matters.
+
+```rust
+CardGroup {
+    Card { CardHeader { CardTitle { CardLink { href: "/guides/forms", "Forms guide" } } } }
+    Card { horizontal: true,
+        CardMedia { img { src: "/cabin.jpg", alt: "The cabin" } }
+        CardHeader { CardTitle { "Lakeside cabin" } }
+    }
+}
+```
+
 ## API
 
 ```rust
 #[component]
 pub fn Card(
+    /// Puts a `CardMedia` beside the content instead of above it (stacked again on narrow
+    /// screens).
+    #[props(default)]
+    horizontal: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -1929,6 +2099,36 @@ pub fn CardFooter(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
+
+/// Makes the whole card a link: the card's title goes inside, and the link's click area is
+/// stretched over the card, so one press anywhere opens it while screen readers hear just the
+/// title. Buttons in the card stay pressable above it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardLink(
+    #[props(into)] href: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// Lays cards out in a grid that fits as many columns as there is room for, each at least
+/// `min_width` wide, down to one column on phones. It adds no list semantics; give it
+/// `role: "list"` and each card `role: "listitem"` when screen readers should count them.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardGroup(
+    /// The narrowest a card may get before the grid drops a column (any CSS length).
+    #[props(into, default = "16rem".to_string())]
+    min_width: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -1943,6 +2143,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem; width: 100%;",
         Card { style: "width: 100%; max-width: 24rem;",
             CardHeader {
                 CardTitle { "Create project" }
@@ -1958,6 +2159,22 @@ pub fn Demo() -> Element {
                 Button { variant: ButtonVariant::Outline, "Cancel" }
                 Button { "Create" }
             }
+        }
+        CardGroup { min_width: "12rem",
+            Card {
+                CardHeader {
+                    CardTitle { CardLink { href: "#docs", "Read the docs" } }
+                    CardDescription { "The whole card opens the guide." }
+                }
+            }
+            Card { horizontal: true,
+                CardHeader {
+                    CardTitle { "Side by side" }
+                    CardDescription { "On wide screens the parts sit in a row." }
+                }
+                CardFooter { Button { variant: ButtonVariant::Outline, "Open" } }
+            }
+        }
         }
     }
 }
@@ -1979,7 +2196,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
+Slides are 80% of the carousel's width by default, so the next one peeks in and shows there is more. `item_size` takes any CSS length: `"16rem"`, `"33%"` for three in view, or `"max(40%, 11rem)"` to adapt to the space. Touch and trackpads scroll it natively; the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 
@@ -2001,6 +2218,11 @@ pub fn Carousel(
     /// Accessible name, for example "Featured products".
     #[props(into)]
     label: String,
+    /// The width of each slide, any CSS length: `"16rem"`, `"33%"` for three in view, or
+    /// `"min(80%, 20rem)"` to adapt to the space. Defaults to 80% of the carousel, so the
+    /// next slide peeks in and shows there is more.
+    #[props(into, default)]
+    item_size: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -2027,10 +2249,16 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
-        div { style: "max-width: 32rem;",
+        div { style: "max-width: 32rem; display: grid; gap: 1.5rem;",
             Carousel { label: "Featured plans",
                 for (i , name) in ["Starter", "Team", "Business", "Enterprise"].into_iter().enumerate() {
                     CarouselItem { label: "{i + 1} of 4", strong { "{name}" } }
+                }
+            }
+            // Smaller slides that adapt: two and a bit in view on a wide screen, one on a phone.
+            Carousel { label: "Recent invoices", item_size: "max(40%, 11rem)",
+                for n in 1..=6 {
+                    CarouselItem { key: "{n}", label: "{n} of 6", "Invoice #{n}" }
                 }
             }
         }
@@ -4547,7 +4775,7 @@ pub fn Demo() -> Element {
 
 # Dialog
 
-- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
+- Copy into your app: `atoll add dialog` or `dx components add dialog --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
 - Import: `use crate::components::dialog::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The dialog component can be used to display additional information or actions related to an item. It is a simple modal dialog that can be opened and closed by the user.
@@ -4573,6 +4801,12 @@ Dialog {
 - `title` is a required prop, so a dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). Radix and shadcn only warn about this at runtime.
 - `hide_title: true` hides the title and `description` visually but keeps them for screen readers, for dialogs whose content already makes the purpose clear (the command palette uses it).
 - For a description with links or formatting, put a `DialogDescription` in the children instead of `description` (not both).
+
+## Sizes, footer and close button
+
+- `size: DialogSize::Sm | Default | Lg | Xl | Full` sets the panel's width; `Full` fills the screen.
+- `DialogFooter` lines up the action buttons at the end (stacked on phones).
+- `DialogClose` is a button that closes the dialog (give it a `class`, or render your own element with `as`); `DialogContentClose` is the corner X, named "Close" in the current locale.
 
 ## Keyboard and accessibility
 
@@ -4632,6 +4866,15 @@ pub struct DialogProps {
     #[props(default)]
     pub hide_title: bool,
 
+    /// How wide the dialog may grow: `Sm` for a confirmation, `Lg`/`Xl` for forms and tables,
+    /// `Full` for most of the screen. On phones every size fills the width.
+    #[props(default)]
+    pub size: DialogSize,
+
+    /// Adds a close button (an X, named "Close") in the top corner.
+    #[props(default)]
+    pub show_close: bool,
+
     /// The ID of the dialog root element.
     pub id: ReadSignal<Option<String>>,
 
@@ -4665,6 +4908,60 @@ pub fn Dialog(props: DialogProps) -> Element
 /// dialog's `description` prop instead.
 #[component]
 pub fn DialogDescription(props: DialogDescriptionProps) -> Element
+
+/// How wide a [`Dialog`] may grow.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum DialogSize {
+    /// 24rem: a short confirmation.
+    Sm,
+    /// 32rem.
+    #[default]
+    Default,
+    /// 42rem: a form.
+    Lg,
+    /// 56rem: a table or a two-column form.
+    Xl,
+    /// Nearly the whole screen.
+    Full,
+}
+
+/// The row of buttons at the bottom of a [`Dialog`] ("Cancel", "Save"), aligned to the end and
+/// stacked on narrow screens.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogFooter(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// A button that closes the [`Dialog`] it is in ("Cancel", "Done"). Style it by passing a
+/// `class`, or render your own element with `as`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogClose(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+    r#as: Option<Callback<Vec<Attribute>, Element>>,
+    children: Element,
+) -> Element
+
+/// The X in a [`Dialog`]'s corner, named "Close" (translatable). `show_close: true` adds it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DialogContentClose(
+    #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
+) -> Element
 ```
 
 ## Example
@@ -4677,16 +4974,33 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut open = use_signal(|| false);
+    let mut wide = use_signal(|| false);
     rsx! {
-        Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
+        div { style: "display: flex; flex-wrap: wrap; gap: 0.75rem;",
+            Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(true), "Open dialog" }
+            Button { variant: ButtonVariant::Outline, onclick: move |_| wide.set(true), "Open a large dialog" }
+        }
         Dialog {
             open: open(),
             on_open_change: move |v| open.set(v),
             title: "Are you sure?",
             description: "This action cannot be undone.",
-            div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;",
+            size: DialogSize::Sm,
+            DialogFooter {
                 Button { variant: ButtonVariant::Outline, onclick: move |_| open.set(false), "Cancel" }
                 Button { variant: ButtonVariant::Destructive, onclick: move |_| open.set(false), "Delete" }
+            }
+        }
+        Dialog {
+            open: wide(),
+            on_open_change: move |v| wide.set(v),
+            title: "Invite people",
+            description: "They get an email with a link to join the workspace.",
+            size: DialogSize::Lg,
+            show_close: true,
+            p { style: "margin: 0;", "Paste one email address per line, or import a CSV file." }
+            DialogFooter {
+                Button { onclick: move |_| wide.set(false), "Send invites" }
             }
         }
     }
@@ -5461,6 +5775,20 @@ Wires a label, description and error to a control with matching ids. `use_field_
 ## API
 
 ```rust
+/// The size of a text field (`Input`, `Textarea`): `Sm` for dense tables and toolbars, `Lg`
+/// for sign-up and marketing forms. Named `field_size` on the components because `size` is
+/// an HTML attribute of `<input>`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum FieldSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
 /// DOM ids that tie a control to its description and error message, so assistive
 /// technology reads them together. Create with [`use_field_ids`].
 pub struct FieldIds {
@@ -6794,7 +7122,7 @@ pub fn Demo() -> Element {
 
 # Input
 
-- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.
@@ -6809,6 +7137,10 @@ input {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -6835,6 +7167,9 @@ pub fn Input(
     oncut: Option<EventHandler<ClipboardEvent>>,
     onpaste: Option<EventHandler<ClipboardEvent>>,
     onmounted: Option<EventHandler<MountedEvent>>,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=input)]
     attributes: Vec<Attribute>,
@@ -6864,6 +7199,10 @@ pub fn Demo() -> Element {
             if !name.read().is_empty() {
                 p { style: "margin: 0; font-size: 0.875rem;", "Hello, {name}!" }
             }
+            Label { html_for: "gallery-search-sm", "Small" }
+            Input { id: "gallery-search-sm", field_size: crate::components::field::FieldSize::Sm, placeholder: "Filter rows" }
+            Label { html_for: "gallery-email-lg", "Large" }
+            Input { id: "gallery-email-lg", r#type: "email", field_size: crate::components::field::FieldSize::Lg, placeholder: "you@example.com" }
         }
     }
 }
@@ -8313,7 +8652,7 @@ pub fn Demo() -> Element {
 
 # Pagination
 
-- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `native_select`, `ui_strings`).
 - Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
@@ -8434,6 +8773,11 @@ pub fn PaginationEllipsis(
 /// the first and last page, so they keep focus but do nothing; long ranges collapse to
 /// "1 … 4 5 6 … 20" (`siblings` pages each side of the current one).
 ///
+/// Each page button is named "Page N" (translatable), and the current one says so with
+/// `aria-current="page"`. With `page_sizes`, a "Rows per page" select comes after the pages.
+/// When the number of pages isn't known (a cursor-based API), leave `pages` out and pass
+/// `has_next`: the pager shows Previous, "Page N" and Next.
+///
 /// For pages that are URLs, compose [`Pagination`] with [`PaginationLink`] instead.
 ///
 /// # Stability
@@ -8442,9 +8786,21 @@ pub fn PaginationEllipsis(
 #[component]
 pub fn Pager(
     page: usize,
+    /// How many pages there are. Leave it out (0) with `has_next` when that isn't known.
+    #[props(default)]
     pages: usize,
     on_page_change: EventHandler<usize>,
     #[props(default = 1)] siblings: usize,
+    /// For an unknown number of pages: whether there is a page after this one.
+    #[props(default)]
+    has_next: Option<bool>,
+    /// Choices for the page size ("10, 25, 50"); shows a select when not empty.
+    #[props(default)]
+    page_sizes: Vec<usize>,
+    /// The current page size, one of `page_sizes`.
+    #[props(default)]
+    page_size: usize,
+    #[props(default)] on_page_size_change: Option<EventHandler<usize>>,
     /// Goes on the `<nav>`: give it an `aria-label` ("Pages of results").
     #[props(extends = GlobalAttributes)]
     attributes: Vec<Attribute>,
@@ -8464,6 +8820,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut page = use_signal(|| 6usize);
+    let mut size = use_signal(|| 25usize);
+    let mut feed = use_signal(|| 1usize);
     rsx! {
         div { style: "display: flex; flex-direction: column; gap: 1.5rem;",
         Pagination {
@@ -8494,6 +8852,16 @@ pub fn Demo() -> Element {
             page: page(),
             pages: 20,
             on_page_change: move |p| page.set(p),
+            page_sizes: vec![10, 25, 50],
+            page_size: size(),
+            on_page_size_change: move |n| size.set(n),
+        }
+        // Unknown total (a cursor-based feed): Previous, "Page N", Next.
+        Pager {
+            aria_label: "Pages of the activity feed",
+            page: feed(),
+            has_next: feed() < 4,
+            on_page_change: move |p| feed.set(p),
         }
         }
     }
@@ -9028,6 +9396,10 @@ Select::<String> { aria_labelledby: "fruit-label", /* options */ }
 Select::<String> { aria_label: "Fruit", /* options */ }
 ```
 
+## Start slot and errors
+
+`Select { start: rsx! { ShoppingBasket {} } }` puts an icon or short text before the value; it is hidden from screen readers. When the trigger has `aria_invalid: "true"` (or sits in a `Field` with an error) it gets the error outline and an alert icon.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Select-Only Combobox](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) pattern. Roles: `listbox`, `option`. Works on native (Blitz): partly.
@@ -9103,6 +9475,12 @@ pub struct SelectProps<T: Clone + PartialEq + 'static = String> {
     #[props(default = ReadSignal::new(Signal::new(Duration::from_millis(1000))))]
     pub typeahead_timeout: ReadSignal<Duration>,
 
+    /// Shown at the start of the trigger: an icon that says what the select is for, or a
+    /// prefix such as the chosen country's flag. Decorative (hidden from screen readers), so
+    /// the value and label still carry the meaning.
+    #[props(default)]
+    pub start: Option<Element>,
+
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 
@@ -9169,6 +9547,7 @@ pub fn Demo() -> Element {
         Select::<Option<Fruit>> {
             width: "12rem",
             aria_label: "Fruit",
+            start: rsx! { crate::components::icons::ShoppingBasket {} },
             SelectGroup {
                 SelectGroupLabel { "Fruits" }
                 {fruits}
@@ -11211,6 +11590,10 @@ Tabs {
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
 
+## Variants, icons and width
+
+`variant` is `TabsVariant::Default` (pills on a track) or `Ghost` (for tabs inside cards). Icons go inside `TabTrigger`, decorative. `stretch: true` makes the list fill its container and gives every tab the same width. `TabTrigger { disabled: true }` keeps a tab visible but out of reach.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) pattern. Roles: `tablist`, `tab`, `tabpanel`. Works on native (Blitz): partly.
@@ -11270,6 +11653,10 @@ pub struct TabsProps {
     #[props(default)]
     pub variant: TabsVariant,
 
+    /// Stretch the tab list to the container's width, every tab the same width.
+    #[props(default)]
+    pub stretch: bool,
+
     /// Additional attributes to apply to the tabs element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -11304,11 +11691,13 @@ pub fn TabContent(props: TabContentProps) -> Element
 
 ```rust
 use crate::components::tabs::*;
+use crate::components::icons::{Bell, CreditCard, User};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem;",
         Tabs { default_value: "account".to_string(), horizontal: true, max_width: "24rem",
             TabList {
                 TabTrigger { value: "account".to_string(), index: 0usize, "Account" }
@@ -11320,6 +11709,18 @@ pub fn Demo() -> Element {
             TabContent { index: 1usize, value: "password".to_string(),
                 p { "Change your password here." }
             }
+        }
+        // Equal-width tabs with icons, and one you can't open yet.
+        Tabs { default_value: "profile".to_string(), horizontal: true, stretch: true, variant: TabsVariant::Ghost, max_width: "24rem",
+            TabList {
+                TabTrigger { value: "profile".to_string(), index: 0usize, User { "aria-hidden": "true", size: "1rem" } "Profile" }
+                TabTrigger { value: "alerts".to_string(), index: 1usize, Bell { "aria-hidden": "true", size: "1rem" } "Alerts" }
+                TabTrigger { value: "billing".to_string(), index: 2usize, disabled: true, CreditCard { "aria-hidden": "true", size: "1rem" } "Billing" }
+            }
+            TabContent { index: 0usize, value: "profile".to_string(), p { "Your name and photo." } }
+            TabContent { index: 1usize, value: "alerts".to_string(), p { "What we email you about." } }
+            TabContent { index: 2usize, value: "billing".to_string(), p { "Plans and invoices." } }
+        }
         }
     }
 }
@@ -11435,7 +11836,7 @@ pub fn Demo() -> Element {
 
 # Textarea
 
-- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The textarea element is used to allow users to enter multi-line text input in a user interface.
@@ -11451,6 +11852,10 @@ textarea {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -11489,6 +11894,9 @@ pub fn Textarea(
     /// `field-sizing: content`, no JavaScript). Browsers without it keep a fixed height.
     #[props(default)]
     autosize: bool,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=textarea)]
     attributes: Vec<Attribute>,
@@ -12039,7 +12447,7 @@ pub fn Demo() -> Element {
 
 # Toast
 
-- Copy into your app: `atoll add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add toast` or `dx components add toast --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
 - Import: `use crate::components::toast::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Toast component is used to display brief messages to the user, typically for notifications or alerts. The toast messages can be focused with the keyboard with the `f6` key.
@@ -12080,9 +12488,32 @@ ToastProvider {
 }
 ```
 
+## Icons, actions and pausing
+
+Each kind of toast (success, error, warning, info) shows its own icon next to the title. A toast stops its countdown while the pointer is over it or focus is inside it, and starts again when they leave (`data-paused` is set meanwhile).
+
+`notify_action` adds one button, such as Undo. Pressing it runs your callback and closes the toast:
+
+```rust
+let toasts = consume_toast();
+toasts.notify_action(ToastType::Success, "Message archived", "Undo", move |_| restore());
+```
+
 ## API
 
 ```rust
+/// A button in a toast that answers it, such as "Undo" after a delete.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub struct ToastAction {
+    /// The button's text ("Undo").
+    pub label: String,
+    /// Runs when the button is pressed; the toast then closes.
+    pub on_action: Callback<()>,
+}
+
 #[component]
 pub fn ToastProvider(
     #[props(default = ReadSignal::new(Signal::new(Some(Duration::from_secs(5)))))]
@@ -12111,7 +12542,7 @@ pub struct ToastMessage {
 use crate::components::button::{Button, ButtonVariant};
 use crate::components::toast::{ToastProvider, ToastsExt};
 use dioxus::prelude::*;
-use dioxus_primitives::toast::use_toast;
+use dioxus_primitives::toast::{use_toast, ToastType};
 
 /// Self-contained: the demo brings its own provider, so it also works on a docs page.
 #[component]
@@ -12140,6 +12571,14 @@ fn Buttons() -> Element {
                 variant: ButtonVariant::Outline,
                 onclick: move |_| toasts.notify_info("Copied"),
                 "Info toast"
+            }
+            Button {
+                variant: ButtonVariant::Outline,
+                onclick: move |_| {
+                    toasts.notify_action(ToastType::Info, ("Invoice deleted", "INV-1042 moved to the bin."), "Undo",
+                        move |_| toasts.notify_success("Invoice restored"))
+                },
+                "Toast with an action"
             }
         }
     }
@@ -12671,6 +13110,10 @@ Tooltip {
 }
 ```
 
+## Timing
+
+Hovering waits `delay_ms` (400 ms by default) before the tooltip opens, so moving the pointer across a toolbar doesn't flash every tooltip. Keyboard focus opens it at once. `Tooltip { delay_ms: 0 }` opens on hover straight away. Escape closes it.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `tooltip`. Works on native (Blitz): partly.
@@ -12691,6 +13134,37 @@ Every row is run as a keyboard test on the web, and on native where it says yes.
 ## API
 
 ```rust
+/// The props for [`Tooltip`].
+pub struct TooltipProps {
+    /// Whether the tooltip is open (controlled). A controlled tooltip opens without delay.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// Default open state when uncontrolled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Callback when open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Whether the tooltip is disabled.
+    #[props(default)]
+    pub disabled: ReadSignal<bool>,
+
+    /// How long the pointer must rest on the trigger before the tooltip opens, in
+    /// milliseconds, so tooltips don't flash open as the cursor crosses the screen. Keyboard
+    /// focus opens it at once. Defaults to 400.
+    #[props(default = 400)]
+    pub delay_ms: u64,
+
+    /// Additional attributes for the tooltip.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// A [`TooltipTrigger`] and a [`TooltipContent`].
+    pub children: Element,
+}
+
 #[component]
 pub fn Tooltip(props: TooltipProps) -> Element
 
@@ -12895,6 +13369,16 @@ pub struct UiStrings {
     // Badge, chips
     /// A dismiss button's name. `{label}` is what it removes ("Remove Rust").
     pub remove_named: String,
+    /// The label of a pager's page size select.
+    pub rows_per_page: String,
+    /// A page button's name in pagination. `{page}` is its number.
+    pub page_number: String,
+    /// Read for a pagination ellipsis.
+    pub more_pages: String,
+    /// The pagination `nav`'s name.
+    pub pagination: String,
+    /// The "…" button of a collapsed breadcrumb trail. `{count}` is how many steps it hides.
+    pub show_more_crumbs: String,
     /// The "+N" avatar in a group. `{count}` is how many are left out.
     pub more_count: String,
 }

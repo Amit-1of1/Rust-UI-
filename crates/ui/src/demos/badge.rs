@@ -6,6 +6,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut tags = use_signal(|| vec!["Rust", "Dioxus", "WebAssembly"]);
+    // The pressed dismiss button goes away with its badge, so focus moves to the group.
+    let mut group = use_signal(|| None::<std::rc::Rc<MountedData>>);
     rsx! {
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;",
             Badge { "Primary" }
@@ -23,10 +25,22 @@ pub fn Demo() -> Element {
             Badge { dot: true, variant: BadgeVariant::Success, aria_label: "Online" }
             span { "Online" }
         }
-        div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem;",
+        div {
+            style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.75rem;",
+            role: "group",
+            aria_label: "Topics",
+            tabindex: "-1",
+            onmounted: move |e: MountedEvent| group.set(Some(e.data())),
             for tag in tags() {
                 Badge { key: "{tag}", variant: BadgeVariant::Outline, dismiss_label: tag,
-                    on_dismiss: move |_| tags.write().retain(|t| *t != tag),
+                    on_dismiss: move |_| {
+                        tags.write().retain(|t| *t != tag);
+                        if let Some(group) = group() {
+                            spawn(async move {
+                                _ = group.set_focus(true).await;
+                            });
+                        }
+                    },
                     "{tag}"
                 }
             }

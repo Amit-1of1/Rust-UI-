@@ -16,6 +16,7 @@
         "accordion/style.css"
       ],
       "registryDependencies": [
+        "hooks",
         "icons"
       ]
     },
@@ -99,6 +100,7 @@
       ],
       "registryDependencies": [
         "hooks",
+        "icons",
         "ui_strings"
       ]
     },
@@ -154,7 +156,9 @@
         "card/mod.rs",
         "card/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "hooks"
+      ]
     },
     {
       "name": "carousel",
@@ -358,7 +362,9 @@
         "dialog/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "icons",
+        "ui_strings"
       ]
     },
     {
@@ -509,7 +515,9 @@
         "input/mod.rs",
         "input/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "field"
+      ]
     },
     {
       "name": "input_group",
@@ -679,6 +687,7 @@
       "registryDependencies": [
         "hooks",
         "icons",
+        "native_select",
         "ui_strings"
       ]
     },
@@ -925,7 +934,9 @@
         "textarea/mod.rs",
         "textarea/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "field"
+      ]
     },
     {
       "name": "theme_customizer",
@@ -963,7 +974,9 @@
         "toast/mod.rs",
         "toast/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "name": "toggle",

@@ -1,7 +1,8 @@
 use dioxus::prelude::*;
+use crate::components::icons::{CircleAlert, CircleCheck, Info, TriangleAlert};
 use dioxus_primitives::toast::{
     self, Toast, ToastCloseButtonProps, ToastContentProps, ToastDescriptionProps, ToastProps,
-    ToastTitleProps,
+    ToastTitleProps, ToastType,
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::time::Duration;
@@ -9,8 +10,48 @@ use std::time::Duration;
 #[css_module("/src/components/toast/style.css")]
 struct Styles;
 
+/// Actions waiting for their toast, by title: the primitive's toast record holds only text,
+/// so [`ToastsExt::notify_action`] parks the button here and the toast picks it up.
+#[derive(Clone, Copy)]
+struct ToastActions(Signal<Vec<(String, ToastAction)>>);
+
+/// A button in a toast that answers it, such as "Undo" after a delete.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Clone, PartialEq)]
+pub struct ToastAction {
+    /// The button's text ("Undo").
+    pub label: String,
+    /// Runs when the button is pressed; the toast then closes.
+    pub on_action: Callback<()>,
+}
+
 #[component]
 fn StyledToast(props: ToastProps) -> Element {
+    let actions = try_use_context::<ToastActions>();
+    let title = props.title.clone();
+    let action = actions.and_then(|a| {
+        a.0.read()
+            .iter()
+            .find(|(t, _)| *t == title)
+            .map(|(_, action)| action.clone())
+    });
+    // Forget the action with its toast.
+    let gone = props.title.clone();
+    use_drop(move || {
+        if let Some(mut a) = actions {
+            a.0.write().retain(|(t, _)| *t != gone);
+        }
+    });
+    let on_close = props.on_close;
+    let icon = match props.toast_type {
+        ToastType::Success => rsx! { CircleCheck { "aria-hidden": "true", size: "1rem" } },
+        ToastType::Error => rsx! { CircleAlert { "aria-hidden": "true", size: "1rem" } },
+        ToastType::Warning => rsx! { TriangleAlert { "aria-hidden": "true", size: "1rem" } },
+        ToastType::Info => rsx! { Info { "aria-hidden": "true", size: "1rem" } },
+    };
     rsx! {
         Toast {
             id: props.id,
@@ -22,9 +63,21 @@ fn StyledToast(props: ToastProps) -> Element {
             permanent: props.permanent,
             duration: props.duration,
             attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_toast }), props.attributes]),
+            span { class: Styles::dx_toast_icon, {icon} }
             ToastContent {
                 ToastTitle {}
                 ToastDescription {}
+            }
+            if let Some(action) = action {
+                button {
+                    r#type: "button",
+                    class: Styles::dx_toast_action,
+                    onclick: move |e: MouseEvent| {
+                        action.on_action.call(());
+                        on_close.call(e);
+                    },
+                    {action.label.clone()}
+                }
             }
             ToastCloseButton {}
         }
@@ -80,6 +133,7 @@ pub fn ToastProvider(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    use_context_provider(|| ToastActions(Signal::new(Vec::new())));
     let render_toast = render_toast.unwrap_or_else(|| {
         Callback::new(|p: toast::ToastPropsWithOwner| rsx! { StyledToast { ..p } })
     });
@@ -103,6 +157,17 @@ pub fn ToastProvider(
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub trait ToastsExt {
+    /// A toast with a button that answers it ("Undo", "Retry"). Pressing the button runs
+    /// `on_action` and closes the toast. Give actions a generous time to be noticed: the
+    /// toast's timer pauses while it is hovered or focused, and F6 moves focus to toasts.
+    /// Must be called below the kit's [`ToastProvider`].
+    fn notify_action(
+        &self,
+        kind: ToastType,
+        message: impl Into<ToastMessage>,
+        label: impl Into<String>,
+        on_action: impl FnMut(()) + 'static,
+    );
     fn notify_success(&self, message: impl Into<ToastMessage>);
     fn notify_error(&self, message: impl Into<ToastMessage>);
     fn notify_warning(&self, message: impl Into<ToastMessage>);
@@ -159,6 +224,29 @@ impl<T: Into<String>, D: Into<String>> From<(T, D)> for ToastMessage {
 }
 
 impl ToastsExt for toast::Toasts {
+    fn notify_action(
+        &self,
+        kind: ToastType,
+        message: impl Into<ToastMessage>,
+        label: impl Into<String>,
+        on_action: impl FnMut(()) + 'static,
+    ) {
+        let message = message.into();
+        if let Some(mut actions) = try_consume_context::<ToastActions>() {
+            let title = message.title.clone();
+            actions.0.write().retain(|(t, _)| *t != title);
+            actions.0.write().push((
+                title,
+                ToastAction {
+                    label: label.into(),
+                    on_action: Callback::new(on_action),
+                },
+            ));
+        }
+        let (title, options) = message.split();
+        self.show(title, kind, options);
+    }
+
     fn notify_success(&self, message: impl Into<ToastMessage>) {
         let (title, options) = message.into().split();
         self.success(title, options);

@@ -184,3 +184,38 @@
 .dx-toast-close:hover {
   color: var(--secondary-color-1);
 }
+
+/* The type's icon, so colour is not the only cue. */
+.dx-toast-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-inline-end: 0.625rem;
+}
+
+.dx-toast-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dx-toast-action {
+  flex-shrink: 0;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  margin-inline: 0.5rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.dx-toast-action:hover {
+  background-color: color-mix(in oklab, currentColor 12%, transparent);
+}
+
+.dx-toast-action:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
