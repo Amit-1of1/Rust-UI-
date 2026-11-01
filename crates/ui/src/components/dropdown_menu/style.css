@@ -131,3 +131,40 @@
     inset-inline-start: anchor(start);
   }
 }
+
+/* Submenus: the trigger is an item with a chevron, the content is the menu's own panel placed
+   beside its trigger (the inline end, so it flips in right-to-left text). It does not flip at
+   screen edges: the parent panel is transformed, so it is the submenu's containing block and
+   anchor fallbacks would always see an overflow. */
+.dx-dropdown-menu-sub {
+  position: relative;
+}
+
+.dx-dropdown-menu-sub-chevron {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  color: var(--secondary-color-5);
+}
+
+.dx-dropdown-menu-sub-trigger[data-state="open"]:not([data-disabled="true"]) {
+  background: var(--dark, var(--primary-color-7))
+    var(--light, var(--primary-color-4));
+  color: var(--secondary-color-1);
+}
+
+.dx-dropdown-menu-content.dx-dropdown-menu-sub-content {
+  top: -0.25rem;
+  inset-inline-start: 100%;
+  margin-top: 0;
+  margin-inline-start: 0.25rem;
+}
+
+.dx-dropdown-menu .dx-dropdown-menu-content.dx-dropdown-menu-sub-content {
+  @supports (anchor-scope: all) and (position-try-fallbacks: flip-block) {
+    position: absolute;
+    position-try-fallbacks: none;
+    inset: auto;
+    top: -0.25rem;
+    inset-inline-start: 100%;
+  }
+}

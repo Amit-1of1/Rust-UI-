@@ -26,3 +26,21 @@ ContextMenu {
     }
 }
 ```
+## Submenus
+
+Put a `ContextMenuSub` where an item would go. Its `index` is the trigger's place among the menu's items; the items inside `ContextMenuSubContent` count from 0 again. Submenus can nest.
+
+```rust
+ContextMenuSub { index: 2usize,
+    ContextMenuSubTrigger { "Share" }
+    ContextMenuSubContent {
+        ContextMenuItem { index: 0usize, value: "a".to_string(), "Copy link" }
+    }
+}
+```
+
+ArrowRight, Enter or Space on the trigger opens the submenu and focuses its first item; ArrowLeft or Escape closes only the submenu and puts focus back on the trigger; choosing an item closes the whole menu. With a mouse the submenu opens after the pointer rests on its trigger for 100 ms, and stays open for 300 ms after the pointer leaves, so it can cross other items on the way. The submenu opens to the inline end and does not flip at screen edges, and the arrow keys are not mirrored in right-to-left text yet.
+
+## Stability
+
+The `ContextMenuSub` parts are experimental (new on 2026-11-01, docs/STABILITY.md); the rest of the component is stable.

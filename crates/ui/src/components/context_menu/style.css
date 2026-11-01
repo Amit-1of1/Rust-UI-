@@ -69,3 +69,38 @@
   color: var(--light, var(--secondary-color-1))
     var(--dark, var(--secondary-color-4));
 }
+
+/* Submenus: the trigger is an item with a chevron, the content is the menu's own panel placed
+   beside its trigger (the inline end, so it flips in right-to-left text). */
+.dx-context-menu-sub {
+  position: relative;
+}
+
+.dx-context-menu-sub-trigger {
+  gap: 0.5rem;
+}
+
+.dx-context-menu-sub-chevron {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  color: var(--secondary-color-5);
+}
+
+.dx-context-menu-sub-trigger[data-state="open"]:not([data-disabled="true"]) {
+  background: var(--light, var(--primary-color-4))
+    var(--dark, var(--primary-color-7));
+  color: var(--light, var(--secondary-color-1))
+    var(--dark, var(--secondary-color-4));
+}
+
+.dx-context-menu-content.dx-context-menu-sub-content {
+  position: absolute;
+  top: -0.25rem;
+  inset-inline-start: 100%;
+  margin-inline-start: 0.25rem;
+}
+
+/* The top-level menu gets `pointer-events: auto` inline from the primitive; a submenu here. */
+.dx-context-menu-content.dx-context-menu-sub-content[data-state="open"] {
+  pointer-events: auto;
+}
