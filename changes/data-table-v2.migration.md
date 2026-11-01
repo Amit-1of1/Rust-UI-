@@ -1,4 +1,4 @@
-### `DataColumn` and `UiStrings` have new fields
+### `DataColumn` and `UiStrings` have new fields (PR #96)
 
 **Who:** code that builds a `DataColumn` or a `UiStrings` with a struct literal and no `..Default::default()`/`..DataColumn::new(..)`. Code using `DataColumn::new(..)` and its builder methods, or `UiStrings { .., ..UiStrings::default() }`, is not affected.
 

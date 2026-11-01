@@ -48,17 +48,17 @@
       }
     },
     "docs": {
-      "firstKB": 1002,
+      "firstKB": 1110.4,
       "firstRequests": 6,
-      "mainWasmKB": 967.9,
-      "totalKB": 1045.9,
+      "mainWasmKB": 1074.5,
+      "totalKB": 1155.2,
       "startupMs4x": 687,
       "files": {
         "assets/atoll.css": 21,
         "assets/demo.css": 0.3,
         "assets/docs.css": 1,
         "assets/docs.js": 11.2,
-        "assets/docs_bg.wasm": 967.9,
+        "assets/docs_bg.wasm": 1074.5,
         "assets/focus-trap.js": 0.4,
         "assets/landing.css": 0.5,
         "assets/reset.css": 0.2,
