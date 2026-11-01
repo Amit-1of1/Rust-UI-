@@ -5129,6 +5129,8 @@ dependencies = [
  "manganis-core",
  "serde",
  "showcase",
+ "stylo",
+ "taffy",
  "tokio",
  "toml",
 ]
