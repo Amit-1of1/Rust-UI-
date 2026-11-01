@@ -28,7 +28,7 @@ What every Atoll component is made of, which parts you can change and which you 
 | `component.rs` | The public components (`#[component] pub fn`), their props and variant enums | no |
 | `style.css` | Looks, using theme tokens only (`var(--...)`) | no |
 | `docs.md` | Description, Component Structure, accessibility notes, stability | no |
-| `contract.toml` | Keyboard and accessibility contract: ARIA pattern, parts, states, keys; each key row is a test ([CONTRACTS.md](CONTRACTS.md)) | no (28 of 80 components have one) |
+| `contract.toml` | Keyboard and accessibility contract: ARIA pattern, parts, states, keys; each key row is a test ([CONTRACTS.md](CONTRACTS.md)) | no (28 of 81 components have one) |
 | `component.json` | What `dx components add` and `atoll add` copy, and the dependencies | yes, by `atoll registry` |
 | `crates/ui/src/demos/<name>.rs` | The demo the gallery, docs site and tests render | no |
 | `crates/ui/tests/components/<name>.rs` | The component's own tests | no |
@@ -61,4 +61,4 @@ What every Atoll component is made of, which parts you can change and which you 
 
 ## Which docs pages show a Component Structure
 
-44 of the 80 components have a **Component Structure** section in their `docs.md`. Every component's page has the generated **Properties** tables, which list each part. The 36 still without a structure snippet are listed in `crates/cli/tests/maintenance.rs`; that test fails when a new component ships without one, and when a listed one gains a section without being taken off the list, so the gap only shrinks.
+45 of the 81 components have a **Component Structure** section in their `docs.md`. Every component's page has the generated **Properties** tables, which list each part. The 36 still without a structure snippet are listed in `crates/cli/tests/maintenance.rs`; that test fails when a new component ships without one, and when a listed one gains a section without being taken off the list, so the gap only shrinks.

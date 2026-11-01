@@ -1,0 +1,3 @@
+### Added
+
+- **ui:** Interface sounds in three sets, Ripple (water drops), Glass (chimes) and Driftwood (marimba and wood): `SoundProvider`, `SoundSettings`, `SoundToggle`, `use_sound`, `Sound`, `SoundEvent`, `SoundStyle`, `Note` and `Wave` (experimental). Sounds are off until the person using the app turns them on; in `SoundSettings` they pick a set, or silence, for each sound, and their choices are remembered. Toasts and invalid `Form` submits play success, error and notice sounds; with `taps: true`, buttons, switches, checkboxes, dialogs, sheets and alert dialogs play taps, toggles and open/close sounds. Minor sounds are skipped under reduced motion. Web only, made with Web Audio from Rust, no audio files.

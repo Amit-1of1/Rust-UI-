@@ -21,7 +21,7 @@ What Atoll is working on, in three horizons. It's a plan, not a promise: dates a
 | Item | Why |
 |---|---|
 | **Dioxus 0.8** as kit minor `0.2.0`, once 0.8 is stable | Dioxus minors are breaking; it ships alone, with a migration guide ([VERSIONING.md](VERSIONING.md)) |
-| **Keyboard contracts for every interactive component** (28 of 80 components have one today) | Turns more of "accessible" from a promise into a test |
+| **Keyboard contracts for every interactive component** (28 of 81 components have one today) | Turns more of "accessible" from a promise into a test |
 | **Component Structure for every docs page** (36 components still lack the snippet) | Component anatomy on every page ([ANATOMY.md](ANATOMY.md)) |
 | **Screen-reader pass** with NVDA and VoiceOver on the items in [SCREEN_READERS.md](SCREEN_READERS.md) | The one accessibility layer tests can't cover |
 | **Desktop builds on Windows and macOS in CI** | Moves them from tier 3 to tier 2 ([SUPPORT_MATRIX.md](SUPPORT_MATRIX.md)) |
