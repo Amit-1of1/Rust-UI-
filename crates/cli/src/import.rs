@@ -53,7 +53,7 @@ pub fn parse(text: &str) -> Result<Source, String> {
     } else {
         from_css(text)
     };
-    if src.light.get("background").is_none() && src.light.get("primary").is_none() {
+    if !src.light.contains_key("background") && !src.light.contains_key("primary") {
         return Err(
             "found no theme colours: expected shadcn variables (--background, --primary, ...) or a Reshaped `color` map"
                 .into(),
@@ -169,7 +169,7 @@ fn from_reshaped(json: &serde_json::Value) -> Source {
             put(&mut src, true, ours, c["hexDark"].as_str().unwrap_or(hex));
         }
     }
-    if src.light.get("ring").is_none() {
+    if !src.light.contains_key("ring") {
         if let Some((l, d)) = src.pair("primary") {
             src.light.insert("ring".into(), l);
             src.dark.insert("ring".into(), d);
