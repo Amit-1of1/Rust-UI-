@@ -5,7 +5,16 @@
 </input>
 <button type="button" aria-pressed=false data-state="off" data-disabled=false class="dx-toggle-css">Research only
 </button>
+<div class="dx-data-table-actions-css">
+<div id="dxc-n0" data-state="closed" class="dx-popover-css">
+<button id="dxc-n1" type="button" class="dx-popover-trigger-css">Columns
+</button>
 </div>
+<button class="dx-button-css" data-size="default" data-style="outline">Export CSV
+</button>
+</div>
+</div>
+<div>
 <div class="dx-table-container-css">
 <table class="dx-table-css">
 <caption class="dx-table-caption-css">Team directory
@@ -14,26 +23,44 @@
 <tr class="dx-table-row-css">
 <th scope="col" class="dx-table-head-css">
 <input type="checkbox" aria-label="Select all rows on this page"/>
+<span class="dx-data-table-measure-css" aria-hidden="true">
+</span>
 </th>
 <th scope="col" aria-sort="none" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Name
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
 </button>
+<span class="dx-data-table-measure-css" aria-hidden="true">
+</span>
+<div class="dx-data-table-resize-css" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize Name" aria-valuemin="48">
+</div>
 </th>
 <th scope="col" aria-sort="none" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Team
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
 </button>
+<span class="dx-data-table-measure-css" aria-hidden="true">
+</span>
+<div class="dx-data-table-resize-css" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize Team" aria-valuemin="48">
+</div>
 </th>
 <th scope="col" class="dx-table-head-css">Office
+<span class="dx-data-table-measure-css" aria-hidden="true">
+</span>
+<div class="dx-data-table-resize-css" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize Office" aria-valuemin="48">
+</div>
 </th>
 <th scope="col" aria-sort="none" data-numeric="true" class="dx-table-head-css">
 <button class="dx-table-sort-css" type="button">Salary
 <span aria-hidden="true" class="dx-table-sort-icon-css">↕
 </span>
 </button>
+<span class="dx-data-table-measure-css" aria-hidden="true">
+</span>
+<div class="dx-data-table-resize-css" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize Salary" aria-valuemin="48">
+</div>
 </th>
 </tr>
 </thead>
@@ -106,6 +133,7 @@
 </tbody>
 </table>
 </div>
+</div>
 <div class="dx-data-table-footer-css">
 <p class="dx-data-table-status-css" role="status">Showing 1–5 of 14 rows
 </p>
@@ -121,4 +149,236 @@
 </div>
 <p style="margin: 0; font-size: 0.875rem;">Selected rows: 0
 </p>
+<div class="dx-data-table-css">
+<div class="dx-data-table-toolbar-css">
+<input aria-label="Filter rows" class="dx-input-css dx-data-table-filter-css" placeholder="Filter rows" type="search" value="">
+</input>
+<div class="dx-data-table-actions-css">
+<button class="dx-button-css" data-size="default" data-style="outline">Export CSV
+</button>
+</div>
+</div>
+<div class="dx-data-table-viewport-css" style="max-height: 360px;" role="region" aria-label="10,000 orders" tabindex="0">
+<div class="dx-table-container-css">
+<table aria-rowcount="10001" class="dx-table-css">
+<caption class="dx-table-caption-css">10,000 orders
+</caption>
+<thead class="dx-table-header-css">
+<tr aria-rowindex="1" class="dx-table-row-css">
+<th scope="col" aria-sort="none" class="dx-table-head-css">
+<button class="dx-table-sort-css" type="button">Order
+<span aria-hidden="true" class="dx-table-sort-icon-css">↕
+</span>
+</button>
+</th>
+<th scope="col" aria-sort="none" class="dx-table-head-css">
+<button class="dx-table-sort-css" type="button">Customer
+<span aria-hidden="true" class="dx-table-sort-icon-css">↕
+</span>
+</button>
+</th>
+<th scope="col" class="dx-table-head-css">Status
+</th>
+<th scope="col" aria-sort="none" data-numeric="true" class="dx-table-head-css">
+<button class="dx-table-sort-css" type="button">Total
+<span aria-hidden="true" class="dx-table-sort-icon-css">↕
+</span>
+</button>
+</th>
+</tr>
+</thead>
+<tbody class="dx-table-body-css">
+<tr aria-rowindex="2" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00001
+</td>
+<td class="dx-table-cell-css">Acme
+</td>
+<td class="dx-table-cell-css">Paid
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$5.00
+</td>
+</tr>
+<tr aria-rowindex="3" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00002
+</td>
+<td class="dx-table-cell-css">Globex
+</td>
+<td class="dx-table-cell-css">Shipped
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$42.13
+</td>
+</tr>
+<tr aria-rowindex="4" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00003
+</td>
+<td class="dx-table-cell-css">Initech
+</td>
+<td class="dx-table-cell-css">Refunded
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$79.26
+</td>
+</tr>
+<tr aria-rowindex="5" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00004
+</td>
+<td class="dx-table-cell-css">Umbrella
+</td>
+<td class="dx-table-cell-css">Pending
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$116.39
+</td>
+</tr>
+<tr aria-rowindex="6" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00005
+</td>
+<td class="dx-table-cell-css">Hooli
+</td>
+<td class="dx-table-cell-css">Paid
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$153.52
+</td>
+</tr>
+<tr aria-rowindex="7" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00006
+</td>
+<td class="dx-table-cell-css">Vandelay
+</td>
+<td class="dx-table-cell-css">Shipped
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$190.65
+</td>
+</tr>
+<tr aria-rowindex="8" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00007
+</td>
+<td class="dx-table-cell-css">Acme
+</td>
+<td class="dx-table-cell-css">Refunded
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$227.78
+</td>
+</tr>
+<tr aria-rowindex="9" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00008
+</td>
+<td class="dx-table-cell-css">Globex
+</td>
+<td class="dx-table-cell-css">Pending
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$264.91
+</td>
+</tr>
+<tr aria-rowindex="10" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00009
+</td>
+<td class="dx-table-cell-css">Initech
+</td>
+<td class="dx-table-cell-css">Paid
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$301.04
+</td>
+</tr>
+<tr aria-rowindex="11" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00010
+</td>
+<td class="dx-table-cell-css">Umbrella
+</td>
+<td class="dx-table-cell-css">Shipped
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$338.17
+</td>
+</tr>
+<tr aria-rowindex="12" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00011
+</td>
+<td class="dx-table-cell-css">Hooli
+</td>
+<td class="dx-table-cell-css">Refunded
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$375.30
+</td>
+</tr>
+<tr aria-rowindex="13" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00012
+</td>
+<td class="dx-table-cell-css">Vandelay
+</td>
+<td class="dx-table-cell-css">Pending
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$412.43
+</td>
+</tr>
+<tr aria-rowindex="14" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00013
+</td>
+<td class="dx-table-cell-css">Acme
+</td>
+<td class="dx-table-cell-css">Paid
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$449.56
+</td>
+</tr>
+<tr aria-rowindex="15" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00014
+</td>
+<td class="dx-table-cell-css">Globex
+</td>
+<td class="dx-table-cell-css">Shipped
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$486.69
+</td>
+</tr>
+<tr aria-rowindex="16" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00015
+</td>
+<td class="dx-table-cell-css">Initech
+</td>
+<td class="dx-table-cell-css">Refunded
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$523.82
+</td>
+</tr>
+<tr aria-rowindex="17" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00016
+</td>
+<td class="dx-table-cell-css">Umbrella
+</td>
+<td class="dx-table-cell-css">Pending
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$560.95
+</td>
+</tr>
+<tr aria-rowindex="18" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00017
+</td>
+<td class="dx-table-cell-css">Hooli
+</td>
+<td class="dx-table-cell-css">Paid
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$597.08
+</td>
+</tr>
+<tr aria-rowindex="19" class="dx-table-row-css" style="height: 40px;">
+<td class="dx-table-cell-css">#00018
+</td>
+<td class="dx-table-cell-css">Vandelay
+</td>
+<td class="dx-table-cell-css">Shipped
+</td>
+<td data-numeric="true" class="dx-table-cell-css">$634.21
+</td>
+</tr>
+<tr class="dx-data-table-spacer-css" aria-hidden="true">
+<td colspan="4" style="height: 399280px;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="dx-data-table-footer-css">
+<p class="dx-data-table-status-css" role="status">10000 rows
+</p>
+</div>
+</div>
 </div>

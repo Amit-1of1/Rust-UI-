@@ -126,6 +126,9 @@ fn cargo_dependencies(source: &str, primitives: &Primitives, registry: &str) -> 
     if uses("wasm_bindgen") {
         deps.push(json!({"name": "wasm-bindgen", "version": "0.2"}));
     }
+    if uses("js_sys") {
+        deps.push(json!({"name": "js-sys", "version": "0.3"}));
+    }
     if uses("wasm_bindgen_futures") {
         deps.push(json!({"name": "wasm-bindgen-futures", "version": "0.4"}));
     }
