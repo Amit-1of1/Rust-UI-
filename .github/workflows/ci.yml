@@ -34,6 +34,14 @@ jobs:
       - run: cargo test -p native
       - run: cargo build -p gallery --target wasm32-unknown-unknown
 
+  # TLA+ models of the kit's async code (docs/notes/tla-models.md). TLC needs only Java, which
+  # the runner image already has; the script pins TLC by version and checksum.
+  tla:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: scripts/tla.sh
+
   # Known-vulnerable or yanked crates, licences outside deny.toml's list, and git sources other
   # than our pinned forks (docs/GUARDRAILS.md: dependency traps).
   deny:
