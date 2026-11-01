@@ -134,7 +134,10 @@ fn ci_model_checks_the_tla_specs() {
         "proofs/tla/MotionValue_bug_two_loops.cfg",
         "proofs/tla/MotionValue_bug_frozen.cfg",
     ] {
-        assert!(repo().join(file).exists(), "{file} is gone; fix docs/CLAIMS.md");
+        assert!(
+            repo().join(file).exists(),
+            "{file} is gone; fix docs/CLAIMS.md"
+        );
     }
 }
 
