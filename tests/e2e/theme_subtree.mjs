@@ -57,16 +57,16 @@ const tokens = await page.evaluate(() => {
 
 // Lagoon, the default look.
 assert.equal(tokens.page, "#fff", JSON.stringify(tokens));
-assert.equal(tokens.dark, "#0d0d0d", JSON.stringify(tokens));
-assert.equal(tokens.inner, "#0d0d0d", "children inherit the dark value");
-assert.equal(tokens.darkBg, "rgb(13, 13, 13)");
+assert.equal(tokens.dark, "#0c0b09", JSON.stringify(tokens));
+assert.equal(tokens.inner, "#0c0b09", "children inherit the dark value");
+assert.equal(tokens.darkBg, "rgb(12, 11, 9)");
 assert.equal(tokens.pageAccent, "#1d4ed8");
 assert.equal(tokens.accent, "#60a5fa", "the page's blue accent, in its dark shade");
 assert.equal(tokens.rose, "#fb7185", "an element's own accent wins");
 assert.equal(tokens.backToLight, "#fff", "a light box inside a dark one is light again");
 assert.equal(tokens.radius, "3px", "plain values set on <html> still reach the subtree");
-assert.equal(tokens.reefPage, "#fffffd", "data-preset on a box switches its look");
-assert.equal(tokens.reefDark, "#100c0a", "a dark island inside a look gets that look's dark tokens");
+assert.equal(tokens.reefPage, "#fff", "data-preset on a box switches its look");
+assert.equal(tokens.reefDark, "#0e0a0a", "a dark island inside a look gets that look's dark tokens");
 assert.match(tokens.reefFont, /Geist/, "and its fonts");
 assert.equal(tokens.lagoonAgain, "#fff", "data-preset=lagoon switches back to the default");
 console.log("theme subtree: ok");

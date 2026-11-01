@@ -44,3 +44,9 @@ body {
   font: inherit;
   color: inherit;
 }
+
+/* Plain links in the accent's text colour, not the browser's default blue and purple. */
+:where(a:not([class])) {
+  color: var(--color-foreground-primary, LinkText);
+  text-underline-offset: 0.2em;
+}

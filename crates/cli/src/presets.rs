@@ -72,9 +72,10 @@ pub fn css(theme_css: &str, name: &str) -> Result<String, String> {
 }
 
 /// The tokens an accent preset sets.
-const ACCENT_TOKENS: [&str; 3] = [
+const ACCENT_TOKENS: [&str; 4] = [
     "--accent-color",
     "--accent-contrast",
+    "--accent-text",
     "--focused-border-color",
 ];
 

@@ -130,8 +130,8 @@
 }
 
 .dx-alert-dialog-action:hover {
-  /* Light: --secondary-error-color is too pale for white text (3.8:1). */
-  background-color: var(--light, var(--error-text-color)) var(--dark, var(--secondary-error-color));
+  /* The error fill a step darker, in both modes, so its white label keeps 4.5:1. */
+  background-color: color-mix(in oklab, var(--primary-error-color) 85%, black);
 }
 
 .dx-alert-dialog-action:focus-visible {

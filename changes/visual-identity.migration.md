@@ -4,7 +4,7 @@
 
 **Before:** buttons and checked controls were near-black (white in dark mode), the page was pure white or black, text used the app's font or Inter, and corners were 8 px.
 
-**After:** the accent is lagoon teal, the greys follow Reshaped's steps (dark mode is a near-black `#0d0d0d` page with brighter text), Inter loads from the kit, corners are 10 px on cards and 6 px on controls, and menus, popovers and dialogs carry a soft shadow.
+**After:** the accent is lagoon teal, the greys follow Reshaped's steps (dark mode is a warm near-black `#0c0b09` page with brighter text, and coloured buttons keep white labels in both modes), Inter loads from the kit, corners are 10 px on cards and 6 px on controls, and menus, popovers and dialogs carry a soft shadow.
 
 **What to do:**
 - To keep the old look, pick the `classic` preset: `ThemeStyles { preset: "classic" }`, or `data-preset="classic"` on `<html>` in your `index.html`.

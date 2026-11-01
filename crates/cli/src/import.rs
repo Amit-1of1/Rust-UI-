@@ -292,6 +292,35 @@ fn mix(a: Rgba, b: Rgba, t: f64) -> Rgba {
     }
 }
 
+/// `fill` lightened, if its label is dark, until the kit's hover fill (15% black mixed in)
+/// still gives the label 4.5:1.
+fn hover_safe(fill: Rgba, label: Rgba) -> Rgba {
+    use crate::contrast::ratio;
+    if label.luminance() >= 0.5 {
+        return fill;
+    }
+    let black = Rgba {
+        r: 0.0,
+        g: 0.0,
+        b: 0.0,
+        a: 1.0,
+    };
+    let white = Rgba {
+        r: 255.0,
+        g: 255.0,
+        b: 255.0,
+        a: 1.0,
+    };
+    let mut f = fill;
+    for _ in 0..40 {
+        if ratio(mix(f, black, 0.15), label) >= 4.6 {
+            return crate::contrast::color(&f.hex()).unwrap_or(f);
+        }
+        f = mix(f, white, 0.04);
+    }
+    f
+}
+
 /// `fill` moved just far enough from `text` (darker under light text, lighter under dark
 /// text, same hue) for body text on it to pass 4.5:1, as the theme builder does for a brand.
 pub fn readable(fill: Rgba, text: Rgba) -> Rgba {
@@ -448,13 +477,17 @@ pub fn body(src: &Source) -> String {
             };
             (best(primary.0), best(primary.1))
         });
-        // Headroom for the hover fill, which mixes the accent towards grey.
+        // Headroom for the hover fill, which mixes 15% black into the accent: under a dark
+        // label that darkening costs contrast, so lighten the fill until the hover passes too.
         let primary = (
-            readable_at(primary.0, on.0, 5.0),
-            readable_at(primary.1, on.1, 5.0),
+            hover_safe(readable_at(primary.0, on.0, 5.0), on.0),
+            hover_safe(readable_at(primary.1, on.1, 5.0), on.1),
         );
         set("--accent-color", per_mode(&|i| pick(primary, i)));
         set("--accent-contrast", per_mode(&|i| pick(on, i)));
+        // As text (links, selected labels) the accent needs 4.5:1 on the page itself.
+        let text = (readable(primary.0, page.0), readable(primary.1, page.1));
+        set("--accent-text", per_mode(&|i| pick(text, i)));
         let ring = src.pair("ring").unwrap_or(primary);
         set("--focused-border-color", per_mode(&|i| pick(ring, i)));
     }

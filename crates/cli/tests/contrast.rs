@@ -97,20 +97,20 @@ fn the_proof_catches_regressions() {
         ),
         // Success text that used to be the fill colour.
         (
-            "--success-text-color: light-dark(#047857, #b6fae3);",
-            "--success-text-color: light-dark(#10b981, #b6fae3);",
+            "--success-text-color: light-dark(#236436, #a4dfaf);",
+            "--success-text-color: light-dark(#4fbf6f, #a4dfaf);",
             "var(--success-text-color)",
         ),
         // A focus colour too close to the page.
         (
-            "--focused-border-color: light-dark(#0f766e, #2dd4bf);",
-            "--focused-border-color: light-dark(#c6f0ea, #2dd4bf);",
+            "--focused-border-color: light-dark(#0b7f7f, #6cb3b2);",
+            "--focused-border-color: light-dark(#c6f0ea, #6cb3b2);",
             "var(--focused-border-color)",
         ),
         // A theme preset whose muted text is too pale on its own page.
         (
-            "--secondary-color-5: light-dark(#6a6562, #afaaa6);",
-            "--secondary-color-5: light-dark(#b0a39d, #afaaa6);",
+            "--secondary-color-5: light-dark(#696161, #a29d9d);",
+            "--secondary-color-5: light-dark(#b0a39d, #a29d9d);",
             "var(--secondary-color-5)",
         ),
     ];

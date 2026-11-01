@@ -134,7 +134,7 @@
 .dx-button[data-style="primary"]:not(:disabled):hover {
   /* Towards grey, not towards the page: a fill that fades into a white page loses
      contrast with its white label (crates/cli/tests/contrast.rs). */
-  background-color: color-mix(in oklab, var(--accent-color) 85%, var(--secondary-color-5));
+  background-color: color-mix(in oklab, var(--accent-color) 85%, black);
 }
 
 .dx-button[data-style="secondary"] {
@@ -173,16 +173,14 @@
 }
 
 .dx-button[data-style="destructive"] {
-  background-color: var(--light, var(--primary-error-color))
-    var(--dark, color-mix(in oklab, var(--primary-error-color) 60%, transparent));
+  background-color: var(--primary-error-color);
   color: var(--contrast-error-color);
 }
 
 .dx-button[data-style="destructive"]:not(:disabled):hover {
   /* Towards grey, not towards the page: a fill that fades into a white page loses
      contrast with its white label (crates/cli/tests/contrast.rs). */
-  background-color: var(--light, color-mix(in oklab, var(--primary-error-color) 85%, var(--secondary-color-5)))
-    var(--dark, color-mix(in oklab, var(--primary-error-color) 85%, var(--primary-color)));
+  background-color: color-mix(in oklab, var(--primary-error-color) 85%, black);
 }
 
 .dx-button[data-style="destructive"]:focus-visible {

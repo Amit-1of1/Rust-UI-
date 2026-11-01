@@ -35,13 +35,13 @@ pub struct PresetInfo {
 pub const PRESET_INFO: [PresetInfo; 5] = [
     PresetInfo {
         name: "lagoon",
-        tagline: "Lagoon teal on neutral greys, Reshaped proportions",
+        tagline: "Deep lagoon teal on warm greys, Reshaped proportions",
         fonts: "Inter",
         radius_px: 10,
     },
     PresetInfo {
         name: "reef",
-        tagline: "Coral on warm stone, round and a little roomier",
+        tagline: "Coral pink on rosy greys, round and a little roomier",
         fonts: "Geist",
         radius_px: 16,
     },
@@ -53,7 +53,7 @@ pub const PRESET_INFO: [PresetInfo; 5] = [
     },
     PresetInfo {
         name: "driftwood",
-        tagline: "Terracotta on warm sand, serif headings",
+        tagline: "Weathered bronze on warm sand, serif headings",
         fonts: "Source Serif 4 + Inter",
         radius_px: 6,
     },

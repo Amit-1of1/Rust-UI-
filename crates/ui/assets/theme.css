@@ -30,31 +30,32 @@ html[data-theme="dark"],
      neutral greys on Reshaped's lightness steps, a lagoon-teal accent, Inter. data-preset
      switches to another look (below); docs/BRAND.md explains the choices. */
   /* Surfaces, page to raised (primary) and ink, strongest to faintest (secondary). */
-  --primary-color: light-dark(#ffffff, #0d0d0d);
-  --primary-color-1: light-dark(#fafafa, #121212);
-  --primary-color-2: light-dark(#ffffff, #161616);
-  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
-  --primary-color-4: light-dark(#f0f0f0, #242424);
-  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
-  --primary-color-6: light-dark(#e1e1e1, #383838);
-  --primary-color-7: light-dark(#b7b7b7, #555555);
-  --secondary-color: light-dark(#090909, #fcfcfc);
-  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
-  --secondary-color-2: light-dark(#161616, #e8e8e8);
-  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
-  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
-  --secondary-color-5: light-dark(#666666, #ababab);
-  --secondary-color-6: light-dark(#cacaca, #525252);
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
 
   /* Highlight colors */
-  --focused-border-color: light-dark(#0f766e, #2dd4bf);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
 
   /* Accent: fills for primary actions and checked/active states. Lagoon teal by default (the
      preset's own accent under data-preset); set data-accent="blue|green|violet|rose|orange"
      on <html> (or any ancestor) to recolor. Override --accent-color / --accent-contrast
      yourself for a brand color. */
-  --accent-color: light-dark(#0f766e, #2dd4bf);
-  --accent-contrast: light-dark(#fff, #042f2e);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
 
   /* Corner radius shared by controls; set on <html> to square or round everything. */
   --radius: 0.625rem;
@@ -71,28 +72,28 @@ html[data-theme="dark"],
   /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
      mode, where a light scrim barely separates the panel from the page. */
   --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
-  --primary-success-color: light-dark(#ecfdf5, #02271c);
-  --secondary-success-color: light-dark(#10b981, #b6fae3);
-  --primary-warning-color: light-dark(#fffbeb, #342203);
-  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
-  --primary-error-color: light-dark(#dc2626, #a22e2e);
-  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
+  --primary-success-color: light-dark(#e8fbeb, #132717);
+  --secondary-success-color: light-dark(#399d57, #62bb78);
+  --primary-warning-color: light-dark(#fef6e7, #33230a);
+  --secondary-warning-color: light-dark(#e19b1b, #e9b452);
+  --primary-error-color: light-dark(#c8433c, #c14b43);
+  --secondary-error-color: light-dark(#e24942, #e3655a);
   /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
-  --error-text-color: light-dark(#b91c1c, #f87171);
+  --error-text-color: light-dark(#ac312c, #ed8c81);
   /* Success and warning as text on their tinted fills (toasts); the --secondary-* ones are
      fills and fail as text in light mode (2.4:1 and 2.1:1). */
-  --success-text-color: light-dark(#047857, #b6fae3);
-  --warning-text-color: light-dark(#b45309, #feeac7);
-  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
+  --success-text-color: light-dark(#236436, #a4dfaf);
+  --warning-text-color: light-dark(#864e18, #f4ce90);
+  --contrast-error-color: #fff;
   --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
   --secondary-info-color: var(--secondary-color-3);
   /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
      accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
      (tests/theme.rs). */
-  --chart-2: light-dark(#1d4ed8, #60a5fa);
-  --chart-3: light-dark(#c2410c, #fb923c);
-  --chart-4: light-dark(#7c3aed, #a78bfa);
-  --chart-5: light-dark(#be185d, #f472b6);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
+  --chart-5: light-dark(#588418, #8cb460);
 }
 
 /* Foundations: layout units, type scale, elevation, layers and motion as tokens, after
@@ -249,7 +250,7 @@ html[data-theme="dark"],
   --color-foreground-neutral: var(--secondary-color-4);
   --color-foreground-neutral-faded: var(--secondary-color-5);
   --color-foreground-disabled: var(--secondary-color-5);
-  --color-foreground-primary: var(--accent-color);
+  --color-foreground-primary: var(--accent-text, var(--accent-color));
   --color-foreground-critical: var(--error-text-color);
   --color-foreground-positive: var(--success-text-color);
   --color-foreground-warning: var(--warning-text-color);
@@ -284,26 +285,28 @@ html[data-theme="dark"],
 /* Lagoon, the default: the same values as :root above, so an element inside another preset
  * can switch back (tests/theme.rs keeps them equal). */
 [data-preset="lagoon"] {
-  --primary-color: light-dark(#ffffff, #0d0d0d);
-  --primary-color-1: light-dark(#fafafa, #121212);
-  --primary-color-2: light-dark(#ffffff, #161616);
-  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
-  --primary-color-4: light-dark(#f0f0f0, #242424);
-  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
-  --primary-color-6: light-dark(#e1e1e1, #383838);
-  --primary-color-7: light-dark(#b7b7b7, #555555);
-  --secondary-color: light-dark(#090909, #fcfcfc);
-  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
-  --secondary-color-2: light-dark(#161616, #e8e8e8);
-  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
-  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
-  --secondary-color-5: light-dark(#666666, #ababab);
-  --secondary-color-6: light-dark(#cacaca, #525252);
-  --accent-color: light-dark(#0f766e, #2dd4bf);
-  --accent-contrast: light-dark(#fff, #042f2e);
-  --focused-border-color: light-dark(#0f766e, #2dd4bf);
-  --chart-2: light-dark(#1d4ed8, #60a5fa);
-  --chart-3: light-dark(#c2410c, #fb923c);
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#588418, #8cb460);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-heading: var(--font-sans);
   --heading-weight: 650;
@@ -311,31 +314,34 @@ html[data-theme="dark"],
   --radius: 0.625rem;
   --density: 1;
   --icon-stroke-width: 2;
-  --chart-4: light-dark(#7c3aed, #a78bfa);
+  --chart-4: light-dark(#825eb9, #b093e5);
 }
 
 /* Reef: coral on warm stone, Geist, round corners, a little roomier. */
 [data-preset="reef"] {
-  --primary-color: light-dark(#fffffd, #100c0a);
-  --primary-color-1: light-dark(#fcfaf8, #14110e);
-  --primary-color-2: light-dark(#fffffd, #191512);
-  --primary-color-3: light-dark(#f7f5f3, #211d1a);
-  --primary-color-4: light-dark(#f2f0ee, #272320);
-  --primary-color-5: light-dark(#e9e7e6, #2e2a27);
-  --primary-color-6: light-dark(#e3e1df, #3b3734);
-  --primary-color-7: light-dark(#bbb6b2, #595451);
-  --secondary-color: light-dark(#0c0806, #fffbf6);
-  --secondary-color-1: light-dark(#100c0a, #f9f4f0);
-  --secondary-color-2: light-dark(#191512, #ece7e3);
-  --secondary-color-3: light-dark(#312d2a, #dcd6d2);
-  --secondary-color-4: light-dark(#221e1c, #f3ede9);
-  --secondary-color-5: light-dark(#6a6562, #afaaa6);
-  --secondary-color-6: light-dark(#cfc9c5, #56524e);
-  --accent-color: light-dark(#be3a2e, #ff8b7b);
-  --accent-contrast: light-dark(#fff, #2a0a06);
-  --focused-border-color: light-dark(#be3a2e, #ff8b7b);
-  --chart-2: light-dark(#0f766e, #2dd4bf);
-  --chart-3: light-dark(#1d4ed8, #60a5fa);
+  --primary-color: light-dark(#ffffff, #0e0a0a);
+  --primary-color-1: light-dark(#fdf9f9, #120e0e);
+  --primary-color-2: light-dark(#ffffff, #161313);
+  --primary-color-3: light-dark(#f8f4f4, #1d1a19);
+  --primary-color-4: light-dark(#f3efef, #242120);
+  --primary-color-5: light-dark(#ebe7e6, #2c2828);
+  --primary-color-6: light-dark(#e5e0e0, #363231);
+  --primary-color-7: light-dark(#beb5b5, #534e4e);
+  --secondary-color: light-dark(#0d0808, #fefbfb);
+  --secondary-color-1: light-dark(#161010, #f9f4f3);
+  --secondary-color-2: light-dark(#1f1919, #ece6e6);
+  --secondary-color-3: light-dark(#383131, #dbd6d6);
+  --secondary-color-4: light-dark(#241d1d, #f2eded);
+  --secondary-color-5: light-dark(#696161, #a29d9d);
+  --secondary-color-6: light-dark(#d1c8c8, #565151);
+  --accent-color: light-dark(#b94884, #b64b84);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#825eb9, #b093e5);
+  --chart-4: light-dark(#986b00, #cc9c42);
+  --accent-text: light-dark(#b94884, #f197c2);
+  --focused-border-color: light-dark(#b94884, #e082b0);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --chart-3: light-dark(#4072c5, #78a5ef);
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-heading: var(--font-sans);
   --heading-weight: 600;
@@ -346,25 +352,29 @@ html[data-theme="dark"],
 }
 /* Abyss: cool slate with an indigo accent, IBM Plex Sans, square corners, compact. */
 [data-preset="abyss"] {
-  --primary-color: light-dark(#fcffff, #060911);
-  --primary-color-1: light-dark(#f7faff, #090d16);
-  --primary-color-2: light-dark(#fcffff, #0d111b);
-  --primary-color-3: light-dark(#f2f5fb, #151923);
-  --primary-color-4: light-dark(#edf0f6, #1b1f29);
-  --primary-color-5: light-dark(#e5e8ed, #222630);
-  --primary-color-6: light-dark(#dfe1e7, #2e333d);
-  --primary-color-7: light-dark(#b1b7c5, #4a505b);
-  --secondary-color: light-dark(#060911, #eff5ff);
-  --secondary-color-1: light-dark(#090d16, #e8effc);
-  --secondary-color-2: light-dark(#12161f, #dbe1ef);
-  --secondary-color-3: light-dark(#292e38, #cbd1df);
-  --secondary-color-4: light-dark(#1b1f29, #e1e8f6);
-  --secondary-color-5: light-dark(#606672, #9ea5b2);
-  --secondary-color-6: light-dark(#c4cbd8, #484d58);
-  --accent-color: light-dark(#4f46e5, #a5b4fc);
-  --accent-contrast: light-dark(#fff, #0b1020);
-  --focused-border-color: light-dark(#4f46e5, #a5b4fc);
-  --chart-4: light-dark(#0e7490, #22d3ee);
+  --primary-color: light-dark(#ffffff, #090b0f);
+  --primary-color-1: light-dark(#f8fafe, #0d0f14);
+  --primary-color-2: light-dark(#ffffff, #121418);
+  --primary-color-3: light-dark(#f2f5fb, #181b1f);
+  --primary-color-4: light-dark(#edf0f6, #1f2226);
+  --primary-color-5: light-dark(#e5e8ed, #27292e);
+  --primary-color-6: light-dark(#dfe1e7, #303338);
+  --primary-color-7: light-dark(#b2b7c2, #4d5055);
+  --secondary-color: light-dark(#060910, #fafcfe);
+  --secondary-color-1: light-dark(#0e1219, #f2f5fc);
+  --secondary-color-2: light-dark(#171b22, #e5e8ee);
+  --secondary-color-3: light-dark(#2f333b, #d4d7de);
+  --secondary-color-4: light-dark(#1c1f27, #ebeef5);
+  --secondary-color-5: light-dark(#5f636d, #9b9ea5);
+  --secondary-color-6: light-dark(#c5cbd5, #505358);
+  --accent-color: light-dark(#5a64e3, #5964dc);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#218a45, #69ba7c);
+  --chart-3: light-dark(#a06604, #d49648);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --accent-text: light-dark(#5a64e3, #a3b2fe);
+  --focused-border-color: light-dark(#5a64e3, #8b9bff);
+  --chart-4: light-dark(#a84f8e, #d686bc);
   --font-sans: "IBM Plex Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-heading: var(--font-sans);
   --heading-weight: 600;
@@ -375,25 +385,29 @@ html[data-theme="dark"],
 }
 /* Driftwood: warm sand and terracotta, Source Serif 4 headings over Inter, editorial. */
 [data-preset="driftwood"] {
-  --primary-color: light-dark(#fffffc, #100d08);
-  --primary-color-1: light-dark(#fcfaf7, #14110c);
-  --primary-color-2: light-dark(#fffffc, #191610);
-  --primary-color-3: light-dark(#f7f5f2, #211e18);
-  --primary-color-4: light-dark(#f2f0ed, #27231e);
-  --primary-color-5: light-dark(#e9e7e4, #2e2b25);
-  --primary-color-6: light-dark(#e3e1de, #3b3731);
-  --primary-color-7: light-dark(#bbb7af, #59554e);
-  --secondary-color: light-dark(#0c0905, #fffbf3);
-  --secondary-color-1: light-dark(#100d08, #f9f4ec);
-  --secondary-color-2: light-dark(#191610, #ece7df);
-  --secondary-color-3: light-dark(#312d27, #dcd7cf);
-  --secondary-color-4: light-dark(#221f19, #f3eee6);
-  --secondary-color-5: light-dark(#6a655f, #afaaa3);
-  --secondary-color-6: light-dark(#cfcac2, #56524b);
-  --accent-color: light-dark(#9a3412, #fdba74);
-  --accent-contrast: light-dark(#fff, #1f1105);
-  --focused-border-color: light-dark(#9a3412, #fdba74);
-  --chart-3: light-dark(#4d7c0f, #a3e635);
+  --primary-color: light-dark(#ffffff, #0d0b08);
+  --primary-color-1: light-dark(#fdfaf6, #110f0c);
+  --primary-color-2: light-dark(#ffffff, #161310);
+  --primary-color-3: light-dark(#f7f5f1, #1d1a17);
+  --primary-color-4: light-dark(#f2f0ec, #24211e);
+  --primary-color-5: light-dark(#eae7e3, #2b2825);
+  --primary-color-6: light-dark(#e4e1dd, #35322f);
+  --primary-color-7: light-dark(#bcb6af, #524f4b);
+  --secondary-color: light-dark(#0c0805, #fffbf7);
+  --secondary-color-1: light-dark(#15110c, #f8f4f0);
+  --secondary-color-2: light-dark(#1e1a14, #ebe7e3);
+  --secondary-color-3: light-dark(#37322c, #dad7d2);
+  --secondary-color-4: light-dark(#231f19, #f1eee9);
+  --secondary-color-5: light-dark(#67625c, #a19e9a);
+  --secondary-color-6: light-dark(#cfcac2, #55524e);
+  --accent-color: light-dark(#956747, #94684a);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#a1529b, #cf88c8);
+  --chart-4: light-dark(#588418, #8cb460);
+  --chart-2: light-dark(#048681, #1dbcb5);
+  --accent-text: light-dark(#956747, #d5af96);
+  --focused-border-color: light-dark(#956747, #c39b81);
+  --chart-3: light-dark(#2378c2, #67aaed);
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-heading: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
   --heading-weight: 600;
@@ -421,6 +435,7 @@ html[data-theme="dark"],
   --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
   --accent-color: light-dark(#0d0d0d, #e6e6e6);
   --accent-contrast: light-dark(#fff, #000);
+  --accent-text: light-dark(#0d0d0d, #e6e6e6);
   --focused-border-color: light-dark(#2b7fff, #2b7fff);
   --chart-2: light-dark(#0f766e, #2dd4bf);
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -435,29 +450,34 @@ html[data-theme="dark"],
 /* Accent presets, light-dark(light, dark). Light fills carry white text (>=4.5:1); dark fills
    carry near-black text (tests/theme.rs checks both). */
 [data-accent="blue"] {
-  --accent-color: light-dark(#1d4ed8, #60a5fa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-color: light-dark(#2870d4, #2e70cf);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#2870d4, #8ab9fe);
+  --focused-border-color: light-dark(#2870d4, #6da5f9);
 }
 [data-accent="green"] {
-  --accent-color: light-dark(#15803d, #4ade80);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#15803d, #4ade80);
+  --accent-color: light-dark(#14833e, #1f8241);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#14833e, #85cb94);
+  --focused-border-color: light-dark(#14833e, #6eb87f);
 }
 [data-accent="violet"] {
-  --accent-color: light-dark(#6d28d9, #a78bfa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+  --accent-color: light-dark(#7d59db, #7b5ad5);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#7d59db, #b9a9fe);
+  --focused-border-color: light-dark(#7d59db, #a891fb);
 }
 [data-accent="rose"] {
-  --accent-color: light-dark(#be123c, #fb7185);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#be123c, #fb7185);
+  --accent-color: light-dark(#c6405c, #c3455e);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#c6405c, #fd94a2);
+  --focused-border-color: light-dark(#c6405c, #ec7e8e);
 }
 [data-accent="orange"] {
-  --accent-color: light-dark(#c2410c, #fb923c);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#c2410c, #fb923c);
+  --accent-color: light-dark(#bb5218, #b85521);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#bb5218, #f3a07a);
+  --focused-border-color: light-dark(#bb5218, #e28b63);
 }
 
 /* Space toggles: --dark and --light are "initial" or empty depending on the scheme, so
@@ -494,41 +514,41 @@ html[data-theme="light"],
 /* data-theme on any element switches its subtree: the colour tokens again, resolved there.
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 :where([data-theme]) {
-  --primary-color: light-dark(#ffffff, #0d0d0d);
-  --primary-color-1: light-dark(#fafafa, #121212);
-  --primary-color-2: light-dark(#ffffff, #161616);
-  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
-  --primary-color-4: light-dark(#f0f0f0, #242424);
-  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
-  --primary-color-6: light-dark(#e1e1e1, #383838);
-  --primary-color-7: light-dark(#b7b7b7, #555555);
-  --secondary-color: light-dark(#090909, #fcfcfc);
-  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
-  --secondary-color-2: light-dark(#161616, #e8e8e8);
-  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
-  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
-  --secondary-color-5: light-dark(#666666, #ababab);
-  --secondary-color-6: light-dark(#cacaca, #525252);
-  --focused-border-color: light-dark(#0f766e, #2dd4bf);
-  --accent-color: light-dark(#0f766e, #2dd4bf);
-  --accent-contrast: light-dark(#fff, #042f2e);
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
   --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
-  --primary-success-color: light-dark(#ecfdf5, #02271c);
-  --secondary-success-color: light-dark(#10b981, #b6fae3);
-  --primary-warning-color: light-dark(#fffbeb, #342203);
-  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
-  --primary-error-color: light-dark(#dc2626, #a22e2e);
-  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
-  --error-text-color: light-dark(#b91c1c, #f87171);
-  --success-text-color: light-dark(#047857, #b6fae3);
-  --warning-text-color: light-dark(#b45309, #feeac7);
-  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
+  --primary-success-color: light-dark(#e8fbeb, #132717);
+  --secondary-success-color: light-dark(#399d57, #62bb78);
+  --primary-warning-color: light-dark(#fef6e7, #33230a);
+  --secondary-warning-color: light-dark(#e19b1b, #e9b452);
+  --primary-error-color: light-dark(#c8433c, #c14b43);
+  --secondary-error-color: light-dark(#e24942, #e3655a);
+  --error-text-color: light-dark(#ac312c, #ed8c81);
+  --success-text-color: light-dark(#236436, #a4dfaf);
+  --warning-text-color: light-dark(#864e18, #f4ce90);
   --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
   --secondary-info-color: var(--secondary-color-3);
-  --chart-2: light-dark(#1d4ed8, #60a5fa);
-  --chart-3: light-dark(#c2410c, #fb923c);
-  --chart-4: light-dark(#7c3aed, #a78bfa);
-  --chart-5: light-dark(#be185d, #f472b6);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
+  --chart-5: light-dark(#588418, #8cb460);
 }
 :where([data-theme]) {
   --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
@@ -537,91 +557,104 @@ html[data-theme="light"],
   --color-highlight: light-dark(rgb(255 255 255 / 0%), rgb(255 255 255 / 10%));
 }
 :where([data-preset="lagoon"] [data-theme]) {
-  --primary-color: light-dark(#ffffff, #0d0d0d);
-  --primary-color-1: light-dark(#fafafa, #121212);
-  --primary-color-2: light-dark(#ffffff, #161616);
-  --primary-color-3: light-dark(#f5f5f5, #1e1e1e);
-  --primary-color-4: light-dark(#f0f0f0, #242424);
-  --primary-color-5: light-dark(#e8e8e8, #2b2b2b);
-  --primary-color-6: light-dark(#e1e1e1, #383838);
-  --primary-color-7: light-dark(#b7b7b7, #555555);
-  --secondary-color: light-dark(#090909, #fcfcfc);
-  --secondary-color-1: light-dark(#0d0d0d, #f5f5f5);
-  --secondary-color-2: light-dark(#161616, #e8e8e8);
-  --secondary-color-3: light-dark(#2e2e2e, #d7d7d7);
-  --secondary-color-4: light-dark(#1f1f1f, #eeeeee);
-  --secondary-color-5: light-dark(#666666, #ababab);
-  --secondary-color-6: light-dark(#cacaca, #525252);
-  --accent-color: light-dark(#0f766e, #2dd4bf);
-  --accent-contrast: light-dark(#fff, #042f2e);
-  --focused-border-color: light-dark(#0f766e, #2dd4bf);
-  --chart-2: light-dark(#1d4ed8, #60a5fa);
-  --chart-3: light-dark(#c2410c, #fb923c);
-  --chart-4: light-dark(#7c3aed, #a78bfa);
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#588418, #8cb460);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
 }
 :where([data-preset="reef"] [data-theme]) {
-  --primary-color: light-dark(#fffffd, #100c0a);
-  --primary-color-1: light-dark(#fcfaf8, #14110e);
-  --primary-color-2: light-dark(#fffffd, #191512);
-  --primary-color-3: light-dark(#f7f5f3, #211d1a);
-  --primary-color-4: light-dark(#f2f0ee, #272320);
-  --primary-color-5: light-dark(#e9e7e6, #2e2a27);
-  --primary-color-6: light-dark(#e3e1df, #3b3734);
-  --primary-color-7: light-dark(#bbb6b2, #595451);
-  --secondary-color: light-dark(#0c0806, #fffbf6);
-  --secondary-color-1: light-dark(#100c0a, #f9f4f0);
-  --secondary-color-2: light-dark(#191512, #ece7e3);
-  --secondary-color-3: light-dark(#312d2a, #dcd6d2);
-  --secondary-color-4: light-dark(#221e1c, #f3ede9);
-  --secondary-color-5: light-dark(#6a6562, #afaaa6);
-  --secondary-color-6: light-dark(#cfc9c5, #56524e);
-  --accent-color: light-dark(#be3a2e, #ff8b7b);
-  --accent-contrast: light-dark(#fff, #2a0a06);
-  --focused-border-color: light-dark(#be3a2e, #ff8b7b);
-  --chart-2: light-dark(#0f766e, #2dd4bf);
-  --chart-3: light-dark(#1d4ed8, #60a5fa);
+  --primary-color: light-dark(#ffffff, #0e0a0a);
+  --primary-color-1: light-dark(#fdf9f9, #120e0e);
+  --primary-color-2: light-dark(#ffffff, #161313);
+  --primary-color-3: light-dark(#f8f4f4, #1d1a19);
+  --primary-color-4: light-dark(#f3efef, #242120);
+  --primary-color-5: light-dark(#ebe7e6, #2c2828);
+  --primary-color-6: light-dark(#e5e0e0, #363231);
+  --primary-color-7: light-dark(#beb5b5, #534e4e);
+  --secondary-color: light-dark(#0d0808, #fefbfb);
+  --secondary-color-1: light-dark(#161010, #f9f4f3);
+  --secondary-color-2: light-dark(#1f1919, #ece6e6);
+  --secondary-color-3: light-dark(#383131, #dbd6d6);
+  --secondary-color-4: light-dark(#241d1d, #f2eded);
+  --secondary-color-5: light-dark(#696161, #a29d9d);
+  --secondary-color-6: light-dark(#d1c8c8, #565151);
+  --accent-color: light-dark(#b94884, #b64b84);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#825eb9, #b093e5);
+  --chart-4: light-dark(#986b00, #cc9c42);
+  --accent-text: light-dark(#b94884, #f197c2);
+  --focused-border-color: light-dark(#b94884, #e082b0);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --chart-3: light-dark(#4072c5, #78a5ef);
 }
 :where([data-preset="abyss"] [data-theme]) {
-  --primary-color: light-dark(#fcffff, #060911);
-  --primary-color-1: light-dark(#f7faff, #090d16);
-  --primary-color-2: light-dark(#fcffff, #0d111b);
-  --primary-color-3: light-dark(#f2f5fb, #151923);
-  --primary-color-4: light-dark(#edf0f6, #1b1f29);
-  --primary-color-5: light-dark(#e5e8ed, #222630);
-  --primary-color-6: light-dark(#dfe1e7, #2e333d);
-  --primary-color-7: light-dark(#b1b7c5, #4a505b);
-  --secondary-color: light-dark(#060911, #eff5ff);
-  --secondary-color-1: light-dark(#090d16, #e8effc);
-  --secondary-color-2: light-dark(#12161f, #dbe1ef);
-  --secondary-color-3: light-dark(#292e38, #cbd1df);
-  --secondary-color-4: light-dark(#1b1f29, #e1e8f6);
-  --secondary-color-5: light-dark(#606672, #9ea5b2);
-  --secondary-color-6: light-dark(#c4cbd8, #484d58);
-  --accent-color: light-dark(#4f46e5, #a5b4fc);
-  --accent-contrast: light-dark(#fff, #0b1020);
-  --focused-border-color: light-dark(#4f46e5, #a5b4fc);
-  --chart-4: light-dark(#0e7490, #22d3ee);
+  --primary-color: light-dark(#ffffff, #090b0f);
+  --primary-color-1: light-dark(#f8fafe, #0d0f14);
+  --primary-color-2: light-dark(#ffffff, #121418);
+  --primary-color-3: light-dark(#f2f5fb, #181b1f);
+  --primary-color-4: light-dark(#edf0f6, #1f2226);
+  --primary-color-5: light-dark(#e5e8ed, #27292e);
+  --primary-color-6: light-dark(#dfe1e7, #303338);
+  --primary-color-7: light-dark(#b2b7c2, #4d5055);
+  --secondary-color: light-dark(#060910, #fafcfe);
+  --secondary-color-1: light-dark(#0e1219, #f2f5fc);
+  --secondary-color-2: light-dark(#171b22, #e5e8ee);
+  --secondary-color-3: light-dark(#2f333b, #d4d7de);
+  --secondary-color-4: light-dark(#1c1f27, #ebeef5);
+  --secondary-color-5: light-dark(#5f636d, #9b9ea5);
+  --secondary-color-6: light-dark(#c5cbd5, #505358);
+  --accent-color: light-dark(#5a64e3, #5964dc);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#218a45, #69ba7c);
+  --chart-3: light-dark(#a06604, #d49648);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --accent-text: light-dark(#5a64e3, #a3b2fe);
+  --focused-border-color: light-dark(#5a64e3, #8b9bff);
+  --chart-4: light-dark(#a84f8e, #d686bc);
 }
 :where([data-preset="driftwood"] [data-theme]) {
-  --primary-color: light-dark(#fffffc, #100d08);
-  --primary-color-1: light-dark(#fcfaf7, #14110c);
-  --primary-color-2: light-dark(#fffffc, #191610);
-  --primary-color-3: light-dark(#f7f5f2, #211e18);
-  --primary-color-4: light-dark(#f2f0ed, #27231e);
-  --primary-color-5: light-dark(#e9e7e4, #2e2b25);
-  --primary-color-6: light-dark(#e3e1de, #3b3731);
-  --primary-color-7: light-dark(#bbb7af, #59554e);
-  --secondary-color: light-dark(#0c0905, #fffbf3);
-  --secondary-color-1: light-dark(#100d08, #f9f4ec);
-  --secondary-color-2: light-dark(#191610, #ece7df);
-  --secondary-color-3: light-dark(#312d27, #dcd7cf);
-  --secondary-color-4: light-dark(#221f19, #f3eee6);
-  --secondary-color-5: light-dark(#6a655f, #afaaa3);
-  --secondary-color-6: light-dark(#cfcac2, #56524b);
-  --accent-color: light-dark(#9a3412, #fdba74);
-  --accent-contrast: light-dark(#fff, #1f1105);
-  --focused-border-color: light-dark(#9a3412, #fdba74);
-  --chart-3: light-dark(#4d7c0f, #a3e635);
+  --primary-color: light-dark(#ffffff, #0d0b08);
+  --primary-color-1: light-dark(#fdfaf6, #110f0c);
+  --primary-color-2: light-dark(#ffffff, #161310);
+  --primary-color-3: light-dark(#f7f5f1, #1d1a17);
+  --primary-color-4: light-dark(#f2f0ec, #24211e);
+  --primary-color-5: light-dark(#eae7e3, #2b2825);
+  --primary-color-6: light-dark(#e4e1dd, #35322f);
+  --primary-color-7: light-dark(#bcb6af, #524f4b);
+  --secondary-color: light-dark(#0c0805, #fffbf7);
+  --secondary-color-1: light-dark(#15110c, #f8f4f0);
+  --secondary-color-2: light-dark(#1e1a14, #ebe7e3);
+  --secondary-color-3: light-dark(#37322c, #dad7d2);
+  --secondary-color-4: light-dark(#231f19, #f1eee9);
+  --secondary-color-5: light-dark(#67625c, #a19e9a);
+  --secondary-color-6: light-dark(#cfcac2, #55524e);
+  --accent-color: light-dark(#956747, #94684a);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#a1529b, #cf88c8);
+  --chart-4: light-dark(#588418, #8cb460);
+  --chart-2: light-dark(#048681, #1dbcb5);
+  --accent-text: light-dark(#956747, #d5af96);
+  --focused-border-color: light-dark(#956747, #c39b81);
+  --chart-3: light-dark(#2378c2, #67aaed);
 }
 :where([data-preset="classic"] [data-theme]) {
   --primary-color: light-dark(#fff, #000);
@@ -641,33 +674,39 @@ html[data-theme="light"],
   --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
   --accent-color: light-dark(#0d0d0d, #e6e6e6);
   --accent-contrast: light-dark(#fff, #000);
+  --accent-text: light-dark(#0d0d0d, #e6e6e6);
   --focused-border-color: light-dark(#2b7fff, #2b7fff);
   --chart-2: light-dark(#0f766e, #2dd4bf);
 }
 :where([data-accent="blue"] [data-theme]) {
-  --accent-color: light-dark(#1d4ed8, #60a5fa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-color: light-dark(#2870d4, #2e70cf);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#2870d4, #8ab9fe);
+  --focused-border-color: light-dark(#2870d4, #6da5f9);
 }
 :where([data-accent="green"] [data-theme]) {
-  --accent-color: light-dark(#15803d, #4ade80);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#15803d, #4ade80);
+  --accent-color: light-dark(#14833e, #1f8241);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#14833e, #85cb94);
+  --focused-border-color: light-dark(#14833e, #6eb87f);
 }
 :where([data-accent="violet"] [data-theme]) {
-  --accent-color: light-dark(#6d28d9, #a78bfa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+  --accent-color: light-dark(#7d59db, #7b5ad5);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#7d59db, #b9a9fe);
+  --focused-border-color: light-dark(#7d59db, #a891fb);
 }
 :where([data-accent="rose"] [data-theme]) {
-  --accent-color: light-dark(#be123c, #fb7185);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#be123c, #fb7185);
+  --accent-color: light-dark(#c6405c, #c3455e);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#c6405c, #fd94a2);
+  --focused-border-color: light-dark(#c6405c, #ec7e8e);
 }
 :where([data-accent="orange"] [data-theme]) {
-  --accent-color: light-dark(#c2410c, #fb923c);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#c2410c, #fb923c);
+  --accent-color: light-dark(#bb5218, #b85521);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#bb5218, #f3a07a);
+  --focused-border-color: light-dark(#bb5218, #e28b63);
 }
 /* subtree themes: end */
 
@@ -676,40 +715,40 @@ html[data-theme="light"],
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 @supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
   :root:root, [data-theme][data-theme] {
-    --primary-color: var(--dark, #0d0d0d) var(--light, #ffffff);
-    --primary-color-1: var(--dark, #121212) var(--light, #fafafa);
-    --primary-color-2: var(--dark, #161616) var(--light, #ffffff);
-    --primary-color-3: var(--dark, #1e1e1e) var(--light, #f5f5f5);
-    --primary-color-4: var(--dark, #242424) var(--light, #f0f0f0);
-    --primary-color-5: var(--dark, #2b2b2b) var(--light, #e8e8e8);
-    --primary-color-6: var(--dark, #383838) var(--light, #e1e1e1);
-    --primary-color-7: var(--dark, #555555) var(--light, #b7b7b7);
-    --secondary-color: var(--dark, #fcfcfc) var(--light, #090909);
-    --secondary-color-1: var(--dark, #f5f5f5) var(--light, #0d0d0d);
-    --secondary-color-2: var(--dark, #e8e8e8) var(--light, #161616);
-    --secondary-color-3: var(--dark, #d7d7d7) var(--light, #2e2e2e);
-    --secondary-color-4: var(--dark, #eeeeee) var(--light, #1f1f1f);
-    --secondary-color-5: var(--dark, #ababab) var(--light, #666666);
-    --secondary-color-6: var(--dark, #525252) var(--light, #cacaca);
-    --focused-border-color: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --accent-color: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --accent-contrast: var(--dark, #042f2e) var(--light, #fff);
+    --primary-color: var(--dark, #0c0b09) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #100f0d) var(--light, #fbfaf7);
+    --primary-color-2: var(--dark, #151411) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1c1a18) var(--light, #f6f5f2);
+    --primary-color-4: var(--dark, #23211f) var(--light, #f1f0ed);
+    --primary-color-5: var(--dark, #2a2926) var(--light, #e9e7e5);
+    --primary-color-6: var(--dark, #343330) var(--light, #e3e1de);
+    --primary-color-7: var(--dark, #514f4d) var(--light, #bab7b2);
+    --secondary-color: var(--dark, #fdfbf8) var(--light, #0b0906);
+    --secondary-color-1: var(--dark, #f7f5f2) var(--light, #13110e);
+    --secondary-color-2: var(--dark, #e9e7e4) var(--light, #1d1a16);
+    --secondary-color-3: var(--dark, #d9d7d4) var(--light, #35322e);
+    --secondary-color-4: var(--dark, #f0eeeb) var(--light, #211f1b);
+    --secondary-color-5: var(--dark, #a09e9b) var(--light, #66635e);
+    --secondary-color-6: var(--dark, #545250) var(--light, #cdcac5);
+    --focused-border-color: var(--dark, #6cb3b2) var(--light, #0b7f7f);
+    --accent-color: var(--dark, #1b7e7e) var(--light, #0b7f7f);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --accent-text: var(--dark, #83c5c5) var(--light, #0b7f7f);
     --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
-    --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
-    --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
-    --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
-    --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
-    --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
-    --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
-    --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
-    --success-text-color: var(--dark, #b6fae3) var(--light, #047857);
-    --warning-text-color: var(--dark, #feeac7) var(--light, #b45309);
-    --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
+    --primary-success-color: var(--dark, #132717) var(--light, #e8fbeb);
+    --secondary-success-color: var(--dark, #62bb78) var(--light, #399d57);
+    --primary-warning-color: var(--dark, #33230a) var(--light, #fef6e7);
+    --secondary-warning-color: var(--dark, #e9b452) var(--light, #e19b1b);
+    --primary-error-color: var(--dark, #c14b43) var(--light, #c8433c);
+    --secondary-error-color: var(--dark, #e3655a) var(--light, #e24942);
+    --error-text-color: var(--dark, #ed8c81) var(--light, #ac312c);
+    --success-text-color: var(--dark, #a4dfaf) var(--light, #236436);
+    --warning-text-color: var(--dark, #f4ce90) var(--light, #864e18);
     --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
-    --chart-2: var(--dark, #60a5fa) var(--light, #1d4ed8);
-    --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
-    --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
-    --chart-5: var(--dark, #f472b6) var(--light, #be185d);
+    --chart-2: var(--dark, #6fa7ee) var(--light, #3475c4);
+    --chart-3: var(--dark, #de8f57) var(--light, #b05a02);
+    --chart-4: var(--dark, #b093e5) var(--light, #825eb9);
+    --chart-5: var(--dark, #8cb460) var(--light, #588418);
   }
   :root:root, [data-theme][data-theme] {
     --color-shadow-raised-1: var(--dark, rgb(0 0 0 / 32%)) var(--light, rgb(0 0 0 / 8%));
@@ -718,91 +757,104 @@ html[data-theme="light"],
     --color-highlight: var(--dark, rgb(255 255 255 / 10%)) var(--light, rgb(255 255 255 / 0%));
   }
   [data-preset="lagoon"][data-preset="lagoon"] {
-    --primary-color: var(--dark, #0d0d0d) var(--light, #ffffff);
-    --primary-color-1: var(--dark, #121212) var(--light, #fafafa);
-    --primary-color-2: var(--dark, #161616) var(--light, #ffffff);
-    --primary-color-3: var(--dark, #1e1e1e) var(--light, #f5f5f5);
-    --primary-color-4: var(--dark, #242424) var(--light, #f0f0f0);
-    --primary-color-5: var(--dark, #2b2b2b) var(--light, #e8e8e8);
-    --primary-color-6: var(--dark, #383838) var(--light, #e1e1e1);
-    --primary-color-7: var(--dark, #555555) var(--light, #b7b7b7);
-    --secondary-color: var(--dark, #fcfcfc) var(--light, #090909);
-    --secondary-color-1: var(--dark, #f5f5f5) var(--light, #0d0d0d);
-    --secondary-color-2: var(--dark, #e8e8e8) var(--light, #161616);
-    --secondary-color-3: var(--dark, #d7d7d7) var(--light, #2e2e2e);
-    --secondary-color-4: var(--dark, #eeeeee) var(--light, #1f1f1f);
-    --secondary-color-5: var(--dark, #ababab) var(--light, #666666);
-    --secondary-color-6: var(--dark, #525252) var(--light, #cacaca);
-    --accent-color: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --accent-contrast: var(--dark, #042f2e) var(--light, #fff);
-    --focused-border-color: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --chart-2: var(--dark, #60a5fa) var(--light, #1d4ed8);
-    --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
-    --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
+    --primary-color: var(--dark, #0c0b09) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #100f0d) var(--light, #fbfaf7);
+    --primary-color-2: var(--dark, #151411) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1c1a18) var(--light, #f6f5f2);
+    --primary-color-4: var(--dark, #23211f) var(--light, #f1f0ed);
+    --primary-color-5: var(--dark, #2a2926) var(--light, #e9e7e5);
+    --primary-color-6: var(--dark, #343330) var(--light, #e3e1de);
+    --primary-color-7: var(--dark, #514f4d) var(--light, #bab7b2);
+    --secondary-color: var(--dark, #fdfbf8) var(--light, #0b0906);
+    --secondary-color-1: var(--dark, #f7f5f2) var(--light, #13110e);
+    --secondary-color-2: var(--dark, #e9e7e4) var(--light, #1d1a16);
+    --secondary-color-3: var(--dark, #d9d7d4) var(--light, #35322e);
+    --secondary-color-4: var(--dark, #f0eeeb) var(--light, #211f1b);
+    --secondary-color-5: var(--dark, #a09e9b) var(--light, #66635e);
+    --secondary-color-6: var(--dark, #545250) var(--light, #cdcac5);
+    --accent-color: var(--dark, #1b7e7e) var(--light, #0b7f7f);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #8cb460) var(--light, #588418);
+    --accent-text: var(--dark, #83c5c5) var(--light, #0b7f7f);
+    --focused-border-color: var(--dark, #6cb3b2) var(--light, #0b7f7f);
+    --chart-2: var(--dark, #6fa7ee) var(--light, #3475c4);
+    --chart-3: var(--dark, #de8f57) var(--light, #b05a02);
+    --chart-4: var(--dark, #b093e5) var(--light, #825eb9);
   }
   [data-preset="reef"][data-preset="reef"] {
-    --primary-color: var(--dark, #100c0a) var(--light, #fffffd);
-    --primary-color-1: var(--dark, #14110e) var(--light, #fcfaf8);
-    --primary-color-2: var(--dark, #191512) var(--light, #fffffd);
-    --primary-color-3: var(--dark, #211d1a) var(--light, #f7f5f3);
-    --primary-color-4: var(--dark, #272320) var(--light, #f2f0ee);
-    --primary-color-5: var(--dark, #2e2a27) var(--light, #e9e7e6);
-    --primary-color-6: var(--dark, #3b3734) var(--light, #e3e1df);
-    --primary-color-7: var(--dark, #595451) var(--light, #bbb6b2);
-    --secondary-color: var(--dark, #fffbf6) var(--light, #0c0806);
-    --secondary-color-1: var(--dark, #f9f4f0) var(--light, #100c0a);
-    --secondary-color-2: var(--dark, #ece7e3) var(--light, #191512);
-    --secondary-color-3: var(--dark, #dcd6d2) var(--light, #312d2a);
-    --secondary-color-4: var(--dark, #f3ede9) var(--light, #221e1c);
-    --secondary-color-5: var(--dark, #afaaa6) var(--light, #6a6562);
-    --secondary-color-6: var(--dark, #56524e) var(--light, #cfc9c5);
-    --accent-color: var(--dark, #ff8b7b) var(--light, #be3a2e);
-    --accent-contrast: var(--dark, #2a0a06) var(--light, #fff);
-    --focused-border-color: var(--dark, #ff8b7b) var(--light, #be3a2e);
-    --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --chart-3: var(--dark, #60a5fa) var(--light, #1d4ed8);
+    --primary-color: var(--dark, #0e0a0a) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #120e0e) var(--light, #fdf9f9);
+    --primary-color-2: var(--dark, #161313) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1d1a19) var(--light, #f8f4f4);
+    --primary-color-4: var(--dark, #242120) var(--light, #f3efef);
+    --primary-color-5: var(--dark, #2c2828) var(--light, #ebe7e6);
+    --primary-color-6: var(--dark, #363231) var(--light, #e5e0e0);
+    --primary-color-7: var(--dark, #534e4e) var(--light, #beb5b5);
+    --secondary-color: var(--dark, #fefbfb) var(--light, #0d0808);
+    --secondary-color-1: var(--dark, #f9f4f3) var(--light, #161010);
+    --secondary-color-2: var(--dark, #ece6e6) var(--light, #1f1919);
+    --secondary-color-3: var(--dark, #dbd6d6) var(--light, #383131);
+    --secondary-color-4: var(--dark, #f2eded) var(--light, #241d1d);
+    --secondary-color-5: var(--dark, #a29d9d) var(--light, #696161);
+    --secondary-color-6: var(--dark, #565151) var(--light, #d1c8c8);
+    --accent-color: var(--dark, #b64b84) var(--light, #b94884);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #b093e5) var(--light, #825eb9);
+    --chart-4: var(--dark, #cc9c42) var(--light, #986b00);
+    --accent-text: var(--dark, #f197c2) var(--light, #b94884);
+    --focused-border-color: var(--dark, #e082b0) var(--light, #b94884);
+    --chart-2: var(--dark, #14bbc2) var(--light, #07858a);
+    --chart-3: var(--dark, #78a5ef) var(--light, #4072c5);
   }
   [data-preset="abyss"][data-preset="abyss"] {
-    --primary-color: var(--dark, #060911) var(--light, #fcffff);
-    --primary-color-1: var(--dark, #090d16) var(--light, #f7faff);
-    --primary-color-2: var(--dark, #0d111b) var(--light, #fcffff);
-    --primary-color-3: var(--dark, #151923) var(--light, #f2f5fb);
-    --primary-color-4: var(--dark, #1b1f29) var(--light, #edf0f6);
-    --primary-color-5: var(--dark, #222630) var(--light, #e5e8ed);
-    --primary-color-6: var(--dark, #2e333d) var(--light, #dfe1e7);
-    --primary-color-7: var(--dark, #4a505b) var(--light, #b1b7c5);
-    --secondary-color: var(--dark, #eff5ff) var(--light, #060911);
-    --secondary-color-1: var(--dark, #e8effc) var(--light, #090d16);
-    --secondary-color-2: var(--dark, #dbe1ef) var(--light, #12161f);
-    --secondary-color-3: var(--dark, #cbd1df) var(--light, #292e38);
-    --secondary-color-4: var(--dark, #e1e8f6) var(--light, #1b1f29);
-    --secondary-color-5: var(--dark, #9ea5b2) var(--light, #606672);
-    --secondary-color-6: var(--dark, #484d58) var(--light, #c4cbd8);
-    --accent-color: var(--dark, #a5b4fc) var(--light, #4f46e5);
-    --accent-contrast: var(--dark, #0b1020) var(--light, #fff);
-    --focused-border-color: var(--dark, #a5b4fc) var(--light, #4f46e5);
-    --chart-4: var(--dark, #22d3ee) var(--light, #0e7490);
+    --primary-color: var(--dark, #090b0f) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #0d0f14) var(--light, #f8fafe);
+    --primary-color-2: var(--dark, #121418) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #181b1f) var(--light, #f2f5fb);
+    --primary-color-4: var(--dark, #1f2226) var(--light, #edf0f6);
+    --primary-color-5: var(--dark, #27292e) var(--light, #e5e8ed);
+    --primary-color-6: var(--dark, #303338) var(--light, #dfe1e7);
+    --primary-color-7: var(--dark, #4d5055) var(--light, #b2b7c2);
+    --secondary-color: var(--dark, #fafcfe) var(--light, #060910);
+    --secondary-color-1: var(--dark, #f2f5fc) var(--light, #0e1219);
+    --secondary-color-2: var(--dark, #e5e8ee) var(--light, #171b22);
+    --secondary-color-3: var(--dark, #d4d7de) var(--light, #2f333b);
+    --secondary-color-4: var(--dark, #ebeef5) var(--light, #1c1f27);
+    --secondary-color-5: var(--dark, #9b9ea5) var(--light, #5f636d);
+    --secondary-color-6: var(--dark, #505358) var(--light, #c5cbd5);
+    --accent-color: var(--dark, #5964dc) var(--light, #5a64e3);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #69ba7c) var(--light, #218a45);
+    --chart-3: var(--dark, #d49648) var(--light, #a06604);
+    --chart-2: var(--dark, #14bbc2) var(--light, #07858a);
+    --accent-text: var(--dark, #a3b2fe) var(--light, #5a64e3);
+    --focused-border-color: var(--dark, #8b9bff) var(--light, #5a64e3);
+    --chart-4: var(--dark, #d686bc) var(--light, #a84f8e);
   }
   [data-preset="driftwood"][data-preset="driftwood"] {
-    --primary-color: var(--dark, #100d08) var(--light, #fffffc);
-    --primary-color-1: var(--dark, #14110c) var(--light, #fcfaf7);
-    --primary-color-2: var(--dark, #191610) var(--light, #fffffc);
-    --primary-color-3: var(--dark, #211e18) var(--light, #f7f5f2);
-    --primary-color-4: var(--dark, #27231e) var(--light, #f2f0ed);
-    --primary-color-5: var(--dark, #2e2b25) var(--light, #e9e7e4);
-    --primary-color-6: var(--dark, #3b3731) var(--light, #e3e1de);
-    --primary-color-7: var(--dark, #59554e) var(--light, #bbb7af);
-    --secondary-color: var(--dark, #fffbf3) var(--light, #0c0905);
-    --secondary-color-1: var(--dark, #f9f4ec) var(--light, #100d08);
-    --secondary-color-2: var(--dark, #ece7df) var(--light, #191610);
-    --secondary-color-3: var(--dark, #dcd7cf) var(--light, #312d27);
-    --secondary-color-4: var(--dark, #f3eee6) var(--light, #221f19);
-    --secondary-color-5: var(--dark, #afaaa3) var(--light, #6a655f);
-    --secondary-color-6: var(--dark, #56524b) var(--light, #cfcac2);
-    --accent-color: var(--dark, #fdba74) var(--light, #9a3412);
-    --accent-contrast: var(--dark, #1f1105) var(--light, #fff);
-    --focused-border-color: var(--dark, #fdba74) var(--light, #9a3412);
-    --chart-3: var(--dark, #a3e635) var(--light, #4d7c0f);
+    --primary-color: var(--dark, #0d0b08) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #110f0c) var(--light, #fdfaf6);
+    --primary-color-2: var(--dark, #161310) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1d1a17) var(--light, #f7f5f1);
+    --primary-color-4: var(--dark, #24211e) var(--light, #f2f0ec);
+    --primary-color-5: var(--dark, #2b2825) var(--light, #eae7e3);
+    --primary-color-6: var(--dark, #35322f) var(--light, #e4e1dd);
+    --primary-color-7: var(--dark, #524f4b) var(--light, #bcb6af);
+    --secondary-color: var(--dark, #fffbf7) var(--light, #0c0805);
+    --secondary-color-1: var(--dark, #f8f4f0) var(--light, #15110c);
+    --secondary-color-2: var(--dark, #ebe7e3) var(--light, #1e1a14);
+    --secondary-color-3: var(--dark, #dad7d2) var(--light, #37322c);
+    --secondary-color-4: var(--dark, #f1eee9) var(--light, #231f19);
+    --secondary-color-5: var(--dark, #a19e9a) var(--light, #67625c);
+    --secondary-color-6: var(--dark, #55524e) var(--light, #cfcac2);
+    --accent-color: var(--dark, #94684a) var(--light, #956747);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #cf88c8) var(--light, #a1529b);
+    --chart-4: var(--dark, #8cb460) var(--light, #588418);
+    --chart-2: var(--dark, #1dbcb5) var(--light, #048681);
+    --accent-text: var(--dark, #d5af96) var(--light, #956747);
+    --focused-border-color: var(--dark, #c39b81) var(--light, #956747);
+    --chart-3: var(--dark, #67aaed) var(--light, #2378c2);
   }
   [data-preset="classic"][data-preset="classic"] {
     --primary-color: var(--dark, #000) var(--light, #fff);
@@ -822,33 +874,39 @@ html[data-theme="light"],
     --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
     --accent-color: var(--dark, #e6e6e6) var(--light, #0d0d0d);
     --accent-contrast: var(--dark, #000) var(--light, #fff);
+    --accent-text: var(--dark, #e6e6e6) var(--light, #0d0d0d);
     --focused-border-color: var(--dark, #2b7fff) var(--light, #2b7fff);
     --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
   }
   [data-accent="blue"][data-accent="blue"] {
-    --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+    --accent-color: var(--dark, #2e70cf) var(--light, #2870d4);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #8ab9fe) var(--light, #2870d4);
+    --focused-border-color: var(--dark, #6da5f9) var(--light, #2870d4);
   }
   [data-accent="green"][data-accent="green"] {
-    --accent-color: var(--dark, #4ade80) var(--light, #15803d);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
+    --accent-color: var(--dark, #1f8241) var(--light, #14833e);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #85cb94) var(--light, #14833e);
+    --focused-border-color: var(--dark, #6eb87f) var(--light, #14833e);
   }
   [data-accent="violet"][data-accent="violet"] {
-    --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+    --accent-color: var(--dark, #7b5ad5) var(--light, #7d59db);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #b9a9fe) var(--light, #7d59db);
+    --focused-border-color: var(--dark, #a891fb) var(--light, #7d59db);
   }
   [data-accent="rose"][data-accent="rose"] {
-    --accent-color: var(--dark, #fb7185) var(--light, #be123c);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
+    --accent-color: var(--dark, #c3455e) var(--light, #c6405c);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #fd94a2) var(--light, #c6405c);
+    --focused-border-color: var(--dark, #ec7e8e) var(--light, #c6405c);
   }
   [data-accent="orange"][data-accent="orange"] {
-    --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
+    --accent-color: var(--dark, #b85521) var(--light, #bb5218);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #f3a07a) var(--light, #bb5218);
+    --focused-border-color: var(--dark, #e28b63) var(--light, #bb5218);
   }
 }
 /* theme fallback: end */

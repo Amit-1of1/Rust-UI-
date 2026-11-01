@@ -20,14 +20,24 @@ Wordmark: "atoll" in lower case, Inter Semibold (650), tracking -0.015em.
 
 | Role | Light | Dark |
 | --- | --- | --- |
-| Lagoon (accent, focus) | `#0f766e` | `#2dd4bf` |
-| Label on the lagoon | `#ffffff` | `#042f2e` |
-| Page | `#ffffff` | `#0d0d0d` |
-| Text | `#1f1f1f` | `#eeeeee` |
-| Muted text | `#666666` | `#ababab` |
+| Lagoon (buttons, selected) | `#0b7f7f` | `#1b7e7e` |
+| Label on the lagoon | `#ffffff` | `#ffffff` |
+| Lagoon as text (links) | `#0b7f7f` | `#83c5c5` |
+| Focus ring | `#0b7f7f` | `#6cb3b2` |
+| Danger | `#c8433c` | `#c14b43` |
+| Page | `#ffffff` | `#0c0b09` |
+| Text | `#211f1b` | `#f0eeeb` |
+| Muted text | `#66635e` | `#a09e9b` |
 | Island (logo, highlights only) | `#f97362` | `#f97362` |
 
-The neutrals sit on Reshaped's lightness steps (page 100 % / 16 %, text 24 % / 95 %, muted text 51 % / 74 % in OKLCH). The contrast proof checks every pairing again for every look, in light and dark.
+How the colours are chosen (the same rules for every look and accent):
+
+- **Built in OKLCH**, a colour space where equal lightness numbers look equally bright. The accent, the danger red and the status colours sit at one lightness, so none of them shouts over the others.
+- **One accent, one job:** the main action and "selected". Red means danger, green success, amber warning, and nothing else.
+- **Greys lean a hair towards the look's temperature** (warm sand for Lagoon, rosy for Reef, cool slate for Abyss), at very low chroma, so the page and the accent feel like one family. They sit on Reshaped's lightness steps.
+- **Dark mode is not inverted.** Coloured fills keep their colour and their white label; only the page and greys flip. Where the accent is text on a dark page (links, selected labels) a lighter tone of it is used, `--accent-text`.
+- **Readable everywhere:** body text about 16:1, muted text at least 5.9:1, labels on coloured fills at least 4.8:1. The contrast proof checks every pairing for every look and accent, in light and dark.
+- **Chart colours** are spaced around the colour wheel at one lightness, starting from the accent, and also differ by line style for colour-blind readers.
 
 ## Type
 
@@ -50,10 +60,10 @@ A look (theme preset) changes colours, fonts, corner radius, density and icon st
 
 | Look | Feel | Fonts | Corners |
 | --- | --- | --- | --- |
-| `lagoon` | Lagoon teal on neutral greys | Inter | 10 px |
-| `reef` | Coral on warm stone, round and a little roomier | Geist | 16 px |
+| `lagoon` | Deep lagoon teal on warm greys | Inter | 10 px |
+| `reef` | Coral pink on rosy greys, round and a little roomier | Geist | 16 px |
 | `abyss` | Indigo on cool slate, square and compact | IBM Plex Sans | 4 px |
-| `driftwood` | Terracotta on warm sand, serif headings | Source Serif 4 + Inter | 6 px |
+| `driftwood` | Weathered bronze on warm sand, serif headings | Source Serif 4 + Inter | 6 px |
 | `classic` | Atoll's old plain black and white | System fonts, no downloads | 8 px |
 
 Pick one when you build the app:

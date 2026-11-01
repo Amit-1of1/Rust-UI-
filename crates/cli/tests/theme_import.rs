@@ -48,7 +48,7 @@ fn imports_a_tweakcn_theme_that_passes_contrast() {
         "{css}"
     );
     assert!(
-        css.contains("--accent-color: light-dark(#4f46e5, #818cf8);"),
+        css.contains("--accent-color: light-dark(#4f46e5, #929efb);"),
         "{css}"
     );
     assert!(
