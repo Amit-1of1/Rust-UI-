@@ -53,7 +53,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Combobox](llms/combobox.md): The Combobox component is an autocomplete input with a filterable popup list
 - [Command](llms/command.md): A command palette: a search box over a filtered list, inside a dialog
 - [Context menu](llms/context_menu.md): The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element
-- [DataTable](llms/data_table.md): A table with sorting, a filter box, pagination and optional row selection, built on `Table`
+- [DataTable](llms/data_table.md): A table with sorting, a filter box, pagination, optional row selection, column hiding and resizing, CSV export and virtualised rows for long lists, built on `Table`
 - [Date picker](llms/date_picker.md): The DatePicker component is used to display a date input and a Calendar popover, allowing users to enter or select a date value
 - [DateTimePicker](llms/date_time_picker.md): A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled
 - [Dialog](llms/dialog.md): The dialog component can be used to display additional information or actions related to an item

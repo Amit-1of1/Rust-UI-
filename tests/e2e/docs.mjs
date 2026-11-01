@@ -9,6 +9,8 @@ const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
+const consoleErrors = [];
+page.on("console", (m) => m.type() === "error" && consoleErrors.push(m.text().slice(0, 300)));
 await page.goto(base);
 await page.waitForSelector(".docs-main");
 await page.waitForTimeout(1000);
@@ -64,11 +66,18 @@ await page.goto(base + "#theme-builder");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theme builder");
 await page.getByLabel("Hex").fill("#4f46e5");
 const cta = page.getByRole("button", { name: "Start free trial" });
-await page.waitForFunction(
-  (el) => getComputedStyle(el).backgroundColor === "rgb(79, 70, 229)",
-  await cta.elementHandle(),
-  { timeout: 3000 },
-);
+// WebKit on CI runners can take a few seconds to restyle; say what it showed if it never does.
+await page
+  .waitForFunction(
+    (el) => getComputedStyle(el).backgroundColor === "rgb(79, 70, 229)",
+    await cta.elementHandle(),
+    { timeout: 15000 },
+  )
+  .catch(async (e) => {
+    const shown = await cta.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const hex = await page.getByLabel("Hex").inputValue();
+    throw new Error(`theme builder CTA is ${shown} for Hex ${hex}, expected rgb(79, 70, 229): ${e.message}`);
+  });
 assert.equal(await page.getByText("Passes AA").count(), 2);
 // A pale brand gets a darker fill in light mode, still with the same hue.
 await page.getByRole("button", { name: "Sunflower" }).click();
@@ -97,15 +106,19 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 
 // Filter narrows the component list.
 await page.getByLabel("Filter components").fill("date");
-// The list re-renders after the input event; Firefox gets there a frame later than Chromium.
+// The list re-renders after the input event; Firefox gets there a frame later than Chromium,
+// and WebKit on a busy CI runner has taken over 2 s.
 const list = nav.getByRole("list").nth(1).getByRole("link");
 let names = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 50; i++) {
   names = await list.allInnerTexts();
   if (names.length > 0 && names.every((n) => /date/i.test(n))) break;
   await page.waitForTimeout(100);
 }
-assert.ok(names.length > 0 && names.every((n) => /date/i.test(n)), `filter result: ${names}`);
+assert.ok(
+  names.length > 0 && names.every((n) => /date/i.test(n)),
+  `filter result: ${names}; page errors so far: ${errors.join(" | ") || "none"}; console errors: ${consoleErrors.join(" | ") || "none"}`,
+);
 
 // Code blocks that can scroll are keyboard reachable.
 await page.goto(base + "#button");

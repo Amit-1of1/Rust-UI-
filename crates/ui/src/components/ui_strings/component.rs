@@ -39,6 +39,12 @@ pub struct UiStrings {
     pub showing_rows: String,
     /// `{page}` and `{pages}` are page numbers.
     pub page_of: String,
+    /// The data table's column visibility menu button.
+    pub columns: String,
+    /// The data table's export button.
+    pub export_csv: String,
+    /// A column resize handle's name. `{column}` is the column header.
+    pub resize_column: String,
     // Multi-select
     pub select_placeholder: String,
     /// `{label}` is the multi-select's name.
@@ -170,6 +176,9 @@ impl Default for UiStrings {
             row_count: s("{count} rows"),
             showing_rows: s("Showing {first}–{last} of {total} rows"),
             page_of: s("Page {page} of {pages}"),
+            columns: s("Columns"),
+            export_csv: s("Export CSV"),
+            resize_column: s("Resize {column}"),
             select_placeholder: s("Select…"),
             filter_named: s("Filter {label}"),
             options_named: s("{label} options"),
