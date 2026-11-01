@@ -14,6 +14,7 @@ use crate::components::time_picker::{
     format_iso_time, format_time, parse_iso_time, use_focus_exit, HourCycle, Time, TimeState,
 };
 use crate::components::ui_strings::{fill, use_ui_strings};
+use crate::components::sound::{use_sound, SoundEvent};
 use dioxus::prelude::*;
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 use std::rc::Rc;
@@ -356,10 +357,20 @@ pub fn Form(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    let sound = use_sound();
     rsx! {
         form {
             novalidate: true,
-            onsubmit: move |event| state.submit(event, || on_valid.call(())),
+            onsubmit: move |event| {
+                let mut valid = false;
+                state.submit(event, || {
+                    valid = true;
+                    on_valid.call(());
+                });
+                if !valid {
+                    sound.play(SoundEvent::Error);
+                }
+            },
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_form }), attributes]),
             {children}
         }
