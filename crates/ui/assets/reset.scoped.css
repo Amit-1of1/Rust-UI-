@@ -17,7 +17,7 @@
 [data-rui-scope] {
   background: var(--primary-color);
   color: var(--secondary-color-4);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
@@ -28,7 +28,28 @@
   margin: 0;
 }
 
+/* Headings in the preset's display face, on the type scale (docs/FOUNDATIONS.md). */
+:where([data-rui-scope] h1, [data-rui-scope] h2, [data-rui-scope] h3, [data-rui-scope] h4) {
+  font-family: var(--font-heading, inherit);
+  font-weight: var(--heading-weight, 700);
+  letter-spacing: var(--heading-tracking, normal);
+}
+:where([data-rui-scope] h1) { font-size: var(--font-size-title-1); line-height: var(--line-height-title-1); }
+:where([data-rui-scope] h2) { font-size: var(--font-size-title-2); line-height: var(--line-height-title-2); }
+:where([data-rui-scope] h3) { font-size: var(--font-size-title-3); line-height: var(--line-height-title-3); }
+:where([data-rui-scope] h4) { font-size: var(--font-size-title-4); line-height: var(--line-height-title-4); }
+
+:where([data-rui-scope] code, [data-rui-scope] kbd, [data-rui-scope] pre, [data-rui-scope] samp) {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
 :where([data-rui-scope] button, [data-rui-scope] input, [data-rui-scope] select, [data-rui-scope] textarea) {
   font: inherit;
   color: inherit;
+}
+
+/* Plain links in the accent's text colour, not the browser's default blue and purple. */
+:where([data-rui-scope] a:not([class])) {
+  color: var(--color-foreground-primary, LinkText);
+  text-underline-offset: 0.2em;
 }

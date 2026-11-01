@@ -1,5 +1,5 @@
 // Usage: serve the built gallery (dx build --platform web; serve target/dx/gallery/debug/web/public),
-// (set ACCENT=blue|green|... to scan an accent preset), then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
+// (set ACCENT=blue|green|... to scan an accent preset, PRESET=reef|abyss|... a theme preset), then `GALLERY_URL=http://localhost:8765/ node axe.mjs [light|dark]`.
 // For apps/site: `GALLERY_URL=http://localhost:8767/ READY_SELECTOR=#pricing node axe.mjs`.
 import { launch } from "./engine.mjs";
 import { createRequire } from "node:module";
@@ -29,6 +29,9 @@ try {
 if (process.env.ACCENT) {
   await page.evaluate((a) => document.documentElement.setAttribute("data-accent", a), process.env.ACCENT);
 }
+if (process.env.PRESET) {
+  await page.evaluate((p) => document.documentElement.setAttribute("data-preset", p), process.env.PRESET);
+}
 if (process.env.DIR) {
   await page.evaluate((d) => document.documentElement.setAttribute("dir", d), process.env.DIR);
 }
@@ -43,6 +46,6 @@ for (const v of bad) {
   console.log(`${v.impact}\t${v.id}\t${v.help}`);
   for (const n of v.nodes.slice(0, 3)) console.log(`   ${n.target.join(" ")}`);
 }
-console.log(`${scheme}${process.env.ACCENT ? " / " + process.env.ACCENT : ""}${process.env.DIR ? " / " + process.env.DIR : ""}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
+console.log(`${scheme}${process.env.ACCENT ? " / " + process.env.ACCENT : ""}${process.env.PRESET ? " / " + process.env.PRESET : ""}${process.env.DIR ? " / " + process.env.DIR : ""}: ${bad.length} violation type(s), ${result.passes.length} rules passed`);
 await browser.close();
 process.exit(bad.length ? 1 : 0);

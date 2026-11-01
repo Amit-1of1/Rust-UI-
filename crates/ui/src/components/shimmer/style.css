@@ -1,7 +1,7 @@
 .dx-shimmer {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
 }
 
 .dx-shimmer[data-loading="true"]::after {

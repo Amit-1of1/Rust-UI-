@@ -45,6 +45,7 @@
     "crates/ui/src/components/item",
     "crates/ui/src/components/kbd",
     "crates/ui/src/components/label",
+    "crates/ui/src/components/layout",
     "crates/ui/src/components/link",
     "crates/ui/src/components/marquee",
     "crates/ui/src/components/menubar",

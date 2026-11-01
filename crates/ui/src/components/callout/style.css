@@ -3,10 +3,10 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background-color: var(--primary-color-3);
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   line-height: 1.5;
 }
 
@@ -28,13 +28,13 @@
 .dx-callout-title {
   margin: 0 0 0.25rem;
   color: var(--secondary-color-1);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 1.25;
 }
 
 .dx-callout-body code {
   padding: 0.0625rem 0.25rem;
-  border-radius: calc(var(--radius) / 2);
+  border-radius: var(--radius-small);
   background-color: var(--primary-color-5);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-body-3);
 }

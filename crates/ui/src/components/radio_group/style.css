@@ -12,7 +12,7 @@
   border: none;
   background-color: transparent;
   color: var(--secondary-color-4);
-  font-size: 14px;
+  font-size: var(--font-size-body-2);
   gap: .75rem;
 }
 

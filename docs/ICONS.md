@@ -52,7 +52,9 @@
 
 - **Decorative by default.** An icon without a `label` is `aria-hidden="true"`; with one it is `role="img"` with that name. An icon-only control is named on the control (`aria-label` or `sr-only` text), never on the SVG.
 - **Theme sizes.** `IconSize::Xs` … `Xl` read `--icon-size-*` (default `Lg`, 24px). Use a number or CSS length (`"1em"`) for a fixed box or to follow the text. The size rules use `:where()`, so a component's own icon CSS wins.
-- **Stroke.** `--icon-stroke-width` (2) unless the caller passes `stroke_width`.
+- **Stroke.** `--icon-stroke-width` (set by the look: 2 in Lagoon) unless the caller passes `stroke_width`.
+- **Finding one.** `atoll icons <words>` searches names and Lucide's search words (`atoll icons delete`).
+- **Reserved icons.** The kit uses some icons for one meaning (close, select, open a list, loading, status...); `atoll icons --reserved` and docs/FOUNDATIONS.md list them. Use them only for that meaning.
 - **Colour.** Icons draw with `currentColor`; colour them through the text colour or a token, never a literal.
 - **Right-to-left.** Icons that point along the reading direction mirror inside `dir="rtl"` (`scale: -1 1`, so a component's own `transform` still applies): left/right arrows, chevrons, corners and moves, panel toggles, undo/redo, reply/forward, log in/out, indent, text wrap. Vertical arrows, media controls and clocks don't. The list is `mirrorsInRtl` in the generator; `mirror_rtl` overrides it per icon.
 - **No sprite.** Icons stay inline SVG: that works on Blitz and in SSR with no extra file, and sprites only pay off with hundreds of repeated icons on one page.

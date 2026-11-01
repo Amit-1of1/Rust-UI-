@@ -5,7 +5,7 @@
   box-sizing: border-box;
   padding: calc(8px * var(--density, 1)) 12px;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-medium);
   margin: 0;
   appearance: none;
   background: none;
@@ -14,7 +14,7 @@
   line-height: 1.5;
   outline: none;
   resize: vertical;
-  transition: background-color 100ms ease-out, border-color 100ms ease-out, box-shadow 100ms ease-out;
+  transition: background-color var(--duration-rapid) var(--easing-decelerate), border-color var(--duration-rapid) var(--easing-decelerate), box-shadow var(--duration-rapid) var(--easing-decelerate);
 }
 
 /* Autosize: grow with the content, then scroll. Manual resizing would fight it. */

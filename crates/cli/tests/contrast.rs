@@ -46,6 +46,13 @@ fn the_proof_covers_every_component_mode_and_accent() {
         accents.len() >= 6,
         "neutral and the five presets: {accents:?}"
     );
+    for preset in ["reef", "abyss", "driftwood", "classic"] {
+        let name = format!("preset:{preset}");
+        assert!(
+            accents.contains(&name),
+            "theme preset {preset} is not proven"
+        );
+    }
     for mode in Mode::ALL {
         for accent in &accents {
             let n = report
@@ -90,15 +97,21 @@ fn the_proof_catches_regressions() {
         ),
         // Success text that used to be the fill colour.
         (
-            "--success-text-color: light-dark(#047857, #b6fae3);",
-            "--success-text-color: light-dark(#10b981, #b6fae3);",
+            "--success-text-color: light-dark(#236436, #a4dfaf);",
+            "--success-text-color: light-dark(#4fbf6f, #a4dfaf);",
             "var(--success-text-color)",
         ),
         // A focus colour too close to the page.
         (
-            "--focused-border-color: #2b7fff;",
-            "--focused-border-color: #c6dcff;",
+            "--focused-border-color: light-dark(#0b7f7f, #6cb3b2);",
+            "--focused-border-color: light-dark(#c6f0ea, #6cb3b2);",
             "var(--focused-border-color)",
+        ),
+        // A theme preset whose muted text is too pale on its own page.
+        (
+            "--secondary-color-5: light-dark(#696161, #a29d9d);",
+            "--secondary-color-5: light-dark(#b0a39d, #a29d9d);",
+            "var(--secondary-color-5)",
         ),
     ];
     for (good, bad, expect) in cases {

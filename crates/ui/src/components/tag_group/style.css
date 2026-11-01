@@ -6,8 +6,8 @@
 
 .dx-tag-group-label {
   padding: 4px 12px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-tag-list {
@@ -21,9 +21,9 @@
   max-width: fit-content;
   align-items: center;
   border: 1px solid var(--primary-color-6);
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   cursor: default;
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
   gap: 0.25rem;
   padding-block: 0.125rem;
   padding-inline: 0.75rem;
@@ -52,15 +52,15 @@
   justify-content: center;
   padding: 0;
   border-style: none;
-  border-radius: 6px;
+  border-radius: var(--radius-medium);
   margin-inline-start: 0.25rem;
   background-color: transparent;
   color: var(--secondary-color-5);
   cursor: pointer;
   transition:
-    background-color 120ms ease,
-    color 120ms ease,
-    transform 80ms ease;
+    background-color var(--duration-rapid) var(--easing-standard),
+    color var(--duration-rapid) var(--easing-standard),
+    transform var(--duration-rapid) var(--easing-standard);
 }
 
 .dx-remove-button:hover {
@@ -79,6 +79,6 @@
 
 .dx-tag-group-empty {
   padding: 4px 0;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   text-align: center;
 }

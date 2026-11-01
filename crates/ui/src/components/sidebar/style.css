@@ -52,7 +52,7 @@
   width: var(--dx-sidebar-width);
   background: transparent;
   /* atoll-motion: layout width (the gap is what makes room for the sidebar as it opens and collapses) */
-  transition: width 200ms ease-out;
+  transition: width var(--duration-medium) var(--easing-decelerate);
 }
 
 [data-collapsible="icon"] .dx-sidebar-gap {
@@ -75,7 +75,7 @@
 
 .dx-sidebar-container {
   position: fixed;
-  z-index: 10;
+  z-index: var(--z-index-sticky);
   top: 0;
   bottom: 0;
   display: none;
@@ -83,7 +83,7 @@
   height: 100svh;
   box-sizing: border-box;
   /* atoll-motion: layout left right width (the sidebar itself changes width when it collapses to icons) */
-  transition: left 200ms ease-out, right 200ms ease-out, width 200ms ease-out;
+  transition: left var(--duration-medium) var(--easing-decelerate), right var(--duration-medium) var(--easing-decelerate), width var(--duration-medium) var(--easing-decelerate);
 }
 
 @media (width >=768px) {
@@ -146,8 +146,8 @@
 
 [data-variant="floating"] .dx-sidebar-inner {
   border: 1px solid var(--dx-sidebar-border);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-raised);
 }
 
 .dx-sidebar-static {
@@ -193,7 +193,7 @@
 
 .dx-sidebar-rail {
   position: absolute;
-  z-index: 20;
+  z-index: var(--z-index-fixed);
   top: 0;
   bottom: 0;
   display: none;
@@ -203,7 +203,7 @@
   background: transparent;
   cursor: ew-resize;
   transform: translateX(calc(-50% * var(--dx-flip, 1)));
-  transition: transform 200ms ease-out;
+  transition: transform var(--duration-medium) var(--easing-decelerate);
 }
 
 @media (width >=640px) {
@@ -273,10 +273,10 @@
 }
 
 [data-variant="inset"]~.dx-sidebar-inset {
-  border-radius: 0.75rem;
+  border-radius: calc(var(--radius-large) * 1.5);
   margin: 0.5rem;
   margin-inline-start: 0;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-raised);
 }
 
 [data-variant="inset"][data-state="collapsed"]~.dx-sidebar-inset {
@@ -338,14 +338,14 @@
   height: 2rem;
   align-items: center;
   padding: 0 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   color: var(--dx-sidebar-foreground);
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: var(--font-size-caption-1);
+  font-weight: var(--font-weight-medium);
   opacity: 0.7;
   outline: none;
   /* atoll-motion: layout margin (the label gives its space back when the sidebar collapses to icons) */
-  transition: margin 200ms ease-out, opacity 200ms ease-out;
+  transition: margin var(--duration-medium) var(--easing-decelerate), opacity var(--duration-medium) var(--easing-decelerate);
 }
 
 .dx-sidebar-group-label svg {
@@ -369,13 +369,13 @@
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   aspect-ratio: 1;
   background: transparent;
   color: var(--dx-sidebar-foreground);
   cursor: pointer;
   outline: none;
-  transition: transform 150ms ease-out, opacity 200ms ease-out, visibility 0ms 0ms;
+  transition: transform var(--duration-fast) var(--easing-decelerate), opacity var(--duration-medium) var(--easing-decelerate), visibility 0ms 0ms;
 }
 
 .dx-sidebar-group-action:hover {
@@ -405,13 +405,13 @@
 [data-collapsible="icon"] .dx-sidebar-group-action {
   opacity: 0;
   pointer-events: none;
-  transition: transform 150ms ease-out, opacity 200ms ease-out, visibility 0ms 200ms;
+  transition: transform var(--duration-fast) var(--easing-decelerate), opacity var(--duration-medium) var(--easing-decelerate), visibility 0ms var(--duration-medium);
   visibility: hidden;
 }
 
 .dx-sidebar-group-content {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-sidebar-menu {
@@ -504,17 +504,17 @@
   align-items: center;
   padding: 0.5rem;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   background: transparent;
   color: var(--dx-sidebar-foreground);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   gap: 0.5rem;
   outline: none;
   text-align: start;
   text-decoration: none;
   /* atoll-motion: layout width height padding (menu buttons shrink to icon size when the sidebar collapses) */
-  transition: width 200ms ease-out, height 200ms ease-out, padding 200ms ease-out;
+  transition: width var(--duration-medium) var(--easing-decelerate), height var(--duration-medium) var(--easing-decelerate), padding var(--duration-medium) var(--easing-decelerate);
 }
 
 .dx-sidebar-menu-button[data-sidebar="menu-button"]:hover {
@@ -540,7 +540,7 @@
 .dx-sidebar-menu-button[data-sidebar="menu-button"][data-active="true"] {
   background: var(--dx-sidebar-accent);
   color: var(--dx-sidebar-accent-foreground);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-sidebar-menu-button[data-sidebar="menu-button"] svg {
@@ -552,7 +552,7 @@
 .dx-sidebar-menu-button[data-sidebar="menu-button"]>span:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: opacity 200ms ease-out;
+  transition: opacity var(--duration-medium) var(--easing-decelerate);
   white-space: nowrap;
 }
 
@@ -563,17 +563,17 @@
 /* Size variants */
 .dx-sidebar-menu-button[data-sidebar="menu-button"][data-size="default"] {
   height: 2rem;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-sidebar-menu-button[data-sidebar="menu-button"][data-size="sm"] {
   height: 1.75rem;
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
 }
 
 .dx-sidebar-menu-button[data-sidebar="menu-button"][data-size="lg"] {
   height: 3rem;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-sidebar-menu-button[data-sidebar="menu-button"][data-variant="outline"] {
@@ -633,13 +633,13 @@
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   aspect-ratio: 1;
   background: transparent;
   color: var(--dx-sidebar-foreground);
   cursor: pointer;
   outline: none;
-  transition: transform 150ms ease-out, opacity 200ms ease-out, visibility 0ms 0ms;
+  transition: transform var(--duration-fast) var(--easing-decelerate), opacity var(--duration-medium) var(--easing-decelerate), visibility 0ms 0ms;
 }
 
 .dx-sidebar-menu-action[data-sidebar="menu-action"]:focus-visible {
@@ -684,7 +684,7 @@
 [data-collapsible="icon"] .dx-sidebar-menu-action[data-sidebar="menu-action"] {
   opacity: 0;
   pointer-events: none;
-  transition: transform 150ms ease-out, opacity 200ms ease-out, visibility 0ms 200ms;
+  transition: transform var(--duration-fast) var(--easing-decelerate), opacity var(--duration-medium) var(--easing-decelerate), visibility 0ms var(--duration-medium);
   visibility: hidden;
 }
 
@@ -718,13 +718,13 @@
   align-items: center;
   justify-content: center;
   padding: 0 0.25rem;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   color: var(--dx-sidebar-foreground);
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
   font-variant-numeric: tabular-nums;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   pointer-events: none;
-  transition: opacity 200ms ease-out;
+  transition: opacity var(--duration-medium) var(--easing-decelerate);
   user-select: none;
 }
 
@@ -751,14 +751,14 @@
   height: 2rem;
   align-items: center;
   padding: 0 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   gap: 0.5rem;
 }
 
 .dx-sidebar-menu-skeleton-icon {
   width: 1rem;
   height: 1rem;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
 }
 
 .dx-sidebar-menu-skeleton-text {
@@ -776,7 +776,7 @@
   list-style: none;
   transform: translateX(1px);
   /* atoll-motion: layout max-height padding margin (sub-menus fold away, giving their space back) */
-  transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, margin 200ms ease-out, visibility 0ms 0ms;
+  transition: opacity var(--duration-medium) var(--easing-decelerate), max-height var(--duration-medium) var(--easing-decelerate), padding var(--duration-medium) var(--easing-decelerate), margin var(--duration-medium) var(--easing-decelerate), visibility 0ms 0ms;
 }
 
 [data-collapsible="icon"] .dx-sidebar-menu-sub {
@@ -787,7 +787,7 @@
   opacity: 0;
   pointer-events: none;
   /* atoll-motion: layout max-height padding margin (sub-menus fold away, giving their space back) */
-  transition: opacity 200ms ease-out, max-height 200ms ease-out, padding 200ms ease-out, margin 200ms ease-out, visibility 0ms 200ms;
+  transition: opacity var(--duration-medium) var(--easing-decelerate), max-height var(--duration-medium) var(--easing-decelerate), padding var(--duration-medium) var(--easing-decelerate), margin var(--duration-medium) var(--easing-decelerate), visibility 0ms var(--duration-medium);
   visibility: hidden;
 }
 
@@ -805,16 +805,16 @@
   align-items: center;
   padding: 0 0.5rem;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: var(--radius-medium);
   background: transparent;
   color: var(--dx-sidebar-foreground);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   gap: 0.5rem;
   outline: none;
   text-decoration: none;
   transform: translateX(-1px);
-  transition: opacity 200ms ease-out;
+  transition: opacity var(--duration-medium) var(--easing-decelerate);
 }
 
 .dx-sidebar-menu-sub-button:hover {
@@ -856,11 +856,11 @@
 }
 
 .dx-sidebar-menu-sub-button[data-size="sm"] {
-  font-size: 0.75rem;
+  font-size: var(--font-size-caption-1);
 }
 
 .dx-sidebar-menu-sub-button[data-size="md"] {
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 [data-collapsible="icon"] .dx-sidebar-menu-sub-button {

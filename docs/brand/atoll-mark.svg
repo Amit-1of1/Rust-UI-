@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Atoll">
+  <title>Atoll</title>
+  <!-- A ring of reef broken by channels, the lagoon inside it, and one island. -->
+  <circle cx="16" cy="16" r="8" fill="#2dd4bf" opacity="0.3"/>
+  <path d="M26.40 14.54A10.5 10.5 0 0 1 15.63 26.49 M9.25 24.04A10.5 10.5 0 0 1 6.56 11.40 M11.40 6.56A10.5 10.5 0 0 1 20.60 6.56" fill="none" stroke="#0f766e" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="18.5" cy="17.5" r="2.75" fill="#f97362"/>
+</svg>

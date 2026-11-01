@@ -6,7 +6,7 @@ body {
   margin: 0;
   background: var(--primary-color);
   color: var(--secondary-color-1);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans, system-ui, sans-serif);
 }
 
 /* The app paints its own background: on native the theme lives on ThemeScope, below <body>. */
@@ -16,7 +16,7 @@ body {
   flex-direction: column;
   background: var(--primary-color);
   color: var(--secondary-color-1);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans, system-ui, sans-serif);
 }
 
 .sc-header {
@@ -219,4 +219,10 @@ body {
     left: 0;
     z-index: 10;
   }
+}
+
+/* Headings in the theme preset's display face. */
+:where(h1, h2, h3) {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
 }

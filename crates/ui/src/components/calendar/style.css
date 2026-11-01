@@ -6,12 +6,13 @@
     box-sizing: border-box;
     flex-direction: row;
     border: 1px solid var(--primary-color-6);
-    border-radius: 8px;
+    border-radius: var(--radius-large);
     background-color: var(--primary-color-2);
-    box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
-    font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-        sans-serif;
+    box-shadow: var(--shadow-raised);
+    font-family: var(
+        --font-sans,
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+    );
 }
 
 /* Calendar Navigation */
@@ -27,8 +28,8 @@
 
 .dx-calendar-nav-title {
     color: var(--secondary-color-4);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--font-size-body-1);
+    font-weight: var(--font-weight-semibold);
 }
 
 .dx-calendar-nav-prev,
@@ -40,12 +41,12 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--primary-color-6);
-    border-radius: var(--radius);
+    border-radius: var(--radius-large);
     background-color: var(--light, transparent)
         var(--dark, var(--primary-color-3));
     color: var(--secondary-color-5);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: var(--font-size-body-1);
 }
 
 .dx-calendar-nav-prev {
@@ -105,7 +106,7 @@
 
 .dx-calendar-grid-day-header {
     color: var(--secondary-color-5);
-    font-size: 12px;
+    font-size: var(--font-size-caption-1);
     font-weight: 300;
     text-align: center;
 }
@@ -117,12 +118,12 @@
 .dx-calendar-grid-cell {
     width: 2rem;
     border: none;
-    border-radius: var(--radius);
+    border-radius: var(--radius-large);
     aspect-ratio: 1;
     background: none;
     color: var(--secondary-color-4);
     cursor: pointer;
-    font-size: 14px;
+    font-size: var(--font-size-body-2);
 }
 
 .dx-calendar-grid-cell[data-month="current"]:not([data-disabled="true"]):hover {
@@ -219,10 +220,10 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
 }
 
 .dx-calendar-grid-weeknum {
-    border-radius: var(--radius);
+    border-radius: var(--radius-large);
     background-color: var(--primary-color);
     color: var(--secondary-color-5);
-    font-size: 12px;
+    font-size: var(--font-size-caption-1);
 }
 
 /* Calendar with week numbers */
@@ -243,7 +244,7 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
 
 .dx-calendar-month-select-container:has(:focus-visible),
 .dx-calendar-year-select-container:has(:focus-visible) {
-    border-radius: var(--radius);
+    border-radius: var(--radius-large);
     outline: 2px solid var(--focused-border-color);
 }
 
@@ -268,8 +269,8 @@ td:has(.dx-calendar-grid-cell[data-selection-end="true"]) {
     background-color: transparent;
     color: var(--secondary-color-4);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: var(--font-size-body-1);
     transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
+        background-color var(--duration-medium) var(--easing-standard),
+        color var(--duration-medium) var(--easing-standard);
 }

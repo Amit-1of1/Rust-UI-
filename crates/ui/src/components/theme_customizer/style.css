@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 1rem;
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-theme-group {
@@ -19,7 +19,7 @@
   padding: 0;
   margin-bottom: 0.5rem;
   color: var(--secondary-color-1);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-theme-swatches {
@@ -34,7 +34,7 @@
   gap: 0.375rem;
   padding: 0.25rem 0.625rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   cursor: pointer;
   text-transform: capitalize;
 }
@@ -47,6 +47,70 @@
 .dx-theme-swatch:has(input:focus-visible) {
   outline: 2px solid var(--focused-border-color);
   outline-offset: 2px;
+}
+
+/* Each preset card wears its own look: data-preset on the label switches the tokens inside it. */
+.dx-theme-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.5rem;
+}
+
+.dx-theme-preset {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-block: 0.5rem;
+  padding-inline: 1.75rem 0.75rem;
+  border: 1px solid var(--primary-color-6);
+  border-radius: var(--radius-large);
+  background: var(--primary-color);
+  color: var(--secondary-color-4);
+  cursor: pointer;
+}
+
+.dx-theme-preset::before {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.625rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--accent-color);
+  content: "";
+}
+
+.dx-theme-preset:has(input:checked) {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.dx-theme-preset:has(input:focus-visible) {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-theme-preset-name {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight, 600);
+  letter-spacing: var(--heading-tracking, normal);
+  text-transform: capitalize;
+}
+
+.dx-theme-preset-fonts {
+  color: var(--secondary-color-5);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-caption-1);
+}
+
+.dx-theme-preset input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 /* Visually hidden but still focusable, so the native radio keeps keyboard and screen reader support. */
@@ -62,7 +126,7 @@
 .dx-theme-dot {
   width: 0.75rem;
   height: 0.75rem;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   background: var(--accent-color);
 }
 

@@ -1,9 +1,9 @@
 //! Remember the theme between visits.
 
-use super::component::{use_theme, Theme, ThemeMode, ACCENTS, DENSITIES};
+use super::component::{use_theme, Theme, ThemeMode, ACCENTS, DENSITIES, PRESETS};
 use dioxus::prelude::*;
 
-/// Saves [`use_theme`]'s choices (mode, accent, density, radius) in the browser's
+/// Saves [`use_theme`]'s choices (mode, preset, accent, density, radius) in the browser's
 /// `localStorage` under `storage_key` (default `"theme"`), and restores them on the next visit. Render it once, next to
 /// `ThemeStyles {}`:
 ///
@@ -42,21 +42,26 @@ pub fn PersistTheme(
     rsx! {}
 }
 
-/// `mode=dark;accent=blue;density=compact;radius=12` (radius only when it isn't the default).
+/// `mode=dark;preset=reef;accent=blue;density=compact;radius=12` (preset only when it isn't
+/// lagoon, radius only when one was set).
 pub fn encode_theme(theme: &Theme) -> String {
     let mode = match theme.mode() {
         ThemeMode::System => "system",
         ThemeMode::Light => "light",
         ThemeMode::Dark => "dark",
     };
-    let mut out = format!(
-        "mode={mode};accent={};density={}",
+    let mut out = format!("mode={mode}");
+    if theme.preset() != "lagoon" {
+        out.push_str(&format!(";preset={}", theme.preset()));
+    }
+    out.push_str(&format!(
+        ";accent={};density={}",
         theme.accent(),
         theme.density()
-    );
-    // 8 px is the default; leave it out so the app's own `--radius` keeps working.
-    if theme.radius() != 8 {
-        out.push_str(&format!(";radius={}", theme.radius()));
+    ));
+    // Unset means the preset's own; leave it out so the app's own `--radius` keeps working.
+    if let Some(px) = theme.radius_override() {
+        out.push_str(&format!(";radius={px}"));
     }
     out
 }
@@ -64,6 +69,14 @@ pub fn encode_theme(theme: &Theme) -> String {
 /// Applies a value written by [`encode_theme`]. The stored text is user-controlled, so every part
 /// is checked against the known values and anything else is ignored.
 pub fn apply_saved_theme(theme: &Theme, saved: &str) {
+    // The preset first: picking one resets the radius, which may come before it.
+    let preset = saved
+        .split(';')
+        .filter_map(|p| p.strip_prefix("preset="))
+        .find(|v| PRESETS.contains(v));
+    if let Some(name) = preset {
+        theme.set_preset(name);
+    }
     for part in saved.split(';') {
         let Some((name, value)) = part.split_once('=') else {
             continue;
@@ -93,7 +106,7 @@ pub fn apply_saved_theme(theme: &Theme, saved: &str) {
 ///
 /// This is the app's own script, opt in: put it in your `index.html`, or render it in a
 /// fullstack app with `document::Script { {THEME_INIT_SCRIPT} }`.
-pub const THEME_INIT_SCRIPT: &str = r#"(function(){try{var s=localStorage.getItem("theme");if(!s)return;var h=document.documentElement,ok={mode:/^(light|dark)$/,accent:/^(blue|green|violet|rose|orange)$/,density:/^(compact|comfortable)$/,radius:/^([0-9]|1[0-9]|20)$/};s.split(";").forEach(function(p){var kv=p.split("="),k=kv[0],v=kv[1];if(!ok[k]||!ok[k].test(v))return;if(k==="mode")h.setAttribute("data-theme",v);else if(k==="radius")h.style.setProperty("--radius",v+"px");else h.setAttribute("data-"+k,v);});}catch(e){}})();"#;
+pub const THEME_INIT_SCRIPT: &str = r#"(function(){try{var s=localStorage.getItem("theme");if(!s)return;var h=document.documentElement,ok={mode:/^(light|dark)$/,preset:/^(reef|abyss|driftwood|classic)$/,accent:/^(blue|green|violet|rose|orange)$/,density:/^(compact|comfortable)$/,radius:/^([0-9]|1[0-9]|20)$/};s.split(";").forEach(function(p){var kv=p.split("="),k=kv[0],v=kv[1];if(!ok[k]||!ok[k].test(v))return;if(k==="mode")h.setAttribute("data-theme",v);else if(k==="radius")h.style.setProperty("--radius",v+"px");else h.setAttribute("data-"+k,v);});}catch(e){}})();"#;
 
 #[cfg(all(target_arch = "wasm32", feature = "web"))]
 mod storage {
