@@ -1,0 +1,74 @@
+name: Component proposal
+description: Propose a new component (or a big change to one) before building it.
+labels: ["proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A proposal makes sure a new component fits every platform, doesn't break existing apps and is worth maintaining. Read CONTRIBUTING.md ("What gets accepted") and docs/LOCAL_LIBRARIES.md ("When to build your own") first. You'll get a decision within 14 days.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Lower-case folder name and the main component's name.
+      placeholder: "tree_view / TreeView"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and use cases
+      description: What it's for, and at least two real screens (yours or well-known apps) that need it.
+    validations:
+      required: true
+  - type: textarea
+    id: why-kit
+    attributes:
+      label: Why in the kit, not your app?
+      description: Why is it a generic pattern most Atoll apps need, rather than a local component?
+    validations:
+      required: true
+  - type: textarea
+    id: anatomy
+    attributes:
+      label: Anatomy and API sketch
+      description: The parts and how they nest (like a docs page's Component Structure), the props with their defaults, and which parts take children or slots.
+      render: rust
+    validations:
+      required: true
+  - type: textarea
+    id: a11y
+    attributes:
+      label: Accessibility
+      description: The WAI-ARIA pattern it follows (link), its roles, the keyboard interaction (the rows of its contract.toml), and its required accessible names.
+    validations:
+      required: true
+  - type: textarea
+    id: base
+    attributes:
+      label: What it's built on
+      description: A dioxus-primitives component, native HTML elements, or existing kit components. Any code to borrow, with its licence.
+    validations:
+      required: true
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Platforms it must work on
+      options:
+        - label: Web (Chromium, Firefox, WebKit)
+        - label: Desktop (system webview)
+        - label: Android
+        - label: Native (Blitz preview); if not, say why below
+  - type: textarea
+    id: impact
+    attributes:
+      label: Effect on existing apps
+      description: New tokens, changes to existing components, anything breaking. Motion and its reduced-motion version, if it animates.
+  - type: dropdown
+    id: build
+    attributes:
+      label: Will you build it?
+      options:
+        - Yes, once the proposal is accepted
+        - I'd like help
+        - No, I'm suggesting it
