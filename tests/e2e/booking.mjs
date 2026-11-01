@@ -145,9 +145,9 @@ check(
   (await pages.getByRole("button", { name: "Go to previous page" }).getAttribute("aria-disabled")) === "true",
   "Previous is disabled on page 1",
 );
-await pages.getByRole("button", { name: "2", exact: true }).click();
+await pages.getByRole("button", { name: "Page 2", exact: true }).click();
 await page.waitForTimeout(200);
-check((await pages.getByRole("button", { name: "2", exact: true }).getAttribute("aria-current")) === "page", "page 2 is current");
+check((await pages.getByRole("button", { name: "Page 2", exact: true }).getAttribute("aria-current")) === "page", "page 2 is current");
 
 // Open the cheapest stay through the command palette.
 await page.keyboard.press("Control+k");
