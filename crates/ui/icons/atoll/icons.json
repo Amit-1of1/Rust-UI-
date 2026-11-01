@@ -11,6 +11,25 @@
         "universal"
       ]
     },
+    "accordion": {
+      "label": "Accordion",
+      "category": "app",
+      "keywords": [
+        "collapsible",
+        "faq",
+        "sections"
+      ]
+    },
+    "activity": {
+      "label": "Activity",
+      "category": "status",
+      "keywords": [
+        "pulse",
+        "heartbeat",
+        "health",
+        "monitor"
+      ]
+    },
     "add": {
       "label": "Add",
       "category": "system",
@@ -21,6 +40,15 @@
       ],
       "reserved": "adding or creating an item"
     },
+    "admin": {
+      "label": "Admin",
+      "category": "people",
+      "keywords": [
+        "crown",
+        "owner",
+        "premium"
+      ]
+    },
     "agent": {
       "label": "Agent",
       "category": "agent",
@@ -30,6 +58,88 @@
         "bot",
         "automation"
       ]
+    },
+    "agent-add": {
+      "label": "Add agent",
+      "category": "agent",
+      "keywords": [
+        "agent",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "agent-alert": {
+      "label": "Agent needs attention",
+      "category": "agent",
+      "keywords": [
+        "agent",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "agent-check": {
+      "label": "Agent confirmed",
+      "category": "agent",
+      "keywords": [
+        "agent",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "alarm": {
+      "label": "Alarm",
+      "category": "time",
+      "keywords": [
+        "wake up",
+        "reminder",
+        "clock"
+      ]
+    },
+    "alert-badge": {
+      "label": "Needs attention",
+      "category": "status",
+      "keywords": [
+        "dot",
+        "unread",
+        "new"
+      ]
+    },
+    "align-center": {
+      "label": "Align center",
+      "category": "editor",
+      "keywords": [
+        "text align",
+        "middle"
+      ]
+    },
+    "align-justify": {
+      "label": "Justify",
+      "category": "editor",
+      "keywords": [
+        "text align",
+        "block"
+      ]
+    },
+    "align-left": {
+      "label": "Align left",
+      "category": "editor",
+      "keywords": [
+        "text align",
+        "start"
+      ],
+      "mirror_rtl": true
+    },
+    "align-right": {
+      "label": "Align right",
+      "category": "editor",
+      "keywords": [
+        "text align",
+        "end"
+      ],
+      "mirror_rtl": true
     },
     "animate": {
       "label": "Animation",
@@ -42,6 +152,15 @@
       ],
       "mirror_rtl": true
     },
+    "announce": {
+      "label": "Announcement",
+      "category": "communication",
+      "keywords": [
+        "megaphone",
+        "broadcast",
+        "news"
+      ]
+    },
     "api": {
       "label": "API",
       "category": "dev",
@@ -50,6 +169,34 @@
         "integration",
         "endpoint",
         "connect"
+      ]
+    },
+    "apps": {
+      "label": "Apps",
+      "category": "navigation",
+      "keywords": [
+        "launcher",
+        "waffle",
+        "grid",
+        "switcher"
+      ]
+    },
+    "archive": {
+      "label": "Archive",
+      "category": "files",
+      "keywords": [
+        "box",
+        "store",
+        "old items"
+      ]
+    },
+    "at-sign": {
+      "label": "Mention",
+      "category": "communication",
+      "keywords": [
+        "at",
+        "email address",
+        "username"
       ]
     },
     "atoll": {
@@ -83,6 +230,100 @@
       "reserved": "going back",
       "mirror_rtl": true
     },
+    "back-to-top": {
+      "label": "Back to top",
+      "category": "navigation",
+      "keywords": [
+        "scroll up",
+        "top",
+        "beginning"
+      ]
+    },
+    "bag": {
+      "label": "Shopping bag",
+      "category": "commerce",
+      "keywords": [
+        "purchase",
+        "store",
+        "buy"
+      ]
+    },
+    "bank": {
+      "label": "Bank",
+      "category": "commerce",
+      "keywords": [
+        "finance",
+        "institution",
+        "payments"
+      ]
+    },
+    "banknote": {
+      "label": "Cash",
+      "category": "commerce",
+      "keywords": [
+        "money",
+        "bill",
+        "payment"
+      ]
+    },
+    "barcode": {
+      "label": "Barcode",
+      "category": "commerce",
+      "keywords": [
+        "scan",
+        "product code",
+        "sku"
+      ]
+    },
+    "battery": {
+      "label": "Battery",
+      "category": "devices",
+      "keywords": [
+        "empty",
+        "power level"
+      ]
+    },
+    "battery-charging": {
+      "label": "Charging",
+      "category": "devices",
+      "keywords": [
+        "power",
+        "plugged in"
+      ]
+    },
+    "battery-full": {
+      "label": "Battery full",
+      "category": "devices",
+      "keywords": [
+        "charged",
+        "power"
+      ]
+    },
+    "battery-half": {
+      "label": "Battery half",
+      "category": "devices",
+      "keywords": [
+        "charge",
+        "power"
+      ]
+    },
+    "battery-low": {
+      "label": "Battery low",
+      "category": "devices",
+      "keywords": [
+        "charge",
+        "power low"
+      ]
+    },
+    "binary": {
+      "label": "Binary",
+      "category": "dev",
+      "keywords": [
+        "bits",
+        "bytes",
+        "machine code"
+      ]
+    },
     "block": {
       "label": "Block",
       "category": "design",
@@ -91,6 +332,63 @@
         "template",
         "page block",
         "layout"
+      ]
+    },
+    "blocked": {
+      "label": "Blocked",
+      "category": "status",
+      "keywords": [
+        "forbidden",
+        "ban",
+        "not allowed",
+        "prohibited"
+      ]
+    },
+    "bluetooth": {
+      "label": "Bluetooth",
+      "category": "devices",
+      "keywords": [
+        "wireless",
+        "pair",
+        "connect"
+      ]
+    },
+    "bluetooth-off": {
+      "label": "Bluetooth off",
+      "category": "devices",
+      "keywords": [
+        "bluetooth",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "bold": {
+      "label": "Bold",
+      "category": "editor",
+      "keywords": [
+        "strong",
+        "text weight",
+        "format"
+      ]
+    },
+    "book": {
+      "label": "Book",
+      "category": "files",
+      "keywords": [
+        "guide",
+        "manual",
+        "read"
+      ]
+    },
+    "book-open": {
+      "label": "Documentation",
+      "category": "files",
+      "keywords": [
+        "read",
+        "manual",
+        "docs",
+        "learn"
       ]
     },
     "bookmark": {
@@ -102,6 +400,62 @@
         "ribbon"
       ]
     },
+    "bookmark-add": {
+      "label": "Add bookmark",
+      "category": "content",
+      "keywords": [
+        "bookmark",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "bookmark-check": {
+      "label": "Bookmark confirmed",
+      "category": "content",
+      "keywords": [
+        "bookmark",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "bookmark-off": {
+      "label": "Remove bookmark",
+      "category": "content",
+      "keywords": [
+        "bookmark",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "bookmark-remove": {
+      "label": "Remove bookmark",
+      "category": "content",
+      "keywords": [
+        "bookmark",
+        "remove",
+        "minus"
+      ]
+    },
+    "bookmarks": {
+      "label": "Saved items",
+      "category": "app",
+      "keywords": [
+        "bookmarks",
+        "reading list"
+      ]
+    },
+    "bracket": {
+      "label": "Array",
+      "category": "dev",
+      "keywords": [
+        "brackets",
+        "list",
+        "index"
+      ]
+    },
     "branch": {
       "label": "Branch",
       "category": "dev",
@@ -110,6 +464,54 @@
         "version control",
         "fork",
         "merge"
+      ]
+    },
+    "branch-add": {
+      "label": "Add branch",
+      "category": "dev",
+      "keywords": [
+        "branch",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "branch-cancel": {
+      "label": "Cancel branch",
+      "category": "dev",
+      "keywords": [
+        "branch",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "branch-check": {
+      "label": "Branch confirmed",
+      "category": "dev",
+      "keywords": [
+        "branch",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "broadcast": {
+      "label": "Live",
+      "category": "media",
+      "keywords": [
+        "broadcast",
+        "stream",
+        "on air"
+      ]
+    },
+    "brush": {
+      "label": "Brush",
+      "category": "editor",
+      "keywords": [
+        "paint",
+        "draw",
+        "art"
       ]
     },
     "bug": {
@@ -132,6 +534,33 @@
         "assemble"
       ]
     },
+    "building": {
+      "label": "Building",
+      "category": "maps",
+      "keywords": [
+        "office",
+        "company",
+        "business"
+      ]
+    },
+    "bulleted-list": {
+      "label": "Bulleted list",
+      "category": "editor",
+      "keywords": [
+        "unordered",
+        "bullets",
+        "items"
+      ]
+    },
+    "calculator": {
+      "label": "Calculator",
+      "category": "commerce",
+      "keywords": [
+        "math",
+        "compute",
+        "totals"
+      ]
+    },
     "calendar": {
       "label": "Calendar",
       "category": "content",
@@ -140,6 +569,167 @@
         "schedule",
         "event",
         "day"
+      ]
+    },
+    "calendar-add": {
+      "label": "Add event",
+      "category": "content",
+      "keywords": [
+        "calendar",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "calendar-cancel": {
+      "label": "Cancel event",
+      "category": "content",
+      "keywords": [
+        "calendar",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "calendar-check": {
+      "label": "Event confirmed",
+      "category": "content",
+      "keywords": [
+        "calendar",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "calendar-remove": {
+      "label": "Remove event",
+      "category": "content",
+      "keywords": [
+        "calendar",
+        "remove",
+        "minus"
+      ]
+    },
+    "calendar-scheduled": {
+      "label": "Scheduled event",
+      "category": "content",
+      "keywords": [
+        "calendar",
+        "clock",
+        "schedule",
+        "later"
+      ]
+    },
+    "camera": {
+      "label": "Camera",
+      "category": "media",
+      "keywords": [
+        "photo",
+        "picture",
+        "snapshot"
+      ]
+    },
+    "camera-off": {
+      "label": "Photo camera off",
+      "category": "media",
+      "keywords": [
+        "camera",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "candlestick-chart": {
+      "label": "Candlestick chart",
+      "category": "data",
+      "keywords": [
+        "stocks",
+        "trading",
+        "ohlc"
+      ]
+    },
+    "captions": {
+      "label": "Captions",
+      "category": "media",
+      "keywords": [
+        "subtitles",
+        "cc",
+        "transcript"
+      ]
+    },
+    "car": {
+      "label": "Car",
+      "category": "maps",
+      "keywords": [
+        "drive",
+        "vehicle",
+        "transport"
+      ]
+    },
+    "carousel": {
+      "label": "Carousel",
+      "category": "app",
+      "keywords": [
+        "slides",
+        "slideshow",
+        "swipe"
+      ]
+    },
+    "cart": {
+      "label": "Cart",
+      "category": "commerce",
+      "keywords": [
+        "shopping cart",
+        "basket",
+        "checkout"
+      ]
+    },
+    "cart-add": {
+      "label": "Add to cart",
+      "category": "commerce",
+      "keywords": [
+        "cart",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "cart-cancel": {
+      "label": "Cancel to cart",
+      "category": "commerce",
+      "keywords": [
+        "cart",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "cart-check": {
+      "label": "To cart confirmed",
+      "category": "commerce",
+      "keywords": [
+        "cart",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "cart-remove": {
+      "label": "Remove to cart",
+      "category": "commerce",
+      "keywords": [
+        "cart",
+        "remove",
+        "minus"
+      ]
+    },
+    "chart-area": {
+      "label": "Area chart",
+      "category": "data",
+      "keywords": [
+        "filled chart",
+        "volume",
+        "trend"
       ]
     },
     "chart-bar": {
@@ -162,6 +752,15 @@
         "breakdown"
       ]
     },
+    "chart-series": {
+      "label": "Line chart",
+      "category": "data",
+      "keywords": [
+        "series",
+        "trend",
+        "graph"
+      ]
+    },
     "chart-trend": {
       "label": "Trend",
       "category": "data",
@@ -182,6 +781,65 @@
         "bubble"
       ]
     },
+    "chat-add": {
+      "label": "Add message",
+      "category": "content",
+      "keywords": [
+        "chat",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "chat-ai": {
+      "label": "Assistant chat",
+      "category": "agent",
+      "keywords": [
+        "ai chat",
+        "copilot",
+        "conversation"
+      ]
+    },
+    "chat-alert": {
+      "label": "Message needs attention",
+      "category": "content",
+      "keywords": [
+        "chat",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "chat-cancel": {
+      "label": "Cancel message",
+      "category": "content",
+      "keywords": [
+        "chat",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "chat-check": {
+      "label": "Message confirmed",
+      "category": "content",
+      "keywords": [
+        "chat",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "chat-off": {
+      "label": "Chat off",
+      "category": "content",
+      "keywords": [
+        "chat",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
     "check": {
       "label": "Done",
       "category": "system",
@@ -192,6 +850,50 @@
         "ok"
       ],
       "reserved": "confirming or a selected state"
+    },
+    "checkbox": {
+      "label": "Checkbox",
+      "category": "app",
+      "keywords": [
+        "tick box",
+        "option",
+        "agree"
+      ]
+    },
+    "clear-format": {
+      "label": "Clear formatting",
+      "category": "editor",
+      "keywords": [
+        "remove style",
+        "plain text"
+      ]
+    },
+    "cli": {
+      "label": "Command",
+      "category": "dev",
+      "keywords": [
+        "prompt",
+        "shell",
+        "run command"
+      ]
+    },
+    "clipboard": {
+      "label": "Clipboard",
+      "category": "files",
+      "keywords": [
+        "paste",
+        "board",
+        "notes"
+      ]
+    },
+    "clipboard-check": {
+      "label": "Checklist",
+      "category": "files",
+      "keywords": [
+        "review",
+        "done list",
+        "audit"
+      ]
     },
     "clock": {
       "label": "Time",
@@ -214,6 +916,91 @@
       ],
       "reserved": "closing or dismissing a surface"
     },
+    "cloud": {
+      "label": "Cloud",
+      "category": "files",
+      "keywords": [
+        "online storage",
+        "sync",
+        "remote"
+      ]
+    },
+    "cloud-add": {
+      "label": "Add cloud",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "cloud-alert": {
+      "label": "Cloud needs attention",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "cloud-cancel": {
+      "label": "Cancel cloud",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "cloud-check": {
+      "label": "Cloud confirmed",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "cloud-download": {
+      "label": "Download from cloud",
+      "category": "files",
+      "keywords": [
+        "sync down",
+        "fetch"
+      ]
+    },
+    "cloud-lock": {
+      "label": "Locked cloud",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "cloud-off": {
+      "label": "Offline",
+      "category": "files",
+      "keywords": [
+        "cloud",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "cloud-upload": {
+      "label": "Upload to cloud",
+      "category": "files",
+      "keywords": [
+        "backup",
+        "sync up"
+      ]
+    },
     "code": {
       "label": "Code",
       "category": "dev",
@@ -222,6 +1009,65 @@
         "brackets",
         "develop",
         "snippet"
+      ]
+    },
+    "code-ai": {
+      "label": "AI code",
+      "category": "dev",
+      "keywords": [
+        "code",
+        "ai",
+        "generate",
+        "sparkle"
+      ]
+    },
+    "code-block": {
+      "label": "Code block",
+      "category": "editor",
+      "keywords": [
+        "snippet",
+        "pre",
+        "source"
+      ]
+    },
+    "code-check": {
+      "label": "Code confirmed",
+      "category": "dev",
+      "keywords": [
+        "code",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "code-lock": {
+      "label": "Locked code",
+      "category": "dev",
+      "keywords": [
+        "code",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "code-search": {
+      "label": "Find code",
+      "category": "dev",
+      "keywords": [
+        "code",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "coin": {
+      "label": "Price",
+      "category": "commerce",
+      "keywords": [
+        "coin",
+        "money",
+        "cost",
+        "currency"
       ]
     },
     "collapse": {
@@ -235,6 +1081,69 @@
       ],
       "reserved": "closing a section"
     },
+    "collapse-all": {
+      "label": "Collapse all",
+      "category": "navigation",
+      "keywords": [
+        "fold",
+        "chevrons",
+        "close all"
+      ]
+    },
+    "color-picker": {
+      "label": "Pick a color",
+      "category": "editor",
+      "keywords": [
+        "eyedropper",
+        "pipette",
+        "sample"
+      ]
+    },
+    "columns": {
+      "label": "Columns",
+      "category": "data",
+      "keywords": [
+        "fields",
+        "table columns",
+        "show columns"
+      ]
+    },
+    "command-key": {
+      "label": "Command",
+      "category": "app",
+      "keywords": [
+        "cmd",
+        "shortcut",
+        "hotkey"
+      ]
+    },
+    "comments": {
+      "label": "Comments",
+      "category": "communication",
+      "keywords": [
+        "discussion",
+        "thread",
+        "replies"
+      ]
+    },
+    "commit": {
+      "label": "Commit",
+      "category": "dev",
+      "keywords": [
+        "git commit",
+        "change",
+        "snapshot"
+      ]
+    },
+    "compass": {
+      "label": "Explore",
+      "category": "maps",
+      "keywords": [
+        "compass",
+        "discover",
+        "direction"
+      ]
+    },
     "component": {
       "label": "Component",
       "category": "design",
@@ -243,6 +1152,33 @@
         "widget",
         "building block",
         "kit"
+      ]
+    },
+    "contacts": {
+      "label": "Contacts",
+      "category": "communication",
+      "keywords": [
+        "address book",
+        "people",
+        "directory"
+      ]
+    },
+    "containers": {
+      "label": "Containers",
+      "category": "dev",
+      "keywords": [
+        "docker",
+        "images",
+        "pods"
+      ]
+    },
+    "cookie": {
+      "label": "Cookies",
+      "category": "app",
+      "keywords": [
+        "consent",
+        "privacy",
+        "tracking"
       ]
     },
     "copy": {
@@ -255,6 +1191,15 @@
       ],
       "reserved": "copying to the clipboard"
     },
+    "cpu": {
+      "label": "Processor",
+      "category": "devices",
+      "keywords": [
+        "chip",
+        "cpu",
+        "hardware"
+      ]
+    },
     "crate": {
       "label": "Crate",
       "category": "dev",
@@ -264,6 +1209,132 @@
         "dependency",
         "library",
         "rust"
+      ]
+    },
+    "crate-add": {
+      "label": "Add crate",
+      "category": "dev",
+      "keywords": [
+        "crate",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "crate-check": {
+      "label": "Crate confirmed",
+      "category": "dev",
+      "keywords": [
+        "crate",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "crate-lock": {
+      "label": "Locked crate",
+      "category": "dev",
+      "keywords": [
+        "crate",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "crate-remove": {
+      "label": "Remove crate",
+      "category": "dev",
+      "keywords": [
+        "crate",
+        "remove",
+        "minus"
+      ]
+    },
+    "crate-search": {
+      "label": "Find crate",
+      "category": "dev",
+      "keywords": [
+        "crate",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "credit-card": {
+      "label": "Card",
+      "category": "commerce",
+      "keywords": [
+        "payment",
+        "credit card",
+        "billing"
+      ]
+    },
+    "credit-card-add": {
+      "label": "Add card",
+      "category": "commerce",
+      "keywords": [
+        "card",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "credit-card-cancel": {
+      "label": "Cancel card",
+      "category": "commerce",
+      "keywords": [
+        "card",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "credit-card-check": {
+      "label": "Card confirmed",
+      "category": "commerce",
+      "keywords": [
+        "card",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "credit-card-lock": {
+      "label": "Locked card",
+      "category": "commerce",
+      "keywords": [
+        "card",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "crop": {
+      "label": "Crop",
+      "category": "editor",
+      "keywords": [
+        "trim",
+        "cut image",
+        "frame"
+      ]
+    },
+    "cut": {
+      "label": "Cut",
+      "category": "editor",
+      "keywords": [
+        "scissors",
+        "clip",
+        "remove"
+      ],
+      "reserved": "cutting to the clipboard"
+    },
+    "dark-light": {
+      "label": "Theme toggle",
+      "category": "app",
+      "keywords": [
+        "auto theme",
+        "system theme",
+        "contrast"
       ]
     },
     "dark-mode": {
@@ -297,6 +1368,64 @@
         "table"
       ]
     },
+    "database-add": {
+      "label": "Add database",
+      "category": "dev",
+      "keywords": [
+        "database",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "database-check": {
+      "label": "Database confirmed",
+      "category": "dev",
+      "keywords": [
+        "database",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "database-lock": {
+      "label": "Locked database",
+      "category": "dev",
+      "keywords": [
+        "database",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "database-remove": {
+      "label": "Remove database",
+      "category": "dev",
+      "keywords": [
+        "database",
+        "remove",
+        "minus"
+      ]
+    },
+    "database-search": {
+      "label": "Find database",
+      "category": "dev",
+      "keywords": [
+        "database",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "date-range": {
+      "label": "Date range",
+      "category": "time",
+      "keywords": [
+        "period",
+        "from to",
+        "dates"
+      ]
+    },
     "delete": {
       "label": "Delete",
       "category": "system",
@@ -318,6 +1447,36 @@
         "release"
       ]
     },
+    "deploy-cancel": {
+      "label": "Cancel deploy",
+      "category": "dev",
+      "keywords": [
+        "deploy",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "deploy-check": {
+      "label": "Deploy confirmed",
+      "category": "dev",
+      "keywords": [
+        "deploy",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "deploy-scheduled": {
+      "label": "Scheduled deploy",
+      "category": "dev",
+      "keywords": [
+        "deploy",
+        "clock",
+        "schedule",
+        "later"
+      ]
+    },
     "desktop-app": {
       "label": "Desktop app",
       "category": "app",
@@ -326,6 +1485,108 @@
         "computer",
         "native",
         "window"
+      ]
+    },
+    "desktop-app-check": {
+      "label": "Desktop app confirmed",
+      "category": "app",
+      "keywords": [
+        "desktop app",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "desktop-app-lock": {
+      "label": "Locked desktop app",
+      "category": "app",
+      "keywords": [
+        "desktop app",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "dialog": {
+      "label": "Dialog",
+      "category": "app",
+      "keywords": [
+        "modal",
+        "popup",
+        "window"
+      ]
+    },
+    "direction-down": {
+      "label": "Down",
+      "category": "navigation",
+      "keywords": [
+        "arrow down",
+        "lower",
+        "bottom"
+      ]
+    },
+    "direction-down-left": {
+      "label": "Down and left",
+      "category": "navigation",
+      "keywords": [
+        "arrow diagonal",
+        "southwest"
+      ],
+      "mirror_rtl": true
+    },
+    "direction-down-right": {
+      "label": "Down and right",
+      "category": "navigation",
+      "keywords": [
+        "arrow diagonal",
+        "southeast"
+      ],
+      "mirror_rtl": true
+    },
+    "direction-up": {
+      "label": "Up",
+      "category": "navigation",
+      "keywords": [
+        "arrow up",
+        "rise",
+        "top"
+      ]
+    },
+    "direction-up-left": {
+      "label": "Up and left",
+      "category": "navigation",
+      "keywords": [
+        "arrow diagonal",
+        "northwest"
+      ],
+      "mirror_rtl": true
+    },
+    "direction-up-right": {
+      "label": "Up and right",
+      "category": "navigation",
+      "keywords": [
+        "arrow diagonal",
+        "northeast",
+        "outward"
+      ],
+      "mirror_rtl": true
+    },
+    "divider": {
+      "label": "Divider",
+      "category": "editor",
+      "keywords": [
+        "separator",
+        "rule",
+        "break"
+      ]
+    },
+    "donut-chart": {
+      "label": "Donut chart",
+      "category": "data",
+      "keywords": [
+        "ring chart",
+        "share",
+        "proportion"
       ]
     },
     "download": {
@@ -338,6 +1599,25 @@
       ],
       "reserved": "downloading a file"
     },
+    "drag": {
+      "label": "Drag handle",
+      "category": "navigation",
+      "keywords": [
+        "grip",
+        "reorder",
+        "handle",
+        "dots"
+      ]
+    },
+    "droplet": {
+      "label": "Humidity",
+      "category": "weather",
+      "keywords": [
+        "drop",
+        "water",
+        "liquid"
+      ]
+    },
     "edit": {
       "label": "Edit",
       "category": "system",
@@ -348,6 +1628,54 @@
         "rename"
       ],
       "reserved": "editing in place"
+    },
+    "emoji": {
+      "label": "Emoji",
+      "category": "communication",
+      "keywords": [
+        "smile",
+        "reaction",
+        "happy",
+        "face"
+      ]
+    },
+    "energy": {
+      "label": "Quick action",
+      "category": "status",
+      "keywords": [
+        "lightning",
+        "zap",
+        "fast",
+        "power"
+      ]
+    },
+    "enter": {
+      "label": "Enter",
+      "category": "navigation",
+      "keywords": [
+        "return key",
+        "submit",
+        "newline"
+      ],
+      "mirror_rtl": true
+    },
+    "equalizer": {
+      "label": "Audio settings",
+      "category": "media",
+      "keywords": [
+        "equalizer",
+        "levels",
+        "mixer"
+      ]
+    },
+    "eraser": {
+      "label": "Eraser",
+      "category": "editor",
+      "keywords": [
+        "erase",
+        "rubber",
+        "remove"
+      ]
     },
     "error": {
       "label": "Error",
@@ -371,6 +1699,24 @@
       ],
       "reserved": "opening a section or list"
     },
+    "expand-all": {
+      "label": "Expand all",
+      "category": "navigation",
+      "keywords": [
+        "unfold",
+        "chevrons",
+        "open all"
+      ]
+    },
+    "extension": {
+      "label": "Extension",
+      "category": "dev",
+      "keywords": [
+        "plugin",
+        "add-on",
+        "puzzle"
+      ]
+    },
     "external-link": {
       "label": "Opens in a new tab",
       "category": "system",
@@ -383,6 +1729,14 @@
       "reserved": "links that leave the app",
       "mirror_rtl": true
     },
+    "fast-forward": {
+      "label": "Fast forward",
+      "category": "media",
+      "keywords": [
+        "speed up",
+        "seek"
+      ]
+    },
     "favorite": {
       "label": "Favorite",
       "category": "content",
@@ -393,6 +1747,15 @@
         "important"
       ]
     },
+    "feed": {
+      "label": "Feed",
+      "category": "communication",
+      "keywords": [
+        "rss",
+        "subscribe",
+        "updates"
+      ]
+    },
     "file": {
       "label": "File",
       "category": "content",
@@ -400,6 +1763,191 @@
         "document",
         "page",
         "paper"
+      ]
+    },
+    "file-add": {
+      "label": "Add file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "file-ai": {
+      "label": "AI file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "ai",
+        "generate",
+        "sparkle"
+      ]
+    },
+    "file-archive": {
+      "label": "Archive file",
+      "category": "files",
+      "keywords": [
+        "zip",
+        "compressed",
+        "bundle"
+      ]
+    },
+    "file-audio": {
+      "label": "Audio file",
+      "category": "files",
+      "keywords": [
+        "sound",
+        "music file",
+        "recording"
+      ]
+    },
+    "file-cancel": {
+      "label": "Cancel file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "file-check": {
+      "label": "File confirmed",
+      "category": "content",
+      "keywords": [
+        "file",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "file-code": {
+      "label": "Code file",
+      "category": "files",
+      "keywords": [
+        "source",
+        "script",
+        "program"
+      ]
+    },
+    "file-download": {
+      "label": "Download file",
+      "category": "files",
+      "keywords": [
+        "save file",
+        "get file"
+      ]
+    },
+    "file-edit": {
+      "label": "Edit file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "edit",
+        "pencil",
+        "change"
+      ]
+    },
+    "file-image": {
+      "label": "Image file",
+      "category": "files",
+      "keywords": [
+        "picture",
+        "photo",
+        "media file"
+      ]
+    },
+    "file-lock": {
+      "label": "Locked file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "file-remove": {
+      "label": "Remove file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "remove",
+        "minus"
+      ]
+    },
+    "file-scheduled": {
+      "label": "Scheduled file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "clock",
+        "schedule",
+        "later"
+      ]
+    },
+    "file-search": {
+      "label": "Find file",
+      "category": "content",
+      "keywords": [
+        "file",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "file-spreadsheet": {
+      "label": "Spreadsheet",
+      "category": "files",
+      "keywords": [
+        "sheet",
+        "excel",
+        "table file"
+      ]
+    },
+    "file-text": {
+      "label": "Text file",
+      "category": "files",
+      "keywords": [
+        "document",
+        "notes",
+        "page"
+      ]
+    },
+    "file-upload": {
+      "label": "Upload file",
+      "category": "files",
+      "keywords": [
+        "send file",
+        "attach"
+      ]
+    },
+    "file-video": {
+      "label": "Video file",
+      "category": "files",
+      "keywords": [
+        "movie file",
+        "clip"
+      ]
+    },
+    "files": {
+      "label": "Files",
+      "category": "files",
+      "keywords": [
+        "documents",
+        "multiple",
+        "copies"
+      ]
+    },
+    "film": {
+      "label": "Film",
+      "category": "media",
+      "keywords": [
+        "movie",
+        "reel",
+        "cinema"
       ]
     },
     "filter": {
@@ -412,6 +1960,34 @@
       ],
       "reserved": "filtering a list"
     },
+    "filter-list": {
+      "label": "Filter list",
+      "category": "data",
+      "keywords": [
+        "refine",
+        "narrow",
+        "facets"
+      ]
+    },
+    "flag": {
+      "label": "Flag",
+      "category": "status",
+      "keywords": [
+        "report",
+        "mark",
+        "milestone"
+      ]
+    },
+    "flag-off": {
+      "label": "Unflag",
+      "category": "status",
+      "keywords": [
+        "flag",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
     "focus": {
       "label": "Focus",
       "category": "design",
@@ -420,6 +1996,14 @@
         "keyboard",
         "a11y",
         "target"
+      ]
+    },
+    "fog": {
+      "label": "Fog",
+      "category": "weather",
+      "keywords": [
+        "mist",
+        "haze"
       ]
     },
     "folder": {
@@ -431,6 +2015,81 @@
         "collection"
       ]
     },
+    "folder-add": {
+      "label": "Add folder",
+      "category": "content",
+      "keywords": [
+        "folder",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "folder-check": {
+      "label": "Folder confirmed",
+      "category": "content",
+      "keywords": [
+        "folder",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "folder-lock": {
+      "label": "Locked folder",
+      "category": "content",
+      "keywords": [
+        "folder",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "folder-open": {
+      "label": "Open folder",
+      "category": "files",
+      "keywords": [
+        "directory",
+        "browse",
+        "expanded"
+      ]
+    },
+    "folder-remove": {
+      "label": "Remove folder",
+      "category": "content",
+      "keywords": [
+        "folder",
+        "remove",
+        "minus"
+      ]
+    },
+    "folder-search": {
+      "label": "Find folder",
+      "category": "content",
+      "keywords": [
+        "folder",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "format-painter": {
+      "label": "Copy formatting",
+      "category": "editor",
+      "keywords": [
+        "format painter",
+        "style brush"
+      ]
+    },
+    "forward": {
+      "label": "Forward",
+      "category": "communication",
+      "keywords": [
+        "share on",
+        "pass along"
+      ],
+      "mirror_rtl": true
+    },
     "fullscreen": {
       "label": "Full screen",
       "category": "navigation",
@@ -438,6 +2097,173 @@
         "maximize",
         "expand view",
         "zoom"
+      ]
+    },
+    "function": {
+      "label": "Function",
+      "category": "dev",
+      "keywords": [
+        "fx",
+        "formula",
+        "lambda"
+      ]
+    },
+    "gamepad": {
+      "label": "Game controller",
+      "category": "devices",
+      "keywords": [
+        "games",
+        "play",
+        "console"
+      ]
+    },
+    "gauge": {
+      "label": "Performance",
+      "category": "dev",
+      "keywords": [
+        "gauge",
+        "speed",
+        "metrics",
+        "benchmark"
+      ]
+    },
+    "gift": {
+      "label": "Gift",
+      "category": "commerce",
+      "keywords": [
+        "present",
+        "reward",
+        "bonus"
+      ]
+    },
+    "globe": {
+      "label": "Globe",
+      "category": "maps",
+      "keywords": [
+        "world",
+        "web",
+        "international",
+        "language"
+      ]
+    },
+    "globe-check": {
+      "label": "Site confirmed",
+      "category": "maps",
+      "keywords": [
+        "globe",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "globe-lock": {
+      "label": "Locked site",
+      "category": "maps",
+      "keywords": [
+        "globe",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "globe-search": {
+      "label": "Find site",
+      "category": "maps",
+      "keywords": [
+        "globe",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "graph": {
+      "label": "Dependency graph",
+      "category": "dev",
+      "keywords": [
+        "graph",
+        "nodes",
+        "relations"
+      ]
+    },
+    "grid-view": {
+      "label": "Grid view",
+      "category": "navigation",
+      "keywords": [
+        "tiles",
+        "gallery",
+        "cards"
+      ]
+    },
+    "guardrail": {
+      "label": "Guardrail",
+      "category": "agent",
+      "keywords": [
+        "safety",
+        "policy",
+        "limit"
+      ]
+    },
+    "guest": {
+      "label": "Guest",
+      "category": "people",
+      "keywords": [
+        "visitor",
+        "anonymous",
+        "unknown user"
+      ]
+    },
+    "handshake": {
+      "label": "Partnership",
+      "category": "people",
+      "keywords": [
+        "deal",
+        "agreement",
+        "partner"
+      ]
+    },
+    "hard-drive": {
+      "label": "Disk",
+      "category": "devices",
+      "keywords": [
+        "storage",
+        "drive",
+        "hdd"
+      ]
+    },
+    "hash": {
+      "label": "Channel",
+      "category": "communication",
+      "keywords": [
+        "hashtag",
+        "number",
+        "topic"
+      ]
+    },
+    "heading": {
+      "label": "Heading",
+      "category": "editor",
+      "keywords": [
+        "title",
+        "h1",
+        "header"
+      ]
+    },
+    "headphones": {
+      "label": "Headphones",
+      "category": "media",
+      "keywords": [
+        "audio",
+        "listen",
+        "support"
+      ]
+    },
+    "heatmap": {
+      "label": "Heatmap",
+      "category": "data",
+      "keywords": [
+        "density",
+        "matrix",
+        "intensity"
       ]
     },
     "help": {
@@ -460,6 +2286,25 @@
       ],
       "reserved": "hiding content"
     },
+    "highlight": {
+      "label": "Highlight",
+      "category": "editor",
+      "keywords": [
+        "marker",
+        "emphasis",
+        "highlighter"
+      ]
+    },
+    "history": {
+      "label": "History",
+      "category": "time",
+      "keywords": [
+        "recent",
+        "past",
+        "log",
+        "versions"
+      ]
+    },
     "home": {
       "label": "Home",
       "category": "navigation",
@@ -480,6 +2325,43 @@
         "fast"
       ]
     },
+    "hotel": {
+      "label": "Stay",
+      "category": "maps",
+      "keywords": [
+        "bed",
+        "hotel",
+        "sleep",
+        "booking"
+      ]
+    },
+    "hourglass": {
+      "label": "Waiting",
+      "category": "time",
+      "keywords": [
+        "hourglass",
+        "time left",
+        "sand"
+      ]
+    },
+    "human-review": {
+      "label": "Human review",
+      "category": "agent",
+      "keywords": [
+        "approval",
+        "check by person",
+        "in the loop"
+      ]
+    },
+    "id-card": {
+      "label": "ID card",
+      "category": "people",
+      "keywords": [
+        "identity",
+        "badge",
+        "membership"
+      ]
+    },
     "image": {
       "label": "Image",
       "category": "content",
@@ -488,6 +2370,100 @@
         "photo",
         "media"
       ]
+    },
+    "image-add": {
+      "label": "Add image",
+      "category": "content",
+      "keywords": [
+        "image",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "image-ai": {
+      "label": "AI image",
+      "category": "content",
+      "keywords": [
+        "image",
+        "ai",
+        "generate",
+        "sparkle"
+      ]
+    },
+    "image-edit": {
+      "label": "Edit image",
+      "category": "content",
+      "keywords": [
+        "image",
+        "edit",
+        "pencil",
+        "change"
+      ]
+    },
+    "image-insert": {
+      "label": "Insert image",
+      "category": "editor",
+      "keywords": [
+        "add picture",
+        "embed photo"
+      ]
+    },
+    "image-off": {
+      "label": "Image off",
+      "category": "content",
+      "keywords": [
+        "image",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "image-remove": {
+      "label": "Remove image",
+      "category": "content",
+      "keywords": [
+        "image",
+        "remove",
+        "minus"
+      ]
+    },
+    "image-search": {
+      "label": "Find image",
+      "category": "content",
+      "keywords": [
+        "image",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "images": {
+      "label": "Gallery",
+      "category": "media",
+      "keywords": [
+        "photos",
+        "album",
+        "pictures"
+      ]
+    },
+    "inbox": {
+      "label": "Inbox",
+      "category": "files",
+      "keywords": [
+        "tray",
+        "incoming",
+        "messages"
+      ]
+    },
+    "indent": {
+      "label": "Indent",
+      "category": "editor",
+      "keywords": [
+        "increase indent",
+        "tab"
+      ],
+      "mirror_rtl": true
     },
     "info": {
       "label": "Information",
@@ -500,6 +2476,33 @@
       ],
       "reserved": "neutral information"
     },
+    "italic": {
+      "label": "Italic",
+      "category": "editor",
+      "keywords": [
+        "emphasis",
+        "slant",
+        "format"
+      ]
+    },
+    "json": {
+      "label": "JSON",
+      "category": "dev",
+      "keywords": [
+        "braces",
+        "object",
+        "data"
+      ]
+    },
+    "kanban": {
+      "label": "Board",
+      "category": "app",
+      "keywords": [
+        "kanban",
+        "columns",
+        "tasks"
+      ]
+    },
     "keyboard": {
       "label": "Keyboard",
       "category": "app",
@@ -510,6 +2513,34 @@
         "typing"
       ]
     },
+    "knowledge": {
+      "label": "Knowledge base",
+      "category": "agent",
+      "keywords": [
+        "docs",
+        "rag",
+        "retrieval",
+        "context"
+      ]
+    },
+    "landscape": {
+      "label": "Landscape",
+      "category": "maps",
+      "keywords": [
+        "mountain",
+        "terrain",
+        "outdoors"
+      ]
+    },
+    "laptop": {
+      "label": "Laptop",
+      "category": "devices",
+      "keywords": [
+        "computer",
+        "notebook",
+        "macbook"
+      ]
+    },
     "layout": {
       "label": "Layout",
       "category": "design",
@@ -518,6 +2549,15 @@
         "columns",
         "structure",
         "template"
+      ]
+    },
+    "library": {
+      "label": "Library",
+      "category": "dev",
+      "keywords": [
+        "books",
+        "dependencies",
+        "shelf"
       ]
     },
     "light-mode": {
@@ -550,6 +2590,83 @@
         "permalink"
       ]
     },
+    "link-add": {
+      "label": "Add link",
+      "category": "system",
+      "keywords": [
+        "link",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "link-off": {
+      "label": "Unlink",
+      "category": "system",
+      "keywords": [
+        "link",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "link-remove": {
+      "label": "Remove link",
+      "category": "system",
+      "keywords": [
+        "link",
+        "remove",
+        "minus"
+      ]
+    },
+    "list-view": {
+      "label": "List view",
+      "category": "navigation",
+      "keywords": [
+        "rows",
+        "items",
+        "lines"
+      ]
+    },
+    "list-view-add": {
+      "label": "Add list",
+      "category": "navigation",
+      "keywords": [
+        "list view",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "list-view-check": {
+      "label": "List confirmed",
+      "category": "navigation",
+      "keywords": [
+        "list view",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "list-view-remove": {
+      "label": "Remove list",
+      "category": "navigation",
+      "keywords": [
+        "list view",
+        "remove",
+        "minus"
+      ]
+    },
+    "list-view-search": {
+      "label": "Find list",
+      "category": "navigation",
+      "keywords": [
+        "list view",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
     "loading": {
       "label": "Loading",
       "category": "status",
@@ -561,6 +2678,56 @@
       ],
       "reserved": "work in progress"
     },
+    "location": {
+      "label": "Location",
+      "category": "maps",
+      "keywords": [
+        "map pin",
+        "place",
+        "marker",
+        "address"
+      ]
+    },
+    "location-add": {
+      "label": "Add location",
+      "category": "maps",
+      "keywords": [
+        "location",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "location-check": {
+      "label": "Location confirmed",
+      "category": "maps",
+      "keywords": [
+        "location",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "location-off": {
+      "label": "Location off",
+      "category": "maps",
+      "keywords": [
+        "location",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "location-search": {
+      "label": "Find location",
+      "category": "maps",
+      "keywords": [
+        "location",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
     "lock": {
       "label": "Locked",
       "category": "system",
@@ -571,6 +2738,24 @@
         "closed"
       ]
     },
+    "logs": {
+      "label": "Logs",
+      "category": "dev",
+      "keywords": [
+        "output",
+        "events",
+        "trace"
+      ]
+    },
+    "magic-wand": {
+      "label": "Auto-fix",
+      "category": "agent",
+      "keywords": [
+        "magic",
+        "wand",
+        "enhance"
+      ]
+    },
     "mail": {
       "label": "Email",
       "category": "content",
@@ -579,6 +2764,91 @@
         "message",
         "inbox",
         "letter"
+      ]
+    },
+    "mail-add": {
+      "label": "Add email",
+      "category": "content",
+      "keywords": [
+        "email",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "mail-alert": {
+      "label": "Email needs attention",
+      "category": "content",
+      "keywords": [
+        "email",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "mail-cancel": {
+      "label": "Cancel email",
+      "category": "content",
+      "keywords": [
+        "email",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "mail-check": {
+      "label": "Email confirmed",
+      "category": "content",
+      "keywords": [
+        "email",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "mail-open": {
+      "label": "Read email",
+      "category": "communication",
+      "keywords": [
+        "opened",
+        "envelope open"
+      ]
+    },
+    "mail-search": {
+      "label": "Find email",
+      "category": "content",
+      "keywords": [
+        "email",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "map": {
+      "label": "Map",
+      "category": "maps",
+      "keywords": [
+        "atlas",
+        "directions",
+        "area"
+      ]
+    },
+    "maximize": {
+      "label": "Maximize",
+      "category": "navigation",
+      "keywords": [
+        "enlarge",
+        "grow",
+        "expand window"
+      ]
+    },
+    "memory": {
+      "label": "Memory",
+      "category": "devices",
+      "keywords": [
+        "ram",
+        "chip",
+        "hardware"
       ]
     },
     "menu": {
@@ -592,6 +2862,52 @@
       ],
       "reserved": "opening the main menu"
     },
+    "merge": {
+      "label": "Merge",
+      "category": "dev",
+      "keywords": [
+        "git merge",
+        "combine",
+        "join"
+      ]
+    },
+    "metric": {
+      "label": "Metric",
+      "category": "data",
+      "keywords": [
+        "kpi",
+        "stat",
+        "number"
+      ]
+    },
+    "microphone": {
+      "label": "Microphone",
+      "category": "media",
+      "keywords": [
+        "mic",
+        "voice",
+        "record audio"
+      ]
+    },
+    "microphone-off": {
+      "label": "Microphone off",
+      "category": "media",
+      "keywords": [
+        "microphone",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "minimize": {
+      "label": "Minimize",
+      "category": "navigation",
+      "keywords": [
+        "shrink",
+        "reduce",
+        "restore"
+      ]
+    },
     "mobile-app": {
       "label": "Mobile app",
       "category": "app",
@@ -600,6 +2916,43 @@
         "android",
         "ios",
         "smartphone"
+      ]
+    },
+    "mobile-app-check": {
+      "label": "Mobile app confirmed",
+      "category": "app",
+      "keywords": [
+        "mobile app",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "mobile-app-lock": {
+      "label": "Locked mobile app",
+      "category": "app",
+      "keywords": [
+        "mobile app",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "mobile-menu": {
+      "label": "Mobile menu",
+      "category": "app",
+      "keywords": [
+        "drawer",
+        "phone nav"
+      ]
+    },
+    "model": {
+      "label": "Model",
+      "category": "agent",
+      "keywords": [
+        "llm",
+        "neural network",
+        "weights"
       ]
     },
     "more": {
@@ -613,6 +2966,73 @@
       ],
       "reserved": "opening more actions"
     },
+    "mouse": {
+      "label": "Mouse",
+      "category": "devices",
+      "keywords": [
+        "pointer device",
+        "click",
+        "scroll"
+      ]
+    },
+    "move": {
+      "label": "Move",
+      "category": "navigation",
+      "keywords": [
+        "drag",
+        "reposition",
+        "pan",
+        "four ways"
+      ]
+    },
+    "music": {
+      "label": "Music",
+      "category": "media",
+      "keywords": [
+        "song",
+        "note",
+        "audio"
+      ]
+    },
+    "music-add": {
+      "label": "Add music",
+      "category": "media",
+      "keywords": [
+        "music",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "music-search": {
+      "label": "Find music",
+      "category": "media",
+      "keywords": [
+        "music",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "mute": {
+      "label": "Mute",
+      "category": "media",
+      "keywords": [
+        "sound off",
+        "silent",
+        "no audio"
+      ],
+      "reserved": "muting sound"
+    },
+    "my-location": {
+      "label": "My location",
+      "category": "maps",
+      "keywords": [
+        "gps",
+        "current position",
+        "locate"
+      ]
+    },
     "native-window": {
       "label": "Window",
       "category": "app",
@@ -621,6 +3041,34 @@
         "desktop window",
         "title bar",
         "blitz"
+      ]
+    },
+    "navigation": {
+      "label": "Navigate",
+      "category": "maps",
+      "keywords": [
+        "gps",
+        "direction",
+        "route"
+      ]
+    },
+    "network": {
+      "label": "Network",
+      "category": "devices",
+      "keywords": [
+        "lan",
+        "connected",
+        "topology"
+      ]
+    },
+    "news": {
+      "label": "News",
+      "category": "files",
+      "keywords": [
+        "newspaper",
+        "articles",
+        "feed",
+        "blog"
       ]
     },
     "next": {
@@ -634,6 +3082,24 @@
       "reserved": "going forward",
       "mirror_rtl": true
     },
+    "night": {
+      "label": "Clear night",
+      "category": "weather",
+      "keywords": [
+        "moon",
+        "stars",
+        "night sky"
+      ]
+    },
+    "note": {
+      "label": "Note",
+      "category": "files",
+      "keywords": [
+        "sticky",
+        "memo",
+        "post-it"
+      ]
+    },
     "notification": {
       "label": "Notifications",
       "category": "status",
@@ -643,6 +3109,151 @@
         "reminder"
       ],
       "reserved": "notifications"
+    },
+    "notification-add": {
+      "label": "Add notification",
+      "category": "status",
+      "keywords": [
+        "notifications",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "notification-alert": {
+      "label": "Notification needs attention",
+      "category": "status",
+      "keywords": [
+        "notifications",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "notification-check": {
+      "label": "Notification confirmed",
+      "category": "status",
+      "keywords": [
+        "notifications",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "notification-off": {
+      "label": "Notifications off",
+      "category": "status",
+      "keywords": [
+        "notifications",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "notification-scheduled": {
+      "label": "Scheduled notification",
+      "category": "status",
+      "keywords": [
+        "notifications",
+        "clock",
+        "schedule",
+        "later"
+      ]
+    },
+    "notification-settings": {
+      "label": "Notification settings",
+      "category": "app",
+      "keywords": [
+        "alerts",
+        "preferences"
+      ]
+    },
+    "numbered-list": {
+      "label": "Numbered list",
+      "category": "editor",
+      "keywords": [
+        "ordered",
+        "steps",
+        "numbers"
+      ]
+    },
+    "outdent": {
+      "label": "Outdent",
+      "category": "editor",
+      "keywords": [
+        "decrease indent",
+        "unindent"
+      ],
+      "mirror_rtl": true
+    },
+    "package": {
+      "label": "Package",
+      "category": "commerce",
+      "keywords": [
+        "box",
+        "parcel",
+        "order"
+      ]
+    },
+    "package-add": {
+      "label": "Add package",
+      "category": "commerce",
+      "keywords": [
+        "package",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "package-cancel": {
+      "label": "Cancel package",
+      "category": "commerce",
+      "keywords": [
+        "package",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "package-check": {
+      "label": "Package confirmed",
+      "category": "commerce",
+      "keywords": [
+        "package",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "package-search": {
+      "label": "Find package",
+      "category": "commerce",
+      "keywords": [
+        "package",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "page-first": {
+      "label": "First page",
+      "category": "navigation",
+      "keywords": [
+        "double chevron",
+        "start",
+        "beginning"
+      ],
+      "mirror_rtl": true
+    },
+    "page-last": {
+      "label": "Last page",
+      "category": "navigation",
+      "keywords": [
+        "double chevron",
+        "end",
+        "final"
+      ],
+      "mirror_rtl": true
     },
     "page-next": {
       "label": "Next page",
@@ -664,6 +3275,88 @@
       ],
       "mirror_rtl": true
     },
+    "palette": {
+      "label": "Colors",
+      "category": "editor",
+      "keywords": [
+        "palette",
+        "paint",
+        "swatches"
+      ]
+    },
+    "panel-bottom": {
+      "label": "Toggle bottom panel",
+      "category": "navigation",
+      "keywords": [
+        "console",
+        "dock",
+        "drawer"
+      ]
+    },
+    "paragraph": {
+      "label": "Paragraph",
+      "category": "editor",
+      "keywords": [
+        "pilcrow",
+        "text block"
+      ]
+    },
+    "partly-cloudy": {
+      "label": "Partly cloudy",
+      "category": "weather",
+      "keywords": [
+        "cloud sun",
+        "mild",
+        "weather"
+      ]
+    },
+    "paste": {
+      "label": "Paste",
+      "category": "files",
+      "keywords": [
+        "clipboard",
+        "insert",
+        "put"
+      ],
+      "reserved": "pasting from the clipboard"
+    },
+    "pause": {
+      "label": "Pause",
+      "category": "media",
+      "keywords": [
+        "hold",
+        "break",
+        "stop for now"
+      ],
+      "reserved": "pausing playback"
+    },
+    "pen": {
+      "label": "Draw",
+      "category": "editor",
+      "keywords": [
+        "pen",
+        "write",
+        "sketch"
+      ]
+    },
+    "pending": {
+      "label": "Pending",
+      "category": "status",
+      "keywords": [
+        "waiting",
+        "queued",
+        "in progress"
+      ]
+    },
+    "percent": {
+      "label": "Discount",
+      "category": "commerce",
+      "keywords": [
+        "percent",
+        "sale",
+        "offer"
+      ]
+    },
     "permission": {
       "label": "Permission",
       "category": "agent",
@@ -675,6 +3368,129 @@
       ],
       "reserved": "asking for or granting permission"
     },
+    "phone": {
+      "label": "Phone",
+      "category": "communication",
+      "keywords": [
+        "call",
+        "telephone",
+        "contact"
+      ]
+    },
+    "phone-add": {
+      "label": "Add call",
+      "category": "communication",
+      "keywords": [
+        "phone",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "phone-call": {
+      "label": "Calling",
+      "category": "communication",
+      "keywords": [
+        "ringing",
+        "incoming call"
+      ]
+    },
+    "phone-cancel": {
+      "label": "Cancel call",
+      "category": "communication",
+      "keywords": [
+        "phone",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "phone-check": {
+      "label": "Call confirmed",
+      "category": "communication",
+      "keywords": [
+        "phone",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "phone-off": {
+      "label": "Hang up",
+      "category": "communication",
+      "keywords": [
+        "phone",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "picture-in-picture": {
+      "label": "Picture in picture",
+      "category": "navigation",
+      "keywords": [
+        "pip",
+        "mini player",
+        "float"
+      ]
+    },
+    "pin": {
+      "label": "Pin",
+      "category": "status",
+      "keywords": [
+        "pushpin",
+        "keep",
+        "stick",
+        "fix"
+      ]
+    },
+    "pin-off": {
+      "label": "Unpin",
+      "category": "status",
+      "keywords": [
+        "pin",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "plane": {
+      "label": "Flight",
+      "category": "maps",
+      "keywords": [
+        "airplane",
+        "travel",
+        "trip"
+      ]
+    },
+    "play": {
+      "label": "Play",
+      "category": "media",
+      "keywords": [
+        "start",
+        "resume",
+        "video"
+      ],
+      "reserved": "starting playback"
+    },
+    "plug": {
+      "label": "Power plug",
+      "category": "devices",
+      "keywords": [
+        "plug in",
+        "electricity",
+        "charger"
+      ]
+    },
+    "podcast": {
+      "label": "Podcast",
+      "category": "media",
+      "keywords": [
+        "episode",
+        "show",
+        "audio show"
+      ]
+    },
     "pointer": {
       "label": "Pointer",
       "category": "app",
@@ -683,6 +3499,60 @@
         "select",
         "click",
         "mouse"
+      ]
+    },
+    "power": {
+      "label": "Power",
+      "category": "status",
+      "keywords": [
+        "on off",
+        "shutdown",
+        "turn off"
+      ]
+    },
+    "presentation": {
+      "label": "Presentation",
+      "category": "files",
+      "keywords": [
+        "slides",
+        "deck",
+        "talk"
+      ]
+    },
+    "print": {
+      "label": "Print",
+      "category": "files",
+      "keywords": [
+        "printer",
+        "paper",
+        "hard copy"
+      ]
+    },
+    "priority": {
+      "label": "Important",
+      "category": "status",
+      "keywords": [
+        "exclamation",
+        "urgent",
+        "attention"
+      ]
+    },
+    "profile": {
+      "label": "Profile",
+      "category": "people",
+      "keywords": [
+        "account",
+        "avatar",
+        "user circle"
+      ]
+    },
+    "progress": {
+      "label": "Progress",
+      "category": "status",
+      "keywords": [
+        "percent done",
+        "pie",
+        "partial"
       ]
     },
     "prompt": {
@@ -695,6 +3565,107 @@
         "input"
       ]
     },
+    "pull-request": {
+      "label": "Pull request",
+      "category": "dev",
+      "keywords": [
+        "pr",
+        "review",
+        "merge request"
+      ]
+    },
+    "qr-code": {
+      "label": "QR code",
+      "category": "commerce",
+      "keywords": [
+        "scan",
+        "code",
+        "link"
+      ]
+    },
+    "quote": {
+      "label": "Quote",
+      "category": "editor",
+      "keywords": [
+        "blockquote",
+        "citation",
+        "testimonial"
+      ]
+    },
+    "radar-chart": {
+      "label": "Radar chart",
+      "category": "data",
+      "keywords": [
+        "spider",
+        "skills",
+        "compare"
+      ]
+    },
+    "radio-option": {
+      "label": "Radio option",
+      "category": "app",
+      "keywords": [
+        "choice",
+        "option",
+        "single select"
+      ]
+    },
+    "rain": {
+      "label": "Rain",
+      "category": "weather",
+      "keywords": [
+        "rainy",
+        "shower",
+        "wet"
+      ]
+    },
+    "rainbow": {
+      "label": "Rainbow",
+      "category": "weather",
+      "keywords": [
+        "colors",
+        "spectrum",
+        "after rain"
+      ]
+    },
+    "range-slider": {
+      "label": "Slider",
+      "category": "app",
+      "keywords": [
+        "range",
+        "adjust",
+        "level"
+      ]
+    },
+    "receipt": {
+      "label": "Receipt",
+      "category": "commerce",
+      "keywords": [
+        "invoice",
+        "bill",
+        "order"
+      ]
+    },
+    "record": {
+      "label": "Record",
+      "category": "media",
+      "keywords": [
+        "rec",
+        "capture",
+        "live"
+      ]
+    },
+    "redo": {
+      "label": "Redo",
+      "category": "navigation",
+      "keywords": [
+        "repeat",
+        "forward",
+        "history"
+      ],
+      "reserved": "redoing a change",
+      "mirror_rtl": true
+    },
     "refresh": {
       "label": "Refresh",
       "category": "system",
@@ -706,6 +3677,25 @@
       ],
       "reserved": "reloading data"
     },
+    "refresh-off": {
+      "label": "Sync off",
+      "category": "system",
+      "keywords": [
+        "refresh",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "regex": {
+      "label": "Pattern",
+      "category": "dev",
+      "keywords": [
+        "regex",
+        "regular expression",
+        "match"
+      ]
+    },
     "remove": {
       "label": "Remove",
       "category": "system",
@@ -715,6 +3705,161 @@
         "less"
       ],
       "reserved": "removing an item from a list (not deleting it)"
+    },
+    "repeat": {
+      "label": "Repeat",
+      "category": "media",
+      "keywords": [
+        "loop",
+        "again",
+        "cycle"
+      ]
+    },
+    "reply": {
+      "label": "Reply",
+      "category": "communication",
+      "keywords": [
+        "respond",
+        "answer",
+        "back"
+      ],
+      "mirror_rtl": true
+    },
+    "repository": {
+      "label": "Repository",
+      "category": "dev",
+      "keywords": [
+        "repo",
+        "source",
+        "project"
+      ]
+    },
+    "resize": {
+      "label": "Resize",
+      "category": "navigation",
+      "keywords": [
+        "corner",
+        "handle",
+        "scale"
+      ]
+    },
+    "responsive": {
+      "label": "Responsive",
+      "category": "app",
+      "keywords": [
+        "devices",
+        "breakpoints",
+        "screens"
+      ]
+    },
+    "rewind": {
+      "label": "Rewind",
+      "category": "media",
+      "keywords": [
+        "seek back",
+        "reverse"
+      ]
+    },
+    "rocket": {
+      "label": "Launch",
+      "category": "dev",
+      "keywords": [
+        "rocket",
+        "ship",
+        "start up",
+        "go live"
+      ]
+    },
+    "rotate-left": {
+      "label": "Rotate left",
+      "category": "navigation",
+      "keywords": [
+        "counterclockwise",
+        "turn",
+        "spin"
+      ]
+    },
+    "rotate-right": {
+      "label": "Rotate right",
+      "category": "navigation",
+      "keywords": [
+        "clockwise",
+        "turn",
+        "spin"
+      ]
+    },
+    "route": {
+      "label": "Route",
+      "category": "maps",
+      "keywords": [
+        "path",
+        "journey",
+        "trip"
+      ]
+    },
+    "router": {
+      "label": "Router",
+      "category": "devices",
+      "keywords": [
+        "modem",
+        "internet box",
+        "hub"
+      ]
+    },
+    "rows": {
+      "label": "Rows",
+      "category": "data",
+      "keywords": [
+        "records",
+        "table rows",
+        "lines"
+      ]
+    },
+    "ruler": {
+      "label": "Ruler",
+      "category": "editor",
+      "keywords": [
+        "measure",
+        "dimensions",
+        "length"
+      ]
+    },
+    "save": {
+      "label": "Save",
+      "category": "files",
+      "keywords": [
+        "floppy",
+        "store",
+        "keep"
+      ],
+      "reserved": "saving changes"
+    },
+    "scan": {
+      "label": "Scan",
+      "category": "files",
+      "keywords": [
+        "scanner",
+        "capture",
+        "frame"
+      ]
+    },
+    "scatter-chart": {
+      "label": "Scatter chart",
+      "category": "data",
+      "keywords": [
+        "points",
+        "correlation",
+        "plot"
+      ]
+    },
+    "screen-share": {
+      "label": "Share screen",
+      "category": "media",
+      "keywords": [
+        "present",
+        "cast",
+        "screen"
+      ]
     },
     "search": {
       "label": "Search",
@@ -737,6 +3882,95 @@
         "api key"
       ]
     },
+    "secret-add": {
+      "label": "Add key",
+      "category": "dev",
+      "keywords": [
+        "secret",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "secret-check": {
+      "label": "Key confirmed",
+      "category": "dev",
+      "keywords": [
+        "secret",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "security": {
+      "label": "Security",
+      "category": "status",
+      "keywords": [
+        "shield",
+        "protect",
+        "safe"
+      ]
+    },
+    "security-alert": {
+      "label": "Security needs attention",
+      "category": "status",
+      "keywords": [
+        "security",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "security-cancel": {
+      "label": "Cancel security",
+      "category": "status",
+      "keywords": [
+        "security",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "security-check": {
+      "label": "Security confirmed",
+      "category": "status",
+      "keywords": [
+        "security",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "security-lock": {
+      "label": "Locked security",
+      "category": "status",
+      "keywords": [
+        "security",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "select": {
+      "label": "Select",
+      "category": "app",
+      "keywords": [
+        "dropdown",
+        "picker",
+        "choose"
+      ]
+    },
+    "send": {
+      "label": "Send",
+      "category": "communication",
+      "keywords": [
+        "submit",
+        "paper plane",
+        "deliver"
+      ],
+      "reserved": "sending a message",
+      "mirror_rtl": true
+    },
     "server": {
       "label": "Server",
       "category": "dev",
@@ -745,6 +3979,56 @@
         "host",
         "machine",
         "fullstack"
+      ]
+    },
+    "server-add": {
+      "label": "Add server",
+      "category": "dev",
+      "keywords": [
+        "server",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "server-alert": {
+      "label": "Server needs attention",
+      "category": "dev",
+      "keywords": [
+        "server",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "server-cancel": {
+      "label": "Cancel server",
+      "category": "dev",
+      "keywords": [
+        "server",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "server-check": {
+      "label": "Server confirmed",
+      "category": "dev",
+      "keywords": [
+        "server",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "server-lock": {
+      "label": "Locked server",
+      "category": "dev",
+      "keywords": [
+        "server",
+        "lock",
+        "private",
+        "secure"
       ]
     },
     "settings": {
@@ -779,6 +4063,14 @@
       ],
       "reserved": "showing hidden content"
     },
+    "shuffle": {
+      "label": "Shuffle",
+      "category": "media",
+      "keywords": [
+        "random",
+        "mix"
+      ]
+    },
     "sidebar": {
       "label": "Toggle sidebar",
       "category": "navigation",
@@ -786,6 +4078,16 @@
         "panel",
         "drawer",
         "navigation rail"
+      ],
+      "mirror_rtl": true
+    },
+    "sidebar-right": {
+      "label": "Toggle right panel",
+      "category": "navigation",
+      "keywords": [
+        "inspector",
+        "drawer",
+        "details panel"
       ],
       "mirror_rtl": true
     },
@@ -812,6 +4114,77 @@
       ],
       "reserved": "signing out",
       "mirror_rtl": true
+    },
+    "signal": {
+      "label": "Signal",
+      "category": "devices",
+      "keywords": [
+        "cellular",
+        "bars",
+        "reception"
+      ]
+    },
+    "signature": {
+      "label": "Signature",
+      "category": "editor",
+      "keywords": [
+        "sign",
+        "autograph",
+        "handwriting"
+      ]
+    },
+    "skeleton": {
+      "label": "Loading placeholder",
+      "category": "app",
+      "keywords": [
+        "skeleton",
+        "shimmer",
+        "placeholder"
+      ]
+    },
+    "skip-back": {
+      "label": "Previous track",
+      "category": "media",
+      "keywords": [
+        "skip back",
+        "rewind track"
+      ]
+    },
+    "skip-forward": {
+      "label": "Next track",
+      "category": "media",
+      "keywords": [
+        "skip",
+        "forward",
+        "following"
+      ]
+    },
+    "snooze": {
+      "label": "Snooze",
+      "category": "time",
+      "keywords": [
+        "later",
+        "sleep",
+        "remind later"
+      ]
+    },
+    "snow": {
+      "label": "Snow",
+      "category": "weather",
+      "keywords": [
+        "snowy",
+        "winter",
+        "cold"
+      ]
+    },
+    "snowflake": {
+      "label": "Freeze",
+      "category": "weather",
+      "keywords": [
+        "snowflake",
+        "cold",
+        "frozen"
+      ]
     },
     "sort": {
       "label": "Sort",
@@ -845,6 +4218,42 @@
       ],
       "reserved": "AI-generated content and actions"
     },
+    "sparkles-off": {
+      "label": "AI off",
+      "category": "agent",
+      "keywords": [
+        "ai",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "speaker": {
+      "label": "Speaker",
+      "category": "devices",
+      "keywords": [
+        "audio device",
+        "sound system"
+      ]
+    },
+    "spell-check": {
+      "label": "Spell check",
+      "category": "editor",
+      "keywords": [
+        "spelling",
+        "proofread",
+        "grammar"
+      ]
+    },
+    "split-view": {
+      "label": "Split view",
+      "category": "navigation",
+      "keywords": [
+        "columns",
+        "side by side",
+        "compare"
+      ]
+    },
     "spring": {
       "label": "Spring motion",
       "category": "design",
@@ -865,6 +4274,34 @@
         "depth"
       ]
     },
+    "stop": {
+      "label": "Stop",
+      "category": "media",
+      "keywords": [
+        "end",
+        "halt",
+        "media"
+      ],
+      "reserved": "stopping playback or a run"
+    },
+    "store": {
+      "label": "Store",
+      "category": "commerce",
+      "keywords": [
+        "shop",
+        "market",
+        "seller"
+      ]
+    },
+    "storm": {
+      "label": "Storm",
+      "category": "weather",
+      "keywords": [
+        "thunder",
+        "lightning",
+        "severe"
+      ]
+    },
     "streaming": {
       "label": "Streaming",
       "category": "agent",
@@ -873,6 +4310,32 @@
         "tokens",
         "live text",
         "output"
+      ]
+    },
+    "strikethrough": {
+      "label": "Strikethrough",
+      "category": "editor",
+      "keywords": [
+        "cross out",
+        "delete text",
+        "format"
+      ]
+    },
+    "subscript": {
+      "label": "Subscript",
+      "category": "editor",
+      "keywords": [
+        "lowered text",
+        "chemical"
+      ]
+    },
+    "subscription": {
+      "label": "Subscription",
+      "category": "commerce",
+      "keywords": [
+        "recurring",
+        "plan",
+        "renewal"
       ]
     },
     "success": {
@@ -886,6 +4349,75 @@
       ],
       "reserved": "success"
     },
+    "sum": {
+      "label": "Total",
+      "category": "data",
+      "keywords": [
+        "sigma",
+        "sum",
+        "aggregate"
+      ]
+    },
+    "summarize": {
+      "label": "Summarize",
+      "category": "agent",
+      "keywords": [
+        "tl;dr",
+        "digest",
+        "condense"
+      ]
+    },
+    "sunrise": {
+      "label": "Sunrise",
+      "category": "weather",
+      "keywords": [
+        "morning",
+        "dawn"
+      ]
+    },
+    "sunset": {
+      "label": "Sunset",
+      "category": "weather",
+      "keywords": [
+        "evening",
+        "dusk"
+      ]
+    },
+    "superscript": {
+      "label": "Superscript",
+      "category": "editor",
+      "keywords": [
+        "exponent",
+        "raised text"
+      ]
+    },
+    "swap": {
+      "label": "Swap",
+      "category": "navigation",
+      "keywords": [
+        "exchange",
+        "switch",
+        "trade"
+      ],
+      "mirror_rtl": true
+    },
+    "switch-off": {
+      "label": "Off",
+      "category": "dev",
+      "keywords": [
+        "toggle off",
+        "disabled"
+      ]
+    },
+    "switch-on": {
+      "label": "On",
+      "category": "dev",
+      "keywords": [
+        "toggle on",
+        "enabled",
+        "feature flag"
+      ]
+    },
     "table": {
       "label": "Table",
       "category": "data",
@@ -896,6 +4428,62 @@
         "data"
       ]
     },
+    "table-add": {
+      "label": "Add table",
+      "category": "data",
+      "keywords": [
+        "table",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "table-insert": {
+      "label": "Insert table",
+      "category": "editor",
+      "keywords": [
+        "grid",
+        "table",
+        "rows and columns"
+      ]
+    },
+    "table-remove": {
+      "label": "Remove table",
+      "category": "data",
+      "keywords": [
+        "table",
+        "remove",
+        "minus"
+      ]
+    },
+    "table-search": {
+      "label": "Find table",
+      "category": "data",
+      "keywords": [
+        "table",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "tablet": {
+      "label": "Tablet",
+      "category": "devices",
+      "keywords": [
+        "ipad",
+        "device",
+        "touch"
+      ]
+    },
+    "tabs": {
+      "label": "Tabs",
+      "category": "app",
+      "keywords": [
+        "tabbed",
+        "sections",
+        "views"
+      ]
+    },
     "tag": {
       "label": "Tag",
       "category": "content",
@@ -903,6 +4491,74 @@
         "label",
         "category",
         "price"
+      ]
+    },
+    "tag-add": {
+      "label": "Add tag",
+      "category": "content",
+      "keywords": [
+        "tag",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "tag-remove": {
+      "label": "Remove tag",
+      "category": "content",
+      "keywords": [
+        "tag",
+        "remove",
+        "minus"
+      ]
+    },
+    "tag-search": {
+      "label": "Find tag",
+      "category": "content",
+      "keywords": [
+        "tag",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "target": {
+      "label": "Goal",
+      "category": "status",
+      "keywords": [
+        "target",
+        "aim",
+        "objective",
+        "bullseye"
+      ]
+    },
+    "task-list": {
+      "label": "Task list",
+      "category": "editor",
+      "keywords": [
+        "checklist",
+        "todo",
+        "checkboxes"
+      ]
+    },
+    "task-list-add": {
+      "label": "Add task",
+      "category": "editor",
+      "keywords": [
+        "task list",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "task-list-check": {
+      "label": "Task confirmed",
+      "category": "editor",
+      "keywords": [
+        "task list",
+        "check",
+        "done",
+        "verified"
       ]
     },
     "team": {
@@ -915,6 +4571,25 @@
         "people"
       ]
     },
+    "team-add": {
+      "label": "Add team",
+      "category": "people",
+      "keywords": [
+        "team",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "team-remove": {
+      "label": "Remove team",
+      "category": "people",
+      "keywords": [
+        "team",
+        "remove",
+        "minus"
+      ]
+    },
     "terminal": {
       "label": "Terminal",
       "category": "dev",
@@ -923,6 +4598,26 @@
         "command line",
         "shell",
         "cli"
+      ]
+    },
+    "terminal-alert": {
+      "label": "Command needs attention",
+      "category": "dev",
+      "keywords": [
+        "terminal",
+        "alert",
+        "warning",
+        "issue"
+      ]
+    },
+    "terminal-check": {
+      "label": "Command confirmed",
+      "category": "dev",
+      "keywords": [
+        "terminal",
+        "check",
+        "done",
+        "verified"
       ]
     },
     "test": {
@@ -935,6 +4630,33 @@
         "lab"
       ]
     },
+    "text-color": {
+      "label": "Text color",
+      "category": "editor",
+      "keywords": [
+        "font color",
+        "foreground",
+        "paint text"
+      ]
+    },
+    "text-input": {
+      "label": "Text field",
+      "category": "app",
+      "keywords": [
+        "input",
+        "form field",
+        "type"
+      ]
+    },
+    "text-wrap": {
+      "label": "Wrap text",
+      "category": "editor",
+      "keywords": [
+        "word wrap",
+        "flow"
+      ],
+      "mirror_rtl": true
+    },
     "theme": {
       "label": "Theme",
       "category": "design",
@@ -943,6 +4665,15 @@
         "appearance",
         "colors",
         "mode"
+      ]
+    },
+    "thermometer": {
+      "label": "Temperature",
+      "category": "weather",
+      "keywords": [
+        "thermometer",
+        "heat",
+        "degrees"
       ]
     },
     "thinking": {
@@ -955,6 +4686,79 @@
         "pending reply"
       ]
     },
+    "thumbs-up": {
+      "label": "Approve",
+      "category": "status",
+      "keywords": [
+        "like",
+        "good",
+        "upvote",
+        "yes"
+      ]
+    },
+    "ticket": {
+      "label": "Ticket",
+      "category": "commerce",
+      "keywords": [
+        "coupon",
+        "pass",
+        "admission"
+      ]
+    },
+    "time-zone": {
+      "label": "Time zone",
+      "category": "time",
+      "keywords": [
+        "world clock",
+        "utc",
+        "region"
+      ]
+    },
+    "timeline": {
+      "label": "Timeline",
+      "category": "data",
+      "keywords": [
+        "roadmap",
+        "events",
+        "history"
+      ]
+    },
+    "timer": {
+      "label": "Timer",
+      "category": "time",
+      "keywords": [
+        "stopwatch",
+        "countdown",
+        "duration"
+      ]
+    },
+    "toast": {
+      "label": "Toast",
+      "category": "app",
+      "keywords": [
+        "snackbar",
+        "notification banner",
+        "message"
+      ]
+    },
+    "today": {
+      "label": "Today",
+      "category": "time",
+      "keywords": [
+        "now",
+        "current day",
+        "calendar"
+      ]
+    },
+    "token": {
+      "label": "Tokens",
+      "category": "agent",
+      "keywords": [
+        "usage",
+        "cost",
+        "credits"
+      ]
+    },
     "tool-call": {
       "label": "Tool call",
       "category": "agent",
@@ -963,6 +4767,78 @@
         "action",
         "invoke",
         "mcp"
+      ]
+    },
+    "tooltip": {
+      "label": "Tooltip",
+      "category": "app",
+      "keywords": [
+        "hint",
+        "popover",
+        "callout"
+      ]
+    },
+    "tornado": {
+      "label": "Tornado",
+      "category": "weather",
+      "keywords": [
+        "twister",
+        "storm",
+        "spin"
+      ]
+    },
+    "transfer": {
+      "label": "Transfer",
+      "category": "navigation",
+      "keywords": [
+        "up down",
+        "exchange",
+        "sync"
+      ]
+    },
+    "translate": {
+      "label": "Translate",
+      "category": "communication",
+      "keywords": [
+        "language",
+        "localize",
+        "i18n"
+      ]
+    },
+    "tree": {
+      "label": "Nature",
+      "category": "maps",
+      "keywords": [
+        "tree",
+        "park",
+        "eco"
+      ]
+    },
+    "tree-view": {
+      "label": "Tree",
+      "category": "data",
+      "keywords": [
+        "hierarchy",
+        "nested",
+        "outline"
+      ]
+    },
+    "truck": {
+      "label": "Shipping",
+      "category": "commerce",
+      "keywords": [
+        "delivery",
+        "truck",
+        "transport"
+      ]
+    },
+    "tv": {
+      "label": "TV",
+      "category": "devices",
+      "keywords": [
+        "television",
+        "screen",
+        "display"
       ]
     },
     "typography": {
@@ -974,6 +4850,34 @@
         "type",
         "letter"
       ]
+    },
+    "umbrella": {
+      "label": "Umbrella",
+      "category": "weather",
+      "keywords": [
+        "rain cover",
+        "insurance",
+        "protection"
+      ]
+    },
+    "underline": {
+      "label": "Underline",
+      "category": "editor",
+      "keywords": [
+        "format",
+        "text"
+      ]
+    },
+    "undo": {
+      "label": "Undo",
+      "category": "navigation",
+      "keywords": [
+        "revert",
+        "back",
+        "history"
+      ],
+      "reserved": "undoing the last change",
+      "mirror_rtl": true
     },
     "unlock": {
       "label": "Unlocked",
@@ -994,6 +4898,15 @@
       ],
       "reserved": "uploading a file"
     },
+    "usb": {
+      "label": "USB",
+      "category": "devices",
+      "keywords": [
+        "cable",
+        "port",
+        "connector"
+      ]
+    },
     "user": {
       "label": "Account",
       "category": "people",
@@ -1002,6 +4915,195 @@
         "profile",
         "avatar",
         "me"
+      ]
+    },
+    "user-add": {
+      "label": "Add user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "user-cancel": {
+      "label": "Cancel user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "user-check": {
+      "label": "User confirmed",
+      "category": "people",
+      "keywords": [
+        "account",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "user-edit": {
+      "label": "Edit user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "edit",
+        "pencil",
+        "change"
+      ]
+    },
+    "user-lock": {
+      "label": "Locked user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "user-remove": {
+      "label": "Remove user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "remove",
+        "minus"
+      ]
+    },
+    "user-search": {
+      "label": "Find user",
+      "category": "people",
+      "keywords": [
+        "account",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "variable": {
+      "label": "Variable",
+      "category": "dev",
+      "keywords": [
+        "x",
+        "value",
+        "parameter"
+      ]
+    },
+    "verified": {
+      "label": "Verified",
+      "category": "status",
+      "keywords": [
+        "badge",
+        "certified",
+        "approved",
+        "trusted"
+      ]
+    },
+    "video": {
+      "label": "Video",
+      "category": "media",
+      "keywords": [
+        "camera",
+        "film",
+        "recording",
+        "call"
+      ]
+    },
+    "video-add": {
+      "label": "Add video",
+      "category": "media",
+      "keywords": [
+        "video",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "video-ai": {
+      "label": "AI video",
+      "category": "media",
+      "keywords": [
+        "video",
+        "ai",
+        "generate",
+        "sparkle"
+      ]
+    },
+    "video-call": {
+      "label": "Video call",
+      "category": "communication",
+      "keywords": [
+        "meeting",
+        "conference",
+        "camera call"
+      ]
+    },
+    "video-off": {
+      "label": "Camera off",
+      "category": "media",
+      "keywords": [
+        "video",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "voice": {
+      "label": "Voice",
+      "category": "agent",
+      "keywords": [
+        "waveform",
+        "speech",
+        "audio input"
+      ]
+    },
+    "voicemail": {
+      "label": "Voicemail",
+      "category": "communication",
+      "keywords": [
+        "message",
+        "recording",
+        "tape"
+      ]
+    },
+    "volume": {
+      "label": "Volume",
+      "category": "media",
+      "keywords": [
+        "sound",
+        "speaker",
+        "audio"
+      ]
+    },
+    "volume-high": {
+      "label": "Volume up",
+      "category": "media",
+      "keywords": [
+        "loud",
+        "sound on"
+      ]
+    },
+    "volume-low": {
+      "label": "Volume low",
+      "category": "media",
+      "keywords": [
+        "quiet",
+        "speaker"
+      ]
+    },
+    "wallet": {
+      "label": "Wallet",
+      "category": "commerce",
+      "keywords": [
+        "money",
+        "balance",
+        "funds"
       ]
     },
     "warning": {
@@ -1025,6 +5127,15 @@
         "web build"
       ]
     },
+    "watch": {
+      "label": "Watch",
+      "category": "devices",
+      "keywords": [
+        "smartwatch",
+        "wearable",
+        "time"
+      ]
+    },
     "web-app": {
       "label": "Web app",
       "category": "app",
@@ -1033,6 +5144,158 @@
         "website",
         "page",
         "url"
+      ]
+    },
+    "web-app-add": {
+      "label": "Add web app",
+      "category": "app",
+      "keywords": [
+        "web app",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "web-app-lock": {
+      "label": "Locked web app",
+      "category": "app",
+      "keywords": [
+        "web app",
+        "lock",
+        "private",
+        "secure"
+      ]
+    },
+    "web-app-search": {
+      "label": "Find web app",
+      "category": "app",
+      "keywords": [
+        "web app",
+        "search",
+        "find",
+        "look up"
+      ]
+    },
+    "webhook": {
+      "label": "Webhook",
+      "category": "dev",
+      "keywords": [
+        "callback",
+        "event",
+        "trigger"
+      ]
+    },
+    "week": {
+      "label": "This week",
+      "category": "time",
+      "keywords": [
+        "7 days",
+        "weekly",
+        "calendar"
+      ]
+    },
+    "wifi": {
+      "label": "Wi-Fi",
+      "category": "devices",
+      "keywords": [
+        "wireless",
+        "internet",
+        "connection"
+      ]
+    },
+    "wifi-off": {
+      "label": "Wi-Fi off",
+      "category": "devices",
+      "keywords": [
+        "wi-fi",
+        "off",
+        "disabled",
+        "slash"
+      ]
+    },
+    "wind": {
+      "label": "Wind",
+      "category": "weather",
+      "keywords": [
+        "breeze",
+        "air",
+        "windy"
+      ]
+    },
+    "window-controls": {
+      "label": "Window controls",
+      "category": "app",
+      "keywords": [
+        "title bar",
+        "traffic lights",
+        "chrome"
+      ]
+    },
+    "workflow": {
+      "label": "Workflow",
+      "category": "dev",
+      "keywords": [
+        "pipeline",
+        "ci",
+        "automation",
+        "flow"
+      ]
+    },
+    "workflow-add": {
+      "label": "Add workflow",
+      "category": "dev",
+      "keywords": [
+        "workflow",
+        "add",
+        "new",
+        "plus"
+      ]
+    },
+    "workflow-cancel": {
+      "label": "Cancel workflow",
+      "category": "dev",
+      "keywords": [
+        "workflow",
+        "x",
+        "cancel",
+        "failed"
+      ]
+    },
+    "workflow-check": {
+      "label": "Workflow confirmed",
+      "category": "dev",
+      "keywords": [
+        "workflow",
+        "check",
+        "done",
+        "verified"
+      ]
+    },
+    "workflow-scheduled": {
+      "label": "Scheduled workflow",
+      "category": "dev",
+      "keywords": [
+        "workflow",
+        "clock",
+        "schedule",
+        "later"
+      ]
+    },
+    "zoom-in": {
+      "label": "Zoom in",
+      "category": "editor",
+      "keywords": [
+        "magnify",
+        "enlarge",
+        "bigger"
+      ]
+    },
+    "zoom-out": {
+      "label": "Zoom out",
+      "category": "editor",
+      "keywords": [
+        "shrink",
+        "smaller"
       ]
     }
   }
