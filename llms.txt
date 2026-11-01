@@ -64,7 +64,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Form](llms/form.md): Validation state for a form, with the accessibility wiring done for you
 - [Hooks](llms/hooks.md): Hooks shared by the components and by apps
 - [Hover card](llms/hover_card.md): The HoverCard component can be used to display additional information when a user hovers over an element
-- [Icons](llms/icons.md): The kit's one icon set: every Lucide icon, generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
+- [Icons](llms/icons.md): The kit's icons: every Lucide icon, plus Atoll's own set drawn for the stack (crates, wasm, desktop and mobile apps, agents and tool calls, charts, motion, focus), all generated into Rust as shape data plus one component per icon, so apps and components import icons from one place
 - [Input](llms/input.md): The input element is used to accept a text input from the user
 - [InputGroup](llms/input_group.md): An input with text, icons or buttons attached inside one bordered box
 - [InputOtp](llms/input_otp.md): A one-time-code input: one box per character

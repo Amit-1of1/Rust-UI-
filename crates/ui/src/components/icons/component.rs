@@ -1,5 +1,7 @@
-//! The kit's icon set: every [Lucide](https://lucide.dev) icon, generated into `lucide.rs` by
-//! `scripts/gen-lucide-icons.mjs` (no icon crate in between).
+//! The kit's icon sets: every [Lucide](https://lucide.dev) icon, generated into `lucide.rs` by
+//! `scripts/gen-lucide-icons.mjs` (no icon crate in between), and Atoll's own icons for the
+//! stack (crates, wasm, apps, agents, motion...), generated into `atoll.rs` by
+//! `scripts/gen-atoll-icons.mjs` from the SVGs in `crates/ui/icons/atoll/`.
 //!
 //! Every component and app imports icons from here (`crate::components::icons::Check`, or
 //! `ui::icons::Check` in an app). Two ways to draw one:
@@ -58,6 +60,8 @@ pub enum IconNode {
     Polyline { points: &'static str },
     /// `<polygon points>`.
     Polygon { points: &'static str },
+    /// `<path d>` filled with `currentColor` and no stroke (a solid shape; Atoll icons only).
+    Fill { d: &'static str },
 }
 
 /// One icon's shape data, as generated from Lucide: `ui::icons::lucide::CHECK`.
@@ -69,6 +73,24 @@ pub struct IconData {
     pub mirror_rtl: bool,
     /// The shapes, drawn in order.
     pub nodes: &'static [IconNode],
+}
+
+/// What the docs and tools know about one icon of a hand-drawn set ([`atoll::INDEX`](super::atoll::INDEX)):
+/// its default accessible name, search keywords, category, and the action it is reserved for.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct IconMeta {
+    /// The icon's name (`"crate"`), the same as its [`IconData::name`].
+    pub name: &'static str,
+    /// The default accessible name: pass it as `label` when the icon stands alone and means
+    /// something (`Icon { icon: atoll::CRATE, label: meta.label }`).
+    pub label: &'static str,
+    /// Search words beyond the name.
+    pub keywords: &'static [&'static str],
+    /// The group it is shown in (`"dev"`, `"system"`); one of [`atoll::CATEGORIES`](super::atoll::CATEGORIES).
+    pub category: &'static str,
+    /// The one action this icon means everywhere (`"delete"`), when it is a reserved system
+    /// icon. Don't use a reserved icon for anything else.
+    pub reserved: Option<&'static str>,
 }
 
 /// Width and height of an icon. The named steps read `--icon-size-xs` … `--icon-size-xl`
@@ -280,6 +302,9 @@ fn shape_node(shape: &IconNode) -> Element {
         },
         IconNode::Polygon { points } => rsx! {
             polygon { points }
+        },
+        IconNode::Fill { d } => rsx! {
+            path { d, fill: "currentColor", stroke: "none" }
         },
     }
 }
