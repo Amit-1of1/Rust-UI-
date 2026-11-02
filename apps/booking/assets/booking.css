@@ -4,7 +4,7 @@ body {
   margin: 0;
   background: var(--primary-color);
   color: var(--secondary-color-1);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans, system-ui, sans-serif);
 }
 
 h1 {
@@ -471,4 +471,10 @@ h1 {
   .tr-wide-only {
     display: none;
   }
+}
+
+/* Headings in the theme preset's display face. */
+:where(h1, h2, h3) {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
 }

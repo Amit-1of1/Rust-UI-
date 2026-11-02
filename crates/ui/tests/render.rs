@@ -108,9 +108,10 @@ fn closed_overlays_render_without_panicking() {
 fn theme_customizer_offers_labelled_radios_and_a_range() {
     let html = render(|| rsx! { ThemeCustomizer {} });
     assert!(html.contains("<legend>Accent colour</legend>"), "{html}");
+    assert!(html.contains("<legend>Look</legend>"), "{html}");
     assert_eq!(
         html.matches("type=\"radio\"").count(),
-        ACCENTS.len() + DENSITIES.len() + 3,
+        PRESETS.len() + ACCENTS.len() + DENSITIES.len() + 3,
         "{html}"
     );
     assert!(html.contains("for=\"theme-radius\""), "{html}");

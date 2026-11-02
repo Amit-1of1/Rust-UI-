@@ -73,6 +73,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Item](llms/item.md): A versatile component for displaying content with media, title, description, and actions
 - [Kbd](llms/kbd.md): A keyboard key cap, for showing shortcuts
 - [Label](llms/label.md): The Label component is used to provide a label for form elements, enhancing accessibility and usability
+- [Layout](llms/layout.md): Page structure on the kit's foundations ([Foundations](../../../../docs/FOUNDATIONS.md)):
 - [Link](llms/link.md): `TextLink`: an inline text link, a plain `<a href>` with an underline, the kit's text colour and a visible focus ring
 - [Marquee](llms/marquee.md): A looping auto-scrolling strip (logos, quotes)
 - [Menubar](llms/menubar.md): The Menubar component can be used to display a menu bar with collapsible menus
@@ -103,7 +104,7 @@ Paths are relative to the repository root. `atoll docs <name>` prints a componen
 - [Tabs](llms/tabs.md): The Tabs component is used to create a tabbed interface, allowing users to switch between different views or sections of content
 - [Tag group](llms/tag_group.md): A Tag Group is a focusable group of tags (labels, categories, filters and similar items) with keyboard navigation, optional selection and removal
 - [Textarea](llms/textarea.md): The textarea element is used to allow users to enter multi-line text input in a user interface
-- [ThemeCustomizer](llms/theme_customizer.md): Pick an accent colour, corner radius and light/dark mode for the whole page
+- [ThemeCustomizer](llms/theme_customizer.md): Pick a look (theme preset), accent colour, corner radius and light/dark mode for the whole page
 - [TimePicker](llms/time_picker.md): A time input: one field per part (hours, minutes, optional seconds and AM/PM), each a spin button
 - [Toast](llms/toast.md): The Toast component is used to display brief messages to the user, typically for notifications or alerts
 - [Toggle](llms/toggle.md): The Toggle component is used to create a toggle button that can be pressed or unpressed

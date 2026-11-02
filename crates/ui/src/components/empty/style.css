@@ -6,7 +6,7 @@
   justify-content: center;
   padding: 2rem;
   border: 1px dashed var(--primary-color-7);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   color: var(--secondary-color-4);
   gap: 1rem;
   text-align: center;
@@ -25,7 +25,7 @@
   height: 2.5rem;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background-color: var(--primary-color-5);
   color: var(--secondary-color-2);
 }
@@ -36,9 +36,11 @@
 }
 
 .dx-empty-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   color: var(--secondary-color-1);
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--font-size-title-4);
+  font-weight: var(--font-weight-semibold);
   line-height: 1.25;
 }
 
@@ -46,7 +48,7 @@
   max-width: 24rem;
   margin: 0;
   color: var(--secondary-color-5);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-empty-content {

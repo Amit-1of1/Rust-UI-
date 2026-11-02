@@ -112,6 +112,10 @@ fn cargo_dependencies(source: &str, primitives: &Primitives, registry: &str) -> 
     if uses("strum") {
         deps.push(json!({"name": "strum", "version": "0.27.2", "features": ["derive"]}));
     }
+    if uses("dioxus_sdk_time") {
+        // Timers that work on the web and native (the async combobox's debounce).
+        deps.push(json!({"name": "dioxus-sdk-time", "version": "0.7.0"}));
+    }
     if uses("tracing") {
         deps.push(json!({"name": "tracing", "version": "0.1"}));
     }

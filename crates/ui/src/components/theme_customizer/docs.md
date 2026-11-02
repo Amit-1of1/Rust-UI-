@@ -1,6 +1,6 @@
 # ThemeCustomizer
 
-Pick an accent colour, corner radius and light/dark mode for the whole page. It only writes `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings.
+Pick a look (theme preset), accent colour, corner radius and light/dark mode for the whole page. It only writes `data-preset`, `data-accent`, `data-theme` and `--radius` on `<html>`, so you can drive the same attributes from your own settings. `PresetPicker {}` is the look picker on its own, for a header or settings page.
 
 ## One theme state: `use_theme()`
 
@@ -17,7 +17,7 @@ rsx! {
 }
 ```
 
-`mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
+`mode()` / `set_mode(ThemeMode::System | Light | Dark)`, `preset()` / `set_preset(name)` (one of `PRESETS`; picking one drops a radius set by hand), `is_dark()` (follows the OS in `System` mode, on the web), `accent()` / `set_accent(name)` (one of `ACCENTS`), `density()` / `set_density(name)` (one of `DENSITIES`) and `radius()` / `set_radius(px)`. Don't write `data-theme` yourself as well; that is the second source of truth this replaces.
 
 ## Remember the theme between visits
 

@@ -5,7 +5,7 @@
   align-items: center;
   width: fit-content;
   padding: calc(0.5rem * var(--density, 1)) 0.5rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-medium);
   background: var(--light, var(--primary-color)) var(--dark, var(--primary-color-3));
   box-shadow: inset 0 0 0 1px var(--light, var(--primary-color-6)) var(--dark, var(--primary-color-7));
   color: var(--secondary-color-4);
@@ -32,7 +32,7 @@
   padding: 0 0.125rem;
   border: none;
   margin: 0;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-small);
   background: transparent;
   caret-color: transparent;
   color: inherit;
