@@ -33,9 +33,27 @@ pub fn Demo() -> Element {
                     },
                     "Duplicate"
                 }
+                // A submenu: its trigger is item 3 of this menu, its items count from 0.
+                ContextMenuSub { index: 3usize,
+                    ContextMenuSubTrigger { "Share" }
+                    ContextMenuSubContent {
+                        ContextMenuItem {
+                            value: "copy-link".to_string(),
+                            index: 0usize,
+                            on_select: move |value| selected_item.set(Some(value)),
+                            "Copy link"
+                        }
+                        ContextMenuItem {
+                            value: "email".to_string(),
+                            index: 1usize,
+                            on_select: move |value| selected_item.set(Some(value)),
+                            "Email"
+                        }
+                    }
+                }
                 ContextMenuItem {
                     value: "delete".to_string(),
-                    index: 3usize,
+                    index: 4usize,
                     on_select: move |value| {
                         selected_item.set(Some(value));
                     },

@@ -1,7 +1,8 @@
 use dioxus::prelude::*;
+use crate::components::icons::ChevronRight;
 use dioxus_primitives::menubar::{
     self, MenubarContentProps, MenubarItemProps, MenubarMenuProps, MenubarProps,
-    MenubarTriggerProps,
+    MenubarSubContentProps, MenubarSubProps, MenubarSubTriggerProps, MenubarTriggerProps,
 };
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 #[css_module("/src/components/menubar/style.css")]
@@ -121,6 +122,61 @@ pub fn MenubarItem(props: MenubarItemProps) -> Element {
             attributes: merge_attributes(vec![attributes!(div {
                 class: Styles::dx_menubar_item,
             }), props.attributes]),
+            {props.children}
+        }
+    }
+}
+
+/// A nested menu inside [`MenubarContent`] (or another submenu). Its trigger is an item of the
+/// surrounding menu at `index`; the content holds ordinary [`MenubarItem`]s.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn MenubarSub(props: MenubarSubProps) -> Element {
+    rsx! {
+        menubar::MenubarSub {
+            index: props.index,
+            open: props.open,
+            default_open: props.default_open,
+            on_open_change: props.on_open_change,
+            disabled: props.disabled,
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_menubar_sub }), props.attributes]),
+            {props.children}
+        }
+    }
+}
+
+/// The item that opens a [`MenubarSub`], with a chevron after its label.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn MenubarSubTrigger(props: MenubarSubTriggerProps) -> Element {
+    let class = format!("{} {}", Styles::dx_menubar_item, Styles::dx_menubar_sub_trigger);
+    rsx! {
+        menubar::MenubarSubTrigger {
+            attributes: merge_attributes(vec![attributes!(div { class }), props.attributes]),
+            {props.children}
+            ChevronRight { size: 16, class: Styles::dx_menubar_sub_chevron }
+        }
+    }
+}
+
+/// The menu of a [`MenubarSub`]: the menubar's own look, beside its trigger.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn MenubarSubContent(props: MenubarSubContentProps) -> Element {
+    let class = format!("{} {}", Styles::dx_menubar_content, Styles::dx_menubar_sub_content);
+    rsx! {
+        menubar::MenubarSubContent {
+            id: props.id,
+            attributes: merge_attributes(vec![attributes!(div { class }), props.attributes]),
             {props.children}
         }
     }

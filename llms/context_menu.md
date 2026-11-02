@@ -1,6 +1,6 @@
 # Context menu
 
-- Copy into your app: `atoll add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add context_menu` or `dx components add context_menu --git https://github.com/Amit-1of1/Rust-UI-` (also copies `icons`).
 - Import: `use crate::components::context_menu::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element. It can contain various menu items that the user can interact with.
@@ -31,6 +31,24 @@ ContextMenu {
     }
 }
 ```
+## Submenus
+
+Put a `ContextMenuSub` where an item would go. Its `index` is the trigger's place among the menu's items; the items inside `ContextMenuSubContent` count from 0 again. Submenus can nest.
+
+```rust
+ContextMenuSub { index: 2usize,
+    ContextMenuSubTrigger { "Share" }
+    ContextMenuSubContent {
+        ContextMenuItem { index: 0usize, value: "a".to_string(), "Copy link" }
+    }
+}
+```
+
+ArrowRight, Enter or Space on the trigger opens the submenu and focuses its first item; ArrowLeft or Escape closes only the submenu and puts focus back on the trigger; choosing an item closes the whole menu. With a mouse the submenu opens after the pointer rests on its trigger for 100 ms, and stays open for 300 ms after the pointer leaves, so it can cross other items on the way. The submenu opens to the inline end and does not flip at screen edges, and the arrow keys are not mirrored in right-to-left text yet.
+
+## Stability
+
+The `ContextMenuSub` parts are experimental (new on 2026-11-01, docs/STABILITY.md); the rest of the component is stable.
 
 ## API
 
@@ -46,6 +64,31 @@ pub fn ContextMenuContent(props: ContextMenuContentProps) -> Element
 
 #[component]
 pub fn ContextMenuItem(props: ContextMenuItemProps) -> Element
+
+/// A nested menu inside [`ContextMenuContent`] (or another submenu). Its trigger is an item of
+/// the surrounding menu at `index`; the content holds ordinary [`ContextMenuItem`]s.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ContextMenuSub(props: ContextMenuSubProps) -> Element
+
+/// The item that opens a [`ContextMenuSub`], with a chevron after its label.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ContextMenuSubTrigger(props: ContextMenuSubTriggerProps) -> Element
+
+/// The menu of a [`ContextMenuSub`]: the context menu's own look, beside its trigger.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn ContextMenuSubContent(props: ContextMenuSubContentProps) -> Element
 ```
 
 ## Example
@@ -86,9 +129,27 @@ pub fn Demo() -> Element {
                     },
                     "Duplicate"
                 }
+                // A submenu: its trigger is item 3 of this menu, its items count from 0.
+                ContextMenuSub { index: 3usize,
+                    ContextMenuSubTrigger { "Share" }
+                    ContextMenuSubContent {
+                        ContextMenuItem {
+                            value: "copy-link".to_string(),
+                            index: 0usize,
+                            on_select: move |value| selected_item.set(Some(value)),
+                            "Copy link"
+                        }
+                        ContextMenuItem {
+                            value: "email".to_string(),
+                            index: 1usize,
+                            on_select: move |value| selected_item.set(Some(value)),
+                            "Email"
+                        }
+                    }
+                }
                 ContextMenuItem {
                     value: "delete".to_string(),
-                    index: 3usize,
+                    index: 4usize,
                     on_select: move |value| {
                         selected_item.set(Some(value));
                     },

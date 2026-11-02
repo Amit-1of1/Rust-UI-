@@ -1,7 +1,9 @@
 use dioxus::prelude::*;
 use dioxus_primitives::dioxus_attributes::attributes;
+use crate::components::icons::ChevronRight;
 use dioxus_primitives::dropdown_menu::{
     self, DropdownMenuContentProps, DropdownMenuItemProps, DropdownMenuProps,
+    DropdownMenuSubContentProps, DropdownMenuSubProps, DropdownMenuSubTriggerProps,
     DropdownMenuTriggerProps,
 };
 use dioxus_primitives::merge_attributes;
@@ -129,5 +131,68 @@ pub fn DropdownMenuItem<T: Clone + PartialEq + 'static>(
             attributes: merged,
             {props.children}
         }
+    }
+}
+
+/// A nested menu inside [`DropdownMenuContent`] (or another submenu). Its trigger is an item of
+/// the surrounding menu at `index`; the content holds ordinary [`DropdownMenuItem`]s.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DropdownMenuSub(props: DropdownMenuSubProps) -> Element {
+    let base = attributes!(div {
+        class: Styles::dx_dropdown_menu_sub,
+    });
+    let merged = merge_attributes(vec![base, props.attributes.clone()]);
+
+    rsx! {
+        dropdown_menu::DropdownMenuSub {
+            index: props.index,
+            open: props.open,
+            default_open: props.default_open,
+            on_open_change: props.on_open_change,
+            disabled: props.disabled,
+            attributes: merged,
+            {props.children}
+        }
+    }
+}
+
+/// The item that opens a [`DropdownMenuSub`], with a chevron after its label.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DropdownMenuSubTrigger(props: DropdownMenuSubTriggerProps) -> Element {
+    let base = attributes!(div {
+        class: format!("{} {}", Styles::dx_dropdown_menu_item, Styles::dx_dropdown_menu_sub_trigger),
+    });
+    let merged = merge_attributes(vec![base, props.attributes]);
+
+    rsx! {
+        dropdown_menu::DropdownMenuSubTrigger { attributes: merged,
+            {props.children}
+            ChevronRight { size: 16, class: Styles::dx_dropdown_menu_sub_chevron }
+        }
+    }
+}
+
+/// The list of a [`DropdownMenuSub`]: the menu's own look, beside its trigger.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn DropdownMenuSubContent(props: DropdownMenuSubContentProps) -> Element {
+    let base = attributes!(div {
+        class: format!("{} {}", Styles::dx_dropdown_menu_content, Styles::dx_dropdown_menu_sub_content),
+    });
+    let merged = merge_attributes(vec![base, props.attributes]);
+
+    rsx! {
+        dropdown_menu::DropdownMenuSubContent { id: props.id, attributes: merged, {props.children} }
     }
 }
