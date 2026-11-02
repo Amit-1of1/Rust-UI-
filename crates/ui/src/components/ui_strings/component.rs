@@ -165,6 +165,17 @@ pub struct UiStrings {
     pub show_more_crumbs: String,
     /// The "+N" avatar in a group. `{count}` is how many are left out.
     pub more_count: String,
+    // Async combobox
+    pub loading_results: String,
+    pub loading_more: String,
+    /// The last option of an async combobox that has more pages.
+    pub load_more: String,
+    pub one_result: String,
+    /// `{count}` is the number of results loaded so far.
+    pub result_count: String,
+    pub results_failed: String,
+    /// The option that repeats a failed request.
+    pub try_again: String,
 }
 
 impl Default for UiStrings {
@@ -261,6 +272,13 @@ impl Default for UiStrings {
             pagination: s("Pagination"),
             show_more_crumbs: s("Show {count} more"),
             more_count: s("{count} more"),
+            loading_results: s("Loading results…"),
+            loading_more: s("Loading more results…"),
+            load_more: s("Load more results"),
+            one_result: s("1 result"),
+            result_count: s("{count} results"),
+            results_failed: s("Couldn't load results."),
+            try_again: s("Try again"),
         }
     }
 }

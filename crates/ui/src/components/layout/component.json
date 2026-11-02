@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "atoll-primitives",
+      "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "Page structure on the kit's foundations ([Foundations](../../../../docs/FOUNDATIONS.md)):",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "layout"
+}

@@ -7,7 +7,12 @@
       "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "sound"
+    }
+  ],
   "description": "The Switch component allows users to toggle between two states, such as on and off.",
   "exclude": [
     "docs.md",

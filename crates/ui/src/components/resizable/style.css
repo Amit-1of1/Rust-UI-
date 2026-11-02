@@ -37,7 +37,7 @@
   cursor: col-resize;
   outline: none;
   touch-action: none;
-  transition: background-color 150ms;
+  transition: background-color var(--duration-fast);
 }
 
 /* A wider invisible hit area than the 1px line. */
@@ -68,11 +68,11 @@
 }
 
 .dx-resizable-grip {
-  z-index: 1;
+  z-index: var(--z-index-raised);
   width: 0.75rem;
   height: 1rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: 0.25rem;
+  border-radius: var(--radius-small);
   background: var(--primary-color-3)
     radial-gradient(circle, var(--secondary-color-5) 1px, transparent 1.5px) center / 4px 4px;
 }

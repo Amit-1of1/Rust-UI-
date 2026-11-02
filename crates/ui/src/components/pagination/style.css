@@ -21,12 +21,12 @@
   justify-content: center;
   border-radius: 0.625rem;
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
   gap: 0.5rem;
   line-height: 1;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--duration-medium) var(--easing-standard), color var(--duration-medium) var(--easing-standard);
 }
 
 .dx-pagination-link:focus-visible {
@@ -109,8 +109,8 @@
   background: none;
   cursor: pointer;
   font: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-pagination-button[data-active="true"] {

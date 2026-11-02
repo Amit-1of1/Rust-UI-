@@ -5,6 +5,7 @@ use dioxus_primitives::dialog::{self, DialogCtx, DialogDescriptionProps};
 use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 
 use crate::components::hooks::ReturnFocus;
+use crate::components::sound::OpenCloseSound;
 
 #[css_module("/src/components/dialog/style.css")]
 struct Styles;
@@ -123,6 +124,7 @@ pub fn Dialog(props: DialogProps) -> Element {
                 if (props.is_modal)() {
                     ReturnFocus { inside: None }
                 }
+                OpenCloseSound {}
             }
         }
 

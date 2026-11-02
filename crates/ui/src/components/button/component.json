@@ -11,6 +11,10 @@
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "sound"
     }
   ],
   "description": "The button element is used to trigger actions or events in a user interface.",

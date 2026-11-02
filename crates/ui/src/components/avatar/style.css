@@ -8,7 +8,7 @@
 .dx-avatar-label {
     margin: 0;
     color: var(--secondary-color-4);
-    font-size: 0.875rem;
+    font-size: var(--font-size-body-2);
 }
 
 /* Avatar Component Styles */
@@ -22,7 +22,7 @@
     align-items: center;
     justify-content: center;
     color: var(--secondary-color-4);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 .dx-avatar-image {
@@ -35,19 +35,19 @@
 .dx-avatar-sm {
     width: 2rem;
     height: 2rem;
-    font-size: 0.875rem;
+    font-size: var(--font-size-body-2);
 }
 
 .dx-avatar-md {
     width: 3rem;
     height: 3rem;
-    font-size: 1.25rem;
+    font-size: var(--font-size-title-3);
 }
 
 .dx-avatar-lg {
     width: 4rem;
     height: 4rem;
-    font-size: 1.75rem;
+    font-size: var(--font-size-title-2);
 }
 
 /* Avatar shape */
@@ -90,7 +90,7 @@
     justify-content: center;
     background: var(--primary-color);
     color: var(--secondary-color-4);
-    font-size: 1.5rem;
+    font-size: var(--font-size-title-2);
 }
 
 .dx-avatar[data-state="error"] .dx-avatar-fallback {

@@ -5,12 +5,24 @@
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "atoll-primitives",
       "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
+    },
+    {
+      "name": "dioxus-sdk-time",
+      "version": "0.7.0"
     }
   ],
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "hooks"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "icons"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "ui_strings"
     }
   ],
   "description": "The Combobox component is an autocomplete input with a filterable popup list.",

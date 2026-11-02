@@ -40,7 +40,8 @@
         "alert_dialog/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "sound"
       ]
     },
     {
@@ -113,7 +114,8 @@
         "button/style.css"
       ],
       "registryDependencies": [
-        "hooks"
+        "hooks",
+        "sound"
       ]
     },
     {
@@ -227,7 +229,8 @@
         "checkbox/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "icons",
+        "sound"
       ]
     },
     {
@@ -271,6 +274,7 @@
     {
       "name": "combobox",
       "files": [
+        "combobox/async_combobox.rs",
         "combobox/component.rs",
         "combobox/contract.toml",
         "combobox/docs.md",
@@ -278,7 +282,9 @@
         "combobox/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "hooks",
+        "icons",
+        "ui_strings"
       ]
     },
     {
@@ -364,6 +370,7 @@
       "registryDependencies": [
         "hooks",
         "icons",
+        "sound",
         "ui_strings"
       ]
     },
@@ -455,6 +462,7 @@
         "hooks",
         "input",
         "select",
+        "sound",
         "textarea",
         "time_picker",
         "ui_strings"
@@ -571,6 +579,16 @@
         "label/docs.md",
         "label/mod.rs",
         "label/style.css"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "layout",
+      "files": [
+        "layout/component.rs",
+        "layout/docs.md",
+        "layout/mod.rs",
+        "layout/style.css"
       ],
       "registryDependencies": []
     },
@@ -784,6 +802,7 @@
       "registryDependencies": [
         "hooks",
         "icons",
+        "sound",
         "ui_strings"
       ]
     },
@@ -850,6 +869,21 @@
       "registryDependencies": []
     },
     {
+      "name": "sound",
+      "files": [
+        "sound/component.rs",
+        "sound/docs.md",
+        "sound/mod.rs",
+        "sound/style.css"
+      ],
+      "registryDependencies": [
+        "hooks",
+        "label",
+        "native_select",
+        "switch"
+      ]
+    },
+    {
       "name": "spinner",
       "files": [
         "spinner/component.rs",
@@ -890,7 +924,9 @@
         "switch/mod.rs",
         "switch/style.css"
       ],
-      "registryDependencies": []
+      "registryDependencies": [
+        "sound"
+      ]
     },
     {
       "name": "table",
@@ -976,7 +1012,8 @@
         "toast/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "icons",
+        "sound"
       ]
     },
     {

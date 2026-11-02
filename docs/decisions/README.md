@@ -9,3 +9,4 @@ One file per decision, named `<yyyy-mm-dd>-<topic>.md`: what was decided, why, a
 | 2026-10-30 | [The primitives fork becomes a publishable crate](2026-10-30-publish-primitives-fork.md) |
 | 2026-10-31 | [The kit is called Atoll](2026-10-31-name-atoll.md) |
 | 2026-11-01 | [How the project is maintained: service levels, support time, no telemetry](2026-11-01-maintenance-process.md) |
+| 2026-11-01 | [Interface sounds: three sets, mixed per sound, off until the person turns them on](2026-11-01-ui-sound.md) |

@@ -140,6 +140,13 @@ impl UiStrings {
             pagination: s("Pagination"),
             show_more_crumbs: s("Afficher {count} de plus"),
             more_count: s("{count} de plus"),
+            loading_results: s("Chargement des résultats…"),
+            loading_more: s("Chargement d'autres résultats…"),
+            load_more: s("Charger plus de résultats"),
+            one_result: s("1 résultat"),
+            result_count: s("{count} résultats"),
+            results_failed: s("Impossible de charger les résultats."),
+            try_again: s("Réessayer"),
         }
     }
 
@@ -237,6 +244,13 @@ impl UiStrings {
             pagination: s("Seitennavigation"),
             show_more_crumbs: s("{count} weitere anzeigen"),
             more_count: s("{count} weitere"),
+            loading_results: s("Ergebnisse werden geladen…"),
+            loading_more: s("Weitere Ergebnisse werden geladen…"),
+            load_more: s("Weitere Ergebnisse laden"),
+            one_result: s("1 Ergebnis"),
+            result_count: s("{count} Ergebnisse"),
+            results_failed: s("Ergebnisse konnten nicht geladen werden."),
+            try_again: s("Erneut versuchen"),
         }
     }
 
@@ -334,6 +348,13 @@ impl UiStrings {
             pagination: s("Paginación"),
             show_more_crumbs: s("Mostrar {count} más"),
             more_count: s("{count} más"),
+            loading_results: s("Cargando resultados…"),
+            loading_more: s("Cargando más resultados…"),
+            load_more: s("Cargar más resultados"),
+            one_result: s("1 resultado"),
+            result_count: s("{count} resultados"),
+            results_failed: s("No se pudieron cargar los resultados."),
+            try_again: s("Reintentar"),
         }
     }
 
@@ -431,6 +452,13 @@ impl UiStrings {
             pagination: s("Paginação"),
             show_more_crumbs: s("Mostrar mais {count}"),
             more_count: s("mais {count}"),
+            loading_results: s("Carregando resultados…"),
+            loading_more: s("Carregando mais resultados…"),
+            load_more: s("Carregar mais resultados"),
+            one_result: s("1 resultado"),
+            result_count: s("{count} resultados"),
+            results_failed: s("Não foi possível carregar os resultados."),
+            try_again: s("Tentar novamente"),
         }
     }
 
@@ -528,6 +556,13 @@ impl UiStrings {
             pagination: s("التنقل بين الصفحات"),
             show_more_crumbs: s("إظهار {count} أخرى"),
             more_count: s("{count} آخرون"),
+            loading_results: s("جارٍ تحميل النتائج…"),
+            loading_more: s("جارٍ تحميل المزيد من النتائج…"),
+            load_more: s("تحميل المزيد من النتائج"),
+            one_result: s("نتيجة واحدة"),
+            result_count: s("{count} نتيجة"),
+            results_failed: s("تعذّر تحميل النتائج."),
+            try_again: s("إعادة المحاولة"),
         }
     }
 
@@ -625,6 +660,13 @@ impl UiStrings {
             pagination: s("ניווט בין עמודים"),
             show_more_crumbs: s("הצגת {count} נוספים"),
             more_count: s("{count} נוספים"),
+            loading_results: s("טוען תוצאות…"),
+            loading_more: s("טוען תוצאות נוספות…"),
+            load_more: s("טעינת תוצאות נוספות"),
+            one_result: s("תוצאה אחת"),
+            result_count: s("{count} תוצאות"),
+            results_failed: s("לא ניתן לטעון את התוצאות."),
+            try_again: s("ניסיון חוזר"),
         }
     }
 
@@ -722,6 +764,13 @@ impl UiStrings {
             pagination: s("ページ送り"),
             show_more_crumbs: s("さらに {count} 件を表示"),
             more_count: s("他 {count} 人"),
+            loading_results: s("結果を読み込み中…"),
+            loading_more: s("さらに結果を読み込み中…"),
+            load_more: s("さらに結果を読み込む"),
+            one_result: s("1 件の結果"),
+            result_count: s("{count} 件の結果"),
+            results_failed: s("結果を読み込めませんでした。"),
+            try_again: s("再試行"),
         }
     }
 
@@ -819,6 +868,13 @@ impl UiStrings {
             pagination: s("分页"),
             show_more_crumbs: s("再显示 {count} 项"),
             more_count: s("另外 {count} 个"),
+            loading_results: s("正在加载结果…"),
+            loading_more: s("正在加载更多结果…"),
+            load_more: s("加载更多结果"),
+            one_result: s("1 个结果"),
+            result_count: s("{count} 个结果"),
+            results_failed: s("无法加载结果。"),
+            try_again: s("重试"),
         }
     }
 

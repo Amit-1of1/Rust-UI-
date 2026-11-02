@@ -29,7 +29,7 @@ tracing = "0.1"
 dioxus-sdk-time = "0.7.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget", "MediaQueryList", "Navigator", "Clipboard", "Storage"] }
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget", "MediaQueryList", "Navigator", "Clipboard", "Storage", "AudioContext", "AudioContextState", "BaseAudioContext", "AudioNode", "AudioParam", "AudioDestinationNode", "AudioScheduledSourceNode", "GainNode", "OscillatorNode", "OscillatorType"] }
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 

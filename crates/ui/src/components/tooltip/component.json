@@ -5,6 +5,10 @@
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "atoll-primitives",
       "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
+    },
+    {
+      "name": "dioxus-sdk-time",
+      "version": "0.7.0"
     }
   ],
   "componentDependencies": [],

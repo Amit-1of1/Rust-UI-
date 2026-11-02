@@ -4,10 +4,10 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background-color: var(--primary-color-2);
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   gap: 0.125rem;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .dx-alert-title {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 1.25rem;
 }
 

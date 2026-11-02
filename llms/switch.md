@@ -1,6 +1,6 @@
 # Switch
 
-- Copy into your app: `atoll add switch` or `dx components add switch --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add switch` or `dx components add switch --git https://github.com/Amit-1of1/Rust-UI-` (also copies `sound`).
 - Import: `use crate::components::switch::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The Switch component allows users to toggle between two states, such as on and off.

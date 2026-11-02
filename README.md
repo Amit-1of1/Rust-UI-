@@ -20,6 +20,8 @@ cd my-app && dx serve       # http://localhost:8080
 
 The full walkthrough is [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md). Adding the kit to an app you already have: [docs/EXISTING_APP.md](docs/EXISTING_APP.md). Free under MIT or Apache-2.0; [Atoll Pro](docs/pro/README.md) adds premium blocks and templates.
 
+Testing your screens in `cargo test` (click, type, assert; no browser): [docs/TESTING.md](docs/TESTING.md).
+
 Before you adopt it: [docs/HARD_QUESTIONS.md](docs/HARD_QUESTIONS.md) answers the objections an experienced engineer raises (age and who writes it, Dioxus lock-in, forks, download size, compile times, accessibility limits), including where Atoll loses.
 
 Atoll was called "Rust UI" until 2026-10-31; [MIGRATION.md](docs/MIGRATION.md) maps the old crate and command names to the new ones.
