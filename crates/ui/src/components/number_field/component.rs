@@ -101,13 +101,13 @@ pub fn NumberInput(
             input {
                 onkeydown: move |e: KeyboardEvent| {
                     let next = match e.key() {
-                        Key::ArrowUp => current + step,
-                        Key::ArrowDown => current - step,
-                        Key::PageUp => current + step * 10.0,
-                        Key::PageDown => current - step * 10.0,
-                        Key::Home if min.is_some() => min.unwrap_or(current),
-                        Key::End if max.is_some() => max.unwrap_or(current),
-                        Key::Enter => match draft().and_then(|d| parse_number(&d)) {
+                        Key::Named(NamedKey::ArrowUp) => current + step,
+                        Key::Named(NamedKey::ArrowDown) => current - step,
+                        Key::Named(NamedKey::PageUp) => current + step * 10.0,
+                        Key::Named(NamedKey::PageDown) => current - step * 10.0,
+                        Key::Named(NamedKey::Home) if min.is_some() => min.unwrap_or(current),
+                        Key::Named(NamedKey::End) if max.is_some() => max.unwrap_or(current),
+                        Key::Named(NamedKey::Enter) => match draft().and_then(|d| parse_number(&d)) {
                             Some(v) => v,
                             None => return,
                         },

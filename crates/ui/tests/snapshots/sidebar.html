@@ -1,16 +1,16 @@
 <div class="dx-sidebar-wrapper-css" data-slot="sidebar-wrapper" style="--dx-sidebar-width: 16rem; --dx-sidebar-width-mobile: 18rem; --dx-sidebar-width-icon: 3rem">
-<div class="dx-sidebar-desktop-css" data-state="expanded" data-collapsible="" data-variant="sidebar" data-side="left" data-slot="sidebar">
-<div class="dx-sidebar-gap-css" data-slot="sidebar-gap">
+<div data-slot="sidebar" class="dx-sidebar-desktop-css" data-state="expanded" data-collapsible="" data-variant="sidebar" data-side="left">
+<div data-slot="sidebar-gap" class="dx-sidebar-gap-css">
 </div>
 <div aria-label="Sidebar" class="dx-sidebar-container-css" data-slot="sidebar-container" role="navigation">
-<div class="dx-sidebar-inner-css" data-sidebar="sidebar" data-slot="sidebar-inner">
+<div data-sidebar="sidebar" data-slot="sidebar-inner" class="dx-sidebar-inner-css">
 <div class="dx-sidebar-header-css" data-sidebar="header" data-slot="sidebar-header">
 <ul class="dx-sidebar-menu-css" data-sidebar="menu" data-slot="sidebar-menu">
 <li class="dx-sidebar-menu-item-css" data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <div data-state="closed" data-disabled=false class="dx-dropdown-menu-css dx-sidebar-dropdown-menu-css">
 <button aria-expanded=false aria-haspopup="listbox" class="dx-sidebar-menu-button-css dx-dropdown-menu-trigger-css dx-sidebar-dropdown-menu-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-sidebar="menu-button" data-size="lg" data-slot="sidebar-menu-button" data-state="closed" data-variant="default" id="dxc-n0" type="button">
 <div style="display:flex; flex-shrink:0; align-items:center; justify-content:center; width:2rem; height:2rem; aspect-ratio:1; border-radius:0.5rem; background:var(--dx-sidebar-accent); color:var(--dx-sidebar-accent-foreground);">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -21,7 +21,7 @@
 <span class="dx-sidebar-info-subtitle-css">Enterprise
 </span>
 </div>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -38,13 +38,13 @@
 <li class="dx-sidebar-menu-item-css" data-disabled=false data-open=true data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <div data-state="closed" data-disabled=true class="dx-tooltip-css dx-sidebar-tooltip-css">
 <button aria-controls="dxc-n1" aria-expanded=true class="dx-tooltip-trigger-css dx-sidebar-menu-button-css dx-collapsible-trigger-css dx-sidebar-collapsible-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-open=true data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default" tabindex="0" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
 <span>Playground
 </span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -76,13 +76,13 @@
 <li class="dx-sidebar-menu-item-css" data-disabled=false data-open=false data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <div data-state="closed" data-disabled=true class="dx-tooltip-css dx-sidebar-tooltip-css">
 <button aria-controls="dxc-n2" aria-expanded=false class="dx-tooltip-trigger-css dx-sidebar-menu-button-css dx-collapsible-trigger-css dx-sidebar-collapsible-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-open=false data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default" tabindex="0" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
 <span>Models
 </span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -94,13 +94,13 @@
 <li class="dx-sidebar-menu-item-css" data-disabled=false data-open=false data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <div data-state="closed" data-disabled=true class="dx-tooltip-css dx-sidebar-tooltip-css">
 <button aria-controls="dxc-n3" aria-expanded=false class="dx-tooltip-trigger-css dx-sidebar-menu-button-css dx-collapsible-trigger-css dx-sidebar-collapsible-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-open=false data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default" tabindex="0" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
 <span>Documentation
 </span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -112,13 +112,13 @@
 <li class="dx-sidebar-menu-item-css" data-disabled=false data-open=false data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <div data-state="closed" data-disabled=true class="dx-tooltip-css dx-sidebar-tooltip-css">
 <button aria-controls="dxc-n4" aria-expanded=false class="dx-tooltip-trigger-css dx-sidebar-menu-button-css dx-collapsible-trigger-css dx-sidebar-collapsible-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-open=false data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default" tabindex="0" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
 <span>Settings
 </span>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -135,7 +135,7 @@
 <ul class="dx-sidebar-menu-css" data-sidebar="menu" data-slot="sidebar-menu">
 <li class="dx-sidebar-menu-item-css" data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <a href="#" class="dx-sidebar-menu-button-css" data-active="false" data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -144,7 +144,7 @@
 </a>
 <div data-state="closed" data-disabled=false class="dx-dropdown-menu-css dx-sidebar-dropdown-menu-css">
 <button aria-expanded=false aria-haspopup="listbox" class="dx-sidebar-menu-action-css dx-dropdown-menu-trigger-css dx-sidebar-dropdown-menu-trigger-css" data-disabled=false data-show-on-hover="true" data-sidebar="menu-action" data-slot="sidebar-menu-action" data-state="closed" id="dxc-n5" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -155,7 +155,7 @@
 </li>
 <li class="dx-sidebar-menu-item-css" data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <a href="#" class="dx-sidebar-menu-button-css" data-active="false" data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -164,7 +164,7 @@
 </a>
 <div data-state="closed" data-disabled=false class="dx-dropdown-menu-css dx-sidebar-dropdown-menu-css">
 <button aria-expanded=false aria-haspopup="listbox" class="dx-sidebar-menu-action-css dx-dropdown-menu-trigger-css dx-sidebar-dropdown-menu-trigger-css" data-disabled=false data-show-on-hover="true" data-sidebar="menu-action" data-slot="sidebar-menu-action" data-state="closed" id="dxc-n6" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -175,7 +175,7 @@
 </li>
 <li class="dx-sidebar-menu-item-css" data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <a href="#" class="dx-sidebar-menu-button-css" data-active="false" data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -184,7 +184,7 @@
 </a>
 <div data-state="closed" data-disabled=false class="dx-dropdown-menu-css dx-sidebar-dropdown-menu-css">
 <button aria-expanded=false aria-haspopup="listbox" class="dx-sidebar-menu-action-css dx-dropdown-menu-trigger-css dx-sidebar-dropdown-menu-trigger-css" data-disabled=false data-show-on-hover="true" data-sidebar="menu-action" data-slot="sidebar-menu-action" data-state="closed" id="dxc-n7" type="button">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -195,7 +195,7 @@
 </li>
 <li class="dx-sidebar-menu-item-css" data-sidebar="menu-item" data-slot="sidebar-menu-item">
 <button class="dx-sidebar-menu-button-css" data-active="false" data-sidebar="menu-button" data-size="default" data-slot="sidebar-menu-button" data-variant="default" style="opacity:0.7; font-weight:500;">
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle" aria-hidden="true" class="dx-sidebar-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css" data-icon="circle" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <circle cx="12" cy="12" r="10">
 </circle>
 </svg>
@@ -214,7 +214,7 @@
 <div data-state="closed" data-disabled=false class="dx-dropdown-menu-css dx-sidebar-dropdown-menu-css">
 <button aria-expanded=false aria-haspopup="listbox" class="dx-sidebar-menu-button-css dx-dropdown-menu-trigger-css dx-sidebar-dropdown-menu-trigger-css dx-sidebar-menu-disclosure-button-css" data-active="false" data-disabled=false data-sidebar="menu-button" data-size="lg" data-slot="sidebar-menu-button" data-state="closed" data-variant="default" id="dxc-n8" type="button">
 <span role="img" data-state="empty" aria-label="dioxus avatar" class="dx-avatar-css dx-avatar-sm-css dx-avatar-circle-css" style="border-radius:0.5rem;">
-<img id="dxc-n9" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="dioxus avatar" style="width: 100%; height: 100%; object-fit: cover;" class="dx-avatar-image-css" draggable="false"/>
+<img style="width: 100%; height: 100%; object-fit: cover;" id="dxc-n9" src="data:image/svg+xml;utf8,&#60;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 64 64&#39;&#62;&#60;rect width=&#39;64&#39; height=&#39;64&#39; fill=&#39;%23888&#39;/&#62;&#60;circle cx=&#39;32&#39; cy=&#39;25&#39; r=&#39;11&#39; fill=&#39;%23fff&#39;/&#62;&#60;path d=&#39;M10 58c3-n0 13-21 22-21s19 6 22 21z&#39; fill=&#39;%23fff&#39;/&#62;&#60;/svg&#62;" alt="dioxus avatar" class="dx-avatar-image-css" draggable="false"/>
 <span class="dx-avatar-fallback-css">DX
 </span>
 </span>
@@ -224,7 +224,7 @@
 <span class="dx-sidebar-info-subtitle-css">m@example.com
 </span>
 </div>
-<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css">
+<svg aria-hidden="true" class="dx-sidebar-icon-css dx-sidebar-chevron-css" data-icon="chevron-right" data-mirror-rtl="true" data-stroke="theme" fill="none" height="24px" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
 <path d="m9 18 6-6-6-6">
 </path>
 </svg>
@@ -242,7 +242,7 @@
 <header style="display:flex; align-items:center; justify-content:space-between; height:3.5rem; flex-shrink:0; padding:0 1rem; border-bottom:1px solid var(--dx-sidebar-border); background:var(--primary-color-n0);">
 <div style="display: flex; align-items: center; gap: 0.75rem;">
 <button class="dx-button-css dx-sidebar-trigger-css" data-sidebar="trigger" data-size="default" data-slot="sidebar-trigger" data-style="ghost">
-<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="panel-left" data-mirror-rtl="true" aria-hidden="true" class="dx-sidebar-trigger-icon-css">
+<svg aria-hidden="true" class="dx-sidebar-trigger-icon-css" data-icon="panel-left" data-mirror-rtl="true" data-stroke="theme" fill="none" height="1rem" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1rem" xmlns="http://www.w3.org/2000/svg">
 <rect x="3" y="3" width="18" height="18" rx="2">
 </rect>
 <path d="M9 3v18">

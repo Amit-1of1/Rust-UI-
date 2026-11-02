@@ -66,10 +66,10 @@ pub fn step_active(current: usize, delta: isize, len: usize) -> usize {
 /// doesn't move it. Arrows wrap; Home and End jump to the ends.
 pub fn command_nav(key: &Key, active: usize, len: usize) -> Option<usize> {
     match key {
-        Key::ArrowDown => Some(step_active(active, 1, len)),
-        Key::ArrowUp => Some(step_active(active, -1, len)),
-        Key::Home => Some(0),
-        Key::End => Some(len.saturating_sub(1)),
+        Key::Named(NamedKey::ArrowDown) => Some(step_active(active, 1, len)),
+        Key::Named(NamedKey::ArrowUp) => Some(step_active(active, -1, len)),
+        Key::Named(NamedKey::Home) => Some(0),
+        Key::Named(NamedKey::End) => Some(len.saturating_sub(1)),
         _ => None,
     }
 }
@@ -132,7 +132,7 @@ pub fn CommandDialog(
         if let Some(next) = command_nav(&key, active_index, count) {
             event.prevent_default();
             active.set(next);
-        } else if key == Key::Enter {
+        } else if key == Key::Named(NamedKey::Enter) {
             event.prevent_default();
             choose_on_key(active_index);
         }

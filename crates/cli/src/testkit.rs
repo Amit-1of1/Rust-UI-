@@ -188,11 +188,8 @@ ui = { package = "atoll-ui", git = "https://github.com/x/y", rev = "abc" }
                 .unwrap();
         let app = "[dependencies]\nui = { git = \"g\", rev = \"r\" }\n";
         let (_, report) = setup(app, &root).unwrap();
-        for c in ["blitz-dom", "blitz-paint", "dioxus-native-dom"] {
-            assert!(
-                report.patches.iter().any(|p| p == c),
-                "{c} missing: {report:?}"
-            );
-        }
+        // Dioxus 0.8 branch: atoll-test and the Blitz 0.2 forks stay on 0.7 (docs/notes/dioxus-0.8.md),
+        // so the root carries none of the native patches and there are none to copy.
+        assert!(report.patches.is_empty(), "{report:?}");
     }
 }

@@ -26,7 +26,7 @@ palette = "0.7.6"
 strum = { version = "0.27.2", features = ["derive"] }
 tracing = "0.1"
 # Timers that work on the web and native (already used by dioxus-primitives).
-dioxus-sdk-time = "0.7.0"
+dioxus-sdk-time = "=0.8.0-alpha.3"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "KeyboardEvent", "EventTarget", "MediaQueryList", "Navigator", "Clipboard", "Storage", "AudioContext", "AudioContextState", "BaseAudioContext", "AudioNode", "AudioParam", "AudioDestinationNode", "AudioScheduledSourceNode", "GainNode", "OscillatorNode", "OscillatorType"] }
@@ -42,7 +42,7 @@ toml = { version = "0.8", optional = true }
 [dev-dependencies]
 # The integration tests walk every demo.
 atoll-ui = { path = ".", features = ["demos", "contract-check"] }
-dioxus-ssr = "0.7.0"
+dioxus-ssr = "=0.8.0-alpha.3"
 proptest = { version = "1", default-features = false, features = ["std"] }
 
 [features]

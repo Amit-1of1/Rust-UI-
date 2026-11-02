@@ -228,11 +228,11 @@ pub fn InputOtp(
                         let mut apply = apply.clone();
                         move |e: KeyboardEvent| {
                             let event = match e.key() {
-                                Key::Backspace => OtpEvent::Backspace(i),
-                                Key::ArrowLeft => OtpEvent::Left(i),
-                                Key::ArrowRight => OtpEvent::Right(i),
-                                Key::Home => OtpEvent::Home,
-                                Key::End => OtpEvent::End,
+                                Key::Named(NamedKey::Backspace) => OtpEvent::Backspace(i),
+                                Key::Named(NamedKey::ArrowLeft) => OtpEvent::Left(i),
+                                Key::Named(NamedKey::ArrowRight) => OtpEvent::Right(i),
+                                Key::Named(NamedKey::Home) => OtpEvent::Home,
+                                Key::Named(NamedKey::End) => OtpEvent::End,
                                 _ => return,
                             };
                             if apply(event) != OtpOutcome::Ignored {
