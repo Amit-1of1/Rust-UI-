@@ -35,6 +35,7 @@ pub mod props;
 pub mod scaffold;
 pub mod scope;
 pub mod template;
+pub mod testkit;
 pub mod theme;
 pub mod update;
 
