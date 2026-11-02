@@ -64,11 +64,18 @@ await page.goto(base + "#theme-builder");
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Theme builder");
 await page.getByLabel("Hex").fill("#4f46e5");
 const cta = page.getByRole("button", { name: "Start free trial" });
-await page.waitForFunction(
-  (el) => getComputedStyle(el).backgroundColor === "rgb(79, 70, 229)",
-  await cta.elementHandle(),
-  { timeout: 3000 },
-);
+// WebKit on CI runners can take a few seconds to restyle; say what it showed if it never does.
+await page
+  .waitForFunction(
+    (el) => getComputedStyle(el).backgroundColor === "rgb(79, 70, 229)",
+    await cta.elementHandle(),
+    { timeout: 15000 },
+  )
+  .catch(async (e) => {
+    const shown = await cta.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const hex = await page.getByLabel("Hex").inputValue();
+    throw new Error(`theme builder CTA is ${shown} for Hex ${hex}, expected rgb(79, 70, 229): ${e.message}`);
+  });
 assert.equal(await page.getByText("Passes AA").count(), 2);
 // A pale brand gets a darker fill in light mode, still with the same hue.
 await page.getByRole("button", { name: "Sunflower" }).click();

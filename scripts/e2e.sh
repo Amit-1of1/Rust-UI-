@@ -135,6 +135,12 @@ for engine in ${BROWSERS//,/ }; do
         e2e env ACCENT="$accent" GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs "$scheme"
       done
     done
+    for preset in reef abyss driftwood classic; do
+      for scheme in light dark; do
+        step "[$engine] axe gallery (preset $preset, $scheme)"
+        e2e env PRESET="$preset" GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs "$scheme"
+      done
+    done
   fi
 done
 

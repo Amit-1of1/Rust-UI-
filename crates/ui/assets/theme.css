@@ -26,7 +26,398 @@ html[data-theme="dark"],
 }
 
 :root {
-  /* Primary colors */
+  /* Atoll's default look, "Lagoon", built on Reshaped's foundations (docs/FOUNDATIONS.md):
+     neutral greys on Reshaped's lightness steps, a lagoon-teal accent, Inter. data-preset
+     switches to another look (below); docs/BRAND.md explains the choices. */
+  /* Surfaces, page to raised (primary) and ink, strongest to faintest (secondary). */
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+
+  /* Highlight colors */
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+
+  /* Accent: fills for primary actions and checked/active states. Lagoon teal by default (the
+     preset's own accent under data-preset); set data-accent="blue|green|violet|rose|orange"
+     on <html> (or any ancestor) to recolor. Override --accent-color / --accent-contrast
+     yourself for a brand color. */
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+
+  /* Corner radius shared by controls; set on <html> to square or round everything. */
+  --radius: 0.625rem;
+
+  /* Type. Fonts ship with the kit (OFL-1.1, crates/ui/assets/fonts) and load only when a
+     preset uses them; ThemeStyles declares them. The stacks end in system fonts, so text
+     shows at once and swaps in when the file arrives. */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --heading-weight: 650;
+  --heading-tracking: -0.015em;
+
+  /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
+     mode, where a light scrim barely separates the panel from the page. */
+  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
+  --primary-success-color: light-dark(#e8fbeb, #132717);
+  --secondary-success-color: light-dark(#399d57, #62bb78);
+  --primary-warning-color: light-dark(#fef6e7, #33230a);
+  --secondary-warning-color: light-dark(#e19b1b, #e9b452);
+  --primary-error-color: light-dark(#c8433c, #c14b43);
+  --secondary-error-color: light-dark(#e24942, #e3655a);
+  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
+  --error-text-color: light-dark(#ac312c, #ed8c81);
+  /* Success and warning as text on their tinted fills (toasts); the --secondary-* ones are
+     fills and fail as text in light mode (2.4:1 and 2.1:1). */
+  --success-text-color: light-dark(#236436, #a4dfaf);
+  --warning-text-color: light-dark(#864e18, #f4ce90);
+  --contrast-error-color: #fff;
+  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
+  --secondary-info-color: var(--secondary-color-3);
+  /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
+     accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
+     (tests/theme.rs). */
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
+  --chart-5: light-dark(#588418, #8cb460);
+}
+
+/* Foundations: layout units, type scale, elevation, layers and motion as tokens, after
+ * Reshaped's (MIT, reshaped.so). docs/FOUNDATIONS.md says what each is for; components use
+ * these instead of literal values (tests/foundations.rs checks). Colours above stay the source;
+ * the semantic colour names below point at them. */
+:root {
+  /* Layout units: everything sits on a 4 px grid (in rem, so it follows the reader's font
+     size). x1 = 4 px ... x10 = 40 px, then page-sized steps. */
+  --unit-x1: 0.25rem;
+  --unit-x2: 0.5rem;
+  --unit-x3: 0.75rem;
+  --unit-x4: 1rem;
+  --unit-x5: 1.25rem;
+  --unit-x6: 1.5rem;
+  --unit-x7: 1.75rem;
+  --unit-x8: 2rem;
+  --unit-x9: 2.25rem;
+  --unit-x10: 2.5rem;
+  --unit-x12: 3rem;
+  --unit-x16: 4rem;
+  --unit-x20: 5rem;
+  --unit-x24: 6rem;
+
+  /* Page layout. Breakpoints (media queries cannot read custom properties, so they are
+     fixed): s below 768 px, m from 768 px, l from 1024 px, xl from 1280 px. The column count
+     and gutters grow with them (below). */
+  --layout-max-width: 80rem;
+  --layout-columns: 4;
+  --layout-gutter: 1rem;
+  --layout-margin: 1rem;
+
+  /* Type scale. Every size has a line height on the 4 px grid; the three largest grow from
+     the m breakpoint up. */
+  --font-size-display: 2.25rem;
+  --line-height-display: 2.75rem;
+  --font-size-title-1: 1.875rem;
+  --line-height-title-1: 2.25rem;
+  --font-size-title-2: 1.5rem;
+  --line-height-title-2: 2rem;
+  --font-size-title-3: 1.25rem;
+  --line-height-title-3: 1.75rem;
+  --font-size-title-4: 1.125rem;
+  --line-height-title-4: 1.75rem;
+  --font-size-body-1: 1rem;
+  --line-height-body-1: 1.5rem;
+  --font-size-body-2: 0.875rem;
+  --line-height-body-2: 1.25rem;
+  --font-size-body-3: 0.8125rem;
+  --line-height-body-3: 1.25rem;
+  --font-size-caption-1: 0.75rem;
+  --line-height-caption-1: 1rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  /* Comfortable reading width for running text. */
+  --text-measure: 70ch;
+
+  /* Shadow colours: soft in light mode, deeper in dark mode where a faint shadow vanishes. */
+  --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
+  --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
+  --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+  /* A lit top edge for things that rise in dark mode, where a shadow barely shows. */
+  --color-highlight: light-dark(rgb(255 255 255 / 0%), rgb(255 255 255 / 10%));
+
+  /* Layers, lowest to highest. Overlays share one layer and stack by order in the page; a
+     modal's panel sits one above its own scrim. */
+  --z-index-raised: 1;
+  --z-index-sticky: 10;
+  --z-index-fixed: 20;
+  --z-index-dropdown: 50;
+  --z-index-overlay: 1000;
+  --z-index-modal: 1001;
+  --z-index-toast: 9999;
+  --z-index-top: 10000;
+
+  /* How far a control rises under the pointer (button hover). */
+  --hover-lift: -1px;
+
+  /* Motion: four durations and three easings for CSS transitions (the springs further down
+     are for entrances that should feel physical). Small things move fast, big things slower;
+     enter decelerates, exit accelerates. */
+  --duration-rapid: 100ms;
+  --duration-fast: 150ms;
+  --duration-medium: 250ms;
+  --duration-slow: 400ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --layout-columns: 8;
+    --layout-gutter: 1.25rem;
+    --layout-margin: 1.5rem;
+    --font-size-display: 3rem;
+    --line-height-display: 3.5rem;
+    --font-size-title-1: 2.25rem;
+    --line-height-title-1: 2.75rem;
+    --font-size-title-2: 1.75rem;
+    --line-height-title-2: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --layout-columns: 12;
+    --layout-gutter: 1.5rem;
+    --layout-margin: 2rem;
+  }
+}
+
+/* Reduced motion: durations drop to (almost) zero, for code that reads them as well as for CSS
+   (the blanket rule further down covers literal values). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hover-lift: 0px;
+    --duration-rapid: 0.01ms;
+    --duration-fast: 0.01ms;
+    --duration-medium: 0.01ms;
+    --duration-slow: 0.01ms;
+  }
+}
+
+/* Semantic names, Reshaped-style: background / foreground / border, then the role (neutral,
+ * primary, critical, positive, warning) and a variant (faded, highlighted). They point at the
+ * tokens above, so presets, accents and data-theme switch them too; declared again on every
+ * element that sets one of those attributes so they resolve there. Prefer these in new CSS. */
+:root,
+[data-theme],
+[data-preset],
+[data-accent] {
+  --color-background-page: var(--primary-color);
+  --color-background-page-faded: var(--primary-color-1);
+  /* Surfaces by height: base (cards, panels), raised (sticky bars, hovered cards), overlay
+     (menus, popovers, dialogs). Each is a little lighter in dark mode, where shadows show
+     less. */
+  --color-background-elevation-base: var(--primary-color-2);
+  --color-background-elevation-raised: color-mix(in oklab, var(--primary-color-2) 96%, #fff);
+  --color-background-elevation-overlay: color-mix(in oklab, var(--primary-color-2) 92%, #fff);
+  --color-background-neutral: var(--primary-color-4);
+  --color-background-neutral-faded: var(--primary-color-3);
+  --color-background-neutral-highlighted: var(--primary-color-5);
+  --color-background-disabled: var(--primary-color-4);
+  --color-background-primary: var(--accent-color);
+  --color-background-primary-faded: color-mix(in oklab, var(--accent-color) 12%, var(--primary-color));
+  --color-background-critical: var(--primary-error-color);
+  --color-background-critical-faded: color-mix(in oklab, var(--error-text-color) 10%, var(--primary-color));
+  --color-background-positive-faded: var(--primary-success-color);
+  --color-background-warning-faded: var(--primary-warning-color);
+  --color-backdrop: var(--overlay-color);
+  --color-foreground-neutral: var(--secondary-color-4);
+  --color-foreground-neutral-faded: var(--secondary-color-5);
+  --color-foreground-disabled: var(--secondary-color-5);
+  --color-foreground-primary: var(--accent-text, var(--accent-color));
+  --color-foreground-critical: var(--error-text-color);
+  --color-foreground-positive: var(--success-text-color);
+  --color-foreground-warning: var(--warning-text-color);
+  --color-on-background-primary: var(--accent-contrast);
+  --color-border-neutral: var(--primary-color-6);
+  --color-border-neutral-faded: var(--primary-color-5);
+  --color-border-neutral-highlighted: var(--primary-color-7);
+  --color-border-primary: var(--accent-color);
+  --color-border-critical: var(--error-text-color);
+  --color-border-focus: var(--focused-border-color);
+
+  /* Corners: one --radius (a preset's or yours) sets all three. With 10 px: 4, 6, 10. */
+  --radius-small: calc(var(--radius) * 0.4);
+  --radius-medium: calc(var(--radius) * 0.6);
+  --radius-large: var(--radius);
+  --radius-full: 9999px;
+
+  /* Shadows by height (Reshaped's): raised for things that lift a little, overlay for things
+     that float over the page. */
+  --shadow-raised: 0 8px 12px -4px var(--color-shadow-raised-1), 0 1px 2px 0 var(--color-shadow-raised-2);
+  --shadow-overlay: 0 16px 24px -4px var(--color-shadow-overlay), 0 8px 12px -4px var(--color-shadow-overlay), 0 8px 6px -4px var(--color-shadow-overlay);
+  /* Hover: a control lifted under the pointer. Soft shadow in light mode, a lit top edge in
+     dark mode. */
+  --shadow-hover: 0 4px 8px -2px var(--color-shadow-raised-1), 0 2px 4px -2px var(--color-shadow-raised-2), inset 0 1px 0 var(--color-highlight);
+}
+
+/* Theme presets: a whole look in one attribute. data-preset="reef|abyss|driftwood|classic" on
+   <html> (or any element) swaps colours, fonts, corner radius, density and icon stroke; no
+   attribute is Lagoon, the default above. They come before the accent and density blocks, so
+   an explicit data-accent or data-density still wins over a preset's own. Checked like the
+   rest of the theme: tests/theme.rs and the contrast proof (crates/cli/tests/contrast.rs). */
+/* Lagoon, the default: the same values as :root above, so an element inside another preset
+ * can switch back (tests/theme.rs keeps them equal). */
+[data-preset="lagoon"] {
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#588418, #8cb460);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 650;
+  --heading-tracking: -0.015em;
+  --radius: 0.625rem;
+  --density: 1;
+  --icon-stroke-width: 2;
+  --chart-4: light-dark(#825eb9, #b093e5);
+}
+
+/* Reef: coral on warm stone, Geist, round corners, a little roomier. */
+[data-preset="reef"] {
+  --primary-color: light-dark(#ffffff, #0e0a0a);
+  --primary-color-1: light-dark(#fdf9f9, #120e0e);
+  --primary-color-2: light-dark(#ffffff, #161313);
+  --primary-color-3: light-dark(#f8f4f4, #1d1a19);
+  --primary-color-4: light-dark(#f3efef, #242120);
+  --primary-color-5: light-dark(#ebe7e6, #2c2828);
+  --primary-color-6: light-dark(#e5e0e0, #363231);
+  --primary-color-7: light-dark(#beb5b5, #534e4e);
+  --secondary-color: light-dark(#0d0808, #fefbfb);
+  --secondary-color-1: light-dark(#161010, #f9f4f3);
+  --secondary-color-2: light-dark(#1f1919, #ece6e6);
+  --secondary-color-3: light-dark(#383131, #dbd6d6);
+  --secondary-color-4: light-dark(#241d1d, #f2eded);
+  --secondary-color-5: light-dark(#696161, #a29d9d);
+  --secondary-color-6: light-dark(#d1c8c8, #565151);
+  --accent-color: light-dark(#b94884, #b64b84);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#825eb9, #b093e5);
+  --chart-4: light-dark(#986b00, #cc9c42);
+  --accent-text: light-dark(#b94884, #f197c2);
+  --focused-border-color: light-dark(#b94884, #e082b0);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --chart-3: light-dark(#4072c5, #78a5ef);
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 600;
+  --heading-tracking: -0.02em;
+  --radius: 1rem;
+  --density: 1.04;
+  --icon-stroke-width: 2;
+}
+/* Abyss: cool slate with an indigo accent, IBM Plex Sans, square corners, compact. */
+[data-preset="abyss"] {
+  --primary-color: light-dark(#ffffff, #090b0f);
+  --primary-color-1: light-dark(#f8fafe, #0d0f14);
+  --primary-color-2: light-dark(#ffffff, #121418);
+  --primary-color-3: light-dark(#f2f5fb, #181b1f);
+  --primary-color-4: light-dark(#edf0f6, #1f2226);
+  --primary-color-5: light-dark(#e5e8ed, #27292e);
+  --primary-color-6: light-dark(#dfe1e7, #303338);
+  --primary-color-7: light-dark(#b2b7c2, #4d5055);
+  --secondary-color: light-dark(#060910, #fafcfe);
+  --secondary-color-1: light-dark(#0e1219, #f2f5fc);
+  --secondary-color-2: light-dark(#171b22, #e5e8ee);
+  --secondary-color-3: light-dark(#2f333b, #d4d7de);
+  --secondary-color-4: light-dark(#1c1f27, #ebeef5);
+  --secondary-color-5: light-dark(#5f636d, #9b9ea5);
+  --secondary-color-6: light-dark(#c5cbd5, #505358);
+  --accent-color: light-dark(#5a64e3, #5964dc);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#218a45, #69ba7c);
+  --chart-3: light-dark(#a06604, #d49648);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --accent-text: light-dark(#5a64e3, #a3b2fe);
+  --focused-border-color: light-dark(#5a64e3, #8b9bff);
+  --chart-4: light-dark(#a84f8e, #d686bc);
+  --font-sans: "IBM Plex Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 600;
+  --heading-tracking: -0.01em;
+  --radius: 0.25rem;
+  --density: 0.92;
+  --icon-stroke-width: 1.5;
+}
+/* Driftwood: warm sand and terracotta, Source Serif 4 headings over Inter, editorial. */
+[data-preset="driftwood"] {
+  --primary-color: light-dark(#ffffff, #0d0b08);
+  --primary-color-1: light-dark(#fdfaf6, #110f0c);
+  --primary-color-2: light-dark(#ffffff, #161310);
+  --primary-color-3: light-dark(#f7f5f1, #1d1a17);
+  --primary-color-4: light-dark(#f2f0ec, #24211e);
+  --primary-color-5: light-dark(#eae7e3, #2b2825);
+  --primary-color-6: light-dark(#e4e1dd, #35322f);
+  --primary-color-7: light-dark(#bcb6af, #524f4b);
+  --secondary-color: light-dark(#0c0805, #fffbf7);
+  --secondary-color-1: light-dark(#15110c, #f8f4f0);
+  --secondary-color-2: light-dark(#1e1a14, #ebe7e3);
+  --secondary-color-3: light-dark(#37322c, #dad7d2);
+  --secondary-color-4: light-dark(#231f19, #f1eee9);
+  --secondary-color-5: light-dark(#67625c, #a19e9a);
+  --secondary-color-6: light-dark(#cfcac2, #55524e);
+  --accent-color: light-dark(#956747, #94684a);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#a1529b, #cf88c8);
+  --chart-4: light-dark(#588418, #8cb460);
+  --chart-2: light-dark(#048681, #1dbcb5);
+  --accent-text: light-dark(#956747, #d5af96);
+  --focused-border-color: light-dark(#956747, #c39b81);
+  --chart-3: light-dark(#2378c2, #67aaed);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  --heading-weight: 600;
+  --heading-tracking: -0.01em;
+  --radius: 0.375rem;
+  --density: 1;
+  --icon-stroke-width: 1.5;
+}
+/* Classic: the plain black-and-white look Atoll had before, system fonts, no downloads. */
+[data-preset="classic"] {
   --primary-color: light-dark(#fff, #000);
   --primary-color-1: light-dark(#fbfbfb, #0e0e0e);
   --primary-color-2: light-dark(#fff, #0a0a0a);
@@ -35,8 +426,6 @@ html[data-theme="dark"],
   --primary-color-5: light-dark(#f5f5f5, #262626);
   --primary-color-6: light-dark(#e5e5e5, #232323);
   --primary-color-7: light-dark(#b0b0b0, #3e3e3e);
-
-  /* Secondary colors */
   --secondary-color: light-dark(#000, #fff);
   --secondary-color-1: light-dark(#000, #fafafa);
   --secondary-color-2: light-dark(#0d0d0d, #e6e6e6);
@@ -44,72 +433,51 @@ html[data-theme="dark"],
   --secondary-color-4: light-dark(#111, #d4d4d4);
   --secondary-color-5: light-dark(#6b6b6b, #a1a1a1);
   --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
-
-  /* Highlight colors */
-  --focused-border-color: #2b7fff;
-
-  /* Accent: fills for primary actions and checked/active states. Neutral by default;
-     set data-accent="blue|green|violet|rose|orange" on <html> (or any ancestor) to recolor.
-     Override --accent-color / --accent-contrast yourself for a brand color. */
-  --accent-color: var(--secondary-color-2);
-  --accent-contrast: var(--primary-color);
-
-  /* Corner radius shared by controls; set on <html> to square or round everything. */
-  --radius: 0.5rem;
-
-  /* Scrim behind modal overlays (dialog, alert dialog, sheet, drawer). Darker in dark
-     mode, where a light scrim barely separates the panel from the page. */
-  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
-  --primary-success-color: light-dark(#ecfdf5, #02271c);
-  --secondary-success-color: light-dark(#10b981, #b6fae3);
-  --primary-warning-color: light-dark(#fffbeb, #342203);
-  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
-  --primary-error-color: light-dark(#dc2626, #a22e2e);
-  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
-  /* Error as text: --secondary-error-color is a fill and is too faint to read as text. */
-  --error-text-color: light-dark(#b91c1c, #f87171);
-  /* Success and warning as text on their tinted fills (toasts); the --secondary-* ones are
-     fills and fail as text in light mode (2.4:1 and 2.1:1). */
-  --success-text-color: light-dark(#047857, #b6fae3);
-  --warning-text-color: light-dark(#b45309, #feeac7);
-  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
-  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
-  --secondary-info-color: var(--secondary-color-3);
-  /* Chart series colours (components/chart). Series 1 is --chart-1 if you set it, otherwise the
-     accent; the rest cycle through these. Each keeps 3:1 against the page in both modes
-     (tests/theme.rs). */
+  --accent-color: light-dark(#0d0d0d, #e6e6e6);
+  --accent-contrast: light-dark(#fff, #000);
+  --accent-text: light-dark(#0d0d0d, #e6e6e6);
+  --focused-border-color: light-dark(#2b7fff, #2b7fff);
   --chart-2: light-dark(#0f766e, #2dd4bf);
-  --chart-3: light-dark(#c2410c, #fb923c);
-  --chart-4: light-dark(#7c3aed, #a78bfa);
-  --chart-5: light-dark(#be185d, #f472b6);
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+  --heading-weight: 600;
+  --heading-tracking: normal;
+  --radius: 0.5rem;
+  --density: 1;
+  --icon-stroke-width: 2;
 }
 
 /* Accent presets, light-dark(light, dark). Light fills carry white text (>=4.5:1); dark fills
    carry near-black text (tests/theme.rs checks both). */
 [data-accent="blue"] {
-  --accent-color: light-dark(#1d4ed8, #60a5fa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-color: light-dark(#2870d4, #2e70cf);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#2870d4, #8ab9fe);
+  --focused-border-color: light-dark(#2870d4, #6da5f9);
 }
 [data-accent="green"] {
-  --accent-color: light-dark(#15803d, #4ade80);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#15803d, #4ade80);
+  --accent-color: light-dark(#14833e, #1f8241);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#14833e, #85cb94);
+  --focused-border-color: light-dark(#14833e, #6eb87f);
 }
 [data-accent="violet"] {
-  --accent-color: light-dark(#6d28d9, #a78bfa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+  --accent-color: light-dark(#7d59db, #7b5ad5);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#7d59db, #b9a9fe);
+  --focused-border-color: light-dark(#7d59db, #a891fb);
 }
 [data-accent="rose"] {
-  --accent-color: light-dark(#be123c, #fb7185);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#be123c, #fb7185);
+  --accent-color: light-dark(#c6405c, #c3455e);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#c6405c, #fd94a2);
+  --focused-border-color: light-dark(#c6405c, #ec7e8e);
 }
 [data-accent="orange"] {
-  --accent-color: light-dark(#c2410c, #fb923c);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#c2410c, #fb923c);
+  --accent-color: light-dark(#bb5218, #b85521);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#bb5218, #f3a07a);
+  --focused-border-color: light-dark(#bb5218, #e28b63);
 }
 
 /* Space toggles: --dark and --light are "initial" or empty depending on the scheme, so
@@ -146,6 +514,149 @@ html[data-theme="light"],
 /* data-theme on any element switches its subtree: the colour tokens again, resolved there.
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 :where([data-theme]) {
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
+  --primary-success-color: light-dark(#e8fbeb, #132717);
+  --secondary-success-color: light-dark(#399d57, #62bb78);
+  --primary-warning-color: light-dark(#fef6e7, #33230a);
+  --secondary-warning-color: light-dark(#e19b1b, #e9b452);
+  --primary-error-color: light-dark(#c8433c, #c14b43);
+  --secondary-error-color: light-dark(#e24942, #e3655a);
+  --error-text-color: light-dark(#ac312c, #ed8c81);
+  --success-text-color: light-dark(#236436, #a4dfaf);
+  --warning-text-color: light-dark(#864e18, #f4ce90);
+  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
+  --secondary-info-color: var(--secondary-color-3);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
+  --chart-5: light-dark(#588418, #8cb460);
+}
+:where([data-theme]) {
+  --color-shadow-raised-1: light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 32%));
+  --color-shadow-raised-2: light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 40%));
+  --color-shadow-overlay: light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 36%));
+  --color-highlight: light-dark(rgb(255 255 255 / 0%), rgb(255 255 255 / 10%));
+}
+:where([data-preset="lagoon"] [data-theme]) {
+  --primary-color: light-dark(#ffffff, #0c0b09);
+  --primary-color-1: light-dark(#fbfaf7, #100f0d);
+  --primary-color-2: light-dark(#ffffff, #151411);
+  --primary-color-3: light-dark(#f6f5f2, #1c1a18);
+  --primary-color-4: light-dark(#f1f0ed, #23211f);
+  --primary-color-5: light-dark(#e9e7e5, #2a2926);
+  --primary-color-6: light-dark(#e3e1de, #343330);
+  --primary-color-7: light-dark(#bab7b2, #514f4d);
+  --secondary-color: light-dark(#0b0906, #fdfbf8);
+  --secondary-color-1: light-dark(#13110e, #f7f5f2);
+  --secondary-color-2: light-dark(#1d1a16, #e9e7e4);
+  --secondary-color-3: light-dark(#35322e, #d9d7d4);
+  --secondary-color-4: light-dark(#211f1b, #f0eeeb);
+  --secondary-color-5: light-dark(#66635e, #a09e9b);
+  --secondary-color-6: light-dark(#cdcac5, #545250);
+  --accent-color: light-dark(#0b7f7f, #1b7e7e);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#588418, #8cb460);
+  --accent-text: light-dark(#0b7f7f, #83c5c5);
+  --focused-border-color: light-dark(#0b7f7f, #6cb3b2);
+  --chart-2: light-dark(#3475c4, #6fa7ee);
+  --chart-3: light-dark(#b05a02, #de8f57);
+  --chart-4: light-dark(#825eb9, #b093e5);
+}
+:where([data-preset="reef"] [data-theme]) {
+  --primary-color: light-dark(#ffffff, #0e0a0a);
+  --primary-color-1: light-dark(#fdf9f9, #120e0e);
+  --primary-color-2: light-dark(#ffffff, #161313);
+  --primary-color-3: light-dark(#f8f4f4, #1d1a19);
+  --primary-color-4: light-dark(#f3efef, #242120);
+  --primary-color-5: light-dark(#ebe7e6, #2c2828);
+  --primary-color-6: light-dark(#e5e0e0, #363231);
+  --primary-color-7: light-dark(#beb5b5, #534e4e);
+  --secondary-color: light-dark(#0d0808, #fefbfb);
+  --secondary-color-1: light-dark(#161010, #f9f4f3);
+  --secondary-color-2: light-dark(#1f1919, #ece6e6);
+  --secondary-color-3: light-dark(#383131, #dbd6d6);
+  --secondary-color-4: light-dark(#241d1d, #f2eded);
+  --secondary-color-5: light-dark(#696161, #a29d9d);
+  --secondary-color-6: light-dark(#d1c8c8, #565151);
+  --accent-color: light-dark(#b94884, #b64b84);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#825eb9, #b093e5);
+  --chart-4: light-dark(#986b00, #cc9c42);
+  --accent-text: light-dark(#b94884, #f197c2);
+  --focused-border-color: light-dark(#b94884, #e082b0);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --chart-3: light-dark(#4072c5, #78a5ef);
+}
+:where([data-preset="abyss"] [data-theme]) {
+  --primary-color: light-dark(#ffffff, #090b0f);
+  --primary-color-1: light-dark(#f8fafe, #0d0f14);
+  --primary-color-2: light-dark(#ffffff, #121418);
+  --primary-color-3: light-dark(#f2f5fb, #181b1f);
+  --primary-color-4: light-dark(#edf0f6, #1f2226);
+  --primary-color-5: light-dark(#e5e8ed, #27292e);
+  --primary-color-6: light-dark(#dfe1e7, #303338);
+  --primary-color-7: light-dark(#b2b7c2, #4d5055);
+  --secondary-color: light-dark(#060910, #fafcfe);
+  --secondary-color-1: light-dark(#0e1219, #f2f5fc);
+  --secondary-color-2: light-dark(#171b22, #e5e8ee);
+  --secondary-color-3: light-dark(#2f333b, #d4d7de);
+  --secondary-color-4: light-dark(#1c1f27, #ebeef5);
+  --secondary-color-5: light-dark(#5f636d, #9b9ea5);
+  --secondary-color-6: light-dark(#c5cbd5, #505358);
+  --accent-color: light-dark(#5a64e3, #5964dc);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#218a45, #69ba7c);
+  --chart-3: light-dark(#a06604, #d49648);
+  --chart-2: light-dark(#07858a, #14bbc2);
+  --accent-text: light-dark(#5a64e3, #a3b2fe);
+  --focused-border-color: light-dark(#5a64e3, #8b9bff);
+  --chart-4: light-dark(#a84f8e, #d686bc);
+}
+:where([data-preset="driftwood"] [data-theme]) {
+  --primary-color: light-dark(#ffffff, #0d0b08);
+  --primary-color-1: light-dark(#fdfaf6, #110f0c);
+  --primary-color-2: light-dark(#ffffff, #161310);
+  --primary-color-3: light-dark(#f7f5f1, #1d1a17);
+  --primary-color-4: light-dark(#f2f0ec, #24211e);
+  --primary-color-5: light-dark(#eae7e3, #2b2825);
+  --primary-color-6: light-dark(#e4e1dd, #35322f);
+  --primary-color-7: light-dark(#bcb6af, #524f4b);
+  --secondary-color: light-dark(#0c0805, #fffbf7);
+  --secondary-color-1: light-dark(#15110c, #f8f4f0);
+  --secondary-color-2: light-dark(#1e1a14, #ebe7e3);
+  --secondary-color-3: light-dark(#37322c, #dad7d2);
+  --secondary-color-4: light-dark(#231f19, #f1eee9);
+  --secondary-color-5: light-dark(#67625c, #a19e9a);
+  --secondary-color-6: light-dark(#cfcac2, #55524e);
+  --accent-color: light-dark(#956747, #94684a);
+  --accent-contrast: light-dark(#ffffff, #ffffff);
+  --chart-5: light-dark(#a1529b, #cf88c8);
+  --chart-4: light-dark(#588418, #8cb460);
+  --chart-2: light-dark(#048681, #1dbcb5);
+  --accent-text: light-dark(#956747, #d5af96);
+  --focused-border-color: light-dark(#956747, #c39b81);
+  --chart-3: light-dark(#2378c2, #67aaed);
+}
+:where([data-preset="classic"] [data-theme]) {
   --primary-color: light-dark(#fff, #000);
   --primary-color-1: light-dark(#fbfbfb, #0e0e0e);
   --primary-color-2: light-dark(#fff, #0a0a0a);
@@ -161,50 +672,41 @@ html[data-theme="light"],
   --secondary-color-4: light-dark(#111, #d4d4d4);
   --secondary-color-5: light-dark(#6b6b6b, #a1a1a1);
   --secondary-color-6: light-dark(#d0d0d0, #5d5d5d);
-  --accent-color: var(--secondary-color-2);
-  --accent-contrast: var(--primary-color);
-  --overlay-color: light-dark(rgb(0 0 0 / 40%), rgb(0 0 0 / 60%));
-  --primary-success-color: light-dark(#ecfdf5, #02271c);
-  --secondary-success-color: light-dark(#10b981, #b6fae3);
-  --primary-warning-color: light-dark(#fffbeb, #342203);
-  --secondary-warning-color: light-dark(#f59e0b, #feeac7);
-  --primary-error-color: light-dark(#dc2626, #a22e2e);
-  --secondary-error-color: light-dark(#ef4444, #9b1c1c);
-  --error-text-color: light-dark(#b91c1c, #f87171);
-  --success-text-color: light-dark(#047857, #b6fae3);
-  --warning-text-color: light-dark(#b45309, #feeac7);
-  --contrast-error-color: light-dark(var(--primary-color), var(--secondary-color-3));
-  --primary-info-color: light-dark(var(--primary-color), var(--primary-color-5));
-  --secondary-info-color: var(--secondary-color-3);
+  --accent-color: light-dark(#0d0d0d, #e6e6e6);
+  --accent-contrast: light-dark(#fff, #000);
+  --accent-text: light-dark(#0d0d0d, #e6e6e6);
+  --focused-border-color: light-dark(#2b7fff, #2b7fff);
   --chart-2: light-dark(#0f766e, #2dd4bf);
-  --chart-3: light-dark(#c2410c, #fb923c);
-  --chart-4: light-dark(#7c3aed, #a78bfa);
-  --chart-5: light-dark(#be185d, #f472b6);
 }
 :where([data-accent="blue"] [data-theme]) {
-  --accent-color: light-dark(#1d4ed8, #60a5fa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#1d4ed8, #60a5fa);
+  --accent-color: light-dark(#2870d4, #2e70cf);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#2870d4, #8ab9fe);
+  --focused-border-color: light-dark(#2870d4, #6da5f9);
 }
 :where([data-accent="green"] [data-theme]) {
-  --accent-color: light-dark(#15803d, #4ade80);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#15803d, #4ade80);
+  --accent-color: light-dark(#14833e, #1f8241);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#14833e, #85cb94);
+  --focused-border-color: light-dark(#14833e, #6eb87f);
 }
 :where([data-accent="violet"] [data-theme]) {
-  --accent-color: light-dark(#6d28d9, #a78bfa);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#6d28d9, #a78bfa);
+  --accent-color: light-dark(#7d59db, #7b5ad5);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#7d59db, #b9a9fe);
+  --focused-border-color: light-dark(#7d59db, #a891fb);
 }
 :where([data-accent="rose"] [data-theme]) {
-  --accent-color: light-dark(#be123c, #fb7185);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#be123c, #fb7185);
+  --accent-color: light-dark(#c6405c, #c3455e);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#c6405c, #fd94a2);
+  --focused-border-color: light-dark(#c6405c, #ec7e8e);
 }
 :where([data-accent="orange"] [data-theme]) {
-  --accent-color: light-dark(#c2410c, #fb923c);
-  --accent-contrast: light-dark(#fff, #0a0a0a);
-  --focused-border-color: light-dark(#c2410c, #fb923c);
+  --accent-color: light-dark(#bb5218, #b85521);
+  --accent-contrast: light-dark(#fff, #fff);
+  --accent-text: light-dark(#bb5218, #f3a07a);
+  --focused-border-color: light-dark(#bb5218, #e28b63);
 }
 /* subtree themes: end */
 
@@ -213,6 +715,148 @@ html[data-theme="light"],
  * Regenerate: UPDATE_THEME_CSS=1 cargo test -p atoll-ui --test theme */
 @supports not ((color: light-dark(#000, #fff)) and (accent-color: auto)) {
   :root:root, [data-theme][data-theme] {
+    --primary-color: var(--dark, #0c0b09) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #100f0d) var(--light, #fbfaf7);
+    --primary-color-2: var(--dark, #151411) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1c1a18) var(--light, #f6f5f2);
+    --primary-color-4: var(--dark, #23211f) var(--light, #f1f0ed);
+    --primary-color-5: var(--dark, #2a2926) var(--light, #e9e7e5);
+    --primary-color-6: var(--dark, #343330) var(--light, #e3e1de);
+    --primary-color-7: var(--dark, #514f4d) var(--light, #bab7b2);
+    --secondary-color: var(--dark, #fdfbf8) var(--light, #0b0906);
+    --secondary-color-1: var(--dark, #f7f5f2) var(--light, #13110e);
+    --secondary-color-2: var(--dark, #e9e7e4) var(--light, #1d1a16);
+    --secondary-color-3: var(--dark, #d9d7d4) var(--light, #35322e);
+    --secondary-color-4: var(--dark, #f0eeeb) var(--light, #211f1b);
+    --secondary-color-5: var(--dark, #a09e9b) var(--light, #66635e);
+    --secondary-color-6: var(--dark, #545250) var(--light, #cdcac5);
+    --focused-border-color: var(--dark, #6cb3b2) var(--light, #0b7f7f);
+    --accent-color: var(--dark, #1b7e7e) var(--light, #0b7f7f);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --accent-text: var(--dark, #83c5c5) var(--light, #0b7f7f);
+    --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
+    --primary-success-color: var(--dark, #132717) var(--light, #e8fbeb);
+    --secondary-success-color: var(--dark, #62bb78) var(--light, #399d57);
+    --primary-warning-color: var(--dark, #33230a) var(--light, #fef6e7);
+    --secondary-warning-color: var(--dark, #e9b452) var(--light, #e19b1b);
+    --primary-error-color: var(--dark, #c14b43) var(--light, #c8433c);
+    --secondary-error-color: var(--dark, #e3655a) var(--light, #e24942);
+    --error-text-color: var(--dark, #ed8c81) var(--light, #ac312c);
+    --success-text-color: var(--dark, #a4dfaf) var(--light, #236436);
+    --warning-text-color: var(--dark, #f4ce90) var(--light, #864e18);
+    --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
+    --chart-2: var(--dark, #6fa7ee) var(--light, #3475c4);
+    --chart-3: var(--dark, #de8f57) var(--light, #b05a02);
+    --chart-4: var(--dark, #b093e5) var(--light, #825eb9);
+    --chart-5: var(--dark, #8cb460) var(--light, #588418);
+  }
+  :root:root, [data-theme][data-theme] {
+    --color-shadow-raised-1: var(--dark, rgb(0 0 0 / 32%)) var(--light, rgb(0 0 0 / 8%));
+    --color-shadow-raised-2: var(--dark, rgb(0 0 0 / 40%)) var(--light, rgb(0 0 0 / 10%));
+    --color-shadow-overlay: var(--dark, rgb(0 0 0 / 36%)) var(--light, rgb(0 0 0 / 6%));
+    --color-highlight: var(--dark, rgb(255 255 255 / 10%)) var(--light, rgb(255 255 255 / 0%));
+  }
+  [data-preset="lagoon"][data-preset="lagoon"] {
+    --primary-color: var(--dark, #0c0b09) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #100f0d) var(--light, #fbfaf7);
+    --primary-color-2: var(--dark, #151411) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1c1a18) var(--light, #f6f5f2);
+    --primary-color-4: var(--dark, #23211f) var(--light, #f1f0ed);
+    --primary-color-5: var(--dark, #2a2926) var(--light, #e9e7e5);
+    --primary-color-6: var(--dark, #343330) var(--light, #e3e1de);
+    --primary-color-7: var(--dark, #514f4d) var(--light, #bab7b2);
+    --secondary-color: var(--dark, #fdfbf8) var(--light, #0b0906);
+    --secondary-color-1: var(--dark, #f7f5f2) var(--light, #13110e);
+    --secondary-color-2: var(--dark, #e9e7e4) var(--light, #1d1a16);
+    --secondary-color-3: var(--dark, #d9d7d4) var(--light, #35322e);
+    --secondary-color-4: var(--dark, #f0eeeb) var(--light, #211f1b);
+    --secondary-color-5: var(--dark, #a09e9b) var(--light, #66635e);
+    --secondary-color-6: var(--dark, #545250) var(--light, #cdcac5);
+    --accent-color: var(--dark, #1b7e7e) var(--light, #0b7f7f);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #8cb460) var(--light, #588418);
+    --accent-text: var(--dark, #83c5c5) var(--light, #0b7f7f);
+    --focused-border-color: var(--dark, #6cb3b2) var(--light, #0b7f7f);
+    --chart-2: var(--dark, #6fa7ee) var(--light, #3475c4);
+    --chart-3: var(--dark, #de8f57) var(--light, #b05a02);
+    --chart-4: var(--dark, #b093e5) var(--light, #825eb9);
+  }
+  [data-preset="reef"][data-preset="reef"] {
+    --primary-color: var(--dark, #0e0a0a) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #120e0e) var(--light, #fdf9f9);
+    --primary-color-2: var(--dark, #161313) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1d1a19) var(--light, #f8f4f4);
+    --primary-color-4: var(--dark, #242120) var(--light, #f3efef);
+    --primary-color-5: var(--dark, #2c2828) var(--light, #ebe7e6);
+    --primary-color-6: var(--dark, #363231) var(--light, #e5e0e0);
+    --primary-color-7: var(--dark, #534e4e) var(--light, #beb5b5);
+    --secondary-color: var(--dark, #fefbfb) var(--light, #0d0808);
+    --secondary-color-1: var(--dark, #f9f4f3) var(--light, #161010);
+    --secondary-color-2: var(--dark, #ece6e6) var(--light, #1f1919);
+    --secondary-color-3: var(--dark, #dbd6d6) var(--light, #383131);
+    --secondary-color-4: var(--dark, #f2eded) var(--light, #241d1d);
+    --secondary-color-5: var(--dark, #a29d9d) var(--light, #696161);
+    --secondary-color-6: var(--dark, #565151) var(--light, #d1c8c8);
+    --accent-color: var(--dark, #b64b84) var(--light, #b94884);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #b093e5) var(--light, #825eb9);
+    --chart-4: var(--dark, #cc9c42) var(--light, #986b00);
+    --accent-text: var(--dark, #f197c2) var(--light, #b94884);
+    --focused-border-color: var(--dark, #e082b0) var(--light, #b94884);
+    --chart-2: var(--dark, #14bbc2) var(--light, #07858a);
+    --chart-3: var(--dark, #78a5ef) var(--light, #4072c5);
+  }
+  [data-preset="abyss"][data-preset="abyss"] {
+    --primary-color: var(--dark, #090b0f) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #0d0f14) var(--light, #f8fafe);
+    --primary-color-2: var(--dark, #121418) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #181b1f) var(--light, #f2f5fb);
+    --primary-color-4: var(--dark, #1f2226) var(--light, #edf0f6);
+    --primary-color-5: var(--dark, #27292e) var(--light, #e5e8ed);
+    --primary-color-6: var(--dark, #303338) var(--light, #dfe1e7);
+    --primary-color-7: var(--dark, #4d5055) var(--light, #b2b7c2);
+    --secondary-color: var(--dark, #fafcfe) var(--light, #060910);
+    --secondary-color-1: var(--dark, #f2f5fc) var(--light, #0e1219);
+    --secondary-color-2: var(--dark, #e5e8ee) var(--light, #171b22);
+    --secondary-color-3: var(--dark, #d4d7de) var(--light, #2f333b);
+    --secondary-color-4: var(--dark, #ebeef5) var(--light, #1c1f27);
+    --secondary-color-5: var(--dark, #9b9ea5) var(--light, #5f636d);
+    --secondary-color-6: var(--dark, #505358) var(--light, #c5cbd5);
+    --accent-color: var(--dark, #5964dc) var(--light, #5a64e3);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #69ba7c) var(--light, #218a45);
+    --chart-3: var(--dark, #d49648) var(--light, #a06604);
+    --chart-2: var(--dark, #14bbc2) var(--light, #07858a);
+    --accent-text: var(--dark, #a3b2fe) var(--light, #5a64e3);
+    --focused-border-color: var(--dark, #8b9bff) var(--light, #5a64e3);
+    --chart-4: var(--dark, #d686bc) var(--light, #a84f8e);
+  }
+  [data-preset="driftwood"][data-preset="driftwood"] {
+    --primary-color: var(--dark, #0d0b08) var(--light, #ffffff);
+    --primary-color-1: var(--dark, #110f0c) var(--light, #fdfaf6);
+    --primary-color-2: var(--dark, #161310) var(--light, #ffffff);
+    --primary-color-3: var(--dark, #1d1a17) var(--light, #f7f5f1);
+    --primary-color-4: var(--dark, #24211e) var(--light, #f2f0ec);
+    --primary-color-5: var(--dark, #2b2825) var(--light, #eae7e3);
+    --primary-color-6: var(--dark, #35322f) var(--light, #e4e1dd);
+    --primary-color-7: var(--dark, #524f4b) var(--light, #bcb6af);
+    --secondary-color: var(--dark, #fffbf7) var(--light, #0c0805);
+    --secondary-color-1: var(--dark, #f8f4f0) var(--light, #15110c);
+    --secondary-color-2: var(--dark, #ebe7e3) var(--light, #1e1a14);
+    --secondary-color-3: var(--dark, #dad7d2) var(--light, #37322c);
+    --secondary-color-4: var(--dark, #f1eee9) var(--light, #231f19);
+    --secondary-color-5: var(--dark, #a19e9a) var(--light, #67625c);
+    --secondary-color-6: var(--dark, #55524e) var(--light, #cfcac2);
+    --accent-color: var(--dark, #94684a) var(--light, #956747);
+    --accent-contrast: var(--dark, #ffffff) var(--light, #ffffff);
+    --chart-5: var(--dark, #cf88c8) var(--light, #a1529b);
+    --chart-4: var(--dark, #8cb460) var(--light, #588418);
+    --chart-2: var(--dark, #1dbcb5) var(--light, #048681);
+    --accent-text: var(--dark, #d5af96) var(--light, #956747);
+    --focused-border-color: var(--dark, #c39b81) var(--light, #956747);
+    --chart-3: var(--dark, #67aaed) var(--light, #2378c2);
+  }
+  [data-preset="classic"][data-preset="classic"] {
     --primary-color: var(--dark, #000) var(--light, #fff);
     --primary-color-1: var(--dark, #0e0e0e) var(--light, #fbfbfb);
     --primary-color-2: var(--dark, #0a0a0a) var(--light, #fff);
@@ -228,47 +872,41 @@ html[data-theme="light"],
     --secondary-color-4: var(--dark, #d4d4d4) var(--light, #111);
     --secondary-color-5: var(--dark, #a1a1a1) var(--light, #6b6b6b);
     --secondary-color-6: var(--dark, #5d5d5d) var(--light, #d0d0d0);
-    --overlay-color: var(--dark, rgb(0 0 0 / 60%)) var(--light, rgb(0 0 0 / 40%));
-    --primary-success-color: var(--dark, #02271c) var(--light, #ecfdf5);
-    --secondary-success-color: var(--dark, #b6fae3) var(--light, #10b981);
-    --primary-warning-color: var(--dark, #342203) var(--light, #fffbeb);
-    --secondary-warning-color: var(--dark, #feeac7) var(--light, #f59e0b);
-    --primary-error-color: var(--dark, #a22e2e) var(--light, #dc2626);
-    --secondary-error-color: var(--dark, #9b1c1c) var(--light, #ef4444);
-    --error-text-color: var(--dark, #f87171) var(--light, #b91c1c);
-    --success-text-color: var(--dark, #b6fae3) var(--light, #047857);
-    --warning-text-color: var(--dark, #feeac7) var(--light, #b45309);
-    --contrast-error-color: var(--dark, var(--secondary-color-3)) var(--light, var(--primary-color));
-    --primary-info-color: var(--dark, var(--primary-color-5)) var(--light, var(--primary-color));
+    --accent-color: var(--dark, #e6e6e6) var(--light, #0d0d0d);
+    --accent-contrast: var(--dark, #000) var(--light, #fff);
+    --accent-text: var(--dark, #e6e6e6) var(--light, #0d0d0d);
+    --focused-border-color: var(--dark, #2b7fff) var(--light, #2b7fff);
     --chart-2: var(--dark, #2dd4bf) var(--light, #0f766e);
-    --chart-3: var(--dark, #fb923c) var(--light, #c2410c);
-    --chart-4: var(--dark, #a78bfa) var(--light, #7c3aed);
-    --chart-5: var(--dark, #f472b6) var(--light, #be185d);
   }
   [data-accent="blue"][data-accent="blue"] {
-    --accent-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #60a5fa) var(--light, #1d4ed8);
+    --accent-color: var(--dark, #2e70cf) var(--light, #2870d4);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #8ab9fe) var(--light, #2870d4);
+    --focused-border-color: var(--dark, #6da5f9) var(--light, #2870d4);
   }
   [data-accent="green"][data-accent="green"] {
-    --accent-color: var(--dark, #4ade80) var(--light, #15803d);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #4ade80) var(--light, #15803d);
+    --accent-color: var(--dark, #1f8241) var(--light, #14833e);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #85cb94) var(--light, #14833e);
+    --focused-border-color: var(--dark, #6eb87f) var(--light, #14833e);
   }
   [data-accent="violet"][data-accent="violet"] {
-    --accent-color: var(--dark, #a78bfa) var(--light, #6d28d9);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #a78bfa) var(--light, #6d28d9);
+    --accent-color: var(--dark, #7b5ad5) var(--light, #7d59db);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #b9a9fe) var(--light, #7d59db);
+    --focused-border-color: var(--dark, #a891fb) var(--light, #7d59db);
   }
   [data-accent="rose"][data-accent="rose"] {
-    --accent-color: var(--dark, #fb7185) var(--light, #be123c);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #fb7185) var(--light, #be123c);
+    --accent-color: var(--dark, #c3455e) var(--light, #c6405c);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #fd94a2) var(--light, #c6405c);
+    --focused-border-color: var(--dark, #ec7e8e) var(--light, #c6405c);
   }
   [data-accent="orange"][data-accent="orange"] {
-    --accent-color: var(--dark, #fb923c) var(--light, #c2410c);
-    --accent-contrast: var(--dark, #0a0a0a) var(--light, #fff);
-    --focused-border-color: var(--dark, #fb923c) var(--light, #c2410c);
+    --accent-color: var(--dark, #b85521) var(--light, #bb5218);
+    --accent-contrast: var(--dark, #fff) var(--light, #fff);
+    --accent-text: var(--dark, #f3a07a) var(--light, #bb5218);
+    --focused-border-color: var(--dark, #e28b63) var(--light, #bb5218);
   }
 }
 /* theme fallback: end */
@@ -317,6 +955,7 @@ html[data-theme="light"],
   --icon-size-md: 1.25rem;
   --icon-size-lg: 1.5rem;
   --icon-size-xl: 2rem;
+  /* Lucide's 2 px stroke, like the Atoll icon set; presets set their own. */
   --icon-stroke-width: 2;
 }
 
