@@ -56,6 +56,7 @@ const KNOWN: &[(&str, &str)] = &[
     ("long-text: chat_composer: ", INPUT_WIDTH),
     ("long-text: chips: ", INPUT_WIDTH),
     ("long-text: combobox: ", INPUT_WIDTH),
+    ("long-text: async_combobox: ", INPUT_WIDTH),
     ("long-text: data_table: ", BLITZ_TEXT),
     ("long-text: date_time_picker: ", INPUT_WIDTH),
     ("long-text: date_picker: ", DATE_RANGE),
