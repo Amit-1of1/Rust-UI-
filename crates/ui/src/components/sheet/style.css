@@ -1,7 +1,7 @@
 /* Sheet Root */
 .dx-sheet-root {
   position: fixed;
-  z-index: 1000;
+  z-index: var(--z-index-overlay);
   background: var(--overlay-color);
   inset: 0;
   opacity: 0;
@@ -9,13 +9,13 @@
 }
 
 .dx-sheet-root[data-state="closed"] {
-  animation: dx-sheet-root-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-sheet-root-out var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
   pointer-events: none;
 }
 
 .dx-sheet-root[data-state="open"] {
   opacity: 1;
-  animation: dx-sheet-root-in var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
+  animation: dx-sheet-root-in var(--spring-gentle-duration, var(--duration-medium)) var(--spring-gentle, var(--easing-decelerate)) forwards;
 }
 
 @keyframes dx-sheet-root-in {
@@ -40,15 +40,15 @@
 
 .dx-sheet {
   position: fixed;
-  z-index: 1001;
+  z-index: var(--z-index-modal);
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
   border: none;
-  background: var(--primary-color-2);
-  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+  background: var(--color-background-elevation-overlay);
+  box-shadow: var(--shadow-overlay);
   color: var(--secondary-color-4);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
   gap: 1rem;
   will-change: transform;
 }
@@ -92,35 +92,35 @@
 }
 
 .dx-sheet-root[data-state="open"] .dx-sheet[data-side="right"] {
-  animation: dx-slide-in-right var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
+  animation: dx-slide-in-right var(--spring-gentle-duration, var(--duration-medium)) var(--spring-gentle, var(--easing-decelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="open"] .dx-sheet[data-side="left"] {
-  animation: dx-slide-in-left var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
+  animation: dx-slide-in-left var(--spring-gentle-duration, var(--duration-medium)) var(--spring-gentle, var(--easing-decelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="open"] .dx-sheet[data-side="top"] {
-  animation: dx-slide-in-top var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
+  animation: dx-slide-in-top var(--spring-gentle-duration, var(--duration-medium)) var(--spring-gentle, var(--easing-decelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="open"] .dx-sheet[data-side="bottom"] {
-  animation: dx-slide-in-bottom var(--spring-gentle-duration, 200ms) var(--spring-gentle, ease-out) forwards;
+  animation: dx-slide-in-bottom var(--spring-gentle-duration, var(--duration-medium)) var(--spring-gentle, var(--easing-decelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="closed"] .dx-sheet[data-side="right"] {
-  animation: dx-slide-out-right var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-slide-out-right var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="closed"] .dx-sheet[data-side="left"] {
-  animation: dx-slide-out-left var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-slide-out-left var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="closed"] .dx-sheet[data-side="top"] {
-  animation: dx-slide-out-top var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-slide-out-top var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
 }
 
 .dx-sheet-root[data-state="closed"] .dx-sheet[data-side="bottom"] {
-  animation: dx-slide-out-bottom var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-in) forwards;
+  animation: dx-slide-out-bottom var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-accelerate)) forwards;
 }
 
 @keyframes dx-slide-in-right {
@@ -219,16 +219,18 @@
 }
 
 .dx-sheet-title {
+  font-family: var(--font-heading, inherit);
+  letter-spacing: var(--heading-tracking, normal);
   margin: 0;
   color: var(--secondary-color-4);
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--font-size-title-4);
+  font-weight: var(--font-weight-semibold);
 }
 
 .dx-sheet-description {
   margin: 0;
   color: var(--secondary-color-5);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
 }
 
 .dx-sheet-close {
@@ -242,11 +244,11 @@
   justify-content: center;
   padding: 0;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-small);
   background: none;
   color: var(--secondary-color-5);
   cursor: pointer;
-  transition: color 150ms ease, background-color 150ms ease;
+  transition: color var(--duration-fast) var(--easing-standard), background-color var(--duration-fast) var(--easing-standard);
 }
 
 .dx-sheet-close:hover {
