@@ -19,11 +19,18 @@ dioxus.workspace = true
 dioxus-motion = { version = "=0.4.0", default-features = false, features = ["dioxus"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
+# dioxus-motion's `web` timer calls JavaScript, which panics off wasm, so it is on for every
+# wasm build (where the browser is the only renderer) and never on the host. That keeps an
+# app's `cargo test` (and atoll-test) working with the app's `web` feature on: the host build
+# gets the Tokio timer instead.
+dioxus-motion = { version = "=0.4.0", default-features = false, features = ["dioxus", "web"] }
 web-sys = { version = "0.3", features = ["Window", "MediaQueryList", "Performance", "PointerEvent", "Element", "Event", "EventTarget", "DomRect"] }
 
 [dev-dependencies]
 dioxus-ssr = "0.7.0"
 
 [features]
-web = ["dioxus-motion/web"]
+# Kept so apps that turn it on keep building; wasm builds get dioxus-motion's web timer from
+# the target section above.
+web = []
 desktop = ["dioxus-motion/desktop"]
