@@ -2,8 +2,9 @@
 resolver = "3"
 # Globs, so a branch that adds a crate or app does not edit this line (docs/PROTOCOL.md).
 members = ["crates/*", "apps/*"]
-# Dioxus 0.8 branch: the native preview stays on 0.7 (its Blitz 0.2 fixes do not apply to Blitz 0.3).
-exclude = ["apps/native"]
+# Dioxus 0.8 branch: the native preview and atoll-test (headless Blitz) stay on 0.7 (their
+# Blitz 0.2 pins and fixes do not apply to Blitz 0.3).
+exclude = ["apps/native", "crates/test"]
 
 [workspace.package]
 edition = "2021"

@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   color: var(--secondary-color-4);
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   gap: 0.5rem;
 }
 
@@ -11,7 +11,7 @@
   width: 0.5rem;
   height: 0.5rem;
   flex-shrink: 0;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   background-color: var(--secondary-color-5);
 }
 

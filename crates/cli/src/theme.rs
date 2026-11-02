@@ -130,7 +130,7 @@ pub fn preset(brand: Rgb) -> Result<Preset, String> {
 pub fn css(name: &str, p: &Preset) -> String {
     let fill = format!("light-dark({}, {})", p.light_fill.hex(), p.dark_fill.hex());
     let body = format!(
-        "  --accent-color: {fill};\n  --accent-contrast: light-dark({}, {});\n  --focused-border-color: {fill};\n",
+        "  --accent-color: {fill};\n  --accent-contrast: light-dark({}, {});\n  --accent-text: {fill};\n  --focused-border-color: {fill};\n",
         p.light_text.hex(),
         p.dark_text.hex()
     );

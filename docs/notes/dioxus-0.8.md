@@ -31,7 +31,7 @@ and the matching CLI: `cargo install dioxus-cli --version 0.8.0-alpha.3 --locked
 | Toasts | No `PropsWithOwner`: `ToastProvider { render_toast }` takes `Callback<toast::ToastProps, Element>` (was `ToastPropsWithOwner`). The only kit API change |
 | `attributes!` | dioxus-rsx 0.8 renders a lone attribute with its Rust name (`aria_label="Send"`, not `aria-label`) and as `Box<[Attribute; 1]>`. The primitives' macro now sets built-in attributes through the typed builder methods, as `rsx!` does for elements (this also fixed the dropdown menu's Escape focus return, which looks for `[aria-haspopup]`) |
 | Snapshots | Dioxus 0.8 writes attributes in another order; `crates/ui/tests/snapshots` were re-recorded (checked: the same attributes and values on every tag) and two `render.rs` asserts check attributes one at a time |
-| Native | `apps/native` and the Blitz 0.2 forks stay on 0.7 (the fixes don't apply to Blitz 0.3; `scripts/fork-drift.sh` says so); this branch builds the web and desktop targets |
+| Native | `apps/native`, `crates/test` (atoll-test, headless Blitz) and the Blitz 0.2 forks stay on 0.7 (the fixes don't apply to Blitz 0.3; `scripts/fork-drift.sh` says so); this branch builds the web and desktop targets |
 
 ## Checked
 

@@ -70,6 +70,7 @@ Everything in `ui::prelude` is ready to use: buttons, inputs, selects, date pick
 - **Theme it.** Pick an accent, density and radius, or generate a preset from your logo with `atoll theme --from-image logo.png` ([Theming](#theming)).
 - **Desktop.** `dx serve --platform desktop --no-default-features --features desktop` runs the same app in a native window.
 - **Already have an app?** `atoll init` and `atoll add` work in an existing project, and the theme can be confined to one part of the page so it never touches your CSS ([EXISTING_APP.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/EXISTING_APP.md)).
+- **Test your screens.** `atoll setup-tests`, then write tests that click, type and check the screen inside `cargo test`, with no browser ([TESTING.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/TESTING.md)).
 - **Using a coding agent?** `atoll skill` installs the kit's agent skill, and `atoll mcp` serves the component docs over MCP ([MCP.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/MCP.md)).
 - **Whole screens.** `atoll add login_01` (or `signup_01`, `dashboard_01`, `settings_01`) copies a finished screen built from kit components.
 

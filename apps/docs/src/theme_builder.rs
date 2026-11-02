@@ -69,6 +69,18 @@ pub fn ThemeBuilderPage() -> Element {
         // The generated preset, scoped to its own name, so it only recolours the preview.
         style { {sheet.clone()} }
 
+        section { "aria-labelledby": "tb-look",
+            h2 { id: "tb-look", "Start from a look" }
+            p {
+                "A look sets the fonts, neutrals, corners and density; your brand colour below then replaces only its accent. In your app: "
+                code { "ThemeStyles {{ preset: \"reef\" }}" }
+                " or "
+                code { "atoll theme --preset reef" }
+                "."
+            }
+            PresetPicker {}
+        }
+
         section { class: "tb-controls", "aria-labelledby": "tb-pick",
             h2 { id: "tb-pick", "1. Your brand colour" }
             div { class: "tb-row",
