@@ -267,6 +267,7 @@
     {
       "name": "combobox",
       "files": [
+        "combobox/async_combobox.rs",
         "combobox/component.rs",
         "combobox/contract.toml",
         "combobox/docs.md",
@@ -274,7 +275,9 @@
         "combobox/style.css"
       ],
       "registryDependencies": [
-        "icons"
+        "hooks",
+        "icons",
+        "ui_strings"
       ]
     },
     {

@@ -133,6 +133,13 @@ impl UiStrings {
             tool_status: s("{name} : {status}"),
             decrease: s("Diminuer {label}"),
             increase: s("Augmenter {label}"),
+            loading_results: s("Chargement des résultats…"),
+            loading_more: s("Chargement d'autres résultats…"),
+            load_more: s("Charger plus de résultats"),
+            one_result: s("1 résultat"),
+            result_count: s("{count} résultats"),
+            results_failed: s("Impossible de charger les résultats."),
+            try_again: s("Réessayer"),
         }
     }
 
@@ -223,6 +230,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("{label} verringern"),
             increase: s("{label} erhöhen"),
+            loading_results: s("Ergebnisse werden geladen…"),
+            loading_more: s("Weitere Ergebnisse werden geladen…"),
+            load_more: s("Weitere Ergebnisse laden"),
+            one_result: s("1 Ergebnis"),
+            result_count: s("{count} Ergebnisse"),
+            results_failed: s("Ergebnisse konnten nicht geladen werden."),
+            try_again: s("Erneut versuchen"),
         }
     }
 
@@ -313,6 +327,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("Reducir {label}"),
             increase: s("Aumentar {label}"),
+            loading_results: s("Cargando resultados…"),
+            loading_more: s("Cargando más resultados…"),
+            load_more: s("Cargar más resultados"),
+            one_result: s("1 resultado"),
+            result_count: s("{count} resultados"),
+            results_failed: s("No se pudieron cargar los resultados."),
+            try_again: s("Reintentar"),
         }
     }
 
@@ -403,6 +424,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("Diminuir {label}"),
             increase: s("Aumentar {label}"),
+            loading_results: s("Carregando resultados…"),
+            loading_more: s("Carregando mais resultados…"),
+            load_more: s("Carregar mais resultados"),
+            one_result: s("1 resultado"),
+            result_count: s("{count} resultados"),
+            results_failed: s("Não foi possível carregar os resultados."),
+            try_again: s("Tentar novamente"),
         }
     }
 
@@ -493,6 +521,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("إنقاص {label}"),
             increase: s("زيادة {label}"),
+            loading_results: s("جارٍ تحميل النتائج…"),
+            loading_more: s("جارٍ تحميل المزيد من النتائج…"),
+            load_more: s("تحميل المزيد من النتائج"),
+            one_result: s("نتيجة واحدة"),
+            result_count: s("{count} نتيجة"),
+            results_failed: s("تعذّر تحميل النتائج."),
+            try_again: s("إعادة المحاولة"),
         }
     }
 
@@ -583,6 +618,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("הקטנת {label}"),
             increase: s("הגדלת {label}"),
+            loading_results: s("טוען תוצאות…"),
+            loading_more: s("טוען תוצאות נוספות…"),
+            load_more: s("טעינת תוצאות נוספות"),
+            one_result: s("תוצאה אחת"),
+            result_count: s("{count} תוצאות"),
+            results_failed: s("לא ניתן לטעון את התוצאות."),
+            try_again: s("ניסיון חוזר"),
         }
     }
 
@@ -673,6 +715,13 @@ impl UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("{label} を減らす"),
             increase: s("{label} を増やす"),
+            loading_results: s("結果を読み込み中…"),
+            loading_more: s("さらに結果を読み込み中…"),
+            load_more: s("さらに結果を読み込む"),
+            one_result: s("1 件の結果"),
+            result_count: s("{count} 件の結果"),
+            results_failed: s("結果を読み込めませんでした。"),
+            try_again: s("再試行"),
         }
     }
 
@@ -763,6 +812,13 @@ impl UiStrings {
             tool_status: s("{name}：{status}"),
             decrease: s("减少{label}"),
             increase: s("增加{label}"),
+            loading_results: s("正在加载结果…"),
+            loading_more: s("正在加载更多结果…"),
+            load_more: s("加载更多结果"),
+            one_result: s("1 个结果"),
+            result_count: s("{count} 个结果"),
+            results_failed: s("无法加载结果。"),
+            try_again: s("重试"),
         }
     }
 
