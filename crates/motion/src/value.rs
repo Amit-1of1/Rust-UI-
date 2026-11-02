@@ -4,6 +4,10 @@
 //! directly while a finger drags it, then handed to a spring or a momentum glide that starts at
 //! the finger's speed. Frames come from the engine's timer (`requestAnimationFrame` on the web,
 //! the Tokio runtime on desktop and native); without a timer the value jumps to its end.
+//!
+//! The way `set`, `stop`, `animate` and `run` share the slot and the `looping` flag is modelled in
+//! `proofs/tla/MotionValue.tla` and checked by `scripts/tla.sh` (one loop per value, no frozen
+//! animation, every animation settles). Change that model when you change this logic.
 
 use crate::gesture::now_ms;
 use crate::physics::{Animation, Glide, GlideConfig, SpringConfig, SpringState};
