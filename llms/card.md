@@ -1,6 +1,6 @@
 # Card
 
-- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add card` or `dx components add card --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`).
 - Import: `use crate::components::card::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The card component is a flexible container for grouping related content and actions. It provides a structured layout with optional header, content, and footer sections.
@@ -45,11 +45,31 @@ Card {
 }
 ```
 
+## Whole-card links, side media and groups
+
+- `CardLink { href }` goes inside the title. Its click area covers the whole card, while screen readers hear only the title. Buttons in the card still work on their own.
+- `Card { horizontal: true }` puts a `CardMedia` beside the content on screens at least 40rem wide, and stacks it again below that.
+- `CardGroup { min_width: "16rem" }` fits as many columns as there is room for, each at least `min_width` wide. It adds no list roles; add `role: "list"` and `role: "listitem"` yourself when the count matters.
+
+```rust
+CardGroup {
+    Card { CardHeader { CardTitle { CardLink { href: "/guides/forms", "Forms guide" } } } }
+    Card { horizontal: true,
+        CardMedia { img { src: "/cabin.jpg", alt: "The cabin" } }
+        CardHeader { CardTitle { "Lakeside cabin" } }
+    }
+}
+```
+
 ## API
 
 ```rust
 #[component]
 pub fn Card(
+    /// Puts a `CardMedia` beside the content instead of above it (stacked again on narrow
+    /// screens).
+    #[props(default)]
+    horizontal: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
@@ -102,6 +122,36 @@ pub fn CardFooter(
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element
+
+/// Makes the whole card a link: the card's title goes inside, and the link's click area is
+/// stretched over the card, so one press anywhere opens it while screen readers hear just the
+/// title. Buttons in the card stay pressable above it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardLink(
+    #[props(into)] href: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
+
+/// Lays cards out in a grid that fits as many columns as there is room for, each at least
+/// `min_width` wide, down to one column on phones. It adds no list semantics; give it
+/// `role: "list"` and each card `role: "listitem"` when screen readers should count them.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardGroup(
+    /// The narrowest a card may get before the grid drops a column (any CSS length).
+    #[props(into, default = "16rem".to_string())]
+    min_width: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element
 ```
 
 ## Example
@@ -116,6 +166,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem; width: 100%;",
         Card { style: "width: 100%; max-width: 24rem;",
             CardHeader {
                 CardTitle { "Create project" }
@@ -131,6 +182,22 @@ pub fn Demo() -> Element {
                 Button { variant: ButtonVariant::Outline, "Cancel" }
                 Button { "Create" }
             }
+        }
+        CardGroup { min_width: "12rem",
+            Card {
+                CardHeader {
+                    CardTitle { CardLink { href: "#docs", "Read the docs" } }
+                    CardDescription { "The whole card opens the guide." }
+                }
+            }
+            Card { horizontal: true,
+                CardHeader {
+                    CardTitle { "Side by side" }
+                    CardDescription { "On wide screens the parts sit in a row." }
+                }
+                CardFooter { Button { variant: ButtonVariant::Outline, "Open" } }
+            }
+        }
         }
     }
 }

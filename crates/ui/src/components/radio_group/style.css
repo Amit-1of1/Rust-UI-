@@ -63,3 +63,9 @@
     background: Highlight;
   }
 }
+
+/* Error state: `aria-invalid="true"` on the group, or an invalid `Field` around it. */
+.dx-radio-group[aria-invalid="true"] .dx-radio-item:not([data-state="checked"])::before,
+[data-slot="field"][data-invalid="true"] .dx-radio-item:not([data-state="checked"])::before {
+  box-shadow: 0 0 0 1px var(--error-text-color);
+}

@@ -1,14 +1,72 @@
 <div style="display: grid; gap: 0.75rem; max-width: 28rem;">
-<div role="alert" data-slot="alert" data-variant="default" class="dx-alert-css">
+<div data-slot="alert" data-variant="default" class="dx-alert-css">
 <div data-slot="alert-title" class="dx-alert-title-css">Heads up
 </div>
 <div data-slot="alert-description" class="dx-alert-description-css">You can add components to your app with the registry.
 </div>
 </div>
-<div role="alert" data-slot="alert" data-variant="destructive" class="dx-alert-css">
+<div role="alert" data-slot="alert" data-variant="destructive" data-icon="true" class="dx-alert-css">
+<span class="dx-alert-icon-css" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" data-size="lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle-alert" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<line x1="12" y1="8" x2="12" y2="12">
+</line>
+<line x1="12" y1="16" x2="12.01" y2="16">
+</line>
+</svg>
+</span>
 <div data-slot="alert-title" class="dx-alert-title-css">Something went wrong
 </div>
 <div data-slot="alert-description" class="dx-alert-description-css">Your session has expired. Sign in again to continue.
+</div>
+<div data-slot="alert-actions" class="dx-alert-actions-css">
+<button class="dx-button-css" data-size="sm" data-style="outline">Sign in
+</button>
+</div>
+</div>
+<div role="status" data-slot="alert" data-variant="success" data-icon="true" class="dx-alert-css">
+<span class="dx-alert-icon-css" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" data-size="lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="circle-check" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<path d="m16 9-5.5 5.5L8 12">
+</path>
+</svg>
+</span>
+<div data-slot="alert-title" class="dx-alert-title-css">Invoice sent
+</div>
+<div data-slot="alert-description" class="dx-alert-description-css">Ledgerly emailed the invoice to your client.
+</div>
+</div>
+<div data-slot="alert" data-variant="warning" data-icon="true" class="dx-alert-css">
+<span class="dx-alert-icon-css" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" data-size="lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="triangle-alert" aria-hidden="true">
+<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-n0 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3">
+</path>
+<path d="M12 9v4">
+</path>
+<path d="M12 17h.01">
+</path>
+</svg>
+</span>
+<div data-slot="alert-title" class="dx-alert-title-css">Trial ends in 3 days
+</div>
+</div>
+<div data-slot="alert" data-variant="info" data-icon="true" class="dx-alert-css">
+<span class="dx-alert-icon-css" aria-hidden="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" data-size="lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="info" aria-hidden="true">
+<circle cx="12" cy="12" r="10">
+</circle>
+<path d="M12 16v-n0">
+</path>
+<path d="M12 8h.01">
+</path>
+</svg>
+</span>
+<div data-slot="alert-title" class="dx-alert-title-css">Maintenance on Sunday
+</div>
+<div data-slot="alert-description" class="dx-alert-description-css">Sync pauses from 02:00 to 03:00 UTC.
 </div>
 </div>
 </div>

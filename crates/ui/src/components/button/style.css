@@ -240,3 +240,50 @@
   transition-duration: var(--duration-rapid);
   translate: 0 0;
 }
+
+/* Toggle buttons that are on (`aria-pressed`) keep the hover colours. */
+.dx-button[aria-pressed="true"] {
+  background-color: var(--primary-color-5);
+  color: var(--secondary-color-1);
+}
+
+/* Loading (`loading: true`): the label stays in place, invisible but still read, so the
+   button keeps its width and height; the spinner sits on top. */
+.dx-button[data-loading="true"] {
+  position: relative;
+  cursor: progress;
+}
+
+.dx-button-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+  opacity: 0;
+}
+
+.dx-button-spinner {
+  position: absolute;
+  inset: 0;
+  width: 1em;
+  height: 1em;
+  box-sizing: border-box;
+  margin: auto;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 999px;
+  animation: dx-button-spin 700ms linear infinite;
+}
+
+@keyframes dx-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A slowly turning ring still says "busy" when motion is reduced (as Spinner does). */
+@media (prefers-reduced-motion: reduce) {
+  .dx-button-spinner {
+    animation-duration: 3s !important;
+    animation-iteration-count: infinite !important;
+  }
+}

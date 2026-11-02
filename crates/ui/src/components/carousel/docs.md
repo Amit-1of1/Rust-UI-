@@ -9,7 +9,7 @@ Carousel { label: "Featured plans",
 }
 ```
 
-Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
+Slides are 80% of the carousel's width by default, so the next one peeks in and shows there is more. `item_size` takes any CSS length: `"16rem"`, `"33%"` for three in view, or `"max(40%, 11rem)"` to adapt to the space. Touch and trackpads scroll it natively; the buttons scroll by about one viewport. Slides centre their content; `CarouselItem { media: true, img { .. } }` makes a full-bleed photo slide instead (the content fills the slide and an `img` is cropped to cover it).
 
 ## Accessibility
 

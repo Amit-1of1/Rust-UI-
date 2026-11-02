@@ -40,6 +40,10 @@ pub struct TabsProps {
     #[props(default)]
     pub variant: TabsVariant,
 
+    /// Stretch the tab list to the container's width, every tab the same width.
+    #[props(default)]
+    pub stretch: bool,
+
     /// Additional attributes to apply to the tabs element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -89,6 +93,7 @@ pub fn Tabs(props: TabsProps) -> Element {
     let base = attributes!(div {
         class: format!("{} {}", props.class, Styles::dx_tabs),
         "data-variant": props.variant.to_class(),
+        "data-stretch": props.stretch.then_some("true"),
     });
     let merged = merge_attributes(vec![base, props.attributes]);
 

@@ -40,10 +40,16 @@ pub fn Carousel(
     /// Accessible name, for example "Featured products".
     #[props(into)]
     label: String,
+    /// The width of each slide, any CSS length: `"16rem"`, `"33%"` for three in view, or
+    /// `"min(80%, 20rem)"` to adapt to the space. Defaults to 80% of the carousel, so the
+    /// next slide peeks in and shows there is more.
+    #[props(into, default)]
+    item_size: Option<String>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
     let track = use_unique_id("dx-carousel");
+    let size_style = item_size.map(|s| format!("--dx-carousel-item: {s};"));
     let t = use_ui_strings();
     let slides = fill(&t.slides, &[("label", &label)]);
     let mut track_el = use_signal(|| None::<Rc<MountedData>>);
@@ -51,6 +57,7 @@ pub fn Carousel(
         section {
             "aria-roledescription": "carousel",
             "aria-label": "{label}",
+            style: size_style,
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_carousel }), attributes]),
             div {
                 id: "{track}",

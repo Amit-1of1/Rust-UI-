@@ -21,3 +21,9 @@ Dialog {
 - `title` is a required prop, so a dialog without a name doesn't compile (the error names the missing field: "Missing required field title"). Radix and shadcn only warn about this at runtime.
 - `hide_title: true` hides the title and `description` visually but keeps them for screen readers, for dialogs whose content already makes the purpose clear (the command palette uses it).
 - For a description with links or formatting, put a `DialogDescription` in the children instead of `description` (not both).
+
+## Sizes, footer and close button
+
+- `size: DialogSize::Sm | Default | Lg | Xl | Full` sets the panel's width; `Full` fills the screen.
+- `DialogFooter` lines up the action buttons at the end (stacked on phones).
+- `DialogClose` is a button that closes the dialog (give it a `class`, or render your own element with `as`); `DialogContentClose` is the corner X, named "Close" in the current locale.

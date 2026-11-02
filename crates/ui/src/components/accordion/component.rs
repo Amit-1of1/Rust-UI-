@@ -23,8 +23,16 @@ pub fn Accordion(props: AccordionProps) -> Element {
     }
 }
 
+/// The trigger's id for this item, so the panel can be a `region` named by its trigger (the
+/// primitive gives the trigger `aria-controls` but leaves the panel unnamed). A trigger with
+/// its own `id` needs the content to set `aria_labelledby` to that id.
+#[derive(Clone)]
+struct AccordionTriggerId(String);
+
 #[component]
 pub fn AccordionItem(props: AccordionItemProps) -> Element {
+    let id = crate::components::hooks::use_unique_id("rui-accordion-trigger");
+    use_context_provider(|| AccordionTriggerId(id));
     rsx! {
         accordion::AccordionItem {
             disabled: props.disabled,
@@ -42,7 +50,9 @@ pub fn AccordionItem(props: AccordionItemProps) -> Element {
 pub fn AccordionTrigger(props: AccordionTriggerProps) -> Element {
     rsx! {
         accordion::AccordionTrigger {
-            id: props.id,
+            id: props
+                .id
+                .or_else(|| try_use_context::<AccordionTriggerId>().map(|t| t.0)),
             attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_accordion_trigger }), props.attributes]),
             {props.children}
             ChevronDown { "aria-hidden": "true",
@@ -56,11 +66,16 @@ pub fn AccordionTrigger(props: AccordionTriggerProps) -> Element {
 
 #[component]
 pub fn AccordionContent(props: AccordionContentProps) -> Element {
+    // A named region, so moving into the panel with a screen reader reads its heading.
+    let trigger = try_use_context::<AccordionTriggerId>().map(|t| t.0);
     rsx! {
         accordion::AccordionContent {
             style: "--collapsible-content-width: 140px",
             id: props.id,
-            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_accordion_content }), props.attributes]),
+            attributes: merge_attributes(vec![
+                attributes!(div { class: Styles::dx_accordion_content, role: "region", aria_labelledby: trigger }),
+                props.attributes,
+            ]),
             {props.children}
         }
     }

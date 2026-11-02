@@ -1,0 +1,44 @@
+/* Use theme tokens (var(--...)), never literal colors, so light and dark both work.
+   Any animation needs a prefers-reduced-motion fallback (docs/GUARDRAILS.md). */
+.dx-list {
+  display: grid;
+  margin: 0;
+  padding-inline-start: 1.5em;
+  color: var(--secondary-color-4);
+  gap: 0.25rem;
+  line-height: 1.5;
+}
+
+.dx-list[data-marker="bullet"] {
+  list-style-type: disc;
+}
+
+.dx-list[data-marker="number"] {
+  list-style-type: decimal;
+}
+
+.dx-list[data-marker="letter"] {
+  list-style-type: lower-alpha;
+}
+
+.dx-list[data-marker="roman"] {
+  list-style-type: lower-roman;
+}
+
+.dx-list[data-marker="none"] {
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.dx-list[data-spaced="true"] {
+  gap: 0.75rem;
+}
+
+.dx-list-item::marker {
+  color: var(--secondary-color-5);
+}
+
+/* Nested lists sit snugly under their item. */
+.dx-list-item > .dx-list {
+  margin-top: 0.25rem;
+}
