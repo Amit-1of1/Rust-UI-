@@ -35,7 +35,9 @@ jobs:
           path: ~/.cargo/bin/dx
           key: dx-${{ runner.os }}-${{ hashFiles('scripts/install-dx.sh') }}
       - if: steps.dx.outputs.cache-hit != 'true'
-        run: scripts/install-dx.sh
+        # --force: rust-cache may already have restored a dx into ~/.cargo/bin without cargo
+        # install's records, and cargo install then refuses to overwrite it.
+        run: scripts/install-dx.sh --force
       # The docs site is the landing page; the gallery lives under /gallery/.
       # release-web.sh = dx release build (split where the app has a `wasm-split` feature),
       # then one stylesheet per app instead of one per component (see crates/cli/README.md).

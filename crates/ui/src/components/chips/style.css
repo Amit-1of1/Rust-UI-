@@ -12,16 +12,16 @@
   min-height: calc(2rem * var(--density, 1));
   padding-inline: 0.75rem;
   border: 1px solid var(--primary-color-6);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--primary-color-3);
   color: var(--secondary-color-4);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-body-2);
   user-select: none;
   transition:
-    background-color 150ms var(--spring-snappy, ease-out),
-    border-color 150ms ease-out,
-    color 150ms ease-out;
+    background-color var(--duration-fast) var(--spring-snappy, var(--easing-decelerate)),
+    border-color var(--duration-fast) var(--easing-decelerate),
+    color var(--duration-fast) var(--easing-decelerate);
 }
 
 .dx-chip:hover {
@@ -60,7 +60,7 @@
   overflow: hidden;
   width: 0;
   /* atoll-motion: layout width (the chip grows to make room for its check mark) */
-  transition: width 150ms var(--spring-snappy, ease-out);
+  transition: width var(--duration-fast) var(--spring-snappy, var(--easing-decelerate));
 }
 
 .dx-chip[data-state="on"] .dx-chip-check {

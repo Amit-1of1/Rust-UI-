@@ -48,24 +48,24 @@
       }
     },
     "docs": {
-      "firstKB": 1002,
-      "firstRequests": 6,
-      "mainWasmKB": 967.9,
-      "totalKB": 1045.9,
+      "firstKB": 1103,
+      "firstRequests": 7,
+      "mainWasmKB": 1064.7,
+      "totalKB": 1154.9,
       "startupMs4x": 687,
       "files": {
-        "assets/atoll.css": 21,
+        "assets/atoll.css": 24.3,
         "assets/demo.css": 0.3,
         "assets/docs.css": 1,
         "assets/docs.js": 11.2,
-        "assets/docs_bg.wasm": 967.9,
+        "assets/docs_bg.wasm": 1064.7,
         "assets/focus-trap.js": 0.4,
         "assets/landing.css": 0.5,
         "assets/reset.css": 0.2,
         "assets/reset.scoped.css": 0.3,
         "assets/style.css": 1.1,
-        "assets/theme.css": 2.1,
-        "assets/theme.scoped.css": 2.2
+        "assets/theme.css": 4.5,
+        "assets/theme.scoped.css": 4.7
       }
     },
     "dashboard": {

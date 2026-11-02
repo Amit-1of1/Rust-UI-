@@ -54,9 +54,28 @@ fn block_in_url() -> Option<String> {
     None
 }
 
+/// Atoll's mark (docs/brand/atoll-mark.svg), drawn in the accent so each look recolours it.
+#[component]
+fn AtollMark() -> Element {
+    rsx! {
+        svg { class: "gallery-mark", width: "24", height: "24", view_box: "0 0 32 32", "aria-hidden": "true",
+            circle { cx: "16", cy: "16", r: "8", style: "fill: var(--accent-color); opacity: 0.25;" }
+            path {
+                d: "M26.40 14.54A10.5 10.5 0 0 1 15.63 26.49 M9.25 24.04A10.5 10.5 0 0 1 6.56 11.40 M11.40 6.56A10.5 10.5 0 0 1 20.60 6.56",
+                fill: "none",
+                stroke_width: "4",
+                stroke_linecap: "round",
+                style: "stroke: var(--accent-color);",
+            }
+            circle { cx: "18.5", cy: "17.5", r: "2.75", fill: "#f97362" }
+        }
+    }
+}
+
 #[component]
 fn App() -> Element {
     let mut block = use_signal(block_in_url);
+    let theme = use_theme();
     if let Some(name) = block() {
         return rsx! {
             ThemeStyles {}
@@ -74,11 +93,25 @@ fn App() -> Element {
     }
     rsx! {
         ThemeStyles {}
+        PersistTheme {}
         document::Stylesheet { href: GALLERY_CSS }
         Fragment {
             header { class: "gallery-header",
-                h1 { "Atoll kit" }
-                Badge { variant: BadgeVariant::Secondary, "week 6" }
+                h1 {
+                    AtollMark {}
+                    "Atoll kit"
+                }
+                div { class: "gallery-look",
+                    Label { html_for: "gallery-look", "Look" }
+                    NativeSelect {
+                        id: "gallery-look",
+                        value: theme.preset(),
+                        onchange: move |e: FormEvent| theme.set_preset(&e.value()),
+                        for info in PRESET_INFO {
+                            NativeSelectOption { key: "{info.name}", value: info.name, "{info.name}" }
+                        }
+                    }
+                }
             }
             section { class: "gallery-main", "aria-label": "Component gallery",
                 Section { title: "Button", blurb: "Variants and sizes.", ui::demos::button::Demo {} }
@@ -91,6 +124,7 @@ fn App() -> Element {
                 Section { title: "Card", blurb: "A grouped surface with header, content and footer.", ui::demos::card::Demo {} }
                 Section { title: "Native select", blurb: "The browser's own select, styled like an input: best on phones and in long forms.", ui::demos::native_select::Demo {} }
                 Section { title: "Resizable", blurb: "Panels with dividers you drag or move with the arrow keys.", ui::demos::resizable::Demo {} }
+                Section { title: "Layout and type", blurb: "Stack, Grid and Text on the 4 px spacing scale, the page grid and the type scale.", ui::demos::layout::Demo {} }
                 Section { title: "Sound", blurb: "Sounds in three sets (Ripple, Glass, Driftwood) that each person mixes per sound, off until they turn them on.", ui::demos::sound::Demo {} }
                 Section {
                     id: "blocks",

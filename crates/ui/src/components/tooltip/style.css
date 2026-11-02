@@ -10,14 +10,14 @@
 
 .dx-tooltip-content {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--z-index-overlay);
   max-width: 250px;
   padding: 8px 12px;
-  border-radius: var(--radius);
-  animation: dx-tooltip-fade-in var(--spring-snappy-duration, 200ms) var(--spring-snappy, ease-in-out);
+  border-radius: var(--radius-large);
+  animation: dx-tooltip-fade-in var(--spring-snappy-duration, var(--duration-medium)) var(--spring-snappy, var(--easing-standard));
   background-color: var(--secondary-color-4);
   color: var(--primary-color);
-  font-size: 14px;
+  font-size: var(--font-size-body-2);
   line-height: 1.4;
 }
 

@@ -25,6 +25,10 @@ pub mod css_bundle;
 /// Internal: not part of the public API (docs/STABILITY.md).
 #[cfg(feature = "demos")]
 pub mod demos;
+/// The fonts the theme presets use (OFL-1.1, shipped with the kit).
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub mod fonts;
 
 /// Shared hooks (`use_hotkey`, `Selection`, `use_media_query`, ...): `ui::hooks::*`.
 pub use components::hooks;
@@ -92,15 +96,35 @@ pub fn ThemeStyles(
     /// Also load the base styles, [`RESET_CSS`] (experimental).
     #[props(default)]
     reset: bool,
+    /// The look to start with, one of
+    /// [`PRESETS`](components::theme_customizer::PRESETS) (`"reef"`, `"abyss"`, ...): the
+    /// app's build-time choice. Without it the page shows Atoll's default, `lagoon`, or what
+    /// [`use_theme`](components::theme_customizer::use_theme)`().set_preset(..)` picks later
+    /// (experimental).
+    #[props(default)]
+    preset: Option<&'static str>,
+    /// Declare the presets' fonts (`@font-face`, files shipped with the kit; on by default).
+    /// Off, every preset uses the system fonts at the end of its stack (experimental).
+    #[props(default = true)]
+    fonts: bool,
 ) -> Element {
     use_hook(css_bundle::install);
     use_hook(|| components::theme_customizer::set_writes_html(!scoped));
-    let theme = if scoped { THEME_SCOPED_CSS } else { THEME_CSS };
+    let theme = components::theme_customizer::use_theme();
+    use_hook(move || {
+        if let Some(name) = preset {
+            theme.set_preset(name);
+        }
+    });
+    let theme_css = if scoped { THEME_SCOPED_CSS } else { THEME_CSS };
     let reset_css = if scoped { RESET_SCOPED_CSS } else { RESET_CSS };
     rsx! {
-        document::Stylesheet { href: theme }
+        document::Stylesheet { href: theme_css }
         if reset {
             document::Stylesheet { href: reset_css }
+        }
+        if fonts {
+            document::Style { {fonts::font_face_css()} }
         }
     }
 }

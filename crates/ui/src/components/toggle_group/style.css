@@ -9,9 +9,9 @@
   border-radius: 0;
   background-color: transparent;
   color: var(--secondary-color-4);
-  font-size: 14px;
+  font-size: var(--font-size-body-2);
   outline: none;
-  transition: background-color 200ms ease, border-color 200ms ease, outline-color 150ms;
+  transition: background-color var(--duration-medium) var(--easing-standard), border-color var(--duration-medium) var(--easing-standard), outline-color var(--duration-fast);
 }
 
 .dx-toggle-group[data-allow-multiple-pressed="true"]
@@ -34,7 +34,7 @@
 
 .dx-toggle-item:focus-visible {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-index-raised);
   outline: 2px solid var(--focused-border-color);
   outline-offset: 2px;
 }
