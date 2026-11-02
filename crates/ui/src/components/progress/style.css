@@ -59,7 +59,7 @@
     align-items: baseline;
     justify-content: space-between;
     gap: .5rem;
-    font-size: .875rem;
+    font-size: var(--font-size-body-2);
 }
 
 .dx-progress-label {
