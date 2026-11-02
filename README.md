@@ -2,7 +2,7 @@
 
 **Accessible, animated UI components for [Dioxus](https://dioxuslabs.com), in plain Rust and plain CSS.** shadcn-style: use them from the crate, or copy a component's source into your app and own it.
 
-- **81 components and 4 whole-screen blocks**: forms, pickers, menus, dialogs, sheets, toasts, data tables, charts, a command palette, a chat and agent UI set.
+- **82 components and 4 whole-screen blocks**: forms, pickers, menus, dialogs, sheets, toasts, data tables, charts, a command palette, a chat and agent UI set.
 - **Accessible by test, not by promise**: every demo passes axe in light and dark and a Tab-only walkthrough, on Chromium, Firefox and WebKit; 28 components ship a keyboard contract whose every row runs as a test in those browsers and on native; text contrast is proved for every accent preset. Each claim and how to check it: [docs/CLAIMS.md](docs/CLAIMS.md).
 - **Motion built in**: springs, enter and exit, gestures and layout animation, all switched off under reduced motion.
 - **Web, desktop and native**: the same components on the web, in a desktop window and on Android (system webview, emulator-tested). The Blitz native renderer is a tested preview.
@@ -19,6 +19,8 @@ cd my-app && dx serve       # http://localhost:8080
 ```
 
 The full walkthrough is [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md). Adding the kit to an app you already have: [docs/EXISTING_APP.md](docs/EXISTING_APP.md). Free under MIT or Apache-2.0; [Atoll Pro](docs/pro/README.md) adds premium blocks and templates.
+
+Testing your screens in `cargo test` (click, type, assert; no browser): [docs/TESTING.md](docs/TESTING.md).
 
 Before you adopt it: [docs/HARD_QUESTIONS.md](docs/HARD_QUESTIONS.md) answers the objections an experienced engineer raises (age and who writes it, Dioxus lock-in, forks, download size, compile times, accessibility limits), including where Atoll loses.
 

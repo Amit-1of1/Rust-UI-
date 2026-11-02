@@ -150,6 +150,17 @@ pub struct UiStrings {
     pub decrease: String,
     /// The + button's name. `{label}` is the field's name.
     pub increase: String,
+    // Async combobox
+    pub loading_results: String,
+    pub loading_more: String,
+    /// The last option of an async combobox that has more pages.
+    pub load_more: String,
+    pub one_result: String,
+    /// `{count}` is the number of results loaded so far.
+    pub result_count: String,
+    pub results_failed: String,
+    /// The option that repeats a failed request.
+    pub try_again: String,
 }
 
 impl Default for UiStrings {
@@ -239,6 +250,13 @@ impl Default for UiStrings {
             tool_status: s("{name}: {status}"),
             decrease: s("Decrease {label}"),
             increase: s("Increase {label}"),
+            loading_results: s("Loading results…"),
+            loading_more: s("Loading more results…"),
+            load_more: s("Load more results"),
+            one_result: s("1 result"),
+            result_count: s("{count} results"),
+            results_failed: s("Couldn't load results."),
+            try_again: s("Try again"),
         }
     }
 }

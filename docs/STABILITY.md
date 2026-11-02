@@ -35,9 +35,12 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 |---|---|
 | `form`: `use_form`, `Form`, `FormState`, `FormField`, `TextField`, `SelectField`, `ComboboxField`, `TimeField`, `DateTimeField`, `DateRangeField`, `FieldOption`, `Validator` and the rules, and `#[derive(Form)]` (crate `atoll-form-derive`) | Reshaped twice this week (`mounted`, then `field_with`/`load`/`reset` and the select and combobox fields). Raw `Select` wiring (dashboard gap 17) is still open. The derive is new on 2026-10-15 and its attributes may change with use. |
 | `time_picker` and `date_time_picker` (`TimePicker`, `TimeState`, `HourCycle`, `DateTimePicker` and the ISO helpers) | New on 2026-10-15; min/max times and a time list popover may change the props. |
+| `combobox`: `AsyncCombobox`, `use_async_options`, `AsyncOptions`, `AsyncPage`, `AsyncStatus`, `DEFAULT_DEBOUNCE`, and `Combobox`'s `list_busy` and `announcement` | New on 2026-11-01 (async results, debounce, load more); the props may change once a real server search uses them. |
 | `data_table` | Kit-written; the `toolbar` slot and `render_cell` are new and the column API is still settling. |
 | `chart`: `BarChart`, `LineChart`, `AreaChart`, `PieChart`, `RadarChart`, `RadialChart`, `ChartLegend`, `ChartSeries`, `LegendMarker`, `ChartCursor`, `ChartKey` | Kit-written SVG; multi-series, the legend, pie and radial charts are new (charts v2), radar charts and `keyboard` on 2026-10-30, and their props may still change with use. The `--chart-*` tokens are part of the theme contract once the props settle. |
 | `theme_customizer`: `use_theme`, `Theme`, `ThemeMode`, `ThemeScope` (and `ThemeCustomizer`'s markup) | New on 2026-10-14; `ThemeScope` exists for the native renderer, which is itself a preview. `ACCENTS` and `DENSITIES` values are stable (theme contract above). |
+| Theme presets (looks): `PRESETS`, `PRESET_INFO`, `PresetInfo`, `PresetPicker`, `Theme::preset`/`set_preset`/`preset_info`/`radius_override`, `ThemeStyles`'s `preset` and `fonts` props, `ui::fonts`, the `data-preset` attribute and its tokens (`--font-sans`, `--font-heading`, `--font-mono`, `--heading-weight`, `--heading-tracking`), `atoll theme --preset` | New on 2026-11-01 ([BRAND.md](BRAND.md)); preset names, their values and the shipped fonts may change while the look settles. |
+| Foundation tokens (`--unit-x*`, `--layout-*`, `--font-size-*`, `--line-height-*`, `--font-weight-*`, `--color-background-*`, `--color-foreground-*`, `--color-border-*`, `--shadow-*`, `--radius-small|medium|large|full`, `--z-index-*`, `--duration-*`, `--easing-*`); `Container`, `Stack`, `Grid`, `GridItem`, `Text`; `atoll icons` | New on 2026-11-01 ([FOUNDATIONS.md](FOUNDATIONS.md)); names follow Reshaped and are meant to stay, values may still be tuned. |
 | `sound`: `SoundProvider`, `SoundSettings`, `SoundToggle`, `use_sound`, `Sound`, `SoundEvent`, `SoundStyle`, `Note`, `Wave` (`OpenCloseSound`, `MountSound` and `use_toggle_sound*` are internal) | New on 2026-11-01; desktop and native are still silent, and the sets and settings may change with use. |
 | Scoped theme and base styles: `ThemeStyles`'s `scoped` and `reset` props, `THEME_SCOPED_CSS`, `RESET_CSS`, `RESET_SCOPED_CSS`, `set_writes_html`, the `data-rui-scope` attribute `ThemeScope` renders, `reset.css`, and `atoll init --scoped/--reset`, `atoll postbuild --scoped` | New on 2026-10-30 for adding the kit to existing apps ([EXISTING_APP.md](EXISTING_APP.md)); the scope selector and what the reset covers may change with use. |
 | `hooks::use_focus_opener`, `use_return_focus`, `ReturnFocus`, `FocusInside` | New on 2026-10-30: overlays return focus to their opener without a script (native). Built into the kit's overlays; the hook shape may change before your own overlays rely on it. |
@@ -99,7 +102,7 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 ### Experimental
 
 - `atoll add` / `diff --blocks-dest` and the block items themselves: new on 2026-10-15.
-- `atoll theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned.
+- `atoll theme --brand <hex>`: its output changed to `light-dark()` pairs on 2026-10-13. `--from-image <logo>` is new on 2026-10-30; how it picks the colour may be tuned. `--import <file>` (shadcn, tweakcn, Reshaped) and `atoll font` are new on 2026-11-01; how they map names and pick files may be tuned.
 - `atoll postbuild <public>`: new on 2026-10-13; the bundle layout may change.
 - `atoll doctor`: its checks grow with the guardrails, so a passing component can start warning after an update.
 - `atoll acr` and `docs/acr/wcag22.toml`: new on 2026-10-30; rows change as checks are added.
@@ -109,11 +112,18 @@ Everything is young (the kit started on 2026-10-10), so "stable" means "we now t
 - `atoll info [--json]` (its JSON fields), `atoll skill` and `skills/atoll/SKILL.md`: new on 2026-10-30; fields may be added.
 - `atoll contract` and the `contract.toml` format (docs/CONTRACTS.md): new on 2026-10-16; steps may be added.
 - `atoll explain` and its `--json` shape: new on 2026-10-30; which errors it explains will grow.
+- `atoll setup-tests`: new on 2026-11-01; which `Cargo.toml` lines it writes may change with atoll-test.
 
 ### Internal
 
 - `atoll new` and `atoll registry`: tools for working inside this repository.
 - The library crate `atoll_cli` (every module and function). It is the binary's implementation, public for the repo's tests. Use the commands instead.
+
+## `atoll-test` (`atoll_test`)
+
+### Experimental
+
+- Everything (`Screen`, `ScreenBuilder`, the queries, `El`, `Rect`, `kit_css` and the CSS helpers): new on 2026-11-01 ([TESTING.md](TESTING.md)). Method names and failure messages may change with use.
 
 ## Marking experimental items
 
