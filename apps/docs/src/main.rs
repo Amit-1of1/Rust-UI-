@@ -184,9 +184,13 @@ fn App() -> Element {
                 // Land on the new page's heading so screen readers announce it.
                 let _ = document::eval(
                     "window.scrollTo(0, 0);
-                     // A page from the lazy part can take a moment to arrive: wait for its heading.
+                     // A page from the lazy part can take a moment to arrive: wait for its
+                     // heading, but give up if the reader has moved focus in the meantime
+                     // (typing in the filter, say).
+                     const from = document.activeElement;
                      let tries = 0;
                      const land = () => {
+                       if (document.activeElement !== from) return;
                        const h = document.getElementById('page-title');
                        if (h) h.focus({ preventScroll: true });
                        else if (++tries < 100) setTimeout(land, 30);
