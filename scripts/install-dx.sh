@@ -9,6 +9,4 @@
 set -euo pipefail
 # Amit-1of1/dioxus, branch claude/project-thread-hgbr1g (on top of claude/project-thread-xwtlc7)
 REV=5ab24501d5a3a6ebf66a04cf099ce5cbbf5b96a9
-# --force: replace any other `dx` already on PATH (a stock one, or one a CI cache restored
-# into ~/.cargo/bin), which otherwise stops cargo with "binary `dx` already exists".
-cargo install --git https://github.com/Amit-1of1/dioxus --rev "$REV" dioxus-cli --locked --force "$@"
+cargo install --git https://github.com/Amit-1of1/dioxus --rev "$REV" dioxus-cli --locked "$@"
