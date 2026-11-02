@@ -55,7 +55,7 @@
   align-items: center;
   padding: 0;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-large);
   background: transparent;
   color: var(--secondary-color-4);
   cursor: pointer;
@@ -85,7 +85,7 @@
 
 .dx-stepper-indicator {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-index-raised);
   display: flex;
   width: 2rem;
   height: 2rem;
@@ -94,10 +94,10 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--primary-color-7);
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   background-color: var(--primary-color);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-stepper-indicator svg {
@@ -119,13 +119,13 @@
 
 .dx-stepper-title {
   color: var(--secondary-color-1);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-body-2);
+  font-weight: var(--font-weight-medium);
 }
 
 .dx-stepper-description {
   color: var(--secondary-color-5);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-body-3);
 }
 
 .dx-stepper-sr {

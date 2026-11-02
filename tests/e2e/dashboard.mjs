@@ -17,6 +17,18 @@ const check = (ok, msg) => {
 
 async function axe(page, label) {
   await page.waitForTimeout(400);
+  // Scan the settled page: on a slow runner an overlay can still be fading in after the
+  // fixed wait, and axe reads half-transparent text as low contrast.
+  await page
+    .waitForFunction(
+      () =>
+        !document
+          .getAnimations()
+          .some((a) => a.playState === "running" && a.effect?.getComputedTiming().iterations !== Infinity),
+      null,
+      { timeout: 3000 },
+    )
+    .catch(() => {});
   await page.evaluate(axeSource);
   const result = await page.evaluate(() =>
     axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"] }),

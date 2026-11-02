@@ -7,7 +7,7 @@
 
 .dx-color-field-description {
     color: var(--secondary-color-5);
-    font-size: 14px;
+    font-size: var(--font-size-body-2);
     line-height: 1.5;
 }
 
@@ -16,7 +16,7 @@
     height: 2rem;
     box-sizing: border-box;
     border: 1px solid color-mix(in oklab, var(--primary-color) 10%, transparent);
-    border-radius: 0.25rem;
+    border-radius: var(--radius-small);
     background-color: var(--swatch-color);
     background-image:
         linear-gradient(var(--swatch-color), var(--swatch-color)),
@@ -36,15 +36,15 @@
 .dx-color-slider-title {
     width: fit-content;
     color: var(--secondary-color-4);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--font-size-body-2);
+    font-weight: var(--font-weight-medium);
     line-height: 1.5rem;
 }
 
 .dx-color-slider-output {
     color: var(--secondary-color-5);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--font-size-body-2);
+    font-weight: var(--font-weight-medium);
     line-height: 1.5rem;
 }
 
@@ -61,7 +61,7 @@
     height: 24px;
     box-sizing: border-box;
     flex-grow: 1;
-    border-radius: 0.375rem;
+    border-radius: var(--radius-medium);
     background: linear-gradient(to right, rgb(255 0 0), rgb(255 255 0), rgb(0 255 0), rgb(0 255 255), rgb(0 0 255), rgb(255 0 255), rgb(255 0 0)), repeating-conic-gradient(rgb(204 204 204) 0%, rgb(204 204 204) 25%, white 0%, white 50%) 50% center / 16px 16px;
 }
 
@@ -78,7 +78,7 @@
     cursor: pointer;
     forced-color-adjust: none;
     transform: translate(-50%, -50%) scale(1);
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms;
+    transition: transform var(--duration-fast) var(--easing-decelerate), box-shadow var(--duration-fast) var(--easing-decelerate), border-color var(--duration-fast);
 }
 
 .dx-color-slider-thumb:hover,
@@ -120,7 +120,7 @@
     box-shadow: black 0 0 0 1px, black 0 0 0 1px inset;
     cursor: pointer;
     transform: translate(-50%, -50%) scale(1);
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms;
+    transition: transform var(--duration-fast) var(--easing-decelerate), box-shadow var(--duration-fast) var(--easing-decelerate), border-color var(--duration-fast);
 }
 
 .dx-color-area-thumb:hover,
@@ -164,7 +164,7 @@
     gap: 8px;
     line-height: 1.5;
     outline: 0 solid;
-    transition: box-shadow 150ms, background-color 150ms, color 150ms;
+    transition: box-shadow var(--duration-fast), background-color var(--duration-fast), color var(--duration-fast);
 }
 
 .dx-color-picker-button:focus-visible {
@@ -173,25 +173,22 @@
 
 .dx-color-picker-popover {
     position: absolute;
-    z-index: 1000;
+    z-index: var(--z-index-overlay);
     top: 100%;
     inset-inline-start: 0;
     display: block;
-    border-radius: var(--radius);
+    border-radius: var(--radius-large);
     margin-top: 4px;
-    background: var(--light, var(--primary-color))
-        var(--dark, var(--primary-color-5));
-    box-shadow:
-        inset 0 0 0 1px var(--light, var(--primary-color-6)) var(--dark, var(--primary-color-7)),
-        0 4px 16px rgb(0 0 0 / 15%);
+    background: var(--color-background-elevation-overlay);
+    box-shadow: inset 0 0 0 1px var(--color-border-neutral), var(--shadow-overlay);
 }
 
 .dx-color-picker-popover[data-state="open"] {
-    animation: dx-color-picker-popover-fade-in var(--spring-snappy-duration, 150ms) var(--spring-snappy, ease-out);
+    animation: dx-color-picker-popover-fade-in var(--spring-snappy-duration, var(--duration-fast)) var(--spring-snappy, var(--easing-decelerate));
 }
 
 .dx-color-picker-popover[data-state="closed"] {
-    animation: dx-color-picker-popover-fade-out var(--motion-exit-duration, 150ms) var(--motion-exit-easing, ease-out) forwards;
+    animation: dx-color-picker-popover-fade-out var(--motion-exit-duration, var(--duration-fast)) var(--motion-exit-easing, var(--easing-decelerate)) forwards;
     pointer-events: none;
 }
 

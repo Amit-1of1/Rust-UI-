@@ -109,6 +109,27 @@ fn every_accent_preset_is_scanned_by_axe() {
     }
 }
 
+/// Theme presets get the same axe scan: every `[data-preset]` but the default.
+#[test]
+fn every_theme_preset_is_scanned_by_axe() {
+    let theme = read("crates/ui/assets/theme.css");
+    let e2e = read("scripts/e2e.sh");
+    let line = e2e
+        .lines()
+        .find(|l| l.contains("for preset in"))
+        .expect("scripts/e2e.sh has a theme preset loop");
+    for part in theme.split("\n[data-preset=\"").skip(1) {
+        let name = part.split('"').next().unwrap();
+        assert!(
+            name == "lagoon"
+                || line
+                    .split_whitespace()
+                    .any(|w| w.trim_end_matches(';') == name),
+            "theme preset `{name}` is not in the axe loop of scripts/e2e.sh"
+        );
+    }
+}
+
 /// "axe and keyboard checks in Chromium, Firefox and WebKit in CI".
 #[test]
 fn ci_runs_the_browser_checks_on_three_engines() {
@@ -117,6 +138,28 @@ fn ci_runs_the_browser_checks_on_three_engines() {
         wf.contains("browser: [chromium, firefox, webkit]"),
         ".github/workflows/e2e.yml no longer runs all three engines; fix the claim or the matrix"
     );
+}
+
+/// "Motion values are model-checked with TLA+": CI must run the checker, and the spec must
+/// keep its mutants (the proof that the checks can fail).
+#[test]
+fn ci_model_checks_the_tla_specs() {
+    let wf = read(".github/workflows/ci.yml");
+    assert!(
+        wf.contains("scripts/tla.sh"),
+        ".github/workflows/ci.yml no longer runs scripts/tla.sh; fix the claim or the workflow"
+    );
+    for file in [
+        "proofs/tla/MotionValue.tla",
+        "proofs/tla/MotionValue.cfg",
+        "proofs/tla/MotionValue_bug_two_loops.cfg",
+        "proofs/tla/MotionValue_bug_frozen.cfg",
+    ] {
+        assert!(
+            repo().join(file).exists(),
+            "{file} is gone; fix docs/CLAIMS.md"
+        );
+    }
 }
 
 /// "A dialog without a title or an icon button without a label doesn't compile": the

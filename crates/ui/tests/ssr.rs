@@ -84,15 +84,22 @@ fn a_saved_theme_round_trips_and_bad_values_are_ignored() {
     fn app() -> Element {
         let theme = use_theme();
         let first = use_hook(move || {
-            apply_saved_theme(&theme, "mode=dark;accent=blue;density=compact;radius=12");
+            // The radius before the preset: picking the preset must not drop it.
+            apply_saved_theme(
+                &theme,
+                "mode=dark;radius=12;accent=blue;preset=reef;density=compact",
+            );
             encode_theme(&theme)
         });
-        apply_saved_theme(&theme, "mode=<script>;accent=pink;radius=x;junk");
+        apply_saved_theme(
+            &theme,
+            "mode=<script>;preset=evil;accent=pink;radius=x;junk",
+        );
         let second = encode_theme(&theme);
         rsx! { p { "{first}|{second}" } }
     }
     let html = render(app);
-    let expected = "mode=dark;accent=blue;density=compact;radius=12";
+    let expected = "mode=dark;preset=reef;accent=blue;density=compact;radius=12";
     assert!(
         html.contains(&format!("{expected}|{expected}")),
         "unexpected: {html}"

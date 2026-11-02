@@ -10,11 +10,11 @@
   box-sizing: border-box;
   padding: 0;
   border: 1px solid var(--light, var(--primary-color-7)) var(--dark, var(--primary-color-7));
-  border-radius: var(--radius);
+  border-radius: var(--radius-medium);
   background-color: var(--primary-color-3);
   color: var(--secondary-color-1);
   font: inherit;
-  font-size: 1.125rem;
+  font-size: var(--font-size-title-4);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
