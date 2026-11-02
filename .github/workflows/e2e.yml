@@ -37,7 +37,9 @@ jobs:
           path: ~/.cargo/bin/dx
           key: dx-${{ runner.os }}-${{ hashFiles('scripts/install-dx.sh') }}
       - if: steps.dx.outputs.cache-hit != 'true'
-        run: scripts/install-dx.sh
+        # --force: rust-cache may already have restored a dx into ~/.cargo/bin without cargo
+        # install's records, and cargo install then refuses to overwrite it.
+        run: scripts/install-dx.sh --force
       # Built as Pages ships them: gallery and dashboard split, CSS bundled (scripts/release-web.sh).
       - run: |
           for app in gallery site docs dashboard booking showcase; do

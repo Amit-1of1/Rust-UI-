@@ -99,15 +99,127 @@ fn accent_presets_meet_aa_contrast_in_both_modes() {
     assert!(checked >= 5, "expected at least the five shipped presets");
 }
 
+/// The `[data-preset]` blocks: name and body, outside the generated blocks.
+fn presets(theme: &str) -> Vec<(String, String)> {
+    outside_fallback(theme)
+        .split("\n[data-preset=\"")
+        .skip(1)
+        .map(|chunk| {
+            let name = chunk[..chunk.find('"').unwrap()].to_string();
+            let block = chunk[..chunk.find('}').unwrap()].to_string();
+            (name, block)
+        })
+        .collect()
+}
+
+/// Every theme preset is a whole look: its accent label stays readable on the fill (4.5:1),
+/// body text on its page reads at 7:1 (AAA, like the default), muted text at 4.5:1, and
+/// its chart colours keep 3:1 against its own page, in both modes.
+#[test]
+fn theme_presets_are_readable_in_both_modes() {
+    let all = presets(THEME);
+    let names: Vec<&str> = all.iter().map(|(n, _)| n.as_str()).collect();
+    assert_eq!(names, ["lagoon", "reef", "abyss", "driftwood", "classic"]);
+    let root = outside_fallback(THEME);
+    for (name, block) in &all {
+        let get = |token: &str| {
+            let t = format!("{token}:");
+            if block.lines().any(|l| l.trim_start().starts_with(&t)) {
+                pair(&declared(block, &t))
+            } else {
+                pair(&declared(&root, &t))
+            }
+        };
+        let (page_dark, page_light) = get("--primary-color");
+        for (fg, min) in [("--secondary-color-4", 7.0), ("--secondary-color-5", 4.5)] {
+            let (dark, light) = get(fg);
+            let (d, l) = (contrast(&dark, &page_dark), contrast(&light, &page_light));
+            assert!(
+                d >= min && l >= min,
+                "{name} {fg}: dark {d:.2}, light {l:.2}"
+            );
+        }
+        let (fill_dark, fill_light) = get("--accent-color");
+        let (text_dark, text_light) = get("--accent-contrast");
+        let (d, l) = (
+            contrast(&fill_dark, &text_dark),
+            contrast(&fill_light, &text_light),
+        );
+        assert!(
+            d >= 4.5 && l >= 4.5,
+            "{name} accent: dark {d:.2}, light {l:.2}"
+        );
+        for n in 2..=5 {
+            let (dark, light) = get(&format!("--chart-{n}"));
+            let (d, l) = (contrast(&dark, &page_dark), contrast(&light, &page_light));
+            assert!(
+                d >= 3.0 && l >= 3.0,
+                "{name} --chart-{n}: dark {d:.2}, light {l:.2}"
+            );
+        }
+        for token in [
+            "--font-sans",
+            "--font-heading",
+            "--radius",
+            "--icon-stroke-width",
+        ] {
+            assert!(block.contains(token), "{name} sets no {token}");
+        }
+    }
+}
+
+/// `[data-preset="lagoon"]` restates the default, so it must say what `:root` says, for every
+/// token any preset sets (otherwise switching back inside another preset leaves some behind).
+#[test]
+fn lagoon_preset_matches_the_default() {
+    let all = presets(THEME);
+    let lagoon = &all.iter().find(|(n, _)| n == "lagoon").expect("lagoon").1;
+    let root = outside_fallback(THEME);
+    let value = |block: &str, token: &str| {
+        let t = format!("{token}:");
+        block
+            .lines()
+            .filter(|l| l.trim_start().starts_with(&t))
+            .map(|l| {
+                l.split_once(':')
+                    .unwrap()
+                    .1
+                    .trim()
+                    .trim_end_matches(';')
+                    .to_string()
+            })
+            .next()
+    };
+    // The first declaration in the file outside the presets is the default.
+    let defaults: String = root.split("\n[data-preset=").next().unwrap().to_string()
+        + &root[root.find("/* Accent presets").unwrap()..];
+    for (name, block) in &all {
+        for line in block.lines().filter(|l| l.trim_start().starts_with("--")) {
+            let token = line.trim().split_once(':').unwrap().0;
+            let mine = value(lagoon, token);
+            assert!(
+                mine.is_some(),
+                "{name} sets {token}, lagoon does not restate it"
+            );
+            assert_eq!(
+                mine,
+                value(&defaults, token),
+                "lagoon {token} differs from :root"
+            );
+        }
+    }
+}
+
 /// Chart series are graphics, so WCAG 1.4.11 asks for 3:1 against the page
-/// (`--primary-color`: #fff in light, #000 in dark).
+/// (`--primary-color`).
 #[test]
 fn chart_colours_meet_non_text_contrast_in_both_modes() {
     let theme = outside_fallback(THEME);
+    let (page_dark, page_light) = pair(&declared(&theme, "--primary-color:"));
     for n in 2..=5 {
         let (dark, light) = pair(&declared(&theme, &format!("--chart-{n}:")));
-        let on_dark = contrast(&dark, "#000");
-        let on_light = contrast(&light, "#fff");
+        let on_dark = contrast(&dark, &page_dark);
+        let on_light = contrast(&light, &page_light);
         assert!(on_dark >= 3.0, "--chart-{n} dark: {on_dark:.2}:1");
         assert!(on_light >= 3.0, "--chart-{n} light: {on_light:.2}:1");
     }
@@ -153,7 +265,7 @@ fn subtree(tokens: &str) -> String {
             };
             let sel = if sel == ":root" {
                 ":where([data-theme])".to_string()
-            } else if sel.starts_with("[data-accent=") {
+            } else if sel.starts_with("[data-accent=") || sel.starts_with("[data-preset=") {
                 format!(":where({sel} [data-theme])")
             } else {
                 continue;
@@ -161,7 +273,12 @@ fn subtree(tokens: &str) -> String {
             out.push_str(&format!("{sel} {{\n{body}}}\n"));
         } else if selector.is_some() {
             let t = line.trim();
-            if t.starts_with("--") && (t.contains("light-dark(") || t.contains("var(")) {
+            // Colours only: fonts are not resolved per scheme, and redeclaring them would undo
+            // a preset set above the subtree.
+            if t.starts_with("--")
+                && !t.starts_with("--font-")
+                && (t.contains("light-dark(") || t.contains("var("))
+            {
                 body.push_str(&format!("  {t}\n"));
             }
         }

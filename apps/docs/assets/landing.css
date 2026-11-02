@@ -1,6 +1,28 @@
 /* Home page (#) and the Founding notes on the pricing page. Theme tokens only. */
-.landing-hero { display: grid; gap: 1rem; justify-items: start; padding-block: 1rem 2rem; }
-.docs-main .landing-hero h1 { margin: 0; font-size: 2.75rem; letter-spacing: -0.02em; }
+.landing-hero {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  margin-top: 0.5rem;
+  padding: 2rem 1.5rem 2.5rem;
+  border-radius: calc(var(--radius) * 2);
+  /* The lagoon: a pale wash of the accent behind the hero, deeper toward one corner. */
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in oklab, var(--accent-color) 22%, transparent), transparent 60%),
+    radial-gradient(80% 90% at 0% 100%, color-mix(in oklab, #f97362 10%, transparent), transparent 70%),
+    var(--primary-color-1);
+  border: 1px solid var(--primary-color-6);
+}
+.landing-title { display: flex; align-items: center; gap: 0.75rem; }
+.docs-main .landing-hero h1 { margin: 0; font-size: 3.25rem; letter-spacing: var(--heading-tracking, -0.02em); }
+.landing-looks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+.landing-looks-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
 .landing-tagline { max-width: 38rem; margin: 0; }
 .landing-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .landing-code {

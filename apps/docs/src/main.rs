@@ -38,6 +38,18 @@ const GUIDES: &[(&str, &str, &str, &str)] = &[
         include_str!("../../../docs/THEMING.md"),
     ),
     (
+        "brand",
+        "Brand and looks",
+        "BRAND.md",
+        include_str!("../../../docs/BRAND.md"),
+    ),
+    (
+        "foundations",
+        "Foundations",
+        "FOUNDATIONS.md",
+        include_str!("../../../docs/FOUNDATIONS.md"),
+    ),
+    (
         "composition",
         "Composing components",
         "COMPOSITION.md",
@@ -180,14 +192,19 @@ fn App() -> Element {
     let mut filter = use_signal(String::new);
     rsx! {
         ThemeStyles {}
+        PersistTheme {}
         document::Stylesheet { href: DOCS_CSS }
         document::Stylesheet { href: LANDING_CSS }
         document::Stylesheet { href: TOOLS_CSS }
         a { class: "docs-skip", href: "#page-title", "Skip to content" }
         Fragment {
             header { class: "docs-header",
-                a { class: "docs-brand", href: "#", "Atoll" }
+                a { class: "docs-brand", href: "#",
+                    AtollMark { size: 28 }
+                    "Atoll"
+                }
                 span { class: "docs-tagline", "Accessible, animated components for Dioxus" }
+                LookSelect {}
             }
             div { class: "docs-layout",
                 nav { class: "docs-nav", "aria-label": "Documentation",
@@ -273,6 +290,50 @@ fn Page(slug: String) -> Element {
         }
         if !entry.contract.is_empty() {
             div { class: "docs-prose", dangerous_inner_html: markdown(entry.contract) }
+        }
+    }
+}
+
+/// Atoll's mark: a ring of reef broken by channels, the lagoon inside it and one island
+/// (docs/brand/atoll-mark.svg). Drawn in the theme's accent, so every look recolours it.
+#[component]
+pub fn AtollMark(size: u32) -> Element {
+    rsx! {
+        svg {
+            class: "atoll-mark",
+            width: "{size}",
+            height: "{size}",
+            view_box: "0 0 32 32",
+            "aria-hidden": "true",
+            circle { cx: "16", cy: "16", r: "8", style: "fill: var(--accent-color); opacity: 0.25;" }
+            path {
+                d: "M26.40 14.54A10.5 10.5 0 0 1 15.63 26.49 M9.25 24.04A10.5 10.5 0 0 1 6.56 11.40 M11.40 6.56A10.5 10.5 0 0 1 20.60 6.56",
+                fill: "none",
+                stroke_width: "4",
+                stroke_linecap: "round",
+                style: "stroke: var(--accent-color);",
+            }
+            circle { cx: "18.5", cy: "17.5", r: "2.75", fill: "#f97362" }
+        }
+    }
+}
+
+/// The header's look switcher: the theme presets, remembered between visits by
+/// `PersistTheme` (and shared with the gallery when both are served from one place).
+#[component]
+fn LookSelect() -> Element {
+    let theme = use_theme();
+    rsx! {
+        div { class: "docs-look",
+            Label { html_for: "docs-look", "Look" }
+            NativeSelect {
+                id: "docs-look",
+                value: theme.preset(),
+                onchange: move |e: FormEvent| theme.set_preset(&e.value()),
+                for info in PRESET_INFO {
+                    NativeSelectOption { key: "{info.name}", value: info.name, "{info.name}" }
+                }
+            }
         }
     }
 }

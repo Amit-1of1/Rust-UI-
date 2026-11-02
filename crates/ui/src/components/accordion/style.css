@@ -41,11 +41,11 @@
 }
 
 .dx-accordion-content[data-open="false"] {
-	animation: dx-accordion-slide-down var(--spring-gentle-duration, 300ms) var(--spring-gentle, cubic-bezier(0.87, 0, 0.13, 1)) forwards;
+	animation: dx-accordion-slide-down var(--spring-gentle-duration, var(--duration-slow)) var(--spring-gentle, cubic-bezier(0.87, 0, 0.13, 1)) forwards;
 }
 
 .dx-accordion-content[data-open="true"] {
-  animation: dx-accordion-slide-up var(--motion-exit-duration, 300ms) var(--motion-exit-easing, cubic-bezier(0.87, 0, 0.13, 1)) forwards;
+  animation: dx-accordion-slide-up var(--motion-exit-duration, var(--duration-slow)) var(--motion-exit-easing, cubic-bezier(0.87, 0, 0.13, 1)) forwards;
 }
 
 @keyframes dx-accordion-slide-down {
@@ -90,7 +90,7 @@
 }
 
 .dx-accordion-expand-icon {
-  transition: rotate 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: rotate var(--duration-slow) var(--easing-standard);
 }
 
 .dx-accordion-item[data-open="true"] .dx-accordion-expand-icon {
