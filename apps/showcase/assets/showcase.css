@@ -206,6 +206,12 @@ body {
     padding-bottom: 5rem;
   }
 
+  /* Focus scrolled into view stops above the tab bar, not under it (WCAG 2.4.11). The native
+     renderer has no scroll-padding; apps/native/tests/layout.rs reads this value instead. */
+  html {
+    scroll-padding-bottom: 5rem;
+  }
+
   .sc-stats,
   .sc-grid {
     grid-template-columns: minmax(0, 1fr);
