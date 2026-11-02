@@ -3,5 +3,8 @@
 # fixes (docs/FORKS.md) are not ported to 0.8 yet, and stock 0.8's splitter panics on our apps
 # ("assertion failed: !self.dead.contains(&id)"), so scripts/release-web.sh does not split here.
 set -euo pipefail
-# --force: CI restores a cached ~/.cargo/bin that may hold the 0.7 dx.
-cargo install dioxus-cli --version 0.8.0-alpha.3 --locked --force "$@"
+# --force: CI restores a cached ~/.cargo/bin that may hold the 0.7 dx. The workflows pass it
+# too, and cargo rejects it twice, so add it only when the caller did not.
+force=(--force)
+for a in "$@"; do [[ $a == --force || $a == -f ]] && force=(); done
+cargo install dioxus-cli --version 0.8.0-alpha.3 --locked "${force[@]}" "$@"
