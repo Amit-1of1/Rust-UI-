@@ -48,24 +48,27 @@
       }
     },
     "docs": {
-      "firstKB": 1103,
+      "firstKB": 370,
       "firstRequests": 7,
-      "mainWasmKB": 1064.7,
-      "totalKB": 1154.9,
-      "startupMs4x": 687,
+      "mainWasmKB": 330.3,
+      "totalKB": 1330.6,
+      "startupMs4x": 882,
       "files": {
-        "assets/atoll.css": 24.3,
+        "assets/atoll.css": 24.9,
+        "assets/chunk_0_split.wasm": 0.2,
         "assets/demo.css": 0.3,
+        "assets/docs.js": 12.3,
         "assets/docs.css": 1,
-        "assets/docs.js": 11.2,
-        "assets/docs_bg.wasm": 1064.7,
+        "assets/docs_bg.wasm": 330.3,
         "assets/focus-trap.js": 0.4,
-        "assets/landing.css": 0.5,
-        "assets/reset.css": 0.2,
-        "assets/reset.scoped.css": 0.3,
-        "assets/style.css": 1.1,
-        "assets/theme.css": 4.5,
-        "assets/theme.scoped.css": 4.7
+        "assets/landing.css": 0.7,
+        "assets/module_0_LazyDocPage.wasm": 907.5,
+        "assets/reset.css": 0.4,
+        "assets/reset.scoped.css": 0.4,
+        "assets/style.css": 0.7,
+        "assets/theme.css": 4.8,
+        "assets/theme.scoped.css": 5.1,
+        "assets/tools.css": 0.4
       }
     },
     "dashboard": {

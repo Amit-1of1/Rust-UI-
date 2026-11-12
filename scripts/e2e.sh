@@ -92,7 +92,8 @@ for engine in ${BROWSERS//,/ }; do
   done
   for route in "#button" "#data_table" "#theming" "#hard-questions" "#pricing" "#theme-builder" "#examples"; do
     step "[$engine] axe docs ($route)"
-    e2e env GALLERY_URL="$D$route" READY_SELECTOR=.docs-main node axe.mjs light
+    # The page's own heading: with a split build the page's code arrives after .docs-main.
+    e2e env GALLERY_URL="$D$route" READY_SELECTOR=".docs-main #page-title" node axe.mjs light
   done
   step "[$engine] axe gallery (rtl)"
   e2e env DIR=rtl GALLERY_URL=$G READY_SELECTOR=".gallery-main > .gallery-section:last-child" node axe.mjs light
