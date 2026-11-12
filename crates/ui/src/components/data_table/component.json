@@ -1,5 +1,34 @@
 {
-  "cargoDependencies": [],
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "atoll-primitives",
+      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+    },
+    {
+      "features": [
+        "Window",
+        "Document",
+        "Element",
+        "HtmlElement",
+        "EventTarget",
+        "BlobPropertyBag",
+        "Blob",
+        "Url"
+      ],
+      "name": "web-sys",
+      "version": "0.3.106"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2"
+    },
+    {
+      "name": "js-sys",
+      "version": "0.3"
+    }
+  ],
   "componentDependencies": [
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
@@ -11,6 +40,10 @@
     },
     {
       "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "popover"
+    },
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
       "name": "table"
     },
     {
@@ -18,7 +51,7 @@
       "name": "ui_strings"
     }
   ],
-  "description": "A table with sorting, a filter box, pagination and optional row selection, built on `Table`.",
+  "description": "A table with sorting, a filter box, pagination, optional row selection, column hiding and resizing, CSV export and virtualised rows for long lists, built on `Table`.",
   "exclude": [
     "docs.md",
     "component.json"
