@@ -27,6 +27,10 @@ Tooltip {
 }
 ```
 
+## Timing
+
+Hovering waits `delay_ms` (400 ms by default) before the tooltip opens, so moving the pointer across a toolbar doesn't flash every tooltip. Keyboard focus opens it at once. `Tooltip { delay_ms: 0 }` opens on hover straight away. Escape closes it.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `tooltip`. Works on native (Blitz): partly.
@@ -47,6 +51,37 @@ Every row is run as a keyboard test on the web, and on native where it says yes.
 ## API
 
 ```rust
+/// The props for [`Tooltip`].
+pub struct TooltipProps {
+    /// Whether the tooltip is open (controlled). A controlled tooltip opens without delay.
+    pub open: ReadSignal<Option<bool>>,
+
+    /// Default open state when uncontrolled.
+    #[props(default)]
+    pub default_open: bool,
+
+    /// Callback when open state changes.
+    #[props(default)]
+    pub on_open_change: Callback<bool>,
+
+    /// Whether the tooltip is disabled.
+    #[props(default)]
+    pub disabled: ReadSignal<bool>,
+
+    /// How long the pointer must rest on the trigger before the tooltip opens, in
+    /// milliseconds, so tooltips don't flash open as the cursor crosses the screen. Keyboard
+    /// focus opens it at once. Defaults to 400.
+    #[props(default = 400)]
+    pub delay_ms: u64,
+
+    /// Additional attributes for the tooltip.
+    #[props(extends = GlobalAttributes)]
+    pub attributes: Vec<Attribute>,
+
+    /// A [`TooltipTrigger`] and a [`TooltipContent`].
+    pub children: Element,
+}
+
 #[component]
 pub fn Tooltip(props: TooltipProps) -> Element
 

@@ -42,6 +42,7 @@ pub fn Demo() -> Element {
         Select::<Option<Fruit>> {
             width: "12rem",
             aria_label: "Fruit",
+            start: rsx! { crate::components::icons::ShoppingBasket {} },
             SelectGroup {
                 SelectGroupLabel { "Fruits" }
                 {fruits}

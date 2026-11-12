@@ -5,6 +5,32 @@ use dioxus_primitives::{dioxus_attributes::attributes, merge_attributes};
 #[css_module("/src/components/field/style.css")]
 struct Styles;
 
+/// The size of a text field (`Input`, `Textarea`): `Sm` for dense tables and toolbars, `Lg`
+/// for sign-up and marketing forms. Named `field_size` on the components because `size` is
+/// an HTML attribute of `<input>`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[derive(Copy, Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub enum FieldSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
+impl FieldSize {
+    pub fn class(&self) -> &'static str {
+        match self {
+            FieldSize::Sm => "sm",
+            FieldSize::Default => "default",
+            FieldSize::Lg => "lg",
+        }
+    }
+}
+
 /// DOM ids that tie a control to its description and error message, so assistive
 /// technology reads them together. Create with [`use_field_ids`].
 #[derive(Clone, PartialEq, Debug)]

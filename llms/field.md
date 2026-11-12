@@ -14,6 +14,20 @@ Wires a label, description and error to a control with matching ids. `use_field_
 ## API
 
 ```rust
+/// The size of a text field (`Input`, `Textarea`): `Sm` for dense tables and toolbars, `Lg`
+/// for sign-up and marketing forms. Named `field_size` on the components because `size` is
+/// an HTML attribute of `<input>`.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+pub enum FieldSize {
+    Sm,
+    #[default]
+    Default,
+    Lg,
+}
+
 /// DOM ids that tie a control to its description and error message, so assistive
 /// technology reads them together. Create with [`use_field_ids`].
 pub struct FieldIds {

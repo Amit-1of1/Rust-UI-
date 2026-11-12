@@ -1,0 +1,39 @@
+/* Use theme tokens (var(--...)), never literal colors, so light and dark both work.
+   Any animation needs a prefers-reduced-motion fallback (docs/GUARDRAILS.md). */
+.dx-image {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: var(--radius);
+  background-color: var(--primary-color-5);
+}
+
+.dx-image-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* With a ratio the box sets the shape and the picture fills it. */
+.dx-image[data-ratio="true"] > .dx-image-img {
+  height: 100%;
+}
+
+.dx-image[data-fit="cover"] > .dx-image-img {
+  object-fit: cover;
+}
+
+.dx-image[data-fit="contain"] > .dx-image-img {
+  object-fit: contain;
+}
+
+.dx-image-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 6rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-color-5);
+}

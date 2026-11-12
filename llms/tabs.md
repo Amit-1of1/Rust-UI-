@@ -38,6 +38,10 @@ Tabs {
 
 Each `TabContent` is labelled by the `TabTrigger` with the same `index` (`aria-labelledby`). If you give a `TabTrigger` your own `id`, set `aria_labelledby` to that id on its `TabContent`.
 
+## Variants, icons and width
+
+`variant` is `TabsVariant::Default` (pills on a track) or `Ghost` (for tabs inside cards). Icons go inside `TabTrigger`, decorative. `stretch: true` makes the list fill its container and gives every tab the same width. `TabTrigger { disabled: true }` keeps a tab visible but out of reach.
+
 ## Keyboard and accessibility
 
 Follows the WAI-ARIA [Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) pattern. Roles: `tablist`, `tab`, `tabpanel`. Works on native (Blitz): partly.
@@ -97,6 +101,10 @@ pub struct TabsProps {
     #[props(default)]
     pub variant: TabsVariant,
 
+    /// Stretch the tab list to the container's width, every tab the same width.
+    #[props(default)]
+    pub stretch: bool,
+
     /// Additional attributes to apply to the tabs element.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
@@ -131,11 +139,13 @@ pub fn TabContent(props: TabContentProps) -> Element
 
 ```rust
 use crate::components::tabs::*;
+use crate::components::icons::{Bell, CreditCard, User};
 use dioxus::prelude::*;
 
 #[component]
 pub fn Demo() -> Element {
     rsx! {
+        div { style: "display: grid; gap: 1.5rem;",
         Tabs { default_value: "account".to_string(), horizontal: true, max_width: "24rem",
             TabList {
                 TabTrigger { value: "account".to_string(), index: 0usize, "Account" }
@@ -147,6 +157,18 @@ pub fn Demo() -> Element {
             TabContent { index: 1usize, value: "password".to_string(),
                 p { "Change your password here." }
             }
+        }
+        // Equal-width tabs with icons, and one you can't open yet.
+        Tabs { default_value: "profile".to_string(), horizontal: true, stretch: true, variant: TabsVariant::Ghost, max_width: "24rem",
+            TabList {
+                TabTrigger { value: "profile".to_string(), index: 0usize, User { "aria-hidden": "true", size: "1rem" } "Profile" }
+                TabTrigger { value: "alerts".to_string(), index: 1usize, Bell { "aria-hidden": "true", size: "1rem" } "Alerts" }
+                TabTrigger { value: "billing".to_string(), index: 2usize, disabled: true, CreditCard { "aria-hidden": "true", size: "1rem" } "Billing" }
+            }
+            TabContent { index: 0usize, value: "profile".to_string(), p { "Your name and photo." } }
+            TabContent { index: 1usize, value: "alerts".to_string(), p { "What we email you about." } }
+            TabContent { index: 2usize, value: "billing".to_string(), p { "Plans and invoices." } }
+        }
         }
     }
 }

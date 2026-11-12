@@ -104,10 +104,11 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 
 // Filter narrows the component list.
 await page.getByLabel("Filter components").fill("date");
-// The list re-renders after the input event; Firefox gets there a frame later than Chromium.
+// The list re-renders after the input event; Firefox gets there later than Chromium, and
+// with 84 components on a busy CI machine that took more than 2 s once, so allow 5 s.
 const list = nav.getByRole("list").nth(1).getByRole("link");
 let names = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 50; i++) {
   names = await list.allInnerTexts();
   if (names.length > 0 && names.every((n) => /date/i.test(n))) break;
   await page.waitForTimeout(100);

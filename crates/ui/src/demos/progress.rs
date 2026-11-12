@@ -9,7 +9,8 @@ pub fn Demo() -> Element {
 
     rsx! {
         div { style: "display: grid; gap: 0.75rem; max-width: 20rem;",
-            Progress { aria_label: "Upload progress", value: progress() as f64 }
+            Progress { label: "Uploading photos", show_value: true, value: progress() as f64 }
+            Progress { aria_label: "Syncing", size: ProgressSize::Sm, value: None }
             div { style: "display: flex; gap: 0.5rem;",
                 Button {
                     variant: ButtonVariant::Outline,

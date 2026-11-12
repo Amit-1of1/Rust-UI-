@@ -2,3 +2,13 @@
 - paragraph: Binary choice; Space toggles.
 - checkbox "Accept terms"
 - text: Accept terms
+- group "Email me about":
+  - text: Email me about
+  - checkbox "Everything" [checked=mixed]
+  - text: Everything
+  - checkbox "Invoices" [checked]
+  - text: Invoices
+  - checkbox "Payments"
+  - text: Payments
+  - checkbox "Team changes"
+  - text: Team changes

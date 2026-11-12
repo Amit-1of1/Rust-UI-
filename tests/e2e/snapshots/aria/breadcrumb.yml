@@ -9,3 +9,22 @@
       - link "Components":
         - /url: "#"
     - listitem: Breadcrumb
+- navigation "Billing breadcrumb":
+  - list:
+    - listitem:
+      - link "Workspace":
+        - /url: "#"
+    - listitem:
+      - link "Billing (owners only)" [disabled]
+    - listitem: Invoices
+- navigation "Project breadcrumb":
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#"
+    - listitem:
+      - button "Show 2 more"
+    - listitem:
+      - link "Settings":
+        - /url: "#"
+    - listitem: Members

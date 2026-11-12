@@ -77,6 +77,14 @@ pub fn Demo() -> Element {
                     "DX"
                 }
             }
+            div { class: Styles::dx_avatar_item,
+                p { class: Styles::dx_avatar_label, "Group" }
+                AvatarGroup { label: "Design team", more: 3,
+                    Avatar { size: AvatarImageSize::Small, label: "Ada Lovelace", AvatarFallback { "AL" } }
+                    Avatar { size: AvatarImageSize::Small, label: "Grace Hopper", AvatarFallback { "GH" } }
+                    ImageAvatar { size: AvatarImageSize::Small, src: DEMO_AVATAR_SRC, alt: "Alan Turing", "AT" }
+                }
+            }
         }
     }
 }

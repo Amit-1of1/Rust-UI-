@@ -7,6 +7,7 @@ pub fn Demo() -> Element {
         div { style: "display: flex; flex-direction: column; align-items: center; gap: 2rem;",
             SkeletonInfoDemo {}
             SkeletonCardDemo {}
+            SkeletonShapesDemo {}
         }
     }
 }
@@ -32,6 +33,19 @@ fn SkeletonCardDemo() -> Element {
             div { style: "display: flex; flex-direction: column; gap: 0.5rem;",
                 Skeleton { style: "width: 15.625rem; height: 1rem;" }
                 Skeleton { style: "width: 12.5rem; height: 1rem;" }
+            }
+        }
+    }
+}
+
+/// The shapes: a circle for an avatar and text lines that follow the font size.
+#[component]
+fn SkeletonShapesDemo() -> Element {
+    rsx! {
+        div { style: "display: flex; align-items: flex-start; gap: 1rem; width: 16rem;", aria_busy: "true",
+            Skeleton { shape: SkeletonShape::Circle, style: "width: 2.5rem;" }
+            div { style: "flex: 1; font-size: 0.875rem;",
+                Skeleton { shape: SkeletonShape::Text, lines: 3 }
             }
         }
     }
