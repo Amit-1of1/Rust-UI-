@@ -693,6 +693,7 @@ dependencies = [
  "dioxus",
  "dioxus-sdk-time",
  "dioxus-ssr",
+ "js-sys",
  "palette",
  "proptest",
  "serde",
