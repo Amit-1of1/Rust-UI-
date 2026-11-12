@@ -149,6 +149,13 @@ body {
 .pricing-faq h3 { margin: 1.25rem 0 0.25rem; font-size: 1rem; }
 .pricing-faq p { margin: 0; }
 
+/* While a page's code arrives (split release builds, `DocPage` in src/main.rs). */
+.docs-loading {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
 /* Headings in the theme preset's display face. */
 :where(h1, h2, h3) {
   font-family: var(--font-heading, inherit);
