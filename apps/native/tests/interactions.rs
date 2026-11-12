@@ -776,3 +776,65 @@ fn ctrl_b_toggles_the_sidebar() {
     h.key(Key::Character("b".into()), Code::KeyB, Modifiers::CONTROL);
     assert_ne!(state(&h), before, "Ctrl+B did not toggle the sidebar");
 }
+
+/// On a phone the sidebar is a sheet; picking an item closes it (shadcn-ui#5561), but a
+/// button that opens something (a collapsible group) leaves it open.
+#[test]
+fn mobile_sidebar_closes_after_an_item_is_picked() {
+    use ui::prelude::*;
+
+    #[component]
+    fn Phone() -> Element {
+        let ctx = use_sidebar();
+        use_hook(move || {
+            let mut is_mobile = ctx.is_mobile;
+            is_mobile.set(true);
+            ctx.set_open_mobile(true);
+        });
+        rsx! {}
+    }
+
+    fn app() -> Element {
+        rsx! {
+            ui::ThemeStyles {}
+            SidebarProvider {
+                Phone {}
+                Sidebar {
+                    SidebarContent {
+                        SidebarMenu {
+                            SidebarMenuItem {
+                                SidebarMenuButton { id: "group", aria_expanded: "false", "Projects" }
+                            }
+                            SidebarMenuItem {
+                                SidebarMenuButton { id: "orders", "Orders" }
+                            }
+                            SidebarMenuItem {
+                                SidebarMenuButton { id: "pinned", "data-keep-open": "true", "Pinned" }
+                            }
+                        }
+                    }
+                }
+                SidebarInset { "Page" }
+            }
+        }
+    }
+
+    // One click per window: a second click anywhere closes a sheet on the native preview,
+    // which would hide what is being tested.
+    let shown = |h: &Harness| h.rect("#orders").is_some_and(|r| r.on_screen());
+    let mut h = Harness::new(app);
+    assert!(shown(&h), "the mobile sheet did not open");
+    h.click("#group");
+    h.settle();
+    assert!(shown(&h), "a disclosure button closed the mobile sheet");
+
+    let mut h = Harness::new(app);
+    h.click("#pinned");
+    h.settle();
+    assert!(shown(&h), "a data-keep-open button closed the mobile sheet");
+
+    let mut h = Harness::new(app);
+    h.click("#orders");
+    h.settle();
+    assert!(!shown(&h), "picking an item left the mobile sheet open");
+}
