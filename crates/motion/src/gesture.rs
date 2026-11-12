@@ -290,7 +290,7 @@ pub fn SwipeDismiss(
                 }
             },
             onkeydown: move |e| {
-                if matches!(e.key(), Key::Delete | Key::Backspace | Key::Escape) {
+                if matches!(e.key(), Key::Named(NamedKey::Delete) | Key::Named(NamedKey::Backspace) | Key::Named(NamedKey::Escape)) {
                     e.prevent_default();
                     dismiss(0.0, SwipeDirection::Right, 0.0);
                 }

@@ -49,7 +49,7 @@ pub fn ToastProvider(
     #[props(default = ReadSignal::new(Signal::new(Some(Duration::from_secs(5)))))]
     default_duration: ReadSignal<Option<Duration>>,
     #[props(default = ReadSignal::new(Signal::new(10)))] max_toasts: ReadSignal<usize>,
-    #[props(default)] render_toast: Option<Callback<toast::ToastPropsWithOwner, Element>>,
+    #[props(default)] render_toast: Option<Callback<toast::ToastProps, Element>>,
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element

@@ -38,10 +38,10 @@ fn a_cursor_outside_shrunk_data_is_pulled_back() {
 
 #[test]
 fn keys_map_to_moves() {
-    assert_eq!(ChartKey::from_key(&Key::ArrowRight), Some(ChartKey::Next));
-    assert_eq!(ChartKey::from_key(&Key::ArrowUp), Some(ChartKey::PreviousSeries));
-    assert_eq!(ChartKey::from_key(&Key::End), Some(ChartKey::Last));
-    assert_eq!(ChartKey::from_key(&Key::Tab), None, "Tab leaves the chart");
+    assert_eq!(ChartKey::from_key(&Key::Named(NamedKey::ArrowRight)), Some(ChartKey::Next));
+    assert_eq!(ChartKey::from_key(&Key::Named(NamedKey::ArrowUp)), Some(ChartKey::PreviousSeries));
+    assert_eq!(ChartKey::from_key(&Key::Named(NamedKey::End)), Some(ChartKey::Last));
+    assert_eq!(ChartKey::from_key(&Key::Named(NamedKey::Tab)), None, "Tab leaves the chart");
 }
 
 #[test]

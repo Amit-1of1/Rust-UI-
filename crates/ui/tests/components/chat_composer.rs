@@ -33,13 +33,13 @@ fn busy_composer_offers_stop() {
 
 #[test]
 fn enter_sends_shift_enter_adds_a_line_and_ime_never_sends() {
-    use dioxus::prelude::Key;
-    assert_eq!(composer_key(&Key::Enter, false, false, false), ComposerKey::Send);
-    assert_eq!(composer_key(&Key::Enter, true, false, false), ComposerKey::Default);
+    use dioxus::prelude::{Key, NamedKey};
+    assert_eq!(composer_key(&Key::Named(NamedKey::Enter), false, false, false), ComposerKey::Send);
+    assert_eq!(composer_key(&Key::Named(NamedKey::Enter), true, false, false), ComposerKey::Default);
     // Enter that confirms an IME composition picks the characters.
-    assert_eq!(composer_key(&Key::Enter, false, true, false), ComposerKey::Default);
-    assert_eq!(composer_key(&Key::Escape, false, false, true), ComposerKey::Stop);
-    assert_eq!(composer_key(&Key::Escape, false, false, false), ComposerKey::Default);
+    assert_eq!(composer_key(&Key::Named(NamedKey::Enter), false, true, false), ComposerKey::Default);
+    assert_eq!(composer_key(&Key::Named(NamedKey::Escape), false, false, true), ComposerKey::Stop);
+    assert_eq!(composer_key(&Key::Named(NamedKey::Escape), false, false, false), ComposerKey::Default);
     assert_eq!(
         composer_key(&Key::Character("a".into()), false, false, false),
         ComposerKey::Default

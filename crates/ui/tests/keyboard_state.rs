@@ -5,7 +5,7 @@
 //! at them and check the invariants after every step. The Zag.js idea: the state machine
 //! is the component, the DOM is a view of it. The browser side is tests/e2e.
 
-use dioxus::prelude::Key;
+use dioxus::prelude::{Key, NamedKey};
 use proptest::prelude::*;
 use ui::components::command::command_nav;
 use ui::components::input_otp::{OtpEvent, OtpOutcome, OtpState};
@@ -22,12 +22,12 @@ enum PaletteStep {
 fn palette_step() -> impl Strategy<Value = PaletteStep> {
     prop_oneof![
         4 => prop_oneof![
-            Just(Key::ArrowDown),
-            Just(Key::ArrowUp),
-            Just(Key::Home),
-            Just(Key::End),
-            Just(Key::Tab),
-            Just(Key::Enter),
+            Just(Key::Named(NamedKey::ArrowDown)),
+            Just(Key::Named(NamedKey::ArrowUp)),
+            Just(Key::Named(NamedKey::Home)),
+            Just(Key::Named(NamedKey::End)),
+            Just(Key::Named(NamedKey::Tab)),
+            Just(Key::Named(NamedKey::Enter)),
         ]
         .prop_map(PaletteStep::Key),
         1 => (0usize..8).prop_map(PaletteStep::Type),
@@ -45,7 +45,7 @@ proptest! {
                     let before = active;
                     match command_nav(&key, active, len) {
                         Some(next) => active = next,
-                        None => prop_assert!(!matches!(key, Key::ArrowDown | Key::ArrowUp | Key::Home | Key::End)),
+                        None => prop_assert!(!matches!(key, Key::Named(NamedKey::ArrowDown) | Key::Named(NamedKey::ArrowUp) | Key::Named(NamedKey::Home) | Key::Named(NamedKey::End))),
                     }
                     if len > 0 {
                         prop_assert!(active < len, "{key:?}: {before} -> {active} of {len}");
@@ -60,18 +60,18 @@ proptest! {
     #[test]
     fn palette_down_then_up_returns(len in 1usize..10, start in 0usize..10) {
         let start = start % len;
-        let down = command_nav(&Key::ArrowDown, start, len).unwrap();
-        prop_assert_eq!(command_nav(&Key::ArrowUp, down, len), Some(start));
+        let down = command_nav(&Key::Named(NamedKey::ArrowDown), start, len).unwrap();
+        prop_assert_eq!(command_nav(&Key::Named(NamedKey::ArrowUp), down, len), Some(start));
     }
 }
 
 #[test]
 fn palette_wraps_and_jumps() {
-    assert_eq!(command_nav(&Key::ArrowDown, 2, 3), Some(0));
-    assert_eq!(command_nav(&Key::ArrowUp, 0, 3), Some(2));
-    assert_eq!(command_nav(&Key::Home, 2, 3), Some(0));
-    assert_eq!(command_nav(&Key::End, 0, 3), Some(2));
-    assert_eq!(command_nav(&Key::Enter, 1, 3), None);
+    assert_eq!(command_nav(&Key::Named(NamedKey::ArrowDown), 2, 3), Some(0));
+    assert_eq!(command_nav(&Key::Named(NamedKey::ArrowUp), 0, 3), Some(2));
+    assert_eq!(command_nav(&Key::Named(NamedKey::Home), 2, 3), Some(0));
+    assert_eq!(command_nav(&Key::Named(NamedKey::End), 0, 3), Some(2));
+    assert_eq!(command_nav(&Key::Named(NamedKey::Enter), 1, 3), None);
 }
 
 // ----- one-time code -----------------------------------------------------------------

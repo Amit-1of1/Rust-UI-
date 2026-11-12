@@ -59,7 +59,12 @@ step "clippy";  cargo clippy --workspace --all-targets -- -D warnings
 step "tests";   cargo test --workspace --exclude native
 # On its own: in a workspace build the gallery's `web` feature reaches the motion crate,
 # which then calls into JavaScript off wasm and panics in the native drawer test.
-step "native (headless Blitz)"; cargo test -p native
+# The Dioxus 0.8 branch keeps apps/native (Blitz) on 0.7, outside the workspace.
+if cargo metadata --no-deps --format-version 1 | grep -q '"name":"native"'; then
+  step "native (headless Blitz)"; cargo test -p native
+else
+  step "native: skipped (not in the workspace on the Dioxus 0.8 branch)"; true
+fi
 step "wasm32";  cargo build -p gallery -p site -p docs -p dashboard -p booking -p showcase --target wasm32-unknown-unknown
 step "registry, component.json, llms.txt"; cargo run -q -p atoll-cli -- registry --check
 step "changelog fragments"; cargo run -q -p atoll-cli -- changelog --check

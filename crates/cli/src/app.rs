@@ -22,7 +22,7 @@ use std::path::{Path, PathBuf};
 use toml_edit::{value, Array, Document, InlineTable, Item as TomlItem};
 
 /// The Dioxus minor line the kit is built and tested against (docs/GUARDRAILS.md).
-pub const DIOXUS_LINE: &str = "0.7";
+pub const DIOXUS_LINE: &str = "0.8";
 
 /// One crate a copied component needs.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -314,7 +314,7 @@ pub fn dioxus_version(cargo_toml: &Path) -> Option<String> {
         .or(workspace)
 }
 
-/// Whether a version requirement is on [`DIOXUS_LINE`] (`0.7`, `0.7.10`, `^0.7`, `=0.7.3`, `~0.7`).
+/// Whether a version requirement is on [`DIOXUS_LINE`] (`0.8`, `=0.8.0-alpha.3`, `^0.8`, `~0.8`).
 pub fn on_supported_line(req: &str) -> bool {
     let v = req.trim().trim_start_matches(['=', '^', '~', ' ']);
     v == DIOXUS_LINE || v.starts_with(&format!("{DIOXUS_LINE}."))
@@ -449,10 +449,10 @@ mod tests {
 
     #[test]
     fn supported_line() {
-        for ok in ["0.7", "0.7.10", "^0.7.1", "=0.7.10", "~0.7"] {
+        for ok in ["0.8", "0.8.0-alpha.3", "^0.8.1", "=0.8.0-alpha.3", "~0.8"] {
             assert!(on_supported_line(ok), "{ok}");
         }
-        for bad in ["0.6.3", "0.8.0-alpha.1", "0.70", "1"] {
+        for bad in ["0.7.10", "0.6.3", "0.80", "1"] {
             assert!(!on_supported_line(bad), "{bad}");
         }
     }

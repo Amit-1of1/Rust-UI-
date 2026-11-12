@@ -106,7 +106,7 @@ pub fn MultiSelect(
         div {
             class: Styles::dx_multi_select,
             onkeydown: move |e: KeyboardEvent| {
-                if open() && e.key() == Key::Escape {
+                if open() && e.key() == Key::Named(NamedKey::Escape) {
                     e.prevent_default();
                     close.call(());
                 }

@@ -35,8 +35,8 @@ pub enum ComposerKey {
 pub fn composer_key(key: &Key, shift: bool, composing: bool, busy: bool) -> ComposerKey {
     match key {
         _ if composing => ComposerKey::Default,
-        Key::Enter if !shift => ComposerKey::Send,
-        Key::Escape if busy => ComposerKey::Stop,
+        Key::Named(NamedKey::Enter) if !shift => ComposerKey::Send,
+        Key::Named(NamedKey::Escape) if busy => ComposerKey::Stop,
         _ => ComposerKey::Default,
     }
 }
