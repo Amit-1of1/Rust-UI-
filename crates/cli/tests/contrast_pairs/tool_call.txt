@@ -1,0 +1,228 @@
+.dx-agent-step	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+.dx-agent-step	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-agent-step	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-agent-step	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-agent-step	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+.dx-agent-step	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-agent-step	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-agent-step	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef
+.dx-agent-step[data-status="queued"]	dark	Text	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-agent-step[data-status="queued"]	dark	Text	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step[data-status="queued"]	dark	Text	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-agent-step[data-status="queued"]	dark	Text	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-agent-step[data-status="queued"]	dark	Text	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-agent-step[data-status="queued"]	light	Text	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-agent-step[data-status="queued"]	light	Text	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step[data-status="queued"]	light	Text	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-agent-step[data-status="queued"]	light	Text	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-agent-step[data-status="queued"]	light	Text	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	dark	Text	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	dark	Text	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	dark	Text	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	dark	Text	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	dark	Text	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	light	Text	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	light	Text	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	light	Text	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	light	Text	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-agent-step[data-status="succeeded"] .dx-agent-step-text	light	Text	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-tool-call	dark	Text	Selector	#d4d4d4 on #141313	12.51	preset:classic
+.dx-tool-call	dark	Text	Selector	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-tool-call	dark	Text	Selector	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call	dark	Text	Selector	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-tool-call	dark	Text	Selector	#f2eded on #1d1a19	14.92	preset:reef
+.dx-tool-call	light	Text	Selector	#111111 on #fbfbfb	18.25	preset:classic
+.dx-tool-call	light	Text	Selector	#1c1f27 on #f8fafe	15.77	preset:abyss
+.dx-tool-call	light	Text	Selector	#211f1b on #fbfaf7	15.76	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call	light	Text	Selector	#231f19 on #fdfaf6	15.75	preset:driftwood
+.dx-tool-call	light	Text	Selector	#241d1d on #fdf9f9	15.84	preset:reef
+.dx-tool-call-body	dark	Graphic	Markup	#d4d4d4 on #141313	12.51	preset:classic
+.dx-tool-call-body	dark	Graphic	Markup	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-tool-call-body	dark	Graphic	Markup	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-body	dark	Graphic	Markup	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-tool-call-body	dark	Graphic	Markup	#f2eded on #1d1a19	14.92	preset:reef
+.dx-tool-call-body	light	Graphic	Markup	#111111 on #fbfbfb	18.25	preset:classic
+.dx-tool-call-body	light	Graphic	Markup	#1c1f27 on #f8fafe	15.77	preset:abyss
+.dx-tool-call-body	light	Graphic	Markup	#211f1b on #fbfaf7	15.76	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-body	light	Graphic	Markup	#231f19 on #fdfaf6	15.75	preset:driftwood
+.dx-tool-call-body	light	Graphic	Markup	#241d1d on #fdf9f9	15.84	preset:reef
+.dx-tool-call-body pre	dark	Text	Selector	#d4d4d4 on #0a0a0a	13.36	preset:classic
+.dx-tool-call-body pre	dark	Text	Selector	#ebeef5 on #121418	15.87	preset:abyss
+.dx-tool-call-body pre	dark	Text	Selector	#f0eeeb on #151411	15.91	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-body pre	dark	Text	Selector	#f1eee9 on #161310	15.99	preset:driftwood
+.dx-tool-call-body pre	dark	Text	Selector	#f2eded on #161313	15.93	preset:reef
+.dx-tool-call-body pre	light	Text	Selector	#111111 on #f5f5f5	17.32	preset:classic
+.dx-tool-call-body pre	light	Text	Selector	#1c1f27 on #e5e8ed	13.41	preset:abyss
+.dx-tool-call-body pre	light	Text	Selector	#211f1b on #e9e7e5	13.34	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-body pre	light	Text	Selector	#231f19 on #eae7e3	13.30	preset:driftwood
+.dx-tool-call-body pre	light	Text	Selector	#241d1d on #ebe7e6	13.48	preset:reef
+.dx-tool-call-name	dark	Text	Markup	#e5e8ee on #181b1f	14.08	preset:abyss
+.dx-tool-call-name	dark	Text	Markup	#e6e6e6 on #141313	14.86	preset:classic
+.dx-tool-call-name	dark	Text	Markup	#e9e7e4 on #1c1a18	14.06	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-name	dark	Text	Markup	#ebe7e3 on #1d1a17	14.08	preset:driftwood
+.dx-tool-call-name	dark	Text	Markup	#ece6e6 on #1d1a19	14.03	preset:reef
+.dx-tool-call-name	light	Text	Markup	#0d0d0d on #fbfbfb	18.78	preset:classic
+.dx-tool-call-name	light	Text	Markup	#171b22 on #f8fafe	16.52	preset:abyss
+.dx-tool-call-name	light	Text	Markup	#1d1a16 on #fbfaf7	16.61	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-name	light	Text	Markup	#1e1a14 on #fdfaf6	16.64	preset:driftwood
+.dx-tool-call-name	light	Text	Markup	#1f1919 on #fdf9f9	16.59	preset:reef
+.dx-tool-call-status	dark	Text	Markup	#9b9ea5 on #181b1f	6.44	preset:abyss
+.dx-tool-call-status	dark	Text	Markup	#a09e9b on #1c1a18	6.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-status	dark	Text	Markup	#a19e9a on #1d1a17	6.49	preset:driftwood
+.dx-tool-call-status	dark	Text	Markup	#a1a1a1 on #141313	7.18	preset:classic
+.dx-tool-call-status	dark	Text	Markup	#a29d9d on #1d1a19	6.46	preset:reef
+.dx-tool-call-status	light	Text	Markup	#5f636d on #f8fafe	5.75	preset:abyss
+.dx-tool-call-status	light	Text	Markup	#66635e on #fbfaf7	5.73	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-status	light	Text	Markup	#67625c on #fdfaf6	5.80	preset:driftwood
+.dx-tool-call-status	light	Text	Markup	#696161 on #fdf9f9	5.77	preset:reef
+.dx-tool-call-status	light	Text	Markup	#6b6b6b on #fbfbfb	5.15	preset:classic
+.dx-tool-call-summary	dark	Text	Markup	#9b9ea5 on #181b1f	6.44	preset:abyss
+.dx-tool-call-summary	dark	Text	Markup	#a09e9b on #1c1a18	6.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-summary	dark	Text	Markup	#a19e9a on #1d1a17	6.49	preset:driftwood
+.dx-tool-call-summary	dark	Text	Markup	#a1a1a1 on #141313	7.18	preset:classic
+.dx-tool-call-summary	dark	Text	Markup	#a29d9d on #1d1a19	6.46	preset:reef
+.dx-tool-call-summary	light	Text	Markup	#5f636d on #f8fafe	5.75	preset:abyss
+.dx-tool-call-summary	light	Text	Markup	#66635e on #fbfaf7	5.73	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-summary	light	Text	Markup	#67625c on #fdfaf6	5.80	preset:driftwood
+.dx-tool-call-summary	light	Text	Markup	#696161 on #fdf9f9	5.77	preset:reef
+.dx-tool-call-summary	light	Text	Markup	#6b6b6b on #fbfbfb	5.15	preset:classic
+.dx-tool-call-trigger	dark	Text	Markup	#d4d4d4 on #141313	12.51	preset:classic
+.dx-tool-call-trigger	dark	Text	Markup	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-tool-call-trigger	dark	Text	Markup	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-trigger	dark	Text	Markup	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-tool-call-trigger	dark	Text	Markup	#f2eded on #1d1a19	14.92	preset:reef
+.dx-tool-call-trigger	light	Text	Markup	#111111 on #fbfbfb	18.25	preset:classic
+.dx-tool-call-trigger	light	Text	Markup	#1c1f27 on #f8fafe	15.77	preset:abyss
+.dx-tool-call-trigger	light	Text	Markup	#211f1b on #fbfaf7	15.76	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-trigger	light	Text	Markup	#231f19 on #fdfaf6	15.75	preset:driftwood
+.dx-tool-call-trigger	light	Text	Markup	#241d1d on #fdf9f9	15.84	preset:reef
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#2b7fff on #141313	4.93	preset:classic
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#6cb3b2 on #1c1a18	7.21	neutral,preset:lagoon
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#6da5f9 on #1c1a18	6.94	blue
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#6eb87f on #1c1a18	7.29	green
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#8b9bff on #181b1f	6.77	preset:abyss
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#a891fb on #1c1a18	6.70	violet
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#c39b81 on #1d1a17	6.87	preset:driftwood
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#e082b0 on #1d1a19	6.58	preset:reef
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#e28b63 on #1c1a18	6.70	orange
+.dx-tool-call-trigger:focus-visible	dark	Focus	Markup	#ec7e8e on #1c1a18	6.56	rose
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#0b7f7f on #fbfaf7	4.62	neutral,preset:lagoon
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#14833e on #fbfaf7	4.63	green
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#2870d4 on #fbfaf7	4.62	blue
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#2b7fff on #fbfbfb	3.64	preset:classic
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#5a64e3 on #f8fafe	4.60	preset:abyss
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#7d59db on #fbfaf7	4.65	violet
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#956747 on #fdfaf6	4.68	preset:driftwood
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#b94884 on #fdf9f9	4.65	preset:reef
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#bb5218 on #fbfaf7	4.64	orange
+.dx-tool-call-trigger:focus-visible	light	Focus	Markup	#c6405c on #fbfaf7	4.69	rose
+.dx-tool-call-trigger:hover	dark	Text	Selector	#d4d4d4 on #262626	10.21	preset:classic
+.dx-tool-call-trigger:hover	dark	Text	Selector	#ebeef5 on #27292e	12.53	preset:abyss
+.dx-tool-call-trigger:hover	dark	Text	Selector	#f0eeeb on #2a2926	12.56	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-trigger:hover	dark	Text	Selector	#f1eee9 on #2b2825	12.66	preset:driftwood
+.dx-tool-call-trigger:hover	dark	Text	Selector	#f2eded on #2c2828	12.57	preset:reef
+.dx-tool-call-trigger:hover	light	Text	Selector	#111111 on #f8f8f8	17.78	preset:classic
+.dx-tool-call-trigger:hover	light	Text	Selector	#1c1f27 on #edf0f6	14.43	preset:abyss
+.dx-tool-call-trigger:hover	light	Text	Selector	#211f1b on #f1f0ed	14.44	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call-trigger:hover	light	Text	Selector	#231f19 on #f2f0ec	14.40	preset:driftwood
+.dx-tool-call-trigger:hover	light	Text	Selector	#241d1d on #f3efef	14.51	preset:reef
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	dark	Text	Selector	#ed8c81 on #141313	7.66	preset:classic
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	dark	Text	Selector	#ed8c81 on #181b1f	7.13	preset:abyss
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	dark	Text	Selector	#ed8c81 on #1c1a18	7.16	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	dark	Text	Selector	#ed8c81 on #1d1a17	7.15	preset:driftwood
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	dark	Text	Selector	#ed8c81 on #1d1a19	7.14	preset:reef
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	light	Text	Selector	#ac312c on #f8fafe	6.22	preset:abyss
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	light	Text	Selector	#ac312c on #fbfaf7	6.23	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	light	Text	Selector	#ac312c on #fbfbfb	6.28	preset:classic
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	light	Text	Selector	#ac312c on #fdf9f9	6.22	preset:reef
+.dx-tool-call[data-status="failed"] .dx-tool-call-status	light	Text	Selector	#ac312c on #fdfaf6	6.25	preset:driftwood
+.dx-tool-glyph	dark	Graphic	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-tool-glyph	dark	Graphic	Markup	#9b9ea5 on #181b1f	6.44	preset:abyss
+.dx-tool-glyph	dark	Graphic	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph	dark	Graphic	Markup	#a09e9b on #1c1a18	6.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph	dark	Graphic	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-tool-glyph	dark	Graphic	Markup	#a19e9a on #1d1a17	6.49	preset:driftwood
+.dx-tool-glyph	dark	Graphic	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-tool-glyph	dark	Graphic	Markup	#a1a1a1 on #141313	7.18	preset:classic
+.dx-tool-glyph	dark	Graphic	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-tool-glyph	dark	Graphic	Markup	#a29d9d on #1d1a19	6.46	preset:reef
+.dx-tool-glyph	light	Graphic	Markup	#5f636d on #f8fafe	5.75	preset:abyss
+.dx-tool-glyph	light	Graphic	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-tool-glyph	light	Graphic	Markup	#66635e on #fbfaf7	5.73	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph	light	Graphic	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph	light	Graphic	Markup	#67625c on #fdfaf6	5.80	preset:driftwood
+.dx-tool-glyph	light	Graphic	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-tool-glyph	light	Graphic	Markup	#696161 on #fdf9f9	5.77	preset:reef
+.dx-tool-glyph	light	Graphic	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-tool-glyph	light	Graphic	Markup	#6b6b6b on #fbfbfb	5.15	preset:classic
+.dx-tool-glyph	light	Graphic	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #000000	8.67	preset:classic
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #090b0f	8.13	preset:abyss
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #0c0b09	8.12	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #0d0b08	8.11	preset:driftwood
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #0e0a0a	8.13	preset:reef
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #141313	7.66	preset:classic
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #181b1f	7.13	preset:abyss
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #1c1a18	7.16	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #1d1a17	7.15	preset:driftwood
+.dx-tool-glyph[data-status="failed"]	dark	Graphic	Markup	#ed8c81 on #1d1a19	7.14	preset:reef
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #f8fafe	6.22	preset:abyss
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #fbfaf7	6.23	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #fbfbfb	6.28	preset:classic
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #fdf9f9	6.22	preset:reef
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #fdfaf6	6.25	preset:driftwood
+.dx-tool-glyph[data-status="failed"]	light	Graphic	Markup	#ac312c on #ffffff	6.50	*
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #000000	14.08	preset:classic
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #090b0f	13.20	preset:abyss
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #0c0b09	13.19	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #0d0b08	13.18	preset:driftwood
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #0e0a0a	13.20	preset:reef
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #141313	12.43	preset:classic
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #181b1f	11.58	preset:abyss
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #1c1a18	11.63	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #1d1a17	11.61	preset:driftwood
+.dx-tool-glyph[data-status="needs-approval"]	dark	Graphic	Markup	#f4ce90 on #1d1a19	11.60	preset:reef
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #f8fafe	6.45	preset:abyss
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #fbfaf7	6.46	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #fbfbfb	6.51	preset:classic
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #fdf9f9	6.45	preset:reef
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #fdfaf6	6.48	preset:driftwood
+.dx-tool-glyph[data-status="needs-approval"]	light	Graphic	Markup	#864e18 on #ffffff	6.74	*
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#d4d7de on #090b0f	13.67	preset:abyss
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#d4d7de on #181b1f	11.99	preset:abyss
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#d9d7d4 on #0c0b09	13.70	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#d9d7d4 on #1c1a18	12.08	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dad7d2 on #0d0b08	13.69	preset:driftwood
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dad7d2 on #1d1a17	12.07	preset:driftwood
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dbd6d6 on #0e0a0a	13.69	preset:reef
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dbd6d6 on #1d1a19	12.03	preset:reef
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dcdcdc on #000000	15.31	preset:classic
+.dx-tool-glyph[data-status="running"]	dark	Graphic	Markup	#dcdcdc on #141313	13.52	preset:classic
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#2b2b2b on #fbfbfb	13.68	preset:classic
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#2b2b2b on #ffffff	14.16	preset:classic
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#2f333b on #f8fafe	12.12	preset:abyss
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#2f333b on #ffffff	12.67	preset:abyss
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#35322e on #fbfaf7	12.22	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#35322e on #ffffff	12.75	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#37322c on #fdfaf6	12.19	preset:driftwood
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#37322c on #ffffff	12.69	preset:driftwood
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#383131 on #fdf9f9	12.17	preset:reef
+.dx-tool-glyph[data-status="running"]	light	Graphic	Markup	#383131 on #ffffff	12.71	preset:reef
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #000000	13.75	preset:classic
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #090b0f	12.90	preset:abyss
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #0c0b09	12.88	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #0d0b08	12.87	preset:driftwood
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #0e0a0a	12.90	preset:reef
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #141313	12.15	preset:classic
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #181b1f	11.32	preset:abyss
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #1c1a18	11.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #1d1a17	11.34	preset:driftwood
+.dx-tool-glyph[data-status="succeeded"]	dark	Graphic	Markup	#a4dfaf on #1d1a19	11.33	preset:reef
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #f8fafe	6.82	preset:abyss
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #fbfaf7	6.83	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #fbfbfb	6.88	preset:classic
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #fdf9f9	6.82	preset:reef
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #fdfaf6	6.85	preset:driftwood
+.dx-tool-glyph[data-status="succeeded"]	light	Graphic	Markup	#236436 on #ffffff	7.12	*

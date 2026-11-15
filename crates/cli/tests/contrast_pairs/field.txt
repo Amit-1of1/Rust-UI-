@@ -1,0 +1,47 @@
+.dx-field-description	dark	Text	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-field-description	dark	Text	Markup	#9b9ea5 on #181b1f	6.44	preset:abyss
+.dx-field-description	dark	Text	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-description	dark	Text	Markup	#a09e9b on #1c1a18	6.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-description	dark	Text	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-field-description	dark	Text	Markup	#a19e9a on #1d1a17	6.49	preset:driftwood
+.dx-field-description	dark	Text	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-field-description	dark	Text	Markup	#a1a1a1 on #141313	7.18	preset:classic
+.dx-field-description	dark	Text	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-field-description	dark	Text	Markup	#a29d9d on #1d1a19	6.46	preset:reef
+.dx-field-description	light	Text	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-field-description	light	Text	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-description	light	Text	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-field-description	light	Text	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-field-description	light	Text	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-field-error	dark	Text	Assumed	#ed8c81 on #000000	8.67	preset:classic
+.dx-field-error	dark	Text	Assumed	#ed8c81 on #090b0f	8.13	preset:abyss
+.dx-field-error	dark	Text	Assumed	#ed8c81 on #0c0b09	8.12	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-error	dark	Text	Assumed	#ed8c81 on #0d0b08	8.11	preset:driftwood
+.dx-field-error	dark	Text	Assumed	#ed8c81 on #0e0a0a	8.13	preset:reef
+.dx-field-error	light	Text	Assumed	#ac312c on #ffffff	6.50	*
+.dx-field-label	dark	Text	Markup	#d4d7de on #090b0f	13.67	preset:abyss
+.dx-field-label	dark	Text	Markup	#d4d7de on #181b1f	11.99	preset:abyss
+.dx-field-label	dark	Text	Markup	#d9d7d4 on #0c0b09	13.70	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-label	dark	Text	Markup	#d9d7d4 on #1c1a18	12.08	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-label	dark	Text	Markup	#dad7d2 on #0d0b08	13.69	preset:driftwood
+.dx-field-label	dark	Text	Markup	#dad7d2 on #1d1a17	12.07	preset:driftwood
+.dx-field-label	dark	Text	Markup	#dbd6d6 on #0e0a0a	13.69	preset:reef
+.dx-field-label	dark	Text	Markup	#dbd6d6 on #1d1a19	12.03	preset:reef
+.dx-field-label	dark	Text	Markup	#dcdcdc on #000000	15.31	preset:classic
+.dx-field-label	dark	Text	Markup	#dcdcdc on #141313	13.52	preset:classic
+.dx-field-label	light	Text	Markup	#2b2b2b on #ffffff	14.16	preset:classic
+.dx-field-label	light	Text	Markup	#2f333b on #ffffff	12.67	preset:abyss
+.dx-field-label	light	Text	Markup	#35322e on #ffffff	12.75	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field-label	light	Text	Markup	#37322c on #ffffff	12.69	preset:driftwood
+.dx-field-label	light	Text	Markup	#383131 on #ffffff	12.71	preset:reef
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #000000	8.67	preset:classic
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #090b0f	8.13	preset:abyss
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #0c0b09	8.12	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #0d0b08	8.11	preset:driftwood
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #0e0a0a	8.13	preset:reef
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #141313	7.66	preset:classic
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #181b1f	7.13	preset:abyss
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #1c1a18	7.16	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #1d1a17	7.15	preset:driftwood
+.dx-field[data-invalid="true"] .dx-field-label	dark	Text	Markup	#ed8c81 on #1d1a19	7.14	preset:reef
+.dx-field[data-invalid="true"] .dx-field-label	light	Text	Markup	#ac312c on #ffffff	6.50	*

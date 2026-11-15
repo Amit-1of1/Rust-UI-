@@ -1,0 +1,80 @@
+.dx-native-select	dark	Text	Markup	#d4d4d4 on #0b0b0b	13.25	preset:classic
+.dx-native-select	dark	Text	Markup	#ebeef5 on #14161a	15.61	preset:abyss
+.dx-native-select	dark	Text	Markup	#f0eeeb on #171614	15.63	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select	dark	Text	Markup	#f1eee9 on #181613	15.62	preset:driftwood
+.dx-native-select	dark	Text	Markup	#f2eded on #191515	15.63	preset:reef
+.dx-native-select	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-native-select	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-native-select	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-native-select	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-native-select optgroup	dark	Text	Selector	#d4d4d4 on #0a0a0a	13.36	preset:classic
+.dx-native-select optgroup	dark	Text	Selector	#ebeef5 on #121418	15.87	preset:abyss
+.dx-native-select optgroup	dark	Text	Selector	#f0eeeb on #151411	15.91	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select optgroup	dark	Text	Selector	#f1eee9 on #161310	15.99	preset:driftwood
+.dx-native-select optgroup	dark	Text	Selector	#f2eded on #161313	15.93	preset:reef
+.dx-native-select optgroup	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-native-select optgroup	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-native-select optgroup	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select optgroup	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-native-select optgroup	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-native-select option	dark	Text	Selector	#d4d4d4 on #0a0a0a	13.36	preset:classic
+.dx-native-select option	dark	Text	Selector	#ebeef5 on #121418	15.87	preset:abyss
+.dx-native-select option	dark	Text	Selector	#f0eeeb on #151411	15.91	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select option	dark	Text	Selector	#f1eee9 on #161310	15.99	preset:driftwood
+.dx-native-select option	dark	Text	Selector	#f2eded on #161313	15.93	preset:reef
+.dx-native-select option	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-native-select option	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-native-select option	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select option	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-native-select option	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-native-select-icon	dark	Graphic	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-native-select-icon	dark	Graphic	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select-icon	dark	Graphic	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-native-select-icon	dark	Graphic	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-native-select-icon	dark	Graphic	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-native-select-icon	light	Graphic	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-native-select-icon	light	Graphic	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select-icon	light	Graphic	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-native-select-icon	light	Graphic	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-native-select-icon	light	Graphic	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-native-select:focus-visible	dark	Focus	Markup	#2b7fff on #000000	5.58	preset:classic
+.dx-native-select:focus-visible	dark	Focus	Markup	#6cb3b2 on #0c0b09	8.18	neutral,preset:lagoon
+.dx-native-select:focus-visible	dark	Focus	Markup	#6da5f9 on #0c0b09	7.87	blue
+.dx-native-select:focus-visible	dark	Focus	Markup	#6eb87f on #0c0b09	8.27	green
+.dx-native-select:focus-visible	dark	Focus	Markup	#8b9bff on #090b0f	7.72	preset:abyss
+.dx-native-select:focus-visible	dark	Focus	Markup	#a891fb on #0c0b09	7.60	violet
+.dx-native-select:focus-visible	dark	Focus	Markup	#c39b81 on #0d0b08	7.79	preset:driftwood
+.dx-native-select:focus-visible	dark	Focus	Markup	#e082b0 on #0e0a0a	7.49	preset:reef
+.dx-native-select:focus-visible	dark	Focus	Markup	#e28b63 on #0c0b09	7.59	orange
+.dx-native-select:focus-visible	dark	Focus	Markup	#ec7e8e on #0c0b09	7.44	rose
+.dx-native-select:focus-visible	dark	Text	Markup	#f2f5fc on #1b1d21	15.43	preset:abyss
+.dx-native-select:focus-visible	dark	Text	Markup	#f7f5f2 on #1e1d1b	15.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select:focus-visible	dark	Text	Markup	#f8f4f0 on #1f1d1a	15.34	preset:driftwood
+.dx-native-select:focus-visible	dark	Text	Markup	#f9f4f3 on #201c1c	15.45	preset:reef
+.dx-native-select:focus-visible	dark	Text	Markup	#fafafa on #131313	17.80	preset:classic
+.dx-native-select:focus-visible	light	Focus	Markup	#0b7f7f on #ffffff	4.82	neutral,preset:lagoon
+.dx-native-select:focus-visible	light	Focus	Markup	#14833e on #ffffff	4.83	green
+.dx-native-select:focus-visible	light	Focus	Markup	#2870d4 on #ffffff	4.82	blue
+.dx-native-select:focus-visible	light	Focus	Markup	#2b7fff on #ffffff	3.76	preset:classic
+.dx-native-select:focus-visible	light	Focus	Markup	#5a64e3 on #ffffff	4.81	preset:abyss
+.dx-native-select:focus-visible	light	Focus	Markup	#7d59db on #ffffff	4.86	violet
+.dx-native-select:focus-visible	light	Focus	Markup	#956747 on #ffffff	4.87	preset:driftwood
+.dx-native-select:focus-visible	light	Focus	Markup	#b94884 on #ffffff	4.86	preset:reef
+.dx-native-select:focus-visible	light	Focus	Markup	#bb5218 on #ffffff	4.85	orange
+.dx-native-select:focus-visible	light	Focus	Markup	#c6405c on #ffffff	4.90	rose
+.dx-native-select:focus-visible	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-native-select:focus-visible	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-native-select:focus-visible	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select:focus-visible	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-native-select:focus-visible	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef
+.dx-native-select:hover:not(:disabled)	dark	Text	Markup	#f2f5fc on #1b1d21	15.43	preset:abyss
+.dx-native-select:hover:not(:disabled)	dark	Text	Markup	#f7f5f2 on #1e1d1b	15.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select:hover:not(:disabled)	dark	Text	Markup	#f8f4f0 on #1f1d1a	15.34	preset:driftwood
+.dx-native-select:hover:not(:disabled)	dark	Text	Markup	#f9f4f3 on #201c1c	15.45	preset:reef
+.dx-native-select:hover:not(:disabled)	dark	Text	Markup	#fafafa on #131313	17.80	preset:classic
+.dx-native-select:hover:not(:disabled)	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-native-select:hover:not(:disabled)	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-native-select:hover:not(:disabled)	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-native-select:hover:not(:disabled)	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-native-select:hover:not(:disabled)	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef

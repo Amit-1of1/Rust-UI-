@@ -1,0 +1,10 @@
+.dx-hover-card-content	dark	Text	Selector	#d4d4d4 on #191919	11.87	preset:classic
+.dx-hover-card-content	dark	Text	Selector	#ebeef5 on #212327	13.56	preset:abyss
+.dx-hover-card-content	dark	Text	Selector	#f0eeeb on #242320	13.58	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-hover-card-content	dark	Text	Selector	#f1eee9 on #25221f	13.68	preset:driftwood
+.dx-hover-card-content	dark	Text	Selector	#f2eded on #252222	13.62	preset:reef
+.dx-hover-card-content	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-hover-card-content	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-hover-card-content	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-hover-card-content	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-hover-card-content	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef

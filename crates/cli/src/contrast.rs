@@ -1645,4 +1645,114 @@ mod tests {
             .iter()
             .any(|p| p.selector == ".tag" && p.accent == "x"));
     }
+    fn near(a: f64, b: f64) -> bool {
+        (a - b).abs() < 1e-6
+    }
+
+    // The tests below pin the pure helpers with exact values; each kills mutants that
+    // cargo-mutants found surviving (docs/notes/mutation-testing.md).
+
+    #[test]
+    fn split_top_ignores_separators_inside_brackets_and_quotes() {
+        assert_eq!(split_top(":is(.a, .b), .c", ','), [":is(.a, .b)", " .c"]);
+        assert_eq!(
+            split_top("[data-x='a,b'], .c", ','),
+            ["[data-x='a,b']", " .c"]
+        );
+        assert_eq!(
+            split_top("[data-x=\")\"], .c", ','),
+            ["[data-x=\")\"]", " .c"]
+        );
+        assert_eq!(split_top("[data-x='('], .c", ','), ["[data-x='(']", " .c"]);
+        assert_eq!(
+            split_top("rgb(0 0 0 / 50%) 0 0 0 2px", ' '),
+            ["rgb(0 0 0 / 50%)", "0", "0", "0", "2px"]
+        );
+    }
+
+    #[test]
+    fn media_blocks_are_kept_and_other_at_rules_skipped() {
+        let r = parse(
+            "@media (hover: hover) { .a { color: red } } \
+             @font-face { src: url(x) } \
+             @keyframes k { from { color: red } to { color: blue } } \
+             .b { color: blue }",
+        );
+        let got: Vec<(&str, Option<&str>)> = r
+            .iter()
+            .map(|x| (x.selector.as_str(), x.media.as_deref()))
+            .collect();
+        assert_eq!(got, [(".a", Some("(hover: hover)")), (".b", None)]);
+        // An unterminated at-rule at the end of a file must not read past it.
+        assert_eq!(
+            parse(".b { color: blue } @font-face { src: url(x)").len(),
+            1
+        );
+    }
+
+    #[test]
+    fn declarations_split_only_at_top_level() {
+        let r =
+            parse(".a { background: url(data:x;y); --x: f(}); color: red; :x } .b { color: blue }");
+        assert_eq!(r.len(), 2);
+        assert_eq!(
+            r[0].decls,
+            [
+                ("background".to_string(), "url(data:x;y)".to_string()),
+                ("--x".to_string(), "f(})".to_string()),
+                ("color".to_string(), "red".to_string()),
+            ]
+        );
+        let r = parse(".a[data-x=\"{\"] { color: red }");
+        assert_eq!(r.len(), 1);
+        assert_eq!(r[0].selector, ".a[data-x=\"{\"]");
+        // A rule with only nested rules adds no empty rule of its own.
+        let r = parse(".a { .b { color: red } }");
+        assert_eq!(r.len(), 1);
+        assert_eq!(r[0].selector, ".a .b");
+    }
+
+    #[test]
+    fn color_mix_weights_alpha_and_premultiplication() {
+        let mix = |s: &str| color(s).unwrap();
+        // One percentage given: the other is the rest (white weighs 0.75: 0.75 * 255).
+        let c = mix("color-mix(in srgb, #000 25%, #fff)");
+        assert!(near(c.r, 191.25) && near(c.a, 1.0), "{c:?}");
+        let c = mix("color-mix(in srgb, #000, #fff 25%)");
+        assert!(near(c.r, 63.75) && near(c.a, 1.0), "{c:?}");
+        // Percentages summing under 100%: normalised, then alpha scaled by the sum.
+        let c = mix("color-mix(in srgb, #000 20%, #fff 20%)");
+        assert!(near(c.r, 127.5) && near(c.a, 0.4), "{c:?}");
+        // Over 100%: normalised, alpha stays 1.
+        let c = mix("color-mix(in srgb, #000 60%, #fff 60%)");
+        assert!(near(c.r, 127.5) && near(c.a, 1.0), "{c:?}");
+        // Premultiplied: (0 * 0.5 / 2 + 255 / 2) / 0.75 = 170, alpha 0.5 / 2 + 1 / 2 = 0.75.
+        let c = mix("color-mix(in srgb, rgb(0 0 0 / 50%), #fff)");
+        assert!(near(c.r, 170.0) && near(c.a, 0.75), "{c:?}");
+        let c = mix("color-mix(in srgb, rgb(255 255 255 / 50%), #000)");
+        assert!(near(c.r, 85.0) && near(c.a, 0.75), "{c:?}");
+        assert_eq!(mix("color-mix(in srgb, transparent, transparent)").a, 0.0);
+        // Oklab midpoint of black and white is L = 0.5: 0.125 linear, #636363 (not #808080).
+        assert_eq!(mix("color-mix(in oklab, #000, #fff)").hex(), "#636363");
+        // Dark channels take the linear segment of the sRGB curve; a round trip keeps them.
+        assert_eq!(
+            mix("color-mix(in oklab, #0a0a0a, #0a0a0a)").hex(),
+            "#0a0a0a"
+        );
+    }
+
+    #[test]
+    fn colour_keywords_and_percent_channels() {
+        assert_eq!(color("white").map(Rgba::hex), Some("#ffffff".into()));
+        assert_eq!(color("black").map(Rgba::hex), Some("#000000".into()));
+        // 50 * 2.55 = 127.4999..., so 7f.
+        assert_eq!(
+            color("rgb(100% 0% 50%)").map(Rgba::hex),
+            Some("#ff007f".into())
+        );
+        assert_eq!(
+            (px("1.5rem"), px("18px"), px("2em"), px("bold")),
+            (Some(24.0), Some(18.0), Some(32.0), None)
+        );
+    }
 }

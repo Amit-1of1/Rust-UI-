@@ -1,0 +1,10 @@
+.dx-status	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+.dx-status	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-status	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-status	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-status	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-status	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+.dx-status	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-status	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-status	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-status	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef

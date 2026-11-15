@@ -1,0 +1,70 @@
+.dx-callout	dark	Text	Selector	#d4d4d4 on #141313	12.51	preset:classic
+.dx-callout	dark	Text	Selector	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-callout	dark	Text	Selector	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout	dark	Text	Selector	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-callout	dark	Text	Selector	#f2eded on #1d1a19	14.92	preset:reef
+.dx-callout	light	Text	Selector	#111111 on #f8f8f8	17.78	preset:classic
+.dx-callout	light	Text	Selector	#1c1f27 on #f2f5fb	15.09	preset:abyss
+.dx-callout	light	Text	Selector	#211f1b on #f6f5f2	15.09	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout	light	Text	Selector	#231f19 on #f7f5f1	15.05	preset:driftwood
+.dx-callout	light	Text	Selector	#241d1d on #f8f4f4	15.17	preset:reef
+.dx-callout-body code	dark	Text	Selector	#d4d4d4 on #262626	10.21	preset:classic
+.dx-callout-body code	dark	Text	Selector	#ebeef5 on #27292e	12.53	preset:abyss
+.dx-callout-body code	dark	Text	Selector	#f0eeeb on #2a2926	12.56	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout-body code	dark	Text	Selector	#f1eee9 on #2b2825	12.66	preset:driftwood
+.dx-callout-body code	dark	Text	Selector	#f2eded on #2c2828	12.57	preset:reef
+.dx-callout-body code	light	Text	Selector	#111111 on #f5f5f5	17.32	preset:classic
+.dx-callout-body code	light	Text	Selector	#1c1f27 on #e5e8ed	13.41	preset:abyss
+.dx-callout-body code	light	Text	Selector	#211f1b on #e9e7e5	13.34	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout-body code	light	Text	Selector	#231f19 on #eae7e3	13.30	preset:driftwood
+.dx-callout-body code	light	Text	Selector	#241d1d on #ebe7e6	13.48	preset:reef
+.dx-callout-title	dark	Text	Markup	#f2f5fc on #181b1f	15.83	preset:abyss
+.dx-callout-title	dark	Text	Markup	#f7f5f2 on #1c1a18	15.94	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout-title	dark	Text	Markup	#f8f4f0 on #1d1a17	15.83	preset:driftwood
+.dx-callout-title	dark	Text	Markup	#f9f4f3 on #1d1a19	15.87	preset:reef
+.dx-callout-title	dark	Text	Markup	#fafafa on #141313	17.77	preset:classic
+.dx-callout-title	light	Text	Markup	#000000 on #f8f8f8	19.77	preset:classic
+.dx-callout-title	light	Text	Markup	#0e1219 on #f2f5fb	17.18	preset:abyss
+.dx-callout-title	light	Text	Markup	#13110e on #f6f5f2	17.29	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout-title	light	Text	Markup	#15110c on #f7f5f1	17.26	preset:driftwood
+.dx-callout-title	light	Text	Markup	#161010 on #f8f4f4	17.24	preset:reef
+.dx-callout[data-variant="info"]	dark	Text	Selector	#d4d4d4 on #000002	14.13	preset:classic
+.dx-callout[data-variant="info"]	dark	Text	Selector	#ebeef5 on #11141e	15.77	preset:abyss
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #131518	15.77	blue
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #131611	15.75	green
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #131614	15.75	neutral,preset:lagoon
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #161418	15.80	violet
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #1a1312	15.82	rose
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f0eeeb on #1a140f	15.80	orange
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f1eee9 on #191410	15.77	preset:driftwood
+.dx-callout[data-variant="info"]	dark	Text	Selector	#f2eded on #1b1215	15.81	preset:reef
+.dx-callout[data-variant="info"]	light	Text	Selector	#111111 on #eef5ff	17.28	preset:classic
+.dx-callout[data-variant="info"]	light	Text	Selector	#1c1f27 on #f0f3fe	14.88	preset:abyss
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #eef4f4	14.83	neutral,preset:lagoon
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #eef4fd	14.85	blue
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #eef5ef	14.83	green
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #f3f2fd	14.84	violet
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #fbf1ed	14.83	orange
+.dx-callout[data-variant="info"]	light	Text	Selector	#211f1b on #fdf0f1	14.82	rose
+.dx-callout[data-variant="info"]	light	Text	Selector	#231f19 on #f7f2ef	14.76	preset:driftwood
+.dx-callout[data-variant="info"]	light	Text	Selector	#241d1d on #fbf0f5	14.91	preset:reef
+.dx-callout[data-variant="success"]	dark	Text	Selector	#d4d4d4 on #132717	10.65	preset:classic
+.dx-callout[data-variant="success"]	dark	Text	Selector	#ebeef5 on #132717	13.59	preset:abyss
+.dx-callout[data-variant="success"]	dark	Text	Selector	#f0eeeb on #132717	13.63	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout[data-variant="success"]	dark	Text	Selector	#f1eee9 on #132717	13.64	preset:driftwood
+.dx-callout[data-variant="success"]	dark	Text	Selector	#f2eded on #132717	13.62	preset:reef
+.dx-callout[data-variant="success"]	light	Text	Selector	#111111 on #e8fbeb	17.47	preset:classic
+.dx-callout[data-variant="success"]	light	Text	Selector	#1c1f27 on #e8fbeb	15.24	preset:abyss
+.dx-callout[data-variant="success"]	light	Text	Selector	#211f1b on #e8fbeb	15.22	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout[data-variant="success"]	light	Text	Selector	#231f19 on #e8fbeb	15.16	preset:driftwood
+.dx-callout[data-variant="success"]	light	Text	Selector	#241d1d on #e8fbeb	15.32	preset:reef
+.dx-callout[data-variant="warning"]	dark	Text	Selector	#d4d4d4 on #33230a	10.23	preset:classic
+.dx-callout[data-variant="warning"]	dark	Text	Selector	#ebeef5 on #33230a	13.05	preset:abyss
+.dx-callout[data-variant="warning"]	dark	Text	Selector	#f0eeeb on #33230a	13.09	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout[data-variant="warning"]	dark	Text	Selector	#f1eee9 on #33230a	13.10	preset:driftwood
+.dx-callout[data-variant="warning"]	dark	Text	Selector	#f2eded on #33230a	13.07	preset:reef
+.dx-callout[data-variant="warning"]	light	Text	Selector	#111111 on #fef6e7	17.58	preset:classic
+.dx-callout[data-variant="warning"]	light	Text	Selector	#1c1f27 on #fef6e7	15.34	preset:abyss
+.dx-callout[data-variant="warning"]	light	Text	Selector	#211f1b on #fef6e7	15.32	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-callout[data-variant="warning"]	light	Text	Selector	#231f19 on #fef6e7	15.26	preset:driftwood
+.dx-callout[data-variant="warning"]	light	Text	Selector	#241d1d on #fef6e7	15.41	preset:reef

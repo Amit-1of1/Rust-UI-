@@ -1,0 +1,10 @@
+.dx-kbd	dark	Text	Selector	#9b9ea5 on #27292e	5.43	preset:abyss
+.dx-kbd	dark	Text	Selector	#a09e9b on #2a2926	5.44	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-kbd	dark	Text	Selector	#a19e9a on #2b2825	5.49	preset:driftwood
+.dx-kbd	dark	Text	Selector	#a1a1a1 on #262626	5.86	preset:classic
+.dx-kbd	dark	Text	Selector	#a29d9d on #2c2828	5.44	preset:reef
+.dx-kbd	light	Text	Selector	#5f636d on #e5e8ed	4.90	preset:abyss
+.dx-kbd	light	Text	Selector	#66635e on #e9e7e5	4.85	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-kbd	light	Text	Selector	#67625c on #eae7e3	4.90	preset:driftwood
+.dx-kbd	light	Text	Selector	#696161 on #ebe7e6	4.91	preset:reef
+.dx-kbd	light	Text	Selector	#6b6b6b on #f5f5f5	4.89	preset:classic

@@ -1,0 +1,36 @@
+.dx-alert	dark	Text	Selector	#d4d4d4 on #0a0a0a	13.36	preset:classic
+.dx-alert	dark	Text	Selector	#ebeef5 on #121418	15.87	preset:abyss
+.dx-alert	dark	Text	Selector	#f0eeeb on #151411	15.91	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert	dark	Text	Selector	#f1eee9 on #161310	15.99	preset:driftwood
+.dx-alert	dark	Text	Selector	#f2eded on #161313	15.93	preset:reef
+.dx-alert	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-alert	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-alert	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-alert	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-alert-description	dark	Text	Markup	#9b9ea5 on #121418	6.87	preset:abyss
+.dx-alert-description	dark	Text	Markup	#a09e9b on #151411	6.89	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert-description	dark	Text	Markup	#a19e9a on #161310	6.94	preset:driftwood
+.dx-alert-description	dark	Text	Markup	#a1a1a1 on #0a0a0a	7.66	preset:classic
+.dx-alert-description	dark	Text	Markup	#a29d9d on #161313	6.90	preset:reef
+.dx-alert-description	light	Text	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-alert-description	light	Text	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert-description	light	Text	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-alert-description	light	Text	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-alert-description	light	Text	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-alert[data-variant="destructive"]	dark	Text	Selector	#ed8c81 on #0a0a0a	8.17	preset:classic
+.dx-alert[data-variant="destructive"]	dark	Text	Selector	#ed8c81 on #121418	7.61	preset:abyss
+.dx-alert[data-variant="destructive"]	dark	Text	Selector	#ed8c81 on #151411	7.60	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert[data-variant="destructive"]	dark	Text	Selector	#ed8c81 on #161310	7.64	preset:driftwood
+.dx-alert[data-variant="destructive"]	dark	Text	Selector	#ed8c81 on #161313	7.63	preset:reef
+.dx-alert[data-variant="destructive"]	light	Text	Selector	#ac312c on #ffffff	6.50	*
+.dx-alert[data-variant="destructive"] .dx-alert-description	dark	Text	Selector	#d4d4d4 on #0a0a0a	13.36	preset:classic
+.dx-alert[data-variant="destructive"] .dx-alert-description	dark	Text	Selector	#ebeef5 on #121418	15.87	preset:abyss
+.dx-alert[data-variant="destructive"] .dx-alert-description	dark	Text	Selector	#f0eeeb on #151411	15.91	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert[data-variant="destructive"] .dx-alert-description	dark	Text	Selector	#f1eee9 on #161310	15.99	preset:driftwood
+.dx-alert[data-variant="destructive"] .dx-alert-description	dark	Text	Selector	#f2eded on #161313	15.93	preset:reef
+.dx-alert[data-variant="destructive"] .dx-alert-description	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-alert[data-variant="destructive"] .dx-alert-description	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-alert[data-variant="destructive"] .dx-alert-description	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-alert[data-variant="destructive"] .dx-alert-description	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-alert[data-variant="destructive"] .dx-alert-description	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef

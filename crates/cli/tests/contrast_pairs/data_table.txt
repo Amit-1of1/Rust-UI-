@@ -1,0 +1,90 @@
+.dx-data-table [data-selected="true"]	dark	Text	Selector	#d4d4d4 on #262626	10.21	preset:classic
+.dx-data-table [data-selected="true"]	dark	Text	Selector	#ebeef5 on #27292e	12.53	preset:abyss
+.dx-data-table [data-selected="true"]	dark	Text	Selector	#f0eeeb on #2a2926	12.56	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table [data-selected="true"]	dark	Text	Selector	#f1eee9 on #2b2825	12.66	preset:driftwood
+.dx-data-table [data-selected="true"]	dark	Text	Selector	#f2eded on #2c2828	12.57	preset:reef
+.dx-data-table [data-selected="true"]	light	Text	Selector	#111111 on #f5f5f5	17.32	preset:classic
+.dx-data-table [data-selected="true"]	light	Text	Selector	#1c1f27 on #e5e8ed	13.41	preset:abyss
+.dx-data-table [data-selected="true"]	light	Text	Selector	#211f1b on #e9e7e5	13.34	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table [data-selected="true"]	light	Text	Selector	#231f19 on #eae7e3	13.30	preset:driftwood
+.dx-data-table [data-selected="true"]	light	Text	Selector	#241d1d on #ebe7e6	13.48	preset:reef
+.dx-data-table-column-option	dark	Text	Assumed	#d4d4d4 on #000000	14.17	preset:classic
+.dx-data-table-column-option	dark	Text	Assumed	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-data-table-column-option	dark	Text	Assumed	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-column-option	dark	Text	Assumed	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-data-table-column-option	dark	Text	Assumed	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-data-table-column-option	light	Text	Assumed	#111111 on #ffffff	18.88	preset:classic
+.dx-data-table-column-option	light	Text	Assumed	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-data-table-column-option	light	Text	Assumed	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-column-option	light	Text	Assumed	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-data-table-column-option	light	Text	Assumed	#241d1d on #ffffff	16.55	preset:reef
+.dx-data-table-column-option:hover	dark	Text	Selector	#d4d4d4 on #1a1a1a	11.74	preset:classic
+.dx-data-table-column-option:hover	dark	Text	Selector	#ebeef5 on #1f2226	13.75	preset:abyss
+.dx-data-table-column-option:hover	dark	Text	Selector	#f0eeeb on #23211f	13.86	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-column-option:hover	dark	Text	Selector	#f1eee9 on #24211e	13.84	preset:driftwood
+.dx-data-table-column-option:hover	dark	Text	Selector	#f2eded on #242120	13.79	preset:reef
+.dx-data-table-column-option:hover	light	Text	Selector	#111111 on #f8f8f8	17.78	preset:classic
+.dx-data-table-column-option:hover	light	Text	Selector	#1c1f27 on #edf0f6	14.43	preset:abyss
+.dx-data-table-column-option:hover	light	Text	Selector	#211f1b on #f1f0ed	14.44	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-column-option:hover	light	Text	Selector	#231f19 on #f2f0ec	14.40	preset:driftwood
+.dx-data-table-column-option:hover	light	Text	Selector	#241d1d on #f3efef	14.51	preset:reef
+.dx-data-table-footer	dark	Text	Markup	#9b9ea5 on #090b0f	7.34	preset:abyss
+.dx-data-table-footer	dark	Text	Markup	#a09e9b on #0c0b09	7.36	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-footer	dark	Text	Markup	#a19e9a on #0d0b08	7.37	preset:driftwood
+.dx-data-table-footer	dark	Text	Markup	#a1a1a1 on #000000	8.13	preset:classic
+.dx-data-table-footer	dark	Text	Markup	#a29d9d on #0e0a0a	7.36	preset:reef
+.dx-data-table-footer	light	Text	Markup	#5f636d on #ffffff	6.01	preset:abyss
+.dx-data-table-footer	light	Text	Markup	#66635e on #ffffff	5.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-footer	light	Text	Markup	#67625c on #ffffff	6.04	preset:driftwood
+.dx-data-table-footer	light	Text	Markup	#696161 on #ffffff	6.03	preset:reef
+.dx-data-table-footer	light	Text	Markup	#6b6b6b on #ffffff	5.33	preset:classic
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#2b7fff on #000000	5.58	preset:classic
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#6cb3b2 on #0c0b09	8.18	neutral,preset:lagoon
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#6da5f9 on #0c0b09	7.87	blue
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#6eb87f on #0c0b09	8.27	green
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#8b9bff on #090b0f	7.72	preset:abyss
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#a891fb on #0c0b09	7.60	violet
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#c39b81 on #0d0b08	7.79	preset:driftwood
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#e082b0 on #0e0a0a	7.49	preset:reef
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#e28b63 on #0c0b09	7.59	orange
+.dx-data-table-resize:focus-visible	dark	Focus	Markup	#ec7e8e on #0c0b09	7.44	rose
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#0b7f7f on #ffffff	4.82	neutral,preset:lagoon
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#14833e on #ffffff	4.83	green
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#2870d4 on #ffffff	4.82	blue
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#2b7fff on #ffffff	3.76	preset:classic
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#5a64e3 on #ffffff	4.81	preset:abyss
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#7d59db on #ffffff	4.86	violet
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#956747 on #ffffff	4.87	preset:driftwood
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#b94884 on #ffffff	4.86	preset:reef
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#bb5218 on #ffffff	4.85	orange
+.dx-data-table-resize:focus-visible	light	Focus	Markup	#c6405c on #ffffff	4.90	rose
+.dx-data-table-viewport th	dark	Text	Selector	#d4d4d4 on #000000	14.17	preset:classic
+.dx-data-table-viewport th	dark	Text	Selector	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-data-table-viewport th	dark	Text	Selector	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-viewport th	dark	Text	Selector	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-data-table-viewport th	dark	Text	Selector	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-data-table-viewport th	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-data-table-viewport th	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-data-table-viewport th	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-data-table-viewport th	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-data-table-viewport th	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#2b7fff on #000000	5.58	preset:classic
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#6cb3b2 on #0c0b09	8.18	neutral,preset:lagoon
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#6da5f9 on #0c0b09	7.87	blue
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#6eb87f on #0c0b09	8.27	green
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#8b9bff on #090b0f	7.72	preset:abyss
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#a891fb on #0c0b09	7.60	violet
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#c39b81 on #0d0b08	7.79	preset:driftwood
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#e082b0 on #0e0a0a	7.49	preset:reef
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#e28b63 on #0c0b09	7.59	orange
+.dx-data-table-viewport:focus-visible	dark	Focus	Markup	#ec7e8e on #0c0b09	7.44	rose
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#0b7f7f on #ffffff	4.82	neutral,preset:lagoon
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#14833e on #ffffff	4.83	green
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#2870d4 on #ffffff	4.82	blue
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#2b7fff on #ffffff	3.76	preset:classic
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#5a64e3 on #ffffff	4.81	preset:abyss
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#7d59db on #ffffff	4.86	violet
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#956747 on #ffffff	4.87	preset:driftwood
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#b94884 on #ffffff	4.86	preset:reef
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#bb5218 on #ffffff	4.85	orange
+.dx-data-table-viewport:focus-visible	light	Focus	Markup	#c6405c on #ffffff	4.90	rose
