@@ -1,3 +1,13 @@
+.dx-context-menu-trigger {
+  padding: 20px;
+  border: 1px dashed var(--primary-color-6);
+  border-radius: 0.5rem;
+  background: var(--primary-color);
+  cursor: context-menu;
+  text-align: center;
+  user-select: none;
+}
+
 .dx-context-menu-content {
   z-index: var(--z-index-overlay);
   min-width: 220px;

@@ -45,11 +45,16 @@ pub fn Pagination(
     #[props(extends = GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
+    // A default name only when the caller gives none: two `aria-label`s on one element keep
+    // just one, and which depends on the renderer.
+    let named = attributes
+        .iter()
+        .any(|a| a.name == "aria-label" || a.name == "aria-labelledby");
     rsx! {
         nav {
             "data-slot": "pagination",
             role: "navigation",
-            aria_label: "pagination",
+            aria_label: (!named).then_some("pagination"),
             ..merge_attributes(vec![attributes!(div { class: Styles::dx_pagination }), attributes]),
             {children}
         }

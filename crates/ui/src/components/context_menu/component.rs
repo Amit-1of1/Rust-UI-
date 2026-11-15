@@ -26,14 +26,9 @@ pub fn ContextMenu(props: ContextMenuProps) -> Element {
 pub fn ContextMenuTrigger(props: ContextMenuTriggerProps) -> Element {
     rsx! {
         context_menu::ContextMenuTrigger {
-            padding: "20px",
-            background: "var(--primary-color)",
-            border: "1px dashed var(--primary-color-6)",
-            border_radius: ".5rem",
-            cursor: "context-menu",
-            user_select: "none",
-            text_align: "center",
-            attributes: props.attributes,
+            // Styled by class: the primitive sets its own `style` (it stops iOS's long-press
+            // menu), and a second `style` attribute would replace it or be dropped.
+            attributes: merge_attributes(vec![attributes!(div { class: Styles::dx_context_menu_trigger }), props.attributes]),
             {props.children}
         }
     }
