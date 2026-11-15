@@ -29,6 +29,8 @@ pub mod demos;
 ///
 /// Experimental: may change in any release (docs/STABILITY.md).
 pub mod fonts;
+#[cfg(kani)]
+mod kani_proofs;
 
 /// Shared hooks (`use_hotkey`, `Selection`, `use_media_query`, ...): `ui::hooks::*`.
 pub use components::hooks;

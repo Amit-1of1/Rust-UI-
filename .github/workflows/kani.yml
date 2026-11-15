@@ -1,0 +1,33 @@
+name: Kani
+
+# Kani proofs of the real Rust code (crates/ui/src/kani_proofs.rs, docs/notes/kani.md):
+# every value of each input, every overflow and panic on the way.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "crates/ui/src/**"
+      - "scripts/kani.sh"
+      - ".github/workflows/kani.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  kani:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          key: kani
+          cache-directories: ~/.kani
+      # Installs the pinned Kani (cargo install + `cargo kani setup`) and runs every harness.
+      - run: scripts/kani.sh

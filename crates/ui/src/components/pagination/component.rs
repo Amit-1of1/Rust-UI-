@@ -318,7 +318,7 @@ pub fn page_items(page: usize, pages: usize, siblings: usize) -> Vec<Option<usiz
     let pages = pages.max(1);
     let page = page.clamp(1, pages);
     let lo = page.saturating_sub(siblings).max(1);
-    let hi = (page + siblings).min(pages);
+    let hi = page.saturating_add(siblings).min(pages);
     let mut items = vec![Some(1)];
     match lo {
         0..=2 => {}
