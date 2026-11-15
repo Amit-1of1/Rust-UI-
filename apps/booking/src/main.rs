@@ -27,20 +27,30 @@ fn main() {
     dioxus::launch(App);
 }
 
-#[derive(Routable, Clone, PartialEq, Debug)]
-#[rustfmt::skip]
-pub enum Route {
-    #[layout(Shell)]
-        #[route("/")]
-        Explore {},
-        #[route("/stays/:id")]
-        StayPage { id: usize },
-        #[route("/checkout/:id")]
-        Checkout { id: usize },
-        #[route("/trips")]
-        Trips {},
-        #[route("/:..segments")]
-        NotFound { segments: Vec<String> },
+pub use routes::Route;
+
+/// In its own module so the lint allowance below covers the derive's output: Rust 1.100 flags
+/// code that `Routable` (dioxus-router 0.7.10) generates for the catch-all route as
+/// unreachable, and an `allow` on the enum itself doesn't reach the generated impls.
+#[allow(unreachable_code)]
+mod routes {
+    use super::*;
+
+    #[derive(Routable, Clone, PartialEq, Debug)]
+    #[rustfmt::skip]
+    pub enum Route {
+        #[layout(Shell)]
+            #[route("/")]
+            Explore {},
+            #[route("/stays/:id")]
+            StayPage { id: usize },
+            #[route("/checkout/:id")]
+            Checkout { id: usize },
+            #[route("/trips")]
+            Trips {},
+            #[route("/:..segments")]
+            NotFound { segments: Vec<String> },
+    }
 }
 
 /// What the booking box hands to checkout.
