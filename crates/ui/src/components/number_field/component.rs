@@ -220,6 +220,8 @@ fn clamp(v: f64, min: Option<f64>, max: Option<f64>) -> f64 {
 
 /// `3` for whole numbers, `2.5` otherwise.
 pub(crate) fn format_number(v: f64) -> String {
+    // -0 shows as "0".
+    let v = if v == 0.0 { 0.0 } else { v };
     if v.fract() == 0.0 && v.abs() < 1e15 {
         format!("{v:.0}")
     } else {
@@ -240,6 +242,7 @@ mod tests {
     #[test]
     fn numbers_round_trip() {
         assert_eq!(format_number(3.0), "3");
+        assert_eq!(format_number(-0.0), "0");
         assert_eq!(format_number(2.5), "2.5");
         assert_eq!(parse_number(" 2,5 "), Some(2.5));
         assert_eq!(parse_number(""), None);

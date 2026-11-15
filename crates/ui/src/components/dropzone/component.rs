@@ -37,6 +37,11 @@ pub fn format_size(bytes: u64) -> String {
         value /= 1024.0;
         unit += 1;
     }
+    // 1023.96 KB rounds to "1024.0 KB": show it as "1.0 MB" instead.
+    if unit > 0 && unit < UNITS.len() - 1 && (value * 10.0).round() >= 10240.0 {
+        value /= 1024.0;
+        unit += 1;
+    }
     if unit == 0 {
         format!("{bytes} B")
     } else {

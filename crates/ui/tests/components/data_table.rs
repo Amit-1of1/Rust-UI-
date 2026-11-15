@@ -188,3 +188,48 @@ fn virtualising_a_long_list_is_much_faster_than_rendering_it_all() {
         "virtual {virtual_ms:.0} ms vs all {full_ms:.0} ms"
     );
 }
+
+mod window_proofs {
+    use proptest::prelude::*;
+    use ui::components::data_table::virtual_window;
+
+    fn any_f64() -> impl Strategy<Value = f64> {
+        prop_oneof![
+            any::<f64>(),
+            prop::sample::select(vec![0.0, -0.0, 1.0, f64::INFINITY, f64::NEG_INFINITY, f64::NAN, 1e300]),
+            0.0..10_000.0f64,
+        ]
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig { cases: 20_000, ..ProptestConfig::default() })]
+
+        /// Any input at all (huge, infinite, NaN): no panic, and a range inside the table.
+        #[test]
+        fn never_panics_and_stays_in_the_table(
+            top in any_f64(), viewport in any_f64(), row in any_f64(),
+            total in prop_oneof![any::<usize>(), 0usize..500], overscan in prop_oneof![any::<usize>(), 0usize..8],
+        ) {
+            let w = virtual_window(top, viewport, row, total, overscan);
+            prop_assert!(w.start <= w.end && w.end <= total, "{w:?}");
+        }
+
+        /// Sane input: every row that is even partly on screen is rendered, plus at most
+        /// `overscan` on each side.
+        #[test]
+        fn renders_every_row_on_screen(
+            top in 0.0..100_000.0f64, viewport in 0.0..2_000.0f64, row in 1.0..80.0f64,
+            total in 0usize..3_000, overscan in 0usize..8,
+        ) {
+            let w = virtual_window(top, viewport, row, total, overscan);
+            for i in 0..total {
+                let (y0, y1) = (i as f64 * row, (i + 1) as f64 * row);
+                if y1 > top && y0 < top + viewport {
+                    prop_assert!(w.contains(&i), "row {i} on screen but not in {w:?}");
+                }
+            }
+            let on_screen = (viewport / row).ceil() as usize + 2;
+            prop_assert!(w.len() <= on_screen + 2 * overscan, "{w:?} renders too many rows");
+        }
+    }
+}

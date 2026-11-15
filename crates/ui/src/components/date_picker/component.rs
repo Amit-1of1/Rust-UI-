@@ -36,10 +36,12 @@ pub fn format_iso_date(date: Date) -> String {
 
 /// Reads `"2026-10-15"`; anything else (including a date that doesn't exist) is `None`.
 pub fn parse_iso_date(text: &str) -> Option<Date> {
+    // Digits only: `parse` alone also takes a sign, so "2026-+1-+5" used to be read.
+    let digits = |p: &&str, n: usize| p.len() == n && p.bytes().all(|b| b.is_ascii_digit());
     let mut parts = text.trim().split('-');
-    let year: i32 = parts.next().filter(|p| p.len() == 4)?.parse().ok()?;
-    let month: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
-    let day: u8 = parts.next().filter(|p| p.len() == 2)?.parse().ok()?;
+    let year: i32 = parts.next().filter(|p| digits(p, 4))?.parse().ok()?;
+    let month: u8 = parts.next().filter(|p| digits(p, 2))?.parse().ok()?;
+    let day: u8 = parts.next().filter(|p| digits(p, 2))?.parse().ok()?;
     if parts.next().is_some() {
         return None;
     }

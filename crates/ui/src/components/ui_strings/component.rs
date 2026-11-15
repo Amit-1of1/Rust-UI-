@@ -293,9 +293,31 @@ pub fn use_ui_strings() -> UiStrings {
 /// assert_eq!(ui::components::ui_strings::fill("Select {row}", &[("row", "Ada")]), "Select Ada");
 /// ```
 pub fn fill(template: &str, values: &[(&str, &str)]) -> String {
-    values
-        .iter()
-        .fold(template.to_string(), |out, (name, value)| {
-            out.replace(&format!("{{{name}}}"), value)
-        })
+    // One pass over the template: a value is never searched for placeholders itself, so an
+    // author called "{text}" or a file called "a{size}.png" is shown as written.
+    let mut out = String::with_capacity(template.len());
+    let mut rest = template;
+    while let Some(open) = rest.find('{') {
+        out.push_str(&rest[..open]);
+        let after = &rest[open + 1..];
+        let value = after.find('}').and_then(|close| {
+            let name = &after[..close];
+            values
+                .iter()
+                .find(|(n, _)| *n == name)
+                .map(|(_, v)| (*v, close))
+        });
+        match value {
+            Some((v, close)) => {
+                out.push_str(v);
+                rest = &after[close + 1..];
+            }
+            None => {
+                out.push('{');
+                rest = after;
+            }
+        }
+    }
+    out.push_str(rest);
+    out
 }
