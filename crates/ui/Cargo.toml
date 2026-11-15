@@ -67,3 +67,7 @@ native = []
 # when one is present, and `MainContent` moves focus after a route change. Experimental
 # (docs/STABILITY.md).
 router = ["dioxus/router"]
+
+[lints.rust]
+# `cargo kani` builds with `--cfg kani` (src/kani_proofs.rs, docs/notes/kani.md).
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(kani)"] }
