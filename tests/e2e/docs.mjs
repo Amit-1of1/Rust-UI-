@@ -68,6 +68,8 @@ assert.match(await ported.innerText(), /Button \{ variant: ButtonVariant::Outlin
 await page.getByLabel("JSX to port").fill('<Badge variant="secondary">New</Badge>');
 await page.waitForFunction(() => /BadgeVariant::Secondary/.test(document.querySelector("pre.port-code")?.textContent ?? ""));
 assert.match(await page.locator("main").innerText(), /atoll add badge/);
+// Keep the history as the later Back-button checks expect it.
+await page.goBack();
 
 // The theme builder: a typed brand colour recolours the preview, and the proof table says
 // both modes pass AA. #4f46e5 is already readable with white, so light mode keeps it as is.
