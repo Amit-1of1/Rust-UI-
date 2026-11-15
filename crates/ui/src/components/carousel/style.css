@@ -22,7 +22,7 @@
   display: flex;
   box-sizing: border-box;
   min-height: 8rem;
-  flex: 0 0 80%;
+  flex: 0 0 var(--dx-carousel-item, 80%);
   align-items: center;
   justify-content: center;
   border: 1px solid var(--primary-color-6);

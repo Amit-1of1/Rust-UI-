@@ -1,6 +1,6 @@
 # Textarea
 
-- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add textarea` or `dx components add textarea --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::textarea::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The textarea element is used to allow users to enter multi-line text input in a user interface.
@@ -16,6 +16,10 @@ textarea {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -54,6 +58,9 @@ pub fn Textarea(
     /// `field-sizing: content`, no JavaScript). Browsers without it keep a fixed height.
     #[props(default)]
     autosize: bool,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=textarea)]
     attributes: Vec<Attribute>,

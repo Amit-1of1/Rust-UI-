@@ -1,5 +1,5 @@
 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-<nav data-slot="pagination" role="navigation" aria-label="pagination" class="dx-pagination-css">
+<nav data-slot="pagination" role="navigation" aria-label="Pagination" class="dx-pagination-css">
 <ul data-slot="pagination-content" class="dx-pagination-content-css">
 <li data-slot="pagination-item">
 <a data-slot="pagination-link" data-active=false data-size="default" data-kind="previous" aria-label="Go to previous page" class="dx-pagination-link-css" href="#">
@@ -49,7 +49,7 @@
 </li>
 </ul>
 </nav>
-<nav data-slot="pagination" role="navigation" aria-label="pagination" aria-label="Pages of results" class="dx-pagination-css">
+<nav data-slot="pagination" role="navigation" aria-label="Pagination" aria-label="Pages of results" class="dx-pagination-css">
 <ul data-slot="pagination-content" class="dx-pagination-content-css">
 <li data-slot="pagination-item">
 <button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="default" data-kind="previous" data-active=false aria-label="Go to previous page">
@@ -62,7 +62,7 @@
 </button>
 </li>
 <li data-slot="pagination-item">
-<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false>1
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false aria-label="Page 1">1
 </button>
 </li>
 <li data-slot="pagination-item">
@@ -80,15 +80,15 @@
 </span>
 </li>
 <li data-slot="pagination-item">
-<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false>5
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false aria-label="Page 5">5
 </button>
 </li>
 <li data-slot="pagination-item">
-<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=true aria-current="page">6
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=true aria-current="page" aria-label="Page 6">6
 </button>
 </li>
 <li data-slot="pagination-item">
-<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false>7
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false aria-label="Page 7">7
 </button>
 </li>
 <li data-slot="pagination-item">
@@ -106,8 +106,54 @@
 </span>
 </li>
 <li data-slot="pagination-item">
-<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false>20
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="icon" data-active=false aria-label="Page 20">20
 </button>
+</li>
+<li data-slot="pagination-item">
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="default" data-kind="next" data-active=false aria-label="Go to next page">
+<span class="dx-pagination-label-css">Next
+</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-right" data-mirror-rtl="true" aria-hidden="true">
+<path d="m9 18 6-6-6-6">
+</path>
+</svg>
+</button>
+</li>
+<li class="dx-pagination-size-css">
+<label for="dx-pager-size-n0">Rows per page
+</label>
+<span class="dx-native-select-wrapper-css">
+<select class="dx-native-select-css" id="dx-pager-size-n0">
+<option value="10">10
+</option>
+<option value="25" selected=true>25
+</option>
+<option value="50">50
+</option>
+</select>
+<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-down" aria-hidden="true" class="dx-native-select-icon-css">
+<path d="m6 9 6 6 6-6">
+</path>
+</svg>
+</span>
+</li>
+</ul>
+</nav>
+<nav data-slot="pagination" role="navigation" aria-label="Pagination" aria-label="Pages of the activity feed" class="dx-pagination-css">
+<ul data-slot="pagination-content" class="dx-pagination-content-css">
+<li data-slot="pagination-item">
+<button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="default" data-kind="previous" data-active=false aria-label="Go to previous page" aria-disabled="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="chevron-left" data-mirror-rtl="true" aria-hidden="true">
+<path d="m15 18-6-6 6-6">
+</path>
+</svg>
+<span class="dx-pagination-label-css">Previous
+</span>
+</button>
+</li>
+<li data-slot="pagination-item">
+<span class="dx-pagination-status-css" aria-current="page">Page 1
+</span>
 </li>
 <li data-slot="pagination-item">
 <button type="button" class="dx-pagination-link-css dx-pagination-button-css" data-size="default" data-kind="next" data-active=false aria-label="Go to next page">

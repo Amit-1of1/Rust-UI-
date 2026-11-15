@@ -61,3 +61,9 @@
 [dir="rtl"] .dx-switch {
   --dx-flip: -1;
 }
+
+/* Error state: `aria-invalid="true"` on the switch, or an invalid `Field` around it. */
+.dx-switch[aria-invalid="true"],
+[data-slot="field"][data-invalid="true"] .dx-switch {
+  box-shadow: 0 0 0 1px var(--error-text-color);
+}

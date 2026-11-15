@@ -51,6 +51,9 @@ pub fn Textarea(
     /// `field-sizing: content`, no JavaScript). Browsers without it keep a fixed height.
     #[props(default)]
     autosize: bool,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=textarea)]
     attributes: Vec<Attribute>,
@@ -58,6 +61,7 @@ pub fn Textarea(
 ) -> Element {
     rsx! {
         textarea {
+            "data-field-size": (field_size != crate::components::field::FieldSize::Default).then_some(field_size.class()),
             "data-slot": "textarea",
             "data-style": variant.class(),
             "data-autosize": autosize.then_some("true"),

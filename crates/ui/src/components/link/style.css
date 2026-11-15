@@ -46,3 +46,36 @@
     transition: none;
   }
 }
+
+/* Colour roles. Inherit keeps the surrounding text's colour and weight, so a link in a
+   heading or an alert matches it; the underline still marks it as a link. */
+.dx-link[data-variant="muted"] {
+  color: var(--secondary-color-5);
+  font-weight: inherit;
+}
+
+.dx-link[data-variant="inherit"] {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration-color: currentcolor;
+}
+
+.dx-link[data-variant="destructive"] {
+  color: var(--error-text-color);
+  text-decoration-color: currentcolor;
+}
+
+/* Font size, family and line height always come from the text around the link, and a long
+   link wraps with the paragraph. */
+.dx-link {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  overflow-wrap: anywhere;
+}
+
+.dx-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration-style: dotted;
+}

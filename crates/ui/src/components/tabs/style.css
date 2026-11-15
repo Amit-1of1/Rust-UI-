@@ -76,3 +76,15 @@
 .dx-tabs-content[data-state="active"] {
     display: block;
 }
+
+/* `stretch`: the list fills the container and the tabs share it equally. */
+.dx-tabs[data-stretch="true"] .dx-tabs-list {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dx-tabs[data-stretch="true"] .dx-tabs-trigger {
+  min-width: 0;
+  flex: 1 1 0;
+}

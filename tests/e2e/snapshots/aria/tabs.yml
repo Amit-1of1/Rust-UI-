@@ -5,3 +5,9 @@
   - tab "Password"
 - tabpanel "Account":
   - paragraph: Make changes to your account here.
+- tablist:
+  - tab "Profile" [selected]
+  - tab "Alerts"
+  - tab "Billing" [disabled]
+- tabpanel "Profile":
+  - paragraph: Your name and photo.

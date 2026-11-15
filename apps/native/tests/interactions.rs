@@ -281,10 +281,23 @@ fn attr(h: &Harness, selector: &str, name: &str) -> Option<String> {
 
 #[test]
 fn tooltip_opens_on_hover() {
+    // The tooltip opens after a hover delay, a timer that needs a Tokio runtime (the windowed
+    // shell has one).
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_time()
+        .build()
+        .expect("runtime");
+    let _rt = rt.enter();
     let mut h = Harness::new(demo!("tooltip"));
     assert!(h.rect("[role=tooltip]").is_none_or(|r| !r.on_screen()));
     h.move_to(1000.0, 700.0);
     h.hover("[tabindex]");
+    assert!(
+        h.rect("[role=tooltip]").is_none_or(|r| !r.on_screen()),
+        "the tooltip should wait before opening on hover"
+    );
+    rt.block_on(tokio::time::sleep(std::time::Duration::from_millis(450)));
+    h.settle();
     shot(&h, "tooltip");
     let r = h.rect("[role=tooltip]").expect("tooltip did not open");
     assert!(r.on_screen(), "{r:?}");
@@ -666,6 +679,44 @@ fn f6_moves_focus_to_the_notifications() {
 }
 
 #[test]
+fn toast_waits_while_hovered() {
+    // Toast timers need a Tokio runtime (the windowed shell has one).
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_time()
+        .build()
+        .expect("runtime");
+    let _rt = rt.enter();
+    // The toast counts down in 100 ms ticks, each run when the page settles, so wait in
+    // slices the way a running app would.
+    let wait = |h: &mut Harness, ms: u64| {
+        for _ in 0..ms / 50 {
+            rt.block_on(tokio::time::sleep(std::time::Duration::from_millis(50)));
+            h.settle();
+        }
+    };
+    let mut h = Harness::new(demo!("toast"));
+    h.click("button");
+    assert!(h.find("[data-type=success]").is_some(), "no toast");
+    h.hover("[data-type=success]");
+    assert!(
+        h.find("[data-type=success][data-paused=true]").is_some(),
+        "not paused on hover"
+    );
+    // Longer than the demo's 5 second timeout.
+    wait(&mut h, 5_500);
+    assert!(
+        h.find("[data-type=success]").is_some(),
+        "closed while hovered"
+    );
+    h.move_to(5.0, 5.0);
+    wait(&mut h, 5_500);
+    assert!(
+        h.find("[data-type=success]").is_none(),
+        "did not close after the pointer left"
+    );
+}
+
+#[test]
 fn escape_in_a_multi_select_returns_focus_to_its_button() {
     let mut h = Harness::new(demo!("multi_select"));
     h.click("button[aria-expanded]");
@@ -734,13 +785,14 @@ fn carousel_buttons_scroll_the_track() {
     let track = h.find("[tabindex='0'][role=group]").expect("track");
     let offset = |h: &Harness| h.doc.get_node(track).unwrap().scroll_offset.x;
     assert_eq!(offset(&h), 0.0);
+    // The first carousel's Previous and Next (the demo has a second carousel below).
     let buttons: Vec<usize> = h
         .doc
         .query_selector_all("button")
         .unwrap()
         .into_iter()
         .collect();
-    let next = buttons.last().copied().unwrap();
+    let next = buttons[1];
     let (x, y) = {
         let n = h.doc.get_node(next).unwrap();
         let p = n.absolute_position(0.0, 0.0);

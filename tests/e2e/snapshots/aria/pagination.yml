@@ -1,6 +1,6 @@
 - heading "Pagination" [level=2]
 - paragraph: Page navigation.
-- navigation "pagination":
+- navigation "Pagination":
   - list:
     - listitem:
       - link "Go to previous page":
@@ -25,16 +25,29 @@
     - listitem:
       - button "Go to previous page": Previous
     - listitem:
-      - button "1"
+      - button "Page 1": "1"
     - listitem: More pages
     - listitem:
-      - button "5"
+      - button "Page 5": "5"
     - listitem:
-      - button "6"
+      - button "Page 6": "6"
     - listitem:
-      - button "7"
+      - button "Page 7": "7"
     - listitem: More pages
     - listitem:
-      - button "20"
+      - button "Page 20": "20"
+    - listitem:
+      - button "Go to next page": Next
+    - listitem:
+      - text: Rows per page
+      - combobox "Rows per page":
+        - option "10"
+        - option "25" [selected]
+        - option "50"
+- navigation "Pages of the activity feed":
+  - list:
+    - listitem:
+      - button "Go to previous page" [disabled]: Previous
+    - listitem: Page 1
     - listitem:
       - button "Go to next page": Next

@@ -11,3 +11,7 @@ textarea {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).

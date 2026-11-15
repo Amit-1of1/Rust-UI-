@@ -21,3 +21,7 @@ Tooltip {
     }
 }
 ```
+
+## Timing
+
+Hovering waits `delay_ms` (400 ms by default) before the tooltip opens, so moving the pointer across a toolbar doesn't flash every tooltip. Keyboard focus opens it at once. `Tooltip { delay_ms: 0 }` opens on hover straight away. Escape closes it.

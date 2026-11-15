@@ -22,6 +22,10 @@ fn merge_class(mut class: String, attributes: Vec<Attribute>) -> (String, Vec<At
 
 #[component]
 pub fn Card(
+    /// Puts a `CardMedia` beside the content instead of above it (stacked again on narrow
+    /// screens).
+    #[props(default)]
+    horizontal: bool,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
@@ -30,6 +34,7 @@ pub fn Card(
         div {
             class,
             "data-slot": "card",
+            "data-layout": horizontal.then_some("horizontal"),
             ..attributes,
             {children}
         }
@@ -149,6 +154,62 @@ pub fn CardFooter(
         div {
             class,
             "data-slot": "card-footer",
+            ..attributes,
+            {children}
+        }
+    }
+}
+
+/// Makes the whole card a link: the card's title goes inside, and the link's click area is
+/// stretched over the card, so one press anywhere opens it while screen readers hear just the
+/// title. Buttons in the card stay pressable above it.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardLink(
+    #[props(into)] href: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    let (class, attributes) = merge_class(Styles::dx_card_link.to_string(), attributes);
+    let shown = crate::components::hooks::in_app_href(&href);
+    rsx! {
+        a {
+            class,
+            href: shown,
+            "data-slot": "card-link",
+            onclick: move |e: MouseEvent| {
+                crate::components::hooks::follow_in_app(&href, &e);
+            },
+            ..attributes,
+            {children}
+        }
+    }
+}
+
+/// Lays cards out in a grid that fits as many columns as there is room for, each at least
+/// `min_width` wide, down to one column on phones. It adds no list semantics; give it
+/// `role: "list"` and each card `role: "listitem"` when screen readers should count them.
+///
+/// # Stability
+///
+/// Experimental: may change in any release (docs/STABILITY.md).
+#[component]
+pub fn CardGroup(
+    /// The narrowest a card may get before the grid drops a column (any CSS length).
+    #[props(into, default = "16rem".to_string())]
+    min_width: String,
+    #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
+    children: Element,
+) -> Element {
+    let (class, attributes) = merge_class(Styles::dx_card_group.to_string(), attributes);
+    rsx! {
+        div {
+            class,
+            "data-slot": "card-group",
+            style: "--dx-card-min: {min_width};",
             ..attributes,
             {children}
         }

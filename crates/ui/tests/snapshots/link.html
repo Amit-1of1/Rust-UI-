@@ -1,8 +1,8 @@
 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
 <p style="margin: 0;">Read the 
-<a href="#theming" class="dx-link-css">theming guide
+<a href="#theming" data-variant="default" class="dx-link-css">theming guide
 </a> or browse the 
-<a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" class="dx-link-css">Lucide icons
+<a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" data-variant="default" class="dx-link-css">Lucide icons
 <svg xmlns="http://www.w3.org/2000/svg" width="0.875em" height="0.875em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-stroke="theme" stroke-linecap="round" stroke-linejoin="round" data-icon="external-link" class="dx-link-icon-css" aria-hidden="true">
 <path d="M15 3h6v6">
 </path>
@@ -15,18 +15,34 @@
 </span>
 </a>.
 </p>
+<p style="margin: 0; max-width: 18rem;">Links wrap with the text: 
+<a href="#start" data-variant="default" class="dx-link-css">a long link that runs over more than one line of this paragraph
+</a>.
+</p>
+<p style="margin: 0; display: flex; flex-wrap: wrap; gap: 1rem;">
+<a href="#privacy" data-variant="muted" class="dx-link-css">Privacy
+</a>
+<span style="color: var(--error-text-color);">Payment failed. 
+<a href="#billing" data-variant="inherit" class="dx-link-css">Update your card
+</a>
+</span>
+<a href="#danger" data-variant="destructive" class="dx-link-css">Delete account
+</a>
+<a role="link" aria-disabled="true" data-variant="default" class="dx-link-css">Export (Pro)
+</a>
+</p>
 <nav aria-label="Link demo">
 <ul style="display: flex; gap: 1rem; list-style: none; margin: 0; padding: 0;">
 <li>
-<a href="#link" aria-current="page" class="dx-link-css">Overview
+<a href="#link" aria-current="page" data-variant="default" class="dx-link-css">Overview
 </a>
 </li>
 <li>
-<a href="#chips" class="dx-link-css">Chips
+<a href="#chips" data-variant="default" class="dx-link-css">Chips
 </a>
 </li>
 <li>
-<a href="#icons" class="dx-link-css">Icons
+<a href="#icons" data-variant="default" class="dx-link-css">Icons
 </a>
 </li>
 </ul>

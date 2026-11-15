@@ -1,0 +1,20 @@
+{
+  "cargoDependencies": [
+    {
+      "features": [],
+      "git": "https://github.com/Amit-1of1/dioxus-components",
+      "name": "atoll-primitives",
+      "rev": "cf9e7909004e60599665ff7de387f8c04cee6dfc"
+    }
+  ],
+  "componentDependencies": [],
+  "description": "A bulleted, numbered or plain list of items. It renders a real `<ul>` or `<ol>`, so screen readers announce \"list, 3 items\" and count as you move through it. Items hold any content, other components included, and lists nest.",
+  "exclude": [
+    "docs.md",
+    "component.json"
+  ],
+  "globalAssets": [
+    "../../../assets/theme.css"
+  ],
+  "name": "list"
+}

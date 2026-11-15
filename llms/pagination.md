@@ -1,6 +1,6 @@
 # Pagination
 
-- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `ui_strings`).
+- Copy into your app: `atoll add pagination` or `dx components add pagination --git https://github.com/Amit-1of1/Rust-UI-` (also copies `hooks`, `icons`, `native_select`, `ui_strings`).
 - Import: `use crate::components::pagination::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The pagination component provides navigational controls for paged content. It exposes a consistent structure for previous/next actions, individual page links, and an optional ellipsis for truncated ranges.
@@ -121,6 +121,11 @@ pub fn PaginationEllipsis(
 /// the first and last page, so they keep focus but do nothing; long ranges collapse to
 /// "1 … 4 5 6 … 20" (`siblings` pages each side of the current one).
 ///
+/// Each page button is named "Page N" (translatable), and the current one says so with
+/// `aria-current="page"`. With `page_sizes`, a "Rows per page" select comes after the pages.
+/// When the number of pages isn't known (a cursor-based API), leave `pages` out and pass
+/// `has_next`: the pager shows Previous, "Page N" and Next.
+///
 /// For pages that are URLs, compose [`Pagination`] with [`PaginationLink`] instead.
 ///
 /// # Stability
@@ -129,9 +134,21 @@ pub fn PaginationEllipsis(
 #[component]
 pub fn Pager(
     page: usize,
+    /// How many pages there are. Leave it out (0) with `has_next` when that isn't known.
+    #[props(default)]
     pages: usize,
     on_page_change: EventHandler<usize>,
     #[props(default = 1)] siblings: usize,
+    /// For an unknown number of pages: whether there is a page after this one.
+    #[props(default)]
+    has_next: Option<bool>,
+    /// Choices for the page size ("10, 25, 50"); shows a select when not empty.
+    #[props(default)]
+    page_sizes: Vec<usize>,
+    /// The current page size, one of `page_sizes`.
+    #[props(default)]
+    page_size: usize,
+    #[props(default)] on_page_size_change: Option<EventHandler<usize>>,
     /// Goes on the `<nav>`: give it an `aria-label` ("Pages of results").
     #[props(extends = GlobalAttributes)]
     attributes: Vec<Attribute>,
@@ -151,6 +168,8 @@ use dioxus::prelude::*;
 #[component]
 pub fn Demo() -> Element {
     let mut page = use_signal(|| 6usize);
+    let mut size = use_signal(|| 25usize);
+    let mut feed = use_signal(|| 1usize);
     rsx! {
         div { style: "display: flex; flex-direction: column; gap: 1.5rem;",
         Pagination {
@@ -181,6 +200,16 @@ pub fn Demo() -> Element {
             page: page(),
             pages: 20,
             on_page_change: move |p| page.set(p),
+            page_sizes: vec![10, 25, 50],
+            page_size: size(),
+            on_page_size_change: move |n| size.set(n),
+        }
+        // Unknown total (a cursor-based feed): Previous, "Page N", Next.
+        Pager {
+            aria_label: "Pages of the activity feed",
+            page: feed(),
+            has_next: feed() < 4,
+            on_page_change: move |p| feed.set(p),
         }
         }
     }

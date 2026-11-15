@@ -7,6 +7,17 @@ The button element is used to trigger actions or events in a user interface.
 
 For a link that should look like a button (the router's `Link`, which renders its own `<a>`), spread `button_look(variant, size)` onto it: `Link { to: Route::Trips {}, attributes: button_look(ButtonVariant::Outline, ButtonSize::Default), "My trips" }`. Don't also pass `class`. A link keeps link semantics: it navigates on Enter, not Space.
 
+## Loading
+
+`loading: true` keeps the button the same size and puts a spinner over its label. The label is
+still read, `aria-busy="true"` says the action is under way, and the button stays focusable
+(`aria-disabled`, not `disabled`) but ignores presses, so a submit button can't send its form
+twice. Set it back to `false` when the work finishes.
+
+```rust
+Button { loading: saving(), onclick: move |_| save(), "Save" }
+```
+
 ## Icon-only buttons
 
 A button that shows only an icon is an `IconButton`. Its `label` is required (it becomes the `aria-label`), so an icon button with no name doesn't compile; `ButtonSize` has no icon sizes, so a plain `Button` can't be squared into one either. Mark the icon decorative.
@@ -63,6 +74,11 @@ pub fn button_look(variant: ButtonVariant, size: ButtonSize) -> Vec<Attribute>
 pub fn Button(
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: ButtonSize,
+    /// Waiting for the result of the press: a spinner covers the label without changing the
+    /// button's size, `aria-busy` and `aria-disabled` are set (focus stays on the button), and
+    /// clicks, including a form submit, do nothing until it is `false` again.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -123,6 +139,9 @@ pub fn IconButton(
     label: String,
     #[props(default)] variant: ButtonVariant,
     #[props(default)] size: IconButtonSize,
+    /// Waiting for the result of the press; see [`Button`]'s `loading`.
+    #[props(default)]
+    loading: bool,
     #[props(extends=GlobalAttributes)]
     #[props(extends=button)]
     attributes: Vec<Attribute>,
@@ -159,6 +178,7 @@ pub fn Demo() -> Element {
             Button { "Default" }
             Button { size: ButtonSize::Lg, "Large" }
             Button { disabled: true, "Disabled" }
+            LoadingDemo {}
         }
         // Icon-only buttons need a `label` (their accessible name); leaving it out doesn't compile.
         div { style: "display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.75rem;",
@@ -171,6 +191,27 @@ pub fn Demo() -> Element {
                 Trash { size: "1.25rem", "aria-hidden": "true" }
             }
         }
+    }
+}
+
+/// Press to see the loading state for two seconds; the button keeps its size.
+#[component]
+fn LoadingDemo() -> Element {
+    let mut loading = use_signal(|| false);
+    rsx! {
+        Button {
+            variant: ButtonVariant::Outline,
+            loading: loading(),
+            onclick: move |_| {
+                loading.set(true);
+                spawn(async move {
+                    dioxus_sdk_time::sleep(std::time::Duration::from_secs(2)).await;
+                    loading.set(false);
+                });
+            },
+            "Save changes"
+        }
+        Button { loading: true, "Loading" }
     }
 }
 ```

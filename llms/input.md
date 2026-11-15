@@ -1,6 +1,6 @@
 # Input
 
-- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-`.
+- Copy into your app: `atoll add input` or `dx components add input --git https://github.com/Amit-1of1/Rust-UI-` (also copies `field`).
 - Import: `use crate::components::input::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
 The input element is used to accept a text input from the user. It can be styled and configured to fit various use cases, such as forms or search bars.
@@ -15,6 +15,10 @@ input {
     {children}
 }
 ```
+
+## Sizes
+
+`field_size: FieldSize::Sm | Default | Lg` changes height, padding and text size (`size` is already the HTML attribute).
 
 ## API
 
@@ -41,6 +45,9 @@ pub fn Input(
     oncut: Option<EventHandler<ClipboardEvent>>,
     onpaste: Option<EventHandler<ClipboardEvent>>,
     onmounted: Option<EventHandler<MountedEvent>>,
+    /// `Sm`, `Default` or `Lg` (`size` is taken by the HTML attribute).
+    #[props(default)]
+    field_size: crate::components::field::FieldSize,
     #[props(extends=GlobalAttributes)]
     #[props(extends=input)]
     attributes: Vec<Attribute>,
@@ -70,6 +77,10 @@ pub fn Demo() -> Element {
             if !name.read().is_empty() {
                 p { style: "margin: 0; font-size: 0.875rem;", "Hello, {name}!" }
             }
+            Label { html_for: "gallery-search-sm", "Small" }
+            Input { id: "gallery-search-sm", field_size: crate::components::field::FieldSize::Sm, placeholder: "Filter rows" }
+            Label { html_for: "gallery-email-lg", "Large" }
+            Input { id: "gallery-email-lg", r#type: "email", field_size: crate::components::field::FieldSize::Lg, placeholder: "you@example.com" }
         }
     }
 }

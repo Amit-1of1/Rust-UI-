@@ -39,3 +39,19 @@ Card {
     CardHeader { CardTitle { "Lakeside cabin" } }
 }
 ```
+
+## Whole-card links, side media and groups
+
+- `CardLink { href }` goes inside the title. Its click area covers the whole card, while screen readers hear only the title. Buttons in the card still work on their own.
+- `Card { horizontal: true }` puts a `CardMedia` beside the content on screens at least 40rem wide, and stacks it again below that.
+- `CardGroup { min_width: "16rem" }` fits as many columns as there is room for, each at least `min_width` wide. It adds no list roles; add `role: "list"` and `role: "listitem"` yourself when the count matters.
+
+```rust
+CardGroup {
+    Card { CardHeader { CardTitle { CardLink { href: "/guides/forms", "Forms guide" } } } }
+    Card { horizontal: true,
+        CardMedia { img { src: "/cabin.jpg", alt: "The cabin" } }
+        CardHeader { CardTitle { "Lakeside cabin" } }
+    }
+}
+```

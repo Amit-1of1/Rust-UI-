@@ -46,3 +46,42 @@
   list-style: none;
   opacity: 0.6;
 }
+
+/* A disabled step: dimmed, dotted, not clickable. */
+.dx-breadcrumb-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.6;
+  text-decoration: underline dotted;
+}
+
+.dx-breadcrumb-link[aria-disabled="true"]:hover {
+  color: inherit;
+}
+
+/* The "…" button of a collapsed trail. */
+.dx-breadcrumb-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.dx-breadcrumb-ellipsis:hover {
+  color: var(--secondary-color);
+}
+
+.dx-breadcrumb-ellipsis:focus-visible {
+  outline: 2px solid var(--focused-border-color);
+  outline-offset: 2px;
+}
+
+.dx-breadcrumb-separator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
