@@ -603,7 +603,14 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             };
             let ported = atoll_cli::port::port(&src);
             if json {
-                println!("{}", ported.to_json());
+                let v = serde_json::json!({
+                    "code": ported.code,
+                    "add": ported.add,
+                    "unmapped_classes": ported.unmapped_classes,
+                    "todo": ported.todo,
+                    "trees": ported.trees,
+                });
+                println!("{v}");
             } else {
                 match &out {
                     Some(path) => {

@@ -6,6 +6,7 @@
 mod generated;
 mod examples;
 mod landing;
+mod port_page;
 mod pricing;
 mod theme_builder;
 
@@ -234,6 +235,7 @@ fn App() -> Element {
                         }
                         li { NavLink { slug: "theme-builder", title: "Theme builder", current: page() } }
                         li { NavLink { slug: "examples", title: "Example apps", current: page() } }
+                        li { NavLink { slug: "port", title: "From shadcn", current: page() } }
                         li { NavLink { slug: "pricing", title: "Pricing", current: page() } }
                     }
                     h2 { class: "docs-nav-heading", "Components" }
@@ -295,7 +297,7 @@ fn Page(slug: String) -> Element {
 
 /// Whether `slug` names a page other than the home page.
 fn is_doc_page(slug: &str) -> bool {
-    matches!(slug, "pricing" | "theme-builder" | "examples")
+    matches!(slug, "pricing" | "theme-builder" | "examples" | "port")
         || GUIDES.iter().any(|(s, _, _, _)| *s == slug)
         || ENTRIES.iter().any(|e| e.name == slug)
 }
@@ -309,6 +311,7 @@ fn DocPage(slug: String) -> Element {
         "pricing" => return rsx! { pricing::PricingPage {} },
         "theme-builder" => return rsx! { theme_builder::ThemeBuilderPage {} },
         "examples" => return rsx! { examples::ExamplesPage {} },
+        "port" => return rsx! { port_page::PortPage {} },
         _ => {}
     }
     if let Some((_, title, _, source)) = GUIDES.iter().find(|(s, _, _, _)| *s == slug) {

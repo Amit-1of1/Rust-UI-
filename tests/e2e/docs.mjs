@@ -60,6 +60,15 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 await page.getByRole("heading", { name: "Am I locking my app to Dioxus?" }).waitFor();
 await page.goBack();
 
+// "From shadcn": the example ports on load, and typing re-ports it.
+await page.goto(base + "#port");
+await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "From shadcn");
+const ported = page.getByLabel("Ported Rust code");
+assert.match(await ported.innerText(), /Button \{ variant: ButtonVariant::Outline/);
+await page.getByLabel("JSX to port").fill('<Badge variant="secondary">New</Badge>');
+await page.waitForFunction(() => /BadgeVariant::Secondary/.test(document.querySelector("pre.port-code")?.textContent ?? ""));
+assert.match(await page.locator("main").innerText(), /atoll add badge/);
+
 // The theme builder: a typed brand colour recolours the preview, and the proof table says
 // both modes pass AA. #4f46e5 is already readable with white, so light mode keeps it as is.
 await page.goto(base + "#theme-builder");

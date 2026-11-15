@@ -212,16 +212,6 @@ impl Ported {
         }
         out
     }
-
-    pub fn to_json(&self) -> serde_json::Value {
-        serde_json::json!({
-            "code": self.code,
-            "add": self.add,
-            "unmapped_classes": self.unmapped_classes,
-            "todo": self.todo,
-            "trees": self.trees,
-        })
-    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -1147,7 +1137,12 @@ export function LoginForm() {
     /// Every mapping points at a component, enum and variant that exist in the kit.
     #[test]
     fn mappings_match_the_kit() {
-        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../ui/src/components");
+        // This file is also built into the docs site (`apps/docs/src/port_page.rs`).
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .ancestors()
+            .map(|d| d.join("crates/ui/src/components"))
+            .find(|d| d.is_dir())
+            .expect("the kit's components folder");
         for m in MAPS {
             let dir = root.join(m.add);
             let mut src = String::new();
