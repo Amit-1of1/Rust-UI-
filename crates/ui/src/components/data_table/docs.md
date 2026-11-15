@@ -51,6 +51,8 @@ rsx! {
 
 On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page_size)` applies the same filter and sort rules to rows in memory; with a database, turn `TableQuery` into `WHERE`/`ORDER BY`/`LIMIT q.page_size OFFSET q.offset()`. Selection is per page in server mode (it clears when a new page arrives). In the fullstack trial this took a 20,000-customer page from a 4.4 MB HTML response to 44 KB.
 
+To send the query to a server function or keep it in the address bar (so a filtered, sorted page can be shared or reloaded), `q.to_query_string()` gives `q=ada&sort=1&dir=desc&page=2&size=25` and `TableQuery::from_query_string(&s, 25)` reads it back; a hand-edited string never fails, bad parts fall back to the defaults.
+
 ## Accessibility
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".

@@ -73,3 +73,25 @@ fn sorting_is_stable_and_none_keeps_original_order() {
     );
     assert_eq!(none.rows, [0, 1, 2, 3]);
 }
+
+#[test]
+fn table_query_round_trips_through_a_query_string() {
+    let q = TableQuery {
+        query: "ada l&co 100%".into(),
+        sort: Some((1, Descending)),
+        page: 2,
+        page_size: 25,
+    };
+    let s = q.to_query_string();
+    assert_eq!(s, "q=ada%20l%26co%20100%25&sort=1&dir=desc&page=2&size=25");
+    assert_eq!(TableQuery::from_query_string(&s, 10), q);
+    assert_eq!(TableQuery::from_query_string(&format!("?{s}"), 10), q);
+    // The first page leaves out everything but the size.
+    assert_eq!(TableQuery::new(10).to_query_string(), "size=10");
+    // Hand-edited URLs never fail.
+    let odd = TableQuery::from_query_string("page=x&size=&sort=2&junk&q=a+b%zz", 20);
+    assert_eq!(odd.page, 0);
+    assert_eq!(odd.page_size, 20);
+    assert_eq!(odd.sort, Some((2, Ascending)));
+    assert_eq!(odd.query, "a b%zz");
+}

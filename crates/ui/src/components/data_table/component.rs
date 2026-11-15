@@ -111,6 +111,91 @@ impl TableQuery {
     pub fn offset(&self) -> usize {
         self.page * self.page_size
     }
+
+    /// The query as a URL query string, such as `q=ada%20l&sort=1&dir=desc&page=2&size=25`, to
+    /// send to a server function or keep in the address bar. Empty and default parts are left
+    /// out; [`TableQuery::from_query_string`] reads it back.
+    pub fn to_query_string(&self) -> String {
+        let mut parts = Vec::new();
+        if !self.query.is_empty() {
+            parts.push(format!("q={}", percent_encode(&self.query)));
+        }
+        if let Some((col, dir)) = self.sort {
+            let dir = match dir {
+                SortDirection::Ascending => "asc",
+                SortDirection::Descending => "desc",
+                SortDirection::None => "none",
+            };
+            parts.push(format!("sort={col}&dir={dir}"));
+        }
+        if self.page > 0 {
+            parts.push(format!("page={}", self.page));
+        }
+        parts.push(format!("size={}", self.page_size));
+        parts.join("&")
+    }
+
+    /// Reads [`TableQuery::to_query_string`]'s output (a leading `?` is fine). Unknown keys are
+    /// ignored and bad numbers fall back to the defaults, so a hand-edited URL never fails;
+    /// `default_size` is the page size when `size` is missing.
+    pub fn from_query_string(s: &str, default_size: usize) -> Self {
+        let mut q = Self::new(default_size);
+        let (mut col, mut dir) = (None, SortDirection::Ascending);
+        for pair in s.trim_start_matches('?').split('&') {
+            let (k, v) = pair.split_once('=').unwrap_or((pair, ""));
+            match k {
+                "q" => q.query = percent_decode(v),
+                "sort" => col = v.parse().ok(),
+                "dir" => {
+                    dir = match v {
+                        "desc" => SortDirection::Descending,
+                        "none" => SortDirection::None,
+                        _ => SortDirection::Ascending,
+                    }
+                }
+                "page" => q.page = v.parse().unwrap_or(0),
+                "size" => q.page_size = v.parse().unwrap_or(default_size),
+                _ => {}
+            }
+        }
+        q.sort = col.map(|c| (c, dir));
+        q
+    }
+}
+
+fn percent_encode(s: &str) -> String {
+    let mut out = String::new();
+    for b in s.bytes() {
+        if b.is_ascii_alphanumeric() || b"-_.~".contains(&b) {
+            out.push(b as char);
+        } else {
+            out.push_str(&format!("%{b:02X}"));
+        }
+    }
+    out
+}
+
+fn percent_decode(s: &str) -> String {
+    let b = s.as_bytes();
+    let mut out = Vec::with_capacity(b.len());
+    let mut i = 0;
+    while i < b.len() {
+        match b[i] {
+            b'+' => out.push(b' '),
+            b'%' if i + 2 < b.len() => {
+                match u8::from_str_radix(std::str::from_utf8(&b[i + 1..i + 3]).unwrap_or(""), 16) {
+                    Ok(v) => {
+                        out.push(v);
+                        i += 2;
+                    }
+                    Err(_) => out.push(b'%'),
+                }
+            }
+            c => out.push(c),
+        }
+        i += 1;
+    }
+    String::from_utf8_lossy(&out).into_owned()
 }
 
 /// What the table shows for a given query, sort and page. Pure, so it is easy to test.
