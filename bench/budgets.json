@@ -25,7 +25,9 @@
         "assets/reset.scoped.css": 0.3,
         "assets/style.css": 1.1,
         "assets/theme.css": 4.8,
-        "assets/theme.scoped.css": 5.1
+        "assets/theme.scoped.css": 5.1,
+        "assets/module_0_LazyMoreSections.wasm": 893.7,
+        "assets/module_1_LazyBlockPage.wasm": 170.7
       }
     },
     "site": {

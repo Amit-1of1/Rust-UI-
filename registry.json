@@ -323,6 +323,7 @@
       "registryDependencies": [
         "button",
         "input",
+        "popover",
         "table",
         "ui_strings"
       ]
