@@ -4,10 +4,15 @@
       "features": [],
       "git": "https://github.com/Amit-1of1/dioxus-components",
       "name": "atoll-primitives",
-      "rev": "cda2513bb8ea0e9d2f72cc85ed966e3b83d4e1ee"
+      "rev": "21f75f98dff1fcbf6f1226d04d8d6bbdfd5fab77"
     }
   ],
-  "componentDependencies": [],
+  "componentDependencies": [
+    {
+      "git": "https://github.com/Amit-1of1/Rust-UI-",
+      "name": "icons"
+    }
+  ],
   "description": "The context menu component can be used to define a context menu that is displayed when the user right-clicks on an element. It can contain various menu items that the user can interact with.",
   "exclude": [
     "docs.md",

@@ -1,5 +1,6 @@
 - listbox "Actions":
   - option "Edit"
   - option "Duplicate"
+  - option "Move to"
   - option "Archive"
   - option "Delete"

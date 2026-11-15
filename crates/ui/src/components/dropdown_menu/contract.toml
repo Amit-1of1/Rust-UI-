@@ -6,12 +6,17 @@ roles = ["listbox", "option"]
 gaps = [
     "The items are a `listbox` of `option`s, not a `menu` of `menuitem`s (upstream markup).",
     "Opening does not move focus to the first item; the first arrow key does.",
+    "A submenu's item is an `option`, which cannot carry `aria-haspopup` or `aria-expanded`; it names its open list with `aria-controls` instead, and that list is a `group` of options labelled by the item (a listbox cannot hold a listbox).",
+    "Submenus open to the inline end and do not flip at screen edges; in right-to-left text ArrowRight still opens and ArrowLeft still closes.",
 ]
 
 [parts]
 trigger = "button[aria-haspopup]"
 list = "[role=listbox]"
 item = "[role=option]"
+subtrigger = "[role=option][data-state]"
+sublist = "[role=listbox] [role=group]"
+subitem = "[role=listbox] [role=group] [role=option]"
 
 [[states]]
 name = "open"
@@ -75,7 +80,7 @@ press ArrowDown*2
 press ArrowUp
 focused item@1
 press ArrowUp
-focused item@4
+focused item@5
 """
 
 [[keys]]
@@ -101,6 +106,82 @@ test = """
 focus trigger
 press Enter
 press Escape
+state closed
+focused trigger
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On an item with a submenu"
+does = "Opens the submenu and moves focus to its first item."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*3
+focused subtrigger@1
+press ArrowRight
+visible sublist
+focused subitem@1
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "In a submenu"
+does = "Moves focus to the next item of the submenu; the menu behind it stays put."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*3
+press ArrowRight
+press ArrowDown
+focused subitem@2
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "In a submenu"
+does = "Closes the submenu and returns focus to the item that opened it."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*3
+press ArrowRight
+press ArrowLeft
+hidden sublist
+focused subtrigger@1
+state open
+"""
+
+[[keys]]
+key = "Escape"
+when = "In a submenu"
+does = "Closes only the submenu; focus goes back to the item that opened it."
+native = true
+test = """
+focus trigger
+press Enter
+press ArrowDown*3
+press ArrowRight
+press Escape
+hidden sublist
+focused subtrigger@1
+state open
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a submenu item"
+does = "Chooses the item, closes the whole menu and returns focus to the trigger."
+native = false
+test = """
+focus trigger
+press Enter
+press ArrowDown*3
+press ArrowRight
+press Enter
 state closed
 focused trigger
 """

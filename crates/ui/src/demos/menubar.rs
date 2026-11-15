@@ -26,8 +26,30 @@ pub fn Demo() -> Element {
                             },
                             "Open"
                         }
+                        // A submenu: its trigger is item 2 of this menu, its items count from 0.
+                        MenubarSub { index: 2usize,
+                            MenubarSubTrigger { "Open recent" }
+                            MenubarSubContent {
+                                MenubarItem {
+                                    index: 0usize,
+                                    value: "recent:notes.md".to_string(),
+                                    on_select: move |value| {
+                                        tracing::info!("Selected value: {}", value);
+                                    },
+                                    "notes.md"
+                                }
+                                MenubarItem {
+                                    index: 1usize,
+                                    value: "recent:budget.csv".to_string(),
+                                    on_select: move |value| {
+                                        tracing::info!("Selected value: {}", value);
+                                    },
+                                    "budget.csv"
+                                }
+                            }
+                        }
                         MenubarItem {
-                            index: 2usize,
+                            index: 3usize,
                             value: "save".to_string(),
                             on_select: move |value| {
                                 tracing::info!("Selected value: {}", value);
