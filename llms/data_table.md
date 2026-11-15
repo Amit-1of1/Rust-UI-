@@ -1,9 +1,9 @@
 # DataTable
 
-- Copy into your app: `atoll add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `table`, `ui_strings`).
+- Copy into your app: `atoll add data_table` or `dx components add data_table --git https://github.com/Amit-1of1/Rust-UI-` (also copies `button`, `input`, `popover`, `table`, `ui_strings`).
 - Import: `use crate::components::data_table::*;` after copying, or `use ui::prelude::*;` with the `atoll-ui` crate.
 
-A table with sorting, a filter box, pagination and optional row selection, built on `Table`.
+A table with sorting, a filter box, pagination, optional row selection, column hiding and resizing, CSV export and virtualised rows for long lists, built on `Table`.
 
 ```rust
 DataTable {
@@ -19,6 +19,20 @@ DataTable {
 Cells are text. For custom content (a badge, a link, a row menu) pass `render_cell: move |(row, col)| rsx! { ... }`; `row` is the index into `rows`, and the text in `rows` is still what filtering and sorting use. For a different layout altogether, compose `Table` yourself and call `table_view(...)` for the filter, sort and page logic; it is a pure function.
 
 Outside filters or actions (a date range, a status select, an "Export" button) go in `toolbar: rsx! { ... }`; they sit in the same row as the filter box and wrap on narrow screens.
+
+## Columns: hide, resize
+
+`column_menu: true` adds a "Columns" menu to the toolbar with a checkbox per column; `DataColumn::hidden()` starts a column hidden and `.always_visible()` keeps it out of the menu (the last shown column can't be hidden either). Hidden columns are not searched by the filter box and not exported. `on_columns_change` gets every column's visibility, to save it.
+
+`resizable_columns: true` gives every header a handle on its end edge: drag it, or Tab to it and use the arrow keys (Shift for bigger steps, Home for the narrowest). The first resize fixes every column at the width it had, and the table becomes exactly as wide as its columns (it scrolls sideways when wider than its box); long cell text is then cut with "…". `DataColumn::width(px)` and `.min_width(px)` set a start width and a limit; `on_column_resize` gets `(column, width)` when a resize ends.
+
+## Export to CSV
+
+`exportable: true` adds an "Export CSV" button. It saves the selected rows, or every row that matches the filter when none are selected (all pages, not just the shown one), in the current sort order and with the shown columns. In the browser it downloads `<caption>.csv` (`export_name` changes it). On desktop and native there's no browser download: pass `on_export: move |csv: String| { ... }` and save it yourself (with a file dialog). `table_csv(&columns, &rows, &order)` is the pure function behind it: RFC 4180 quoting, and cells that would run as spreadsheet formulas (`=`, `+`, `-`, `@` at the start) get a `'` in front, except numbers in `numeric` columns. In server mode the button exports the page you have; export everything on the server with `table_csv` there.
+
+## Long lists: virtualised rows
+
+`virtual_height: Some(480.0)` puts the rows in a scrolling box that tall (CSS pixels) and renders only the rows in view plus a few either side, so 100,000 rows cost what 30 do; the header stays at the top. Paging is off. Every row is `row_height` pixels tall (40 by default; long text is cut with "…"), which is what lets the table know where each row is without measuring it. The table keeps `aria-rowcount` and each row `aria-rowindex`, so screen readers still say "row 5,001 of 10,000". `virtual_window(...)` is the windowing maths, for your own layouts. Past a few thousand rows coming from a server, use server mode instead: virtualising saves the rendering, not the download.
 
 Paging and selection are kept as row indices, so both reset when `rows` changes (an outside filter, an insert or a delete).
 
@@ -44,6 +58,8 @@ On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".
 - Keyboard: everything is a native control (Tab, Space, Enter).
+- Column menu: native checkboxes named after their column in a popover. Resize handles are focusable `role="separator"` elements named "Resize <column>", with `aria-valuenow` (the width in pixels) and `aria-valuemin`.
+- Virtualised: the scroll box is a focusable `role="region"` named by the caption, so keyboard users can scroll it; the table has `aria-rowcount` and rows `aria-rowindex`.
 - Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced. While `loading` it reads "Loading" and the table has `aria-busy`.
 - Reduced motion: no animation.
 
@@ -53,7 +69,7 @@ Original to this repo (sorting headers come from our `Table`). The feature set f
 
 ## Stability
 
-Experimental. The column API and the `toolbar` slot are new and may change in any release; see `docs/STABILITY.md` in the kit repository.
+Experimental. The column API, the `toolbar` slot, column visibility, resizing, export and virtual rows are new and may change in any release; see `docs/STABILITY.md` in the kit repository.
 
 ## API
 
@@ -68,6 +84,15 @@ pub struct DataColumn {
     pub sortable: bool,
     /// Right-aligned, and sorted as numbers (`$1,200`, `45%` and `3.5` all parse).
     pub numeric: bool,
+    /// Not shown, not searched by the filter box and not exported. With `column_menu` the
+    /// reader can show it again.
+    pub hidden: bool,
+    /// Listed in the column menu, so the reader can hide it (default `true`).
+    pub hideable: bool,
+    /// Width in CSS pixels. `None` sizes the column by its content until someone resizes it.
+    pub width: Option<f64>,
+    /// The narrowest a resize can make the column, in CSS pixels (default 48).
+    pub min_width: f64,
 }
 
 /// What a [`DataTable`] in server mode asks for: the filter text, the sort and the page.
@@ -97,8 +122,9 @@ pub struct TableView {
     pub page: usize,
 }
 
-/// Filter (every whitespace-separated term must appear in some cell, ignoring case), sort
-/// (stable; unparsable numbers last) and paginate (`page_size` 0 shows everything).
+/// Filter (every whitespace-separated term must appear in some cell of a column that is not
+/// `hidden`, ignoring case), sort (stable; unparsable numbers last) and paginate (`page_size`
+/// 0 shows everything).
 pub fn table_view(
     columns: &[DataColumn],
     rows: &[Vec<String>],
@@ -108,9 +134,33 @@ pub fn table_view(
     page_size: usize,
 ) -> TableView
 
+/// The rows in `order` (original indices, as in [`TableView::rows`]) as CSV: a header line,
+/// then one line per row, with only the columns that are not `hidden`. Follows RFC 4180
+/// (comma separated, CRLF line ends, fields with commas, quotes or line breaks quoted).
+///
+/// A text cell that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a `'`
+/// in front, so a spreadsheet opens it as text instead of running it as a formula (CSV
+/// injection). Numbers in `numeric` columns, such as `-12.5`, are left alone.
+pub fn table_csv(columns: &[DataColumn], rows: &[Vec<String>], order: &[usize]) -> String
+
+/// Which rows a virtualised table renders: the ones inside a `viewport` px tall window
+/// scrolled `scroll_top` px down a list of `total` rows of `row_height` px each, plus
+/// `overscan` rows on each side so a fast scroll doesn't show blank space. Positions are in
+/// display order (indices into [`TableView::rows`]).
+pub fn virtual_window(
+    scroll_top: f64,
+    viewport: f64,
+    row_height: f64,
+    total: usize,
+    overscan: usize,
+) -> std::ops::Range<usize>
+
 /// A table with sorting, a filter box, pagination and optional row selection. Cells are text
-/// unless `render_cell` is given; `toolbar` adds controls beside the filter box. For a different
-/// layout compose `Table` yourself and reuse [`table_view`].
+/// unless `render_cell` is given; `toolbar` adds controls beside the filter box. It can also
+/// let the reader hide columns (`column_menu`), resize them (`resizable_columns`) and save
+/// what they see as CSV (`exportable`), and it renders only the visible rows of a long list
+/// (`virtual_height`). For a different layout compose `Table` yourself and reuse
+/// [`table_view`], [`table_csv`] and [`virtual_window`].
 ///
 /// # Stability
 ///
@@ -122,7 +172,7 @@ pub fn DataTable(
     /// Describes the table to assistive tech and is shown below it.
     #[props(into)]
     caption: String,
-    /// Rows per page; `0` shows all rows.
+    /// Rows per page; `0` shows all rows. Ignored when `virtual_height` is set.
     #[props(default = 10)]
     page_size: usize,
     #[props(default = true)] filterable: bool,
@@ -150,6 +200,37 @@ pub fn DataTable(
     /// A page is being fetched: the table is marked busy and the status says so.
     #[props(default)]
     loading: bool,
+    /// Show a "Columns" menu in the toolbar with a checkbox for every `hideable` column.
+    #[props(default)]
+    column_menu: bool,
+    /// Called with every column's visibility (`true` = shown) when the reader changes it.
+    #[props(default)]
+    on_columns_change: Callback<Vec<bool>>,
+    /// Give every header a resize handle: drag it, or focus it and use the arrow keys.
+    #[props(default)]
+    resizable_columns: bool,
+    /// Called with `(column, width in CSS pixels)` when a resize ends, to save the layout.
+    #[props(default)]
+    on_column_resize: Callback<(usize, f64)>,
+    /// Show an "Export CSV" button in the toolbar. It exports the selected rows, or every row
+    /// that matches the filter when none are selected, in the current sort order and with
+    /// the visible columns (see [`table_csv`]).
+    #[props(default)]
+    exportable: bool,
+    /// Receives the CSV instead of the browser download. Needed on desktop and native, where
+    /// there is no browser to download it (save it with a file dialog there).
+    #[props(default)]
+    on_export: Option<Callback<String>>,
+    /// The downloaded file's name. Defaults to the caption, as `team-directory.csv`.
+    #[props(default, into)]
+    export_name: Option<String>,
+    /// Virtualise: show the rows in a scrolling box this many CSS pixels tall and render only
+    /// the rows in view, so 100,000 rows cost what 30 do. Paging is off; the header stays put.
+    #[props(default)]
+    virtual_height: Option<f64>,
+    /// Every row's height in CSS pixels when virtualised. Long cell text is cut with "…".
+    #[props(default = 40.0)]
+    row_height: f64,
 ) -> Element
 ```
 
@@ -187,12 +268,13 @@ pub fn Demo() -> Element {
         .map(|(a, b, c, d)| vec![a.to_string(), b.to_string(), c.to_string(), d.to_string()])
         .collect();
     let columns = vec![
-        DataColumn::new("Name").sortable(),
+        DataColumn::new("Name").sortable().always_visible(),
         DataColumn::new("Team").sortable(),
         DataColumn::new("Office"),
         DataColumn::new("Salary").sortable().numeric(),
     ];
     let mut picked = use_signal(Vec::<usize>::new);
+    let orders = use_hook(orders);
     rsx! {
         div { style: "display: grid; gap: 0.75rem;",
             DataTable {
@@ -202,6 +284,9 @@ pub fn Demo() -> Element {
                 page_size: 5,
                 selectable: true,
                 on_select: move |s| picked.set(s),
+                column_menu: true,
+                resizable_columns: true,
+                exportable: true,
                 toolbar: rsx! {
                     Toggle {
                         pressed: research_only(),
@@ -211,7 +296,36 @@ pub fn Demo() -> Element {
                 },
             }
             p { style: "margin: 0; font-size: 0.875rem;", "Selected rows: {picked().len()}" }
+            // A long list: only the rows in view are rendered, so 10,000 cost what 20 do.
+            DataTable {
+                columns: vec![
+                    DataColumn::new("Order").sortable(),
+                    DataColumn::new("Customer").sortable(),
+                    DataColumn::new("Status"),
+                    DataColumn::new("Total").sortable().numeric(),
+                ],
+                rows: orders.clone(),
+                caption: "10,000 orders",
+                virtual_height: 360.0,
+                exportable: true,
+            }
         }
     }
+}
+
+/// 10,000 made-up orders for the virtualised table, the same on every run.
+fn orders() -> Vec<Vec<String>> {
+    const CUSTOMERS: [&str; 6] = ["Acme", "Globex", "Initech", "Umbrella", "Hooli", "Vandelay"];
+    const STATUS: [&str; 4] = ["Paid", "Pending", "Refunded", "Shipped"];
+    (0..10_000_usize)
+        .map(|i| {
+            vec![
+                format!("#{:05}", i + 1),
+                CUSTOMERS[(i * 7) % CUSTOMERS.len()].to_string(),
+                STATUS[(i * 3) % STATUS.len()].to_string(),
+                format!("${}.{:02}", (i * 37) % 5000 + 5, (i * 13) % 100),
+            ]
+        })
+        .collect()
 }
 ```

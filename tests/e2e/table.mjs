@@ -64,5 +64,84 @@ const edges = await table.evaluate((t) => {
 });
 assert.ok(Math.abs(edges.nameHead - edges.nameCell) <= 1, `Name header starts with its cells ${JSON.stringify(edges)}`);
 assert.ok(Math.abs(edges.salaryHead - edges.salaryCell) <= 1, `Salary header ends with its cells ${JSON.stringify(edges)}`);
+
+// Data table v2. Export: 5 rows are selected above, so the file has those 5 and a header.
+const [download] = await Promise.all([
+  page.waitForEvent("download"),
+  root.getByRole("button", { name: "Export CSV" }).click(),
+]);
+assert.equal(download.suggestedFilename(), "team-directory.csv");
+const csv = (await import("node:fs")).readFileSync(await download.path(), "utf8");
+const lines = csv.replace(/^﻿/, "").trimEnd().split("\r\n");
+assert.equal(lines[0], "Name,Team,Office,Salary");
+assert.equal(lines.length, 6, csv);
+assert.equal(lines[1], 'Donald Knuth,Research,Stanford,"$170,000"', "in the table's sort order, commas quoted");
+
+// Column menu: hide Office, then show it again.
+const heads = () => table.locator("thead th").count();
+const before = await heads();
+await root.getByRole("button", { name: "Columns" }).click();
+const office = page.getByRole("checkbox", { name: "Office" });
+await office.uncheck();
+await page.waitForTimeout(100);
+assert.equal(await heads(), before - 1, "Office is hidden");
+assert.equal(await table.getByRole("columnheader", { name: "Office" }).count(), 0);
+assert.equal(await page.getByRole("checkbox", { name: "Name" }).count(), 0, "Name can't be hidden");
+await office.check();
+await page.waitForTimeout(100);
+assert.equal(await heads(), before, "Office is back");
+await page.keyboard.press("Escape");
+
+// Resize from the keyboard: two steps of 16 px.
+const nameHead = table.getByRole("columnheader", { name: /^Name/ });
+const width = async (head) => (await head.boundingBox()).width;
+const nameBefore = await width(nameHead);
+const nameHandle = table.getByRole("separator", { name: "Resize Name" });
+await nameHandle.focus();
+await page.keyboard.press("ArrowRight");
+await page.waitForTimeout(100);
+await page.keyboard.press("ArrowRight");
+await page.waitForTimeout(150);
+const nameAfter = await width(nameHead);
+assert.ok(Math.abs(nameAfter - nameBefore - 32) <= 2, `Name ${nameBefore} -> ${nameAfter}`);
+assert.equal(await nameHandle.getAttribute("aria-valuenow"), String(Math.round(nameAfter)));
+await page.keyboard.press("Home");
+await page.waitForTimeout(150);
+assert.ok(Math.abs((await width(nameHead)) - 48) <= 2, "Home goes to the narrowest");
+
+// Resize with the pointer: drag Team's edge 60 px.
+const teamHead = table.getByRole("columnheader", { name: /^Team/ });
+const teamBefore = await width(teamHead);
+const handle = await table.getByRole("separator", { name: "Resize Team" }).boundingBox();
+const y = handle.y + handle.height / 2;
+await page.mouse.move(handle.x + handle.width / 2, y);
+await page.mouse.down();
+await page.waitForTimeout(100);
+await page.mouse.move(handle.x + 30, y, { steps: 3 });
+await page.mouse.move(handle.x + 60, y, { steps: 3 });
+await page.mouse.up();
+await page.waitForTimeout(150);
+const teamAfter = await width(teamHead);
+assert.ok(Math.abs(teamAfter - teamBefore - 60) <= 4, `Team ${teamBefore} -> ${teamAfter}`);
+
+// Virtualised: 10,000 rows, a few dozen in the DOM, and scrolling brings the end in.
+const orders = page.locator("table", { has: page.locator("caption", { hasText: "10,000 orders" }) });
+const viewport = page.getByRole("region", { name: "10,000 orders" });
+await viewport.scrollIntoViewIfNeeded();
+assert.equal(await orders.getAttribute("aria-rowcount"), "10001");
+const rendered = () => orders.locator("tbody tr[aria-rowindex]").count();
+assert.ok((await rendered()) < 40, `${await rendered()} rows in the DOM`);
+const timeTo = async (top, text) => {
+  const start = Date.now();
+  await viewport.evaluate((el, top) => { el.scrollTop = top; }, top);
+  await orders.locator("td", { hasText: text }).first().waitFor({ state: "visible", timeout: 5000 });
+  return Date.now() - start;
+};
+const middle = await timeTo(5000 * 40, "#05001");
+const end = await timeTo(10_000 * 40, "#10000");
+assert.ok((await rendered()) < 40, "still a few dozen rows after scrolling");
+const row = await orders.locator("tbody tr[aria-rowindex]").last().getAttribute("aria-rowindex");
+assert.equal(row, "10001", "the last row says it is row 10,001 (the header is row 1)");
+console.log(`table: virtual scroll to the middle ${middle} ms, to the end ${end} ms`);
 console.log("table: ok");
 await browser.close();

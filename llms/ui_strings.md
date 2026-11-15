@@ -58,6 +58,12 @@ pub struct UiStrings {
     pub showing_rows: String,
     /// `{page}` and `{pages}` are page numbers.
     pub page_of: String,
+    /// The data table's column visibility menu button.
+    pub columns: String,
+    /// The data table's export button.
+    pub export_csv: String,
+    /// A column resize handle's name. `{column}` is the column header.
+    pub resize_column: String,
     // Multi-select
     pub select_placeholder: String,
     /// `{label}` is the multi-select's name.

@@ -9,6 +9,8 @@ const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
+const consoleErrors = [];
+page.on("console", (m) => m.type() === "error" && consoleErrors.push(m.text().slice(0, 300)));
 await page.goto(base);
 await page.waitForSelector(".docs-main");
 await page.waitForTimeout(1000);
@@ -105,10 +107,10 @@ await page.waitForFunction(() => document.getElementById("page-title")?.textCont
 // Filter narrows the component list.
 const filterBox = page.getByLabel("Filter components");
 await filterBox.fill("date");
-// The list re-renders after the input event; Firefox gets there a frame later than Chromium.
-// On main (2026-11-01) WebKit once left the list unfiltered for 2 s after fill() right after a
-// Back navigation; if it hasn't narrowed after a second, the text is typed again key by key.
-// The failure message keeps the box's value, so a filter that really broke still shows.
+// The list re-renders after the input event; Firefox gets there a frame later than Chromium,
+// and WebKit on a busy CI runner has taken over 2 s. On main (2026-11-01) WebKit once left the
+// list unfiltered after fill() right after a Back navigation; if it hasn't narrowed after a
+// second, the text is typed again key by key.
 const list = nav.getByRole("list").nth(1).getByRole("link");
 let names = [];
 for (let i = 0; i < 50; i++) {
@@ -122,7 +124,7 @@ for (let i = 0; i < 50; i++) {
 }
 assert.ok(
   names.length > 0 && names.every((n) => /date/i.test(n)),
-  `filter "${await filterBox.inputValue()}" gave: ${names}`,
+  `filter "${await filterBox.inputValue()}" gave: ${names}; page errors so far: ${errors.join(" | ") || "none"}; console errors: ${consoleErrors.join(" | ") || "none"}`,
 );
 
 // Code blocks that can scroll are keyboard reachable.

@@ -6,26 +6,26 @@
   },
   "apps": {
     "gallery": {
-      "firstKB": 292.4,
+      "firstKB": 321.9,
       "firstRequests": 4,
-      "mainWasmKB": 257.8,
-      "totalKB": 1314.9,
+      "mainWasmKB": 282.4,
+      "totalKB": 1440.4,
       "startupMs4x": 2982,
       "files": {
-        "assets/atoll.css": 21.6,
+        "assets/atoll.css": 25.8,
         "assets/chunk_0_split.wasm": 0.2,
         "assets/demo.css": 0.3,
         "assets/focus-trap.js": 0.4,
         "assets/gallery.css": 1,
         "assets/gallery.js": 12.1,
-        "assets/gallery_bg.wasm": 257.8,
-        "assets/module_0_LazyBlockPage.wasm": 171.5,
-        "assets/module_1_LazyMoreSections.wasm": 806.5,
+        "assets/gallery_bg.wasm": 282.4,
+        "assets/module_0_LazyMoreSections.wasm": 893.7,
+        "assets/module_1_LazyBlockPage.wasm": 170.7,
         "assets/reset.css": 0.2,
         "assets/reset.scoped.css": 0.3,
         "assets/style.css": 1.1,
         "assets/theme.css": 2.1,
-        "assets/theme.scoped.css": 2.2
+        "assets/theme.scoped.css": 5.1
       }
     },
     "site": {
