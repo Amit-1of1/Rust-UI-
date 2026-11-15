@@ -97,3 +97,53 @@ You don't have to: the kit is MIT or Apache-2.0 and complete on its own. Pro add
 ## Is copying code from a registry a supply-chain risk?
 
 The registry is this repository: every item is reviewed in a pull request and tested, and there are no third-party uploads. `atoll add` copies plain source you can read before you build it, and `atoll diff` shows what changed before `atoll update` applies it.
+
+## What's missing that I might need?
+
+Checked against `main` on 2026-11-15. Plan around these:
+
+- **Desktop app plumbing.** The Dioxus desktop target runs the kit, but Atoll has no helpers for the OS menu bar, tray icon, open and save dialogs, several windows, remembered window size or file associations. You wire those yourself through the Dioxus desktop window and menu APIs. The in-window `Menubar` is there.
+- **Rich chat messages.** The chat components show plain text: no formatted text or code rendered as it streams, no diff view, no approval card.
+- **Some components internal tools need**: tree view, kanban board, rich text editor, code editor, timeline.
+- **Platforms.** Desktop builds are only checked on Linux in CI; Windows and macOS are not. Android launches in an emulator but nothing is clicked there. iOS is not built ([SUPPORT_MATRIX.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/SUPPORT_MATRIX.md)).
+- **Locale formatting.** UI strings come in 9 languages with right-to-left support, but dates and numbers are not yet formatted per locale, and the non-English strings have not been reviewed by native speakers.
+- **Picture tests.** There are no screenshot tests that flag a visual change.
+- **A release.** Nothing is on crates.io yet; you depend on a git commit ([RELEASE.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/RELEASE.md)).
+
+## Will my CI cope with the build?
+
+Plan for it. Rust UI apps are slow to build compared with a JS app, and the cost grows with the app. One team running Dioxus fullstack in production reported 90-minute release builds on GitHub's hosted runners and `cargo clippy` running out of memory, fixed with a self-hosted runner, a swapfile and `CARGO_BUILD_JOBS=1`. Atoll's own CI is green on hosted runners, but the kit is not a 20-crate app. What helps: cache `target/` and the cargo registry on a key that changes rarely, keep the UI in a few small crates so a change rebuilds less, and run release builds only where you ship from.
+
+## Why not Leptos, Slint, egui or Tauri?
+
+Each is the better choice somewhere:
+
+- **Leptos** makes smaller downloads and has stronger server rendering (islands). It is web only; desktop goes through Tauri. If you build a website in Rust and download size matters most, start there. Atoll is Dioxus only, and a Leptos port is not planned.
+- **Slint** is made for embedded screens and has a designer-friendly live preview; read its licence if you ship a device.
+- **egui** is quick for internal tools and debug panels. It redraws every frame, and its accessibility is still catching up.
+- **Tauri with a JS front end** lets you keep React or Svelte with a Rust back end. Atoll's Dioxus desktop target uses the same system webviews, so it looks the same; what changes is that the UI is Rust too, with one language and shared types end to end.
+
+Atoll is for apps that run on the web **and** the desktop from one code base, look like a modern web product, and are written by a team that already chose Rust.
+
+## How does it help a team?
+
+- **Time.** A select, combobox, date picker, data table, dialog and menus, each with keyboard support checked on three browser engines, are already built and tested.
+- **One language.** The people who write the Rust back end can change a screen, and types are shared, so renaming a field breaks the build instead of production.
+- **Evidence for buyers.** `atoll acr` drafts an accessibility conformance report from the kit's checks ([ACR.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/ACR.md)).
+- **Tests for your screens.** `atoll-test` renders your app headless, finds parts by role and label, clicks and types ([TESTING.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/TESTING.md)).
+- **Help for AI coding agents.** An MCP server, an agent skill and `llms.txt` give an agent the kit's real props, keys and roles instead of guesses ([MCP.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/MCP.md)).
+- **Designers** get the theme as W3C design tokens for Figma (`atoll tokens`, [DESIGN_TOKENS.md](https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/DESIGN_TOKENS.md)).
+
+What it costs the team is in the answers above: a bigger first download, slower Rust rebuilds, a pre-1.0 framework and Rust skills on the UI side.
+
+## Can we hire for this?
+
+Few developers list Dioxus on a CV. React developers already know its model (components, props, hooks), and Rust developers already know the language, so you are training one or the other. Expect a few weeks for a React developer who is new to Rust's ownership rules.
+
+## Is anyone using it in production?
+
+Not in public, as of 2026-11-15. It has been tried on one internal trial app and is exercised by six example apps in this repository (gallery, docs, site, dashboard, booking, showcase). If you need someone else's production app as proof, wait, or talk to us about being the first.
+
+## Why not ask an AI to write the components we need?
+
+It can write a component. What takes longer is the proof that it works: keyboard behaviour checked key by key on Chromium, Firefox, WebKit and the native renderer, contrast proved for every theme, and that proof kept green on every Dioxus release. That proof, and someone answerable for it, is what the kit gives you.
