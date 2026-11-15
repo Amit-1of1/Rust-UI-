@@ -39,7 +39,7 @@ jobs:
       - if: steps.dx.outputs.cache-hit != 'true'
         # --force: rust-cache may already have restored a dx into ~/.cargo/bin without cargo
         # install's records, and cargo install then refuses to overwrite it.
-        run: scripts/install-dx.sh --force
+        run: scripts/install-dx.sh
       # Built as Pages ships them: gallery and dashboard split, CSS bundled (scripts/release-web.sh).
       - run: |
           for app in gallery site docs dashboard booking showcase; do

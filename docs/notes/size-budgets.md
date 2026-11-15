@@ -23,4 +23,4 @@ Baseline, main at e303195, 2026-10-31 (4-core cloud VM, headless Chromium 153). 
 
 Verified: with the gallery's main-wasm budget set to 220 KB the check fails with `mainWasmKB 257.8 KB is 17% over its budget of 220 KB` and `grew: assets/gallery_bg.wasm 206.24 -> 257.8 KB`.
 
-The docs site and booking are not split (no `wasm-split` feature), which is why their first screen is nearly their whole download; splitting them is the obvious next saving.
+The docs site was split on 2026-11-01 (first screen 1,089 -> 326 KB); booking was tried and not kept, because the router already makes its first page a lazy part of its own. Numbers and reasons: [split-docs-and-render-cost.md](split-docs-and-render-cost.md).

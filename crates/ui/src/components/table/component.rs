@@ -93,12 +93,14 @@ impl SortDirection {
 
 /// A column header. Pass `on_sort` to make it a sort button (with `aria-sort`). `numeric`
 /// aligns it to the end, with the sort arrow before the text so the text lines up with
-/// the `numeric` cells below.
+/// the `numeric` cells below. `trailing` is placed after the header's content (and outside
+/// its sort button), for things like a column resize handle.
 #[component]
 pub fn TableHead(
     #[props(default)] sort: SortDirection,
     #[props(default)] on_sort: Option<EventHandler<()>>,
     #[props(default)] numeric: bool,
+    #[props(default)] trailing: Option<Element>,
     #[props(extends=GlobalAttributes)] attributes: Vec<Attribute>,
     children: Element,
 ) -> Element {
@@ -119,6 +121,7 @@ pub fn TableHead(
             } else {
                 {children}
             }
+            {trailing}
         }
     }
 }
