@@ -93,7 +93,7 @@ struct Model {
 fn replay(seq: &[Step]) {
     let mut dom = VirtualDom::new(app);
     dom.rebuild_in_place();
-    let v = VALUE.with(Cell::get).expect("the holder rendered");
+    let mut v = VALUE.with(Cell::get).expect("the holder rendered");
     let mut model = Model {
         goal: 0.0,
         mounted: true,
