@@ -1,0 +1,23 @@
+# cargo-mutants (docs/notes/mutation-testing.md). These mutants can't change anything a caller
+# can observe, so no test can kill them; each line says why.
+exclude_re = [
+    # The critical-damping tolerance is a band of measure zero, and zeta = 1 never reaches the
+    # under-damped branch.
+    "replace < with <= in SpringConfig::solve",
+    # settle_time's loop stops at the first step at or past 10 s either way (t is a float sum
+    # that never lands on exactly 10).
+    "replace < with <= in SpringConfig::settle_time",
+    # Advancing by 0 seconds adds 0.
+    "replace > with >= in SpringState::advance",
+    "replace > with >= in Glide::advance",
+    # Trimming stops at 2 samples; the newest is always inside the window, so the second can't
+    # be at or before its start when only 2 are left.
+    "replace > with >= in VelocityTracker::push",
+    # At x == lo or x == hi the stretch is rubber_band(0) = 0.
+    "replace < with <= in rubber_band_clamp",
+    "replace > with >= in rubber_band_clamp",
+    # A point exactly 0.5 px ahead (after weighting) is a float tie no input produces on purpose.
+    "replace > with >= in DragModel::key_step",
+    # An overflow of 0 gives (-0, 0) or (-0, -0), and -0 == 0.
+    "replace > with >= in pan_bounds",
+]

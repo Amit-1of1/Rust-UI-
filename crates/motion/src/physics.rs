@@ -404,6 +404,16 @@ impl VelocityTracker {
         self.samples.clear();
     }
 
+    /// Samples kept: those in the last 100 ms plus one before them, so it stays small however
+    /// long the drag.
+    pub fn len(&self) -> usize {
+        self.samples.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.samples.is_empty()
+    }
+
     /// Record where the pointer was at `t_ms`.
     pub fn push(&mut self, t_ms: f64, x: f64, y: f64) {
         if !(t_ms.is_finite() && x.is_finite() && y.is_finite()) {
@@ -427,7 +437,7 @@ impl VelocityTracker {
         let Some(&(t1, x1, y1)) = self.samples.last() else {
             return (0.0, 0.0);
         };
-        if now_ms - t1 > VELOCITY_WINDOW_MS || self.samples.len() < 2 {
+        if now_ms - t1 >= VELOCITY_WINDOW_MS || self.samples.len() < 2 {
             return (0.0, 0.0);
         }
         let cutoff = t1 - VELOCITY_WINDOW_MS;
