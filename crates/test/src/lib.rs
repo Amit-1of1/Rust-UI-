@@ -34,6 +34,7 @@
 //!
 //! Experimental (docs/STABILITY.md): new on 2026-11-01; method names may still change.
 
+pub mod agent;
 mod css;
 mod keys;
 mod query;

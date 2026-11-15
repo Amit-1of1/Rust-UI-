@@ -678,6 +678,7 @@ dependencies = [
  "image",
  "keyboard-types",
  "manganis-core",
+ "serde_json",
  "stylo",
  "tokio",
 ]

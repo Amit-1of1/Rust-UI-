@@ -807,6 +807,42 @@ impl Screen {
         path
     }
 
+    /// The current frame as PNG bytes (what [`Screen::screenshot`] writes to a file).
+    pub fn png(&self) -> Vec<u8> {
+        use image::ImageEncoder as _;
+        let buf = self.paint();
+        let mut out = Vec::new();
+        image::codecs::png::PngEncoder::new(&mut out)
+            .write_image(
+                &buf,
+                self.width,
+                self.height,
+                image::ExtendedColorType::Rgba8,
+            )
+            .expect("atoll-test: encode png");
+        out
+    }
+
+    /// The screen as a user or a screen reader meets it: one line per element with a role
+    /// (role, name, value and state such as `[expanded=true]` or `[focused]`), indented by
+    /// nesting, plus loose text. Hidden parts are left out. Handy to print while writing a
+    /// test, and what [`crate::agent`] shows an AI agent.
+    pub fn outline(&self) -> String {
+        let focused = self.focused().map(|e| e.0);
+        query::outline(&self.doc, focused, 400)
+    }
+
+    /// Like [`Screen::get`], but returns the "no match" or "several match" message instead of
+    /// panicking.
+    pub fn find(&self, query: impl Into<Query>) -> Result<El, String> {
+        query.into().one(&self.doc).map(El)
+    }
+
+    /// The window size in CSS pixels.
+    pub fn size(&self) -> (u32, u32) {
+        (self.width, self.height)
+    }
+
     /// RGBA of the pixel at (x, y) in a CPU-painted frame.
     pub fn pixel(&self, x: u32, y: u32) -> [u8; 4] {
         let buf = self.paint();

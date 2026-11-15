@@ -599,3 +599,121 @@ fn accessible_summary(doc: &BaseDocument) -> String {
         format!("On the screen (role, name):\n{}", lines.join("\n"))
     }
 }
+
+/// The screen as a user or screen reader meets it: one line per element with a role (role,
+/// name, state), indented by nesting, plus loose text. Hidden parts are left out. For agents
+/// (`atoll_test::agent`) and for printing in a test.
+pub(crate) fn outline(doc: &BaseDocument, focused: Option<usize>, max_lines: usize) -> String {
+    fn visit(
+        doc: &BaseDocument,
+        id: usize,
+        depth: usize,
+        focused: Option<usize>,
+        out: &mut Vec<String>,
+        max: usize,
+    ) {
+        if out.len() >= max {
+            return;
+        }
+        let Some(n) = doc.get_node(id) else { return };
+        if n.is_text_node() {
+            let t = normalize(&n.text_content());
+            if !t.is_empty() {
+                let short: String = t.chars().take(80).collect();
+                out.push(format!("{}text {short:?}", "  ".repeat(depth)));
+            }
+            return;
+        }
+        if !n.is_element() {
+            for &c in &n.children {
+                visit(doc, c, depth, focused, out, max);
+            }
+            return;
+        }
+        if matches!(
+            tag(n),
+            "script" | "style" | "head" | "title" | "meta" | "link"
+        ) || is_hidden(doc, n)
+        {
+            return;
+        }
+        let role =
+            role_of(doc, n).filter(|r| !matches!(r.as_str(), "generic" | "presentation" | "none"));
+        let mut child_depth = depth;
+        if let Some(r) = &role {
+            let name = accessible_name(doc, n);
+            let mut line = format!("{}{r}", "  ".repeat(depth));
+            if !name.is_empty() {
+                let short: String = name.chars().take(80).collect();
+                line.push_str(&format!(" {short:?}"));
+            }
+            if matches!(tag(n), "input" | "textarea") {
+                if let Some(v) = n
+                    .element_data()
+                    .and_then(|e| e.attr(LocalName::from("value")))
+                {
+                    line.push_str(&format!(" value={v:?}"));
+                }
+            }
+            for a in [
+                "aria-checked",
+                "aria-expanded",
+                "aria-selected",
+                "aria-pressed",
+                "aria-current",
+                "aria-invalid",
+            ] {
+                if let Some(v) = attr(n, a) {
+                    line.push_str(&format!(" [{}={v}]", &a[5..]));
+                }
+            }
+            if attr(n, "checked").is_some() {
+                line.push_str(" [checked]");
+            }
+            if attr(n, "disabled").is_some() || attr(n, "aria-disabled") == Some("true") {
+                line.push_str(" [disabled]");
+            }
+            if focused == Some(id) {
+                line.push_str(" [focused]");
+            }
+            out.push(line);
+            child_depth += 1;
+            // A named control's text is its name: don't repeat it.
+            if !name.is_empty()
+                && matches!(
+                    r.as_str(),
+                    "button"
+                        | "link"
+                        | "tab"
+                        | "option"
+                        | "menuitem"
+                        | "heading"
+                        | "checkbox"
+                        | "radio"
+                        | "switch"
+                        | "columnheader"
+                        | "cell"
+                        | "listitem"
+                        | "textbox"
+                        | "status"
+                        | "alert"
+                        | "paragraph"
+                )
+            {
+                let text = normalize(&n.text_content());
+                if text == name {
+                    return;
+                }
+            }
+        }
+        for &c in &n.children {
+            visit(doc, c, child_depth, focused, out, max);
+        }
+    }
+    let mut out = Vec::new();
+    visit(doc, doc.root_node().id, 0, focused, &mut out, max_lines);
+    if out.len() >= max_lines {
+        out.push(format!("... (cut at {max_lines} lines)"));
+    }
+    out.join("\n")
+}
