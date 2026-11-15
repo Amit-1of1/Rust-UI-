@@ -1,0 +1,44 @@
+name: Mutants
+
+# Mutation testing (docs/notes/mutation-testing.md): cargo-mutants changes the motion physics
+# and drag code one operator at a time and the tests must fail for every change. A mutant that
+# survives is code no test pins down. Equivalent mutants (no caller can tell) are listed, with
+# the reason, in .cargo/mutants.toml. Runs on PRs that touch that code, and weekly.
+on:
+  pull_request:
+    paths:
+      - crates/motion/src/physics.rs
+      - crates/motion/src/drag.rs
+      - crates/motion/tests/**
+      - .cargo/mutants.toml
+      - .github/workflows/mutants.yml
+  schedule:
+    - cron: "41 5 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  motion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - run: cargo install cargo-mutants --locked --version 27.1.0
+      # --timeout 10: a mutant that makes a spring loop forever is caught when it times out.
+      # cargo-mutants exits 2 if any mutant is missed and 3 if some only timed out (caught).
+      - run: |
+          status=0
+          cargo mutants -p atoll-motion \
+            -f crates/motion/src/physics.rs -f crates/motion/src/drag.rs \
+            --timeout 10 -j 2 -o target || status=$?
+          [ "$status" -eq 0 ] || [ "$status" -eq 3 ]
+      - if: always()
+        run: |
+          for f in missed timeout caught unviable; do
+            echo "$f: $(wc -l < target/mutants.out/$f.txt 2>/dev/null || echo 0)"
+          done >> "$GITHUB_STEP_SUMMARY"
+          cat target/mutants.out/missed.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
