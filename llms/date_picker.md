@@ -35,6 +35,33 @@ Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates
 
 `DateRangeField` (in the form component) binds a `DateRangePicker` to a `use_form` field, labelled, described and validated like the other fields. Its value is `2026-10-15/2026-10-20`; `format_iso_date_range` and `parse_iso_date_range` write and read that, and `format_iso_date` / `parse_iso_date` do the same for one date (`2026-10-15`, the `<input type="date">` format).
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Spinbutton segments with a calendar popover](https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/) pattern. Roles: `group`, `spinbutton`, `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a segment | Moves to the next segment (year, month, day). | yes |
+| ArrowLeft | On a segment | Moves to the previous segment. | yes |
+| Enter | On a segment | Moves to the next segment. | yes |
+| ArrowUp | On an empty segment | Fills it with today's value; on a filled one, adds one, wrapping at the end of the range. | yes |
+| ArrowDown | On an empty segment | Fills it with today's value; on a filled one, subtracts one, wrapping at the start. | yes |
+| Enter | On the calendar button | Opens the calendar. | yes |
+| Escape | In the open calendar | Closes it and returns focus to the calendar button. | yes |
+
+States:
+
+- `open`: The calendar popover is shown.
+- `closed`: Only the segments and the calendar button are shown.
+
+Known gaps:
+
+- No Home or End on a segment (APG spinbutton: minimum and maximum).
+- No PageUp or PageDown on a segment.
+- Typing digits, Backspace and Delete are not covered by a row yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

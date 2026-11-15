@@ -23,7 +23,6 @@ In a `use_form` form, use `DateTimeField { field, label: "Departure" }`: the fie
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label` (default "Date and time") or by a visible label through `labelled_by`, with the description and error in `aria-describedby`. Inside are the date picker's group and the time picker's group; see their docs.
-- Keyboard: as `DatePicker` and `TimePicker`; Tab moves from the date segments to the calendar button to the time segments.
 - `DateTimeField` validates when focus leaves the whole picker, calendar included, and a failed submit focuses the hours (the date segments come from dioxus-primitives and cannot be focused from outside).
 - Reduced motion: the calendar popover's fade follows `DatePicker`.
 

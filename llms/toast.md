@@ -41,6 +41,22 @@ ToastProvider {
 }
 ```
 
+## Keyboard and accessibility
+
+Pattern: Notifications region (toasts). Roles: `region`, `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a button that shows a toast | Shows the toast in the notifications region; focus stays on the button. | yes |
+| Enter | On a toast's close button | Dismisses that toast. | yes |
+
+Known gaps:
+
+- Escape does not dismiss the focused toast.
+- The close button's accessible name is the lowercase "close" and does not say which toast.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

@@ -1,0 +1,113 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Segments are the primitive's contenteditable role=spinbutton spans (dioxus-primitives
+# date_picker.rs, DateSegment). An empty segment's ArrowUp/Down fills in TODAY's value, so the
+# rows assert the primitive's `no-date` attribute instead of a number (the demo has no
+# fixed date and no SSR snapshot). Digits and Backspace/Delete edit the text; not drafted
+# (typing into contenteditable is flaky in the runners), see gaps.
+# Popover rows reuse the kit popover (Enter opens, Escape closes, focus returns).
+pattern = "Spinbutton segments with a calendar popover"
+apg = "spinbutton"
+roles = ["group", "spinbutton", "dialog"]
+gaps = [
+    "No Home or End on a segment (APG spinbutton: minimum and maximum).",
+    "No PageUp or PageDown on a segment.",
+    "Typing digits, Backspace and Delete are not covered by a row yet.",
+]
+
+[parts]
+picker = "[role=group][aria-label=Date]"
+segment = "[role=group][aria-label=Date] [role=spinbutton]"
+trigger = "[role=group][aria-label=Date] button[aria-label='Show Calendar']"
+popover = "[role=dialog]"
+
+[[states]]
+name = "open"
+means = "The calendar popover is shown."
+check = "visible popover"
+
+[[states]]
+name = "closed"
+means = "Only the segments and the calendar button are shown."
+check = "hidden popover"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a segment"
+does = "Moves to the next segment (year, month, day)."
+native = true
+test = """
+visible picker
+focus segment@1
+press ArrowRight
+focused segment@2
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a segment"
+does = "Moves to the previous segment."
+native = true
+test = """
+focus segment@2
+press ArrowLeft
+focused segment@1
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a segment"
+does = "Moves to the next segment."
+native = true
+test = """
+focus segment@1
+press Enter
+focused segment@2
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On an empty segment"
+does = "Fills it with today's value; on a filled one, adds one, wrapping at the end of the range."
+native = true
+test = """
+focus segment@2
+press ArrowUp
+attr segment@2 no-date=false
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On an empty segment"
+does = "Fills it with today's value; on a filled one, subtracts one, wrapping at the start."
+native = true
+test = """
+focus segment@3
+press ArrowDown
+attr segment@3 no-date=false
+"""
+
+[[keys]]
+key = "Enter"
+when = "On the calendar button"
+does = "Opens the calendar."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open calendar"
+does = "Closes it and returns focus to the calendar button."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+press Escape
+state closed
+focused trigger
+"""

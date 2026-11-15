@@ -26,7 +26,6 @@ Sizes are percentages of the group and should add up to 100; `min_size` and `max
 ## Accessibility
 
 - Role and name: each `ResizableHandle` is a focusable `role="separator"` (the WAI-ARIA window splitter pattern) with `aria-valuenow` (the size of the panel before it, in percent), `aria-valuemin`, `aria-valuemax`, `aria-orientation` and the `aria_label` you give it ("Resize" by default). Give the panel before it an `id` and the handle points at it with `aria-controls`.
-- Keyboard: Tab reaches each divider. Left and Right arrows (Up and Down in a vertical group) move it by 5%, with Shift by 10%; Home and End move it to the panel's minimum and maximum.
 - Pointer: drag the divider (a 9 px hit area around the 1 px line). The drag ends when the pointer leaves the group.
 - Right to left: not mirrored yet. In a `dir="rtl"` row the first panel is on the right, and the arrow keys and dragging still change its size as in a left-to-right row, so they feel reversed. Use a vertical group, or `dir="ltr"` on the group, until this is fixed.
 - Reduced motion: only the divider's colour changes; that transition is off under `prefers-reduced-motion`.
@@ -38,6 +37,26 @@ Original to this repo. The API follows shadcn/ui's `Resizable` (built on react-r
 ## Stability
 
 Experimental. New on 2026-10-31.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Window Splitter](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/) pattern. Roles: `separator`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a divider between side-by-side panels | Moves the divider right by 5% of the group, within both panels' limits. | yes |
+| ArrowLeft | On a divider between side-by-side panels | Moves the divider left by 5%. | yes |
+| Shift + ArrowRight | On a divider between side-by-side panels | Moves the divider by 10% (Shift+ArrowLeft the other way). | yes |
+| ArrowDown | On a divider between stacked panels | Moves the divider down by 5%. | yes |
+| ArrowUp | On a divider between stacked panels | Moves the divider up by 5%. | yes |
+| Home | On a divider | Moves the divider to the first panel's minimum. | yes |
+| End | On a divider | Moves the divider to the first panel's maximum, or the second panel's minimum if that comes first. | yes |
+
+Known gaps:
+
+- Enter does not collapse or restore the panel before the divider.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

@@ -1,0 +1,114 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Keys are handled on the primitive's root (dioxus-primitives calendar.rs, role=application).
+# The demo pins the view to 2026-05-15 with nothing selected, so Friday 15 May 2026 is the one
+# day in the tab order. Enter and Space on a day are the native button click (selects it).
+# There is no SSR snapshot for calendar (it renders today's date), so the selectors were taken
+# from the primitive's source, not from crates/ui/tests/snapshots.
+pattern = "Date grid (as in the APG date picker dialog)"
+apg = "dialog-modal"
+roles = ["application", "grid"]
+gaps = [
+    "PageUp and PageDown (previous/next month) are missing; Shift+ArrowUp/Down change the month instead.",
+    "Shift+PageUp and Shift+PageDown (previous/next year) are missing.",
+    "Home and End (first/last day of the week) are missing.",
+]
+
+[parts]
+calendar = "[role=application][aria-label=Calendar]"
+may15 = "[role=grid] button[aria-label='Friday, May 15, 2026']"
+may16 = "[role=grid] button[aria-label='Saturday, May 16, 2026']"
+may14 = "[role=grid] button[aria-label='Thursday, May 14, 2026']"
+may22 = "[role=grid] button[aria-label='Friday, May 22, 2026']"
+may8 = "[role=grid] button[aria-label='Friday, May 8, 2026']"
+june15 = "[role=grid] button[aria-label='Monday, June 15, 2026']"
+april15 = "[role=grid] button[aria-label='Wednesday, April 15, 2026']"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a day"
+does = "Moves to the next day."
+native = true
+test = """
+visible calendar
+focus may15
+press ArrowRight
+focused may16
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a day"
+does = "Moves to the previous day."
+native = true
+test = """
+focus may15
+press ArrowLeft
+focused may14
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a day"
+does = "Moves to the same day next week."
+native = true
+test = """
+focus may15
+press ArrowDown
+focused may22
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On a day"
+does = "Moves to the same day last week."
+native = true
+test = """
+focus may15
+press ArrowUp
+focused may8
+"""
+
+[[keys]]
+key = "Shift+ArrowDown"
+when = "On a day"
+does = "Moves to the same day next month, turning the page."
+native = true
+test = """
+focus may15
+press Shift+ArrowDown
+focused june15
+"""
+
+[[keys]]
+key = "Shift+ArrowUp"
+when = "On a day"
+does = "Moves to the same day last month, turning the page."
+native = true
+test = """
+focus may15
+press Shift+ArrowUp
+focused april15
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a day"
+does = "Selects it (pressing it again clears the selection)."
+native = true
+test = """
+focus may15
+press Enter
+attr may15 data-selected=true
+"""
+
+[[keys]]
+key = "Space"
+when = "On a day"
+does = "Selects it, like Enter."
+native = true
+test = """
+focus may16
+press Space
+attr may16 data-selected=true
+"""

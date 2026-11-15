@@ -1,0 +1,71 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# APG has no one-time-code pattern; the rows follow the component's own OtpState reducer
+# (model-checked in crates/ui/tests/model_check.rs). Typing and paste are text entry, covered
+# there and in tests/keyboard_state.rs, so no rows for them.
+# Remove the "- Keyboard:" line from input_otp/docs.md when this lands (doctor rule).
+pattern = "One-time code input (group of text boxes)"
+roles = ["group"]
+gaps = [
+    "Delete does nothing special (only Backspace clears and moves back).",
+]
+
+[parts]
+group = "[role=group][aria-label='Verification code']"
+slot = "[role=group][aria-label='Verification code'] input"
+
+[[keys]]
+key = "ArrowRight"
+when = "In a box"
+does = "Moves to the next box (stops at the last)."
+native = true
+test = """
+visible group
+focus slot@1
+press ArrowRight
+focused slot@2
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "In a box"
+does = "Moves to the previous box (stops at the first)."
+native = true
+test = """
+focus slot@3
+press ArrowLeft
+focused slot@2
+"""
+
+[[keys]]
+key = "Home"
+when = "In a box"
+does = "Moves to the first box."
+native = true
+test = """
+focus slot@5
+press Home
+focused slot@1
+"""
+
+[[keys]]
+key = "End"
+when = "In a box"
+does = "Moves to the last box."
+native = true
+test = """
+focus slot@2
+press End
+focused slot@6
+"""
+
+[[keys]]
+key = "Backspace"
+when = "In an empty box"
+does = "Clears the box before it and moves there."
+native = true
+test = """
+focus slot@3
+press Backspace
+focused slot@2
+"""

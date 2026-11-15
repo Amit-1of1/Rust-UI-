@@ -19,7 +19,7 @@ rsx! {
 ## Accessibility
 
 - Role and name: An ordered list; the current step has `aria-current="step"`; completed steps add hidden "(completed)" text.
-- Keyboard: each step is a button (Tab/Enter/Space); `disabled` steps are skipped
+- `disabled` steps are skipped by Tab.
 - Reduced motion: none
 
 ## Source

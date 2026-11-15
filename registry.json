@@ -127,6 +127,7 @@
       "name": "calendar",
       "files": [
         "calendar/component.rs",
+        "calendar/contract.toml",
         "calendar/docs.md",
         "calendar/mod.rs",
         "calendar/style.css"
@@ -159,6 +160,7 @@
       "name": "carousel",
       "files": [
         "carousel/component.rs",
+        "carousel/contract.toml",
         "carousel/docs.md",
         "carousel/mod.rs",
         "carousel/style.css"
@@ -255,6 +257,7 @@
       "name": "color_picker",
       "files": [
         "color_picker/component.rs",
+        "color_picker/contract.toml",
         "color_picker/docs.md",
         "color_picker/mod.rs",
         "color_picker/style.css"
@@ -309,6 +312,7 @@
       "name": "data_table",
       "files": [
         "data_table/component.rs",
+        "data_table/contract.toml",
         "data_table/docs.md",
         "data_table/mod.rs",
         "data_table/style.css"
@@ -325,6 +329,7 @@
       "name": "date_picker",
       "files": [
         "date_picker/component.rs",
+        "date_picker/contract.toml",
         "date_picker/docs.md",
         "date_picker/mod.rs",
         "date_picker/style.css"
@@ -341,6 +346,7 @@
       "name": "date_time_picker",
       "files": [
         "date_time_picker/component.rs",
+        "date_time_picker/contract.toml",
         "date_time_picker/docs.md",
         "date_time_picker/mod.rs",
         "date_time_picker/style.css"
@@ -370,6 +376,7 @@
       "name": "drag_and_drop_list",
       "files": [
         "drag_and_drop_list/component.rs",
+        "drag_and_drop_list/contract.toml",
         "drag_and_drop_list/docs.md",
         "drag_and_drop_list/mod.rs",
         "drag_and_drop_list/style.css"
@@ -479,6 +486,7 @@
       "name": "hover_card",
       "files": [
         "hover_card/component.rs",
+        "hover_card/contract.toml",
         "hover_card/docs.md",
         "hover_card/mod.rs",
         "hover_card/style.css"
@@ -520,6 +528,7 @@
       "name": "input_otp",
       "files": [
         "input_otp/component.rs",
+        "input_otp/contract.toml",
         "input_otp/docs.md",
         "input_otp/mod.rs",
         "input_otp/style.css"
@@ -667,6 +676,7 @@
       "name": "pagination",
       "files": [
         "pagination/component.rs",
+        "pagination/contract.toml",
         "pagination/docs.md",
         "pagination/mod.rs",
         "pagination/style.css"
@@ -715,6 +725,7 @@
       "name": "resizable",
       "files": [
         "resizable/component.rs",
+        "resizable/contract.toml",
         "resizable/docs.md",
         "resizable/mod.rs",
         "resizable/style.css"
@@ -725,6 +736,7 @@
       "name": "scroll_area",
       "files": [
         "scroll_area/component.rs",
+        "scroll_area/contract.toml",
         "scroll_area/docs.md",
         "scroll_area/mod.rs",
         "scroll_area/style.css"
@@ -785,6 +797,7 @@
       "name": "sidebar",
       "files": [
         "sidebar/component.rs",
+        "sidebar/contract.toml",
         "sidebar/demo.css",
         "sidebar/docs.md",
         "sidebar/mod.rs",
@@ -875,6 +888,7 @@
       "name": "stepper",
       "files": [
         "stepper/component.rs",
+        "stepper/contract.toml",
         "stepper/docs.md",
         "stepper/mod.rs",
         "stepper/style.css"
@@ -921,6 +935,7 @@
       "name": "tag_group",
       "files": [
         "tag_group/component.rs",
+        "tag_group/contract.toml",
         "tag_group/docs.md",
         "tag_group/mod.rs",
         "tag_group/style.css"
@@ -971,6 +986,7 @@
       "name": "toast",
       "files": [
         "toast/component.rs",
+        "toast/contract.toml",
         "toast/docs.md",
         "toast/mod.rs",
         "toast/style.css"

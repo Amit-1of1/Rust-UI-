@@ -16,6 +16,32 @@ DragAndDropList {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Listbox with rearrangeable options (keyboard drag and drop)](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) pattern. Roles: `status`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | On an item | Moves focus to the next item. | yes |
+| ArrowUp | On an item | Moves focus to the previous item. | yes |
+| Home | On an item | Moves focus to the first item. | yes |
+| End | On an item | Moves focus to the last item. | yes |
+| Enter | On an item | Lifts it; Enter again drops it where it now is and announces the move. | yes |
+| Space | On an item | Lifts or drops it, like Enter. | yes |
+| ArrowDown | While an item is lifted | Moves it one place down (ArrowUp moves it up) and announces the new position. | yes |
+| Escape | While an item is lifted | Puts it back where it started and announces that. | yes |
+
+States:
+
+- `lifted`: The first item is picked up and moves with the arrow keys.
+
+Known gaps:
+
+- No typeahead.
+- While an item is lifted, the arrow keys wrap from the last position to the first.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

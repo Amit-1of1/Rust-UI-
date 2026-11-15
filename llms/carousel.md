@@ -17,12 +17,27 @@ Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons sc
 ## Accessibility
 
 - Role and name: a `section` with `aria-roledescription="carousel"` named by `label`; the scrolling track is a focusable group; each slide is `aria-roledescription="slide"` with your `label`.
-- Keyboard: focus the track and use the arrow keys (native scrolling), or Tab to the Previous/Next buttons.
+- Scrolling: focus the track and use the arrow keys (native scrolling).
 - Reduced motion: scrolling is instant instead of smooth.
 
 ## Source
 
 Original to this repo. The pattern follows the WAI-ARIA carousel practices; Rust/UI's `carousel.rs` was used only to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Carousel](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) pattern. Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the slide track | Moves to Previous, then Next (the track is one tab stop). | yes |
+
+Known gaps:
+
+- Previous and Next change nothing a screen reader is told: the visible slide is not marked and nothing is announced.
+- Arrow keys on the track scroll it natively; there is no slide-by-slide keyboard step.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

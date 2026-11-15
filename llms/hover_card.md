@@ -26,6 +26,29 @@ HoverCard {
 
 `HoverCardTrigger` is itself focusable (`role="button"`, `tabindex="0"`), so keyboard users can open the card. A button or link inside it is a control inside a control (axe `nested-interactive`), and screen readers announce it badly. Put text, an avatar or an icon directly inside the trigger, and put links and buttons inside `HoverCardContent` (or next to the trigger).
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Hover card (tooltip-like, opens on focus)](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `button`, `tooltip`. Works on native (Blitz): not yet.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the trigger, with the card open | Moves focus on and closes the card (focusing the trigger opens it). | not yet |
+
+States:
+
+- `open`: The card is shown.
+- `closed`: Only the trigger is shown.
+
+Known gaps:
+
+- Escape does not close the card (APG tooltip: Escape dismisses).
+- The trigger has role=button but Enter and Space do nothing.
+- The card's content can't be reached by keyboard: it closes as soon as focus leaves the trigger.
+
+Native: On Blitz the card stays open when focus tabs away from the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

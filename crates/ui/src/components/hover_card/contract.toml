@@ -1,0 +1,40 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The trigger opens the card on focus and closes it on blur (dioxus-primitives hover_card.rs);
+# it has no key handlers. So the only key row is Tab leaving the trigger.
+pattern = "Hover card (tooltip-like, opens on focus)"
+apg = "tooltip"
+roles = ["button", "tooltip"]
+native_note = "On Blitz the card stays open when focus tabs away from the trigger."
+gaps = [
+    "Escape does not close the card (APG tooltip: Escape dismisses).",
+    "The trigger has role=button but Enter and Space do nothing.",
+    "The card's content can't be reached by keyboard: it closes as soon as focus leaves the trigger.",
+]
+
+[parts]
+trigger = "[role=button][tabindex='0']"
+card = "[role=tooltip]"
+
+[[states]]
+name = "open"
+means = "The card is shown."
+check = "visible card"
+
+[[states]]
+name = "closed"
+means = "Only the trigger is shown."
+check = "hidden card"
+
+[[keys]]
+key = "Tab"
+when = "On the trigger, with the card open"
+does = "Moves focus on and closes the card (focusing the trigger opens it)."
+native = false
+test = """
+focus trigger
+state open
+focused trigger
+press Tab
+state closed
+"""

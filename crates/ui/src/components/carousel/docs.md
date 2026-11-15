@@ -14,7 +14,7 @@ Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons sc
 ## Accessibility
 
 - Role and name: a `section` with `aria-roledescription="carousel"` named by `label`; the scrolling track is a focusable group; each slide is `aria-roledescription="slide"` with your `label`.
-- Keyboard: focus the track and use the arrow keys (native scrolling), or Tab to the Previous/Next buttons.
+- Scrolling: focus the track and use the arrow keys (native scrolling).
 - Reduced motion: scrolling is instant instead of smooth.
 
 ## Source

@@ -1,0 +1,126 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Behaviour comes from the primitive (dioxus-primitives tag_group.rs, tag_option_on_keydown).
+# Escape clears the selection only with escape_clears_selection (the demo leaves it off: no
+# row). The demo's tags each have a RemoveButton, which makes Delete/Backspace remove them.
+pattern = "Grid (tag list)"
+apg = "grid"
+roles = ["grid", "row"]
+gaps = [
+    "No typeahead.",
+]
+
+[parts]
+list = "[role=grid]"
+tag = "[role=grid] [role=row]"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a tag"
+does = "Moves focus to the next tag."
+native = true
+test = """
+visible list
+focus tag@1
+press ArrowRight
+focused tag@2
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a tag"
+does = "Moves focus to the next tag, like ArrowRight."
+native = true
+test = """
+focus tag@2
+press ArrowDown
+focused tag@3
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a tag"
+does = "Moves focus to the previous tag."
+native = true
+test = """
+focus tag@3
+press ArrowLeft
+focused tag@2
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On a tag"
+does = "Moves focus to the previous tag, like ArrowLeft."
+native = true
+test = """
+focus tag@2
+press ArrowUp
+focused tag@1
+"""
+
+[[keys]]
+key = "Home"
+when = "On a tag"
+does = "Moves focus to the first tag."
+native = true
+test = """
+focus tag@4
+press Home
+focused tag@1
+"""
+
+[[keys]]
+key = "End"
+when = "On a tag"
+does = "Moves focus to the last tag."
+native = true
+test = """
+focus tag@2
+press End
+focused tag@6
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a tag"
+does = "Selects the tag. A selected tag stays selected when the group must keep one."
+native = true
+test = """
+focus tag@1
+press Enter
+attr tag@1 aria-selected=true
+"""
+
+[[keys]]
+key = "Space"
+when = "On a tag"
+does = "Selects the tag, like Enter."
+native = true
+test = """
+focus tag@2
+press Space
+attr tag@2 aria-selected=true
+"""
+
+[[keys]]
+key = "Delete"
+when = "On a removable tag"
+does = "Removes it (or every selected tag, when it is selected)."
+native = true
+test = """
+focus tag@1
+press Delete
+text tag@1 feature
+"""
+
+[[keys]]
+key = "Backspace"
+when = "On a removable tag"
+does = "Removes it, like Delete."
+native = true
+test = """
+focus tag@2
+press Backspace
+text tag@2 core
+"""

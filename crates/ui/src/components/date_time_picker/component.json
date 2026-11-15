@@ -36,7 +36,8 @@
   "description": "A `DatePicker` and a `TimePicker` that edit one value, for bookings, reminders and anything scheduled.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

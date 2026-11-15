@@ -11,7 +11,8 @@
   "description": "Panels in a row or column with dividers between them: drag a divider, or focus it and use the arrow keys. For split views such as folders | messages | preview.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

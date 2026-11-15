@@ -20,7 +20,8 @@
   "description": "Allows users to create vertically sortable lists supporting drag and drop, touch or keyboard input.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

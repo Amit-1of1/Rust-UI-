@@ -24,7 +24,8 @@
   "description": "Color picker used when the user needs to make a customized color selection.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

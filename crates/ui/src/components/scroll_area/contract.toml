@@ -1,0 +1,28 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# No key handlers. The demo passes tabindex="0", so the area is a tab
+# stop and the browser scrolls it with the arrow keys, PageUp/PageDown, Home/End and Space.
+# The step language has no way to check a scroll position, so the only row checks that an
+# arrow key keeps focus in the area (it doesn't move focus anywhere else). Proposal: a
+# `scrolled <part>` assertion (scrollTop > 0) in contracts.mjs and the native runner.
+# Also: a focusable scrolling box with no role or name; give it role=region + aria-label.
+pattern = "Scrollable region"
+roles = []
+gaps = [
+    "The scrollable box is focusable but has no role or accessible name (it should be a named region).",
+    "Scrolling by keyboard is the browser's own and is not asserted by a row.",
+]
+
+[parts]
+area = "[data-scroll-direction=vertical][tabindex='0']"
+
+[[keys]]
+key = "ArrowDown"
+when = "In the scroll area"
+does = "Scrolls the content down (browser scrolling); focus stays on the area."
+native = true
+test = """
+focus area
+press ArrowDown
+focused area
+"""

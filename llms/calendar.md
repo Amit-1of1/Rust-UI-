@@ -28,6 +28,29 @@ Calendar {
 
 The styled `Calendar` and `RangeCalendar` render a complete month view by default, including the header, navigation, month/year selectors, and date grid.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Date grid (as in the APG date picker dialog)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `application`, `grid`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a day | Moves to the next day. | yes |
+| ArrowLeft | On a day | Moves to the previous day. | yes |
+| ArrowDown | On a day | Moves to the same day next week. | yes |
+| ArrowUp | On a day | Moves to the same day last week. | yes |
+| Shift + ArrowDown | On a day | Moves to the same day next month, turning the page. | yes |
+| Shift + ArrowUp | On a day | Moves to the same day last month, turning the page. | yes |
+| Enter | On a day | Selects it (pressing it again clears the selection). | yes |
+| Space | On a day | Selects it, like Enter. | yes |
+
+Known gaps:
+
+- PageUp and PageDown (previous/next month) are missing; Shift+ArrowUp/Down change the month instead.
+- Shift+PageUp and Shift+PageDown (previous/next year) are missing.
+- Home and End (first/last day of the week) are missing.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

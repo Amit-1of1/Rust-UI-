@@ -57,7 +57,6 @@ On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page
 ## Accessibility
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".
-- Keyboard: everything is a native control (Tab, Space, Enter).
 - Column menu: native checkboxes named after their column in a popover. Resize handles are focusable `role="separator"` elements named "Resize <column>", with `aria-valuenow` (the width in pixels) and `aria-valuemin`.
 - Virtualised: the scroll box is a focusable `role="region"` named by the caption, so keyboard users can scroll it; the table has `aria-rowcount` and rows `aria-rowindex`.
 - Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced. While `loading` it reads "Loading" and the table has `aria-busy`.
@@ -70,6 +69,27 @@ Original to this repo (sorting headers come from our `Table`). The feature set f
 ## Stability
 
 Experimental. The column API, the `toolbar` slot, column visibility, resizing, export and virtual rows are new and may change in any release; see `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Sortable table](https://www.w3.org/WAI/ARIA/apg/patterns/table/) pattern. Roles: `separator`, `status`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a sortable column's header button | Sorts by that column, ascending; again, descending. | yes |
+| Space | On a sortable column's header button | Sorts by that column, like Enter. | yes |
+| Space | On a row's checkbox | Selects or deselects the row; the status line counts the selection. | yes |
+| Home | On a column's resize handle | Shrinks the column to its minimum width. | yes |
+| ArrowRight | On a column's resize handle | Widens the column by 16 px (on right-to-left pages the handle still moves the way the arrow points). | yes |
+| ArrowLeft | On a column's resize handle | Narrows the column by 16 px, down to its minimum. | yes |
+| Shift + ArrowRight | On a column's resize handle | Widens the column by 64 px (Shift+ArrowLeft narrows). | yes |
+
+Known gaps:
+
+- No arrow-key navigation between cells (it is a table, not an APG grid); Tab reaches each control.
+- Column resize has no End key (Home sets the minimum width).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
