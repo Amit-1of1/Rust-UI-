@@ -34,6 +34,10 @@
 //!
 //! Experimental (docs/STABILITY.md): new on 2026-11-01; method names may still change.
 
+// The kit is a dependency so its CSS sits next to this crate and its version matches the app's
+// (Cargo.toml); nothing here calls it, so name it to keep cargo's unused-dependency lint quiet.
+use ui as _;
+
 mod css;
 mod keys;
 mod query;
