@@ -26,7 +26,6 @@ In a `use_form` form, use `DateTimeField { field, label: "Departure" }`: the fie
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label` (default "Date and time") or by a visible label through `labelled_by`, with the description and error in `aria-describedby`. Inside are the date picker's group and the time picker's group; see their docs.
-- Keyboard: as `DatePicker` and `TimePicker`; Tab moves from the date segments to the calendar button to the time segments.
 - `DateTimeField` validates when focus leaves the whole picker, calendar included, and a failed submit focuses the hours (the date segments come from dioxus-primitives and cannot be focused from outside).
 - Reduced motion: the calendar popover's fade follows `DatePicker`.
 
@@ -37,6 +36,24 @@ Original to this repo; composes the kit's `DatePicker` and `TimePicker`.
 ## Stability
 
 Experimental. New on 2026-10-15; see `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Pattern: Group of a date picker and a time picker. Roles: `group`, `spinbutton`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | In the date or time half | Moves to the next segment of that half. | yes |
+| Tab | On the last date segment | Moves to the calendar button, then to the first time segment. | not yet |
+| Shift + Tab | On the first time segment | Moves back to the calendar button. | yes |
+
+Known gaps:
+
+- Arrow keys do not cross from the date half to the time half; Tab does.
+
+Native: Tab from the last date segment does not reach the calendar button on Blitz yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

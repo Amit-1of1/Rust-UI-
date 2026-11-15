@@ -54,7 +54,8 @@
   "description": "A table with sorting, a filter box, pagination, optional row selection, column hiding and resizing, CSV export and virtualised rows for long lists, built on `Table`.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

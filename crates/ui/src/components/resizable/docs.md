@@ -23,7 +23,6 @@ Sizes are percentages of the group and should add up to 100; `min_size` and `max
 ## Accessibility
 
 - Role and name: each `ResizableHandle` is a focusable `role="separator"` (the WAI-ARIA window splitter pattern) with `aria-valuenow` (the size of the panel before it, in percent), `aria-valuemin`, `aria-valuemax`, `aria-orientation` and the `aria_label` you give it ("Resize" by default). Give the panel before it an `id` and the handle points at it with `aria-controls`.
-- Keyboard: Tab reaches each divider. Left and Right arrows (Up and Down in a vertical group) move it by 5%, with Shift by 10%; Home and End move it to the panel's minimum and maximum.
 - Pointer: drag the divider (a 9 px hit area around the 1 px line). The drag ends when the pointer leaves the group.
 - Right to left: not mirrored yet. In a `dir="rtl"` row the first panel is on the right, and the arrow keys and dragging still change its size as in a left-to-right row, so they feel reversed. Use a vertical group, or `dir="ltr"` on the group, until this is fixed.
 - Reduced motion: only the divider's colour changes; that transition is off under `prefers-reduced-motion`.

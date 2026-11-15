@@ -1,0 +1,66 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The demo's sidebar is the desktop panel ([data-slot=sidebar], data-state expanded/collapsed);
+# on a narrow viewport it becomes a sheet, which these rows don't cover.
+# Ctrl/Cmd+B: on the web a window listener (document::eval in sidebar/component.rs), off the
+# web a keydown on the provider's wrapper (works while focus is inside it).
+# Remove the "- Keyboard:" line from sidebar/docs.md when this lands (doctor rule).
+pattern = "Disclosure (sidebar toggle)"
+apg = "disclosure"
+roles = ["navigation"]
+gaps = [
+    "The trigger has no aria-expanded or aria-controls, so the toggle state is not exposed to assistive tech.",
+    "On small screens (sheet) Escape-to-close is the sheet's and is not covered here.",
+]
+
+[parts]
+trigger = "[data-slot=sidebar-trigger]"
+panel = "[data-slot=sidebar]"
+nav = "[data-slot=sidebar-container][role=navigation]"
+
+[[states]]
+name = "expanded"
+means = "The sidebar is open."
+check = "attr panel data-state=expanded"
+
+[[states]]
+name = "collapsed"
+means = "The sidebar is collapsed."
+check = "attr panel data-state=collapsed"
+
+[[keys]]
+key = "Enter"
+when = "On the sidebar trigger"
+does = "Collapses or expands the sidebar."
+native = true
+test = """
+visible nav
+state expanded
+focus trigger
+press Enter
+state collapsed
+"""
+
+[[keys]]
+key = "Space"
+when = "On the sidebar trigger"
+does = "Collapses or expands the sidebar, like Enter."
+native = true
+test = """
+focus trigger
+press Space
+state collapsed
+"""
+
+[[keys]]
+key = "Control+b"
+when = "Anywhere in the app (Cmd+B on macOS)"
+does = "Collapses or expands the sidebar."
+native = true
+test = """
+focus trigger
+press Control+b
+state collapsed
+press Control+b
+state expanded
+"""

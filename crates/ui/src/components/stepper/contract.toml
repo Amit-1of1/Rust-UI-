@@ -1,0 +1,49 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Each step is a native <button>; the current one has aria-current="step". The demo's footer
+# has Back and Next buttons (its own, not part of the component).
+# Remove the "- Keyboard:" line from stepper/docs.md when this lands (doctor rule).
+pattern = "Ordered list of step buttons"
+roles = []
+gaps = [
+    "No arrow-key movement between steps (each is a Tab stop).",
+]
+
+[parts]
+step = "ol[aria-label='Checkout progress'] button"
+current = "ol[aria-label='Checkout progress'] button[aria-current=step]"
+next = "ol[aria-label='Checkout progress'] + div button"
+
+[[keys]]
+key = "Enter"
+when = "On a step"
+does = "Goes to that step."
+native = true
+test = """
+focus step@3
+press Enter
+attr step@3 aria-current=step
+text current Payment
+"""
+
+[[keys]]
+key = "Space"
+when = "On a step"
+does = "Goes to that step, like Enter."
+native = true
+test = """
+focus step@1
+press Space
+attr step@1 aria-current=step
+"""
+
+[[keys]]
+key = "Enter"
+when = "On the demo's Next button"
+does = "Moves to the next step."
+native = true
+test = """
+focus next@2
+press Enter
+text current Payment
+"""

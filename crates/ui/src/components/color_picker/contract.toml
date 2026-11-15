@@ -1,0 +1,152 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Trigger and popover come from the kit's popover (Enter opens, Escape closes and returns
+# focus). The hue slider is the primitive Slider used directly, so it has arrow keys only
+# (the kit's own Slider adds Home/End; this one doesn't). The colour area is a focusable thumb
+# that hands focus to a hidden range input per axis (saturation, value).
+# Hue math in the tests: the demo starts at rgb(155,128,255) = hue ~252.8; step 1, Shift x10,
+# clamped to 0..360. So Shift+ArrowRight*11 always lands on 360 and Shift+ArrowLeft*26 on 0.
+pattern = "Slider (hue) and 2D slider (colour area) in a non-modal dialog"
+apg = "slider"
+roles = ["group", "dialog", "slider"]
+gaps = [
+    "Hue slider: no Home, End, PageUp or PageDown.",
+    "Colour area: no Home, End, PageUp or PageDown; its focusable thumb has no role (only aria-label \"Color area\").",
+]
+
+[parts]
+trigger = "[role=group][aria-label='Color picker'] button[aria-expanded]"
+popover = "[role=dialog]"
+hue = "[role=dialog] [role=slider]"
+area = "[role=dialog] [aria-label='Color area']"
+saturation = "[role=dialog] input[aria-label=Saturation]"
+value = "[role=dialog] input[aria-label=Value]"
+
+[[states]]
+name = "open"
+means = "The picker's popover is shown."
+check = "visible popover"
+
+[[states]]
+name = "closed"
+means = "Only the swatch button is shown."
+check = "hidden popover"
+
+[[keys]]
+key = "Enter"
+when = "On the swatch button"
+does = "Opens the picker."
+native = true
+test = """
+focus trigger
+press Enter
+state open
+attr trigger aria-expanded=true
+"""
+
+[[keys]]
+key = "Escape"
+when = "In the open picker"
+does = "Closes it and returns focus to the swatch button."
+native = true
+test = """
+focus trigger
+press Enter
+focus hue
+press Escape
+state closed
+focused trigger
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On the hue slider"
+does = "Increases the hue by 1 degree."
+native = true
+test = """
+focus trigger
+press Enter
+focus hue
+press Shift+ArrowLeft*26
+press ArrowRight
+attr hue aria-valuenow=1
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On the hue slider"
+does = "Decreases the hue by 1 degree."
+native = true
+test = """
+focus trigger
+press Enter
+focus hue
+press Shift+ArrowRight*11
+press ArrowLeft
+attr hue aria-valuenow=359
+"""
+
+[[keys]]
+key = "Shift+ArrowRight"
+when = "On the hue slider"
+does = "Increases the hue by 10 degrees, up to 360 (Shift+ArrowLeft decreases)."
+native = true
+test = """
+focus trigger
+press Enter
+focus hue
+press Shift+ArrowRight*11
+attr hue aria-valuenow=360
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On the colour area"
+does = "Raises the saturation one step and moves focus to the saturation input, which announces it."
+native = true
+test = """
+focus trigger
+press Enter
+focus area
+press ArrowRight
+focused saturation
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On the colour area"
+does = "Raises the brightness (value) one step and moves focus to the value input."
+native = true
+test = """
+focus trigger
+press Enter
+focus area
+press ArrowUp
+focused value
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On the saturation input"
+does = "Raises the value and moves focus to the value input (the cross axis)."
+native = true
+test = """
+focus trigger
+press Enter
+focus saturation
+press ArrowUp
+focused value
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On the value input"
+does = "Raises the saturation and moves focus to the saturation input."
+native = true
+test = """
+focus trigger
+press Enter
+focus value
+press ArrowRight
+focused saturation
+"""

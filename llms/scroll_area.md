@@ -17,6 +17,21 @@ ScrollArea {
 }
 ```
 
+## Keyboard and accessibility
+
+Pattern: Scrollable region. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | In the scroll area | Scrolls the content down (browser scrolling); focus stays on the area. | yes |
+
+Known gaps:
+
+- The scrollable box is focusable but has no role or accessible name (it should be a named region).
+- Scrolling by keyboard is the browser's own and is not asserted by a row.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

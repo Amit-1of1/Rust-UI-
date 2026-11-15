@@ -1,0 +1,123 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Behaviour is the primitive's (dioxus-primitives drag_and_drop_list.rs, DragAndDropListItem).
+# Items are <li aria-roledescription="sortable item">, roving tabindex; an assertive status
+# region announces each move.
+# BUG found while drafting (not a row): Delete/Backspace remove the focused item even when the
+# list is not removable (`is_removable` false, as in the demo, which shows no remove button).
+# The primitive's handler doesn't check removability. Fix before documenting Delete.
+# ArrowUp/Down while lifted wrap around the ends (modulo), unlike most sortable lists.
+pattern = "Listbox with rearrangeable options (keyboard drag and drop)"
+apg = "listbox"
+roles = ["status"]
+gaps = [
+    "No typeahead.",
+    "While an item is lifted, the arrow keys wrap from the last position to the first.",
+]
+
+[parts]
+item = "li[aria-roledescription='sortable item']"
+live = "[role=status][aria-live=assertive]"
+
+[[states]]
+name = "lifted"
+means = "The first item is picked up and moves with the arrow keys."
+check = "attr item@1 aria-grabbed=true"
+
+[[keys]]
+key = "ArrowDown"
+when = "On an item"
+does = "Moves focus to the next item."
+native = true
+test = """
+focus item@1
+press ArrowDown
+focused item@2
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On an item"
+does = "Moves focus to the previous item."
+native = true
+test = """
+focus item@2
+press ArrowUp
+focused item@1
+"""
+
+[[keys]]
+key = "Home"
+when = "On an item"
+does = "Moves focus to the first item."
+native = true
+test = """
+focus item@4
+press Home
+focused item@1
+"""
+
+[[keys]]
+key = "End"
+when = "On an item"
+does = "Moves focus to the last item."
+native = true
+test = """
+focus item@2
+press End
+focused item@6
+"""
+
+[[keys]]
+key = "Enter"
+when = "On an item"
+does = "Lifts it; Enter again drops it where it now is and announces the move."
+native = true
+test = """
+focus item@1
+press Enter
+state lifted
+text live You have lifted an item in position 1
+press ArrowDown
+press Enter
+text item@1 Redesign onboarding flow
+text live moved from position 1 to position 2
+"""
+
+[[keys]]
+key = "Space"
+when = "On an item"
+does = "Lifts or drops it, like Enter."
+native = true
+test = """
+focus item@1
+press Space
+state lifted
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "While an item is lifted"
+does = "Moves it one place down (ArrowUp moves it up) and announces the new position."
+native = true
+test = """
+focus item@1
+press Enter
+press ArrowDown
+text live moved the item to position 2 of 6
+"""
+
+[[keys]]
+key = "Escape"
+when = "While an item is lifted"
+does = "Puts it back where it started and announces that."
+native = true
+test = """
+focus item@1
+press Enter
+press ArrowDown
+press Escape
+attr item@1 aria-grabbed=false
+text item@1 Ship Q2 product roadmap
+text live Movement cancelled
+"""

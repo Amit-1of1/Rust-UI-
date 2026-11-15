@@ -66,13 +66,35 @@ SidebarProvider {
 ## Behaviors
 - Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects the start (`Left`) or end (`Right`) edge, which swap on right-to-left pages (docs/RTL.md).
 - Collapse: `Offcanvas` hides the rail; `Icon` keeps a thin icon strip and hides labels/actions/badges; `None` is static.
-- Keyboard: ⌘/Ctrl+B toggles via provider. Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
+- Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
 - Phones: below 768 px the sidebar is a sheet. Clicking a `SidebarMenuButton` closes it (`"data-keep-open": "true"` keeps it open; buttons with `aria-expanded` or `aria-haspopup`, such as a collapsible group's trigger, never close it). With the `router` feature the provider also closes it after every in-app navigation, which covers router links passed through `as`; without the router, call `use_sidebar().set_open_mobile(false)` from your own links.
 - Tooltips: `tooltip: Option<Element>` on `SidebarMenuButton`; `None` skips wrapping in Tooltip.
 - Landmarks: `Sidebar` is a navigation landmark named "Sidebar" (`UiStrings::sidebar`; pass `aria_label` to rename it, or `role` to change it). `SidebarInset` renders `<main>`, so it is the page's `main` landmark: don't add another `main` inside it.
 
 ## Custom Rendering with `as`
 Supported components: `SidebarTrigger`, `SidebarGroupLabel`, `SidebarGroupAction`, `SidebarMenuButton`, `SidebarMenuAction`, `SidebarMenuSubButton`. Use `as: |attrs| rsx! { ... }` and spread `..attrs` to retain merged attributes, state data, and handlers.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure (sidebar toggle)](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Roles: `navigation`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the sidebar trigger | Collapses or expands the sidebar. | yes |
+| Space | On the sidebar trigger | Collapses or expands the sidebar, like Enter. | yes |
+| Control + b | Anywhere in the app (Cmd+B on macOS) | Collapses or expands the sidebar. | yes |
+
+States:
+
+- `expanded`: The sidebar is open.
+- `collapsed`: The sidebar is collapsed.
+
+Known gaps:
+
+- The trigger has no aria-expanded or aria-controls, so the toggle state is not exposed to assistive tech.
+- On small screens (sheet) Escape-to-close is the sheet's and is not covered here.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

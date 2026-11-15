@@ -1,0 +1,56 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Composition of DatePicker and TimePicker; each half's keys are in their own contracts. These
+# rows check the seam: the demo's second picker, "Return" (12-hour), with no value.
+# Tab order per docs.md: date segments, calendar button, time segments.
+pattern = "Group of a date picker and a time picker"
+roles = ["group", "spinbutton"]
+native_note = "Tab from the last date segment does not reach the calendar button on Blitz yet."
+gaps = [
+    "Arrow keys do not cross from the date half to the time half; Tab does.",
+]
+
+[parts]
+picker = "[role=group][aria-label=Return]"
+date = "[role=group][aria-label=Return] [role=group][aria-label=Date] [role=spinbutton]"
+calendar = "[role=group][aria-label=Return] button[aria-label='Show Calendar']"
+time = "[role=group][aria-label=Return] [role=group][aria-label=Time] [role=spinbutton]"
+
+[[keys]]
+key = "ArrowRight"
+when = "In the date or time half"
+does = "Moves to the next segment of that half."
+native = true
+test = """
+visible picker
+focus date@1
+press ArrowRight
+focused date@2
+focus time@1
+press ArrowRight
+focused time@2
+"""
+
+[[keys]]
+key = "Tab"
+when = "On the last date segment"
+does = "Moves to the calendar button, then to the first time segment."
+native = false
+test = """
+focus date@3
+press Tab
+focused calendar
+press Tab
+focused time@1
+"""
+
+[[keys]]
+key = "Shift+Tab"
+when = "On the first time segment"
+does = "Moves back to the calendar button."
+native = true
+test = """
+focus time@1
+press Shift+Tab
+focused calendar
+"""

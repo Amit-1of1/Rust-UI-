@@ -40,6 +40,22 @@ Pagination {
 - `PaginationLink` uses `is_active` to indicate the current page.
 - `PaginationPrevious` and `PaginationNext` show labels on larger (non-mobile) screens; labels are hidden on smaller screens to keep the control compact.
 
+## Keyboard and accessibility
+
+Pattern: Navigation landmark with page buttons. Roles: `navigation`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On Next | Goes to the next page; focus stays on Next. | yes |
+| Space | On Previous | Goes to the previous page. | yes |
+| Enter | On a page number | Goes to that page; on the last page Next is marked unavailable. | yes |
+
+Known gaps:
+
+- No arrow-key movement between page buttons (each is a Tab stop, as on most sites).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

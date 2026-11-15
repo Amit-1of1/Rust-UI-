@@ -47,6 +47,34 @@ ColorPickerRoot {
 If you only need to add content after the default controls, pass children to
 `ColorPicker`; they will be appended inside the default popover.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Slider (hue) and 2D slider (colour area) in a non-modal dialog](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) pattern. Roles: `group`, `dialog`, `slider`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the swatch button | Opens the picker. | yes |
+| Escape | In the open picker | Closes it and returns focus to the swatch button. | yes |
+| ArrowRight | On the hue slider | Increases the hue by 1 degree. | yes |
+| ArrowLeft | On the hue slider | Decreases the hue by 1 degree. | yes |
+| Shift + ArrowRight | On the hue slider | Increases the hue by 10 degrees, up to 360 (Shift+ArrowLeft decreases). | yes |
+| ArrowRight | On the colour area | Raises the saturation one step and moves focus to the saturation input, which announces it. | yes |
+| ArrowUp | On the colour area | Raises the brightness (value) one step and moves focus to the value input. | yes |
+| ArrowUp | On the saturation input | Raises the value and moves focus to the value input (the cross axis). | yes |
+| ArrowRight | On the value input | Raises the saturation and moves focus to the saturation input. | yes |
+
+States:
+
+- `open`: The picker's popover is shown.
+- `closed`: Only the swatch button is shown.
+
+Known gaps:
+
+- Hue slider: no Home, End, PageUp or PageDown.
+- Colour area: no Home, End, PageUp or PageDown; its focusable thumb has no role (only aria-label "Color area").
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

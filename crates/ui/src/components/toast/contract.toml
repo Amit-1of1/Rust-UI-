@@ -1,0 +1,48 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The kit's ToastProvider over the primitive (dioxus-primitives toast.rs). Toasts are named
+# role=group boxes (tabindex 0) inside a role=region; each has a close button.
+# Not covered yet: F6 moves focus to the notifications region (use_global_keydown_listener
+# on the web, a keydown on the provider's box off the web), but `press` only knows the keys in
+# NAMED_KEYS (crates/cli/src/contract.rs), which has no F-keys. Add "F6" there, then add:
+#   [[keys]] key = "F6", when = "Anywhere in the app", does = "Moves focus to the notifications.",
+#   test: focus show@1 / press Enter / press F6 / focus-in region
+pattern = "Notifications region (toasts)"
+roles = ["region", "group"]
+gaps = [
+    "Escape does not dismiss the focused toast.",
+    "The close button's accessible name is the lowercase \"close\" and does not say which toast.",
+]
+
+[parts]
+show = "button"
+region = "[role=region]"
+toast = "[role=region] [role=group]"
+close = "[role=region] [role=group] button[aria-label=close]"
+
+[[keys]]
+key = "Enter"
+when = "On a button that shows a toast"
+does = "Shows the toast in the notifications region; focus stays on the button."
+native = true
+test = """
+focus show@1
+press Enter
+visible toast
+text toast Saved
+focused show@1
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a toast's close button"
+does = "Dismisses that toast."
+native = true
+test = """
+focus show@1
+press Enter
+visible toast
+focus close
+press Enter
+hidden toast
+"""

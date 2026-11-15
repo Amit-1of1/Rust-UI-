@@ -1,0 +1,57 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Rows use the demo's second navigation, the button-based Pager (20 pages, starting on page 6:
+# 1 … 5 6 7 … 20). The first navigation is static links (href="#"): Tab and Enter follow a
+# link, nothing to assert, so no rows for it.
+# BUG found while drafting: the Pager's <nav> renders aria-label twice (SSR snapshot:
+# aria-label="pagination" aria-label="Pages of results"): Pagination's own default label is
+# not replaced by the caller's. Browsers keep the first, so the name is "pagination". Selectors
+# here therefore avoid aria-label.
+pattern = "Navigation landmark with page buttons"
+roles = ["navigation"]
+gaps = [
+    "No arrow-key movement between page buttons (each is a Tab stop, as on most sites).",
+]
+
+[parts]
+nav = "nav[role=navigation]"
+current = "nav button[aria-current=page]"
+page = "nav button[data-size=icon]"
+previous = "nav button[data-kind=previous]"
+next = "nav button[data-kind=next]"
+
+[[keys]]
+key = "Enter"
+when = "On Next"
+does = "Goes to the next page; focus stays on Next."
+native = true
+test = """
+visible nav@2
+focus next
+press Enter
+text current 7
+focused next
+"""
+
+[[keys]]
+key = "Space"
+when = "On Previous"
+does = "Goes to the previous page."
+native = true
+test = """
+focus previous
+press Space
+text current 5
+"""
+
+[[keys]]
+key = "Enter"
+when = "On a page number"
+does = "Goes to that page; on the last page Next is marked unavailable."
+native = true
+test = """
+focus page@5
+press Enter
+text current 20
+attr next aria-disabled=true
+"""

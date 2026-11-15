@@ -9,7 +9,8 @@
   "description": "A one-time-code input: one box per character.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

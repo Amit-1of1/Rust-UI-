@@ -11,7 +11,8 @@
   "description": "The ScrollArea component is used to create a scrollable container for its children. It can be used to enable scrolling for content that overflows the available space.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

@@ -24,7 +24,8 @@
   "description": "The Calendar component is used to display a calendar interface, allowing users to select dates. It provides a grid layout of days for a specific month and year.",
   "exclude": [
     "docs.md",
-    "component.json"
+    "component.json",
+    "contract.toml"
   ],
   "globalAssets": [
     "../../../assets/theme.css"

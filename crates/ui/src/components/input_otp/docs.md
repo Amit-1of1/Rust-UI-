@@ -11,7 +11,6 @@ Typing advances to the next box; Backspace on an empty box clears and goes back;
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label`; every box is a real `<input>` named "label, character n of N".
-- Keyboard: as above; Tab leaves the group normally.
 - Reduced motion: no animation.
 
 ## Source

@@ -22,6 +22,29 @@ TagGroup {
 }
 ```
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Grid (tag list)](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) pattern. Roles: `grid`, `row`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a tag | Moves focus to the next tag. | yes |
+| ArrowDown | On a tag | Moves focus to the next tag, like ArrowRight. | yes |
+| ArrowLeft | On a tag | Moves focus to the previous tag. | yes |
+| ArrowUp | On a tag | Moves focus to the previous tag, like ArrowLeft. | yes |
+| Home | On a tag | Moves focus to the first tag. | yes |
+| End | On a tag | Moves focus to the last tag. | yes |
+| Enter | On a tag | Selects the tag. A selected tag stays selected when the group must keep one. | yes |
+| Space | On a tag | Selects the tag, like Enter. | yes |
+| Delete | On a removable tag | Removes it (or every selected tag, when it is selected). | yes |
+| Backspace | On a removable tag | Removes it, like Delete. | yes |
+
+Known gaps:
+
+- No typeahead.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust

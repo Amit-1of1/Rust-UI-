@@ -1,0 +1,92 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# Gaps vs APG Window Splitter: Enter (collapse/restore) missing; F6 (cycle panes, optional)
+# missing. Shift+arrow moves by 10% (two steps), an addition.
+# Remove the "- Keyboard:" line from resizable/docs.md when this lands (doctor rule).
+pattern = "Window Splitter"
+apg = "windowsplitter"
+roles = ["separator"]
+gaps = [
+    "Enter does not collapse or restore the panel before the divider.",
+]
+
+[parts]
+divider = "[role=separator][aria-label='Resize folders']"
+stacked = "[role=separator][aria-label='Resize preview']"
+
+[[keys]]
+key = "ArrowRight"
+when = "On a divider between side-by-side panels"
+does = "Moves the divider right by 5% of the group, within both panels' limits."
+native = true
+test = """
+focus divider
+press ArrowRight
+attr divider aria-valuenow=35
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a divider between side-by-side panels"
+does = "Moves the divider left by 5%."
+native = true
+test = """
+focus divider
+press ArrowLeft
+attr divider aria-valuenow=25
+"""
+
+[[keys]]
+key = "Shift+ArrowRight"
+when = "On a divider between side-by-side panels"
+does = "Moves the divider by 10% (Shift+ArrowLeft the other way)."
+native = true
+test = """
+focus divider
+press Shift+ArrowRight
+attr divider aria-valuenow=40
+"""
+
+[[keys]]
+key = "ArrowDown"
+when = "On a divider between stacked panels"
+does = "Moves the divider down by 5%."
+native = true
+test = """
+focus stacked
+press ArrowDown
+attr stacked aria-valuenow=65
+"""
+
+[[keys]]
+key = "ArrowUp"
+when = "On a divider between stacked panels"
+does = "Moves the divider up by 5%."
+native = true
+test = """
+focus stacked
+press ArrowUp
+attr stacked aria-valuenow=55
+"""
+
+[[keys]]
+key = "Home"
+when = "On a divider"
+does = "Moves the divider to the first panel's minimum."
+native = true
+test = """
+focus divider
+press Home
+attr divider aria-valuenow=15
+"""
+
+[[keys]]
+key = "End"
+when = "On a divider"
+does = "Moves the divider to the first panel's maximum, or the second panel's minimum if that comes first."
+native = true
+test = """
+focus divider
+press End
+attr divider aria-valuenow=60
+"""

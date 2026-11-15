@@ -1,0 +1,105 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The first demo table ("Team directory": sortable Name, Team, Salary; selectable; resizable
+# columns). Sorting and selection are native controls (a <button> in each sortable <th>, an
+# <input type=checkbox> per row); the column resize handle is the kit's own role=separator.
+# The table is a plain <table>, not an APG grid: Tab walks the controls, there is no arrow-key
+# cell navigation. Remove the "- Keyboard:" line from data_table/docs.md when this lands.
+# Selectors use @1 for the first table: the second demo table (10,000 orders) repeats them.
+pattern = "Sortable table"
+apg = "table"
+roles = ["separator", "status"]
+gaps = [
+    "No arrow-key navigation between cells (it is a table, not an APG grid); Tab reaches each control.",
+    "Column resize has no End key (Home sets the minimum width).",
+]
+
+[parts]
+sort_header = "th[aria-sort]"
+sort_button = "th[aria-sort] button"
+ada = "input[aria-label='Select Ada Lovelace']"
+status = "[role=status]"
+resize = "[role=separator][aria-label='Resize Name']"
+
+[[keys]]
+key = "Enter"
+when = "On a sortable column's header button"
+does = "Sorts by that column, ascending; again, descending."
+native = true
+test = """
+focus sort_button@1
+press Enter
+attr sort_header@1 aria-sort=ascending
+press Enter
+attr sort_header@1 aria-sort=descending
+"""
+
+[[keys]]
+key = "Space"
+when = "On a sortable column's header button"
+does = "Sorts by that column, like Enter."
+native = true
+test = """
+focus sort_button@2
+press Space
+attr sort_header@2 aria-sort=ascending
+"""
+
+[[keys]]
+key = "Space"
+when = "On a row's checkbox"
+does = "Selects or deselects the row; the status line counts the selection."
+native = true
+test = """
+focus ada
+press Space
+text status@1 1 selected
+"""
+
+[[keys]]
+key = "Home"
+when = "On a column's resize handle"
+does = "Shrinks the column to its minimum width."
+native = true
+test = """
+focus resize
+press Home
+attr resize aria-valuenow=48
+"""
+
+[[keys]]
+key = "ArrowRight"
+when = "On a column's resize handle"
+does = "Widens the column by 16 px (on right-to-left pages the handle still moves the way the arrow points)."
+native = true
+test = """
+focus resize
+press Home
+press ArrowRight
+attr resize aria-valuenow=64
+"""
+
+[[keys]]
+key = "ArrowLeft"
+when = "On a column's resize handle"
+does = "Narrows the column by 16 px, down to its minimum."
+native = true
+test = """
+focus resize
+press Home
+press ArrowRight
+press ArrowLeft
+attr resize aria-valuenow=48
+"""
+
+[[keys]]
+key = "Shift+ArrowRight"
+when = "On a column's resize handle"
+does = "Widens the column by 64 px (Shift+ArrowLeft narrows)."
+native = true
+test = """
+focus resize
+press Home
+press Shift+ArrowRight
+attr resize aria-valuenow=112
+"""

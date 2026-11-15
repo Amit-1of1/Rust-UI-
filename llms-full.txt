@@ -1294,6 +1294,29 @@ Calendar {
 
 The styled `Calendar` and `RangeCalendar` render a complete month view by default, including the header, navigation, month/year selectors, and date grid.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Date grid (as in the APG date picker dialog)](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) pattern. Roles: `application`, `grid`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a day | Moves to the next day. | yes |
+| ArrowLeft | On a day | Moves to the previous day. | yes |
+| ArrowDown | On a day | Moves to the same day next week. | yes |
+| ArrowUp | On a day | Moves to the same day last week. | yes |
+| Shift + ArrowDown | On a day | Moves to the same day next month, turning the page. | yes |
+| Shift + ArrowUp | On a day | Moves to the same day last month, turning the page. | yes |
+| Enter | On a day | Selects it (pressing it again clears the selection). | yes |
+| Space | On a day | Selects it, like Enter. | yes |
+
+Known gaps:
+
+- PageUp and PageDown (previous/next month) are missing; Shift+ArrowUp/Down change the month instead.
+- Shift+PageUp and Shift+PageDown (previous/next year) are missing.
+- Home and End (first/last day of the week) are missing.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -1675,12 +1698,27 @@ Slide width and spacing are CSS (`.dx-carousel-item` flex-basis); the buttons sc
 ## Accessibility
 
 - Role and name: a `section` with `aria-roledescription="carousel"` named by `label`; the scrolling track is a focusable group; each slide is `aria-roledescription="slide"` with your `label`.
-- Keyboard: focus the track and use the arrow keys (native scrolling), or Tab to the Previous/Next buttons.
+- Scrolling: focus the track and use the arrow keys (native scrolling).
 - Reduced motion: scrolling is instant instead of smooth.
 
 ## Source
 
 Original to this repo. The pattern follows the WAI-ARIA carousel practices; Rust/UI's `carousel.rs` was used only to see the feature set.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Carousel](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/) pattern. Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the slide track | Moves to Previous, then Next (the track is one tab stop). | yes |
+
+Known gaps:
+
+- Previous and Next change nothing a screen reader is told: the visible slide is not marked and nothing is announced.
+- Arrow keys on the track scroll it natively; there is no slide-by-slide keyboard step.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -2971,6 +3009,34 @@ ColorPickerRoot {
 If you only need to add content after the default controls, pass children to
 `ColorPicker`; they will be appended inside the default popover.
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Slider (hue) and 2D slider (colour area) in a non-modal dialog](https://www.w3.org/WAI/ARIA/apg/patterns/slider/) pattern. Roles: `group`, `dialog`, `slider`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the swatch button | Opens the picker. | yes |
+| Escape | In the open picker | Closes it and returns focus to the swatch button. | yes |
+| ArrowRight | On the hue slider | Increases the hue by 1 degree. | yes |
+| ArrowLeft | On the hue slider | Decreases the hue by 1 degree. | yes |
+| Shift + ArrowRight | On the hue slider | Increases the hue by 10 degrees, up to 360 (Shift+ArrowLeft decreases). | yes |
+| ArrowRight | On the colour area | Raises the saturation one step and moves focus to the saturation input, which announces it. | yes |
+| ArrowUp | On the colour area | Raises the brightness (value) one step and moves focus to the value input. | yes |
+| ArrowUp | On the saturation input | Raises the value and moves focus to the value input (the cross axis). | yes |
+| ArrowRight | On the value input | Raises the saturation and moves focus to the saturation input. | yes |
+
+States:
+
+- `open`: The picker's popover is shown.
+- `closed`: Only the swatch button is shown.
+
+Known gaps:
+
+- Hue slider: no Home, End, PageUp or PageDown.
+- Colour area: no Home, End, PageUp or PageDown; its focusable thumb has no role (only aria-label "Color area").
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -3801,7 +3867,6 @@ On the server, `table_view(&columns, &all_rows, &q.query, q.sort, q.page, q.page
 ## Accessibility
 
 - Role and name: a native `<table>` with a `<caption>`; sortable headers are buttons inside `<th scope="col" aria-sort>`; the filter has an `aria-label`; each row checkbox is named after the row's first cell, and the header checkbox is "Select all rows on this page".
-- Keyboard: everything is a native control (Tab, Space, Enter).
 - Column menu: native checkboxes named after their column in a popover. Resize handles are focusable `role="separator"` elements named "Resize <column>", with `aria-valuenow` (the width in pixels) and `aria-valuemin`.
 - Virtualised: the scroll box is a focusable `role="region"` named by the caption, so keyboard users can scroll it; the table has `aria-rowcount` and rows `aria-rowindex`.
 - Status: "Showing 1–5 of 14 rows" and the selected count are in a `role="status"` region, so filter results are announced. While `loading` it reads "Loading" and the table has `aria-busy`.
@@ -3814,6 +3879,27 @@ Original to this repo (sorting headers come from our `Table`). The feature set f
 ## Stability
 
 Experimental. The column API, the `toolbar` slot, column visibility, resizing, export and virtual rows are new and may change in any release; see `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Sortable table](https://www.w3.org/WAI/ARIA/apg/patterns/table/) pattern. Roles: `separator`, `status`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a sortable column's header button | Sorts by that column, ascending; again, descending. | yes |
+| Space | On a sortable column's header button | Sorts by that column, like Enter. | yes |
+| Space | On a row's checkbox | Selects or deselects the row; the status line counts the selection. | yes |
+| Home | On a column's resize handle | Shrinks the column to its minimum width. | yes |
+| ArrowRight | On a column's resize handle | Widens the column by 16 px (on right-to-left pages the handle still moves the way the arrow points). | yes |
+| ArrowLeft | On a column's resize handle | Narrows the column by 16 px, down to its minimum. | yes |
+| Shift + ArrowRight | On a column's resize handle | Widens the column by 64 px (Shift+ArrowLeft narrows). | yes |
+
+Known gaps:
+
+- No arrow-key navigation between cells (it is a table, not an APG grid); Tab reaches each control.
+- Column resize has no End key (Home sets the minimum width).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -4113,6 +4199,33 @@ Name a picker from its visible label: `DateRangePicker { aria_labelledby: "dates
 
 `DateRangeField` (in the form component) binds a `DateRangePicker` to a `use_form` field, labelled, described and validated like the other fields. Its value is `2026-10-15/2026-10-20`; `format_iso_date_range` and `parse_iso_date_range` write and read that, and `format_iso_date` / `parse_iso_date` do the same for one date (`2026-10-15`, the `<input type="date">` format).
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Spinbutton segments with a calendar popover](https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/) pattern. Roles: `group`, `spinbutton`, `dialog`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a segment | Moves to the next segment (year, month, day). | yes |
+| ArrowLeft | On a segment | Moves to the previous segment. | yes |
+| Enter | On a segment | Moves to the next segment. | yes |
+| ArrowUp | On an empty segment | Fills it with today's value; on a filled one, adds one, wrapping at the end of the range. | yes |
+| ArrowDown | On an empty segment | Fills it with today's value; on a filled one, subtracts one, wrapping at the start. | yes |
+| Enter | On the calendar button | Opens the calendar. | yes |
+| Escape | In the open calendar | Closes it and returns focus to the calendar button. | yes |
+
+States:
+
+- `open`: The calendar popover is shown.
+- `closed`: Only the segments and the calendar button are shown.
+
+Known gaps:
+
+- No Home or End on a segment (APG spinbutton: minimum and maximum).
+- No PageUp or PageDown on a segment.
+- Typing digits, Backspace and Delete are not covered by a row yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -4337,7 +4450,6 @@ In a `use_form` form, use `DateTimeField { field, label: "Departure" }`: the fie
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label` (default "Date and time") or by a visible label through `labelled_by`, with the description and error in `aria-describedby`. Inside are the date picker's group and the time picker's group; see their docs.
-- Keyboard: as `DatePicker` and `TimePicker`; Tab moves from the date segments to the calendar button to the time segments.
 - `DateTimeField` validates when focus leaves the whole picker, calendar included, and a failed submit focuses the hours (the date segments come from dioxus-primitives and cannot be focused from outside).
 - Reduced motion: the calendar popover's fade follows `DatePicker`.
 
@@ -4348,6 +4460,24 @@ Original to this repo; composes the kit's `DatePicker` and `TimePicker`.
 ## Stability
 
 Experimental. New on 2026-10-15; see `docs/STABILITY.md` in the kit repository.
+
+## Keyboard and accessibility
+
+Pattern: Group of a date picker and a time picker. Roles: `group`, `spinbutton`. Works on native (Blitz): partly.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | In the date or time half | Moves to the next segment of that half. | yes |
+| Tab | On the last date segment | Moves to the calendar button, then to the first time segment. | not yet |
+| Shift + Tab | On the first time segment | Moves back to the calendar button. | yes |
+
+Known gaps:
+
+- Arrow keys do not cross from the date half to the time half; Tab does.
+
+Native: Tab from the last date segment does not reach the calendar button on Blitz yet.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -4631,6 +4761,32 @@ DragAndDropList {
     is_removable
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Listbox with rearrangeable options (keyboard drag and drop)](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/) pattern. Roles: `status`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | On an item | Moves focus to the next item. | yes |
+| ArrowUp | On an item | Moves focus to the previous item. | yes |
+| Home | On an item | Moves focus to the first item. | yes |
+| End | On an item | Moves focus to the last item. | yes |
+| Enter | On an item | Lifts it; Enter again drops it where it now is and announces the move. | yes |
+| Space | On an item | Lifts or drops it, like Enter. | yes |
+| ArrowDown | While an item is lifted | Moves it one place down (ArrowUp moves it up) and announces the new position. | yes |
+| Escape | While an item is lifted | Puts it back where it started and announces that. | yes |
+
+States:
+
+- `lifted`: The first item is picked up and moves with the arrow keys.
+
+Known gaps:
+
+- No typeahead.
+- While an item is lifted, the arrow keys wrap from the last position to the first.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -6267,6 +6423,29 @@ HoverCard {
 
 `HoverCardTrigger` is itself focusable (`role="button"`, `tabindex="0"`), so keyboard users can open the card. A button or link inside it is a control inside a control (axe `nested-interactive`), and screen readers announce it badly. Put text, an avatar or an icon directly inside the trigger, and put links and buttons inside `HoverCardContent` (or next to the trigger).
 
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Hover card (tooltip-like, opens on focus)](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) pattern. Roles: `button`, `tooltip`. Works on native (Blitz): not yet.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Tab | On the trigger, with the card open | Moves focus on and closes the card (focusing the trigger opens it). | not yet |
+
+States:
+
+- `open`: The card is shown.
+- `closed`: Only the trigger is shown.
+
+Known gaps:
+
+- Escape does not close the card (APG tooltip: Escape dismisses).
+- The trigger has role=button but Enter and Space do nothing.
+- The card's content can't be reached by keyboard: it closes as soon as focus leaves the trigger.
+
+Native: On Blitz the card stays open when focus tabs away from the trigger.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -6859,12 +7038,29 @@ Typing advances to the next box; Backspace on an empty box clears and goes back;
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label`; every box is a real `<input>` named "label, character n of N".
-- Keyboard: as above; Tab leaves the group normally.
 - Reduced motion: no animation.
 
 ## Source
 
 Original to this repo. Rust/UI has an `input_otp` driven by a wasm-bindgen DOM controller; this one is plain Dioxus state and native inputs.
+
+## Keyboard and accessibility
+
+Pattern: One-time code input (group of text boxes). Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | In a box | Moves to the next box (stops at the last). | yes |
+| ArrowLeft | In a box | Moves to the previous box (stops at the first). | yes |
+| Home | In a box | Moves to the first box. | yes |
+| End | In a box | Moves to the last box. | yes |
+| Backspace | In an empty box | Clears the box before it and moves there. | yes |
+
+Known gaps:
+
+- Delete does nothing special (only Backspace clears and moves back).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -8322,6 +8518,22 @@ Pagination {
 - `PaginationLink` uses `is_active` to indicate the current page.
 - `PaginationPrevious` and `PaginationNext` show labels on larger (non-mobile) screens; labels are hidden on smaller screens to keep the control compact.
 
+## Keyboard and accessibility
+
+Pattern: Navigation landmark with page buttons. Roles: `navigation`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On Next | Goes to the next page; focus stays on Next. | yes |
+| Space | On Previous | Goes to the previous page. | yes |
+| Enter | On a page number | Goes to that page; on the last page Next is marked unavailable. | yes |
+
+Known gaps:
+
+- No arrow-key movement between page buttons (each is a Tab stop, as on most sites).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
+
 ## API
 
 ```rust
@@ -8702,7 +8914,6 @@ Sizes are percentages of the group and should add up to 100; `min_size` and `max
 ## Accessibility
 
 - Role and name: each `ResizableHandle` is a focusable `role="separator"` (the WAI-ARIA window splitter pattern) with `aria-valuenow` (the size of the panel before it, in percent), `aria-valuemin`, `aria-valuemax`, `aria-orientation` and the `aria_label` you give it ("Resize" by default). Give the panel before it an `id` and the handle points at it with `aria-controls`.
-- Keyboard: Tab reaches each divider. Left and Right arrows (Up and Down in a vertical group) move it by 5%, with Shift by 10%; Home and End move it to the panel's minimum and maximum.
 - Pointer: drag the divider (a 9 px hit area around the 1 px line). The drag ends when the pointer leaves the group.
 - Right to left: not mirrored yet. In a `dir="rtl"` row the first panel is on the right, and the arrow keys and dragging still change its size as in a left-to-right row, so they feel reversed. Use a vertical group, or `dir="ltr"` on the group, until this is fixed.
 - Reduced motion: only the divider's colour changes; that transition is off under `prefers-reduced-motion`.
@@ -8714,6 +8925,26 @@ Original to this repo. The API follows shadcn/ui's `Resizable` (built on react-r
 ## Stability
 
 Experimental. New on 2026-10-31.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Window Splitter](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/) pattern. Roles: `separator`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a divider between side-by-side panels | Moves the divider right by 5% of the group, within both panels' limits. | yes |
+| ArrowLeft | On a divider between side-by-side panels | Moves the divider left by 5%. | yes |
+| Shift + ArrowRight | On a divider between side-by-side panels | Moves the divider by 10% (Shift+ArrowLeft the other way). | yes |
+| ArrowDown | On a divider between stacked panels | Moves the divider down by 5%. | yes |
+| ArrowUp | On a divider between stacked panels | Moves the divider up by 5%. | yes |
+| Home | On a divider | Moves the divider to the first panel's minimum. | yes |
+| End | On a divider | Moves the divider to the first panel's maximum, or the second panel's minimum if that comes first. | yes |
+
+Known gaps:
+
+- Enter does not collapse or restore the panel before the divider.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -8863,6 +9094,21 @@ ScrollArea {
     {children}
 }
 ```
+
+## Keyboard and accessibility
+
+Pattern: Scrollable region. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowDown | In the scroll area | Scrolls the content down (browser scrolling); focus stays on the area. | yes |
+
+Known gaps:
+
+- The scrollable box is focusable but has no role or accessible name (it should be a named region).
+- Scrolling by keyboard is the browser's own and is not asserted by a row.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -9495,13 +9741,35 @@ SidebarProvider {
 ## Behaviors
 - Layout: `variant` adjusts chrome (`Floating/Inset` adds padding/radius); `side` selects the start (`Left`) or end (`Right`) edge, which swap on right-to-left pages (docs/RTL.md).
 - Collapse: `Offcanvas` hides the rail; `Icon` keeps a thin icon strip and hides labels/actions/badges; `None` is static.
-- Keyboard: ⌘/Ctrl+B toggles via provider. Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
+- Focus rings are defined in `sidebar/style.css`; keep or replace with `:focus-visible` styles.
 - Phones: below 768 px the sidebar is a sheet. Clicking a `SidebarMenuButton` closes it (`"data-keep-open": "true"` keeps it open; buttons with `aria-expanded` or `aria-haspopup`, such as a collapsible group's trigger, never close it). With the `router` feature the provider also closes it after every in-app navigation, which covers router links passed through `as`; without the router, call `use_sidebar().set_open_mobile(false)` from your own links.
 - Tooltips: `tooltip: Option<Element>` on `SidebarMenuButton`; `None` skips wrapping in Tooltip.
 - Landmarks: `Sidebar` is a navigation landmark named "Sidebar" (`UiStrings::sidebar`; pass `aria_label` to rename it, or `role` to change it). `SidebarInset` renders `<main>`, so it is the page's `main` landmark: don't add another `main` inside it.
 
 ## Custom Rendering with `as`
 Supported components: `SidebarTrigger`, `SidebarGroupLabel`, `SidebarGroupAction`, `SidebarMenuButton`, `SidebarMenuAction`, `SidebarMenuSubButton`. Use `as: |attrs| rsx! { ... }` and spread `..attrs` to retain merged attributes, state data, and handlers.
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Disclosure (sidebar toggle)](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/) pattern. Roles: `navigation`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On the sidebar trigger | Collapses or expands the sidebar. | yes |
+| Space | On the sidebar trigger | Collapses or expands the sidebar, like Enter. | yes |
+| Control + b | Anywhere in the app (Cmd+B on macOS) | Collapses or expands the sidebar. | yes |
+
+States:
+
+- `expanded`: The sidebar is open.
+- `collapsed`: The sidebar is collapsed.
+
+Known gaps:
+
+- The trigger has no aria-expanded or aria-controls, so the toggle state is not exposed to assistive tech.
+- On small screens (sheet) Escape-to-close is the sheet's and is not covered here.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -10937,12 +11205,28 @@ rsx! {
 ## Accessibility
 
 - Role and name: An ordered list; the current step has `aria-current="step"`; completed steps add hidden "(completed)" text.
-- Keyboard: each step is a button (Tab/Enter/Space); `disabled` steps are skipped
+- `disabled` steps are skipped by Tab.
 - Reduced motion: none
 
 ## Source
 
 Structure and API adapted from Rust/UI (`stepper.rs`, rust-ui/ui commit 43ddc65, MIT); styling rewritten in plain CSS with this kit's tokens. Behaviour and accessibility were reworked here.
+
+## Keyboard and accessibility
+
+Pattern: Ordered list of step buttons. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a step | Goes to that step. | yes |
+| Space | On a step | Goes to that step, like Enter. | yes |
+| Enter | On the demo's Next button | Moves to the next step. | yes |
+
+Known gaps:
+
+- No arrow-key movement between steps (each is a Tab stop).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -11485,6 +11769,29 @@ TagGroup {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Follows the WAI-ARIA [Grid (tag list)](https://www.w3.org/WAI/ARIA/apg/patterns/grid/) pattern. Roles: `grid`, `row`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | On a tag | Moves focus to the next tag. | yes |
+| ArrowDown | On a tag | Moves focus to the next tag, like ArrowRight. | yes |
+| ArrowLeft | On a tag | Moves focus to the previous tag. | yes |
+| ArrowUp | On a tag | Moves focus to the previous tag, like ArrowLeft. | yes |
+| Home | On a tag | Moves focus to the first tag. | yes |
+| End | On a tag | Moves focus to the last tag. | yes |
+| Enter | On a tag | Selects the tag. A selected tag stays selected when the group must keep one. | yes |
+| Space | On a tag | Selects the tag, like Enter. | yes |
+| Delete | On a removable tag | Removes it (or every selected tag, when it is selected). | yes |
+| Backspace | On a removable tag | Removes it, like Delete. | yes |
+
+Known gaps:
+
+- No typeahead.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
@@ -12256,6 +12563,22 @@ ToastProvider {
     }
 }
 ```
+
+## Keyboard and accessibility
+
+Pattern: Notifications region (toasts). Roles: `region`, `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| Enter | On a button that shows a toast | Shows the toast in the notifications region; focus stays on the button. | yes |
+| Enter | On a toast's close button | Dismisses that toast. | yes |
+
+Known gaps:
+
+- Escape does not dismiss the focused toast.
+- The close button's accessible name is the lowercase "close" and does not say which toast.
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 

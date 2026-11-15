@@ -1,0 +1,32 @@
+# Keyboard and accessibility contract (docs/CONTRACTS.md): the docs table is generated from it,
+# and tests/e2e/contracts.mjs (web) and apps/native/tests/contracts.rs (Blitz) run every row.
+# The component has no key handlers of its own. The track is a focusable
+# scroll container (native arrow-key scrolling) and Previous/Next are native buttons, but the
+# step language cannot observe scrolling and the slides expose no state, so only the Tab order
+# is testable. Proposal: a `scrolled <part>` step, or mark the visible slide.
+# Remove the "- Keyboard:" line from carousel/docs.md when this lands (doctor rule).
+pattern = "Carousel"
+apg = "carousel"
+roles = ["group"]
+gaps = [
+    "Previous and Next change nothing a screen reader is told: the visible slide is not marked and nothing is announced.",
+    "Arrow keys on the track scroll it natively; there is no slide-by-slide keyboard step.",
+]
+
+[parts]
+track = "section[aria-roledescription=carousel] > [role=group]"
+button = "section[aria-roledescription=carousel] button"
+
+[[keys]]
+key = "Tab"
+when = "On the slide track"
+does = "Moves to Previous, then Next (the track is one tab stop)."
+native = true
+test = """
+visible track
+focus track
+press Tab
+focused button@1
+press Tab
+focused button@2
+"""

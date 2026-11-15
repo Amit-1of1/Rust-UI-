@@ -14,12 +14,29 @@ Typing advances to the next box; Backspace on an empty box clears and goes back;
 ## Accessibility
 
 - Role and name: a `role="group"` named by `label`; every box is a real `<input>` named "label, character n of N".
-- Keyboard: as above; Tab leaves the group normally.
 - Reduced motion: no animation.
 
 ## Source
 
 Original to this repo. Rust/UI has an `input_otp` driven by a wasm-bindgen DOM controller; this one is plain Dioxus state and native inputs.
+
+## Keyboard and accessibility
+
+Pattern: One-time code input (group of text boxes). Roles: `group`. Works on native (Blitz): yes.
+
+| Key | When | What it does | Native |
+|---|---|---|---|
+| ArrowRight | In a box | Moves to the next box (stops at the last). | yes |
+| ArrowLeft | In a box | Moves to the previous box (stops at the first). | yes |
+| Home | In a box | Moves to the first box. | yes |
+| End | In a box | Moves to the last box. | yes |
+| Backspace | In an empty box | Clears the box before it and moves there. | yes |
+
+Known gaps:
+
+- Delete does nothing special (only Backspace clears and moves back).
+
+Every row is run as a keyboard test on the web, and on native where it says yes. Generated from the component's `contract.toml`.
 
 ## API
 
