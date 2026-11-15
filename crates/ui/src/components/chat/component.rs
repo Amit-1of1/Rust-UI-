@@ -12,6 +12,8 @@ struct Styles;
 
 /// How close to the end (in pixels) still counts as "reading the latest".
 const SLACK: f64 = 24.0;
+/// A scroll target past any real content; engines clamp it to the end.
+const BOTTOM: f64 = 1.0e9;
 
 /// Says things to screen readers on behalf of a [`ChatLog`].
 ///
@@ -62,8 +64,10 @@ fn Announcer() -> Element {
 }
 
 /// Keeps the log at the newest message while the reader is there, and lets go when they
-/// scroll up. Before each follow it compares the scroll offset with the one it last set: one
-/// that moved up means the reader scrolled. That works without scroll events (Blitz has none)
+/// scroll up. Runs overlap (one per render and per resize, so per streamed token); the way they
+/// interleave is modelled in `proofs/tla/ChatFollow.tla` and checked by `scripts/tla.sh`; change
+/// that model when you change this logic. Before each follow it compares the scroll offset with
+/// the one it last set: one that moved up means the reader scrolled. That works without scroll events (Blitz has none)
 /// and catches a scroll whose event has not arrived yet (browsers send them a frame late,
 /// and a follow in between would otherwise undo it).
 #[derive(Clone, Copy)]
@@ -75,6 +79,9 @@ struct Follow {
     top: Signal<Option<f64>>,
     /// The scroll offset the last scroll event reported (web).
     seen_top: Signal<Option<f64>>,
+    /// Bumped by "Jump to latest": a run from before the click stops at its next await, so it
+    /// can't let go again on the strength of where the reader was before (ChatFollow.tla).
+    epoch: Signal<u32>,
 }
 
 impl Follow {
@@ -82,9 +89,14 @@ impl Follow {
         let Some(el) = self.el.peek().clone() else {
             return;
         };
+        let epoch = *self.epoch.peek();
+        let current = |f: &Self| *f.epoch.peek() == epoch;
         let Ok(size) = el.get_scroll_size().await else {
             return;
         };
+        if !current(&self) {
+            return;
+        }
         let before = *self.height.peek();
         let grew = size.height > before + 0.5;
         let shrank = size.height + 0.5 < before;
@@ -96,12 +108,17 @@ impl Follow {
             return;
         }
         if !shrank {
-            // Copy the offset out first: a guard held across the await below would make a
-            // concurrent follow's `top.set` panic (already borrowed). Seen on Android, where
-            // the webview's round trips are slow enough for two follows to overlap.
-            let last = *self.top.peek();
-            if let (Some(top), Ok(now)) = (last, el.get_scroll_offset().await) {
-                if now.y + SLACK < top {
+            // Read `top` only once the offset is back: copied before the await, a run that
+            // started before another run recorded its first position would still hold None,
+            // skip this check and pull down a reader who scrolled meanwhile (found by
+            // proofs/tla/ChatFollow.tla). No guard is held across an await, so a concurrent
+            // follow's `top.set` can't panic (seen on Android, where round trips are slow).
+            if let Ok(now) = el.get_scroll_offset().await {
+                if !current(&self) {
+                    return;
+                }
+                let last = *self.top.peek();
+                if last.is_some_and(|top| now.y + SLACK < top) {
                     self.pinned.set(false);
                     if grew {
                         self.unseen.set(true);
@@ -110,21 +127,49 @@ impl Follow {
                 }
             }
         }
+        // Far past the end, which every engine clamps to the end: `size.height` may already be
+        // stale, and a run that read it before a newer one could otherwise finish last and leave
+        // the log above the end (ChatFollow.tla, OldScrollToSize).
         _ = el
-            .scroll(
-                PixelsVector2D::new(0.0, size.height),
-                ScrollBehavior::Instant,
-            )
+            .scroll(PixelsVector2D::new(0.0, BOTTOM), ScrollBehavior::Instant)
             .await;
+        let view = el.get_client_rect().await.map(|r| r.size.height).ok();
         if let Ok(now) = el.get_scroll_offset().await {
-            self.top.set(Some(now.y));
+            if !current(&self) {
+                return;
+            }
+            // The scroll landed at the end: at least the end of the content measured above
+            // (content only grows while pinned). An offset above that is the reader, who
+            // scrolled between the scroll and this read: let go. Recording it as where we left them would hide their
+            // scroll from every later run, which would then pull them back down
+            // (ChatFollow.tla, OldTrustAfter).
+            // It also landed at least where any run last left them: a newer run may already
+            // have recorded a higher position than this (possibly stale) run's height gives.
+            let recorded = if shrank { None } else { *self.top.peek() };
+            let floor = match (view.map(|v| size.height - v), recorded) {
+                (Some(a), Some(b)) => Some(a.max(b)),
+                (a, b) => a.or(b),
+            };
+            if floor.is_some_and(|f| now.y + SLACK < f) {
+                self.pinned.set(false);
+                // Content another run measured after this scroll is news to the reader.
+                if *self.height.peek() > size.height + 0.5 {
+                    self.unseen.set(true);
+                }
+            } else {
+                self.top.set(Some(now.y));
+            }
         }
     }
 
     async fn jump(mut self) {
+        self.epoch += 1;
         self.pinned.set(true);
         self.unseen.set(false);
         self.top.set(None);
+        // A scroll event still queued from before the click must not read as the reader
+        // moving up and let go again (proofs/tla/ChatFollow.tla).
+        self.seen_top.set(None);
         self.run().await;
         // The button goes away; keep focus on the conversation instead of the page.
         if let Some(el) = self.el.peek().clone() {
@@ -185,6 +230,7 @@ pub fn ChatLog(
         height: use_signal(|| 0.0),
         top: use_signal(|| None),
         seen_top: use_signal(|| None),
+        epoch: use_signal(|| 0),
     };
     // Parents re-render the log when they add a message; follow after every render.
     dioxus::core::use_after_render(move || {

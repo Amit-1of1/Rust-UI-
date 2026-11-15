@@ -154,6 +154,15 @@ fn ci_model_checks_the_tla_specs() {
         "proofs/tla/MotionValue.cfg",
         "proofs/tla/MotionValue_bug_two_loops.cfg",
         "proofs/tla/MotionValue_bug_frozen.cfg",
+        "proofs/tla/ChatFollow.tla",
+        "proofs/tla/ChatFollow.cfg",
+        "proofs/tla/ChatFollow_bug_stale_top.cfg",
+        "proofs/tla/ChatFollow_bug_trust_after.cfg",
+        "proofs/tla/ChatFollow_bug_scroll_to_size.cfg",
+        "proofs/tla/ChatFollowJump.tla",
+        "proofs/tla/ChatFollowJump.cfg",
+        "proofs/tla/ChatFollowJump_bug_no_epoch.cfg",
+        "proofs/tla/ChatFollowJump_bug_keep_seen_top.cfg",
     ] {
         assert!(
             repo().join(file).exists(),
