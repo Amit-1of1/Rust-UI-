@@ -105,19 +105,26 @@ await page.goBack();
 await page.waitForFunction(() => document.getElementById("page-title")?.textContent === "Dialog");
 
 // Filter narrows the component list.
-await page.getByLabel("Filter components").fill("date");
+const filterBox = page.getByLabel("Filter components");
+await filterBox.fill("date");
 // The list re-renders after the input event; Firefox gets there a frame later than Chromium,
-// and WebKit on a busy CI runner has taken over 2 s.
+// and WebKit on a busy CI runner has taken over 2 s. On main (2026-11-01) WebKit once left the
+// list unfiltered after fill() right after a Back navigation; if it hasn't narrowed after a
+// second, the text is typed again key by key.
 const list = nav.getByRole("list").nth(1).getByRole("link");
 let names = [];
 for (let i = 0; i < 50; i++) {
   names = await list.allInnerTexts();
   if (names.length > 0 && names.every((n) => /date/i.test(n))) break;
+  if (i === 10 || i === 30) {
+    await filterBox.fill("");
+    await filterBox.pressSequentially("date");
+  }
   await page.waitForTimeout(100);
 }
 assert.ok(
   names.length > 0 && names.every((n) => /date/i.test(n)),
-  `filter result: ${names}; page errors so far: ${errors.join(" | ") || "none"}; console errors: ${consoleErrors.join(" | ") || "none"}`,
+  `filter "${await filterBox.inputValue()}" gave: ${names}; page errors so far: ${errors.join(" | ") || "none"}; console errors: ${consoleErrors.join(" | ") || "none"}`,
 );
 
 // Code blocks that can scroll are keyboard reachable.
