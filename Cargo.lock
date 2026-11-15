@@ -621,6 +621,7 @@ dependencies = [
  "clap",
  "diffy",
  "image",
+ "proptest",
  "serde",
  "serde_json",
  "tempfile",

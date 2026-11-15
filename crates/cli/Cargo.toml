@@ -29,4 +29,5 @@ toml = "0.8"
 toml_edit = "0.20"
 
 [dev-dependencies]
+proptest = { version = "1", default-features = false, features = ["std"] }
 tempfile = "3"
