@@ -22,6 +22,34 @@ pub const PRO_V1_DATE: &str = "30 November 2026";
 const CHECKOUT_URL_PERSONAL: &str = "";
 const CHECKOUT_URL_TEAM: &str = "";
 
+/// Where a team asks for a port or setup quote: a GitHub issue form, so no email address has to
+/// be published. `.github/ISSUE_TEMPLATE/port_request.yml`.
+const QUOTE_URL: &str =
+    "https://github.com/Amit-1of1/Rust-UI-/issues/new?template=port_request.yml";
+
+/// Paid help, next to the kit and Pro: moving a React/shadcn app (or an Electron/Tauri one)
+/// to Rust on Atoll. `atoll port` does the first pass; people finish and test it.
+const SERVICES: &[(&str, &str, &str, &str)] = &[
+    (
+        "Free port check",
+        "$0",
+        "for one screen",
+        "Send one React or shadcn screen. You get it back as working Atoll code with tests, and a fixed quote for the rest. First 10 teams.",
+    ),
+    (
+        "Port package",
+        "from $1,500",
+        "up to 10 screens, about 2 weeks",
+        "Your screens rebuilt on Atoll, keyboard and screen-reader tested, with atoll-test tests and a written hand-over. Fixed price agreed before work starts.",
+    ),
+    (
+        "Setup and help",
+        "$150",
+        "per hour, 2 hour minimum",
+        "Theme your brand, wire the kit into an existing Dioxus app, set up AI agents to build with it, or review your screens.",
+    ),
+];
+
 const LICENSE_URL: &str = "https://github.com/Amit-1of1/Rust-UI-/blob/main/docs/pro/LICENSE-PRO.md";
 
 struct Plan {
@@ -181,6 +209,34 @@ pub fn PricingPage() -> Element {
                             TableCell { {*feature} }
                             TableCell { {*free} }
                             TableCell { {*pro} }
+                        }
+                    }
+                }
+            }
+        }
+        section { "aria-labelledby": "services-heading",
+            h2 { id: "services-heading", "Help moving to Rust" }
+            p {
+                "Have a React, shadcn, Electron or Tauri app and want it in Rust? We port it onto Atoll for you. "
+                code { "atoll port" }
+                " does the first pass; we finish it, test it and hand it over."
+            }
+            div { class: "pricing-grid",
+                for (name , price , per , blurb) in SERVICES {
+                    Card { key: "{name}", "data-service": *name,
+                        CardHeader {
+                            CardTitle { {*name} }
+                            CardDescription { {*blurb} }
+                        }
+                        CardContent {
+                            p { class: "pricing-price",
+                                span { class: "pricing-amount", {*price} }
+                                " "
+                                span { class: "pricing-per", {*per} }
+                            }
+                        }
+                        CardFooter {
+                            a { href: QUOTE_URL, ..button_look(ButtonVariant::Outline, ButtonSize::Default), "Ask for a quote" }
                         }
                     }
                 }

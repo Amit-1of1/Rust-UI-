@@ -1,0 +1,41 @@
+name: Port or setup quote
+description: Ask for a free port check, a port package or setup help (moving a React, shadcn, Electron or Tauri app to Rust on Atoll).
+labels: ["service-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for asking. This issue is public, so leave out anything confidential; we'll move to a private channel after the first reply. Prices are on the docs site's Pricing page.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What do you need?
+      options:
+        - Free port check (one screen)
+        - Port package (several screens)
+        - Setup and help (hourly)
+    validations:
+      required: true
+  - type: textarea
+    id: app
+    attributes:
+      label: Your app today
+      description: Framework (React/Next, shadcn, Electron, Tauri, Dioxus...), roughly how many screens, and where it runs (web, desktop, mobile).
+    validations:
+      required: true
+  - type: textarea
+    id: screen
+    attributes:
+      label: A screen to start with (optional)
+      description: Paste one component's JSX or link to it. For a free port check, this is the screen we port.
+      render: tsx
+  - type: input
+    id: contact
+    attributes:
+      label: How to reach you privately
+      description: An email or a profile we can message. Optional; otherwise we reply here.
+  - type: input
+    id: when
+    attributes:
+      label: Timeline
+      placeholder: "This month / next quarter / exploring"
