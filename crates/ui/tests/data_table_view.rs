@@ -7,12 +7,48 @@ use std::cmp::Ordering;
 use ui::components::data_table::*;
 use ui::components::table::SortDirection;
 
+/// The definition, written independently of the kit's parser: after dropping currency signs,
+/// commas, percent signs and spaces, a cell is a number when it is an optional sign, digits with
+/// at most one decimal point, and an optional exponent. Words such as "inf" and "NaN" are not.
 fn number(cell: &str) -> Option<f64> {
     let cleaned: String = cell
         .chars()
         .filter(|c| !matches!(c, '$' | '€' | '£' | ',' | '%' | ' '))
         .collect();
-    cleaned.parse().ok()
+    let b = cleaned.as_bytes();
+    let mut i = 0;
+    if i < b.len() && (b[i] == b'+' || b[i] == b'-') {
+        i += 1;
+    }
+    let (mut digits, mut dots) = (0, 0);
+    while i < b.len() && (b[i].is_ascii_digit() || b[i] == b'.') {
+        if b[i] == b'.' {
+            dots += 1;
+        } else {
+            digits += 1;
+        }
+        i += 1;
+    }
+    if digits == 0 || dots > 1 {
+        return None;
+    }
+    if i < b.len() && (b[i] == b'e' || b[i] == b'E') {
+        i += 1;
+        if i < b.len() && (b[i] == b'+' || b[i] == b'-') {
+            i += 1;
+        }
+        let start = i;
+        while i < b.len() && b[i].is_ascii_digit() {
+            i += 1;
+        }
+        if i == start {
+            return None;
+        }
+    }
+    if i != b.len() {
+        return None;
+    }
+    cleaned.parse::<f64>().ok().filter(|v| v.is_finite())
 }
 
 fn reference(rows: &[Vec<String>], numeric: bool, direction: SortDirection) -> Vec<usize> {
@@ -47,6 +83,10 @@ fn cell() -> impl Strategy<Value = String> {
         (0u32..5000).prop_map(|n| format!("${n}")),
         Just("n/a".to_string()),
         Just("1.5".to_string()),
+        prop::sample::select(vec![
+            "inf", "-inf", "NaN", "infinity", "1e999", "2e3", ".5", "5."
+        ])
+        .prop_map(str::to_string),
     ]
 }
 

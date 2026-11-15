@@ -130,7 +130,8 @@ fn number(cell: &str) -> Option<f64> {
         .chars()
         .filter(|c| !matches!(c, '$' | '€' | '£' | ',' | '%' | ' '))
         .collect();
-    cleaned.parse().ok()
+    // Only finite numbers: Rust also parses "inf" and "NaN", which are words in a table.
+    cleaned.parse::<f64>().ok().filter(|v| v.is_finite())
 }
 
 /// Filter (every whitespace-separated term must appear in some cell of a column that is not
@@ -274,13 +275,18 @@ pub fn virtual_window(
     total: usize,
     overscan: usize,
 ) -> std::ops::Range<usize> {
-    if total == 0 || row_height <= 0.0 {
+    // Float-to-usize casts saturate (NaN gives 0), and the sums
+    // saturate, so a huge or infinite scroll offset or viewport can't overflow.
+    if total == 0 || row_height.is_nan() || row_height <= 0.0 {
         return 0..0;
     }
     let first = (scroll_top.max(0.0) / row_height).floor() as usize;
-    let visible = (viewport.max(0.0) / row_height).ceil() as usize + 1;
+    let visible = ((viewport.max(0.0) / row_height).ceil() as usize).saturating_add(1);
     let start = first.saturating_sub(overscan).min(total);
-    let end = (first + visible + overscan).min(total);
+    let end = first
+        .saturating_add(visible)
+        .saturating_add(overscan)
+        .min(total);
     start.min(end)..end
 }
 

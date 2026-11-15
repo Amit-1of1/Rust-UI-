@@ -91,7 +91,24 @@ pub fn nice_max(max: f32) -> f32 {
     } else {
         10.0
     };
-    nice * magnitude
+    let mut limit = nice * magnitude;
+    // `10f32.powf` can land a hair under the power of ten (0.05 gave 0.049999997, below the
+    // data): then take the next nice value. Checked for every f32 in tests/components/chart.rs.
+    if limit < max {
+        let next = if nice == 1.0 {
+            2.0
+        } else if nice == 2.0 {
+            5.0
+        } else {
+            10.0
+        };
+        limit = next * magnitude;
+    }
+    // Above about 2e38 the next nice value doesn't fit in an f32 (it was infinity).
+    if !limit.is_finite() || limit < max {
+        return f32::MAX;
+    }
+    limit
 }
 
 fn clean(value: f32) -> f32 {

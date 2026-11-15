@@ -22,10 +22,17 @@ pub const RESIZE_STEP: f32 = 5.0;
 /// ```
 pub fn resize_pair(sizes: (f32, f32), delta: f32, a: (f32, f32), b: (f32, f32)) -> (f32, f32) {
     let total = sizes.0 + sizes.1;
+    if !delta.is_finite() || !total.is_finite() {
+        return sizes;
+    }
+    // A NaN limit means "no limit" (it would make `clamp` panic).
+    let or = |v: f32, none: f32| if v.is_nan() { none } else { v };
+    let a = (or(a.0, f32::NEG_INFINITY), or(a.1, f32::INFINITY));
+    let b = (or(b.0, f32::NEG_INFINITY), or(b.1, f32::INFINITY));
     // `a` may not go below its min, above its max, or leave `b` outside its own range.
     let low = a.0.max(total - b.1);
     let high = a.1.min(total - b.0);
-    if low > high {
+    if low.is_nan() || high.is_nan() || low > high {
         return sizes;
     }
     let first = (sizes.0 + delta).clamp(low, high);

@@ -55,10 +55,15 @@ impl DragBounds {
         Self::new(-x.abs(), x.abs(), -y.abs(), y.abs())
     }
 
+    /// Never panics: the fields are public, so bounds built by hand may be swapped or NaN
+    /// (`f64::clamp` would panic); swapped bounds are read in order and a NaN bound is no bound.
     pub fn clamp(&self, (x, y): (f64, f64)) -> (f64, f64) {
+        fn within(v: f64, a: f64, b: f64) -> f64 {
+            v.max(a.min(b)).min(a.max(b))
+        }
         (
-            x.clamp(self.left, self.right),
-            y.clamp(self.top, self.bottom),
+            within(x, self.left, self.right),
+            within(y, self.top, self.bottom),
         )
     }
 }
@@ -505,5 +510,55 @@ mod tests {
         assert_eq!(snaps.key_step((300.0, 0.0), (1.0, 0.0), 16.0), (300.0, 0.0));
         // Up and down do nothing on a horizontal-only drag.
         assert_eq!(snaps.key_step((150.0, 0.0), (0.0, 1.0), 16.0), (150.0, 0.0));
+    }
+
+    /// Every combination of awkward values for the four public bounds and the point (9^6 =
+    /// 531,441 cases): `clamp` never panics, and with ordinary bounds the point lands inside them
+    /// even when they were built by hand in the wrong order.
+    #[test]
+    fn clamp_never_panics_and_lands_inside() {
+        let vals = [
+            f64::NAN,
+            f64::NEG_INFINITY,
+            -1e308,
+            -1.0,
+            -0.0,
+            0.0,
+            1.0,
+            1e308,
+            f64::INFINITY,
+        ];
+        for &l in &vals {
+            for &r in &vals {
+                for &t in &vals {
+                    for &b in &vals {
+                        let bounds = DragBounds {
+                            left: l,
+                            right: r,
+                            top: t,
+                            bottom: b,
+                        };
+                        for &x in &vals {
+                            for &y in &vals {
+                                let (cx, cy) = bounds.clamp((x, y));
+                                for (c, v, lo, hi) in [(cx, x, l, r), (cy, y, t, b)] {
+                                    if lo.is_nan() || hi.is_nan() || v.is_nan() {
+                                        continue;
+                                    }
+                                    assert!(
+                                        c >= lo.min(hi) && c <= lo.max(hi),
+                                        "{v} in [{lo}, {hi}] gave {c}"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assert_eq!(
+            DragBounds::new(f64::NAN, 5.0, 0.0, 0.0).clamp((9.0, 0.0)).0,
+            5.0
+        );
     }
 }
