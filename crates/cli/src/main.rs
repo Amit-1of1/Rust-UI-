@@ -159,6 +159,18 @@ enum Command {
         #[arg(long, default_value = "tokens")]
         out: PathBuf,
     },
+    /// Turn shadcn/ui JSX (a .tsx/.jsx file, or `-` for stdin) into an Atoll `rsx!` starting
+    /// point: components and their variants, Lucide icons and the Tailwind classes it knows are
+    /// carried over; everything else is listed to finish by hand. docs/PORTING.md.
+    Port {
+        file: PathBuf,
+        /// Write the Rust code here instead of printing it (the report still prints).
+        #[arg(long)]
+        out: Option<PathBuf>,
+        /// Print code and report as JSON (for editors and agents).
+        #[arg(long)]
+        json: bool,
+    },
     /// Audit what every animation and transition costs the browser (composite, paint or
     /// layout). Layout animations fail unless an `atoll-motion: layout` comment explains them.
     Motion {
@@ -579,6 +591,31 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
             );
             if !failures.is_empty() {
                 return Ok(ExitCode::FAILURE);
+            }
+        }
+        Command::Port { file, out, json } => {
+            let src = if file.as_os_str() == "-" {
+                let mut s = String::new();
+                std::io::Read::read_to_string(&mut std::io::stdin(), &mut s).map_err(err)?;
+                s
+            } else {
+                std::fs::read_to_string(&file).map_err(|e| format!("{}: {e}", file.display()))?
+            };
+            let ported = atoll_cli::port::port(&src);
+            if json {
+                println!("{}", ported.to_json());
+            } else {
+                match &out {
+                    Some(path) => {
+                        std::fs::write(path, &ported.code).map_err(err)?;
+                        println!("wrote {}", path.display());
+                    }
+                    None => println!("{}", ported.code),
+                }
+                print!("{}", ported.report());
+            }
+            if ported.trees == 0 {
+                return Err(format!("no JSX found in {}", file.display()));
             }
         }
         Command::Tokens { theme, accent, out } => {
