@@ -127,7 +127,9 @@ fn replay(seq: &[Step]) {
             // AnimatingIsTrue.
             let (flag, moving) = dom.in_runtime(|| (v.is_animating(), v.is_moving()));
             if flag != moving {
-                fail(&format!("is_animating() = {flag} but an animation running = {moving}"));
+                fail(&format!(
+                    "is_animating() = {flag} but an animation running = {moving}"
+                ));
             }
         }
     }
@@ -146,7 +148,9 @@ fn replay(seq: &[Step]) {
         wake(&mut dom);
         let (x, moving) = dom.in_runtime(|| (v.peek(), v.is_moving()));
         if moving || x != 3.0 {
-            fail(&format!("a later animation froze at {x} (moving: {moving})"));
+            fail(&format!(
+                "a later animation froze at {x} (moving: {moving})"
+            ));
         }
     }
 }
