@@ -129,7 +129,7 @@ pub fn DragAndDropDropIndicator(props: DragAndDropDropIndicatorProps) -> Element
 #[component]
 fn DragIcon() -> Element {
     rsx! {
-        GripVertical { "aria-hidden": "true",
+        GripVertical {
             class: Styles::dx_item_icon,
             "aria-hidden": "true",
             size: "16px",

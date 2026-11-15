@@ -497,6 +497,14 @@ fn check(html: &str) -> Vec<String> {
             Some(c) => format!("<{} class=\"{c}\">", n.tag),
             None => format!("<{}>", n.tag),
         };
+        // A browser keeps the first of two same-name attributes and drops the rest, so a
+        // component's default and the caller's value can't both be meant.
+        let mut seen = HashSet::new();
+        for (name, _) in &n.attrs {
+            if !seen.insert(name.as_str()) {
+                problems.push(format!("{}: {name} given twice", what()));
+            }
+        }
         for (name, value) in &n.attrs {
             if name.starts_with("aria-") && !ARIA_ATTRS.contains(&name.as_str()) {
                 problems.push(format!("{}: unknown attribute {name}", what()));
