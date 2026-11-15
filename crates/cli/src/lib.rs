@@ -29,6 +29,7 @@ pub mod logo;
 pub mod manifest;
 pub mod mcp;
 pub mod motion;
+pub mod port;
 pub mod postbuild;
 pub mod presets;
 pub mod props;

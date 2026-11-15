@@ -400,6 +400,13 @@ impl Server {
                     p.dark_fill.hex(),
                 ))
             }
+            "port_jsx" => {
+                let Some(source) = args.get("source").and_then(Value::as_str) else {
+                    return Err("`source` (the JSX/TSX text) is required".into());
+                };
+                let ported = crate::port::port(source);
+                Ok(format!("{}\n{}", ported.code, ported.report()))
+            }
             "list_templates" => {
                 let rows: Vec<Value> = crate::template::TEMPLATES
                     .iter()
@@ -621,6 +628,15 @@ fn tools() -> Vec<Value> {
             "title": "List app templates",
             "description": "The kit's example apps that `atoll create --template` starts a new app from (admin dashboard, booking app, marketing site, web+desktop+mobile showcase). Use one when the user asks for a new app of that kind.",
             "inputSchema": { "type": "object", "properties": {} },
+            "annotations": read_only,
+        }),
+        json!({
+            "name": "port_jsx",
+            "title": "Port shadcn JSX to Atoll",
+            "description": "Turn shadcn/ui JSX or a whole .tsx file into Atoll rsx!: shadcn components become the kit's (variant/size strings become enums), Lucide icons keep their names, known Tailwind classes become inline styles on theme tokens. Returns the Rust code, the `atoll add` line, and every handler, list, hook or class it could not carry over. Same as `atoll port`.",
+            "inputSchema": { "type": "object", "properties": {
+                "source": { "type": "string", "description": "The JSX/TSX text." }
+            }, "required": ["source"] },
             "annotations": read_only,
         }),
     ]

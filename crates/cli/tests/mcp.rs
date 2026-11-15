@@ -124,7 +124,8 @@ fn lists_the_tools_with_schemas() {
             "explain_errors",
             "get_contract",
             "generate_theme",
-            "list_templates"
+            "list_templates",
+            "port_jsx"
         ]
     );
     for t in tools {
