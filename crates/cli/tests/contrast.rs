@@ -11,9 +11,17 @@
 use atoll_cli::contrast::{self, check, Kind, Mode, Nesting, Theme};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 fn repo() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+}
+
+/// The proof over the kit as it is, run once and shared: it takes seconds in a debug build,
+/// and mutation testing runs this file once per mutant.
+fn kit_report() -> &'static contrast::Report {
+    static REPORT: OnceLock<contrast::Report> = OnceLock::new();
+    REPORT.get_or_init(|| contrast::run(&repo(), &[]).expect("proof runs"))
 }
 
 fn kit_theme() -> String {
@@ -22,8 +30,8 @@ fn kit_theme() -> String {
 
 #[test]
 fn every_pair_meets_wcag_aa_in_both_modes_and_every_accent() {
-    let report = contrast::run(&repo(), &[]).expect("proof runs");
-    let failures = contrast::summary(&report);
+    let report = kit_report();
+    let failures = contrast::summary(report);
     assert!(
         failures.is_empty(),
         "{} rules draw unreadable colours (fix the CSS, or the token):\n  {}",
@@ -45,7 +53,7 @@ fn every_pair_meets_wcag_aa_in_both_modes_and_every_accent() {
 
 #[test]
 fn the_proof_covers_every_component_mode_and_accent() {
-    let report = contrast::run(&repo(), &[]).expect("proof runs");
+    let report = kit_report();
     let theme = Theme::parse(&kit_theme());
     let accents = theme.accent_names();
     assert!(
@@ -213,7 +221,7 @@ fn nesting_comes_from_rendered_markup() {
 #[test]
 fn pairs_match_the_golden_files() {
     let dir = repo().join("crates/cli/tests/contrast_pairs");
-    let report = contrast::run(&repo(), &[]).expect("proof runs");
+    let report = kit_report();
     let accents = Theme::parse(&kit_theme()).accent_names();
     let mut files: BTreeMap<String, BTreeMap<String, Vec<usize>>> = BTreeMap::new();
     for p in &report.pairs {
