@@ -1,6 +1,6 @@
 # Getting started
 
-From nothing to a running Atoll app in about five minutes: three commands, then edit `src/main.rs`. You need Rust 1.88 or newer (`rustup update`) and the WebAssembly target.
+From nothing to a running Atoll app in about five minutes: three commands, then edit `src/main.rs`. You need Rust 1.89 or newer (`rustup update`) and the WebAssembly target.
 
 ## 1. Install the tools (once)
 

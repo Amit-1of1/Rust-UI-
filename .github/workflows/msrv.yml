@@ -1,0 +1,39 @@
+name: MSRV
+
+# The Rust version the workspace declares (`rust-version` in Cargo.toml) builds the crates
+# people depend on, on the host and for the web, with the committed Cargo.lock. Read from
+# Cargo.toml, so the declared and the tested version can't drift apart.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install the declared Rust
+        id: rust
+        run: |
+          v=$(sed -n 's/^rust-version = "\(.*\)"/\1/p' Cargo.toml)
+          test -n "$v" || { echo "no rust-version in Cargo.toml"; exit 1; }
+          # rust-version may omit the patch number; rustup wants it.
+          case "$v" in *.*.*) ;; *) v="$v.0" ;; esac
+          rustup toolchain install "$v" --profile minimal --target wasm32-unknown-unknown
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          key: msrv-${{ steps.rust.outputs.version }}
+      - name: Host
+        run: cargo +${{ steps.rust.outputs.version }} check --locked -p atoll-ui -p atoll-motion -p atoll-cli -p atoll-form-derive -p atoll-test
+      - name: Web
+        run: cargo +${{ steps.rust.outputs.version }} check --locked --target wasm32-unknown-unknown -p atoll-ui -p atoll-motion

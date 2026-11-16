@@ -45,7 +45,7 @@ Automated checks cover roles, names, states and keyboard behaviour on every tier
 
 | Tool | Supported |
 |---|---|
-| Rust | stable, `rust-version` 1.88 or newer (raised only in a minor release, never to a Rust less than six months old: [VERSIONING.md](VERSIONING.md)) |
+| Rust | stable, `rust-version` 1.89 or newer (raised only in a minor release, never to a Rust less than six months old: [VERSIONING.md](VERSIONING.md)) |
 | Dioxus | 0.7.x (one Dioxus minor per kit minor; 0.8 is being prepared on its own branch) |
 | `dx` | 0.7.10; split release builds need the patched `dx` from `scripts/install-dx.sh` |
 | Node | only for the browser checks in `tests/e2e` (Playwright 1.63.0); apps never need Node |

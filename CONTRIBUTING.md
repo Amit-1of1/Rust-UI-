@@ -29,7 +29,7 @@ Accepted proposals go on the [roadmap](docs/ROADMAP.md). Declined ones get a rea
 
 ## Setting up
 
-You need Rust (stable, 1.88 or newer) with the wasm target, and `dx` 0.7.10:
+You need Rust (stable, 1.89 or newer) with the wasm target, and `dx` 0.7.10:
 
 ```sh
 rustup target add wasm32-unknown-unknown
