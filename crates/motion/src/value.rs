@@ -167,7 +167,11 @@ impl MotionValue {
         if !*self.looping.read() {
             *self.looping.write() = true;
             let this = *self;
-            Runtime::current().spawn(self.scope, this.run());
+            // Spawn through the scope, not `Runtime::spawn`: only the scope's own spawn records
+            // the task, so the task is dropped with the component. A task spawned with
+            // `Runtime::spawn` outlives an unmount and panics on its first poll
+            // (docs/notes/motion-value-replay.md).
+            Runtime::current().in_scope(self.scope, || spawn(this.run()));
         }
     }
 
