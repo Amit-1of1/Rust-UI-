@@ -1645,4 +1645,421 @@ mod tests {
             .iter()
             .any(|p| p.selector == ".tag" && p.accent == "x"));
     }
+    fn near(a: f64, b: f64) -> bool {
+        (a - b).abs() < 1e-6
+    }
+
+    // The tests below pin the pure helpers with exact values; each kills mutants that
+    // cargo-mutants found surviving (docs/notes/mutation-testing.md).
+
+    #[test]
+    fn split_top_ignores_separators_inside_brackets_and_quotes() {
+        assert_eq!(split_top(":is(.a, .b), .c", ','), [":is(.a, .b)", " .c"]);
+        assert_eq!(
+            split_top("[data-x='a,b'], .c", ','),
+            ["[data-x='a,b']", " .c"]
+        );
+        assert_eq!(
+            split_top("[data-x=\")\"], .c", ','),
+            ["[data-x=\")\"]", " .c"]
+        );
+        assert_eq!(split_top("[data-x='('], .c", ','), ["[data-x='(']", " .c"]);
+        assert_eq!(
+            split_top("rgb(0 0 0 / 50%) 0 0 0 2px", ' '),
+            ["rgb(0 0 0 / 50%)", "0", "0", "0", "2px"]
+        );
+    }
+
+    #[test]
+    fn media_blocks_are_kept_and_other_at_rules_skipped() {
+        let r = parse(
+            "@media (hover: hover) { .a { color: red } } \
+             @font-face { src: url(x) } \
+             @keyframes k { from { color: red } to { color: blue } } \
+             .b { color: blue }",
+        );
+        let got: Vec<(&str, Option<&str>)> = r
+            .iter()
+            .map(|x| (x.selector.as_str(), x.media.as_deref()))
+            .collect();
+        assert_eq!(got, [(".a", Some("(hover: hover)")), (".b", None)]);
+        // An unterminated at-rule at the end of a file must not read past it.
+        assert_eq!(
+            parse(".b { color: blue } @font-face { src: url(x)").len(),
+            1
+        );
+    }
+
+    #[test]
+    fn declarations_split_only_at_top_level() {
+        let r =
+            parse(".a { background: url(data:x;y); --x: f(}); color: red; :x } .b { color: blue }");
+        assert_eq!(r.len(), 2);
+        assert_eq!(
+            r[0].decls,
+            [
+                ("background".to_string(), "url(data:x;y)".to_string()),
+                ("--x".to_string(), "f(})".to_string()),
+                ("color".to_string(), "red".to_string()),
+            ]
+        );
+        let r = parse(".a[data-x=\"{\"] { color: red }");
+        assert_eq!(r.len(), 1);
+        assert_eq!(r[0].selector, ".a[data-x=\"{\"]");
+        // A rule with only nested rules adds no empty rule of its own.
+        let r = parse(".a { .b { color: red } }");
+        assert_eq!(r.len(), 1);
+        assert_eq!(r[0].selector, ".a .b");
+    }
+
+    #[test]
+    fn color_mix_weights_alpha_and_premultiplication() {
+        let mix = |s: &str| color(s).unwrap();
+        // One percentage given: the other is the rest (white weighs 0.75: 0.75 * 255).
+        let c = mix("color-mix(in srgb, #000 25%, #fff)");
+        assert!(near(c.r, 191.25) && near(c.a, 1.0), "{c:?}");
+        let c = mix("color-mix(in srgb, #000, #fff 25%)");
+        assert!(near(c.r, 63.75) && near(c.a, 1.0), "{c:?}");
+        // Percentages summing under 100%: normalised, then alpha scaled by the sum.
+        let c = mix("color-mix(in srgb, #000 20%, #fff 20%)");
+        assert!(near(c.r, 127.5) && near(c.a, 0.4), "{c:?}");
+        // Over 100%: normalised, alpha stays 1.
+        let c = mix("color-mix(in srgb, #000 60%, #fff 60%)");
+        assert!(near(c.r, 127.5) && near(c.a, 1.0), "{c:?}");
+        // Premultiplied: (0 * 0.5 / 2 + 255 / 2) / 0.75 = 170, alpha 0.5 / 2 + 1 / 2 = 0.75.
+        let c = mix("color-mix(in srgb, rgb(0 0 0 / 50%), #fff)");
+        assert!(near(c.r, 170.0) && near(c.a, 0.75), "{c:?}");
+        let c = mix("color-mix(in srgb, rgb(255 255 255 / 50%), #000)");
+        assert!(near(c.r, 85.0) && near(c.a, 0.75), "{c:?}");
+        assert_eq!(mix("color-mix(in srgb, transparent, transparent)").a, 0.0);
+        // Oklab midpoint of black and white is L = 0.5: 0.125 linear, #636363 (not #808080).
+        assert_eq!(mix("color-mix(in oklab, #000, #fff)").hex(), "#636363");
+        // Dark channels take the linear segment of the sRGB curve; a round trip keeps them.
+        assert_eq!(
+            mix("color-mix(in oklab, #0a0a0a, #0a0a0a)").hex(),
+            "#0a0a0a"
+        );
+    }
+
+    #[test]
+    fn colour_keywords_and_percent_channels() {
+        assert_eq!(color("white").map(Rgba::hex), Some("#ffffff".into()));
+        assert_eq!(color("black").map(Rgba::hex), Some("#000000".into()));
+        // 50 * 2.55 = 127.4999..., so 7f.
+        assert_eq!(
+            color("rgb(100% 0% 50%)").map(Rgba::hex),
+            Some("#ff007f".into())
+        );
+        assert_eq!(
+            (px("1.5rem"), px("18px"), px("2em"), px("bold")),
+            (Some(24.0), Some(18.0), Some(32.0), None)
+        );
+    }
+
+    // Second batch: one test per group of mutants that survived the whole suite, including
+    // the golden pairs (research table in docs/notes/mutation-testing.md terms: "missed").
+
+    fn vars(pairs: &[(&str, &str)]) -> Tokens {
+        Tokens {
+            vars: pairs
+                .iter()
+                .map(|(k, v)| (k.to_string(), v.to_string()))
+                .collect(),
+        }
+    }
+
+    #[test]
+    fn selector_helpers() {
+        assert_eq!(
+            Selector::parse(".a:not(.b .c) > .d").compounds,
+            [
+                vec![".a".to_string(), ":not(.b .c)".to_string()],
+                vec![".d".to_string()]
+            ]
+        );
+        assert_eq!(simples("&.a"), [".a"]);
+        assert!(simples("*").is_empty());
+        assert_eq!(without_not(".a:not(.b(x)).c"), ".a.c");
+        assert_eq!(without_not(".a:not(.b)"), ".a");
+    }
+
+    #[test]
+    fn substitute_exact_strings() {
+        let t = vars(&[("--x", "red"), ("--a", "var(--a)"), ("--light", "initial")]);
+        let ctx = |mode| Ctx {
+            mode,
+            layers: vec![&t],
+        };
+        let sub = |mode, v: &str| ctx(mode).substitute(v, 0);
+        assert_eq!(sub(Mode::Light, "a var(--x) b").as_deref(), Some("a red b"));
+        assert_eq!(
+            sub(Mode::Dark, "light-dark(var(--x), #000)").as_deref(),
+            Some("#000")
+        );
+        assert_eq!(
+            sub(Mode::Light, "light-dark(var(--x), #000)").as_deref(),
+            Some("red")
+        );
+        // Whichever of `var(` and `light-dark(` comes first is taken first.
+        assert_eq!(
+            sub(Mode::Light, "var(--x) light-dark(#111, #222)").as_deref(),
+            Some("red #111")
+        );
+        assert_eq!(
+            sub(Mode::Dark, "light-dark(#111, #222) var(--x)").as_deref(),
+            Some("#222 red")
+        );
+        assert_eq!(
+            sub(Mode::Dark, "x light-dark(var(--x), var(--y, blue)) y").as_deref(),
+            Some("x blue y")
+        );
+        // A variable that refers to itself is invalid, not a hang.
+        assert_eq!(sub(Mode::Light, "var(--a)"), None);
+        // The space toggles win over a variable of the same name.
+        assert_eq!(
+            sub(Mode::Light, "var(--light, red)").as_deref(),
+            Some("red")
+        );
+        assert_eq!(sub(Mode::Dark, "var(--light, red)").as_deref(), Some(""));
+    }
+
+    #[test]
+    fn paint_of_shorthands() {
+        assert_eq!(paint_of("unset"), Paint::None);
+        assert_eq!(paint_of("initial"), Paint::None);
+        // `red` is not a colour keyword the proof knows; hex is.
+        assert!(matches!(paint_of("#f00 url(x)"), Paint::Unknown(_)));
+        assert!(matches!(paint_of("url(x) #f00"), Paint::Unknown(_)));
+        assert!(matches!(
+            paint_of("linear-gradient(red, blue)"),
+            Paint::Unknown(_)
+        ));
+        assert_eq!(
+            paint_of("#000 no-repeat"),
+            Paint::Color(color("#000").unwrap())
+        );
+        assert_eq!(paint_of("#000 a b"), Paint::Color(color("#000").unwrap()));
+        assert!(matches!(paint_of("#000 a b c"), Paint::Unknown(_)));
+        assert!(matches!(paint_of("#f00 #00f"), Paint::Unknown(_)));
+        assert_eq!(paint_of("none none"), Paint::None);
+        assert!(matches!(paint_of("none auto"), Paint::Unknown(_)));
+    }
+
+    #[test]
+    fn pair_display() {
+        let pair = Pair {
+            component: "button".into(),
+            selector: ".b".into(),
+            kind: Kind::Text,
+            mode: Mode::Dark,
+            accent: "x".into(),
+            fg_source: "var(--fg)".into(),
+            bg_source: "--bg".into(),
+            fg: color("#777").unwrap(),
+            bg: color("#fff").unwrap(),
+            ratio: 4.478,
+            host: Host::Selector,
+        };
+        assert_eq!(
+            pair.to_string(),
+            "button `.b` (dark, x): var(--fg) #777777 on --bg #ffffff = 4.48:1, needs 4.5:1"
+        );
+    }
+
+    #[test]
+    fn markup_nesting_from_html() {
+        let mut n = Nesting::default();
+        n.add_html(
+            r#"<!-- x --><p class="b" title="x>y">hi</p><br class="c"><x-y class="g"/><span class="d"></span><i class='e' title='a>b' class="f"></i>"#,
+        );
+        let chains: Vec<&Vec<Vec<String>>> = n.elements.iter().map(|(c, _)| c).collect();
+        let s = |v: &[&str]| v.iter().map(|x| x.to_string()).collect::<Vec<_>>();
+        assert_eq!(
+            chains,
+            [
+                &vec![s(&["b"])],
+                &vec![s(&["c"])],
+                &vec![s(&["g"])],
+                &vec![s(&["d"])],
+                &vec![s(&["f"])],
+            ]
+        );
+        assert_eq!(n.has_text(&s(&["b"])), Some(true));
+        assert_eq!(n.has_text(&s(&["d"])), Some(false));
+        assert_eq!(n.has_text(&s(&["z"])), None);
+    }
+
+    #[test]
+    fn sheet_cascade_and_scoped_tokens() {
+        // Specificity is classes in the subject plus compounds: 4 + 1 beats 2 + 2, even
+        // though the second rule comes later.
+        let sheet = Sheet::new("t", ".a.b.c.d { color: red } .x.y .a.b { color: blue }");
+        let got = sheet.cascaded(&Selector::parse(".x.y .a.b.c.d"), |p| p == "color");
+        assert_eq!(got, Some("red"));
+        // A tie goes to the later rule.
+        let sheet = Sheet::new("t", ".a.b { color: red } .x .a { color: blue }");
+        let got = sheet.cascaded(&Selector::parse(".x .a.b"), |p| p == "color");
+        assert_eq!(got, Some("blue"));
+        // A custom property set on a rule applies to that rule, not the sheet's last value.
+        let report = check(
+            &theme(),
+            &[(
+                "t".into(),
+                ".a { --c: #ff0000; color: var(--c) } .b { --c: #0000ff; color: var(--c) }".into(),
+            )],
+            &Nesting::default(),
+        );
+        let fg = |sel: &str| {
+            let mut v: Vec<String> = report
+                .pairs
+                .iter()
+                .filter(|p| p.selector == sel)
+                .map(|p| p.fg.hex())
+                .collect();
+            v.dedup();
+            v
+        };
+        assert_eq!(fg(".a"), ["#ff0000"]);
+        assert_eq!(fg(".b"), ["#0000ff"]);
+    }
+
+    fn pairs_of(css: &str) -> Report {
+        check(&theme(), &[("t".into(), css.into())], &Nesting::default())
+    }
+
+    #[test]
+    fn text_size_weight_and_decoration() {
+        let kinds = |css: &str| {
+            let r = pairs_of(css);
+            let mut k: Vec<String> = r.pairs.iter().map(|p| format!("{:?}", p.kind)).collect();
+            k.dedup();
+            k
+        };
+        assert_eq!(kinds(".a { color: #777; font-size: 24px }"), ["LargeText"]);
+        assert_eq!(kinds(".a { color: #777; font-size: 23px }"), ["Text"]);
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 19px; font-weight: bold }"),
+            ["LargeText"]
+        );
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 19px; font-weight: bolder }"),
+            ["LargeText"]
+        );
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 19px; font-weight: 700 }"),
+            ["LargeText"]
+        );
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 19px; font-weight: 600 }"),
+            ["Text"]
+        );
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 18px; font-weight: 700 }"),
+            ["Text"]
+        );
+        assert_eq!(
+            kinds(".a { color: #777; font-size: 1.5rem }"),
+            ["LargeText"]
+        );
+        // Empty `::before`/`::after` is decoration; with content it is text.
+        assert!(pairs_of(".a::before { content: \"\"; color: #777 }")
+            .pairs
+            .is_empty());
+        assert!(pairs_of(".a::after { color: #777 }").pairs.is_empty());
+        assert!(!pairs_of(".a::before { content: \"x\"; color: #777 }")
+            .pairs
+            .is_empty());
+        // A value the proof can't evaluate is reported, once per mode and accent.
+        let r = pairs_of(".a { color: url(x) }");
+        assert!(r.pairs.is_empty());
+        assert_eq!(r.skipped.len(), 4);
+    }
+
+    #[test]
+    fn inset_focus_ring_is_checked_against_the_element() {
+        let r = pairs_of(
+            ".a { background: #000 } .a:focus-visible { outline: 2px solid transparent; box-shadow: inset 0 0 0 2px #fff }",
+        );
+        let focus: Vec<&Pair> = r.pairs.iter().filter(|p| p.kind == Kind::Focus).collect();
+        // One per mode and accent, measured on the element's black, not the white page.
+        assert_eq!(focus.len(), 4);
+        assert!(focus
+            .iter()
+            .all(|p| p.bg.hex() == "#000000" && near(p.ratio, 21.0)));
+        // A ring the element already has unfocused indicates nothing.
+        let r = pairs_of(".a { outline: 2px solid red } .a:focus { outline: 2px solid red }");
+        assert!(r.pairs.iter().all(|p| p.kind != Kind::Focus));
+        // A transparent ring draws nothing, so there is no indicator to measure.
+        let r = pairs_of(".a:focus-visible { outline: 2px solid transparent }");
+        assert!(r.pairs.iter().all(|p| p.kind != Kind::Focus));
+    }
+
+    #[test]
+    fn background_source_is_described() {
+        let r = pairs_of(
+            ".p { background: #fff } .p .q { background: rgb(0 0 0 / 50%) } .p .q .a { color: #000 }",
+        );
+        let p = r.pairs.iter().find(|p| p.selector == ".p .q .a").unwrap();
+        assert_eq!(p.bg_source, "rgb(0 0 0 / 50%) over #fff");
+        assert!(near(p.bg.r, 127.5), "{:?}", p.bg);
+    }
+
+    #[test]
+    fn substitution_depth_limit() {
+        let t = vars(&[("--light", "x")]);
+        let nest = |open: &str, close: &str, k: usize| {
+            format!("{}#123{}", open.repeat(k), close.repeat(k))
+        };
+        for (mode, open, close) in [
+            (Mode::Light, "var(--nope, ", ")"),
+            (Mode::Light, "var(--light, ", ")"),
+            (Mode::Dark, "light-dark(#000, ", ")"),
+        ] {
+            let ctx = Ctx {
+                mode,
+                layers: vec![&t],
+            };
+            // 32 nested calls resolve; the 33rd is too deep.
+            assert_eq!(
+                ctx.substitute(&nest(open, close, 32), 0).as_deref(),
+                Some("#123"),
+                "{open}"
+            );
+            assert_eq!(ctx.substitute(&nest(open, close, 33), 0), None, "{open}");
+        }
+    }
+
+    #[test]
+    fn markup_backgrounds_stop_at_the_first_opaque_one() {
+        let mut n = Nesting::default();
+        n.add_html(r#"<div class="o"><div class="t"><span class="a">x</span></div></div>"#);
+        let r = check(
+            &theme(),
+            &[(
+                "t".into(),
+                ".o { background: #000 } .t { background: rgb(255 255 255 / 50%) } .a { color: #fff }"
+                    .into(),
+            )],
+            &n,
+        );
+        let p = r
+            .pairs
+            .iter()
+            .find(|p| p.selector == ".a" && p.host == Host::Markup)
+            .expect("a pair placed by the markup");
+        assert_eq!(
+            p.bg_source,
+            "rgb(255 255 255 / 50%) (`.t`) over #000 (`.o`)"
+        );
+        assert!(near(p.bg.r, 127.5), "{:?}", p.bg);
+    }
+
+    #[test]
+    fn summary_lists_failures() {
+        let r = pairs_of(".a { color: #777 }");
+        assert!(r.failures().count() > 0);
+        let lines = summary(&r);
+        assert!(!lines.is_empty());
+        assert!(lines.iter().any(|l| l.contains(".a")), "{lines:?}");
+    }
 }

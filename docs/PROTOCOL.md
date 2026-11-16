@@ -85,7 +85,7 @@ The coordinator pastes these into project memory and every thread brief:
 4. A sync-bot comment, sync-bot push or conflict notice on your PR means: sync-main, resolve,
    check, push, now.
 5. Never hand-edit or hand-merge generated files (`registry.json`, `component.json`, `llms*`,
-   `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots).
+   `apps/docs/src/generated.rs`, `Cargo.lock`, snapshots, `crates/cli/tests/contrast_pairs/`).
 6. Name any shared file you will change (list in docs/PROTOCOL.md) in your first reply, so
    overlapping work is caught before it conflicts.
 

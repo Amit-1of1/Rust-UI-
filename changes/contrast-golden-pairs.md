@@ -1,0 +1,5 @@
+### Added
+
+- **cli:** The contrast proof's every pair (5,817 lines over 72 components) is recorded in `crates/cli/tests/contrast_pairs/<component>.txt`, so a theme, stylesheet or markup change shows its effect on every colour pair as a diff, and a bug in the proof that drops pairs or shifts a ratio is caught. Update with `UPDATE_CONTRAST_PAIRS=1 cargo test -p atoll-cli --test contrast`; `scripts/sync-main.sh` regenerates them after a merge.
+- **cli:** The contrast proof's own code is mutation-tested: every one of cargo-mutants' 663 changes to `crates/cli/src/contrast.rs` now fails a test, apart from 5 that can't change behaviour (listed in docs/notes/contrast-proof.md). 99 survived the full suite before; 22 exact-value unit tests now cover them (selector and declaration parsing, `var()`/`light-dark()` substitution and its depth limit, `background` shorthands, `color-mix()`, markup nesting, specificity, rule-scoped custom properties, large and bold text, decoration, inset and transparent focus rings, layered markup backgrounds).
+- **cli:** The contrast integration tests run the proof over the kit once and share it (`OnceLock`), about 5x faster.

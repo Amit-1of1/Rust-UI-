@@ -1,0 +1,10 @@
+.dx-tooltip-content	dark	Text	Selector	#000000 on #d4d4d4	14.17	preset:classic
+.dx-tooltip-content	dark	Text	Selector	#090b0f on #ebeef5	16.96	preset:abyss
+.dx-tooltip-content	dark	Text	Selector	#0c0b09 on #f0eeeb	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tooltip-content	dark	Text	Selector	#0d0b08 on #f1eee9	16.98	preset:driftwood
+.dx-tooltip-content	dark	Text	Selector	#0e0a0a on #f2eded	16.98	preset:reef
+.dx-tooltip-content	light	Text	Selector	#ffffff on #111111	18.88	preset:classic
+.dx-tooltip-content	light	Text	Selector	#ffffff on #1c1f27	16.47	preset:abyss
+.dx-tooltip-content	light	Text	Selector	#ffffff on #211f1b	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-tooltip-content	light	Text	Selector	#ffffff on #231f19	16.39	preset:driftwood
+.dx-tooltip-content	light	Text	Selector	#ffffff on #241d1d	16.55	preset:reef

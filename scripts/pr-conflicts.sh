@@ -31,7 +31,7 @@ fi
 generated() {
   case "$1" in
     registry.json|Cargo.lock|apps/docs/src/generated.rs|llms.txt|llms-full.txt|llms/*) return 0 ;;
-    crates/ui/src/components/*/component.json|component.json|crates/ui/tests/snapshots/*) return 0 ;;
+    crates/ui/src/components/*/component.json|component.json|crates/ui/tests/snapshots/*|crates/cli/tests/contrast_pairs/*) return 0 ;;
   esac
   return 1
 }

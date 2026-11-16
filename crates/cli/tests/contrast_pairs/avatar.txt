@@ -1,0 +1,70 @@
+.dx-avatar	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+.dx-avatar	dark	Text	Markup	#d4d4d4 on #141313	12.51	preset:classic
+.dx-avatar	dark	Text	Markup	#d4d4d4 on #1a1a1a	11.74	preset:classic
+.dx-avatar	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-avatar	dark	Text	Markup	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-avatar	dark	Text	Markup	#ebeef5 on #1f2226	13.75	preset:abyss
+.dx-avatar	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar	dark	Text	Markup	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar	dark	Text	Markup	#f0eeeb on #23211f	13.86	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-avatar	dark	Text	Markup	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-avatar	dark	Text	Markup	#f1eee9 on #24211e	13.84	preset:driftwood
+.dx-avatar	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-avatar	dark	Text	Markup	#f2eded on #1d1a19	14.92	preset:reef
+.dx-avatar	dark	Text	Markup	#f2eded on #242120	13.79	preset:reef
+.dx-avatar	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+.dx-avatar	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-avatar	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-avatar	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef
+.dx-avatar-fallback	dark	Text	Selector	#d4d4d4 on #000000	14.17	preset:classic
+.dx-avatar-fallback	dark	Text	Selector	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-avatar-fallback	dark	Text	Selector	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar-fallback	dark	Text	Selector	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-avatar-fallback	dark	Text	Selector	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-avatar-fallback	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-avatar-fallback	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-avatar-fallback	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar-fallback	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-avatar-fallback	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-avatar-label	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+.dx-avatar-label	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-avatar-label	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar-label	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-avatar-label	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-avatar-label	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+.dx-avatar-label	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-avatar-label	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar-label	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-avatar-label	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef
+.dx-avatar[data-state="empty"]	dark	Text	Selector	#d4d4d4 on #3e3e3e	7.22	preset:classic
+.dx-avatar[data-state="empty"]	dark	Text	Selector	#ebeef5 on #4d5055	6.97	preset:abyss
+.dx-avatar[data-state="empty"]	dark	Text	Selector	#f0eeeb on #514f4d	7.04	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="empty"]	dark	Text	Selector	#f1eee9 on #524f4b	7.04	preset:driftwood
+.dx-avatar[data-state="empty"]	dark	Text	Selector	#f2eded on #534e4e	7.05	preset:reef
+.dx-avatar[data-state="empty"]	light	Text	Selector	#111111 on #b0b0b0	8.71	preset:classic
+.dx-avatar[data-state="empty"]	light	Text	Selector	#1c1f27 on #b2b7c2	8.19	preset:abyss
+.dx-avatar[data-state="empty"]	light	Text	Selector	#211f1b on #bab7b2	8.23	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="empty"]	light	Text	Selector	#231f19 on #bcb6af	8.15	preset:driftwood
+.dx-avatar[data-state="empty"]	light	Text	Selector	#241d1d on #beb5b5	8.25	preset:reef
+.dx-avatar[data-state="error"] .dx-avatar-fallback	dark	Text	Selector	#d4d4d4 on #141313	12.51	preset:classic
+.dx-avatar[data-state="error"] .dx-avatar-fallback	dark	Text	Selector	#ebeef5 on #181b1f	14.88	preset:abyss
+.dx-avatar[data-state="error"] .dx-avatar-fallback	dark	Text	Selector	#f0eeeb on #1c1a18	14.98	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="error"] .dx-avatar-fallback	dark	Text	Selector	#f1eee9 on #1d1a17	14.97	preset:driftwood
+.dx-avatar[data-state="error"] .dx-avatar-fallback	dark	Text	Selector	#f2eded on #1d1a19	14.92	preset:reef
+.dx-avatar[data-state="error"] .dx-avatar-fallback	light	Text	Selector	#111111 on #f8f8f8	17.78	preset:classic
+.dx-avatar[data-state="error"] .dx-avatar-fallback	light	Text	Selector	#1c1f27 on #f2f5fb	15.09	preset:abyss
+.dx-avatar[data-state="error"] .dx-avatar-fallback	light	Text	Selector	#211f1b on #f6f5f2	15.09	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="error"] .dx-avatar-fallback	light	Text	Selector	#231f19 on #f7f5f1	15.05	preset:driftwood
+.dx-avatar[data-state="error"] .dx-avatar-fallback	light	Text	Selector	#241d1d on #f8f4f4	15.17	preset:reef
+.dx-avatar[data-state="loading"]	dark	Text	Selector	#d4d4d4 on #262626	10.21	preset:classic
+.dx-avatar[data-state="loading"]	dark	Text	Selector	#ebeef5 on #27292e	12.53	preset:abyss
+.dx-avatar[data-state="loading"]	dark	Text	Selector	#f0eeeb on #2a2926	12.56	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="loading"]	dark	Text	Selector	#f1eee9 on #2b2825	12.66	preset:driftwood
+.dx-avatar[data-state="loading"]	dark	Text	Selector	#f2eded on #2c2828	12.57	preset:reef
+.dx-avatar[data-state="loading"]	light	Text	Selector	#111111 on #f5f5f5	17.32	preset:classic
+.dx-avatar[data-state="loading"]	light	Text	Selector	#1c1f27 on #e5e8ed	13.41	preset:abyss
+.dx-avatar[data-state="loading"]	light	Text	Selector	#211f1b on #e9e7e5	13.34	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-avatar[data-state="loading"]	light	Text	Selector	#231f19 on #eae7e3	13.30	preset:driftwood
+.dx-avatar[data-state="loading"]	light	Text	Selector	#241d1d on #ebe7e6	13.48	preset:reef

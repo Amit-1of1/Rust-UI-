@@ -40,6 +40,7 @@ is_generated() {
     registry.json|Cargo.lock|apps/docs/src/generated.rs|llms.txt|llms-full.txt|llms/*) return 0 ;;
     crates/ui/src/components/*/component.json|component.json) return 0 ;;
     crates/ui/tests/snapshots/*) return 0 ;;
+    crates/cli/tests/contrast_pairs/*) return 0 ;;
     crates/ui/assets/*.scoped.css) return 0 ;;
   esac
   return 1
@@ -55,8 +56,12 @@ regenerate_and_commit() {
     echo "== regenerating markup snapshots (review their diff before pushing)"
     UPDATE_SNAPSHOTS=1 cargo test -q -p atoll-ui --test snapshots >/dev/null
   fi
+  # The contrast pairs follow theme.css, the stylesheets and the snapshots, which either side
+  # may have changed even when the merge was clean.
+  echo "== regenerating contrast pairs (review their diff before pushing)"
+  UPDATE_CONTRAST_PAIRS=1 cargo test -q -p atoll-cli --test contrast pairs_match_the_golden_files >/dev/null
   git add -A registry.json Cargo.lock apps/docs/src/generated.rs component.json \
-    crates/ui/src/components crates/ui/tests/snapshots llms.txt llms-full.txt llms \
+    crates/ui/src/components crates/ui/tests/snapshots crates/cli/tests/contrast_pairs llms.txt llms-full.txt llms \
     crates/ui/assets/theme.scoped.css crates/ui/assets/reset.scoped.css
   if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
     git commit -q --no-edit

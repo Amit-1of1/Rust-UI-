@@ -2,12 +2,26 @@
 //! stylesheet draws, on the background it sits on, in light and dark, under every accent
 //! preset, meets WCAG 2 AA. Focus rings and icons need 3:1. Run `cargo run -p atoll-cli --
 //! contrast` for the same report, or add `--theme your-theme.css` to prove your own theme.
+//!
+//! `tests/contrast_pairs/<component>.txt` records every pair the proof checks, with its colours
+//! and ratio, so a change to the theme, a stylesheet or a markup snapshot shows in review as a
+//! diff ("this moved `.dx-badge` from 7.1 to 4.6 in dark/rose"). After such a change run
+//! `UPDATE_CONTRAST_PAIRS=1 cargo test -p atoll-cli --test contrast` and review the diff.
 
 use atoll_cli::contrast::{self, check, Kind, Mode, Nesting, Theme};
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 fn repo() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
+}
+
+/// The proof over the kit as it is, run once and shared: it takes seconds in a debug build,
+/// and mutation testing runs this file once per mutant.
+fn kit_report() -> &'static contrast::Report {
+    static REPORT: OnceLock<contrast::Report> = OnceLock::new();
+    REPORT.get_or_init(|| contrast::run(&repo(), &[]).expect("proof runs"))
 }
 
 fn kit_theme() -> String {
@@ -16,8 +30,8 @@ fn kit_theme() -> String {
 
 #[test]
 fn every_pair_meets_wcag_aa_in_both_modes_and_every_accent() {
-    let report = contrast::run(&repo(), &[]).expect("proof runs");
-    let failures = contrast::summary(&report);
+    let report = kit_report();
+    let failures = contrast::summary(report);
     assert!(
         failures.is_empty(),
         "{} rules draw unreadable colours (fix the CSS, or the token):\n  {}",
@@ -39,7 +53,7 @@ fn every_pair_meets_wcag_aa_in_both_modes_and_every_accent() {
 
 #[test]
 fn the_proof_covers_every_component_mode_and_accent() {
-    let report = contrast::run(&repo(), &[]).expect("proof runs");
+    let report = kit_report();
     let theme = Theme::parse(&kit_theme());
     let accents = theme.accent_names();
     assert!(
@@ -123,6 +137,13 @@ fn the_proof_catches_regressions() {
             report.failures().any(|f| f.fg_source.contains(expect)),
             "`{bad}` was not caught"
         );
+        // And the report says so (`atoll contrast` prints this list).
+        assert!(
+            contrast::summary(&report)
+                .iter()
+                .any(|line| line.contains(expect)),
+            "`{bad}` is missing from the summary"
+        );
     }
 }
 
@@ -191,4 +212,85 @@ fn nesting_comes_from_rendered_markup() {
     assert_eq!(hint.len(), 1);
     assert_eq!(hint[0].bg.hex(), "#eeeeee");
     assert!(!hint[0].passes(), "#777 on #eee is 3.9:1");
+}
+
+/// Every pair the proof checks, one line each (selector, mode, kind, how the background was
+/// found, colours, ratio rounded as the pass check rounds it, and the accents that give that
+/// line, `*` for all), one file per component. Besides showing changes in review, this pins
+/// the proof's own logic: a bug that drops pairs or shifts a ratio but still passes shows here.
+#[test]
+fn pairs_match_the_golden_files() {
+    let dir = repo().join("crates/cli/tests/contrast_pairs");
+    let report = kit_report();
+    let accents = Theme::parse(&kit_theme()).accent_names();
+    let mut files: BTreeMap<String, BTreeMap<String, Vec<usize>>> = BTreeMap::new();
+    for p in &report.pairs {
+        let sel = p.selector.split_whitespace().collect::<Vec<_>>().join(" ");
+        let line = format!(
+            "{sel}\t{}\t{:?}\t{:?}\t{} on {}\t{:.2}",
+            p.mode.name(),
+            p.kind,
+            p.host,
+            p.fg.hex(),
+            p.bg.hex(),
+            (p.ratio * 100.0).round() / 100.0
+        );
+        let index = accents
+            .iter()
+            .position(|a| *a == p.accent)
+            .expect("a known accent");
+        let on = files
+            .entry(p.component.clone())
+            .or_default()
+            .entry(line)
+            .or_default();
+        if !on.contains(&index) {
+            on.push(index);
+        }
+    }
+    let update = std::env::var_os("UPDATE_CONTRAST_PAIRS").is_some();
+    let mut stale = Vec::new();
+    for (component, lines) in &files {
+        let mut fresh = String::new();
+        for (line, on) in lines {
+            let mut on = on.clone();
+            on.sort_unstable();
+            let which = if on.len() == accents.len() {
+                "*".to_string()
+            } else {
+                on.iter()
+                    .map(|&i| accents[i].as_str())
+                    .collect::<Vec<_>>()
+                    .join(",")
+            };
+            fresh.push_str(&format!("{line}\t{which}\n"));
+        }
+        let path = dir.join(format!("{component}.txt"));
+        if std::fs::read_to_string(&path).unwrap_or_default() == fresh {
+            continue;
+        }
+        if update {
+            std::fs::create_dir_all(&dir).expect("create contrast_pairs");
+            std::fs::write(&path, fresh).expect("write golden file");
+        } else {
+            stale.push(component.clone());
+        }
+    }
+    // A component that no longer produces pairs leaves a file nobody checks.
+    for entry in std::fs::read_dir(&dir).into_iter().flatten().flatten() {
+        let name = entry.file_name().to_string_lossy().to_string();
+        let component = name.trim_end_matches(".txt");
+        if !files.contains_key(component) {
+            if update {
+                std::fs::remove_file(entry.path()).expect("remove orphaned golden file");
+            } else {
+                stale.push(format!("{component} (no pairs any more)"));
+            }
+        }
+    }
+    assert!(
+        stale.is_empty(),
+        "contrast pairs changed for {stale:?}; if intended (a theme, stylesheet or snapshot \
+         change), rerun with UPDATE_CONTRAST_PAIRS=1 and review the diff"
+    );
 }

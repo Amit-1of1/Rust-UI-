@@ -1,0 +1,105 @@
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#d4d4d4 on #000000	14.17	preset:classic
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#d4d4d4 on #191919	11.87	preset:classic
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#ebeef5 on #212327	13.56	preset:abyss
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f0eeeb on #242320	13.58	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f1eee9 on #25221f	13.68	preset:driftwood
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-navbar > .dx-navbar-item	dark	Text	Assumed	#f2eded on #252222	13.62	preset:reef
+.dx-navbar > .dx-navbar-item	light	Text	Assumed	#111111 on #ffffff	18.88	preset:classic
+.dx-navbar > .dx-navbar-item	light	Text	Assumed	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-navbar > .dx-navbar-item	light	Text	Assumed	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar > .dx-navbar-item	light	Text	Assumed	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-navbar > .dx-navbar-item	light	Text	Assumed	#241d1d on #ffffff	16.55	preset:reef
+.dx-navbar-content	dark	Text	Selector	#d4d4d4 on #191919	11.87	preset:classic
+.dx-navbar-content	dark	Text	Selector	#ebeef5 on #212327	13.56	preset:abyss
+.dx-navbar-content	dark	Text	Selector	#f0eeeb on #242320	13.58	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-content	dark	Text	Selector	#f1eee9 on #25221f	13.68	preset:driftwood
+.dx-navbar-content	dark	Text	Selector	#f2eded on #252222	13.62	preset:reef
+.dx-navbar-content	light	Text	Selector	#111111 on #ffffff	18.88	preset:classic
+.dx-navbar-content	light	Text	Selector	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-navbar-content	light	Text	Selector	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-content	light	Text	Selector	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-navbar-content	light	Text	Selector	#241d1d on #ffffff	16.55	preset:reef
+.dx-navbar-item	dark	Text	Assumed	#d4d4d4 on #000000	14.17	preset:classic
+.dx-navbar-item	dark	Text	Assumed	#d4d4d4 on #191919	11.87	preset:classic
+.dx-navbar-item	dark	Text	Assumed	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-navbar-item	dark	Text	Assumed	#ebeef5 on #212327	13.56	preset:abyss
+.dx-navbar-item	dark	Text	Assumed	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item	dark	Text	Assumed	#f0eeeb on #242320	13.58	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item	dark	Text	Assumed	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-navbar-item	dark	Text	Assumed	#f1eee9 on #25221f	13.68	preset:driftwood
+.dx-navbar-item	dark	Text	Assumed	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-navbar-item	dark	Text	Assumed	#f2eded on #252222	13.62	preset:reef
+.dx-navbar-item	light	Text	Assumed	#111111 on #ffffff	18.88	preset:classic
+.dx-navbar-item	light	Text	Assumed	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-navbar-item	light	Text	Assumed	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item	light	Text	Assumed	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-navbar-item	light	Text	Assumed	#241d1d on #ffffff	16.55	preset:reef
+.dx-navbar-item:focus-visible	dark	Text	Selector	#f2f5fc on #4d5055	7.42	preset:abyss
+.dx-navbar-item:focus-visible	dark	Text	Selector	#f7f5f2 on #514f4d	7.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item:focus-visible	dark	Text	Selector	#f8f4f0 on #524f4b	7.44	preset:driftwood
+.dx-navbar-item:focus-visible	dark	Text	Selector	#f9f4f3 on #534e4e	7.50	preset:reef
+.dx-navbar-item:focus-visible	dark	Text	Selector	#fafafa on #3e3e3e	10.25	preset:classic
+.dx-navbar-item:focus-visible	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-navbar-item:focus-visible	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-navbar-item:focus-visible	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item:focus-visible	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-navbar-item:focus-visible	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef
+.dx-navbar-item:hover:not([data-disabled="true"])	dark	Text	Selector	#f2f5fc on #4d5055	7.42	preset:abyss
+.dx-navbar-item:hover:not([data-disabled="true"])	dark	Text	Selector	#f7f5f2 on #514f4d	7.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item:hover:not([data-disabled="true"])	dark	Text	Selector	#f8f4f0 on #524f4b	7.44	preset:driftwood
+.dx-navbar-item:hover:not([data-disabled="true"])	dark	Text	Selector	#f9f4f3 on #534e4e	7.50	preset:reef
+.dx-navbar-item:hover:not([data-disabled="true"])	dark	Text	Selector	#fafafa on #3e3e3e	10.25	preset:classic
+.dx-navbar-item:hover:not([data-disabled="true"])	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-navbar-item:hover:not([data-disabled="true"])	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-navbar-item:hover:not([data-disabled="true"])	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-item:hover:not([data-disabled="true"])	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-navbar-item:hover:not([data-disabled="true"])	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	dark	Text	Selector	#f2f5fc on #4d5055	7.42	preset:abyss
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	dark	Text	Selector	#f7f5f2 on #514f4d	7.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	dark	Text	Selector	#f8f4f0 on #524f4b	7.44	preset:driftwood
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	dark	Text	Selector	#f9f4f3 on #534e4e	7.50	preset:reef
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	dark	Text	Selector	#fafafa on #3e3e3e	10.25	preset:classic
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-navbar-nav[data-state="open"] .dx-navbar-trigger	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef
+.dx-navbar-trigger	dark	Text	Assumed	#d4d4d4 on #000000	14.17	preset:classic
+.dx-navbar-trigger	dark	Text	Assumed	#d4d4d4 on #191919	11.87	preset:classic
+.dx-navbar-trigger	dark	Text	Assumed	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-navbar-trigger	dark	Text	Assumed	#ebeef5 on #212327	13.56	preset:abyss
+.dx-navbar-trigger	dark	Text	Assumed	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger	dark	Text	Assumed	#f0eeeb on #242320	13.58	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger	dark	Text	Assumed	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-navbar-trigger	dark	Text	Assumed	#f1eee9 on #25221f	13.68	preset:driftwood
+.dx-navbar-trigger	dark	Text	Assumed	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-navbar-trigger	dark	Text	Assumed	#f2eded on #252222	13.62	preset:reef
+.dx-navbar-trigger	light	Text	Assumed	#111111 on #ffffff	18.88	preset:classic
+.dx-navbar-trigger	light	Text	Assumed	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-navbar-trigger	light	Text	Assumed	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger	light	Text	Assumed	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-navbar-trigger	light	Text	Assumed	#241d1d on #ffffff	16.55	preset:reef
+.dx-navbar-trigger:focus-visible	dark	Text	Selector	#f2f5fc on #4d5055	7.42	preset:abyss
+.dx-navbar-trigger:focus-visible	dark	Text	Selector	#f7f5f2 on #514f4d	7.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger:focus-visible	dark	Text	Selector	#f8f4f0 on #524f4b	7.44	preset:driftwood
+.dx-navbar-trigger:focus-visible	dark	Text	Selector	#f9f4f3 on #534e4e	7.50	preset:reef
+.dx-navbar-trigger:focus-visible	dark	Text	Selector	#fafafa on #3e3e3e	10.25	preset:classic
+.dx-navbar-trigger:focus-visible	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-navbar-trigger:focus-visible	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-navbar-trigger:focus-visible	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger:focus-visible	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-navbar-trigger:focus-visible	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef
+.dx-navbar-trigger:hover:not([data-disabled="true"])	dark	Text	Selector	#f2f5fc on #4d5055	7.42	preset:abyss
+.dx-navbar-trigger:hover:not([data-disabled="true"])	dark	Text	Selector	#f7f5f2 on #514f4d	7.49	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger:hover:not([data-disabled="true"])	dark	Text	Selector	#f8f4f0 on #524f4b	7.44	preset:driftwood
+.dx-navbar-trigger:hover:not([data-disabled="true"])	dark	Text	Selector	#f9f4f3 on #534e4e	7.50	preset:reef
+.dx-navbar-trigger:hover:not([data-disabled="true"])	dark	Text	Selector	#fafafa on #3e3e3e	10.25	preset:classic
+.dx-navbar-trigger:hover:not([data-disabled="true"])	light	Text	Selector	#000000 on #f8f8f8	19.77	preset:classic
+.dx-navbar-trigger:hover:not([data-disabled="true"])	light	Text	Selector	#0e1219 on #edf0f6	16.44	preset:abyss
+.dx-navbar-trigger:hover:not([data-disabled="true"])	light	Text	Selector	#13110e on #f1f0ed	16.54	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-navbar-trigger:hover:not([data-disabled="true"])	light	Text	Selector	#15110c on #f2f0ec	16.51	preset:driftwood
+.dx-navbar-trigger:hover:not([data-disabled="true"])	light	Text	Selector	#161010 on #f3efef	16.50	preset:reef

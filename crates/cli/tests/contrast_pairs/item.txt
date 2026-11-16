@@ -1,0 +1,70 @@
+.dx-item-description	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+.dx-item-description	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+.dx-item-description	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item-description	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+.dx-item-description	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+.dx-item-description	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+.dx-item-description	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+.dx-item-description	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item-description	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+.dx-item-description	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef
+.dx-item-description a:hover	dark	Text	Assumed	#f2f5fc on #090b0f	18.04	preset:abyss
+.dx-item-description a:hover	dark	Text	Assumed	#f7f5f2 on #0c0b09	18.08	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item-description a:hover	dark	Text	Assumed	#f8f4f0 on #0d0b08	17.96	preset:driftwood
+.dx-item-description a:hover	dark	Text	Assumed	#f9f4f3 on #0e0a0a	18.06	preset:reef
+.dx-item-description a:hover	dark	Text	Assumed	#fafafa on #000000	20.12	preset:classic
+.dx-item-description a:hover	light	Text	Assumed	#000000 on #ffffff	21.00	preset:classic
+.dx-item-description a:hover	light	Text	Assumed	#0e1219 on #ffffff	18.76	preset:abyss
+.dx-item-description a:hover	light	Text	Assumed	#13110e on #ffffff	18.85	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item-description a:hover	light	Text	Assumed	#15110c on #ffffff	18.79	preset:driftwood
+.dx-item-description a:hover	light	Text	Assumed	#161010 on #ffffff	18.82	preset:reef
+.dx-item:focus-visible	dark	Focus	Markup	#2b7fff on #000000	5.58	preset:classic
+.dx-item:focus-visible	dark	Focus	Markup	#6cb3b2 on #0c0b09	8.18	neutral,preset:lagoon
+.dx-item:focus-visible	dark	Focus	Markup	#6da5f9 on #0c0b09	7.87	blue
+.dx-item:focus-visible	dark	Focus	Markup	#6eb87f on #0c0b09	8.27	green
+.dx-item:focus-visible	dark	Focus	Markup	#8b9bff on #090b0f	7.72	preset:abyss
+.dx-item:focus-visible	dark	Focus	Markup	#a891fb on #0c0b09	7.60	violet
+.dx-item:focus-visible	dark	Focus	Markup	#c39b81 on #0d0b08	7.79	preset:driftwood
+.dx-item:focus-visible	dark	Focus	Markup	#e082b0 on #0e0a0a	7.49	preset:reef
+.dx-item:focus-visible	dark	Focus	Markup	#e28b63 on #0c0b09	7.59	orange
+.dx-item:focus-visible	dark	Focus	Markup	#ec7e8e on #0c0b09	7.44	rose
+.dx-item:focus-visible	light	Focus	Markup	#0b7f7f on #ffffff	4.82	neutral,preset:lagoon
+.dx-item:focus-visible	light	Focus	Markup	#14833e on #ffffff	4.83	green
+.dx-item:focus-visible	light	Focus	Markup	#2870d4 on #ffffff	4.82	blue
+.dx-item:focus-visible	light	Focus	Markup	#2b7fff on #ffffff	3.76	preset:classic
+.dx-item:focus-visible	light	Focus	Markup	#5a64e3 on #ffffff	4.81	preset:abyss
+.dx-item:focus-visible	light	Focus	Markup	#7d59db on #ffffff	4.86	violet
+.dx-item:focus-visible	light	Focus	Markup	#956747 on #ffffff	4.87	preset:driftwood
+.dx-item:focus-visible	light	Focus	Markup	#b94884 on #ffffff	4.86	preset:reef
+.dx-item:focus-visible	light	Focus	Markup	#bb5218 on #ffffff	4.85	orange
+.dx-item:focus-visible	light	Focus	Markup	#c6405c on #ffffff	4.90	rose
+.dx-item[data-variant="muted"]	dark	Text	Markup	#d4d4d4 on #131313	12.53	preset:classic
+.dx-item[data-variant="muted"]	dark	Text	Markup	#ebeef5 on #181a1f	14.99	preset:abyss
+.dx-item[data-variant="muted"]	dark	Text	Markup	#f0eeeb on #1b1a18	15.02	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item[data-variant="muted"]	dark	Text	Markup	#f1eee9 on #1c1a17	15.06	preset:driftwood
+.dx-item[data-variant="muted"]	dark	Text	Markup	#f2eded on #1d1919	15.03	preset:reef
+.dx-item[data-variant="muted"]	light	Text	Markup	#111111 on #fafafa	18.09	preset:classic
+.dx-item[data-variant="muted"]	light	Text	Markup	#1c1f27 on #f2f4f6	14.90	preset:abyss
+.dx-item[data-variant="muted"]	light	Text	Markup	#211f1b on #f4f3f2	14.84	neutral,preset:lagoon,blue,green,violet,rose,orange
+.dx-item[data-variant="muted"]	light	Text	Markup	#231f19 on #f5f3f1	14.79	preset:driftwood
+.dx-item[data-variant="muted"]	light	Text	Markup	#241d1d on #f5f3f3	14.97	preset:reef
+a.dx-item	dark	Text	Markup	#d4d4d4 on #000000	14.17	preset:classic
+a.dx-item	dark	Text	Markup	#ebeef5 on #090b0f	16.96	preset:abyss
+a.dx-item	dark	Text	Markup	#f0eeeb on #0c0b09	16.99	neutral,preset:lagoon,blue,green,violet,rose,orange
+a.dx-item	dark	Text	Markup	#f1eee9 on #0d0b08	16.98	preset:driftwood
+a.dx-item	dark	Text	Markup	#f2eded on #0e0a0a	16.98	preset:reef
+a.dx-item	light	Text	Markup	#111111 on #ffffff	18.88	preset:classic
+a.dx-item	light	Text	Markup	#1c1f27 on #ffffff	16.47	preset:abyss
+a.dx-item	light	Text	Markup	#211f1b on #ffffff	16.45	neutral,preset:lagoon,blue,green,violet,rose,orange
+a.dx-item	light	Text	Markup	#231f19 on #ffffff	16.39	preset:driftwood
+a.dx-item	light	Text	Markup	#241d1d on #ffffff	16.55	preset:reef
+a.dx-item:hover	dark	Text	Selector	#d4d4d4 on #262626	10.21	preset:classic
+a.dx-item:hover	dark	Text	Selector	#ebeef5 on #27292e	12.53	preset:abyss
+a.dx-item:hover	dark	Text	Selector	#f0eeeb on #2a2926	12.56	neutral,preset:lagoon,blue,green,violet,rose,orange
+a.dx-item:hover	dark	Text	Selector	#f1eee9 on #2b2825	12.66	preset:driftwood
+a.dx-item:hover	dark	Text	Selector	#f2eded on #2c2828	12.57	preset:reef
+a.dx-item:hover	light	Text	Selector	#111111 on #f5f5f5	17.32	preset:classic
+a.dx-item:hover	light	Text	Selector	#1c1f27 on #e5e8ed	13.41	preset:abyss
+a.dx-item:hover	light	Text	Selector	#211f1b on #e9e7e5	13.34	neutral,preset:lagoon,blue,green,violet,rose,orange
+a.dx-item:hover	light	Text	Selector	#231f19 on #eae7e3	13.30	preset:driftwood
+a.dx-item:hover	light	Text	Selector	#241d1d on #ebe7e6	13.48	preset:reef
