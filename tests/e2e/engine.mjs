@@ -11,6 +11,27 @@ export const ENGINE = process.env.BROWSER ?? "chromium";
 // page gets this long in WebKit.
 export const TIMEOUT = ENGINE === "webkit" ? 90000 : 30000;
 
+// Every page error (an uncaught exception: a wasm panic, a failed import) and every
+// `console.error` fails the script, even when the step it was checking still passed: a panic
+// in a real app is a dead app. Messages matching ALLOWED are expected by the demos.
+const ALLOWED = [
+  // The avatar demo loads a missing image on purpose to show its fallback.
+  /Failed to load resource: .*404/,
+  // Debug builds try to reach `dx serve`'s hot-reload socket; the static server has none.
+  /WebSocket connection to 'ws:\/\/[^']*\/_dioxus/,
+];
+const errors = [];
+export function pageErrors() {
+  return errors;
+}
+process.on("exit", (code) => {
+  if (code === 0 && errors.length && !process.env.ALLOW_PAGE_ERRORS) {
+    console.log(`\n${errors.length} page error(s) in a passing run (set ALLOW_PAGE_ERRORS=1 to ignore):`);
+    for (const e of errors.slice(0, 10)) console.log(`  ${e}`);
+    process.exitCode = 1;
+  }
+});
+
 export async function launch(options) {
   const type = ENGINES[ENGINE];
   if (!type) throw new Error(`BROWSER=${ENGINE}: expected chromium, firefox or webkit`);
@@ -31,8 +52,17 @@ export async function launch(options) {
       page.setDefaultTimeout(TIMEOUT);
       // A wasm panic or engine crash otherwise shows up only as a timeout.
       page.on("pageerror", (e) => {
-        console.log(`page error (${ENGINE}): ${e.message.split("\n")[0]}`);
+        const line = e.message.split("\n")[0];
+        console.log(`page error (${ENGINE}): ${line}`);
         if (e.stack) console.log(`  ${e.stack.split("\n").slice(0, 5).join("\n  ")}`);
+        errors.push(`page error at ${page.url()}: ${line}`);
+      });
+      page.on("console", (m) => {
+        if (m.type() !== "error") return;
+        const text = m.text().split("\n")[0];
+        if (ALLOWED.some((re) => re.test(text))) return;
+        console.log(`console.error (${ENGINE}): ${text}`);
+        errors.push(`console.error at ${page.url()}: ${text}`);
       });
       return page;
     };
