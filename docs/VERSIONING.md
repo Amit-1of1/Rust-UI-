@@ -25,7 +25,7 @@ What an app that adopts the kit can count on before 1.0:
 - **Breaking releases are batched and rare.** Breaks collect on `main` behind deprecations and ship together in one minor release, not more than one every six weeks (a security fix is the exception). Everything between is patch releases, which Cargo picks up by itself and which never break a stable item.
 - **The previous minor gets fixes.** For three months after `0.N+1.0`, security fixes and fixes for crashes or broken keyboard and screen-reader behaviour are backported as `0.N.x` patch releases, from a `release/0.N` branch cut at the `v0.N.0` tag.
 - **Every break comes with steps.** A MIGRATION.md section with before and after. Where a change can be scripted (a rename), `atoll update` applies it to copied components.
-- **Rust version (MSRV).** `rust-version` in the workspace (now 1.88) only goes up in a minor release, and never to a Rust release less than six months old.
+- **Rust version (MSRV).** `rust-version` in the workspace (now 1.89) only goes up in a minor release, and never to a Rust release less than six months old.
 - **Dioxus.** Each kit minor supports exactly one Dioxus minor (`0.7.x` now). The kit follows Dioxus patch releases within it.
 
 ### Apps installing from git
